@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "types": [
+            "webpack-env"
+        ],
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "suppressImplicitAnyIndexErrors": true,
+        "strictNullChecks": false,
+        "paths": { // 指定模块的路径，和baseUrl有关联，和webpack中resolve.alias配置一样
+            "@/*": [
+                "./*"
+            ]
+        },
+        "baseUrl": "src", // 工作根目录
+    },
+    "include": [
+        "src"
+    ]
+}
