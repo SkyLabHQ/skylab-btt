@@ -19,10 +19,10 @@ import {
 } from "@/hooks/useRetryContract";
 import { useGameContext } from "@/pages/TacToe";
 import { useNavigate } from "react-router-dom";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import { getRandomProvider } from "@/utils/web3Utils";
 import { ethers } from "ethers";
 import { useTacToeSigner } from "@/hooks/useSigner";
+import { useAccount } from "wagmi";
 
 const QuitModal = ({
     quitType,
@@ -33,7 +33,7 @@ const QuitModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const { account } = useActiveWeb3React();
+    const { address } = useAccount();
     const navigate = useNavigate();
     const { tokenId, bidTacToeGameAddress, istest, realChainId } =
         useGameContext();
@@ -94,7 +94,7 @@ const QuitModal = ({
 
         const value = balance.sub(gasFee).sub(l1Fees);
         const transferResult = await singer.sendTransaction({
-            to: account,
+            to: address,
             value: value,
             gasLimit: 21000,
             gasPrice: fasterGasPrice,

@@ -10,12 +10,12 @@ import {
     useMultiSkylabBidTacToeGameContract,
     useMultiMercuryBaseContract,
 } from "@/hooks/useMultiContract";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import ToolBar from "./Toolbar";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { botAddress } from "@/hooks/useContract";
 import { GrayButton } from "../Button/Index";
 import QuitModal from "./QuitModal";
+import { useAccount } from "wagmi";
 
 export const PlaneImg = ({
     detail,
@@ -187,9 +187,8 @@ export const MatchPage = ({
     onChangeInfo: (position: "my" | "op", info: Info) => void;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { account } = useActiveWeb3React();
+    const { address } = useAccount();
     const {
-        istest,
         realChainId,
         myInfo,
         opInfo,
@@ -309,7 +308,7 @@ export const MatchPage = ({
             img: getMetadataImg(mtadata2),
         };
 
-        if (player1Info.address === account) {
+        if (player1Info.address === address) {
             onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
             onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
             onChangePoint(player1Move.toNumber(), player2Move.toNumber());

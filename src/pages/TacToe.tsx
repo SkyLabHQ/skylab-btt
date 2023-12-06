@@ -23,7 +23,6 @@ import YellowCircle from "@/components/TacToe/assets/yellow-circle.svg";
 import YellowCross from "@/components/TacToe/assets/yellow-x.svg";
 import BotX from "@/components/TacToe/assets/bot-x.svg";
 import YellowBotX from "@/components/TacToe/assets/yellow-bot-x.svg";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import {
     skylabTestFlightAddress,
     skylabTournamentAddress,
@@ -33,7 +32,7 @@ import { ZERO_DATA } from "@/skyConstants";
 import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { getSCWallet } from "@/hooks/useSCWallet";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useBttFactoryRetry } from "@/hooks/useRetryContract";
+import { useAccount, useChainId } from "wagmi";
 
 export enum UserMarkType {
     Empty = -1,
@@ -136,9 +135,9 @@ const GameContext = createContext<{
 export const useGameContext = () => useContext(GameContext);
 
 const TacToe = () => {
-    const { chainId, account } = useActiveWeb3React();
-    const bttFactoryRetryTest = useBttFactoryRetry(true);
-    const bttFactoryRetry = useBttFactoryRetry(false);
+    const chainId = useChainId();
+    const { address: account } = useAccount();
+
     const [gameType, setGameType] = useState<GameType>(GameType.Unkown);
     const [mileages, setMileages] = useState<{
         winMileage: number;

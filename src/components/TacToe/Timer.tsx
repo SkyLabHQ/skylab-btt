@@ -19,9 +19,10 @@ const Timer = ({
     loading?: boolean;
     handleCallTimeOut: () => void;
 }) => {
-    const { bidTacToeGameAddress, tokenId, realChainId } = useGameContext();
+    const { bidTacToeGameAddress, tokenId, realChainId, istest } =
+        useGameContext();
 
-    const [bufferTime, setBufferTime] = useState(0); // [ms
+    const [bufferTime, setBufferTime] = useState(0);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
     const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress, tokenId);
     const autoBidRef = useRef(autoBid);
@@ -60,7 +61,7 @@ const Timer = ({
             let bufferTime = sessionStorage.getItem(bufferKey) ?? 0;
             sessionStorage.setItem(bufferKey, "");
 
-            if (Number(bufferTime) === 0 || remainTime > bufferTime) {
+            if (Number(bufferTime) === 0 || remainTime > Number(bufferTime)) {
                 if (remainTime > SixtySecond) {
                     bufferTime = remainTime - SixtySecond;
                 } else if (remainTime > ThirtySecond) {
@@ -93,7 +94,8 @@ const Timer = ({
             !tacToeGameRetryWrite ||
             !opGameInfo.timeout ||
             !opGameInfo.gameState ||
-            !myGameInfo.gameState
+            !myGameInfo.gameState ||
+            istest
         )
             return;
         const now = getNowSecondsTimestamp();

@@ -18,7 +18,6 @@ import {
     useMercuryBaseContract,
     useSkylabBidTacToeContract,
 } from "@/hooks/useContract";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
     getMultiSkylabBidTacToeGameContract,
@@ -26,11 +25,7 @@ import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
-import {
-    DEAFAULT_CHAINID,
-    injected,
-    TESTFLIGHT_CHAINID,
-} from "@/utils/web3Utils";
+import { DEAFAULT_CHAINID, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import RequestNextButton from "@/components/RequrestNextButton";
 import { Contract } from "ethers-multicall";
 import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
@@ -39,14 +34,14 @@ import PlaneList, { NoPlaneContent } from "@/components/TacToeMode/PlaneList";
 import { LiveGame } from "@/components/TacToeMode/LiveGameList";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
-import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
 import { getDefaultWithProvider, getTestflightSigner } from "@/hooks/useSigner";
 import { getSCWallet } from "@/hooks/useSCWallet";
 import ConnectWalletBg from "@/components/TacToeMode/assets/connect-wallet.svg";
-import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import { erc721iface, topic0Transfer } from "@/skyConstants/iface";
+import { ConnectKitButton } from "connectkit";
+import { useAccount, useChainId } from "wagmi";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -68,8 +63,8 @@ export interface onGoingGame {
 
 const TacToeMode = () => {
     const navigate = useNavigate();
-    const { activate } = useWeb3React();
-    const { chainId, account } = useActiveWeb3React();
+    const { address } = useAccount();
+    const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
 
     const multiProvider = useMultiProvider(DEAFAULT_CHAINID);
@@ -80,7 +75,7 @@ const TacToeMode = () => {
     const contract = useSkylabBidTacToeContract();
 
     const toast = useSkyToast();
-    const addNetworkToMetask = useAddNetworkToMetamask();
+
     const deafaultMercuryBaseContract = useMercuryBaseContract();
     const mercuryBaseContract = useMercuryBaseContract(true);
     const [loading, setLoading] = useState(false);
@@ -168,12 +163,12 @@ const TacToeMode = () => {
         );
 
         const [balance, round] = await ethcallProvider.all([
-            tournamentContract.balanceOf(account),
+            tournamentContract.balanceOf(address),
             tournamentContract._currentRound(),
         ]);
 
         const p = new Array(balance.toNumber()).fill("").map((item, index) => {
-            return tournamentContract.tokenOfOwnerByIndex(account, index);
+            return tournamentContract.tokenOfOwnerByIndex(address, index);
         });
         const planeTokenIds = await ethcallProvider.all(p);
         const p1: any = [];
@@ -286,7 +281,7 @@ const TacToeMode = () => {
     };
 
     const handleCreateOrJoinDefault = async () => {
-        if (!account) {
+        if (!address) {
             toast("Connect wallet to enter tournament");
             return;
         }
@@ -296,11 +291,6 @@ const TacToeMode = () => {
         }
 
         try {
-            if (chainId !== Number(DEAFAULT_CHAINID)) {
-                await addNetworkToMetask(Number(DEAFAULT_CHAINID));
-                return;
-            }
-
             if (planeList[currentPlaneIndex].state) {
                 navigate(
                     `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
@@ -344,12 +334,12 @@ const TacToeMode = () => {
     }, [multiProvider, multiSkylabBidTacToeFactoryContract]);
 
     useEffect(() => {
-        if (!account) {
+        if (!address) {
             setPlaneList([]);
             return;
         }
         handleGetPlaneBalance();
-    }, [account]);
+    }, [address]);
 
     return (
         <>
@@ -466,7 +456,7 @@ const TacToeMode = () => {
                         ></PlaneList>
                     )}
 
-                    {account ? (
+                    {address ? (
                         <RequestNextButton
                             sx={{
                                 background: "transparent !important",
@@ -489,37 +479,31 @@ const TacToeMode = () => {
                             }}
                         ></RequestNextButton>
                     ) : (
-                        <Box
-                            onClick={() => {
-                                activate(injected, undefined, true).catch(
-                                    (e) => {
-                                        if (
-                                            e instanceof UnsupportedChainIdError
-                                        ) {
-                                            addNetworkToMetask(
-                                                DEAFAULT_CHAINID,
-                                            ).then(() => {
-                                                activate(injected);
-                                            });
-                                        }
-                                    },
+                        <ConnectKitButton.Custom>
+                            {({ show }) => {
+                                return (
+                                    <Box
+                                        onClick={() => {
+                                            show();
+                                        }}
+                                        sx={{
+                                            background: `url(${ConnectWalletBg}) no-repeat center`,
+                                            backgroundSize: "100% 100%",
+                                            height: "2.6042vw !important",
+
+                                            width: "25vw !important",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            fontSize: "1.0417vw",
+                                            paddingTop: "2px",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        Connect Wallet
+                                    </Box>
                                 );
                             }}
-                            sx={{
-                                background: `url(${ConnectWalletBg}) no-repeat center`,
-                                backgroundSize: "100% 100%",
-                                height: "2.6042vw !important",
-
-                                width: "25vw !important",
-                                display: "flex",
-                                justifyContent: "center",
-                                fontSize: "1.0417vw",
-                                paddingTop: "2px",
-                                cursor: "pointer",
-                            }}
-                        >
-                            Connect Wallet
-                        </Box>
+                        </ConnectKitButton.Custom>
                     )}
                 </Box>
             </Box>

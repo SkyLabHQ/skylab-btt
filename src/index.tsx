@@ -4,10 +4,12 @@ import reportWebVitals from "./reportWebVitals";
 import { Box, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 import { HashRouter } from "react-router-dom";
-import { createWeb3ReactRoot, Web3ReactProvider } from "@web3-react/core";
-
-import { getLibrary, NETWORK_CONTEXT_NAME } from "./utils/web3Utils";
-import Web3ReactManager from "./components/Web3ReactManager";
+import { WagmiConfig, createConfig } from "wagmi";
+import {
+    ConnectKitProvider,
+    ConnectKitButton,
+    getDefaultConfig,
+} from "connectkit";
 import { GlobalStyles } from "./skyConstants";
 import AppRoutes, { ScrollToTop } from "./Routes";
 import theme from "./theme";
@@ -15,15 +17,31 @@ import { HelmetProvider } from "react-helmet-async";
 
 import { KnobVisibilityContextProvider } from "./contexts/KnobVisibilityContext";
 import { BlockNumberProvider } from "./contexts/BlockNumber";
-
-const Web3ProviderNetwork = createWeb3ReactRoot(NETWORK_CONTEXT_NAME);
+import { base } from "viem/chains";
 
 if (window && window.ethereum) {
     window.ethereum.autoRefreshOnNetworkChange = false;
 }
 
+const chains = [base];
+
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,
+);
+
+const config = createConfig(
+    getDefaultConfig({
+        chains,
+        // Required API Keys
+        alchemyId: process.env.REACT_APP_ALCHEMY_ID, // or infuraId
+        walletConnectProjectId: process.env.REACT_APP_WALLETCONNECT_PROJECT_ID,
+        // Required
+        appName: "Skylab-Btt",
+        // Optional
+        appDescription: "Your App Description",
+        appUrl: "https://app.projmercury.io", // your app's url
+        appIcon: "https://app.projmercury.io/tournament.jpg", // your app's icon, no bigger than 1024x1024px (max. 1MB)
+    }),
 );
 
 root.render(
@@ -32,22 +50,21 @@ root.render(
         <ChakraProvider theme={theme}>
             <Global styles={GlobalStyles} />
             <HashRouter>
-                <Web3ReactProvider getLibrary={getLibrary}>
-                    <Web3ProviderNetwork getLibrary={getLibrary}>
+                <WagmiConfig config={config}>
+                    <ConnectKitProvider>
                         <BlockNumberProvider>
-                            <Web3ReactManager>
-                                <KnobVisibilityContextProvider>
-                                    <Fragment>
-                                        <ScrollToTop />
-                                        <HelmetProvider>
-                                            <AppRoutes />
-                                        </HelmetProvider>
-                                    </Fragment>
-                                </KnobVisibilityContextProvider>
-                            </Web3ReactManager>
+                            <KnobVisibilityContextProvider>
+                                <Fragment>
+                                    <ScrollToTop />
+                                    <HelmetProvider>
+                                        <AppRoutes />
+                                    </HelmetProvider>
+                                </Fragment>
+                            </KnobVisibilityContextProvider>
                         </BlockNumberProvider>
-                    </Web3ProviderNetwork>
-                </Web3ReactProvider>
+                        <ConnectKitButton />
+                    </ConnectKitProvider>
+                </WagmiConfig>
             </HashRouter>
         </ChakraProvider>
     </Box>,

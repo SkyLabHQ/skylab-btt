@@ -9,9 +9,9 @@ import BabyTitle from "./assets/baby-title.svg";
 import BabyTitle1 from "./assets/baby-title1.svg";
 import { useBabyMercsContract } from "@/hooks/useContract";
 import { ethers } from "ethers";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import Loading from "../Loading";
 import { ChainId } from "@/utils/web3Utils";
+import { useAccount, useChainId } from "wagmi";
 
 const Price = {
     [ChainId.POLYGON]: 1,
@@ -23,7 +23,8 @@ const BabyMerc = ({
 }: {
     onNextRound: (step: number | string) => void;
 }) => {
-    const { account, chainId } = useActiveWeb3React();
+    const { address } = useAccount();
+    const chainId = useChainId();
     const [loading, setLoading] = useState(false);
     const babyMercsContract = useBabyMercsContract();
     const [amount, setAmount] = useState(1);
@@ -41,7 +42,7 @@ const BabyMerc = ({
     const handleMint = async () => {
         try {
             setLoading(true);
-            const res = await babyMercsContract.publicMint(account, amount, {
+            const res = await babyMercsContract.publicMint(address, amount, {
                 value: ethers.utils.parseEther(String(amount * Price[chainId])),
             });
             await res.wait();

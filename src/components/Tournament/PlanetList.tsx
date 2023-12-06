@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Box, Text, Image, useDisclosure } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { Box, Text, Image } from "@chakra-ui/react";
 import SectionActivities from "@/components/Tournament/assets/ring.svg";
 import BluePlanet from "@/components/Tournament/assets/blue-planet.png";
 import GrayPlanet from "@/components/Tournament/assets/gray-planet.png";
 import ButtonBg from "@/components/Tournament/assets/button-bg.svg";
 import { useNavigate } from "react-router-dom";
-import { useMercuryBaseContract } from "@/hooks/useContract";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
-import { handleError } from "@/utils/error";
-import { DEAFAULT_CHAINID, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
-import useSkyToast from "@/hooks/useSkyToast";
-import Loading from "../Loading";
 import GrayPlanetBg from "./assets/gray-planet-bg.svg";
 import { motion, useAnimation } from "framer-motion";
 import { PrimaryButton } from "../Button/Index";
@@ -58,67 +51,10 @@ const PlanetList = ({
 }) => {
     const imgAnimation = useAnimation();
 
-    const toast = useSkyToast();
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const { account, chainId } = useActiveWeb3React();
     const navigate = useNavigate();
-    const mercuryBaseContract = useMercuryBaseContract(true);
-
-    const addNetworkToMetask = useAddNetworkToMetamask();
-    const [loading, setLoading] = useState(false);
-    const handleToSpend = async () => {
-        if (chainId !== Number(DEAFAULT_CHAINID)) {
-            await addNetworkToMetask(Number(DEAFAULT_CHAINID));
-            return;
-        }
-    };
 
     const handleToBtt = async () => {
         navigate(`/btt/mode`);
-    };
-
-    const handleMintPlayTest = async (
-        path: string,
-        showBalanceTip: boolean = true,
-    ) => {
-        try {
-            if (chainId !== TESTFLIGHT_CHAINID) {
-                await addNetworkToMetask(TESTFLIGHT_CHAINID);
-                return;
-            }
-
-            const balanceTip = localStorage.getItem("balanceTip");
-            if (!balanceTip && showBalanceTip) {
-                onOpen();
-                return;
-            }
-            setLoading(true);
-            const res = await mercuryBaseContract.playTestMint();
-            await res.wait();
-
-            const balance1 = await mercuryBaseContract.balanceOf(account);
-            const p1 = new Array(balance1.toNumber())
-                .fill("")
-                .map((item, index) => {
-                    return mercuryBaseContract.tokenOfOwnerByIndex(
-                        account,
-                        index,
-                    );
-                });
-            const planeTokenIds1 = await Promise.all(p1);
-            setLoading(false);
-
-            if (planeTokenIds1.length > 0) {
-                navigate(
-                    `${path}?tokenId=${planeTokenIds1[
-                        planeTokenIds1.length - 1
-                    ].toNumber()}&testflight=true`,
-                );
-            }
-        } catch (error) {
-            setLoading(false);
-            toast(handleError(error));
-        }
     };
 
     const planetList = [
@@ -136,9 +72,7 @@ const PlanetList = ({
                 transform: "",
             },
             text: "Trailbalzer",
-
-            playTest: handleMintPlayTest,
-            play: handleToSpend,
+            play: () => {},
             path: "/spendresource",
         },
         {
@@ -155,7 +89,6 @@ const PlanetList = ({
                 transform: "",
             },
             text: "Bid Tac Toe",
-            playTest: handleMintPlayTest,
             play: handleToBtt,
             path: "/btt/mode",
         },
@@ -167,7 +100,6 @@ const PlanetList = ({
 
     return (
         <>
-            {loading && <Loading></Loading>}
             <Box
                 sx={{
                     left: 0,

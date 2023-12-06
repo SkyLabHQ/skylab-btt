@@ -1,28 +1,21 @@
 import { Box, Button, Text } from "@chakra-ui/react";
-import useActiveWeb3React from "../../hooks/useActiveWeb3React";
-
-import { DEAFAULT_CHAINID, injected } from "../../utils/web3Utils";
-import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
+import { ConnectKitButton } from "connectkit";
 import { useEffect } from "react";
 import { SubmitButton } from "../Button/Index";
-import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
+import { useAccount } from "wagmi";
 
 interface ChildProps {
     onNextRound: (nextStep: number) => void;
 }
 
 const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
-    const addNetworkToMetask = useAddNetworkToMetamask();
-
-    const { account } = useActiveWeb3React();
-
-    const { activate } = useWeb3React();
+    const { address } = useAccount();
 
     useEffect(() => {
-        if (account) {
+        if (address) {
             onNextRound(2);
         }
-    }, [account]);
+    }, [address]);
 
     return (
         <Box
@@ -49,29 +42,31 @@ const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
                     alignItems: "center",
                 }}
             >
-                <SubmitButton
-                    width="100%"
-                    onClick={() => {
-                        activate(injected, undefined, true).catch((e) => {
-                            if (e instanceof UnsupportedChainIdError) {
-                                addNetworkToMetask(DEAFAULT_CHAINID).then(
-                                    () => {
-                                        activate(injected);
-                                    },
-                                );
-                            }
-                        });
+                <ConnectKitButton.Custom>
+                    {({
+                        isConnected,
+                        isConnecting,
+                        show,
+                        hide,
+                        address,
+                        ensName,
+                        chain,
+                    }) => {
+                        return (
+                            <SubmitButton width="100%" onClick={show}>
+                                <Text
+                                    fontSize="1.875vw"
+                                    color="#000"
+                                    fontWeight="600"
+                                    textAlign="center"
+                                >
+                                    Connect Wallet
+                                </Text>
+                            </SubmitButton>
+                        );
                     }}
-                >
-                    <Text
-                        fontSize="1.875vw"
-                        color="#000"
-                        fontWeight="600"
-                        textAlign="center"
-                    >
-                        Connect Wallet
-                    </Text>
-                </SubmitButton>
+                </ConnectKitButton.Custom>
+
                 <Button
                     variant={"unstyled"}
                     onClick={() => {

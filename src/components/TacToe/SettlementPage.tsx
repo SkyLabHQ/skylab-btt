@@ -9,7 +9,6 @@ import { GameState } from ".";
 import UpIcon from "./assets/up-icon.svg";
 import DownIcon from "./assets/down-icon.svg";
 import Loading from "../Loading";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import { aviationImg } from "@/utils/aviationImg";
 import { levelRanges } from "@/utils/level";
 import RequestNextButton from "../RequrestNextButton";
@@ -18,10 +17,11 @@ import MileageIcon from "@/components/Tournament/assets/mileage-icon.svg";
 import PilotIcon from "@/components/Tournament/assets/pilot-icon.svg";
 import RightArrowBlack from "@/components/Tournament/assets/right-arrow-black.svg";
 import { PrimaryButton } from "../Button/Index";
+import { useAccount } from "wagmi";
 
 const PilotInfo = ({ mileage }: { mileage: number }) => {
     const { myActivePilot } = useGameContext();
-    const { account } = useActiveWeb3React();
+    const { address } = useAccount();
     const navigate = useNavigate();
 
     const pilotImg = myActivePilot?.img;
@@ -39,7 +39,7 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
             >
                 <MyPilot
                     img={pilotImg}
-                    showSupport={myActivePilot.owner !== account}
+                    showSupport={myActivePilot.owner !== address}
                     sx={{
                         width: "5.7292vw !important",
                         height: "5.7292vw !important",

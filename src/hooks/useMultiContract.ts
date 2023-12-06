@@ -11,10 +11,8 @@ import DELEGATEERC721_ABI from "@/skyConstants/abis/DelegateERC721.json";
 import PILOTMILEAGE_ABI from "@/skyConstants/abis/PilotMileage.json";
 import PILOTNETPOINTS_ABI from "@/skyConstants/abis/PilotNetPoints.json";
 import PILOTWINSTREAK_ABI from "@/skyConstants/abis/PilotWinStreak.json";
-
 import qs from "query-string";
-import useActiveWeb3React from "./useActiveWeb3React";
-import { ChainId, randomRpc, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { ChainId, randomRpc } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
 import {
     skylabBidTacToeAddress,
@@ -28,6 +26,7 @@ import {
 } from "./useContract";
 import { ethers } from "ethers";
 import { isAddress } from "@/utils/isAddress";
+import { useChainId } from "wagmi";
 
 setMulticallAddress(ChainId.BASE, "0xcA11bde05977b3631167028862bE2a173976CA11");
 
@@ -73,14 +72,14 @@ export function getSigner(
 }
 
 export const useMultiMercuryTouramentContract = (propChainId?: number) => {
-    const { chainId: activeChainId } = useActiveWeb3React();
+    const activeChainId = useChainId();
     const chainId = propChainId || activeChainId;
 
     return useContract(skylabTournamentAddress[chainId], SKYLABTOURNAMENT_ABI);
 };
 
 export const useMultiMercuryBaseContract = (propChainId?: number) => {
-    const { chainId: activeChainId } = useActiveWeb3React();
+    const activeChainId = useChainId();
     const chainId = propChainId || activeChainId;
     const { search } = useLocation();
     const params = qs.parse(search) as any;
@@ -97,7 +96,7 @@ export const useMultiMercuryBaseContract = (propChainId?: number) => {
 export const useMultiSkylabBidTacToeFactoryContract = (
     propChainId?: number,
 ) => {
-    const { chainId: activeChainId } = useActiveWeb3React();
+    const activeChainId = useChainId();
     const chainId = propChainId || activeChainId;
 
     return useContract(skylabBidTacToeAddress[chainId], SKYLABBIDTACTOE_ABI);

@@ -17,7 +17,6 @@ import DotIcon from "./assets/dot.png";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import { skylabTournamentAddress } from "@/hooks/useContract";
 import { getMetadataImg } from "@/utils/ipfsImg";
 import { shortenAddress } from "@/utils";
@@ -33,6 +32,7 @@ import { RankBackground, RankMedal } from "@/skyConstants/rank";
 import { ActivePilotRes, handlePilotsInfo } from "@/skyConstants/pilots";
 import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import WinBg from "./assets/galaxy-bg.svg";
+import { useAccount, useWalletClient } from "wagmi";
 
 const Empty = () => {
     return (
@@ -644,9 +644,7 @@ export const Leaderboard = ({
 }: ChildProps): ReactElement => {
     const [controlledSwiper, setControlledSwiper] = useState(null);
     const [childLoading] = useState(false);
-
-    const { account } = useActiveWeb3React();
-
+    const { address } = useAccount();
     const [selectRound, setSelectRound] = useState(currentRound);
 
     const [tokenIdList, setTokenIdList] = useState<any[]>([]);
@@ -697,7 +695,7 @@ export const Leaderboard = ({
     };
 
     const handleNextRound = () => {
-        if (!!account) {
+        if (!!address) {
             onNextRound(2);
         } else {
             onNextRound(1);
@@ -821,7 +819,7 @@ export const Leaderboard = ({
                     width: "2.0833vw",
                 }}
                 onClick={(e: any) => {
-                    if (!!account) {
+                    if (!!address) {
                         onNextRound(2);
                     } else {
                         onNextRound(1);

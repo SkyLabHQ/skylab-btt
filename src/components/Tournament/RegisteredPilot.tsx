@@ -1,7 +1,6 @@
 import { Box, Image, Text, Grid, GridItem } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import {
     useMultiPilotMileageContract,
     useMultiProvider,
@@ -12,6 +11,7 @@ import { PilotInfo } from "@/hooks/usePilotInfo";
 import { PilotXp } from "./PilotXp";
 import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import { getPilotInfo, handlePilotsInfo } from "@/skyConstants/pilots";
+import { useAccount, useChainId } from "wagmi";
 
 const RegisteredPilot = ({
     selectPilotInfo,
@@ -20,7 +20,8 @@ const RegisteredPilot = ({
     selectPilotInfo: PilotInfo;
     handleSelectPilotId: (value: PilotInfo) => void;
 }) => {
-    const { account, chainId } = useActiveWeb3React();
+    const { address } = useAccount();
+    const chainId = useChainId();
     const defaultMultiProvider = useMultiProvider(chainId);
 
     const [recentlyActivePilots, setRecentlyActivePilots] = useState([]);
@@ -34,7 +35,7 @@ const RegisteredPilot = ({
         try {
             setLoading(true);
             const recentlyActivePilots =
-                await mercuryPilotsContract.getRecentlyActivePilots(account);
+                await mercuryPilotsContract.getRecentlyActivePilots(address);
             const pMileageRequest: any = [];
 
             // filter out invalid pilots
@@ -82,7 +83,7 @@ const RegisteredPilot = ({
 
     useEffect(() => {
         if (
-            !account ||
+            !address ||
             !mercuryPilotsContract ||
             !multiPilotMileageContract ||
             !defaultMultiProvider
@@ -91,7 +92,7 @@ const RegisteredPilot = ({
         }
         handleGetRecentlyUsedPilot();
     }, [
-        account,
+        address,
         mercuryPilotsContract,
         multiPilotMileageContract,
         defaultMultiProvider,

@@ -1,15 +1,15 @@
 import { ethers } from "ethers";
 import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import useActiveWeb3React from "./useActiveWeb3React";
 import qs from "query-string";
 import { getRandomProvider } from "@/utils/web3Utils";
+import { useChainId } from "wagmi";
 
 export const useTacToeSigner = (
     tokenId: number,
     propTestflight: boolean = false,
 ): [ethers.Wallet, () => void] => {
-    const { chainId } = useActiveWeb3React();
+    const chainId = useChainId();
     const { search } = useLocation();
 
     const params = qs.parse(search) as any;

@@ -1,12 +1,3 @@
-import {
-    BaseProvider,
-    ExternalProvider,
-    getDefaultProvider,
-    JsonRpcFetchFunc,
-    Web3Provider,
-} from "@ethersproject/providers";
-import { InjectedConnector } from "@web3-react/injected-connector";
-import { NetworkConnector } from "@web3-react/network-connector";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ethers } from "ethers";
 
@@ -130,51 +121,13 @@ export const SUPPORTED_NETWORKS: { [chainId in ChainId]?: ChainInfo } = {
     },
 };
 
-let networkLibrary: BaseProvider | undefined;
-
 export const NETWORK_CONTEXT_NAME = "SkyLabNetworkContext";
 
 export const TESTFLIGHT_CHAINID = ChainId.BASEGOERLI;
 
 export const DEAFAULT_CHAINID =
-    ChainId.BASE || Number(process.env.REACT_APP_CHAIN_ID) || ChainId.POLYGON;
-
+    ChainId.BASEGOERLI || Number(process.env.REACT_APP_CHAIN_ID);
 export const NETWORK_URL = randomRpc[DEAFAULT_CHAINID][0];
-
-/**
- * Get the web3 provider instance and set its polling interval
- * Note: web3-react relies on the existence of a Web3ReactProvider
- * at the root of your application (or more accurately, at the root
- * of the subtree which you'd like to have web3 functionality).
- * It requires a single getLibrary prop which is responsible for
- * instantiating a web3 convenience library object from a low-level provider.
- *
- * This function will be passed to the *getLibrary* prop.
- * @param provider the current web3 provider (i.e. injected/metamask)
- * @returns Web3Provider instance
- */
-export const getLibrary = (
-    provider: ExternalProvider | JsonRpcFetchFunc,
-): Web3Provider => {
-    const library = new Web3Provider(provider, "any");
-    library.pollingInterval = 5000;
-    return library;
-};
-
-export const getNetworkLibrary = (): BaseProvider => {
-    const provider = getDefaultProvider(NETWORK_URL);
-    return (networkLibrary = networkLibrary ?? provider);
-};
-
-/** Network connector (default connection to network - i.e. Polygon) */
-export const network = new NetworkConnector({
-    urls: { [DEAFAULT_CHAINID]: NETWORK_URL },
-});
-
-/** Injected Connector (metamask) */
-export const injected = new InjectedConnector({
-    supportedChainIds: [ChainId.BASE],
-});
 
 // add 10%
 export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {

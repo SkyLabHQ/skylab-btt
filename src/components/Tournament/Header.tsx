@@ -13,14 +13,11 @@ import React from "react";
 import Discord from "./assets/discord.svg";
 import Tw from "./assets/tw.svg";
 import Telegram from "./assets/telegram.svg";
-import { PilotInfo } from "@/hooks/usePilotInfo";
 import SkylabIcon from "./assets/skylab-icon.svg";
 import Airdrop from "./assets/airdrop-icon.svg";
-
 import CosmeticRewardIcon from "./assets/cosmetic-reward.svg";
 import TasksIcon from "./assets/tasks.svg";
 import FactionIcon from "./assets/faction.svg";
-
 import MenuIcon from "./assets/menu.svg";
 
 const Header = ({
@@ -169,6 +166,7 @@ const Header = ({
                                             display: "flex",
                                             flexDirection: "column",
                                             alignItems: "center",
+                                            background: "transparent",
                                             cursor: item.onClick
                                                 ? "pointer"
                                                 : "no-drop",

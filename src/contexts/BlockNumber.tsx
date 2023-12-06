@@ -1,6 +1,5 @@
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import useDebounce from "@/utils/useDebounce";
-import { DEAFAULT_CHAINID, randomRpc } from "@/utils/web3Utils";
+import { randomRpc } from "@/utils/web3Utils";
 import { ethers } from "ethers";
 import {
     createContext,
@@ -11,6 +10,7 @@ import {
     useMemo,
     useState,
 } from "react";
+import { useChainId } from "wagmi";
 
 export const BlockNumberContext = createContext<{
     blockNumber: number | null;
@@ -23,7 +23,7 @@ export const BlockNumberProvider = ({
 }: {
     children: ReactElement;
 }) => {
-    const { chainId = DEAFAULT_CHAINID } = useActiveWeb3React();
+    const chainId = useChainId();
     const library = useMemo(() => {
         const provider = new ethers.providers.StaticJsonRpcProvider(
             randomRpc[chainId][0],

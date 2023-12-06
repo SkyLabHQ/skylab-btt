@@ -17,12 +17,10 @@ import { useNavigate } from "react-router-dom";
 import { ImgButton, YellowButton } from "../Button/Index";
 import { usePilotInfo } from "@/hooks/usePilotInfo";
 import GameLeaderboard from "./GameLeaderboard";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
-import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
 import MyPilot from "./MyPilot";
-import { DEAFAULT_CHAINID, injected } from "@/utils/web3Utils";
-import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import MileageArrow from "./assets/mileage-arrow.svg";
+import { useAccount } from "wagmi";
+import { ConnectKitButton } from "connectkit";
 
 const Mileage = ({
     value,
@@ -32,10 +30,8 @@ const Mileage = ({
     onNextRound: (value: string) => void;
 }) => {
     const navigate = useNavigate();
-    const { account, chainId } = useActiveWeb3React();
-    const { activePilot } = usePilotInfo(account);
-    const addNetworkToMetask = useAddNetworkToMetamask();
-    const { activate } = useWeb3React();
+    const { address } = useAccount();
+    const { activePilot } = usePilotInfo(address);
 
     return (
         <Box
@@ -49,30 +45,24 @@ const Mileage = ({
                 padding: "0.2083vw",
             }}
         >
-            <MyPilot
-                img={activePilot.img}
-                showSupport={activePilot.owner !== account}
-                onClick={async () => {
-                    if (!account) {
-                        activate(injected, undefined, true).catch((e) => {
-                            if (e instanceof UnsupportedChainIdError) {
-                                addNetworkToMetask(DEAFAULT_CHAINID).then(
-                                    () => {
-                                        activate(injected);
-                                    },
-                                );
-                            }
-                        });
-                        return;
-                    }
+            <ConnectKitButton.Custom>
+                {({ show }) => {
+                    return (
+                        <MyPilot
+                            img={activePilot.img}
+                            showSupport={activePilot.owner !== address}
+                            onClick={async () => {
+                                if (!address) {
+                                    show();
+                                    return;
+                                }
 
-                    if (chainId !== Number(DEAFAULT_CHAINID)) {
-                        await addNetworkToMetask(Number(DEAFAULT_CHAINID));
-                        return;
-                    }
-                    onNextRound("currentPilot");
+                                onNextRound("currentPilot");
+                            }}
+                        ></MyPilot>
+                    );
                 }}
-            ></MyPilot>
+            </ConnectKitButton.Custom>
 
             <Popover>
                 <PopoverTrigger>
@@ -117,7 +107,7 @@ const Mileage = ({
                                 fontWeight: 500,
                             }}
                         >
-                            {account ? value : "?"}
+                            {address ? value : "?"}
                         </Text>
                     </Box>
                 </PopoverTrigger>
@@ -267,10 +257,10 @@ const RightNav = ({
 }: {
     onNextRound: (step: number | string) => void;
 }) => {
-    const { account } = useActiveWeb3React();
+    const { address } = useAccount();
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
-    const { activePilot } = usePilotInfo(account);
+    const { activePilot } = usePilotInfo(address);
 
     return (
         <Box

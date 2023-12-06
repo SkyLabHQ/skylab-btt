@@ -5,7 +5,6 @@ import OldWhite from "./assets/old-white.svg";
 import OldYellow from "./assets/old-yellow.svg";
 import FindYellow from "./assets/find-yellow.svg";
 import FindWhite from "./assets/find-white.svg";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import {
     getMultiDelegateERC721Contract,
     getMultiProvider,
@@ -31,6 +30,7 @@ import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import { ZERO_DATA } from "@/skyConstants";
 import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
 import UnknownPilotIcon from "./assets/unknow-pilot2.svg";
+import { useAccount, useChainId } from "wagmi";
 
 const CustomButton = styled(Button)`
     width: 10.4167vw;
@@ -131,14 +131,16 @@ const CurrentPilot = ({
     onNextRound: (step: number | string) => void;
 }) => {
     const toast = useSkyToast();
-    const { account, chainId } = useActiveWeb3React();
+    const { address } = useAccount();
+    const chainId = useChainId();
+
     const addNetworkToMetask = useAddNetworkToMetamask();
     const mercuryPilotsContract = useMercuryPilotsContract();
     const [activeLoading, setActiveLoading] = useState(false);
     const [currentTab, setCurrentTab] = React.useState(0);
     const pilotList = AllPilotList[chainId];
 
-    const { activePilot, handleGetActivePilot } = usePilotInfo(account);
+    const { activePilot, handleGetActivePilot } = usePilotInfo(address);
     const [inputPilotId, setInputPilotId] = useState("");
     const [pilotIndex, setPilotIndex] = useState(1);
 
@@ -246,7 +248,7 @@ const CurrentPilot = ({
             const res = await mercuryPilotsContract.setActivePilot(
                 selectPilotInfo.address,
                 selectPilotInfo.pilotId,
-                account,
+                address,
             );
             await res.wait();
             setActiveLoading(false);
@@ -308,7 +310,7 @@ const CurrentPilot = ({
                         >
                             <MyPilot
                                 img={activePilot.img}
-                                showSupport={activePilot.owner !== account}
+                                showSupport={activePilot.owner !== address}
                                 sx={{
                                     width: "4.8958vw !important",
                                     height: "4.8958vw !important",
@@ -348,7 +350,7 @@ const CurrentPilot = ({
                         <MyPilot
                             nonexistentImg={UnknownPilotIcon}
                             img={selectPilotInfo.img}
-                            showSupport={selectPilotInfo.owner !== account}
+                            showSupport={selectPilotInfo.owner !== address}
                             sx={{
                                 width: "4.8958vw !important",
                                 height: "4.8958vw !important",

@@ -11,10 +11,6 @@ interface Window {
     web3?: unknown;
 }
 
-declare module "@metamask/jazzicon" {
-    export default function (diameter: number, seed: number): HTMLElement;
-}
-
 declare module "*.svg" {
     import React = require("react");
     export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;

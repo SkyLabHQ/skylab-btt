@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import useActiveWeb3React from "./useActiveWeb3React";
 import qs from "query-string";
+import { useAccount, useChainId } from "wagmi";
 
 export const useGridCommited = (tokenId: number, grid: number) => {
-    const { chainId } = useActiveWeb3React();
+    const chainId = useChainId();
     const getGridCommited = useCallback(() => {
         if (!tokenId || !chainId || grid === -1) {
             return "";
@@ -60,8 +60,7 @@ export const useGridCommited = (tokenId: number, grid: number) => {
 };
 
 export const useDeleteTokenIdCommited = (tokenId: number) => {
-    const { chainId } = useActiveWeb3React();
-
+    const chainId = useChainId();
     const deleteTokenIdCommited = useCallback(() => {
         if (!tokenId || !chainId) {
             return null;
@@ -84,7 +83,7 @@ export const useDeleteTokenIdCommited = (tokenId: number) => {
 };
 
 export const useAddBttTransaction = (tokenId: number) => {
-    const { chainId } = useActiveWeb3React();
+    const chainId = useChainId();
     const { search } = useLocation();
 
     const params = qs.parse(search) as any;
@@ -143,10 +142,11 @@ export const useAddBttTransaction = (tokenId: number) => {
 };
 
 export const useAllBttTransaction = () => {
-    const { chainId, account } = useActiveWeb3React();
+    const chainId = useChainId();
+    const { address } = useAccount();
 
     return useMemo(() => {
-        if (!chainId || !account) {
+        if (!chainId || !address) {
             return [];
         }
 
@@ -164,9 +164,9 @@ export const useAllBttTransaction = () => {
                 return records[item];
             })
             .filter((item) => {
-                return item.account === account || item.from === account;
+                return item.account === address || item.from === address;
             })
             .reverse();
         return myRecords;
-    }, [account, chainId]);
+    }, [address, chainId]);
 };

@@ -1,6 +1,5 @@
 import { Contract, ethers, Wallet } from "ethers";
 import { useCallback } from "react";
-import useActiveWeb3React from "./useActiveWeb3React";
 import retry from "p-retry";
 import PQueue from "p-queue";
 
@@ -40,6 +39,7 @@ import {
     topic0UserOperationRevertReason,
     UserOperationiface,
 } from "@/skyConstants/iface";
+import { useChainId } from "wagmi";
 
 const nonceManager = new NonceManager();
 
@@ -69,7 +69,7 @@ export const useTestflightRetryContract = () => {
 };
 
 export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
-    const { chainId } = useActiveWeb3React();
+    const chainId = useChainId();
     return useCallback(
         async (
             method: string,

@@ -31,12 +31,12 @@ import {
 import StatusTip from "./StatusTip";
 import ResultUserCard from "./ResultUserCard";
 import Chat from "./Chat";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import { useTacToeSigner } from "@/hooks/useSigner";
-import { getRandomProvider, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { getRandomProvider } from "@/utils/web3Utils";
 import { ZERO_DATA } from "@/skyConstants";
 import A0Testflight from "@/assets/aviations/a0-testflight.png";
 import A2Testflight from "@/assets/aviations/a2-testflight.png";
+import { useAccount } from "wagmi";
 
 export const getWinState = (gameState: GameState) => {
     return [
@@ -106,7 +106,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     } = useGameContext();
 
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
-    const { account } = useActiveWeb3React();
+    const { address } = useAccount();
     const { blockNumber } = useBlockNumber();
     const [revealing, setRevealing] = useState<boolean>(false);
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
@@ -292,7 +292,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
 
         const value = balance.sub(gasFee).sub(l1Fees);
         const transferResult = await singer.sendTransaction({
-            to: account,
+            to: address,
             value: value,
             gasLimit: 21000,
             gasPrice: fasterGasPrice,

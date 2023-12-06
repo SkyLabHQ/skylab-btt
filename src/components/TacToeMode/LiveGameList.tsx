@@ -1,12 +1,11 @@
 import { Box, Text, Image } from "@chakra-ui/react";
 import React from "react";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import { PrimaryButton } from "@/components/Button/Index";
 import YellowArrowIcon from "@/assets/yellow-arrow.svg";
 import { onGoingGame } from "@/pages/TacToeMode";
+import { useChainId } from "wagmi";
 export const LiveGame = ({ list }: { list: onGoingGame[] }) => {
-    const { chainId } = useActiveWeb3React();
-
+    const chainId = useChainId();
     const handleWatch = (gameAddress: string) => {
         const url = `${window.location.origin}/#/btt/live?gameAddress=${gameAddress}&chainId=${chainId}`;
         window.open(url, "_blank");

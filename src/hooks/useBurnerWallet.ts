@@ -1,9 +1,10 @@
 import { ethers } from "ethers";
 import { useCallback } from "react";
-import useActiveWeb3React from "./useActiveWeb3React";
-import { getSigner, useSkylabBidTacToeContract } from "./useContract";
+import { useSkylabBidTacToeContract } from "./useContract";
 import { ChainId, SUPPORTED_NETWORKS } from "@/utils/web3Utils";
 import useSkyToast from "./useSkyToast";
+import { useAccount, useChainId } from "wagmi";
+import { useEthersProvider } from "./useWagmiToEthers";
 
 export enum BalanceState {
     ACCOUNT_LACK,
@@ -41,7 +42,9 @@ const balanceInfo = {
 
 export const useCheckBurnerBalanceAndApprove = () => {
     const toast = useSkyToast();
-    const { account, chainId, library } = useActiveWeb3React();
+    const { address } = useAccount();
+    const library = useEthersProvider();
+    const chainId = useChainId();
     const skylabBidTacToeContract = useSkylabBidTacToeContract();
 
     const approveForBidTacToeGame = useCallback(
@@ -52,7 +55,7 @@ export const useCheckBurnerBalanceAndApprove = () => {
             needTransfer: boolean,
         ) => {
             if (
-                !account ||
+                !address ||
                 !skylabBidTacToeContract ||
                 !tokenId ||
                 !burnerAddress
@@ -84,7 +87,7 @@ export const useCheckBurnerBalanceAndApprove = () => {
                     : "success approveForGame",
             );
         },
-        [account, skylabBidTacToeContract],
+        [address, skylabBidTacToeContract],
     );
 
     const getTacToeBalanceState = useCallback(
@@ -98,7 +101,7 @@ export const useCheckBurnerBalanceAndApprove = () => {
                     ethers.utils.parseEther(balanceInfo[chainId].low),
                 )
             ) {
-                const balance = await library.getBalance(account);
+                const balance = await library.getBalance(address);
                 if (
                     balance.lt(
                         ethers.utils.parseEther(balanceInfo[chainId].need),
@@ -111,22 +114,6 @@ export const useCheckBurnerBalanceAndApprove = () => {
             return BalanceState.ENOUTH;
         },
         [library, chainId],
-    );
-
-    const transferTacToeGas = useCallback(
-        async (burnerAddress: string) => {
-            if (!library || !account || !burnerAddress) {
-                return;
-            }
-            toast("Confirm transaction in MetaMask to proceed");
-            const singer = getSigner(library, account);
-            const transferResult = await singer.sendTransaction({
-                to: burnerAddress,
-                value: ethers.utils.parseEther(balanceInfo[chainId].high),
-            });
-            await transferResult.wait();
-        },
-        [library, account, chainId],
     );
 
     const getApproveBitTacToeGameState = useCallback(
@@ -190,7 +177,6 @@ export const useCheckBurnerBalanceAndApprove = () => {
         },
         [
             getTacToeBalanceState,
-            transferTacToeGas,
             getApproveBitTacToeGameState,
             approveForBidTacToeGame,
         ],

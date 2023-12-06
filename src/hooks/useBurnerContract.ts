@@ -3,10 +3,10 @@ import { useMemo } from "react";
 import { AddressZero } from "@ethersproject/constants";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
-import useActiveWeb3React from "./useActiveWeb3React";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { isAddress } from "@/utils/isAddress";
 import { skylabBidTacToeAddress } from "./useContract";
+import { useChainId } from "wagmi";
 
 // account is optional
 export function getContract(address: string, ABI: any): Contract {
@@ -30,7 +30,7 @@ function useContract(address: string | undefined, ABI: any): Contract | null {
 }
 
 export const useBurnerSkylabBidTacToeContract = (istest: boolean = false) => {
-    const { chainId: activeChainId } = useActiveWeb3React();
+    const activeChainId = useChainId();
     const chainId = istest ? TESTFLIGHT_CHAINID : activeChainId;
     return useContract(
         skylabBidTacToeAddress[istest ? chainId : TESTFLIGHT_CHAINID],

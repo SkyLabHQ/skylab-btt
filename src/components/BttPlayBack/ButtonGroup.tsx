@@ -1,6 +1,5 @@
 import { Box, Button, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import StartIcon from "./assets/start.svg";
 import PreStepIcon from "./assets/pre-step.svg";
 import NextStepIcon from "./assets/next-step.svg";
@@ -16,6 +15,7 @@ import { BoardItem, GameInfo, Info, UserMarkType } from "@/pages/TacToe";
 import { getWinState } from "../TacToe";
 import { shortenAddressWithout0x } from "@/utils";
 import ShareEmojiIcon from "./assets/share-emoji.svg";
+import { useChainId } from "wagmi";
 
 const winEmoji = ["❤️", "👑", "🦋", "🌻", "🥳", "🤪", "😎", "🤭", "🤩"];
 const loseEmoji = ["🥀", "💔", "🥲", "🥶", "🤬", "🥺", "🤕", "☠️"];
@@ -93,8 +93,7 @@ const ButtonGroup = ({
     handleStopPlay: () => void;
     handleNext?: () => void;
 }) => {
-    const { chainId } = useActiveWeb3React();
-
+    const chainId = useChainId();
     const handleShare = () => {
         const url = `${
             window.location.origin

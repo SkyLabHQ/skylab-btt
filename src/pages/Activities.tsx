@@ -1,4 +1,4 @@
-import { Box, Image } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useState } from "react";
 import { Leaderboard } from "../components/Tournament";
 import MercuryBg from "@/components/Tournament/assets/mercury-bg.png";
@@ -6,7 +6,6 @@ import BlueBg from "@/components/Tournament/assets/blue-bg.png";
 import { Contract } from "ethers-multicall";
 import ConnectWalletRound from "../components/Tournament/ConnectWalletRound";
 import MissionRound from "../components/Tournament/MissionRound";
-import useActiveWeb3React from "../hooks/useActiveWeb3React";
 import BgImgD from "../components/Tournament/BgImgD";
 import { skylabTournamentAddress } from "@/hooks/useContract";
 import { useLocation } from "react-router-dom";
@@ -22,7 +21,6 @@ import TournamentHelmet from "@/components/Helmet/TournamentHelmet";
 
 const Activities = (): ReactElement => {
     const { search } = useLocation();
-    const { account } = useActiveWeb3React();
     const [step, setStep] = useState<number | string>(0);
     const [currentRound, setCurrentRound] = useState(-1);
     const ethcallProvider = useMultiProvider(DEAFAULT_CHAINID);
@@ -86,13 +84,7 @@ const Activities = (): ReactElement => {
                         )}
 
                         {step == 2 && (
-                            <MissionRound
-                                currentRound={currentRound}
-                                onBack={() => {
-                                    setStep(0);
-                                }}
-                                onNextRound={handleNextStep}
-                            />
+                            <MissionRound onNextRound={handleNextStep} />
                         )}
 
                         {step === "pilotDetail" && <PilotDetail></PilotDetail>}

@@ -20,9 +20,9 @@ import QuitModal from "./QuitModal";
 import { useGameContext } from "@/pages/TacToe";
 import useSkyToast from "@/hooks/useSkyToast";
 import { CHAIN_NAMES } from "@/utils/web3Utils";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
 import { shortenAddressWithout0x } from "@/utils";
 import KeyBoard from "../BttComponents/KeyBoard";
+import { useChainId } from "wagmi";
 
 const ShareLink = ({
     isOpen,
@@ -33,7 +33,7 @@ const ShareLink = ({
     onToggle: () => void;
     onClose: () => void;
 }) => {
-    const { chainId } = useActiveWeb3React();
+    const chainId = useChainId();
     const { bidTacToeGameAddress, myInfo, istest } = useGameContext();
     const toast = useSkyToast();
     const inviteLink = useMemo(() => {

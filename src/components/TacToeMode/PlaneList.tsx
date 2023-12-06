@@ -1,8 +1,6 @@
 import { Box, Text, Image } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useActiveWeb3React from "@/hooks/useActiveWeb3React";
-import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
 import PlaneShadow from "./assets/plane-shadow.png";
 import InGame from "./assets/ingame.svg";
@@ -13,6 +11,7 @@ import RoundTime from "@/skyConstants/roundTime";
 import { PlaneInfo } from "@/pages/TacToeMode";
 import NoPlaneBg from "./assets/no-plane.svg";
 import { motion } from "framer-motion";
+import { useChainId } from "wagmi";
 
 export const NoPlaneContent = () => {
     return (
@@ -25,51 +24,6 @@ export const NoPlaneContent = () => {
                     marginBottom: "3.125vw",
                 }}
             ></Image>
-            {/* <Box sx={{ fontSize: "1.0417vw" }}>
-                You currently do not have any aviation for this round.
-                <Popover placement="end-start">
-                    <PopoverTrigger>
-                        <Image
-                            src={GrayTipIcon}
-                            sx={{
-                                display: "inline-block",
-                                verticalAlign: "middle",
-                                marginLeft: "0.2604vw",
-                                cursor: "pointer",
-                                width: "1.7708vw",
-                                height: "1.7708vw",
-                            }}
-                        ></Image>
-                    </PopoverTrigger>
-                    <PopoverContent
-                        sx={{
-                            background: "#D9D9D9",
-                            borderRadius: "0.5208vw",
-                            border: "none",
-                            color: "#000",
-                            width: "14.1667vw",
-                            lineHeight: 1,
-                            "&:focus": {
-                                outline: "none !important",
-                                boxShadow: "none !important",
-                            },
-                        }}
-                    >
-                        <PopoverBody>
-                            <span
-                                style={{
-                                    fontSize: "0.7292vw",
-                                    fontWeight: 600,
-                                    fontFamily: "Orbitron",
-                                }}
-                            >
-                                Without a plane, you only have access to
-                                playtest.
-                            </span>
-                        </PopoverBody>
-                    </PopoverContent>
-                </Popover>
-            </Box> */}
         </Box>
     );
 };
@@ -84,9 +38,6 @@ const PlaneList = ({
     const [currentImg, setCurrentImg] = useState(0);
     const [lastImg, setLastImg] = useState(0);
     const navigate = useNavigate();
-    const { chainId } = useActiveWeb3React();
-    const addNetworkToMetask = useAddNetworkToMetamask();
-
     const handleSetCurrentImg = (index: number) => {
         if (currentImg !== lastImg) {
             setLastImg(currentImg);
@@ -139,12 +90,6 @@ const PlaneList = ({
                 {planeList[currentImg].state && (
                     <Image
                         onClick={async () => {
-                            if (chainId !== Number(DEAFAULT_CHAINID)) {
-                                await addNetworkToMetask(
-                                    Number(DEAFAULT_CHAINID),
-                                );
-                                return;
-                            }
                             navigate(
                                 `/btt/game?tokenId=${planeList[currentImg].tokenId}`,
                             );
