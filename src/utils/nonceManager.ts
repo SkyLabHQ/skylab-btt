@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
 import getNowSecondsTimestamp from "./nowTime";
+import { PublicClient } from "viem";
 
 const NONCE_STALE_AFTER_MS = 10_000;
 
@@ -25,7 +26,7 @@ class NonceManager {
     }
 
     public async getNonce(
-        provider: ethers.providers.JsonRpcProvider,
+        provider: providers.FallbackProvider | providers.JsonRpcProvider,
         address: string,
     ) {
         const releaseMutex = await this.nonceMutex.acquire();

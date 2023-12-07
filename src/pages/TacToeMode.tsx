@@ -1,5 +1,5 @@
 import { useCheckBurnerBalanceAndApprove } from "@/hooks/useBurnerWallet";
-import { Box, Text, Image } from "@chakra-ui/react";
+import { Box, Text, Image, useBoolean } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -36,12 +36,23 @@ import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import { getDefaultWithProvider, getTestflightSigner } from "@/hooks/useSigner";
+import {
+    getDefaultWithProvider,
+    getPrivateLobbySigner,
+    getTestflightSigner,
+} from "@/hooks/useSigner";
 import { getSCWallet } from "@/hooks/useSCWallet";
 import ConnectWalletBg from "@/components/TacToeMode/assets/connect-wallet.svg";
-import { erc721iface, topic0Transfer } from "@/skyConstants/iface";
+import {
+    erc721iface,
+    topic0PrivateLobbyCreated,
+    topic0Transfer,
+} from "@/skyConstants/iface";
 import { ConnectKitButton } from "connectkit";
-import { useAccount, useChainId } from "wagmi";
+import { useAccount, useChainId, useWalletClient } from "wagmi";
+import { decodeEventLog } from "viem";
+import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
+import Back from "@/components/Back";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -62,11 +73,11 @@ export interface onGoingGame {
 }
 
 const TacToeMode = () => {
+    const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
     const navigate = useNavigate();
     const { address } = useAccount();
     const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
-
     const multiProvider = useMultiProvider(DEAFAULT_CHAINID);
     const multiMercuryBaseContract = useMultiMercuryBaseContract();
 
@@ -81,13 +92,15 @@ const TacToeMode = () => {
     const [loading, setLoading] = useState(false);
     const ethcallProvider = useMultiProvider(DEAFAULT_CHAINID);
 
+    const { data: signer } = useWalletClient();
+
     const [onGoingGames, setOnGoingGames] = useState<any>([]);
 
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
     const burnerRetryContract = useBurnerRetryContract(contract);
     const testflightContract = useTestflightRetryContract();
 
-    const bttFactoryRetryTest = useBttFactoryRetry(true);
+    const bttFactoryRetryTest = useBttFactoryRetry(true, signer);
 
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
@@ -210,11 +223,8 @@ const TacToeMode = () => {
         setPlaneList(_list);
     };
 
-    const handlePlayTestWithBot = async () => {};
-
     const handleMintPlayTest = async (type: string) => {
         try {
-            setLoading(true);
             const testflightSinger = getTestflightSigner(
                 TESTFLIGHT_CHAINID,
                 true,
@@ -222,7 +232,7 @@ const TacToeMode = () => {
             const { sCWAddress } = await getSCWallet(
                 testflightSinger.privateKey,
             );
-
+            setLoading(true);
             const receipt = await testflightContract("playTestMint", [], {
                 usePaymaster: true,
             });
@@ -263,7 +273,7 @@ const TacToeMode = () => {
                 await checkBurnerBalanceAndApprove(
                     mercuryBaseContract.address,
                     tokenId,
-                    testflightSinger.address,
+                    testflightSinger.account.address,
                 );
                 await burnerRetryContract("createOrJoinDefault", [], {
                     gasLimit: 1000000,
@@ -299,16 +309,14 @@ const TacToeMode = () => {
             }
 
             const tokenId = planeList[currentPlaneIndex].tokenId;
-
             if (loading) return;
             setLoading(true);
 
             const defaultSinger = getDefaultWithProvider(tokenId, chainId);
-
             await checkBurnerBalanceAndApprove(
                 deafaultMercuryBaseContract.address,
                 tokenId,
-                defaultSinger.address,
+                defaultSinger.account.address,
             );
 
             await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
@@ -328,9 +336,74 @@ const TacToeMode = () => {
         }
     };
 
+    const handleCreatePrivateLobby = async () => {
+        try {
+            setLoading(true);
+            const privateLobbySigner = getPrivateLobbySigner();
+            const receipt = await bttFactoryRetryTest(
+                "createPrivateLobby",
+                [],
+                {
+                    usePaymaster: true,
+                    signer: privateLobbySigner,
+                },
+            );
+
+            const logs = receipt.logs.find((item: any) => {
+                return item.topics[0] === topic0PrivateLobbyCreated;
+            });
+
+            // @ts-ignore
+            const result: any = decodeEventLog({
+                abi: [
+                    {
+                        anonymous: false,
+                        inputs: [
+                            {
+                                indexed: false,
+                                internalType: "address",
+                                name: "privateLobbyAddress",
+                                type: "address",
+                            },
+                            {
+                                indexed: false,
+                                internalType: "string",
+                                name: "name",
+                                type: "string",
+                            },
+                            {
+                                indexed: false,
+                                internalType: "address",
+                                name: "admin",
+                                type: "address",
+                            },
+                        ],
+                        name: "PrivateLobbyCreated",
+                        type: "event",
+                    },
+                ],
+                data: logs.data,
+                topics: logs.topics,
+            });
+
+            const url =
+                `/btt/privatelobby?lobbyAddress=` +
+                result.args.privateLobbyAddress;
+            navigate(url);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+            toast(handleError(error, true));
+        }
+    };
+
+    const handleJoinPrivateLobby = async () => {
+        navigate("/btt/joinlobby");
+    };
+
     useEffect(() => {
         if (!multiProvider || !multiSkylabBidTacToeFactoryContract) return;
-        handleGetLobbyOnGoingGames();
+        // handleGetLobbyOnGoingGames();
     }, [multiProvider, multiSkylabBidTacToeFactoryContract]);
 
     useEffect(() => {
@@ -356,17 +429,15 @@ const TacToeMode = () => {
                     position: "relative",
                 }}
             >
-                <Image
-                    src={BackIcon}
-                    onClick={() => navigate("/")}
+                <Box
                     sx={{
                         position: "absolute",
                         left: "1.0417vw",
                         top: "1.0417vw",
-                        width: "2.0833vw",
-                        cursor: "pointer",
                     }}
-                ></Image>
+                >
+                    <Back onClick={() => navigate("/")}></Back>
+                </Box>
                 <Toolbar></Toolbar>
                 <Box
                     sx={{
@@ -378,8 +449,7 @@ const TacToeMode = () => {
                     <LiveGame list={onGoingGames}></LiveGame>
                     <Box
                         sx={{
-                            marginTop: "35px",
-                            height: "8vw",
+                            paddingTop: "1.8229vw",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -391,17 +461,26 @@ const TacToeMode = () => {
                             exit={{ opacity: 0, x: -100 }} // 退出状态：透明且在原位置左边100px的位置
                             transition={{ duration: 0.5 }}
                         >
-                            <PlayButtonGroup
-                                tournamentDisabled={planeList.length === 0}
-                                onPlayTournament={handleCreateOrJoinDefault}
-                                onPlayTestWithBot={handlePlayTestWithBot}
-                                onPlayWithHuman={() => {
-                                    handleMintPlayTest("human");
-                                }}
-                                onPlayWithBot={() => {
-                                    handleMintPlayTest("bot");
-                                }}
-                            ></PlayButtonGroup>
+                            {isPrivateLobbyMode ? (
+                                <PrivateLobbyButtons
+                                    onBack={() => {
+                                        setIsPrivateLobbyMode.off();
+                                    }}
+                                    onCreateLobby={handleCreatePrivateLobby}
+                                    onJoinLobby={handleJoinPrivateLobby}
+                                ></PrivateLobbyButtons>
+                            ) : (
+                                <PlayButtonGroup
+                                    tournamentDisabled={planeList.length === 0}
+                                    onPlayTournament={handleCreateOrJoinDefault}
+                                    onPlayTestLobby={() => {
+                                        setIsPrivateLobbyMode.on();
+                                    }}
+                                    onPlayWithBot={() => {
+                                        handleMintPlayTest("bot");
+                                    }}
+                                ></PlayButtonGroup>
+                            )}
                         </motion.div>
                     </Box>
                     <Box

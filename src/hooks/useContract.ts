@@ -1,28 +1,20 @@
-import { Contract, ethers, providers } from "ethers";
+import { ethers } from "ethers";
 import { useMemo } from "react";
-import {
-    JsonRpcSigner,
-    Web3Provider,
-    type JsonRpcProvider,
-} from "@ethersproject/providers";
-import { AddressZero } from "@ethersproject/constants";
+import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import SKYLABTESSTFLIGHT_ABI from "@/skyConstants/abis/SkylabTestFlight.json";
 import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import MERCURYPILOTS_ABI from "@/skyConstants/abis/MercuryPilots.json";
 import BABYMERCS_ABI from "@/skyConstants/abis/BabyMercs.json";
-
+import MERCURYBTTPRIVATELOBBY_ABI from "@/skyConstants/abis/MercuryBTTPrivateLobby.json";
 import qs from "query-string";
+import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 
 import { ChainId, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
-import { isAddress } from "@/utils/isAddress";
-import {
-    useActiveWagmiToEthers,
-    useEthersProvider,
-    useEthersSigner,
-} from "./useWagmiToEthers";
-import { useAccount, useChainId } from "wagmi";
+import { useEthersProvider, useEthersSigner } from "./useWagmiToEthers";
+import { useChainId, useWalletClient } from "wagmi";
+import { getContract } from "@/utils/contractHelpers";
 
 type ChainIdToAddressMap = { [chainId in ChainId]?: string };
 
@@ -110,39 +102,27 @@ export const botAddress: ChainIdToAddressMap = {
     [ChainId.BASEGOERLI]: "0x8188b958fd692566ebA9E117D0645507BEF7b605",
 };
 
-// returns null on errors
-function useContract(
-    address: string | undefined,
-    ABI: any,
-    withSignerIfPossible = true,
-): Contract | null {
-    const { address: account } = useAccount();
-    const library = useEthersProvider();
+function useContract(address: any, abi: any) {
+    const chainId = useChainId();
     const signer = useEthersSigner();
+    const { data: walletClient } = useWalletClient();
 
     return useMemo(() => {
-        if (!address || !ABI || !library) return null;
+        if (!address || !abi) return null;
         try {
-            return getContract(
+            return getContract({
+                abi,
                 address,
-                ABI,
-                withSignerIfPossible ? signer : library,
-            );
+                chainId,
+                signer: walletClient ?? undefined,
+            });
         } catch (error) {
             console.error("Failed to get contract", error);
             return null;
         }
-    }, [address, ABI, library, withSignerIfPossible, account, signer]);
+    }, [address, abi, chainId, signer]);
 }
 
-// account is optional
-export function getContract(address: string, ABI: any, library: any): Contract {
-    if (!isAddress(address) || address === AddressZero) {
-        throw Error(`Invalid 'address' parameter '${address}'.`);
-    }
-
-    return new Contract(address, ABI, library);
-}
 // account is optional
 export function getProviderOrSigner(
     library: Web3Provider,
@@ -181,7 +161,6 @@ export const useTestflightContract = () => {
     return useContract(
         skylabTestFlightAddress[TESTFLIGHT_CHAINID],
         SKYLABTESSTFLIGHT_ABI,
-        false,
     );
 };
 
@@ -200,17 +179,12 @@ export const useMercuryBaseContract = (usetest?: boolean) => {
                 ? skylabTestFlightAddress[chainId]
                 : skylabTournamentAddress[chainId]),
         istest ? SKYLABTESSTFLIGHT_ABI : SKYLABTOURNAMENT_ABI,
-        true,
     );
 };
 
-export const useSkylabBidTacToeContract = (useSigner: boolean = true) => {
+export const useSkylabBidTacToeContract = () => {
     const chainId = useChainId();
-    return useContract(
-        skylabBidTacToeAddress[chainId],
-        SKYLABBIDTACTOE_ABI,
-        useSigner,
-    );
+    return useContract(skylabBidTacToeAddress[chainId], SKYLABBIDTACTOE_ABI);
 };
 
 export const useMercuryPilotsContract = () => {
@@ -221,4 +195,8 @@ export const useMercuryPilotsContract = () => {
 export const useBabyMercsContract = () => {
     const chainId = useChainId();
     return useContract(babyMercsAddress[chainId], BABYMERCS_ABI);
+};
+
+export const useSkylabBidTacToeGameContract = (address: string) => {
+    return useContract(address, SKYLABBIDTACTOEGAME_ABI);
 };

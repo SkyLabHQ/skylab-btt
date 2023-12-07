@@ -22,6 +22,31 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "privateLobbyAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      }
+    ],
+    "name": "PrivateLobbyCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "uint256",
         "name": "tokenId",
@@ -41,6 +66,32 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "activeLobbyPerPlayer",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "activeQueueTimeout",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
         "name": "burner",
         "type": "address"
       },
@@ -102,6 +153,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "aviation",
+        "type": "address"
+      }
+    ],
+    "name": "cleanupDefaultQueue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "bot",
         "type": "address"
       }
@@ -114,34 +178,82 @@
   {
     "inputs": [
       {
-        "internalType": "uint64",
-        "name": "gridWidth",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint64",
-        "name": "gridHeight",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint64",
-        "name": "lengthToWin",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint64",
-        "name": "initialBalance",
-        "type": "uint64"
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "gridWidth",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "gridHeight",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "lengthToWin",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "initialBalance",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridMaxSelectionCount",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridSelectionStrategy",
+            "type": "uint128"
+          },
+          {
+            "internalType": "bool",
+            "name": "isBot",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct MercuryBidTacToe.GameParams",
+        "name": "gameParams",
+        "type": "tuple"
       }
     ],
-    "name": "createLobby",
-    "outputs": [],
+    "name": "createGameInPrivateLobby",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "createOrJoinDefault",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "createPrivateLobby",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      }
+    ],
+    "name": "deactiveLobbyForPlayer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -169,11 +281,24 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "lobby",
+        "name": "room",
         "type": "address"
       }
     ],
-    "name": "deleteLobby",
+    "name": "deleteGameInPrivateLobby",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "deletePrivateLobby",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -201,19 +326,66 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "burner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "aviation",
         "type": "address"
       }
     ],
-    "name": "getLobbyOnGoingGames",
+    "name": "getAviationLevel",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "uint64",
         "name": "",
-        "type": "address[]"
+        "type": "uint64"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "burner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "aviation",
+        "type": "address"
+      }
+    ],
+    "name": "getAviationPoints",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "playerBurner",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "playerWon",
+        "type": "bool"
+      }
+    ],
+    "name": "handleBotWinLoss",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -275,13 +447,56 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "lobby",
+        "name": "gameAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "player2",
         "type": "address"
       }
     ],
-    "name": "joinLobby",
+    "name": "joinGameInPrivateLobby",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "lobbyExists",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "nameToPrivateLobby",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -391,6 +606,21 @@
         "internalType": "uint64",
         "name": "initialBalance",
         "type": "uint64"
+      },
+      {
+        "internalType": "uint128",
+        "name": "gridMaxSelectionCount",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint128",
+        "name": "gridSelectionStrategy",
+        "type": "uint128"
+      },
+      {
+        "internalType": "bool",
+        "name": "isBot",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -452,6 +682,26 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "player",
+        "type": "address"
+      }
+    ],
+    "name": "setActiveLobby",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setActiveQueue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_protocol",
         "type": "address"
       }
@@ -478,24 +728,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "contract MercuryBase",
-        "name": "aviation",
-        "type": "address"
-      }
-    ],
-    "name": "unapproveForGame",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

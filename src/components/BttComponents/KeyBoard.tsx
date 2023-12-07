@@ -49,19 +49,17 @@ const KeyBoard = ({
     onClose: () => void;
 }) => {
     return (
-        <>
+        <Box>
             {type ? (
                 <Popover
                     isOpen={isOpen}
                     onClose={() => {
                         onClose();
-                        console.log("关闭");
                     }}
                 >
                     <PopoverTrigger>
                         <Box
                             onClick={(e) => {
-                                console.log(e, "e");
                                 onToggle();
                             }}
                             sx={{
@@ -374,7 +372,7 @@ const KeyBoard = ({
                     </PopoverContent>
                 </Popover>
             )}
-        </>
+        </Box>
     );
 };
 

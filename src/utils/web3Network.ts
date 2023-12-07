@@ -5,9 +5,9 @@ import timeout from "p-timeout";
 export const DEFAULT_MAX_CALL_RETRIES = 8 as const;
 
 export function waitForTransaction(
-    provider: providers.JsonRpcProvider,
+    provider: any,
     txHash: string,
-): Promise<providers.TransactionReceipt> {
+): Promise<any> {
     return retry(
         async (tries) => {
             console.log(

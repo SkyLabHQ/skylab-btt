@@ -1,32 +1,29 @@
-import { Contract, ethers } from "ethers";
 import { useMemo } from "react";
-import { AddressZero } from "@ethersproject/constants";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
+import MERCURYBTTPRIVATELOBBY_ABI from "@/skyConstants/abis/MercuryBTTPrivateLobby.json";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { isAddress } from "@/utils/isAddress";
 import { skylabBidTacToeAddress } from "./useContract";
 import { useChainId } from "wagmi";
+import { getContract } from "@/utils/contractHelpers";
 
-// account is optional
-export function getContract(address: string, ABI: any): Contract {
-    if (!isAddress(address) || address === AddressZero) {
-        throw Error(`Invalid 'address' parameter '${address}'.`);
-    }
+function useContract(address: any, abi: any) {
+    const chainId = useChainId();
 
-    return new Contract(address, ABI);
-}
-// returns null on errors
-function useContract(address: string | undefined, ABI: any): Contract | null {
     return useMemo(() => {
-        if (!address || !ABI) return null;
+        if (!address || !abi) return null;
         try {
-            return getContract(address, ABI);
+            return getContract({
+                abi,
+                address,
+                chainId,
+                signer: undefined,
+            });
         } catch (error) {
             console.error("Failed to get contract", error);
             return null;
         }
-    }, [address, ABI]);
+    }, [address, abi, chainId]);
 }
 
 export const useBurnerSkylabBidTacToeContract = (istest: boolean = false) => {
@@ -40,4 +37,8 @@ export const useBurnerSkylabBidTacToeContract = (istest: boolean = false) => {
 
 export const useBurnerSkylabBidTacToeGameContract = (address: string) => {
     return useContract(address, SKYLABBIDTACTOEGAME_ABI);
+};
+
+export const useBurnerMercuryBTTPrivateLobbyContract = (address: string) => {
+    return useContract(address, MERCURYBTTPRIVATELOBBY_ABI);
 };

@@ -43,17 +43,15 @@ const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
                 }}
             >
                 <ConnectKitButton.Custom>
-                    {({
-                        isConnected,
-                        isConnecting,
-                        show,
-                        hide,
-                        address,
-                        ensName,
-                        chain,
-                    }) => {
+                    {({ show }) => {
                         return (
-                            <SubmitButton width="100%" onClick={show}>
+                            <SubmitButton
+                                width="100%"
+                                onClick={show}
+                                style={{
+                                    height: "3.8021vw",
+                                }}
+                            >
                                 <Text
                                     fontSize="1.875vw"
                                     color="#000"
@@ -76,6 +74,7 @@ const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
                     <Text
                         sx={{
                             textDecoration: "underline",
+                            fontSize: "0.8333vw",
                         }}
                     >
                         Skip

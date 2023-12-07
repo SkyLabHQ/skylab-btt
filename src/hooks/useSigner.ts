@@ -1,14 +1,17 @@
 import { ethers } from "ethers";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
-import { getRandomProvider } from "@/utils/web3Utils";
 import { useChainId } from "wagmi";
+import { privateKeyToAccount } from "viem/accounts";
+import { createWalletClient, http } from "viem";
+import { CHAINS } from "@/skyConstants/chains";
+import { baseGoerli } from "viem/chains";
 
 export const useTacToeSigner = (
     tokenId: number,
     propTestflight: boolean = false,
-): [ethers.Wallet, () => void] => {
+): [any] => {
     const chainId = useChainId();
     const { search } = useLocation();
 
@@ -20,8 +23,6 @@ export const useTacToeSigner = (
         if (!tokenId || !chainId) {
             return null;
         }
-        const provider = getRandomProvider(chainId);
-
         let stringPrivateKey = istest
             ? sessionStorage.getItem("testflightPrivateKey")
             : localStorage.getItem("tactoePrivateKey");
@@ -49,48 +50,25 @@ export const useTacToeSigner = (
                       JSON.stringify(objPrivateKey),
                   );
         }
-        return new ethers.Wallet(objPrivateKey[key], provider);
+        const account = privateKeyToAccount(objPrivateKey[key]);
+
+        const client = createWalletClient({
+            account,
+            chain: CHAINS.find((item) => {
+                return item.id === chainId;
+            }),
+            transport: http(),
+        });
+        return { ...client, privateKey: objPrivateKey[key] };
     }, [tokenId, chainId]);
 
-    const deleteSigner = useCallback(() => {
-        if (!tokenId || !chainId) {
-            return null;
-        }
-        let stringPrivateKey = istest
-            ? localStorage.getItem("testflightPrivateKey")
-            : localStorage.getItem("tactoePrivateKey");
-        let objPrivateKey;
-        try {
-            objPrivateKey = JSON.parse(stringPrivateKey);
-        } catch (e) {
-            objPrivateKey = {};
-        }
-        const key = chainId + "-" + tokenId;
-        if (objPrivateKey[key]) {
-            delete objPrivateKey[key];
-            istest
-                ? localStorage.setItem(
-                      "testflightPrivateKey",
-                      JSON.stringify(objPrivateKey),
-                  )
-                : localStorage.setItem(
-                      "tactoePrivateKey",
-                      JSON.stringify(objPrivateKey),
-                  );
-        }
-    }, [tokenId, chainId]);
-
-    return [singer, deleteSigner];
+    return [singer];
 };
 
-export const getDefaultWithProvider = (
-    tokenId: number,
-    chainId: number,
-): ethers.Wallet => {
+export const getDefaultWithProvider = (tokenId: number, chainId: number) => {
     if (!tokenId || !chainId) {
         return null;
     }
-    const provider = getRandomProvider(chainId);
     let stringPrivateKey = localStorage.getItem("tactoePrivateKey");
 
     let objPrivateKey;
@@ -107,16 +85,21 @@ export const getDefaultWithProvider = (
         objPrivateKey[key] = randomAccount.privateKey;
         localStorage.setItem("tactoePrivateKey", JSON.stringify(objPrivateKey));
     }
-    return new ethers.Wallet(objPrivateKey[key], provider);
+    const account = privateKeyToAccount(objPrivateKey[key] as any);
+
+    const client = createWalletClient({
+        account,
+        chain: CHAINS.find((item) => {
+            return item.id === chainId;
+        }),
+        transport: http(),
+    });
+    return { ...client, privateKey: objPrivateKey[key] };
 };
-export const getTestflightWithProvider = (
-    tokenId: number,
-    chainId: number,
-): ethers.Wallet => {
+export const getTestflightWithProvider = (tokenId: number, chainId: number) => {
     if (!tokenId || !chainId) {
         return null;
     }
-    const provider = getRandomProvider(chainId);
     let stringPrivateKey = sessionStorage.getItem("testflightPrivateKey");
 
     let objPrivateKey;
@@ -136,23 +119,50 @@ export const getTestflightWithProvider = (
             JSON.stringify(objPrivateKey),
         );
     }
-    return new ethers.Wallet(objPrivateKey[key], provider);
+    const account = privateKeyToAccount(objPrivateKey[key] as any);
+
+    const client = createWalletClient({
+        account,
+        chain: CHAINS.find((item) => {
+            return item.id === chainId;
+        }),
+        transport: http(),
+    });
+
+    return { ...client, privateKey: objPrivateKey[key] };
 };
 
-export const getTestflightSigner = (
-    chainId: number,
-    useNew?: boolean,
-): ethers.Wallet => {
+export const getTestflightSigner = (chainId: number, useNew?: boolean) => {
     if (!chainId) {
         return null;
     }
 
-    const provider = getRandomProvider(chainId);
     let stringPrivateKey = sessionStorage.getItem("testflight");
     if (!stringPrivateKey || useNew) {
         const randomPrivateKey = ethers.Wallet.createRandom().privateKey;
         stringPrivateKey = randomPrivateKey;
     }
     sessionStorage.setItem("testflight", stringPrivateKey);
-    return new ethers.Wallet(stringPrivateKey, provider);
+    const account = privateKeyToAccount(stringPrivateKey as any);
+
+    const client = createWalletClient({
+        account,
+        chain: CHAINS.find((item) => {
+            return item.id === chainId;
+        }),
+        transport: http(),
+    });
+
+    return { ...client, privateKey: stringPrivateKey };
+};
+
+export const getPrivateLobbySigner = () => {
+    let stringPrivateKey = sessionStorage.getItem("privateLobbySigner");
+    if (!stringPrivateKey) {
+        const randomPrivateKey = ethers.Wallet.createRandom().privateKey;
+        stringPrivateKey = randomPrivateKey;
+    }
+    sessionStorage.setItem("privateLobbySigner", stringPrivateKey);
+
+    return { privateKey: stringPrivateKey };
 };

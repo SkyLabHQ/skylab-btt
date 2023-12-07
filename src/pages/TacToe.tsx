@@ -33,6 +33,7 @@ import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { getSCWallet } from "@/hooks/useSCWallet";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useAccount, useChainId } from "wagmi";
+import { getViemClients } from "@/utils/viem";
 
 export enum UserMarkType {
     Empty = -1,
@@ -131,6 +132,7 @@ const GameContext = createContext<{
     };
     onStep: (step: number) => void;
     onList: (list: BoardItem[]) => void;
+    handleGetGas: () => void;
 }>(null);
 export const useGameContext = () => useContext(GameContext);
 
@@ -180,6 +182,8 @@ const TacToe = () => {
         img: "",
         mark: UserMarkType.Empty,
     });
+    const [burnerWallet] = useTacToeSigner(tokenId);
+
     const { activePilot: myActivePilot } = usePilotInfo(account);
 
     const { activePilot: opActivePilot } = usePilotInfo(opInfo.address);
@@ -216,12 +220,18 @@ const TacToe = () => {
     // get my and op info
     const handleGetGameInfo = async () => {
         try {
-            const testflightSinger = getTestflightSigner(realChainId);
-            const { sCWAddress } = await getSCWallet(
-                testflightSinger.privateKey,
-            );
-
-            const operateAddress = istest ? sCWAddress : tacToeBurner.address;
+            let operateAddress = "";
+            if (istest) {
+                const testflightSinger = getTestflightSigner(realChainId);
+                const { sCWAddress } = await getSCWallet(
+                    testflightSinger.privateKey,
+                );
+                operateAddress = sCWAddress;
+                console.log("sCWAddress", sCWAddress);
+            } else {
+                operateAddress = tacToeBurner.account.address;
+            }
+            console.log(operateAddress, "operateAddress");
             const [bidTacToeGameAddress, defaultGameQueue] =
                 await multiProvider.all([
                     multiSkylabBidTacToeFactoryContract.gamePerPlayer(
@@ -236,7 +246,6 @@ const TacToe = () => {
 
             console.log("Game Address", bidTacToeGameAddress);
             console.log("DefaultGameQueue", defaultGameQueue);
-            console.log("sCWAddress", sCWAddress);
 
             if (bidTacToeGameAddress === ZERO_DATA) {
                 if (operateAddress !== defaultGameQueue) {
@@ -273,6 +282,33 @@ const TacToe = () => {
 
     const handleChangeList = (list: any) => {
         setList(list);
+    };
+
+    const handleGetGas = async () => {
+        console.log("start transfer gas");
+
+        const publicClient: any = getViemClients({ chainId: realChainId });
+        const balance = await publicClient.getBalance({
+            address: burnerWallet.account.address,
+        });
+        const gasPrice = await publicClient.getGasPrice();
+        const fasterGasPrice = (gasPrice * BigInt(110)) / BigInt(100);
+        const gasFee = fasterGasPrice * BigInt(21000);
+        const l1Fees = BigInt(100000000000000);
+
+        if (balance - l1Fees < gasFee) {
+            return;
+        }
+
+        const value = balance - gasFee - l1Fees;
+        const transferResult = await burnerWallet.sendTransaction({
+            to: account,
+            value: value,
+            gasLimit: 21000,
+            gasPrice: fasterGasPrice,
+        });
+
+        console.log("transfer remain balance", transferResult);
     };
 
     useEffect(() => {
@@ -360,6 +396,7 @@ const TacToe = () => {
                         points,
                         onStep: handleStep,
                         onList: handleChangeList,
+                        handleGetGas: handleGetGas,
                     }}
                 >
                     <Box>

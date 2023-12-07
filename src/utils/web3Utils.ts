@@ -130,8 +130,11 @@ export const DEAFAULT_CHAINID =
 export const NETWORK_URL = randomRpc[DEAFAULT_CHAINID][0];
 
 // add 10%
-export function calculateGasMargin(value: BigNumber, margin = 1000): BigNumber {
-    return value
+export function calculateGasMargin(
+    value: BigNumber | number | string,
+    margin = 1000,
+): BigNumber {
+    return BigNumber.from(value)
         .mul(BigNumber.from(10000).add(BigNumber.from(margin)))
         .div(BigNumber.from(10000));
 }

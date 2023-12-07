@@ -5,6 +5,8 @@ import { ChainId, SUPPORTED_NETWORKS } from "@/utils/web3Utils";
 import useSkyToast from "./useSkyToast";
 import { useAccount, useChainId } from "wagmi";
 import { useEthersProvider } from "./useWagmiToEthers";
+import { waitForTransaction } from "@/utils/web3Network";
+import { getViemClients } from "@/utils/viem";
 
 export enum BalanceState {
     ACCOUNT_LACK,
@@ -69,18 +71,26 @@ export const useCheckBurnerBalanceAndApprove = () => {
                     : "start approveForGame",
             );
 
-            const approveResult = await skylabBidTacToeContract.approveForGame(
-                burnerAddress,
-                tokenId,
-                aviationAddress,
-                {
-                    value: needTransfer
-                        ? ethers.utils.parseEther(balanceInfo[chainId].high)
-                        : 0,
-                    gasLimit: 1000000,
-                },
-            );
-            await approveResult.wait();
+            const approveResult =
+                await skylabBidTacToeContract.write.approveForGame(
+                    [burnerAddress, tokenId, aviationAddress],
+                    {
+                        value: needTransfer
+                            ? ethers.utils.parseEther(balanceInfo[chainId].high)
+                            : 0,
+                        gasLimit: 1000000,
+                    },
+                );
+
+            const publicClient = getViemClients({
+                chainId,
+            });
+
+            // @ts-ignore
+            const receipt = await publicClient.waitForTransactionReceipt({
+                hash: approveResult,
+            });
+
             console.log(
                 needTransfer
                     ? "success approveForGame and transferGas"
@@ -113,7 +123,7 @@ export const useCheckBurnerBalanceAndApprove = () => {
             }
             return BalanceState.ENOUTH;
         },
-        [library, chainId],
+        [library, chainId, address],
     );
 
     const getApproveBitTacToeGameState = useCallback(
@@ -131,10 +141,13 @@ export const useCheckBurnerBalanceAndApprove = () => {
                 return;
             }
 
-            const voidSigner = new ethers.VoidSigner(operateAddress, library);
-            const isApprovedForGame = await skylabBidTacToeContract
-                .connect(voidSigner)
-                .isApprovedForGame(tokenId, aviationAddress);
+            const isApprovedForGame =
+                await skylabBidTacToeContract.read.isApprovedForGame(
+                    [tokenId, aviationAddress],
+                    {
+                        account: operateAddress as any,
+                    },
+                );
 
             return isApprovedForGame
                 ? ApproveGameState.APPROVED
@@ -184,7 +197,5 @@ export const useCheckBurnerBalanceAndApprove = () => {
 
     return handleCheckBurnerBidTacToe;
 };
-
-export const useBurnerBidTacToeContract = (chainId: number) => {};
 
 export default null;

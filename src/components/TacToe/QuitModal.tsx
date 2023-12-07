@@ -19,10 +19,6 @@ import {
 } from "@/hooks/useRetryContract";
 import { useGameContext } from "@/pages/TacToe";
 import { useNavigate } from "react-router-dom";
-import { getRandomProvider } from "@/utils/web3Utils";
-import { ethers } from "ethers";
-import { useTacToeSigner } from "@/hooks/useSigner";
-import { useAccount } from "wagmi";
 
 const QuitModal = ({
     quitType,
@@ -33,14 +29,12 @@ const QuitModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const { address } = useAccount();
     const navigate = useNavigate();
-    const { tokenId, bidTacToeGameAddress, istest, realChainId } =
+    const { tokenId, bidTacToeGameAddress, istest, handleGetGas } =
         useGameContext();
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
-    const [burnerWallet] = useTacToeSigner(tokenId);
 
     const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress, tokenId);
 
@@ -56,17 +50,15 @@ const QuitModal = ({
                 const url = istest
                     ? `/btt/mode?tokenId=${tokenId}&testflight=true`
                     : `/btt/mode?tokenId=${tokenId}`;
-                handleGetGas();
+                if (!istest) {
+                    handleGetGas();
+                }
                 navigate(url);
             } else {
                 await tacToeGameRetryWrite("surrender", [], {
                     gasLimit: 500000,
                     usePaymaster: istest,
                 });
-
-                if (!istest) {
-                    handleGetGas();
-                }
             }
 
             setLoading(false);
@@ -76,31 +68,6 @@ const QuitModal = ({
             setLoading(false);
             toast(handleError(error, istest));
         }
-    };
-
-    const handleGetGas = async () => {
-        console.log("start transfer gas");
-        const provider = getRandomProvider(realChainId);
-        const singer = new ethers.Wallet(burnerWallet, provider);
-        const balance = await provider.getBalance(singer.address);
-        const gasPrice = await provider.getGasPrice();
-        const fasterGasPrice = gasPrice.mul(110).div(100);
-        const gasFee = fasterGasPrice.mul(21000);
-        const l1Fees = ethers.utils.parseEther("0.0001");
-
-        if (balance.sub(l1Fees).lte(gasFee)) {
-            return;
-        }
-
-        const value = balance.sub(gasFee).sub(l1Fees);
-        const transferResult = await singer.sendTransaction({
-            to: address,
-            value: value,
-            gasLimit: 21000,
-            gasPrice: fasterGasPrice,
-        });
-
-        console.log("transfer remain balance", transferResult);
     };
 
     return (

@@ -11,7 +11,7 @@ export const SubmitButton = ({
     isLoading,
     style,
     children,
-    width = "466px",
+    width = "24.2708vw",
     onClick,
 }: {
     loadingText?: string;
@@ -27,7 +27,7 @@ export const SubmitButton = ({
                 display: "flex",
                 position: "relative",
                 width: width,
-                height: "73px",
+                height: "3.8021vw",
                 justifyContent: "center",
                 alignItems: "center",
                 cursor: "pointer",
@@ -40,12 +40,22 @@ export const SubmitButton = ({
         >
             <Img
                 src={LeftTopBorder}
-                sx={{ left: 0, top: 0, position: "absolute" }}
+                sx={{
+                    left: 0,
+                    top: 0,
+                    position: "absolute",
+                    width: "4.1667vw",
+                }}
             ></Img>
 
             <Img
                 src={RightBottomBorder}
-                sx={{ right: 0, bottom: 0, position: "absolute" }}
+                sx={{
+                    right: 0,
+                    bottom: 0,
+                    position: "absolute",
+                    width: "4.1667vw",
+                }}
             ></Img>
             <Box
                 sx={{
@@ -54,31 +64,31 @@ export const SubmitButton = ({
                     position: "absolute",
                     width: "100%",
                     display: "flex",
-                    padding: "10px",
+                    padding: "0.5208vw",
                 }}
             >
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "53px",
-                        width: "10px",
+                        height: "2.7604vw",
+                        width: "0.5208vw",
                         transform: " skewX(-45deg)",
-                        marginRight: "10px",
+                        marginRight: "0.5208vw",
                     }}
                 ></Box>
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "53px",
-                        width: "10px",
+                        height: "2.7604vw",
+                        width: "0.5208vw",
                         transform: " skewX(-45deg)",
-                        marginRight: "10px",
+                        marginRight: "0.5208vw",
                     }}
                 ></Box>
                 <Box
                     sx={{
                         width: "100%",
-                        height: "53px",
+                        height: "2.7604vw",
                         position: "relative",
                         display: "flex",
                         alignItems: "center",
@@ -93,19 +103,19 @@ export const SubmitButton = ({
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "53px",
-                        width: "10px",
+                        height: "2.7604vw",
+                        width: "0.5208vw",
                         transform: " skewX(-45deg)",
-                        marginLeft: "10px",
+                        marginLeft: "0.5208vw",
                     }}
                 ></Box>
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "53px",
-                        width: "10px",
+                        height: "2.7604vw",
+                        width: "0.5208vw",
                         transform: " skewX(-45deg)",
-                        marginLeft: "10px",
+                        marginLeft: "0.5208vw",
                     }}
                 ></Box>
             </Box>
@@ -114,7 +124,7 @@ export const SubmitButton = ({
                 sx={{
                     zIndex: 100,
                     color: "#000",
-                    fontSize: "36px",
+                    fontSize: "1.875vw",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -126,8 +136,8 @@ export const SubmitButton = ({
                         <motion.img
                             src={LoadingIcon}
                             style={{
-                                marginLeft: "10px",
-                                width: "30px",
+                                marginLeft: "0.5208vw",
+                                width: "1.5625vw",
                                 rotate: 0,
                             }}
                             transition={{
@@ -196,21 +206,21 @@ export const YellowButton = (props: ButtonProps) => {
 };
 
 export const GrayButtonStyle = styled(Button)`
-    border: 3px solid #bcbbbe !important;
+    border: 3px solid #bcbbbe;
     border-radius: 0.9375vw;
     height: 3.3333vw;
     fontsize: 1.25vw;
     textalign: left;
     outline: none;
     width: 20.8333vw;
-    box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.5);
+    box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
     justify-content: flex-start;
     padding: 0;
     &:focus {
-        box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.5);
+        box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
     }
     &: [data-focus] {
-        box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.5);
+        box-shadow: 0.2083vw 0.2083vw 0px 0px rgba(255, 255, 255, 0.5);
     }
     & .chakra-button__icon {
         position: absolute;

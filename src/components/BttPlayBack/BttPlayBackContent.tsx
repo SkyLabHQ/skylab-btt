@@ -112,7 +112,7 @@ const BttPlayBackContent = ({
                 >
                     <Image
                         src={TwLogo}
-                        sx={{ marginRight: "0.2083vw", width: "28px" }}
+                        sx={{ marginRight: "0.2083vw", width: "1.4583vw" }}
                     ></Image>
                     <Text
                         sx={{
@@ -132,7 +132,7 @@ const BttPlayBackContent = ({
                 >
                     <Image
                         src={EarthIcon}
-                        sx={{ marginRight: "0.2083vw", width: "28px" }}
+                        sx={{ marginRight: "0.2083vw", width: "1.4583vw" }}
                     ></Image>
                     <Text
                         sx={{
@@ -141,7 +141,7 @@ const BttPlayBackContent = ({
                         }}
                     >
                         https://app.projmercury.io/#/
-                    </Text>{" "}
+                    </Text>
                 </Box>
             </Box>
             <Box

@@ -13,10 +13,12 @@ import {
     createPublicErc4337Client,
     getDefaultEntryPointAddress,
     deepHexlify,
+    PublicErc4337Client,
 } from "@alchemy/aa-core";
 import { baseGoerli } from "viem/chains";
 import { toHex } from "viem";
 import { ethers } from "ethers";
+import { useEffect, useState } from "react";
 
 const chain = baseGoerli;
 export const withAlchemyGasEstimator = (
@@ -30,7 +32,7 @@ export const withAlchemyGasEstimator = (
         );
 
         struct.callGasLimit = ethers.BigNumber.from(estimates.callGasLimit)
-            .add(ethers.BigNumber.from(100000))
+            .add(ethers.BigNumber.from(500000))
             .toHexString();
         struct.verificationGasLimit = estimates.verificationGasLimit;
         struct.preVerificationGas = estimates.preVerificationGas;
@@ -58,6 +60,25 @@ async function resolveProperties<T>(object: Deferrable<T>): Promise<T> {
 
 const rpcUrl =
     "https://base-goerli.g.alchemy.com/v2/vDX2uQbv3DcZEeQxXEnymi3dqUwRvXQd";
+
+export const useSCWallet = (privateKey: string) => {
+    const [sCWSigner, setSCWSigner] = useState<AlchemyProvider>(null);
+    const [sCWAddress, setSCWAddress] = useState<`0x${string}`>(null);
+    const [sCWClient, setSCWClient] = useState<PublicErc4337Client>(null);
+    useEffect(() => {
+        (async () => {
+            if (!privateKey) return;
+            const { sCWSigner, sCWClient, sCWAddress } = await getSCWallet(
+                privateKey,
+            );
+            setSCWSigner(sCWSigner);
+            setSCWAddress(sCWAddress);
+            setSCWClient(sCWClient);
+        })();
+    }, [privateKey]);
+
+    return { sCWSigner, sCWClient, sCWAddress };
+};
 
 export const getSCWallet = async (privateKey: string) => {
     const owner: SmartAccountSigner =
@@ -165,7 +186,9 @@ export const getSCWallet = async (privateKey: string) => {
         });
         const data = await response.json();
 
-        // console.log("response", data);
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
 
         return {
             paymasterAndData: data.result,

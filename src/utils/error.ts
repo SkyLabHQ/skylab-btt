@@ -5,6 +5,7 @@ export const handleError = (callError: any, isPaymaster?: boolean) => {
 
     return (
         callError.reason ||
+        callError.shortMessage ||
         callError.error?.message ||
         callError.data?.message ||
         callError.message

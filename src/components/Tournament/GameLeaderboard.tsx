@@ -421,8 +421,6 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
                 multiMercuryTouramentContract._currentRound(),
             ]);
 
-            console.log(round, "round");
-
             const [infos] = await multiProvider.all([
                 multiMercuryTouramentContract.leaderboardInfo(round.toNumber()),
             ]);

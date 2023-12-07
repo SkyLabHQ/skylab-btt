@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import qs from "query-string";
 import { useAccount, useChainId } from "wagmi";
 
-export const useGridCommited = (tokenId: number, grid: number) => {
+export const useGridCommited = (tokenId: number | string, grid: number) => {
     const chainId = useChainId();
     const getGridCommited = useCallback(() => {
         if (!tokenId || !chainId || grid === -1) {
@@ -59,7 +59,7 @@ export const useGridCommited = (tokenId: number, grid: number) => {
     };
 };
 
-export const useDeleteTokenIdCommited = (tokenId: number) => {
+export const useDeleteTokenIdCommited = (tokenId: number | string) => {
     const chainId = useChainId();
     const deleteTokenIdCommited = useCallback(() => {
         if (!tokenId || !chainId) {

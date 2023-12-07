@@ -32,11 +32,9 @@ import StatusTip from "./StatusTip";
 import ResultUserCard from "./ResultUserCard";
 import Chat from "./Chat";
 import { useTacToeSigner } from "@/hooks/useSigner";
-import { getRandomProvider } from "@/utils/web3Utils";
 import { ZERO_DATA } from "@/skyConstants";
 import A0Testflight from "@/assets/aviations/a0-testflight.png";
 import A2Testflight from "@/assets/aviations/a2-testflight.png";
-import { useAccount } from "wagmi";
 
 export const getWinState = (gameState: GameState) => {
     return [
@@ -103,10 +101,10 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
         onStep,
         gameType,
         realChainId,
+        handleGetGas,
     } = useGameContext();
 
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
-    const { address } = useAccount();
     const { blockNumber } = useBlockNumber();
     const [revealing, setRevealing] = useState<boolean>(false);
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
@@ -274,31 +272,6 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
             emote: opEmote.toNumber(),
         });
         setNextDrawWinner(nextDrawWinner);
-    };
-
-    const handleGetGas = async () => {
-        console.log("start transfer gas");
-        const provider = getRandomProvider(realChainId);
-        const singer = new ethers.Wallet(burnerWallet, provider);
-        const balance = await provider.getBalance(singer.address);
-        const gasPrice = await provider.getGasPrice();
-        const fasterGasPrice = gasPrice.mul(110).div(100);
-        const gasFee = fasterGasPrice.mul(21000);
-        const l1Fees = ethers.utils.parseEther("0.0001");
-
-        if (balance.sub(l1Fees).lte(gasFee)) {
-            return;
-        }
-
-        const value = balance.sub(gasFee).sub(l1Fees);
-        const transferResult = await singer.sendTransaction({
-            to: address,
-            value: value,
-            gasLimit: 21000,
-            gasPrice: fasterGasPrice,
-        });
-
-        console.log("transfer remain balance", transferResult);
     };
 
     const handleCallTimeOut = async () => {

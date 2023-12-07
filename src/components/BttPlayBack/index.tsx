@@ -24,7 +24,6 @@ import ButtonGroup from "./ButtonGroup";
 import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "./BttPlayBackContent";
 import { botAddress } from "@/hooks/useContract";
-import { BigNumber } from "ethers";
 
 const StartJourney = () => {
     const navigate = useNavigate();
@@ -227,10 +226,10 @@ const BttPlayBackPage = () => {
         let _opInfo = JSON.parse(JSON.stringify(opInfo));
 
         if (myIsPlayer1) {
-            myBids = player1Bids.map((item: BigNumber) => {
+            myBids = player1Bids.map((item: any) => {
                 return item.toNumber();
             });
-            opBids = player2Bids.map((item: BigNumber) => {
+            opBids = player2Bids.map((item: any) => {
                 return item.toNumber();
             });
             myGameState = player1GameState.toNumber();
@@ -247,10 +246,10 @@ const BttPlayBackPage = () => {
             _opInfo.burner = player2;
             _opInfo.isBot = player2IsBot;
         } else {
-            myBids = player2Bids.map((item: BigNumber) => {
+            myBids = player2Bids.map((item: any) => {
                 return item.toNumber();
             });
-            opBids = player1Bids.map((item: BigNumber) => {
+            opBids = player1Bids.map((item: any) => {
                 return item.toNumber();
             });
             myGameState = player2GameState.toNumber();

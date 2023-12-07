@@ -1,4 +1,4 @@
-import { Contract, ethers, Wallet } from "ethers";
+import { ethers } from "ethers";
 import { useCallback } from "react";
 import retry from "p-retry";
 import PQueue from "p-queue";
@@ -27,9 +27,9 @@ import {
 } from "@/utils/web3Utils";
 import { getTestflightSigner, useTacToeSigner } from "./useSigner";
 import NonceManager from "@/utils/nonceManager";
-import { waitForTransaction } from "@/utils/web3Network";
 import { getSCWallet } from "./useSCWallet";
 import {
+    useBurnerMercuryBTTPrivateLobbyContract,
     useBurnerSkylabBidTacToeContract,
     useBurnerSkylabBidTacToeGameContract,
 } from "./useBurnerContract";
@@ -40,6 +40,8 @@ import {
     UserOperationiface,
 } from "@/skyConstants/iface";
 import { useChainId } from "wagmi";
+import { encodeFunctionData } from "viem";
+import { getViemClients } from "@/utils/viem";
 
 const nonceManager = new NonceManager();
 
@@ -51,24 +53,7 @@ export const wait = async (time: number) => {
     });
 };
 
-export const useBidTacToeFactoryRetry = (
-    tokenId?: number,
-    propTestflight: boolean = false,
-) => {
-    const [signer] = useTacToeSigner(tokenId, propTestflight);
-    const contract = useSkylabBidTacToeContract();
-    const tacToeFactoryRetryWrite = useBurnerRetryContract(contract, signer);
-
-    return tacToeFactoryRetryWrite;
-};
-
-export const useTestflightRetryContract = () => {
-    const contract = useTestflightContract();
-    const contractWrite = useBurnerRetryContract(contract);
-    return contractWrite;
-};
-
-export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
+export const useBurnerRetryContract = (contract: any, signer?: any) => {
     const chainId = useChainId();
     return useCallback(
         async (
@@ -89,22 +74,29 @@ export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
             return retry(
                 async (tries) => {
                     if (usePaymaster) {
-                        const provider = getRandomProvider(TESTFLIGHT_CHAINID);
-                        const localSinger =
-                            getTestflightSigner(TESTFLIGHT_CHAINID);
+                        const provider = getViemClients({
+                            chainId: TESTFLIGHT_CHAINID,
+                        });
+                        const localSinger = overridsSigner
+                            ? overridsSigner
+                            : getTestflightSigner(TESTFLIGHT_CHAINID);
                         const { sCWSigner, sCWAddress } = await getSCWallet(
                             localSinger.privateKey,
                         );
                         const hash = await queue.add(
                             async () => {
+                                // @ts-ignore
+                                const data = encodeFunctionData({
+                                    abi: contract.abi,
+                                    functionName: method,
+                                    args,
+                                });
+
                                 console.log(`tries ${tries} ${method} start`);
                                 return await sCWSigner.sendTransaction({
                                     from: sCWAddress as `0x${string}`,
                                     to: contract.address as `0x${string}`,
-                                    data: contract.interface.encodeFunctionData(
-                                        method,
-                                        args,
-                                    ) as `0x${string}`,
+                                    data: data as `0x${string}`,
                                 });
                             },
                             {
@@ -116,13 +108,11 @@ export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
                             `tries ${tries} use paymaster receipt hash: ${hash}`,
                         );
 
-                        const receipt = await waitForTransaction(
-                            provider,
-                            hash,
-                        );
+                        const receipt = // @ts-ignore
+                            await provider.waitForTransactionReceipt({ hash });
 
                         console.log(receipt);
-                        const operateLog = receipt.logs.find((log) => {
+                        const operateLog = receipt.logs.find((log: any) => {
                             return log.topics[0] === topic0UserOpearationEvent;
                         });
 
@@ -135,14 +125,14 @@ export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
                             const success = operateData.args.success;
 
                             if (!success) {
-                                const errorLog = receipt.logs.find((log) => {
-                                    return (
-                                        log.topics[0] ===
-                                        topic0UserOperationRevertReason
-                                    );
-                                });
-
-                                console.log(errorLog, "errorLog");
+                                const errorLog = receipt.logs.find(
+                                    (log: any) => {
+                                        return (
+                                            log.topics[0] ===
+                                            topic0UserOperationRevertReason
+                                        );
+                                    },
+                                );
 
                                 if (!errorLog) {
                                     throw new Error("Transaction failed");
@@ -177,50 +167,53 @@ export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
                         return receipt;
                     } else {
                         const provider = getRandomProvider(chainId);
-
                         console.log(`tries ${tries} ${method} start`);
-
                         const newSigner = overridsSigner
                             ? overridsSigner
                             : signer;
 
-                        const address = await newSigner.getAddress();
+                        const address = await newSigner.account.address;
 
-                        let res;
                         try {
-                            const gasPrice = await provider.getGasPrice();
+                            const publicClient = getViemClients({
+                                chainId,
+                            });
+
+                            // @ts-ignore
+                            const gas = await publicClient.estimateContractGas({
+                                address: contract.address,
+                                abi: contract.abi,
+                                functionName: method,
+                                account: newSigner.account.address,
+                                args: args,
+                            });
 
                             const nonce = await nonceManager.getNonce(
                                 provider,
                                 address,
                             );
-                            const gas = await contract
-                                .connect(newSigner)
-                                .estimateGas[method](...args);
 
-                            res = await contract
-                                .connect(newSigner)
-                                [method](...args, {
-                                    nonce,
-                                    gasPrice: gasPrice.mul(120).div(100),
-                                    gasLimit:
-                                        gasLimit && gasLimit > gas.toNumber()
-                                            ? gasLimit
-                                            : calculateGasMargin(gas),
+                            const hash = await newSigner.writeContract({
+                                address: contract.address,
+                                abi: contract.abi,
+                                functionName: method,
+                                args: args,
+                                nonce: nonce,
+                                gasLimit:
+                                    gasLimit && gasLimit > Number(gas)
+                                        ? gasLimit
+                                        : calculateGasMargin(Number(gas)),
+                            });
+
+                            const receipt = // @ts-ignore
+                                await publicClient.waitForTransactionReceipt({
+                                    hash,
                                 });
-
-                            const receipt = await waitForTransaction(
-                                provider,
-                                res.hash,
-                            );
 
                             console.log(receipt, "receipt");
 
                             if (receipt.status === 0) {
-                                const reason = await getReason(
-                                    provider,
-                                    res.hash,
-                                );
+                                const reason = await getReason(provider, hash);
 
                                 if (reason) {
                                     throw new Error(reason);
@@ -230,7 +223,7 @@ export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
                             }
                             console.log(`tries ${tries} ${method} success`);
 
-                            return res;
+                            return receipt;
                         } catch (e) {
                             console.log(
                                 `tries ${tries} write method ${method} error`,
@@ -250,6 +243,23 @@ export const useBurnerRetryContract = (contract: Contract, signer?: Wallet) => {
     );
 };
 
+export const useBidTacToeFactoryRetry = (
+    tokenId?: number,
+    propTestflight: boolean = false,
+) => {
+    const [signer] = useTacToeSigner(tokenId, propTestflight);
+    const contract = useSkylabBidTacToeContract();
+    const tacToeFactoryRetryWrite = useBurnerRetryContract(contract, signer);
+
+    return tacToeFactoryRetryWrite;
+};
+
+export const useTestflightRetryContract = () => {
+    const contract = useTestflightContract();
+    const contractWrite = useBurnerRetryContract(contract);
+    return contractWrite;
+};
+
 export const useBttFactoryRetry = (testflight: boolean, signer?: any) => {
     const contract = useBurnerSkylabBidTacToeContract(testflight);
     const contractWrite = useBurnerRetryContract(contract, signer);
@@ -260,11 +270,12 @@ export const useBttGameRetry = (address: string, tokenId?: number) => {
     const [signer] = useTacToeSigner(tokenId);
     const contract = useBurnerSkylabBidTacToeGameContract(address);
     const tacToeGameRetryWrite = useBurnerRetryContract(contract, signer);
+    return tacToeGameRetryWrite;
+};
 
-    if (!signer) {
-        return null;
-    }
-
+export const useBttPrivateLobbyContract = (address: string, signer?: any) => {
+    const contract = useBurnerMercuryBTTPrivateLobbyContract(address);
+    const tacToeGameRetryWrite = useBurnerRetryContract(contract, signer);
     return tacToeGameRetryWrite;
 };
 

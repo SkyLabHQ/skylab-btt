@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { encodeEventTopics } from "viem";
 
 export const erc721iface = new ethers.utils.Interface([
     "event Transfer(address indexed from,address indexed to,uint256 indexed tokenId);",
@@ -17,3 +18,37 @@ export const topic0UserOperationRevertReason = UserOperationiface.getEventTopic(
 
 export const topic0UserOpearationEvent =
     UserOperationiface.getEventTopic("UserOperationEvent");
+
+// @ts-ignore
+export const topic0PrivateLobbyCreated = encodeEventTopics({
+    abi: [
+        {
+            anonymous: false,
+            inputs: [
+                {
+                    indexed: false,
+                    internalType: "address",
+                    name: "privateLobbyAddress",
+                    type: "address",
+                },
+                {
+                    indexed: false,
+                    internalType: "string",
+                    name: "name",
+                    type: "string",
+                },
+                {
+                    indexed: false,
+                    internalType: "address",
+                    name: "admin",
+                    type: "address",
+                },
+            ],
+            name: "PrivateLobbyCreated",
+            type: "event",
+        },
+    ],
+    eventName: "PrivateLobbyCreated",
+})[0];
+
+console.log(topic0PrivateLobbyCreated, "topic0PrivateLobbyCreated");
