@@ -157,12 +157,12 @@ export const getTestflightSigner = (chainId: number, useNew?: boolean) => {
 };
 
 export const getPrivateLobbySigner = () => {
-    let stringPrivateKey = sessionStorage.getItem("privateLobbySigner");
+    let stringPrivateKey = localStorage.getItem("privateLobbySigner");
     if (!stringPrivateKey) {
         const randomPrivateKey = ethers.Wallet.createRandom().privateKey;
         stringPrivateKey = randomPrivateKey;
     }
-    sessionStorage.setItem("privateLobbySigner", stringPrivateKey);
+    localStorage.setItem("privateLobbySigner", stringPrivateKey);
 
     return { privateKey: stringPrivateKey };
 };
