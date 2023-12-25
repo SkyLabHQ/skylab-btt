@@ -50,5 +50,3 @@ export const topic0PrivateLobbyCreated = encodeEventTopics({
     ],
     eventName: "PrivateLobbyCreated",
 })[0];
-
-console.log(topic0PrivateLobbyCreated, "topic0PrivateLobbyCreated");

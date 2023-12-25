@@ -1,5 +1,5 @@
 import { useCheckBurnerBalanceAndApprove } from "@/hooks/useBurnerWallet";
-import { Box, Text, Image, useBoolean } from "@chakra-ui/react";
+import { Box, Text, useBoolean, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,7 +9,6 @@ import {
     useTestflightRetryContract,
 } from "@/hooks/useRetryContract";
 import Loading from "@/components/Loading";
-import BackIcon from "@/components/TacToe/assets/back-arrow.svg";
 import { handleError } from "@/utils/error";
 import {
     botAddress,
@@ -21,6 +20,7 @@ import {
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
     getMultiSkylabBidTacToeGameContract,
+    useMultiMercuryBTTPrivateLobby,
     useMultiMercuryBaseContract,
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -41,7 +41,7 @@ import {
     getPrivateLobbySigner,
     getTestflightSigner,
 } from "@/hooks/useSigner";
-import { getSCWallet } from "@/hooks/useSCWallet";
+import { getSCWallet, useSCWallet } from "@/hooks/useSCWallet";
 import ConnectWalletBg from "@/components/TacToeMode/assets/connect-wallet.svg";
 import {
     erc721iface,
@@ -53,6 +53,8 @@ import { useAccount, useChainId, useWalletClient } from "wagmi";
 import { decodeEventLog } from "viem";
 import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
 import Back from "@/components/Back";
+import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
+import { ZERO_DATA } from "@/skyConstants";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -74,6 +76,11 @@ export interface onGoingGame {
 
 const TacToeMode = () => {
     const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
+    const {
+        isOpen: isPreviousLobbyModalOpen,
+        onOpen: onPreviousLobbyModalOpen,
+        onClose: onPreviousLobbyModalClose,
+    } = useDisclosure();
     const navigate = useNavigate();
     const { address } = useAccount();
     const chainId = useChainId();
@@ -91,7 +98,16 @@ const TacToeMode = () => {
     const mercuryBaseContract = useMercuryBaseContract(true);
     const [loading, setLoading] = useState(false);
     const ethcallProvider = useMultiProvider(DEAFAULT_CHAINID);
+    const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
+    const localSinger = getPrivateLobbySigner();
 
+    const [activeLobbyAddress, setActiveLobbyAddress] =
+        useState<string>(ZERO_DATA);
+
+    const [lobbyName, setLobbyName] = useState<string>("");
+    const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
+        localSinger.privateKey,
+    );
     const { data: signer } = useWalletClient();
 
     const [onGoingGames, setOnGoingGames] = useState<any>([]);
@@ -105,6 +121,12 @@ const TacToeMode = () => {
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
 
+    const testMultiSkylabBidTacToeFactoryContract =
+        useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
+
+    const multiMercuryBTTPrivateLobby = useMultiMercuryBTTPrivateLobby(
+        activeLobbyAddress !== ZERO_DATA ? activeLobbyAddress : "",
+    );
     const handleGetLobbyOnGoingGames = async () => {
         const avaitionAddress = skylabTournamentAddress[DEAFAULT_CHAINID];
 
@@ -401,6 +423,32 @@ const TacToeMode = () => {
         navigate("/btt/joinlobby");
     };
 
+    const handleGetActiveLobby = async () => {
+        const [activeLobbyAddress] = await testProvider.all([
+            testMultiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
+                privateLobbySCWAddress,
+            ),
+        ]);
+        setActiveLobbyAddress(activeLobbyAddress);
+    };
+
+    const handleGetLoobyName = async () => {
+        const [lobbyName] = await testProvider.all([
+            multiMercuryBTTPrivateLobby.lobbyName(),
+        ]);
+
+        setLobbyName(lobbyName);
+    };
+
+    const handlePreviousLobbyClose = () => {
+        onPreviousLobbyModalClose();
+        setIsPrivateLobbyMode.on();
+    };
+
+    const handlePreviousLobbyConfirm = async () => {
+        navigate(`/btt/privatelobby?lobbyAddress=${activeLobbyAddress}`);
+    };
+
     useEffect(() => {
         if (!multiProvider || !multiSkylabBidTacToeFactoryContract) return;
         // handleGetLobbyOnGoingGames();
@@ -413,6 +461,32 @@ const TacToeMode = () => {
         }
         handleGetPlaneBalance();
     }, [address]);
+
+    useEffect(() => {
+        if (
+            !testMultiSkylabBidTacToeFactoryContract ||
+            !testProvider ||
+            !privateLobbySCWAddress
+        )
+            return;
+
+        handleGetActiveLobby();
+    }, [
+        testProvider,
+        testMultiSkylabBidTacToeFactoryContract,
+        privateLobbySCWAddress,
+    ]);
+
+    useEffect(() => {
+        if (
+            !activeLobbyAddress ||
+            !testProvider ||
+            !multiMercuryBTTPrivateLobby
+        )
+            return;
+
+        handleGetLoobyName();
+    }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
 
     return (
         <>
@@ -473,8 +547,12 @@ const TacToeMode = () => {
                                 <PlayButtonGroup
                                     tournamentDisabled={planeList.length === 0}
                                     onPlayTournament={handleCreateOrJoinDefault}
-                                    onPlayTestLobby={() => {
-                                        setIsPrivateLobbyMode.on();
+                                    onPlayTestLobby={async () => {
+                                        if (activeLobbyAddress === ZERO_DATA) {
+                                            setIsPrivateLobbyMode.on();
+                                        } else {
+                                            onPreviousLobbyModalOpen();
+                                        }
                                     }}
                                     onPlayWithBot={() => {
                                         handleMintPlayTest("bot");
@@ -585,6 +663,12 @@ const TacToeMode = () => {
                         </ConnectKitButton.Custom>
                     )}
                 </Box>
+                <PreviousLobbyModal
+                    lobbyName={lobbyName}
+                    isOpen={isPreviousLobbyModalOpen}
+                    onConfirm={handlePreviousLobbyConfirm}
+                    onClose={handlePreviousLobbyClose}
+                ></PreviousLobbyModal>
             </Box>
         </>
     );

@@ -201,18 +201,9 @@ const Profile = ({
 }) => {
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<"name" | "avatar">("name");
-    const {
-        lobbyAddress,
-        activeLobbyAddress,
-        avatarIndex,
-        nickname,
-        handleStepChange,
-    } = usePrivateLobbyContext();
-    const { data: signer } = useWalletClient();
-    const bttPrivateLobbyContract = useBttPrivateLobbyContract(
-        lobbyAddress,
-        signer,
-    );
+    const { lobbyAddress, avatarIndex, nickname, handleStepChange } =
+        usePrivateLobbyContext();
+    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
 
     const toast = useSkyToast();
 
@@ -220,12 +211,6 @@ const Profile = ({
         try {
             setLoading(true);
             const privateLobbySigner = getPrivateLobbySigner();
-            if (activeLobbyAddress !== lobbyAddress) {
-                await bttPrivateLobbyContract("joinPrivateLobby", [], {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                });
-            }
 
             await bttPrivateLobbyContract(
                 "setUserInfo",

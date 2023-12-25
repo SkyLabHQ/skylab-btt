@@ -3,23 +3,33 @@ import Medal1 from "@/assets/medal1.svg";
 import Medal2 from "@/assets/medal2.svg";
 import Medal3 from "@/assets/medal3.svg";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LobbyInfo from "./LobbyInfo";
+import {
+    useMultiMercuryBTTPrivateLobby,
+    useMultiProvider,
+} from "@/hooks/useMultiContract";
+import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
+import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { useNavigate } from "react-router-dom";
+import useSkyToast from "@/hooks/useSkyToast";
+import avatars from "@/skyConstants/avatars";
 
 const Top3Item = ({ detail }: { detail: any }) => {
-    const { color, rank } = detail;
+    const { avatar, rank, name, win, game } = detail;
     return (
         <Flex align={"flex-end"}>
             <Box
                 sx={{
                     position: "relative",
+                    marginRight: "10px",
                 }}
             >
                 <Box
                     sx={{
                         width: "90px",
                         height: "90px",
-                        background: color,
+                        background: avatars[avatar],
                         border: "1px solid #FFF",
                         borderRadius: "20px",
                     }}
@@ -48,8 +58,10 @@ const Top3Item = ({ detail }: { detail: any }) => {
                     WebkitTextFillColor: "transparent",
                 }}
             >
-                <Text sx={{}}>Alfwwdd</Text>
-                <Text>Alfwwdd</Text>
+                <Text sx={{}}>{name}</Text>
+                <Text>
+                    Win {win}/Game {game}
+                </Text>
             </Box>
         </Flex>
     );
@@ -63,69 +75,122 @@ const GameStatus = () => {
     );
 };
 
-const GameList = () => {
+const GameList = ({ list }: { list: any[] }) => {
     return (
         <Box sx={{ marginTop: "40px" }}>
-            {Array(10)
-                .fill(0)
-                .map((_, index) => {
-                    return (
-                        <Box
-                            key={index}
-                            sx={{
-                                height: "78px",
-                            }}
-                        >
-                            <Flex align={"center"} justify={"space-between"}>
-                                <Flex align={"center"}>
+            {list.map((item, index) => {
+                return (
+                    <Box
+                        key={index}
+                        sx={{
+                            height: "78px",
+                        }}
+                    >
+                        <Flex align={"center"} justify={"space-between"}>
+                            <Flex align={"center"}>
+                                <Text
+                                    sx={{
+                                        fontSize: "16px",
+                                        marginRight: "40px",
+                                        width: "100px",
+                                    }}
+                                >
+                                    {index + 4}
+                                </Text>
+                                <Flex sx={{}} align={"center"}>
+                                    <Box
+                                        sx={{
+                                            width: "70px",
+                                            height: "70px",
+                                            borderRadius: "20px",
+                                            border: "1px solid #FFF",
+                                            background: "#C96F9D",
+                                            marginRight: "12px",
+                                        }}
+                                    ></Box>
                                     <Text
                                         sx={{
+                                            color: "#BCBBBE",
                                             fontSize: "16px",
-                                            marginRight: "40px",
-                                            width: "100px",
                                         }}
                                     >
-                                        {index + 4}
+                                        {item.name}
                                     </Text>
-                                    <Flex sx={{}} align={"center"}>
-                                        <Box
-                                            sx={{
-                                                width: "70px",
-                                                height: "70px",
-                                                borderRadius: "20px",
-                                                border: "1px solid #FFF",
-                                                background: "#C96F9D",
-                                                marginRight: "12px",
-                                            }}
-                                        ></Box>
-                                        <Text
-                                            sx={{
-                                                color: "#BCBBBE",
-                                                fontSize: "16px",
-                                            }}
-                                        >
-                                            Alhasit
-                                        </Text>
-                                    </Flex>
                                 </Flex>
-
-                                <GameStatus></GameStatus>
                             </Flex>
-                            <Box
-                                sx={{
-                                    height: "1px",
-                                    background:
-                                        "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFF 9.44%, rgba(255, 255, 255, 0.39) 85.56%, rgba(255, 255, 255, 0.00) 100%)",
-                                }}
-                            ></Box>
-                        </Box>
-                    );
-                })}
+
+                            <Flex>
+                                <Text>
+                                    {item.win} win/ {item.game} games
+                                </Text>
+                            </Flex>
+                        </Flex>
+                        <Box
+                            sx={{
+                                height: "1px",
+                                background:
+                                    "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFF 9.44%, rgba(255, 255, 255, 0.39) 85.56%, rgba(255, 255, 255, 0.00) 100%)",
+                            }}
+                        ></Box>
+                    </Box>
+                );
+            })}
         </Box>
     );
 };
 
 const Leaderboard = () => {
+    const navigate = useNavigate();
+    const toast = useSkyToast();
+    const [listLoading, setListLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [list, setList] = useState<any[]>([]);
+    const { lobbyAddress, handleSetGameCount, lobbyName, myGameCount } =
+        usePrivateLobbyContext();
+
+    const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
+
+    const multiMercuryBTTPrivateLobby =
+        useMultiMercuryBTTPrivateLobby(lobbyAddress);
+    const handleGetGameList = async () => {
+        const [players] = await multiProvider.all([
+            multiMercuryBTTPrivateLobby.getPlayers(),
+        ]);
+
+        const p = [];
+
+        for (let i = 0; i < players.length; i++) {
+            p.push(multiMercuryBTTPrivateLobby.winCountPerPlayer(players[i]));
+            p.push(multiMercuryBTTPrivateLobby.loseCountPerPlayer(players[i]));
+            p.push(multiMercuryBTTPrivateLobby.userInfo(players[i]));
+        }
+
+        const counts = await multiProvider.all(p);
+
+        const playersCounts = players
+            .map((player: string, index: number) => {
+                return {
+                    address: player,
+                    win: counts[index * 3].toNumber(),
+                    lose: counts[index * 3 + 1].toNumber(),
+                    avatar: counts[index * 3 + 2].avatar.toNumber() - 1,
+                    name: counts[index * 3 + 2].name,
+                };
+            })
+            .sort((a: any, b: any) => {
+                return b.win - a.win;
+            });
+
+        setList(playersCounts);
+        console.log(playersCounts, "gameHistory");
+    };
+
+    useEffect(() => {
+        handleGetGameList();
+    }, []);
+
+    console.log(list, "listlistlistlist");
+
     return (
         <Box>
             <Box
@@ -144,43 +209,49 @@ const Leaderboard = () => {
                         margin: "0 auto",
                     }}
                 >
-                    <Flex justify={"center"}>
-                        <Top3Item
-                            detail={{
-                                color: "red",
-                                name: "Alhasit",
-                                win: 10,
-                                game: 20,
-                                rank: 1,
-                            }}
-                        ></Top3Item>
-                    </Flex>
+                    {list?.[0] && (
+                        <Flex justify={"center"}>
+                            <Top3Item
+                                detail={{
+                                    avatar: list[0].avatar,
+                                    name: list[0].name,
+                                    win: list[0].win,
+                                    game: list[0].win + list[0].lose,
+                                    rank: 1,
+                                }}
+                            ></Top3Item>
+                        </Flex>
+                    )}
                     <Flex
                         justify={"space-between"}
                         sx={{
                             marginTop: "100px",
                         }}
                     >
-                        <Top3Item
-                            detail={{
-                                color: "red",
-                                name: "Alhasit",
-                                win: 10,
-                                game: 20,
-                                rank: 2,
-                            }}
-                        ></Top3Item>
-                        <Top3Item
-                            detail={{
-                                color: "red",
-                                name: "Alhasit",
-                                win: 10,
-                                game: 20,
-                                rank: 3,
-                            }}
-                        ></Top3Item>
+                        {list?.[1] && (
+                            <Top3Item
+                                detail={{
+                                    avatar: list[1].avatar,
+                                    name: list[1].name,
+                                    win: list[1].win,
+                                    game: list[1].win + list[0].lose,
+                                    rank: 2,
+                                }}
+                            ></Top3Item>
+                        )}
+                        {list?.[2] && (
+                            <Top3Item
+                                detail={{
+                                    avatar: list?.[2].avatar,
+                                    name: list?.[2].name,
+                                    win: list?.[2].win,
+                                    game: list?.[2].win + list[2].lose,
+                                    rank: 3,
+                                }}
+                            ></Top3Item>
+                        )}
                     </Flex>
-                    <GameList></GameList>
+                    <GameList list={list.slice(3)}></GameList>
                 </Box>
             </Box>
             <LobbyInfo></LobbyInfo>

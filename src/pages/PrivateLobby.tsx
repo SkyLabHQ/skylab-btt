@@ -16,13 +16,20 @@ import Loading from "@/components/Loading";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Back from "@/components/Back";
+import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 
 interface GameCount {
     allGameCount: number;
     inGameCount: number;
 }
 
+interface MyGameCount {
+    winCount: number;
+    loseCount: number;
+}
+
 const PrivateLobbyContext = createContext<{
+    myGameCount: MyGameCount;
     lobbyName: string;
     lobbyAddress: string;
     nickname: string;
@@ -36,7 +43,9 @@ const PrivateLobbyContext = createContext<{
 export const usePrivateLobbyContext = () => useContext(PrivateLobbyContext);
 
 const PrivateLobby = () => {
-    const [avatarIndex, setAvatarIndex] = useState<number>(0);
+    const [avatarIndex, setAvatarIndex] = useState<number>(
+        Math.floor(Math.random() * 14),
+    );
     const [nickname, setNickname] = useState<string>("");
     const localSinger = getPrivateLobbySigner();
     const { sCWAddress } = useSCWallet(localSinger.privateKey);
@@ -52,14 +61,17 @@ const PrivateLobby = () => {
     const [step, setStep] = useState<number>(0);
     const params = qs.parse(search) as any;
     const [lobbyName, setLobbyName] = useState<string>("");
-    const [lobbyAddress, setLobbyAddress] = useState<string>(
-        params.lobbyAddress,
-    );
+    const [lobbyAddress] = useState<string>(params.lobbyAddress);
     const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
-
+    const [myGameCount, setMyGameCount] = useState({
+        winCount: 0,
+        loseCount: 0,
+    });
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
+
+    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
 
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
@@ -76,24 +88,39 @@ const PrivateLobby = () => {
         setAvatarIndex(color);
     };
 
-    const handleGetLobbyAddress = async () => {
-        const [lobbyName, activeLobbyAddress] = await multiProvider.all([
+    const handleInitLobby = async () => {
+        const [
+            userInfo,
+            winCount,
+            loseCount,
+            queueList,
+            onGameList,
+            lobbyName,
+            activeLobbyAddress,
+        ] = await multiProvider.all([
+            multiMercuryBTTPrivateLobby.userInfo(sCWAddress),
+            multiMercuryBTTPrivateLobby.winCountPerPlayer(sCWAddress),
+            multiMercuryBTTPrivateLobby.loseCountPerPlayer(sCWAddress),
+            multiMercuryBTTPrivateLobby.getLobbyGameQueue(),
+            multiMercuryBTTPrivateLobby.getLobbyOnGoingGames(),
             multiMercuryBTTPrivateLobby.lobbyName(),
             multiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
                 sCWAddress,
             ),
         ]);
 
+        if (activeLobbyAddress !== lobbyAddress) {
+            const privateLobbySigner = getPrivateLobbySigner();
+            await bttPrivateLobbyContract("joinPrivateLobby", [], {
+                usePaymaster: true,
+                signer: privateLobbySigner,
+            });
+        }
+        setMyGameCount({
+            winCount: winCount.toNumber(),
+            loseCount: loseCount.toNumber(),
+        });
         setLobbyName(lobbyName);
-        setActiveLobbyAddress(activeLobbyAddress);
-    };
-
-    const handleInitLobby = async () => {
-        const [userInfo, queueList, onGameList] = await multiProvider.all([
-            multiMercuryBTTPrivateLobby.userInfo(sCWAddress),
-            multiMercuryBTTPrivateLobby.getLobbyGameQueue(),
-            multiMercuryBTTPrivateLobby.getLobbyOnGoingGames(),
-        ]);
 
         const p1 = [];
 
@@ -147,35 +174,30 @@ const PrivateLobby = () => {
     };
 
     useEffect(() => {
-        console.log(lobbyAddress, "lobbyAddress");
         if (!lobbyAddress) {
-            // navigate("/btt/joinlobby");
+            navigate("/btt/joinlobby");
             return;
         }
+    }, [lobbyAddress]);
+
+    useEffect(() => {
         if (
-            !multiProvider ||
+            !lobbyAddress ||
             !multiMercuryBTTPrivateLobby ||
-            !multiSkylabBidTacToeFactoryContract ||
-            !sCWAddress
+            !multiProvider ||
+            !sCWAddress ||
+            !multiSkylabBidTacToeFactoryContract
         ) {
             return;
         }
-
-        handleGetLobbyAddress();
+        handleInitLobby();
     }, [
         lobbyAddress,
         multiMercuryBTTPrivateLobby,
-        multiSkylabBidTacToeFactoryContract,
         multiProvider,
         sCWAddress,
+        multiSkylabBidTacToeFactoryContract,
     ]);
-
-    useEffect(() => {
-        if (!multiMercuryBTTPrivateLobby || !multiProvider || !sCWAddress) {
-            return;
-        }
-        handleInitLobby();
-    }, [multiMercuryBTTPrivateLobby, multiProvider, sCWAddress]);
 
     return (
         <>
@@ -191,6 +213,7 @@ const PrivateLobby = () => {
                 ) : (
                     <PrivateLobbyContext.Provider
                         value={{
+                            myGameCount,
                             lobbyName,
                             gameCount,
                             lobbyAddress,

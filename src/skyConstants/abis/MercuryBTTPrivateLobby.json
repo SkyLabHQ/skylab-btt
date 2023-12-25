@@ -116,6 +116,11 @@
         "internalType": "address",
         "name": "loserBurner",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "room",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -135,6 +140,11 @@
           {
             "internalType": "address",
             "name": "loserBurner",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "room",
             "type": "address"
           }
         ],

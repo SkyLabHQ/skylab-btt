@@ -1,9 +1,30 @@
-import { Box, Flex, Text, Image, Button, SimpleGrid } from "@chakra-ui/react";
+import {
+    Box,
+    Flex,
+    Text,
+    Image,
+    Button,
+    SimpleGrid,
+    useClipboard,
+} from "@chakra-ui/react";
 import PairingIcon from "./assets/pairing.svg";
 import RightArrow from "./assets/right-arrow.svg";
 import FriendIcon from "./assets/friend.svg";
-import React from "react";
+import React, { useState } from "react";
 import LobbyInfo from "./LobbyInfo";
+import { useBlockNumber } from "wagmi";
+import { useNavigate } from "react-router-dom";
+import useSkyToast from "@/hooks/useSkyToast";
+import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
+import {
+    getMultiSkylabBidTacToeGameContract,
+    useMultiMercuryBTTPrivateLobby,
+    useMultiProvider,
+} from "@/hooks/useMultiContract";
+import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { useSCWallet } from "@/hooks/useSCWallet";
+import { getPrivateLobbySigner } from "@/hooks/useSigner";
 
 const GameStatus = () => {
     return (
@@ -119,6 +140,77 @@ const GameList = () => {
 };
 
 const History = () => {
+    const { onCopy } = useClipboard(window.location.href ?? "");
+
+    const [queueList, setQueueList] = useState([]);
+    const [onGameList, setOnGameList] = useState([]);
+    const navigate = useNavigate();
+    const toast = useSkyToast();
+    const [listLoading, setListLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { lobbyAddress, handleSetGameCount, lobbyName, myGameCount } =
+        usePrivateLobbyContext();
+
+    const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
+    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
+    const localSinger = getPrivateLobbySigner();
+    const { sCWAddress } = useSCWallet(localSinger.privateKey);
+
+    const multiMercuryBTTPrivateLobby =
+        useMultiMercuryBTTPrivateLobby(lobbyAddress);
+    const handleGetGameList = async () => {
+        const [gameHistory, onGameList] = await multiProvider.all([
+            multiMercuryBTTPrivateLobby.getGameHistory(),
+        ]);
+
+        const p1 = [];
+        for (let i = 0; i < queueList.length; i++) {
+            const multiSkylabBidTacToeGameContract =
+                getMultiSkylabBidTacToeGameContract(queueList[i]);
+            p1.push(multiSkylabBidTacToeGameContract.player1());
+        }
+
+        for (let i = 0; i < onGameList.length; i++) {
+            const multiSkylabBidTacToeGameContract =
+                getMultiSkylabBidTacToeGameContract(onGameList[i]);
+            p1.push(multiSkylabBidTacToeGameContract.player1());
+            p1.push(multiSkylabBidTacToeGameContract.player2());
+        }
+
+        const playerAddresses = await multiProvider.all(p1);
+        const p2 = playerAddresses.map((item) => {
+            return multiMercuryBTTPrivateLobby.userInfo(item);
+        });
+        const userInfos = await multiProvider.all(p2);
+        const queueUserList = queueList.map((item: any, index: number) => {
+            return {
+                address1: playerAddresses[index],
+                gameAddress: item,
+                avatar1: userInfos[index].avatar.toNumber() - 1,
+                name1: userInfos[index].name,
+            };
+        });
+        const onGameUserList = onGameList.map((item: any, index: number) => {
+            const player1Index = index * 2 + queueList.length;
+            const player2Index = index * 2 + queueList.length + 1;
+            return {
+                gameAddress: item,
+                address1: playerAddresses[player1Index],
+                avatar1: userInfos[player1Index].avatar.toNumber() - 1,
+                name1: userInfos[player1Index].name,
+                address2: playerAddresses[player2Index],
+                avatar2: userInfos[player2Index].avatar.toNumber() - 1,
+                name2: userInfos[player2Index].name,
+            };
+        });
+
+        setQueueList(queueUserList);
+        setOnGameList(onGameUserList);
+        handleSetGameCount({
+            allGameCount: (queueList.length + onGameList.length) * 2,
+            inGameCount: queueList.length + onGameList.length * 2,
+        });
+    };
     return (
         <Box>
             <GameList></GameList>

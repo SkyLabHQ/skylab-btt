@@ -14,14 +14,6 @@ const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
         onClose: keyBoardOnClose,
     } = useDisclosure();
 
-    const {
-        isOpen: shareOpen,
-        onToggle: shareOnToggle,
-        onClose: shareOnClose,
-    } = useDisclosure({
-        defaultIsOpen: true,
-    });
-
     return (
         <Box
             sx={{
@@ -35,17 +27,14 @@ const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
                 },
             }}
         >
-            {quitType === "game" && (
-                <KeyBoard
-                    isOpen={keyBoardOpen}
-                    onToggle={() => {
-                        keyBoardOnToggle();
-                        shareOnClose();
-                    }}
-                    onClose={keyBoardOnClose}
-                ></KeyBoard>
-            )}
-
+            <KeyBoard
+                type={false}
+                isOpen={keyBoardOpen}
+                onToggle={() => {
+                    keyBoardOnToggle();
+                }}
+                onClose={keyBoardOnClose}
+            ></KeyBoard>
             <Box
                 sx={{
                     borderRadius: "0.5208vw",
@@ -82,13 +71,11 @@ const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
             >
                 <Text sx={{ fontSize: "0.8333vw" }}>Quit</Text>
             </Box>
-            {quitType && (
-                <QuitModal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    quitType={quitType}
-                ></QuitModal>
-            )}
+            <QuitModal
+                isOpen={isOpen}
+                onClose={onClose}
+                quitType={quitType}
+            ></QuitModal>
         </Box>
     );
 };

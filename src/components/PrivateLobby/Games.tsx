@@ -370,12 +370,9 @@ const Games = () => {
     const toast = useSkyToast();
     const [listLoading, setListLoading] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { lobbyAddress, handleSetGameCount, lobbyName } =
+    const { lobbyAddress, handleSetGameCount, lobbyName, myGameCount } =
         usePrivateLobbyContext();
-    const [myGameCount, setMyGameCount] = useState({
-        winCount: 0,
-        loseCount: 0,
-    });
+
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
     const localSinger = getPrivateLobbySigner();
@@ -383,18 +380,6 @@ const Games = () => {
 
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
-
-    const handleGetUserGameCount = async () => {
-        const [winCount, loseCount] = await multiProvider.all([
-            multiMercuryBTTPrivateLobby.winCountPerPlayer(sCWAddress),
-            multiMercuryBTTPrivateLobby.loseCountPerPlayer(sCWAddress),
-        ]);
-
-        setMyGameCount({
-            winCount: winCount.toNumber(),
-            loseCount: loseCount.toNumber(),
-        });
-    };
 
     const handleStartGame = async () => {
         if (loading) {
@@ -535,13 +520,6 @@ const Games = () => {
             inGameCount: queueList.length + onGameList.length * 2,
         });
     };
-
-    useEffect(() => {
-        if (!sCWAddress || !multiMercuryBTTPrivateLobby || !multiProvider) {
-            return;
-        }
-        handleGetUserGameCount();
-    }, [multiMercuryBTTPrivateLobby, sCWAddress, multiProvider]);
 
     useEffect(() => {
         if (!multiMercuryBTTPrivateLobby || !multiProvider || !blockNumber) {

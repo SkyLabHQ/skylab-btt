@@ -172,7 +172,6 @@ const PrivateRoom = () => {
         const [playerAddress] = await multiProvider.all([
             multiSkylabBidTacToeGameContract.player2(),
         ]);
-        console.log(playerAddress, "222222");
         if (playerAddress !== ZERO_DATA) {
             const { user, winCount, loseCount } = await handleGetUserInfo(
                 playerAddress,

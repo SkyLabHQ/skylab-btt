@@ -14,8 +14,8 @@ import { handleError } from "@/utils/error";
 import Loading from "../Loading";
 import useSkyToast from "@/hooks/useSkyToast";
 import {
-    useBidTacToeFactoryRetry,
     useBttGameRetry,
+    useBttPrivateLobbyContract,
 } from "@/hooks/useRetryContract";
 import { useNavigate } from "react-router-dom";
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
@@ -34,8 +34,7 @@ const QuitModal = ({
     const { bidTacToeGameAddress, lobbyAddress } = usePrivateGameContext();
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
-    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
-
+    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
     const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress);
 
     const handleRetreat = async () => {
@@ -44,12 +43,16 @@ const QuitModal = ({
             const privateLobbySigner = getPrivateLobbySigner();
             if (loading) return;
             if (quitType === "wait") {
-                await tacToeFactoryRetryWrite("withdrawFromQueue", [], {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                });
-
-                navigate(`/btt/privatelobby?lobbyAddress=${lobbyAddress}`);
+                const privateLobbySigner = getPrivateLobbySigner();
+                await bttPrivateLobbyContract(
+                    "deleteRoom",
+                    [bidTacToeGameAddress],
+                    {
+                        usePaymaster: true,
+                        signer: privateLobbySigner,
+                    },
+                );
+                navigate(`/btt/privateLobby?lobbyAddress=${lobbyAddress}`);
             } else {
                 await tacToeGameRetryWrite("surrender", [], {
                     usePaymaster: true,
