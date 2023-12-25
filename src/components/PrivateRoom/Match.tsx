@@ -4,12 +4,7 @@ import { Box, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import Loading from "../Loading";
 import useCountDown from "react-countdown-hook";
-import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
-import { useLocation, useNavigate } from "react-router-dom";
-import qs from "query-string";
-import useSkyToast from "@/hooks/useSkyToast";
-import { handleError } from "@/utils/error";
-import { getPrivateLobbySigner } from "@/hooks/useSigner";
+import { useLocation } from "react-router-dom";
 import ToolBar from "./Toolbar";
 import QuitModal from "./QuitModal";
 
@@ -64,10 +59,8 @@ const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
 
 const Match = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const toast = useSkyToast();
-    const navigate = useNavigate();
+
     const { search } = useLocation();
-    const params = qs.parse(search) as any;
     const [timeLeft, { start }] = useCountDown(5000, 1000);
     const { myInfo, opInfo, handleStepChange } = usePrivateGameContext();
 
@@ -124,6 +117,7 @@ const Match = () => {
                             <Text
                                 sx={{
                                     fontSize: "1.25vw",
+                                    textAlign: "center",
                                 }}
                             >
                                 ({timeLeft / 1000}s)

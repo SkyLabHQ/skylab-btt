@@ -1,4 +1,5 @@
 import { Box, Text } from "@chakra-ui/react";
+import React from "react";
 
 const RoundInfo = ({
     currentRound,
@@ -27,15 +28,14 @@ const RoundInfo = ({
                 }}
             >
                 Round {currentRound}
-            </Text>
-            <Text
-                sx={{
-                    color: "#616161",
-                    fontSize: "0.7292vw",
-                }}
-            >
-                {" "}
-                /{allRound}
+                <span
+                    style={{
+                        color: "#616161",
+                        fontSize: "0.7292vw",
+                    }}
+                >
+                    /{allRound}
+                </span>
             </Text>
         </Box>
     );

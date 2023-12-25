@@ -11,6 +11,8 @@ import BttRules from "./pages/BttRules";
 import JoinLobby from "./pages/JoinLobby";
 import PrivateLobby from "./pages/PrivateLobby";
 import PrivateRoom from "./pages/PrivateRoom";
+import PrivatePlayBack from "./pages/PrivatePlayBack";
+import PrivateLiveGame from "./pages/PrivateLiveGame";
 
 export const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -38,10 +40,15 @@ const AppRoutes = (): ReactElement => {
                     path="/btt/privatelobby"
                     element={<PrivateLobby />}
                 ></Route>
-
-                <Route>
-                    <Route path="/btt/privateRoom" element={<PrivateRoom />} />
-                </Route>
+                <Route path="/btt/privateRoom" element={<PrivateRoom />} />
+                <Route
+                    path="/btt/privatePlayback"
+                    element={<PrivatePlayBack />}
+                />
+                <Route
+                    path="/btt/privateLive"
+                    element={<PrivateLiveGame />}
+                ></Route>
             </Route>
         </Routes>
     );

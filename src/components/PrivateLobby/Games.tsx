@@ -1,15 +1,8 @@
-import {
-    Box,
-    Flex,
-    Text,
-    Image,
-    Button,
-    SimpleGrid,
-    useClipboard,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Image, Button, useClipboard } from "@chakra-ui/react";
 import PairingIcon from "./assets/pairing.svg";
 import RightArrow from "./assets/right-arrow.svg";
 import FriendIcon from "./assets/friend.svg";
+import InGameIcon from "./assets/in-game.svg";
 import React, { useEffect, useState } from "react";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
 import {
@@ -28,11 +21,13 @@ import { useNavigate } from "react-router-dom";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import { useBlockNumber } from "@/contexts/BlockNumber";
+import Vacant from "./Vacant";
 
 const ListBorder = () => {
     return (
         <Box
             sx={{
+                marginTop: "0.625vw",
                 height: "1px",
                 background:
                     "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFF 9.44%, rgba(255, 255, 255, 0.39) 85.56%, rgba(255, 255, 255, 0.00) 100%)",
@@ -44,9 +39,13 @@ const ListBorder = () => {
 const GameButton = ({
     label,
     onClick,
+    border = "2px solid #303030",
+    background = "linear-gradient(95deg, #BCBBBE 0.99%, #FFF 0.99%, #D7C878 46.9%, rgba(216, 209, 169, 0.49) 68.71%, #FFF 104.68%)",
 }: {
     label: string;
     onClick?: () => void;
+    border?: string;
+    background?: string;
 }) => {
     return (
         <Flex
@@ -58,16 +57,26 @@ const GameButton = ({
                 height: "2.1875vw",
                 fontSize: "1.25vw",
                 borderRadius: "0.5208vw",
-                border: "2px solid #303030",
                 padding: "0 0.5208vw",
                 color: "#303030",
                 cursor: "pointer",
-                background:
-                    "linear-gradient(95deg, #BCBBBE 0.99%, #FFF 0.99%, #D7C878 46.9%, rgba(216, 209, 169, 0.49) 68.71%, #FFF 104.68%)",
+                border,
+                background,
             }}
         >
-            <Text>{label}</Text>
-            <Image src={RightArrow}></Image>
+            <Text
+                sx={{
+                    fontSize: "1.25vw",
+                }}
+            >
+                {label}
+            </Text>
+            <Image
+                src={RightArrow}
+                sx={{
+                    width: "0.8333vw",
+                }}
+            ></Image>
         </Flex>
     );
 };
@@ -155,7 +164,7 @@ const GameStatus = ({ type }: { type: GameStatusEnum }) => {
     return (
         <Flex>
             <Image
-                src={PairingIcon}
+                src={type === GameStatusEnum.pairing ? PairingIcon : InGameIcon}
                 sx={{
                     width: "1.25vw",
                     marginRight: "0.2083vw",
@@ -213,50 +222,58 @@ const QueueItem = ({
 }) => {
     return (
         <Box w="100%">
-            <Flex align={"center"}>
-                <ListUserProfile
-                    name={detail.name1}
-                    avatar={detail.avatar1}
-                ></ListUserProfile>
-                <Text
-                    sx={{
-                        fontSize: "1.25vw",
-                        margin: "0 1.0417vw",
-                    }}
-                >
-                    VS
-                </Text>
-                <Flex
-                    sx={{
-                        marginRight: "1.25vw",
-                    }}
-                    direction={"column"}
-                    align={"center"}
-                >
-                    <Box
-                        sx={{
-                            width: "4.6875vw",
-                            height: "4.6875vw",
-                            borderRadius: "1.0417vw",
-                            border: "1px solid #787878",
-                            background: "transparent",
-                        }}
-                    ></Box>
-
+            <Flex align={"center"} justify={"space-between"}>
+                <Flex align={"center"}>
+                    <ListUserProfile
+                        name={detail.name1}
+                        avatar={detail.avatar1}
+                    ></ListUserProfile>
                     <Text
                         sx={{
-                            color: "#BCBBBE",
-                            fontSize: "0.8333vw",
+                            fontSize: "1.25vw",
+                            margin: "0 1.0417vw",
                         }}
                     >
-                        ...
+                        VS
                     </Text>
+                    <Flex
+                        sx={{
+                            marginRight: "1.25vw",
+                        }}
+                        direction={"column"}
+                        align={"center"}
+                    >
+                        <Box
+                            sx={{
+                                width: "4.6875vw",
+                                height: "4.6875vw",
+                                borderRadius: "1.0417vw",
+                                border: "1px solid #787878",
+                                background: "transparent",
+                            }}
+                        ></Box>
+
+                        <Text
+                            sx={{
+                                color: "#BCBBBE",
+                                fontSize: "0.8333vw",
+                            }}
+                        >
+                            ...
+                        </Text>
+                    </Flex>
                 </Flex>
-                <GameStatus type={GameStatusEnum.pairing}></GameStatus>
-                <GameButton
-                    label="Join Game"
-                    onClick={onButtonClick}
-                ></GameButton>
+                <Flex
+                    sx={{
+                        paddingRight: "1.0417vw",
+                    }}
+                >
+                    <GameStatus type={GameStatusEnum.pairing}></GameStatus>
+                    <GameButton
+                        label="Join Game"
+                        onClick={onButtonClick}
+                    ></GameButton>
+                </Flex>
             </Flex>
             <ListBorder></ListBorder>
         </Box>
@@ -272,25 +289,34 @@ const OnGameItem = ({
 }) => {
     return (
         <Box w="100%">
-            <Flex align={"center"}>
-                <ListUserProfile
-                    name={detail.name1}
-                    avatar={detail.avatar1}
-                ></ListUserProfile>
-                <Text
-                    sx={{
-                        fontSize: "1.25vw",
-                        margin: "0 1.0417vw",
-                    }}
-                >
-                    VS
-                </Text>
-                <ListUserProfile
-                    name={detail.name2}
-                    avatar={detail.avatar2}
-                ></ListUserProfile>
-                <GameStatus type={GameStatusEnum.inGame}></GameStatus>
-                <GameButton label="Watch" onClick={onButtonClick}></GameButton>
+            <Flex align={"center"} justify={"space-between"}>
+                <Flex align={"center"}>
+                    <ListUserProfile
+                        name={detail.name1}
+                        avatar={detail.avatar1}
+                    ></ListUserProfile>
+                    <Text
+                        sx={{
+                            fontSize: "1.25vw",
+                            margin: "0 1.0417vw",
+                        }}
+                    >
+                        VS
+                    </Text>
+                    <ListUserProfile
+                        name={detail.name2}
+                        avatar={detail.avatar2}
+                    ></ListUserProfile>
+                </Flex>
+                <Flex>
+                    <GameStatus type={GameStatusEnum.inGame}></GameStatus>
+                    <GameButton
+                        label="Watch"
+                        onClick={onButtonClick}
+                        border={"2px solid #303030"}
+                        background={"#D9D9D9"}
+                    ></GameButton>
+                </Flex>
             </Flex>
             <ListBorder></ListBorder>
         </Box>
@@ -314,22 +340,20 @@ const GameList = ({
         <Box
             sx={{
                 padding: "1.0417vw",
-                display: "flex",
-                flexWrap: "wrap",
-                height: "24.375vw",
                 overflowY: "scroll",
                 position: "relative",
+                height: "100%",
+                flex: 1,
             }}
         >
             {loading ? (
                 <Loading></Loading>
             ) : (
-                <SimpleGrid
-                    columns={2}
-                    spacingX={"5.2083vw"}
-                    spacingY={"1.0417vw"}
+                <Box
                     sx={{
                         height: "100%",
+                        width: "690px",
+                        margin: "0 auto",
                     }}
                 >
                     {queueList.map((item: any, index: number) => {
@@ -354,7 +378,7 @@ const GameList = ({
                             ></OnGameItem>
                         );
                     })}
-                </SimpleGrid>
+                </Box>
             )}
         </Box>
     );
@@ -368,6 +392,7 @@ const Games = () => {
     const [onGameList, setOnGameList] = useState([]);
     const navigate = useNavigate();
     const toast = useSkyToast();
+    const [vacantList, setVacantList] = useState([]);
     const [listLoading, setListLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const { lobbyAddress, handleSetGameCount, lobbyName, myGameCount } =
@@ -462,14 +487,15 @@ const Games = () => {
 
     const handleWatchGame = async (gameAddress: string) => {
         navigate(
-            `/btt/privateRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
+            `/btt/privateLive?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
         );
     };
 
     const handleGetGameList = async () => {
-        const [queueList, onGameList] = await multiProvider.all([
+        const [queueList, onGameList, players] = await multiProvider.all([
             multiMercuryBTTPrivateLobby.getLobbyGameQueue(),
             multiMercuryBTTPrivateLobby.getLobbyOnGoingGames(),
+            multiMercuryBTTPrivateLobby.getPlayers(),
         ]);
 
         const p1 = [];
@@ -487,9 +513,23 @@ const Games = () => {
         }
 
         const playerAddresses = await multiProvider.all(p1);
+
+        const vacantAddresses = players.filter((item: string) => {
+            const findItem = playerAddresses.find((item1: string) => {
+                return item1 === item;
+            });
+
+            return findItem ? false : true;
+        });
+
         const p2 = playerAddresses.map((item) => {
             return multiMercuryBTTPrivateLobby.userInfo(item);
         });
+
+        vacantAddresses.forEach((item: string) => {
+            p2.push(multiMercuryBTTPrivateLobby.userInfo(item));
+        });
+
         const userInfos = await multiProvider.all(p2);
         const queueUserList = queueList.map((item: any, index: number) => {
             return {
@@ -513,8 +553,21 @@ const Games = () => {
             };
         });
 
+        const vacantUserList = vacantAddresses.map(
+            (item: any, index: number) => {
+                const playerIndex =
+                    index + queueList.length + onGameList.length;
+                return {
+                    address: item,
+                    avatar: userInfos[playerIndex].avatar.toNumber() - 1,
+                    name: userInfos[playerIndex].name,
+                };
+            },
+        );
+
         setQueueList(queueUserList);
         setOnGameList(onGameUserList);
+        setVacantList(vacantUserList);
         handleSetGameCount({
             allGameCount: (queueList.length + onGameList.length) * 2,
             inGameCount: queueList.length + onGameList.length * 2,
@@ -544,17 +597,24 @@ const Games = () => {
                     gameCount={myGameCount}
                     onStartGame={handleStartGame}
                 ></Header>
-                <GameList
-                    onJoinGame={(gameAddress: string) => {
-                        handleJoinGame(gameAddress);
+                <Flex
+                    sx={{
+                        height: "24.375vw",
                     }}
-                    onWatchGame={(gameAddress: string) => {
-                        handleWatchGame(gameAddress);
-                    }}
-                    loading={listLoading}
-                    queueList={queueList}
-                    onGameList={onGameList}
-                ></GameList>
+                >
+                    <GameList
+                        onJoinGame={(gameAddress: string) => {
+                            handleJoinGame(gameAddress);
+                        }}
+                        onWatchGame={(gameAddress: string) => {
+                            handleWatchGame(gameAddress);
+                        }}
+                        loading={listLoading}
+                        queueList={queueList}
+                        onGameList={onGameList}
+                    ></GameList>
+                    <Vacant list={vacantList}></Vacant>
+                </Flex>
             </Box>
             <LobbyInfo></LobbyInfo>
             <Flex justify={"center"}>

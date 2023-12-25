@@ -11,56 +11,16 @@ import saveAs from "file-saver";
 import html2canvas from "html2canvas";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import RightArrowWhite from "./assets/right-arrow.svg";
-import { BoardItem, GameInfo, Info, UserMarkType } from "@/pages/TacToe";
 import { getWinState } from "../TacToe";
 import { shortenAddressWithout0x } from "@/utils";
 import ShareEmojiIcon from "./assets/share-emoji.svg";
 import { useChainId } from "wagmi";
-
-const winEmoji = ["❤️", "👑", "🦋", "🌻", "🥳", "🤪", "😎", "🤭", "🤩"];
-const loseEmoji = ["🥀", "💔", "🥲", "🥶", "🤬", "🥺", "🤕", "☠️"];
-export const getShareEmoji = (
-    myMark: UserMarkType,
-    list: BoardItem[],
-    win: boolean,
-) => {
-    const emojiList = win
-        ? winEmoji.sort(() => Math.random() - 0.5).slice(0, 3)
-        : loseEmoji.sort(() => Math.random() - 0.5).slice(0, 3);
-    const gridSize = 3; // 九宫格的大小，这里是3x3
-
-    const mark = myMark === UserMarkType.Circle ? "⭕️" : "❌";
-    let gridString = "";
-
-    for (let i = 0; i < gridSize; i++) {
-        gridString += `${mark}       `;
-        for (let j = 0; j < gridSize; j++) {
-            const index = i * gridSize + j;
-            const cellValue =
-                list[index].mark === UserMarkType.Empty
-                    ? "◻️"
-                    : list[index].mark === UserMarkType.Circle ||
-                      list[index].mark === UserMarkType.YellowCircle
-                    ? "⭕️"
-                    : "❌";
-            gridString += cellValue;
-        }
-        gridString += `     ${mark}`; // 在每行末尾添加换行符
-        if (i !== gridSize - 1) {
-            gridString += "\n";
-        }
-    }
-
-    const border = `${mark}                             ${mark}`;
-
-    return `${mark}${mark}${emojiList.join("")}${mark}${mark}
-${border}
-${gridString}
-${border}
-${mark}${mark}${emojiList.join("")}${mark}${mark}
-@skylabHQ
-https://app.projmercury.io/#/?step=2`;
-};
+import {
+    BoardItem,
+    GameInfo,
+    getShareEmoji,
+} from "@/skyConstants/bttGameTypes";
+import { Info } from "@/pages/TacToe";
 
 const ButtonGroup = ({
     showShareEmoji,

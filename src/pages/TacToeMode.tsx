@@ -101,8 +101,7 @@ const TacToeMode = () => {
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
 
-    const [activeLobbyAddress, setActiveLobbyAddress] =
-        useState<string>(ZERO_DATA);
+    const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
 
     const [lobbyName, setLobbyName] = useState<string>("");
     const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
@@ -548,7 +547,13 @@ const TacToeMode = () => {
                                     tournamentDisabled={planeList.length === 0}
                                     onPlayTournament={handleCreateOrJoinDefault}
                                     onPlayTestLobby={async () => {
-                                        if (activeLobbyAddress === ZERO_DATA) {
+                                        if (activeLobbyAddress === "") {
+                                            toast(
+                                                "Querying lobby address, please try again later",
+                                            );
+                                        } else if (
+                                            activeLobbyAddress === ZERO_DATA
+                                        ) {
                                             setIsPrivateLobbyMode.on();
                                         } else {
                                             onPreviousLobbyModalOpen();

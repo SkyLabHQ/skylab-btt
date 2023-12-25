@@ -24,41 +24,46 @@ const ShareButtons = ({
                 position: "relative",
             }}
         >
-            {showShareEmoji && (
-                <Button
-                    sx={{
-                        border: "1px solid rgba(97, 97, 97, 1) !important",
-                        borderRadius: "0.9375vw",
-                        width: "9.375vw",
-                        height: "2.7083vw",
-                        color: "#d9d9d9",
-                        fontSize: "1.0417vw",
-                        position: "absolute",
-                        left: "-10.4167vw",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                    }}
-                    variant={"outline"}
-                    onClick={() => {
-                        handleShareEmoji();
-                    }}
-                >
-                    <Image
-                        src={ShareEmojiIcon}
+            <Box
+                sx={{
+                    width: "9.375vw",
+                    height: "2.7083vw",
+                    marginRight: "0.625vw",
+                }}
+            >
+                {showShareEmoji && (
+                    <Button
                         sx={{
-                            width: "1.5625vw",
+                            border: "3px solid #bcbbbe !important",
+                            borderRadius: "0.9375vw",
+                            width: "9.375vw",
+                            height: "2.7083vw",
+                            color: "#d9d9d9",
+                            fontSize: "1.0417vw",
                         }}
-                    ></Image>
-                    <Text
-                        sx={{
-                            flex: 1,
-                            textAlign: "center",
+                        variant={"outline"}
+                        onClick={() => {
+                            handleShareEmoji();
                         }}
                     >
-                        Share Emoji
-                    </Text>
-                </Button>
-            )}
+                        <Image
+                            src={ShareEmojiIcon}
+                            sx={{
+                                width: "1.5625vw",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                flex: 1,
+                                textAlign: "center",
+                            }}
+                        >
+                            Share Emoji
+                        </Text>
+                    </Button>
+                )}
+            </Box>
+
             <Button
                 sx={{
                     border: "3px solid #bcbbbe !important",

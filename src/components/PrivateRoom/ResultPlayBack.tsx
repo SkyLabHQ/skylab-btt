@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Text, useBoolean } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
     useMultiMercuryBTTPrivateLobby,
@@ -12,6 +12,7 @@ import {
     GameState,
     UserMarkIcon,
     UserMarkType,
+    getShareEmoji,
     getWinState,
     initBoard,
     winPatterns,
@@ -26,6 +27,7 @@ import ShareButtons from "./ShareButton";
 import { useNavigate } from "react-router-dom";
 
 const ResultPlayBack = () => {
+    const [showShareButton, setShowShareButton] = useBoolean(false);
     const navigate = useNavigate();
     const {
         bidTacToeGameAddress,
@@ -48,8 +50,8 @@ const ResultPlayBack = () => {
     const [resultList, setResultList] = useState<BoardItem[]>(initBoard()); // init board
 
     const gameOver = useMemo(() => {
-        return currentRound === allSelectedGrids.length;
-    }, [currentRound, allSelectedGrids]);
+        return currentRound === allSelectedGrids.length && init;
+    }, [currentRound, allSelectedGrids, init]);
 
     const myMark = useMemo(() => {
         if (myInfo.mark === UserMarkType.Circle) {
@@ -282,7 +284,7 @@ const ResultPlayBack = () => {
     const handleShare = () => {
         const url = `${
             window.location.origin
-        }/#/btt/playback?gameAddress=${bidTacToeGameAddress}&show=true&round=${currentRound}&burner=${shortenAddressWithout0x(
+        }/#/btt/privatePlayback?lobbyAddress=${lobbyAddress}&gameAddress=${bidTacToeGameAddress}&show=true&round=${currentRound}&address=${shortenAddressWithout0x(
             myInfo.address,
         )}`;
         const text = `Bid Tac Toe is a fully on-chain cryptoeconomic tic tac toe game, on @0xPolygon . You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
@@ -301,6 +303,18 @@ https://app.projmercury.io/#/`;
 
     const handleBackToPrivateLobby = async () => {
         navigate(`/btt/privatelobby?lobbyAddress=${lobbyAddress}`);
+    };
+
+    const handleShareEmoji = () => {
+        const text = getShareEmoji(
+            myInfo.mark,
+            resultList,
+            getWinState(myGameInfo.gameState),
+        );
+
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+        );
     };
 
     useEffect(() => {
@@ -335,9 +349,7 @@ https://app.projmercury.io/#/`;
                 myIsNextDrawWinner={myIsNextDrawWinner}
                 currentRound={currentRound}
                 allSelectedGrids={allSelectedGrids}
-                gameOver={gameOver}
                 myGameInfo={myGameInfo}
-                opGameInfo={opGameInfo}
                 showList={showList}
             ></PrivateLobbyPlayBack>
             <Flex
@@ -356,35 +368,39 @@ https://app.projmercury.io/#/`;
                     handlePreStep={handlePreStep}
                     handleStartStep={handleStartStep}
                 ></PlayBackButton>
-                {/* <ShareButtons
-                    showShareEmoji={false}
-                    handleShareEmoji={() => {}}
-                    handleShare={handleShare}
-                ></ShareButtons> */}
-                <Button
-                    sx={{
-                        border: "2px solid #fff",
-                        borderRadius: "0.9375vw",
-                        width: "9.375vw",
-                        height: "2.7083vw",
-                        color: "#d9d9d9",
-                        fontSize: "1.0417vw",
-                        marginTop: "1.0417vw",
-                    }}
-                    variant={"outline"}
-                    onClick={() => {
-                        handleShare();
-                    }}
-                >
-                    <Text
+                {showShareButton ? (
+                    <ShareButtons
+                        showShareEmoji={gameOver}
+                        handleShareEmoji={handleShareEmoji}
+                        handleShare={handleShare}
+                    ></ShareButtons>
+                ) : (
+                    <Button
                         sx={{
-                            flex: 1,
-                            textAlign: "center",
+                            border: "2px solid #fff",
+                            borderRadius: "0.9375vw",
+                            width: "9.375vw",
+                            height: "2.7083vw",
+                            color: "#d9d9d9",
+                            fontSize: "1.0417vw",
+                            marginTop: "1.0417vw",
+                        }}
+                        variant={"outline"}
+                        onClick={() => {
+                            setShowShareButton.on();
                         }}
                     >
-                        Share
-                    </Text>
-                </Button>
+                        <Text
+                            sx={{
+                                flex: 1,
+                                textAlign: "center",
+                            }}
+                        >
+                            Share
+                        </Text>
+                    </Button>
+                )}
+
                 <Flex
                     onClick={handleBackToPrivateLobby}
                     sx={{

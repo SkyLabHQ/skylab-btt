@@ -63,7 +63,7 @@ const PlayBackButton = ({
                 src={EndIcon}
                 onClick={handleEndStep}
                 sx={{
-                    width: "24px",
+                    width: "1.25vw",
                     opacity: showNext ? 1 : 0.5,
                     cursor: showNext ? "pointer" : "not-allowed",
                 }}

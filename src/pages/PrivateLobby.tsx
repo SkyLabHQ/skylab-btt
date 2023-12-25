@@ -97,6 +97,7 @@ const PrivateLobby = () => {
             onGameList,
             lobbyName,
             activeLobbyAddress,
+            players,
         ] = await multiProvider.all([
             multiMercuryBTTPrivateLobby.userInfo(sCWAddress),
             multiMercuryBTTPrivateLobby.winCountPerPlayer(sCWAddress),
@@ -107,6 +108,7 @@ const PrivateLobby = () => {
             multiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
                 sCWAddress,
             ),
+            multiMercuryBTTPrivateLobby.getPlayers(),
         ]);
 
         if (activeLobbyAddress !== lobbyAddress) {
@@ -138,7 +140,7 @@ const PrivateLobby = () => {
         }
 
         setGameCount({
-            allGameCount: (queueList.length + onGameList.length) * 2,
+            allGameCount: players.length,
             inGameCount: queueList.length + onGameList.length * 2,
         });
 

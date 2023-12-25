@@ -9,46 +9,7 @@ import EarthIcon from "@/components/TacToe/assets/earth.svg";
 import UserProfile from "./UserProfile";
 import { OpBid } from "./UserBid";
 import { BoardItem, GameInfo } from "@/skyConstants/bttGameTypes";
-const RoundInfo = ({
-    currentRound,
-    allRound,
-}: {
-    currentRound: number;
-    allRound: number;
-}) => {
-    return (
-        <Box
-            sx={{
-                borderRadius: "1.0417vw",
-                background: "#d9d9d9",
-                display: "flex",
-                width: "6.875vw",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "2.6042vw auto 0",
-                height: "1.875vw",
-            }}
-        >
-            <Text
-                sx={{
-                    fontSize: "0.8333vw",
-                    color: "#303030",
-                }}
-            >
-                Round {currentRound}
-            </Text>
-            <Text
-                sx={{
-                    color: "#616161",
-                    fontSize: "0.7292vw",
-                }}
-            >
-                {" "}
-                /{allRound}
-            </Text>
-        </Box>
-    );
-};
+import RoundInfo from "../BttComponents/RoundInfo";
 
 const PrivateLobbyPlayBack = ({
     myInfo,
@@ -60,9 +21,7 @@ const PrivateLobbyPlayBack = ({
     myIsNextDrawWinner,
     currentRound,
     allSelectedGrids,
-    gameOver,
     myGameInfo,
-    opGameInfo,
     showList,
 }: {
     myInfo: any;
@@ -76,9 +35,7 @@ const PrivateLobbyPlayBack = ({
     myIsNextDrawWinner: boolean;
     currentRound: number;
     allSelectedGrids: BoardItem[];
-    gameOver: boolean;
     myGameInfo: GameInfo;
-    opGameInfo: GameInfo;
     showList: BoardItem[];
 }) => {
     return (
@@ -209,6 +166,7 @@ const PrivateLobbyPlayBack = ({
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
+                    marginTop: "1.0417vw",
                 }}
             >
                 <Box

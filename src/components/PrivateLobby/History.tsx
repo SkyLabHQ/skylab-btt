@@ -10,7 +10,8 @@ import {
 import PairingIcon from "./assets/pairing.svg";
 import RightArrow from "./assets/right-arrow.svg";
 import FriendIcon from "./assets/friend.svg";
-import React, { useState } from "react";
+import PlayBackIcon from "./assets/playback.svg";
+import React, { useEffect, useState } from "react";
 import LobbyInfo from "./LobbyInfo";
 import { useBlockNumber } from "wagmi";
 import { useNavigate } from "react-router-dom";
@@ -25,22 +26,18 @@ import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
+import avatars from "@/skyConstants/avatars";
 
-const GameStatus = () => {
-    return (
-        <Flex>
-            <Image
-                src={PairingIcon}
-                sx={{
-                    width: "24px",
-                    marginLeft: "24px",
-                }}
-            ></Image>
-        </Flex>
-    );
-};
+const GameList = ({ list }: { list: any[] }) => {
+    const { lobbyAddress } = usePrivateLobbyContext();
 
-const GameList = () => {
+    const navigate = useNavigate();
+
+    const handleToPlayBack = (item: any) => {
+        navigate(
+            `/btt/privatePlayback?lobbyAddress=${lobbyAddress}&gameAddress=${item.room}`,
+        );
+    };
     return (
         <Box
             sx={{
@@ -58,82 +55,135 @@ const GameList = () => {
                 spacingX={"110px"}
                 spacingY={"20px"}
             >
-                {Array(10)
-                    .fill(0)
-                    .map((_, index) => {
-                        return (
-                            <Box w="400px" key={index}>
-                                <Flex align={"center"}>
-                                    <Flex
-                                        sx={{}}
-                                        direction={"column"}
-                                        align={"center"}
-                                    >
-                                        <Box
-                                            sx={{
-                                                width: "90px",
-                                                height: "90px",
-                                                borderRadius: "20px",
-                                                border: "1px solid #FFF",
-                                                background: "#C96F9D",
-                                            }}
-                                        ></Box>
+                {list.map((item, index) => {
+                    return (
+                        <Box w="400px" key={index}>
+                            <Flex align={"center"}>
+                                <Flex
+                                    sx={{}}
+                                    direction={"column"}
+                                    align={"center"}
+                                >
+                                    <Box
+                                        sx={{
+                                            width: "90px",
+                                            height: "90px",
+                                            borderRadius: "20px",
+                                            border: "1px solid #FFF",
+                                            position: "relative",
 
-                                        <Text
+                                            background:
+                                                avatars[item.loseUserAvatar],
+                                        }}
+                                    >
+                                        <Flex
                                             sx={{
-                                                color: "#BCBBBE",
+                                                position: "absolute",
+                                                bottom: "10px",
+                                                left: "50%",
+                                                transform: "translateX(-50%)",
+                                                width: "54px",
+                                                height: "24px",
+                                                borderRadius: "10px",
+                                                background: "#D9D9D9",
+                                                color: "#303030",
                                                 fontSize: "16px",
                                             }}
+                                            align={"center"}
+                                            justify={"center"}
                                         >
-                                            Alhasit
-                                        </Text>
-                                    </Flex>
+                                            Lose
+                                        </Flex>
+                                    </Box>
+
                                     <Text
                                         sx={{
-                                            fontSize: "24px",
-                                            margin: "0 20px",
+                                            color: "#BCBBBE",
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
                                         }}
                                     >
-                                        VS
+                                        {item.loseUserName}
                                     </Text>
-                                    <Flex
+                                </Flex>
+                                <Text
+                                    sx={{
+                                        fontSize: "24px",
+                                        margin: "0 20px",
+                                    }}
+                                >
+                                    VS
+                                </Text>
+                                <Flex
+                                    sx={{
+                                        marginRight: "24px",
+                                    }}
+                                    direction={"column"}
+                                    align={"center"}
+                                >
+                                    <Box
                                         sx={{
-                                            marginRight: "24px",
+                                            width: "90px",
+                                            height: "90px",
+                                            borderRadius: "20px",
+                                            border: "1px solid #FFF",
+                                            position: "relative",
+                                            background:
+                                                avatars[item.winUserAvatar],
                                         }}
-                                        direction={"column"}
-                                        align={"center"}
                                     >
-                                        <Box
+                                        {" "}
+                                        <Flex
                                             sx={{
-                                                width: "90px",
-                                                height: "90px",
-                                                borderRadius: "20px",
-                                                border: "1px solid #FFF",
-                                                background: "#C96F9D",
-                                            }}
-                                        ></Box>
-
-                                        <Text
-                                            sx={{
-                                                color: "#BCBBBE",
+                                                position: "absolute",
+                                                bottom: "10px",
+                                                left: "50%",
+                                                transform: "translateX(-50%)",
+                                                width: "54px",
+                                                height: "24px",
+                                                borderRadius: "10px",
+                                                background: "#FDDC2D",
+                                                color: "#303030",
                                                 fontSize: "16px",
                                             }}
+                                            align={"center"}
+                                            justify={"center"}
                                         >
-                                            Alhasit
-                                        </Text>
-                                    </Flex>
-                                    <GameStatus></GameStatus>
+                                            Win
+                                        </Flex>
+                                    </Box>
+
+                                    <Text
+                                        sx={{
+                                            color: "#BCBBBE",
+                                            fontSize: "16px",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        {item.winUserName}
+                                    </Text>
                                 </Flex>
-                                <Box
+                                <Image
+                                    onClick={() => handleToPlayBack(item)}
+                                    src={PlayBackIcon}
                                     sx={{
-                                        height: "1px",
-                                        background:
-                                            "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFF 9.44%, rgba(255, 255, 255, 0.39) 85.56%, rgba(255, 255, 255, 0.00) 100%)",
+                                        width: "30px",
+                                        marginLeft: "30px",
+                                        cursor: "pointer",
                                     }}
-                                ></Box>
-                            </Box>
-                        );
-                    })}
+                                ></Image>
+                            </Flex>
+                            <Box
+                                sx={{
+                                    height: "1px",
+                                    marginTop: "12px",
+                                    background:
+                                        "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFF 9.44%, rgba(255, 255, 255, 0.39) 85.56%, rgba(255, 255, 255, 0.00) 100%)",
+                                }}
+                            ></Box>
+                        </Box>
+                    );
+                })}
             </SimpleGrid>
         </Box>
     );
@@ -142,6 +192,7 @@ const GameList = () => {
 const History = () => {
     const { onCopy } = useClipboard(window.location.href ?? "");
 
+    const [list, setList] = useState([]);
     const [queueList, setQueueList] = useState([]);
     const [onGameList, setOnGameList] = useState([]);
     const navigate = useNavigate();
@@ -159,61 +210,44 @@ const History = () => {
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
     const handleGetGameList = async () => {
-        const [gameHistory, onGameList] = await multiProvider.all([
+        const [gameHistory] = await multiProvider.all([
             multiMercuryBTTPrivateLobby.getGameHistory(),
         ]);
 
-        const p1 = [];
-        for (let i = 0; i < queueList.length; i++) {
-            const multiSkylabBidTacToeGameContract =
-                getMultiSkylabBidTacToeGameContract(queueList[i]);
-            p1.push(multiSkylabBidTacToeGameContract.player1());
-        }
+        const p: any = [];
 
-        for (let i = 0; i < onGameList.length; i++) {
-            const multiSkylabBidTacToeGameContract =
-                getMultiSkylabBidTacToeGameContract(onGameList[i]);
-            p1.push(multiSkylabBidTacToeGameContract.player1());
-            p1.push(multiSkylabBidTacToeGameContract.player2());
-        }
+        gameHistory.map((item: any) => {
+            p.push(multiMercuryBTTPrivateLobby.userInfo(item.winnerBurner));
+            p.push(multiMercuryBTTPrivateLobby.userInfo(item.loserBurner));
+        });
 
-        const playerAddresses = await multiProvider.all(p1);
-        const p2 = playerAddresses.map((item) => {
-            return multiMercuryBTTPrivateLobby.userInfo(item);
-        });
-        const userInfos = await multiProvider.all(p2);
-        const queueUserList = queueList.map((item: any, index: number) => {
+        const userInfos = await multiProvider.all(p);
+
+        console.log(gameHistory, "gameHistory");
+        console.log(userInfos, "userInfos");
+        const list = gameHistory.map((item: any, index: number) => {
             return {
-                address1: playerAddresses[index],
-                gameAddress: item,
-                avatar1: userInfos[index].avatar.toNumber() - 1,
-                name1: userInfos[index].name,
-            };
-        });
-        const onGameUserList = onGameList.map((item: any, index: number) => {
-            const player1Index = index * 2 + queueList.length;
-            const player2Index = index * 2 + queueList.length + 1;
-            return {
-                gameAddress: item,
-                address1: playerAddresses[player1Index],
-                avatar1: userInfos[player1Index].avatar.toNumber() - 1,
-                name1: userInfos[player1Index].name,
-                address2: playerAddresses[player2Index],
-                avatar2: userInfos[player2Index].avatar.toNumber() - 1,
-                name2: userInfos[player2Index].name,
+                winUserName: userInfos[index * 2].name,
+                winUserAvatar: userInfos[index * 2].avatar.toNumber() - 1,
+                loseUserName: userInfos[index * 2 + 1].name,
+                loseUserAvatar: userInfos[index * 2 + 1].avatar.toNumber() - 1,
+                winBurner: item.winnerBurner,
+                loseBurner: item.loserBurner,
+                room: item.room,
             };
         });
 
-        setQueueList(queueUserList);
-        setOnGameList(onGameUserList);
-        handleSetGameCount({
-            allGameCount: (queueList.length + onGameList.length) * 2,
-            inGameCount: queueList.length + onGameList.length * 2,
-        });
+        setList(list);
+        console.log(list, "list");
     };
+
+    useEffect(() => {
+        handleGetGameList();
+    }, []);
+
     return (
         <Box>
-            <GameList></GameList>
+            <GameList list={list}></GameList>
             <LobbyInfo></LobbyInfo>
         </Box>
     );

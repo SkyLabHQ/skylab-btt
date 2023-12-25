@@ -10,46 +10,7 @@ import { UserCard } from "./UserCard";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
 import { aviationImg } from "@/utils/aviationImg";
-const RoundInfo = ({
-    currentRound,
-    allRound,
-}: {
-    currentRound: number;
-    allRound: number;
-}) => {
-    return (
-        <Box
-            sx={{
-                borderRadius: "1.0417vw",
-                background: "#d9d9d9",
-                display: "flex",
-                width: "6.875vw",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "2.6042vw auto 0",
-                height: "1.875vw",
-            }}
-        >
-            <Text
-                sx={{
-                    fontSize: "0.8333vw",
-                    color: "#303030",
-                }}
-            >
-                Round {currentRound}
-            </Text>
-            <Text
-                sx={{
-                    color: "#616161",
-                    fontSize: "0.7292vw",
-                }}
-            >
-                {" "}
-                /{allRound}
-            </Text>
-        </Box>
-    );
-};
+import RoundInfo from "../BttComponents/RoundInfo";
 
 const BttPlayBackContent = ({
     myInfo,

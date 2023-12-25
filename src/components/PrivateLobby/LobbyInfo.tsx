@@ -8,12 +8,12 @@ const LobbyInfo = () => {
         <Flex
             justify={"flex-end"}
             sx={{
-                fontSize: "24px",
+                fontSize: "1.25vw",
             }}
         >
             <Text
                 sx={{
-                    marginRight: "20px",
+                    marginRight: "1.0417vw",
                 }}
             >
                 Private Lobby Code {lobbyName}
