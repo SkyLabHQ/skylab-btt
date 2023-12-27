@@ -1,31 +1,14 @@
-import {
-    Box,
-    Flex,
-    Text,
-    Image,
-    Button,
-    SimpleGrid,
-    useClipboard,
-} from "@chakra-ui/react";
-import PairingIcon from "./assets/pairing.svg";
-import RightArrow from "./assets/right-arrow.svg";
-import FriendIcon from "./assets/friend.svg";
+import { Box, Flex, Text, Image, SimpleGrid } from "@chakra-ui/react";
 import PlayBackIcon from "./assets/playback.svg";
 import React, { useEffect, useState } from "react";
 import LobbyInfo from "./LobbyInfo";
-import { useBlockNumber } from "wagmi";
 import { useNavigate } from "react-router-dom";
-import useSkyToast from "@/hooks/useSkyToast";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
 import {
-    getMultiSkylabBidTacToeGameContract,
     useMultiMercuryBTTPrivateLobby,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
-import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useSCWallet } from "@/hooks/useSCWallet";
-import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import avatars from "@/skyConstants/avatars";
 
 const GameList = ({ list }: { list: any[] }) => {
@@ -190,21 +173,10 @@ const GameList = ({ list }: { list: any[] }) => {
 };
 
 const History = () => {
-    const { onCopy } = useClipboard(window.location.href ?? "");
-
     const [list, setList] = useState([]);
-    const [queueList, setQueueList] = useState([]);
-    const [onGameList, setOnGameList] = useState([]);
-    const navigate = useNavigate();
-    const toast = useSkyToast();
-    const [listLoading, setListLoading] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const { lobbyAddress, lobbyName, myGameCount } = usePrivateLobbyContext();
+    const { lobbyAddress } = usePrivateLobbyContext();
 
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
-    const localSinger = getPrivateLobbySigner();
-    const { sCWAddress } = useSCWallet(localSinger.privateKey);
 
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
@@ -222,8 +194,6 @@ const History = () => {
 
         const userInfos = await multiProvider.all(p);
 
-        console.log(gameHistory, "gameHistory");
-        console.log(userInfos, "userInfos");
         const list = gameHistory.map((item: any, index: number) => {
             return {
                 winUserName: userInfos[index * 2].name,
@@ -237,7 +207,6 @@ const History = () => {
         });
 
         setList(list);
-        console.log(list, "list");
     };
 
     useEffect(() => {

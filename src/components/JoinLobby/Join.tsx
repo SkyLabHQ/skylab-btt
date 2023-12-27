@@ -73,7 +73,6 @@ const Join = () => {
     useEffect(() => {
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
-            console.log(key, "key");
             switch (key) {
                 case "Backspace":
                     handleBackspace();

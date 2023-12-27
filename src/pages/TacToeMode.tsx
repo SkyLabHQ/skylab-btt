@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
     useBidTacToeFactoryRetry,
     useBttFactoryRetry,
+    useBttPrivateLobbyContract,
     useBurnerRetryContract,
     useTestflightRetryContract,
 } from "@/hooks/useRetryContract";
@@ -126,6 +127,12 @@ const TacToeMode = () => {
     const multiMercuryBTTPrivateLobby = useMultiMercuryBTTPrivateLobby(
         activeLobbyAddress !== ZERO_DATA ? activeLobbyAddress : "",
     );
+    const bttPrivateLobbyContract = useBttPrivateLobbyContract(
+        activeLobbyAddress && activeLobbyAddress !== ZERO_DATA
+            ? activeLobbyAddress
+            : "",
+    );
+
     const handleGetLobbyOnGoingGames = async () => {
         const avaitionAddress = skylabTournamentAddress[DEAFAULT_CHAINID];
 
@@ -361,6 +368,13 @@ const TacToeMode = () => {
         try {
             setLoading(true);
             const privateLobbySigner = getPrivateLobbySigner();
+            if (bttPrivateLobbyContract) {
+                await bttPrivateLobbyContract("quitPrivateLobby", [], {
+                    usePaymaster: true,
+                    signer: privateLobbySigner,
+                });
+            }
+
             const receipt = await bttFactoryRetryTest(
                 "createPrivateLobby",
                 [],

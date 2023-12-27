@@ -541,8 +541,6 @@ const Games = () => {
                 return item.avatar >= 1;
             });
 
-        console.log(playerInfos, "playerInfos");
-
         const userInfos = await multiProvider.all(p2);
         const queueUserList = queueList.map((item: any, index: number) => {
             const user = allValidPlayers.find((item1: any) => {

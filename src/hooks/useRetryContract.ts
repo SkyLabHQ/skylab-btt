@@ -276,6 +276,9 @@ export const useBttGameRetry = (address: string, tokenId?: number) => {
 export const useBttPrivateLobbyContract = (address: string, signer?: any) => {
     const contract = useBurnerMercuryBTTPrivateLobbyContract(address);
     const tacToeGameRetryWrite = useBurnerRetryContract(contract, signer);
+    if (!contract) {
+        return null;
+    }
     return tacToeGameRetryWrite;
 };
 

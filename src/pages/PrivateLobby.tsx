@@ -17,6 +17,7 @@ import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Back from "@/components/Back";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import { ZERO_DATA } from "@/skyConstants";
 
 interface GameCount {
     allGameCount: number;
@@ -114,6 +115,13 @@ const PrivateLobby = () => {
 
         if (activeLobbyAddress !== lobbyAddress) {
             const privateLobbySigner = getPrivateLobbySigner();
+            if (activeLobbyAddress && activeLobbyAddress !== ZERO_DATA) {
+                await bttPrivateLobbyContract("quitPrivateLobby", [], {
+                    usePaymaster: true,
+                    signer: privateLobbySigner,
+                });
+            }
+
             await bttPrivateLobbyContract("joinPrivateLobby", [], {
                 usePaymaster: true,
                 signer: privateLobbySigner,

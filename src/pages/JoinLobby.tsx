@@ -17,7 +17,6 @@ const JoinLobby = () => {
                 height: "100vh",
             }}
         >
-            {" "}
             <Box
                 sx={{
                     position: "absolute",
