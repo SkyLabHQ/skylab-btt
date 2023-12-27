@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import StartIcon from "./assets/start.svg";
 import PreStepIcon from "./assets/pre-step.svg";
 import NextStepIcon from "./assets/next-step.svg";
@@ -20,6 +20,25 @@ const PlayBackButton = ({
     handleNextStep: () => void;
     handleEndStep: () => void;
 }) => {
+    useEffect(() => {
+        const keyboardListener = (event: KeyboardEvent) => {
+            const key = event.key;
+            switch (key) {
+                case "ArrowLeft":
+                    handlePreStep();
+                    break;
+                case "ArrowRight":
+                    handleNextStep();
+                    break;
+            }
+        };
+        document.addEventListener("keydown", keyboardListener);
+
+        return () => {
+            document.removeEventListener("keydown", keyboardListener);
+        };
+    }, [handlePreStep, handleNextStep]);
+
     return (
         <Flex
             sx={{

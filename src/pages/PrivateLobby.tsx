@@ -38,8 +38,9 @@ const PrivateLobbyContext = createContext<{
     step: number;
     gameCount: GameCount;
     handleStepChange: (step: number) => void;
-    handleSetGameCount: (gameCount: GameCount) => void;
+    setGameCount: (gameCount: GameCount) => void;
 }>(null);
+
 export const usePrivateLobbyContext = () => useContext(PrivateLobbyContext);
 
 const PrivateLobby = () => {
@@ -139,8 +140,19 @@ const PrivateLobby = () => {
             p1.push(multiSkylabBidTacToeGameContract.player2());
         }
 
+        const p2: any = [];
+        players.forEach((item: string) => {
+            p2.push(multiMercuryBTTPrivateLobby.userInfo(item));
+        });
+
+        const playerInfos = await multiProvider.all(p2);
+
+        const allValidPlayers = playerInfos.filter((item: any) => {
+            return item.avatar.toNumber() >= 1;
+        });
+
         setGameCount({
-            allGameCount: players.length,
+            allGameCount: allValidPlayers.length,
             inGameCount: queueList.length + onGameList.length * 2,
         });
 
@@ -166,6 +178,8 @@ const PrivateLobby = () => {
             setNickname(userInfo.name);
             setAvatarIndex(userInfo.avatar.toNumber() - 1);
             setStep(1);
+        } else {
+            setStep(0);
         }
 
         setInit(true);
@@ -224,7 +238,7 @@ const PrivateLobby = () => {
                             nickname,
                             avatarIndex,
                             handleStepChange,
-                            handleSetGameCount: setGameCount,
+                            setGameCount,
                         }}
                     >
                         <Box

@@ -11,8 +11,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useNavigate } from "react-router-dom";
-import useSkyToast from "@/hooks/useSkyToast";
 import avatars from "@/skyConstants/avatars";
 
 const Top3Item = ({ detail }: { detail: any }) => {
@@ -63,14 +61,6 @@ const Top3Item = ({ detail }: { detail: any }) => {
                     Win {win}/Game {game}
                 </Text>
             </Box>
-        </Flex>
-    );
-};
-
-const GameStatus = () => {
-    return (
-        <Flex>
-            <Text>4 win/ 5 games</Text>
         </Flex>
     );
 };
@@ -140,13 +130,8 @@ const GameList = ({ list }: { list: any[] }) => {
 };
 
 const Leaderboard = () => {
-    const navigate = useNavigate();
-    const toast = useSkyToast();
-    const [listLoading, setListLoading] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [list, setList] = useState<any[]>([]);
-    const { lobbyAddress, handleSetGameCount, lobbyName, myGameCount } =
-        usePrivateLobbyContext();
+    const { lobbyAddress } = usePrivateLobbyContext();
 
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
 
@@ -234,7 +219,7 @@ const Leaderboard = () => {
                                     avatar: list[1].avatar,
                                     name: list[1].name,
                                     win: list[1].win,
-                                    game: list[1].win + list[0].lose,
+                                    game: list[1].win + list[1].lose,
                                     rank: 2,
                                 }}
                             ></Top3Item>

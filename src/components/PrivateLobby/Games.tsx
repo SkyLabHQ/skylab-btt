@@ -395,7 +395,7 @@ const Games = () => {
     const [vacantList, setVacantList] = useState([]);
     const [listLoading, setListLoading] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { lobbyAddress, handleSetGameCount, lobbyName, myGameCount } =
+    const { lobbyAddress, setGameCount, lobbyName, myGameCount } =
         usePrivateLobbyContext();
 
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
@@ -519,37 +519,63 @@ const Games = () => {
                 return item1 === item;
             });
 
-            return findItem ? false : true;
+            return !findItem;
         });
 
-        const p2 = playerAddresses.map((item) => {
-            return multiMercuryBTTPrivateLobby.userInfo(item);
-        });
-
-        vacantAddresses.forEach((item: string) => {
+        const p2: any = [];
+        players.forEach((item: string) => {
             p2.push(multiMercuryBTTPrivateLobby.userInfo(item));
         });
 
+        const playerInfos = await multiProvider.all(p2);
+
+        const allValidPlayers = playerInfos
+            .map((item, index) => {
+                return {
+                    avatar: item.avatar.toNumber(),
+                    name: item.name,
+                    address: players[index],
+                };
+            })
+            .filter((item: any) => {
+                return item.avatar >= 1;
+            });
+
+        console.log(playerInfos, "playerInfos");
+
         const userInfos = await multiProvider.all(p2);
         const queueUserList = queueList.map((item: any, index: number) => {
+            const user = allValidPlayers.find((item1: any) => {
+                return item1.address === playerAddresses[index];
+            });
+
             return {
-                address1: playerAddresses[index],
+                address1: user.address,
                 gameAddress: item,
-                avatar1: userInfos[index].avatar.toNumber() - 1,
-                name1: userInfos[index].name,
+                avatar1: user.avatar,
+                name1: user.name,
             };
         });
         const onGameUserList = onGameList.map((item: any, index: number) => {
             const player1Index = index * 2 + queueList.length;
             const player2Index = index * 2 + queueList.length + 1;
+            const address1 = playerAddresses[player1Index];
+            const address2 = playerAddresses[player2Index];
+            const user1 = allValidPlayers.find((item1: any) => {
+                return item1.address === address1;
+            });
+            const user2 = allValidPlayers.find((item1: any) => {
+                return item1.address === address2;
+            });
+
             return {
                 gameAddress: item,
-                address1: playerAddresses[player1Index],
-                avatar1: userInfos[player1Index].avatar.toNumber() - 1,
-                name1: userInfos[player1Index].name,
-                address2: playerAddresses[player2Index],
-                avatar2: userInfos[player2Index].avatar.toNumber() - 1,
-                name2: userInfos[player2Index].name,
+                address1: address1,
+                avatar1: user1.avatar,
+                name1: user1.name,
+                address2: address2,
+                avatar2: user2.avatar,
+                name2: user2.name,
             };
         });
 
@@ -567,9 +593,13 @@ const Games = () => {
 
         setQueueList(queueUserList);
         setOnGameList(onGameUserList);
-        setVacantList(vacantUserList);
-        handleSetGameCount({
-            allGameCount: (queueList.length + onGameList.length) * 2,
+        setVacantList(
+            vacantUserList.filter((item: any) => {
+                return item.avatar !== -1;
+            }),
+        );
+        setGameCount({
+            allGameCount: allValidPlayers.length,
             inGameCount: queueList.length + onGameList.length * 2,
         });
     };
@@ -621,6 +651,7 @@ const Games = () => {
                 <Button
                     onClick={() => {
                         onCopy();
+                        toast("Copy link success");
                     }}
                     sx={{
                         width: "12.5vw",

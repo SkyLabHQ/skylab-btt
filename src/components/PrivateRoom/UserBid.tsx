@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import AdvantageIcon from "@/assets/advantage-icon.svg";
 import { motion } from "framer-motion";
 import {
@@ -431,27 +431,6 @@ export const OpBid = ({
     myGameState,
     bidAmount,
 }: UserCardProps) => {
-    const isWaiting = useMemo(() => {
-        if (opGameState === GameState.WaitingForBid) {
-            return true;
-        }
-        if (
-            myGameState === GameState.Commited &&
-            opGameState === GameState.Commited
-        ) {
-            return true;
-        }
-
-        if (
-            myGameState === GameState.Revealed &&
-            opGameState === GameState.Commited
-        ) {
-            return true;
-        }
-
-        return false;
-    }, [myGameState, opGameState]);
-
     return (
         <Box
             sx={{
@@ -513,17 +492,16 @@ export const OpBid = ({
                                     {bidAmount}
                                 </Text>
                             )}
-                            {myGameState === GameState.WaitingForBid &&
-                                opGameState === GameState.Commited && (
-                                    <Image
-                                        src={LockIcon}
-                                        sx={{
-                                            width: "2.0417vw",
-                                        }}
-                                    ></Image>
-                                )}
+                            {opGameState === GameState.Commited && (
+                                <Image
+                                    src={LockIcon}
+                                    sx={{
+                                        width: "2.0417vw",
+                                    }}
+                                ></Image>
+                            )}
 
-                            {isWaiting && (
+                            {opGameState === GameState.WaitingForBid && (
                                 <motion.div
                                     animate={{
                                         opacity: [0, 1, 0],
@@ -543,15 +521,14 @@ export const OpBid = ({
                                 </motion.div>
                             )}
 
-                            {myGameState === GameState.Commited &&
-                                opGameState === GameState.Revealed && (
-                                    <Image
-                                        src={UnlockIcon}
-                                        sx={{
-                                            width: "2.0417vw",
-                                        }}
-                                    ></Image>
-                                )}
+                            {opGameState === GameState.Revealed && (
+                                <Image
+                                    src={UnlockIcon}
+                                    sx={{
+                                        width: "2.0417vw",
+                                    }}
+                                ></Image>
+                            )}
                         </Box>
                     </Box>
                     <Box sx={{ flex: 1 }}>

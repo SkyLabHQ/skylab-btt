@@ -1,10 +1,11 @@
 import { Box } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Games from "./Games";
 import History from "./History";
 import Leaderboard from "./Leaderboard";
-import LobbyInfo from "./LobbyInfo";
-
+import { useLocation } from "react-router-dom";
+import qs from "query-string";
+import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
 const tabs = [
     {
         label: "Games",
@@ -60,7 +61,18 @@ const Tabs = ({
 };
 
 const Preparation = () => {
+    const { handleStepChange } = usePrivateLobbyContext();
     const [activeIndex, setActiveIndex] = useState(0);
+    const { search } = useLocation();
+    const params = qs.parse(search) as any;
+
+    useEffect(() => {
+        if (params.type == 2) {
+            handleStepChange(1);
+            setActiveIndex(1);
+        }
+    }, [params.type]);
+
     return (
         <Box
             sx={{

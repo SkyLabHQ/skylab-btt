@@ -322,6 +322,8 @@ const PrivatePlayBackPage = () => {
 
         if (round && round <= _gridOrder.length) {
             setCurrentRound(Number(round));
+        } else {
+            setCurrentRound(_gridOrder.length);
         }
 
         setResultList(_list);
@@ -517,7 +519,13 @@ https://app.projmercury.io/#/`;
                     top: "1.0417vw",
                 }}
             >
-                <Back onClick={() => navigate("/")}></Back>
+                <Back
+                    onClick={() =>
+                        navigate(
+                            `/btt/privatelobby?lobbyAddress=${lobbyAddress}&type=2`,
+                        )
+                    }
+                ></Back>
             </Box>
 
             {!init ? (

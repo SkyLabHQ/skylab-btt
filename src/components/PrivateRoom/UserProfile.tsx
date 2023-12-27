@@ -9,7 +9,7 @@ import {
     PopoverTrigger,
     useClipboard,
 } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React from "react";
 import CopyIcon from "./assets/copy-icon.svg";
 import avatars from "@/skyConstants/avatars";
 import { UserMarkIcon, UserMarkType } from "@/skyConstants/bttGameTypes";
@@ -41,9 +41,6 @@ const UserProfile = ({
         <Flex
             flexDir={"column"}
             align={status === "my" ? "flex-start" : "flex-end"}
-            sx={{
-                position: "relative",
-            }}
         >
             <Box
                 sx={{

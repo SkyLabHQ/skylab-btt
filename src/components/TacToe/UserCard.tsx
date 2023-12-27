@@ -498,27 +498,6 @@ const OpBid = ({
     opGameState: number;
     balance: number;
 }) => {
-    const isWaiting = useMemo(() => {
-        if (opGameState === GameState.WaitingForBid) {
-            return true;
-        }
-        if (
-            myGameState === GameState.Commited &&
-            opGameState === GameState.Commited
-        ) {
-            return true;
-        }
-
-        if (
-            myGameState === GameState.Revealed &&
-            opGameState === GameState.Commited
-        ) {
-            return true;
-        }
-
-        return false;
-    }, [myGameState, opGameState]);
-
     return (
         <Box>
             <Box sx={{ marginTop: "0.7813vw", display: "flex" }}>
@@ -537,17 +516,7 @@ const OpBid = ({
                             width: "6.25vw",
                         }}
                     >
-                        {myGameState === GameState.WaitingForBid &&
-                            opGameState === GameState.Commited && (
-                                <Image
-                                    src={LockIcon}
-                                    sx={{
-                                        width: "2.0417vw",
-                                    }}
-                                ></Image>
-                            )}
-
-                        {isWaiting && (
+                        {opGameState === GameState.WaitingForBid && (
                             <motion.div
                                 animate={{
                                     opacity: [0, 1, 0],
@@ -566,15 +535,24 @@ const OpBid = ({
                                 ></Image>
                             </motion.div>
                         )}
-                        {myGameState === GameState.Commited &&
-                            opGameState === GameState.Revealed && (
-                                <Image
-                                    src={UnlockIcon}
-                                    sx={{
-                                        width: "2.0417vw",
-                                    }}
-                                ></Image>
-                            )}
+
+                        {opGameState === GameState.Commited && (
+                            <Image
+                                src={LockIcon}
+                                sx={{
+                                    width: "2.0417vw",
+                                }}
+                            ></Image>
+                        )}
+
+                        {opGameState === GameState.Revealed && (
+                            <Image
+                                src={UnlockIcon}
+                                sx={{
+                                    width: "2.0417vw",
+                                }}
+                            ></Image>
+                        )}
                     </Box>
                 </Box>
                 <Box sx={{ flex: 1 }}>

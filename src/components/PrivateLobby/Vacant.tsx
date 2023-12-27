@@ -28,9 +28,10 @@ const Vacant = ({ list }: { list: any }) => {
                     marginTop: "0.625vw",
                 }}
             >
-                {list.map((item: any) => {
+                {list.map((item: any, index: number) => {
                     return (
                         <Flex
+                            key={index}
                             align={"center"}
                             flexDir={"column"}
                             sx={{

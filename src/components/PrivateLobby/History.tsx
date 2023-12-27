@@ -199,8 +199,7 @@ const History = () => {
     const toast = useSkyToast();
     const [listLoading, setListLoading] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { lobbyAddress, handleSetGameCount, lobbyName, myGameCount } =
-        usePrivateLobbyContext();
+    const { lobbyAddress, lobbyName, myGameCount } = usePrivateLobbyContext();
 
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
