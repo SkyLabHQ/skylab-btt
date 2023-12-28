@@ -83,7 +83,8 @@ const TacToeMode = () => {
         onClose: onPreviousLobbyModalClose,
     } = useDisclosure();
     const navigate = useNavigate();
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
+
     const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
     const multiProvider = useMultiProvider(DEAFAULT_CHAINID);
@@ -329,12 +330,12 @@ const TacToeMode = () => {
         }
 
         try {
-            if (planeList[currentPlaneIndex].state) {
-                navigate(
-                    `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
-                );
-                return;
-            }
+            // if (planeList[currentPlaneIndex].state) {
+            //     navigate(
+            //         `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
+            //     );
+            //     return;
+            // }
 
             const tokenId = planeList[currentPlaneIndex].tokenId;
             if (loading) return;
@@ -632,7 +633,7 @@ const TacToeMode = () => {
                         ></PlaneList>
                     )}
 
-                    {address ? (
+                    {isConnected ? (
                         <RequestNextButton
                             sx={{
                                 background: "transparent !important",

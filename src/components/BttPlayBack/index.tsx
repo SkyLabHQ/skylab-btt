@@ -545,6 +545,8 @@ const BttPlayBackPage = () => {
                         }}
                     >
                         <ButtonGroup
+                            showPre={currentRound > 0}
+                            showNext={currentRound < allSelectedGrids.length}
                             list={showList}
                             myInfo={myInfo}
                             myGameInfo={myGameInfo}
@@ -556,7 +558,6 @@ const BttPlayBackPage = () => {
                             handlePreStep={handlePreStep}
                             handleStartPlay={handleStartPlay}
                             handleStartStep={handleStartStep}
-                            handleStopPlay={handleStopPlay}
                             showShareEmoji={false}
                         ></ButtonGroup>
                         {onlyShow && <StartJourney></StartJourney>}

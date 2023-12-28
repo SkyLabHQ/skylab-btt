@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, Checkbox, Image, Text, useDisclosure } from "@chakra-ui/react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Box, Image, Text, useDisclosure } from "@chakra-ui/react";
 import { Info, UserMarkType, useGameContext, GameType } from "@/pages/TacToe";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
@@ -16,6 +16,7 @@ import { botAddress } from "@/hooks/useContract";
 import { GrayButton } from "../Button/Index";
 import QuitModal from "./QuitModal";
 import { useAccount } from "wagmi";
+import { useTacToeSigner } from "@/hooks/useSigner";
 
 export const PlaneImg = ({
     detail,
@@ -195,8 +196,10 @@ export const MatchPage = ({
         bidTacToeGameAddress,
         myActivePilot,
         opActivePilot,
+        tokenId,
     } = useGameContext();
     const ethcallProvider = useMultiProvider(realChainId);
+    const [tacToeBurner] = useTacToeSigner(tokenId);
 
     const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
     const multiSkylabBidTacToeGameContract =
@@ -308,22 +311,22 @@ export const MatchPage = ({
             img: getMetadataImg(mtadata2),
         };
 
-        if (player1Info.address === address) {
-            onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
-            onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
+        if (player1Info.address === tacToeBurner.account.address) {
             onChangePoint(player1Move.toNumber(), player2Move.toNumber());
             onChangeMileage(
                 player1WinMileage.toNumber(),
                 player1LoseMileage.toNumber(),
             );
+            onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
+            onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
         } else {
-            onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
-            onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
             onChangeMileage(
                 player2WinMileage.toNumber(),
                 player2LoseMileage.toNumber(),
             );
             onChangePoint(player2Move.toNumber(), player1Move.toNumber());
+            onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
+            onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         }
         onGameType(GameType.HumanWithHuman);
     };

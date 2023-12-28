@@ -6,6 +6,13 @@ import LevelDownIcon from "./assets/level-down.svg";
 import useCountDown from "react-countdown-hook";
 import { getLevel } from "@/utils/level";
 import { PilotInfo } from "@/hooks/usePilotInfo";
+import { GrayButton } from "../Button/Index";
+import getNowSecondsTimestamp from "@/utils/nowTime";
+import { useBttFactoryRetry } from "@/hooks/useRetryContract";
+import { useTacToeSigner } from "@/hooks/useSigner";
+import useSkyToast from "@/hooks/useSkyToast";
+import { handleError } from "@/utils/error";
+import Loading from "../Loading";
 
 export const PlaneImg = ({
     detail,
@@ -76,15 +83,52 @@ export const PlaneImg = ({
 };
 
 const LevelInfo = ({}) => {
-    const { myInfo, opInfo, onStep, points, myActivePilot, opActivePilot } =
-        useGameContext();
-    const [timeLeft, { start }] = useCountDown(5000, 1000);
+    const {
+        myInfo,
+        opInfo,
+        myConfirmTimeout,
+        opConfirmTimeout,
+        points,
+        myActivePilot,
+        opActivePilot,
+        tokenId,
+    } = useGameContext();
+    const [timeLeft, { start }] = useCountDown(0, 1000);
 
     const { winPoint, losePoint } = points;
+    const toast = useSkyToast();
+    const [loading, setLoading] = React.useState(false);
+    const [tacToeBurner] = useTacToeSigner(tokenId);
 
-    useEffect(() => {
-        start();
-    }, []);
+    const bttFactoryContract = useBttFactoryRetry(false);
+
+    // activeQueueTimeout
+    const handleConfirmMatch = async () => {
+        if (loading) return;
+        setLoading(true);
+        try {
+            await bttFactoryContract("setActiveQueue", [], {
+                signer: tacToeBurner,
+            });
+            setLoading(false);
+        } catch (e) {
+            console.log(e);
+            setLoading(false);
+            toast(handleError(e));
+        }
+    };
+
+    // activeQueueTimeout
+    const handleActiveQueueTimeout = async () => {
+        try {
+            await bttFactoryContract("activeQueueTimeout", [], {
+                signer: tacToeBurner,
+            });
+        } catch (e) {
+            console.log(e);
+            toast(handleError(e));
+        }
+    };
 
     const [myWinNewLevel, myWinNewPoint, myLoseNewLevel, myLoseNewPoint] =
         useMemo(() => {
@@ -102,10 +146,31 @@ const LevelInfo = ({}) => {
         }, [winPoint, losePoint, myInfo, opInfo]);
 
     useEffect(() => {
-        setTimeout(() => {
-            onStep(2);
-        }, 5000);
-    }, []);
+        if (myConfirmTimeout <= 0 && opConfirmTimeout <= 0) {
+            return;
+        }
+        const now = getNowSecondsTimestamp();
+
+        if (myConfirmTimeout > now) {
+            start(myConfirmTimeout - now);
+        } else if (opConfirmTimeout > now) {
+            start(opConfirmTimeout - now);
+        }
+        let timer: any = null;
+        if (opConfirmTimeout !== 0) {
+            if (opConfirmTimeout <= now) {
+                handleActiveQueueTimeout();
+            } else {
+                timer = setTimeout(() => {
+                    handleActiveQueueTimeout();
+                }, opConfirmTimeout - now);
+            }
+        }
+
+        return () => {
+            timer && clearTimeout(timer);
+        };
+    }, [myConfirmTimeout, opConfirmTimeout]);
 
     return (
         <Box
@@ -118,6 +183,7 @@ const LevelInfo = ({}) => {
                 height: "100vh",
             }}
         >
+            {loading && <Loading></Loading>}
             <Box
                 sx={{
                     display: "flex",
@@ -223,14 +289,41 @@ const LevelInfo = ({}) => {
                     </Box>
                 </Box>
             </Box>
+            <GrayButton
+                onClick={handleConfirmMatch}
+                sx={{
+                    width: "21.875vw !important",
+                    height: "3.3333vw !important",
+                    marginTop: "40px",
+                }}
+                isDisabled={myConfirmTimeout === 0}
+                variant="outline"
+            >
+                <Box
+                    sx={{
+                        textAlign: "center",
+                        width: "100%",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            fontSize: "1.25vw",
+
+                            fontWeight: "400",
+                        }}
+                    >
+                        Confirm entering
+                    </Text>
+                </Box>
+            </GrayButton>
+
             <Text
                 sx={{
                     fontSize: "1.25vw",
-                    fontWeight: "bold",
-                    marginTop: "10vh",
+                    marginTop: "10px",
                 }}
             >
-                Entering game in 5s
+                ({timeLeft / 1000}s)
             </Text>
             <Box
                 sx={{
@@ -244,7 +337,7 @@ const LevelInfo = ({}) => {
             >
                 <Box
                     sx={{
-                        width: (timeLeft / 5000) * 100 + "%",
+                        width: (timeLeft / 30000) * 100 + "%",
                         transition: "width 0.5s",
                         height: "0.2083vw",
                         background: "#BCBBBE",

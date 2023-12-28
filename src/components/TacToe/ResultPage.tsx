@@ -327,6 +327,7 @@ const ResultPage = () => {
                 opGameInfo={opGameInfo}
                 showList={showList}
             ></BttPlayBackContent>
+
             <Box
                 sx={{
                     display: "flex",
@@ -334,6 +335,8 @@ const ResultPage = () => {
                 }}
             >
                 <ButtonGroup
+                    showPre={currentRound > 0}
+                    showNext={currentRound < allSelectedGrids.length}
                     list={showList}
                     myInfo={myInfo}
                     myGameInfo={myGameInfo}
@@ -345,7 +348,6 @@ const ResultPage = () => {
                     handlePreStep={handlePreStep}
                     handleStartPlay={handleStartPlay}
                     handleStartStep={handleStartStep}
-                    handleStopPlay={handleStopPlay}
                     showShareEmoji={
                         allSelectedGrids.length === currentRound && init
                     }

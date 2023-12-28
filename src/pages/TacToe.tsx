@@ -34,6 +34,7 @@ import { getSCWallet } from "@/hooks/useSCWallet";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useAccount, useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
+import { BigNumber } from "ethers";
 
 export enum UserMarkType {
     Empty = -1,
@@ -121,6 +122,8 @@ const GameContext = createContext<{
     opGameInfo: GameInfo;
     bidTacToeGameAddress: string;
     myActivePilot: PilotInfo;
+    myConfirmTimeout: number;
+    opConfirmTimeout: number;
     opActivePilot: PilotInfo;
     mileages: {
         winMileage: number;
@@ -166,6 +169,8 @@ const TacToe = () => {
     const [myNewInfo, setMyNewInfo] = useState<MyNewInfo>(null); // if game over update my info
     const realChainId = istest ? TESTFLIGHT_CHAINID : chainId;
     const multiProvider = useMultiProvider(realChainId);
+    const [myConfirmTimeout, setMyConfirmTimeout] = useState<number>(-1);
+    const [opConfirmTimeout, setOpConfirmTimeout] = useState<number>(-1);
     const [myInfo, setMyInfo] = useState<Info>({
         burner: "",
         address: "",
@@ -174,7 +179,7 @@ const TacToe = () => {
         img: "",
         mark: UserMarkType.Empty,
     });
-    const [opInfo, seOpInfo] = useState<Info>({
+    const [opInfo, setOpInfo] = useState<Info>({
         burner: "",
         address: "",
         level: 0,
@@ -184,6 +189,8 @@ const TacToe = () => {
     });
     const [burnerWallet] = useTacToeSigner(tokenId);
 
+    const [defaultGameQueue, setDefaultGameQueue] = useState<string>(ZERO_DATA);
+    const [opPlayer, setOpPlayer] = useState<string>(ZERO_DATA); // op player address
     const { activePilot: myActivePilot } = usePilotInfo(account);
 
     const { activePilot: opActivePilot } = usePilotInfo(opInfo.address);
@@ -227,12 +234,11 @@ const TacToe = () => {
                     testflightSinger.privateKey,
                 );
                 operateAddress = sCWAddress;
-                console.log("sCWAddress", sCWAddress);
             } else {
                 operateAddress = tacToeBurner.account.address;
             }
-            console.log(operateAddress, "operateAddress");
-            const [bidTacToeGameAddress, defaultGameQueue] =
+            // console.log(operateAddress, "operateAddress");
+            const [bidTacToeGameAddress, defaultGameQueue, opPlayer] =
                 await multiProvider.all([
                     multiSkylabBidTacToeFactoryContract.gamePerPlayer(
                         operateAddress,
@@ -242,36 +248,105 @@ const TacToe = () => {
                             ? skylabTestFlightAddress[TESTFLIGHT_CHAINID]
                             : skylabTournamentAddress[realChainId],
                     ),
+                    multiSkylabBidTacToeFactoryContract.playerToOpponent(
+                        operateAddress,
+                    ),
                 ]);
 
-            console.log("Game Address", bidTacToeGameAddress);
-            console.log("DefaultGameQueue", defaultGameQueue);
-
             if (bidTacToeGameAddress === ZERO_DATA) {
-                if (operateAddress !== defaultGameQueue) {
+                if (
+                    operateAddress !== defaultGameQueue &&
+                    opPlayer === ZERO_DATA
+                ) {
                     navigate("/btt/mode");
                     return;
                 }
 
-                const [account, level, mtadata, point] =
-                    await multiProvider.all([
+                if (opPlayer === ZERO_DATA) {
+                    const [account, level, mtadata, point] =
+                        await multiProvider.all([
+                            multiMercuryBaseContract.ownerOf(tokenId),
+                            multiMercuryBaseContract.aviationLevels(tokenId),
+                            multiMercuryBaseContract.tokenURI(tokenId),
+                            multiMercuryBaseContract.aviationPoints(tokenId),
+                        ]);
+                    setMyInfo({
+                        burner: operateAddress,
+                        address: account,
+                        level: level.toNumber(),
+                        point: point.toNumber(),
+                        img: getMetadataImg(mtadata),
+                        mark: null,
+                    });
+                    setOpInfo({
+                        burner: "",
+                        address: "",
+                        level: 0,
+                        point: 0,
+                        img: "",
+                        mark: null,
+                    });
+                } else {
+                    const [opTokenId] = await multiProvider.all([
+                        multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
+                            opPlayer,
+                        ),
+                    ]);
+
+                    const [
+                        account,
+                        level,
+                        mtadata,
+                        point,
+                        opAccount,
+                        opLevel,
+                        opMtadata,
+                        opPoint,
+                        myConfirmTimeout,
+                        opConfirmTimeout,
+                    ] = await multiProvider.all([
                         multiMercuryBaseContract.ownerOf(tokenId),
                         multiMercuryBaseContract.aviationLevels(tokenId),
                         multiMercuryBaseContract.tokenURI(tokenId),
                         multiMercuryBaseContract.aviationPoints(tokenId),
+                        multiMercuryBaseContract.ownerOf(opTokenId),
+                        multiMercuryBaseContract.aviationLevels(opTokenId),
+                        multiMercuryBaseContract.tokenURI(opTokenId),
+                        multiMercuryBaseContract.aviationPoints(opTokenId),
+
+                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
+                            operateAddress,
+                        ),
+                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
+                            opPlayer,
+                        ),
                     ]);
 
-                setMyInfo({
-                    burner: operateAddress,
-                    address: account,
-                    level: level.toNumber(),
-                    point: point.toNumber(),
-                    img: getMetadataImg(mtadata),
-                    mark: null,
-                });
+                    setMyConfirmTimeout(myConfirmTimeout.toNumber() * 1000);
+                    setOpConfirmTimeout(opConfirmTimeout.toNumber() * 1000);
+
+                    setMyInfo({
+                        burner: operateAddress,
+                        address: account,
+                        level: level.toNumber(),
+                        point: point.toNumber(),
+                        img: getMetadataImg(mtadata),
+                        mark: null,
+                    });
+                    setOpInfo({
+                        burner: opPlayer,
+                        address: opAccount,
+                        level: opLevel.toNumber(),
+                        point: opPoint.toNumber(),
+                        img: getMetadataImg(opMtadata),
+                        mark: null,
+                    });
+                }
             } else {
                 setBidTacToeGameAddress(bidTacToeGameAddress);
             }
+            setDefaultGameQueue(defaultGameQueue);
+            setOpPlayer(opPlayer);
         } catch (e: any) {
             console.log(e);
             if (e.code === "CALL_EXCEPTION") {
@@ -348,13 +423,25 @@ const TacToe = () => {
     }, [search, tokenId]);
 
     useEffect(() => {
+        if (defaultGameQueue !== ZERO_DATA) {
+            setStep(0);
+            return;
+        }
+
+        if (opPlayer !== ZERO_DATA) {
+            setStep(1);
+            return;
+        }
+
         if (!myInfo.address || !opInfo.address) {
             return;
         }
-        setTimeout(() => {
-            handleStep(1);
-        }, 1000);
-    }, [myInfo, opInfo]);
+
+        if (bidTacToeGameAddress && myInfo.mark && opInfo.mark) {
+            handleStep(2);
+            return;
+        }
+    }, [myInfo, opInfo, defaultGameQueue, bidTacToeGameAddress, opPlayer]);
 
     useEffect(() => {
         if (istest) {
@@ -394,6 +481,8 @@ const TacToe = () => {
                         bidTacToeGameAddress,
                         mileages,
                         points,
+                        myConfirmTimeout,
+                        opConfirmTimeout,
                         onStep: handleStep,
                         onList: handleChangeList,
                         handleGetGas: handleGetGas,
@@ -411,7 +500,7 @@ const TacToe = () => {
                                         return;
                                     }
                                     if (position === "op") {
-                                        seOpInfo(info);
+                                        setOpInfo(info);
                                         return;
                                     }
                                 }}

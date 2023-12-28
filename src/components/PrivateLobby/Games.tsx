@@ -386,7 +386,6 @@ const GameList = ({
 
 const Games = () => {
     const { onCopy } = useClipboard(window.location.href ?? "");
-
     const { blockNumber } = useBlockNumber();
     const [queueList, setQueueList] = useState([]);
     const [onGameList, setOnGameList] = useState([]);

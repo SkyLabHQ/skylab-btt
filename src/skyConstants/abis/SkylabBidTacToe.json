@@ -218,6 +218,11 @@
         "internalType": "struct MercuryBidTacToe.GameParams",
         "name": "gameParams",
         "type": "tuple"
+      },
+      {
+        "internalType": "address",
+        "name": "player1",
+        "type": "address"
       }
     ],
     "name": "createGameInPrivateLobby",
@@ -655,6 +660,44 @@
         "internalType": "uint64",
         "name": "token2Points",
         "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "playerToOpponent",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "playerToTimeout",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

@@ -199,7 +199,7 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                 functionName: method,
                                 args: args,
                                 nonce: nonce,
-                                gasLimit:
+                                gas:
                                     gasLimit && gasLimit > Number(gas)
                                         ? gasLimit
                                         : calculateGasMargin(Number(gas)),

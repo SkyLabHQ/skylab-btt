@@ -31,7 +31,6 @@ import {
 import StatusTip from "./StatusTip";
 import ResultUserCard from "./ResultUserCard";
 import Chat from "./Chat";
-import { useTacToeSigner } from "@/hooks/useSigner";
 import { ZERO_DATA } from "@/skyConstants";
 import A0Testflight from "@/assets/aviations/a0-testflight.png";
 import A2Testflight from "@/assets/aviations/a2-testflight.png";
@@ -121,8 +120,6 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const [messageIndex, setMessageIndex] = useState<number>(0);
     const [emoteIndex, setEmoteIndex] = useState<number>(0);
 
-    const [burnerWallet] = useTacToeSigner(tokenId);
-
     const gameOver = useMemo(() => {
         return myGameInfo.gameState > GameState.Revealed;
     }, [myGameInfo.gameState]);
@@ -141,6 +138,8 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const ethcallProvider = useMultiProvider(realChainId);
     const [loading, setLoading] = useState<boolean>(false);
 
+    console.log(myInfo, "myInfo");
+    console.log(opInfo, "opInfo");
     const handleGetGameInfo = async () => {
         const [
             resCurrentGrid,

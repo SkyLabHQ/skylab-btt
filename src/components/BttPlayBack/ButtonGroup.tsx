@@ -21,23 +21,25 @@ import {
     getShareEmoji,
 } from "@/skyConstants/bttGameTypes";
 import { Info } from "@/pages/TacToe";
+import PlayBackButton from "./PlayBackButton";
 
 const ButtonGroup = ({
+    showPre,
+    showNext,
     showShareEmoji,
     list,
     myGameInfo,
     myInfo,
     bttGameAddress,
     currentRound,
-    startPlay,
     handleStartStep,
     handlePreStep,
-    handleStartPlay,
     handleNextStep,
     handleEndStep,
-    handleStopPlay,
     handleNext,
 }: {
+    showPre: boolean;
+    showNext: boolean;
     showShareEmoji: boolean;
     list: BoardItem[];
     myInfo: Info;
@@ -50,7 +52,6 @@ const ButtonGroup = ({
     handleStartPlay: () => void;
     handleNextStep: () => void;
     handleEndStep: () => void;
-    handleStopPlay: () => void;
     handleNext?: () => void;
 }) => {
     const chainId = useChainId();
@@ -86,67 +87,14 @@ https://app.projmercury.io/#/`;
     };
     return (
         <Box>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "2.0833vw",
-                    "& > img": {
-                        cursor: "pointer",
-                    },
-                }}
-            >
-                <Image
-                    src={StartIcon}
-                    sx={{
-                        marginRight: "1.4583vw",
-                        width: "2.0833vw",
-                    }}
-                    onClick={handleStartStep}
-                ></Image>
-                <Image
-                    src={PreStepIcon}
-                    sx={{
-                        marginRight: "1.4583vw",
-                        width: "3.125vw",
-                    }}
-                    onClick={handlePreStep}
-                ></Image>
-                {startPlay ? (
-                    <Image
-                        src={StopIcon}
-                        sx={{
-                            marginRight: "1.4583vw",
-                            width: "1.25vw",
-                        }}
-                        onClick={handleStopPlay}
-                    ></Image>
-                ) : (
-                    <Image
-                        src={PlayIcon}
-                        sx={{
-                            marginRight: "1.4583vw",
-                            width: "1.5625vw",
-                        }}
-                        onClick={handleStartPlay}
-                    ></Image>
-                )}
-                <Image
-                    src={NextStepIcon}
-                    sx={{
-                        marginRight: "1.4583vw",
-                        width: "3.125vw",
-                    }}
-                    onClick={handleNextStep}
-                ></Image>
-                <Image
-                    src={EndIcon}
-                    onClick={handleEndStep}
-                    sx={{
-                        width: "2.0833vw",
-                    }}
-                ></Image>
-            </Box>
+            <PlayBackButton
+                showPre={showPre}
+                showNext={showNext}
+                handleEndStep={handleEndStep}
+                handleNextStep={handleNextStep}
+                handlePreStep={handlePreStep}
+                handleStartStep={handleStartStep}
+            ></PlayBackButton>
             <Box
                 sx={{
                     display: "flex",
