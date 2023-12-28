@@ -121,7 +121,12 @@ const PlanetList = ({
 
                     const Content = () => {
                         return (
-                            <>
+                            <Box
+                                className="bid-tac-toe"
+                                sx={{
+                                    position: "relative",
+                                }}
+                            >
                                 <Box
                                     sx={{
                                         display: "flex",
@@ -133,7 +138,6 @@ const PlanetList = ({
                                         margin: "0 auto",
                                         transition: "all 0.2s",
                                     }}
-                                    className="text"
                                 >
                                     <Image
                                         src={ButtonBg}
@@ -163,33 +167,23 @@ const PlanetList = ({
                                 </Box>
                                 <Box
                                     sx={{
-                                        position: "absolute",
-                                        bottom: "-5.2083vw",
-                                        left: "50%",
-                                        width: "26.0417vw",
-                                        transform: "translateX(-50%)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        transition: "all 0.2s",
+                                        justifyContent: "center",
                                     }}
                                 >
                                     <Box
                                         sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            transition: "all 0.2s",
-                                            justifyContent: "center",
+                                            marginRight: "0.5vw",
                                         }}
                                     >
-                                        <Box
-                                            sx={{
-                                                marginRight: "0.5vw",
-                                            }}
-                                        >
-                                            <PlayButton
-                                                onClick={item.play}
-                                            ></PlayButton>
-                                        </Box>
+                                        <PlayButton
+                                            onClick={item.play}
+                                        ></PlayButton>
                                     </Box>
                                 </Box>
-                            </>
+                            </Box>
                         );
                     };
 
