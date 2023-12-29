@@ -336,7 +336,7 @@ const Header = ({
                                         background: "#4A4A4A",
                                         color: "#F2D861",
                                         marginBottom: "0.3125vw",
-                                        fontSize: "20px",
+                                        fontSize: "1.0417vw",
                                         "&:hover": {
                                             border: "2px solid #F2D861",
                                         },

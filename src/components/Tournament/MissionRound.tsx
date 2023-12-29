@@ -112,7 +112,7 @@ const ContentComponent = (props: any) => {
     return (
         <Box
             sx={{
-                fontSize: "20px",
+                fontSize: "1.0417vw",
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
@@ -154,7 +154,7 @@ const tourConfig: StepType[] = [
             return (
                 <Box
                     sx={{
-                        width: "300px",
+                        width: "15.625vw",
                     }}
                 >
                     <Text
@@ -172,9 +172,9 @@ const tourConfig: StepType[] = [
                             width: "fit-content",
                             marginTop: "1.0417vw",
                             color: "#fff",
-                            height: "22px",
-                            padding: "4px 10px",
-                            borderRadius: "40px",
+                            height: "1.25vw",
+                            padding: "0.2083vw 0.5208vw",
+                            borderRadius: "2.0833vw",
                             background: "rgba(217, 217, 217, 0.50)",
                         }}
                     >
@@ -182,7 +182,7 @@ const tourConfig: StepType[] = [
                         <Image
                             src={WhiteArrowIcon}
                             sx={{
-                                width: "16px",
+                                width: "0.8333vw",
                             }}
                         ></Image>
                     </Flex>
@@ -197,7 +197,7 @@ const tourConfig: StepType[] = [
             return (
                 <Box
                     sx={{
-                        width: "300px",
+                        width: "15.625vw",
                     }}
                 >
                     <Text
@@ -215,9 +215,9 @@ const tourConfig: StepType[] = [
                             width: "fit-content",
                             marginTop: "1.0417vw",
                             color: "#fff",
-                            height: "22px",
-                            padding: "4px 10px",
-                            borderRadius: "40px",
+                            height: "1.25vw",
+                            padding: "0.2083vw 0.5208vw",
+                            borderRadius: "2.0833vw",
                             background: "rgba(217, 217, 217, 0.50)",
                         }}
                     >
@@ -225,7 +225,7 @@ const tourConfig: StepType[] = [
                         <Image
                             src={WhiteArrowIcon}
                             sx={{
-                                width: "16px",
+                                width: "0.8333vw",
                             }}
                         ></Image>
                     </Flex>
@@ -240,7 +240,7 @@ const tourConfig: StepType[] = [
             return (
                 <Box
                     sx={{
-                        width: "300px",
+                        width: "15.625vw",
                     }}
                 >
                     <Text
@@ -258,9 +258,9 @@ const tourConfig: StepType[] = [
                             width: "fit-content",
                             marginTop: "1.0417vw",
                             color: "#fff",
-                            height: "22px",
-                            padding: "4px 10px",
-                            borderRadius: "40px",
+                            height: "1.25vw",
+                            padding: "0.2083vw 0.5208vw",
+                            borderRadius: "2.0833vw",
                             background: "rgba(217, 217, 217, 0.50)",
                         }}
                     >
@@ -268,7 +268,7 @@ const tourConfig: StepType[] = [
                         <Image
                             src={WhiteArrowIcon}
                             sx={{
-                                width: "16px",
+                                width: "0.8333vw",
                             }}
                         ></Image>
                     </Flex>
@@ -283,7 +283,7 @@ const tourConfig: StepType[] = [
             return (
                 <Box
                     sx={{
-                        width: "300px",
+                        width: "15.625vw",
                     }}
                 >
                     <Text
@@ -330,7 +330,7 @@ const MissionRound = ({ onNextRound }: ChildProps) => {
                         borderRadius: "0.8333vw",
                         background: "#4A4A4A",
                         border: "1px solid #F2D861",
-                        padding: "12px",
+                        padding: "0.625vw",
                     };
                 },
                 highlightedArea: (base: any, props: any) => ({
