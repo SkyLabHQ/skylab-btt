@@ -267,7 +267,7 @@ const RightNav = ({
     return (
         <Box
             right="1.1979vw"
-            top="3.2407vh"
+            top="1.8229vw"
             pos={"absolute"}
             sx={{
                 width: "22.3958vw",

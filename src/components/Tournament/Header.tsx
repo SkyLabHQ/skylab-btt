@@ -99,7 +99,7 @@ const Header = ({
 
     return (
         <Box>
-            <Box pos="absolute" left="1.1979vw" top="3.2407vh" zIndex={20}>
+            <Box pos="absolute" left="1.1979vw" top="1.8229vw" zIndex={20}>
                 <Box
                     sx={{
                         display: "flex",
@@ -275,8 +275,8 @@ const Header = ({
                 sx={{
                     position: "fixed",
                     zIndex: 9999999,
-                    left: "180px",
-                    top: "140px",
+                    left: "9.375vw",
+                    top: "6.875vw",
                 }}
                 onMouseLeave={() => {
                     setIsOpen(false);
