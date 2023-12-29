@@ -533,7 +533,7 @@ const Games = () => {
         const allValidPlayers = playerInfos
             .map((item, index) => {
                 return {
-                    avatar: item.avatar.toNumber(),
+                    avatar: item.avatar.toNumber() - 1,
                     name: item.name,
                     address: players[index],
                 };

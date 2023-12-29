@@ -117,7 +117,6 @@ const PrivateLobby = () => {
             multiMercuryBTTPrivateLobby.getPlayers(),
         ]);
 
-        console.log(activeLobbyAddress, "activeLobbyAddress");
         if (activeLobbyAddress !== lobbyAddress) {
             const privateLobbySigner = getPrivateLobbySigner();
             if (activeLobbyAddress && activeLobbyAddress !== ZERO_DATA) {
@@ -130,7 +129,6 @@ const PrivateLobby = () => {
                     chainId: TESTFLIGHT_CHAINID,
                 });
 
-                console.log("退出");
                 await beforeBttPrivateLobbyContract("quitPrivateLobby", [], {
                     usePaymaster: true,
                     signer: privateLobbySigner,

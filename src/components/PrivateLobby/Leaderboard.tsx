@@ -162,6 +162,9 @@ const Leaderboard = () => {
                     name: counts[index * 3 + 2].name,
                 };
             })
+            .filter((item: any) => {
+                return item.avatar !== -1;
+            })
             .sort((a: any, b: any) => {
                 return b.win - a.win;
             });
