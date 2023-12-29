@@ -16,8 +16,12 @@ import Loading from "@/components/Loading";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Back from "@/components/Back";
-import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import {
+    getBurnerRetryContract,
+    useBttPrivateLobbyContract,
+} from "@/hooks/useRetryContract";
 import { ZERO_DATA } from "@/skyConstants";
+import { getBurnerMercuryBTTPrivateLobbyContract } from "@/hooks/useBurnerContract";
 
 interface GameCount {
     allGameCount: number;
@@ -113,10 +117,21 @@ const PrivateLobby = () => {
             multiMercuryBTTPrivateLobby.getPlayers(),
         ]);
 
+        console.log(activeLobbyAddress, "activeLobbyAddress");
         if (activeLobbyAddress !== lobbyAddress) {
             const privateLobbySigner = getPrivateLobbySigner();
             if (activeLobbyAddress && activeLobbyAddress !== ZERO_DATA) {
-                await bttPrivateLobbyContract("quitPrivateLobby", [], {
+                const contract =
+                    getBurnerMercuryBTTPrivateLobbyContract(activeLobbyAddress);
+
+                const beforeBttPrivateLobbyContract = getBurnerRetryContract({
+                    signer: privateLobbySigner,
+                    contract,
+                    chainId: TESTFLIGHT_CHAINID,
+                });
+
+                console.log("退出");
+                await beforeBttPrivateLobbyContract("quitPrivateLobby", [], {
                     usePaymaster: true,
                     signer: privateLobbySigner,
                 });

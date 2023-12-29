@@ -53,6 +53,188 @@ export const wait = async (time: number) => {
     });
 };
 
+export const getBurnerRetryContract = ({
+    contract,
+    signer,
+    chainId,
+}: {
+    contract: any;
+    signer?: any;
+    chainId: number;
+}) => {
+    return async (
+        method: string,
+        args: any[],
+        overrides: {
+            gasLimit?: number;
+            signer?: any;
+            usePaymaster?: boolean;
+        } = {},
+    ) => {
+        const { gasLimit, signer: overridsSigner, usePaymaster } = overrides;
+
+        return retry(
+            async (tries) => {
+                if (usePaymaster) {
+                    const provider = getViemClients({
+                        chainId: TESTFLIGHT_CHAINID,
+                    });
+                    const localSinger = overridsSigner
+                        ? overridsSigner
+                        : getTestflightSigner(TESTFLIGHT_CHAINID);
+                    const { sCWSigner, sCWAddress } = await getSCWallet(
+                        localSinger.privateKey,
+                    );
+                    const hash = await queue.add(
+                        async () => {
+                            // @ts-ignore
+                            const data = encodeFunctionData({
+                                abi: contract.abi,
+                                functionName: method,
+                                args,
+                            });
+
+                            console.log(`tries ${tries} ${method} start`);
+                            return await sCWSigner.sendTransaction({
+                                from: sCWAddress as `0x${string}`,
+                                to: contract.address as `0x${string}`,
+                                data: data as `0x${string}`,
+                            });
+                        },
+                        {
+                            priority: MethodPriority[method] || 1,
+                        },
+                    );
+
+                    console.log(
+                        `tries ${tries} use paymaster receipt hash: ${hash}`,
+                    );
+
+                    const receipt = // @ts-ignore
+                        await provider.waitForTransactionReceipt({ hash });
+
+                    console.log(receipt);
+                    const operateLog = receipt.logs.find((log: any) => {
+                        return log.topics[0] === topic0UserOpearationEvent;
+                    });
+
+                    if (operateLog) {
+                        const operateData = UserOperationiface.parseLog({
+                            data: operateLog.data,
+                            topics: operateLog.topics,
+                        });
+
+                        const success = operateData.args.success;
+
+                        if (!success) {
+                            const errorLog = receipt.logs.find((log: any) => {
+                                return (
+                                    log.topics[0] ===
+                                    topic0UserOperationRevertReason
+                                );
+                            });
+
+                            if (!errorLog) {
+                                throw new Error("Transaction failed");
+                            }
+                            const errorData = UserOperationiface.parseLog({
+                                data: errorLog.data,
+                                topics: errorLog.topics,
+                            });
+
+                            const revertReason = errorData.args.revertReason;
+                            console.log(revertReason, "");
+                            const revertBytes =
+                                ethers.utils.arrayify(revertReason);
+
+                            // 解析错误消息
+                            const errorMessage =
+                                ethers.utils.defaultAbiCoder.decode(
+                                    ["string"],
+                                    ethers.utils.hexDataSlice(revertBytes, 4),
+                                )[0];
+
+                            throw new Error(errorMessage);
+                        }
+                    }
+
+                    console.log(`tries ${tries} ${method} success`);
+
+                    return receipt;
+                } else {
+                    const provider = getRandomProvider(chainId);
+                    console.log(`tries ${tries} ${method} start`);
+                    const newSigner = overridsSigner ? overridsSigner : signer;
+
+                    const address = await newSigner.account.address;
+
+                    try {
+                        const publicClient = getViemClients({
+                            chainId,
+                        });
+
+                        // @ts-ignore
+                        const gas = await publicClient.estimateContractGas({
+                            address: contract.address,
+                            abi: contract.abi,
+                            functionName: method,
+                            account: newSigner.account.address,
+                            args: args,
+                        });
+
+                        const nonce = await nonceManager.getNonce(
+                            provider,
+                            address,
+                        );
+
+                        const hash = await newSigner.writeContract({
+                            address: contract.address,
+                            abi: contract.abi,
+                            functionName: method,
+                            args: args,
+                            nonce: nonce,
+                            gasLimit:
+                                gasLimit && gasLimit > Number(gas)
+                                    ? gasLimit
+                                    : calculateGasMargin(Number(gas)),
+                        });
+
+                        const receipt = // @ts-ignore
+                            await publicClient.waitForTransactionReceipt({
+                                hash,
+                            });
+
+                        console.log(receipt, "receipt");
+
+                        if (receipt.status === 0) {
+                            const reason = await getReason(provider, hash);
+
+                            if (reason) {
+                                throw new Error(reason);
+                            }
+
+                            throw new Error("Transaction failed");
+                        }
+                        console.log(`tries ${tries} ${method} success`);
+
+                        return receipt;
+                    } catch (e) {
+                        console.log(
+                            `tries ${tries} write method ${method} error`,
+                            e,
+                        );
+                        nonceManager.resetNonce(address);
+                        return Promise.reject(e);
+                    }
+                }
+            },
+            {
+                retries: 1,
+            },
+        );
+    };
+};
+
 export const useBurnerRetryContract = (contract: any, signer?: any) => {
     const chainId = useChainId();
     return useCallback(

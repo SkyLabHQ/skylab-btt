@@ -42,3 +42,13 @@ export const useBurnerSkylabBidTacToeGameContract = (address: string) => {
 export const useBurnerMercuryBTTPrivateLobbyContract = (address: string) => {
     return useContract(address, MERCURYBTTPRIVATELOBBY_ABI);
 };
+
+export const getBurnerMercuryBTTPrivateLobbyContract = (
+    address: `0x${string}`,
+) => {
+    return getContract({
+        abi: MERCURYBTTPRIVATELOBBY_ABI,
+        address,
+        signer: undefined,
+    });
+};

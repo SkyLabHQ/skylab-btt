@@ -459,6 +459,7 @@ const Games = () => {
             }
             setLoading(false);
         } catch (e) {
+            console.log(e);
             setLoading(false);
             toast(handleError(e, true));
         }
