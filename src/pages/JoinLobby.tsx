@@ -8,7 +8,7 @@ const JoinLobby = () => {
     const navigate = useNavigate();
 
     const handleMode = () => {
-        navigate("/btt/mode");
+        navigate("/btt");
     };
     return (
         <Box

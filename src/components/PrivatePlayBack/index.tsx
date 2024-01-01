@@ -469,7 +469,7 @@ const PrivatePlayBackPage = () => {
     const handleShare = () => {
         const url = `${
             window.location.origin
-        }/#/btt/privatePlayback?lobbyAddress=${lobbyAddress}&gameAddress=${gameAddress}&show=true&round=${currentRound}&burner=${shortenAddressWithout0x(
+        }/#/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${gameAddress}&show=true&round=${currentRound}&burner=${shortenAddressWithout0x(
             myInfo.address,
         )}`;
         const text = `Bid Tac Toe is a fully on-chain cryptoeconomic tic tac toe game, on @0xPolygon . You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
@@ -522,7 +522,7 @@ https://app.projmercury.io/#/`;
                 <Back
                     onClick={() =>
                         navigate(
-                            `/btt/privatelobby?lobbyAddress=${lobbyAddress}&type=2`,
+                            `/btt/lobby?lobbyAddress=${lobbyAddress}&type=2`,
                         )
                     }
                 ></Back>

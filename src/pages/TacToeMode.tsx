@@ -422,8 +422,7 @@ const TacToeMode = () => {
             });
 
             const url =
-                `/btt/privatelobby?lobbyAddress=` +
-                result.args.privateLobbyAddress;
+                `/btt/lobby?lobbyAddress=` + result.args.privateLobbyAddress;
             navigate(url);
         } catch (error) {
             console.log(error);
@@ -459,7 +458,7 @@ const TacToeMode = () => {
     };
 
     const handlePreviousLobbyConfirm = async () => {
-        navigate(`/btt/privatelobby?lobbyAddress=${activeLobbyAddress}`);
+        navigate(`/btt/lobby?lobbyAddress=${activeLobbyAddress}`);
     };
 
     useEffect(() => {

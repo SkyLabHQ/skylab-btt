@@ -64,7 +64,7 @@ const Join = () => {
         if (address === ZERO_DATA) {
             toast("Invalid Lobby Code");
         } else {
-            navigate(`/btt/privatelobby?lobbyAddress=${address}`);
+            navigate(`/btt/lobby?lobbyAddress=${address}`);
         }
 
         setLoading(false);

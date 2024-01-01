@@ -54,7 +54,7 @@ const PlanetList = ({
     const navigate = useNavigate();
 
     const handleToBtt = async () => {
-        navigate(`/btt/mode`);
+        navigate(`/btt`);
     };
 
     const planetList = [
@@ -90,7 +90,7 @@ const PlanetList = ({
             },
             text: "Bid Tac Toe",
             play: handleToBtt,
-            path: "/btt/mode",
+            path: "/btt",
         },
     ];
 

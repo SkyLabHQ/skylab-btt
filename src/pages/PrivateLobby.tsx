@@ -191,7 +191,7 @@ const PrivateLobby = () => {
             }
 
             navigate(
-                `/btt/privateRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
+                `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
             );
             return;
         }

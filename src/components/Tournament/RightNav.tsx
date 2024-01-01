@@ -237,7 +237,7 @@ const Mileage = ({
                                 </Text>
                                 <Image
                                     onClick={() => {
-                                        navigate(`/btt/mode`);
+                                        navigate(`/btt`);
                                     }}
                                     src={MileageArrow}
                                     sx={{

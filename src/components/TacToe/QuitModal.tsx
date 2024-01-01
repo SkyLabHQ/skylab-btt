@@ -48,8 +48,8 @@ const QuitModal = ({
                     usePaymaster: istest,
                 });
                 const url = istest
-                    ? `/btt/mode?tokenId=${tokenId}&testflight=true`
-                    : `/btt/mode?tokenId=${tokenId}`;
+                    ? `/btt?tokenId=${tokenId}&testflight=true`
+                    : `/btt?tokenId=${tokenId}`;
                 if (!istest) {
                     handleGetGas();
                 }

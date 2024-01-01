@@ -453,7 +453,7 @@ const Games = () => {
 
             if (isOnGame) {
                 navigate(
-                    `/btt/privateRoom?gameAddress=${isOnGame.gameAddress}&lobbyAddress=${lobbyAddress}`,
+                    `/btt/lobbyRoom?gameAddress=${isOnGame.gameAddress}&lobbyAddress=${lobbyAddress}`,
                 );
                 return;
             }
@@ -477,7 +477,7 @@ const Games = () => {
                 signer: privateLobbySigner,
             });
             navigate(
-                `/btt/privateRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
+                `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
             );
             setLoading(false);
         } catch (e) {
@@ -488,7 +488,7 @@ const Games = () => {
 
     const handleWatchGame = async (gameAddress: string) => {
         navigate(
-            `/btt/privateLive?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
+            `/btt/lobbyLive?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
         );
     };
 
