@@ -538,7 +538,7 @@ const Games = () => {
                 };
             })
             .filter((item: any) => {
-                return item.avatar >= 1;
+                return item.avatar !== -1;
             });
 
         const userInfos = await multiProvider.all(p2);
@@ -596,6 +596,8 @@ const Games = () => {
                 return item.avatar !== -1;
             }),
         );
+
+        console.log(allValidPlayers, "allValidPlayers");
         setGameCount({
             allGameCount: allValidPlayers.length,
             inGameCount: queueList.length + onGameList.length * 2,
