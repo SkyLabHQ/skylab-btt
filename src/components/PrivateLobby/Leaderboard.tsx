@@ -170,14 +170,11 @@ const Leaderboard = () => {
             });
 
         setList(playersCounts);
-        console.log(playersCounts, "gameHistory");
     };
 
     useEffect(() => {
         handleGetGameList();
     }, []);
-
-    console.log(list, "listlistlistlist");
 
     return (
         <Box>

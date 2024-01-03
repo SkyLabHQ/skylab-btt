@@ -597,7 +597,6 @@ const Games = () => {
             }),
         );
 
-        console.log(allValidPlayers, "allValidPlayers");
         setGameCount({
             allGameCount: allValidPlayers.length,
             inGameCount: queueList.length + onGameList.length * 2,
