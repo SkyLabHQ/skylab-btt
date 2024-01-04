@@ -258,7 +258,7 @@ const TacToe = () => {
                     operateAddress !== defaultGameQueue &&
                     opPlayer === ZERO_DATA
                 ) {
-                    navigate("/btt/mode");
+                    navigate("/btt");
                     return;
                 }
 

@@ -14,6 +14,7 @@ function doArrow(
     position: "top" | "right" | "bottom" | "left" | "custom",
     verticalAlign: "top" | "bottom",
     horizontalAlign: "left" | "right",
+    color = "white",
 ): CSSObject {
     if (!position || position === "custom") {
         return {};
@@ -21,7 +22,6 @@ function doArrow(
 
     const width = 40;
     const height = 30;
-    const color = "white";
     const isVertical = position === "top" || position === "bottom";
     const spaceFromSide = 25;
 
@@ -39,7 +39,8 @@ function doArrow(
         [`--rtp-arrow-border-${position}`]: `${height}px solid ${color}`,
     };
 
-    return obj;
+    return;
+    obj;
 }
 
 const tourConfig: StepType[] = [

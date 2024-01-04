@@ -64,7 +64,7 @@ const Join = () => {
         if (address === ZERO_DATA) {
             toast("Invalid Lobby Code");
         } else {
-            navigate(`/btt/privatelobby?lobbyAddress=${address}`);
+            navigate(`/btt/lobby?lobbyAddress=${address}`);
         }
 
         setLoading(false);
@@ -73,13 +73,29 @@ const Join = () => {
     useEffect(() => {
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
-            switch (key) {
-                case "Backspace":
-                    handleBackspace();
-                    break;
+            if (key === "Backspace") {
+                handleBackspace();
             }
         };
         document.addEventListener("keydown", keyboardListener);
+
+        document.addEventListener("paste", function (event) {
+            // 阻止默认的粘贴行为
+            event.preventDefault();
+            // 获取剪贴板数据
+            var clipboardData = event.clipboardData;
+            var pastedData = clipboardData.getData("Text");
+            let j = 0;
+
+            for (let i = 0; i < Math.min(6, pastedData.length); i++) {
+                if (codeRef[i]?.current.value) {
+                    continue;
+                } else {
+                    codeRef[i].current.value = pastedData[j++].toUpperCase();
+                }
+            }
+            // 打印粘贴的内容
+        });
 
         return () => {
             document.removeEventListener("keydown", keyboardListener);
@@ -114,7 +130,7 @@ const Join = () => {
                     position: "relative",
                 }}
             >
-                {[1, 2, 3, 4, 5, 6].map((item, index) => {
+                {codeRef.map((item, index) => {
                     return (
                         <Input
                             onFocus={() => {
@@ -127,8 +143,8 @@ const Join = () => {
                                     }
                                 }
                             }}
-                            key={item}
-                            ref={codeRef[index]}
+                            key={index}
+                            ref={item}
                             onChange={(e) => {
                                 const value = e.target.value
                                     .replace(/[^A-Za-z0-9]$/g, "")

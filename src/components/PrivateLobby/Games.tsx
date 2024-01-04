@@ -452,12 +452,13 @@ const Games = () => {
 
             if (isOnGame) {
                 navigate(
-                    `/btt/privateRoom?gameAddress=${isOnGame.gameAddress}&lobbyAddress=${lobbyAddress}`,
+                    `/btt/lobbyRoom?gameAddress=${isOnGame.gameAddress}&lobbyAddress=${lobbyAddress}`,
                 );
                 return;
             }
             setLoading(false);
         } catch (e) {
+            console.log(e);
             setLoading(false);
             toast(handleError(e, true));
         }
@@ -475,7 +476,7 @@ const Games = () => {
                 signer: privateLobbySigner,
             });
             navigate(
-                `/btt/privateRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
+                `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
             );
             setLoading(false);
         } catch (e) {
@@ -486,7 +487,7 @@ const Games = () => {
 
     const handleWatchGame = async (gameAddress: string) => {
         navigate(
-            `/btt/privateLive?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
+            `/btt/lobbyLive?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
         );
     };
 
@@ -531,13 +532,13 @@ const Games = () => {
         const allValidPlayers = playerInfos
             .map((item, index) => {
                 return {
-                    avatar: item.avatar.toNumber(),
+                    avatar: item.avatar.toNumber() - 1,
                     name: item.name,
                     address: players[index],
                 };
             })
             .filter((item: any) => {
-                return item.avatar >= 1;
+                return item.avatar !== -1;
             });
 
         const userInfos = await multiProvider.all(p2);
@@ -595,6 +596,7 @@ const Games = () => {
                 return item.avatar !== -1;
             }),
         );
+
         setGameCount({
             allGameCount: allValidPlayers.length,
             inGameCount: queueList.length + onGameList.length * 2,

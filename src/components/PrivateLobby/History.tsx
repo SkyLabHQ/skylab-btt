@@ -18,7 +18,7 @@ const GameList = ({ list }: { list: any[] }) => {
 
     const handleToPlayBack = (item: any) => {
         navigate(
-            `/btt/privatePlayback?lobbyAddress=${lobbyAddress}&gameAddress=${item.room}`,
+            `/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${item.room}`,
         );
     };
     return (

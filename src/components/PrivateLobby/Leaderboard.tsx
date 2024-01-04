@@ -162,19 +162,19 @@ const Leaderboard = () => {
                     name: counts[index * 3 + 2].name,
                 };
             })
+            .filter((item: any) => {
+                return item.avatar !== -1;
+            })
             .sort((a: any, b: any) => {
                 return b.win - a.win;
             });
 
         setList(playersCounts);
-        console.log(playersCounts, "gameHistory");
     };
 
     useEffect(() => {
         handleGetGameList();
     }, []);
-
-    console.log(list, "listlistlistlist");
 
     return (
         <Box>

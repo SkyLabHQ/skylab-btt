@@ -96,6 +96,7 @@ const TacToeMode = () => {
 
     const toast = useSkyToast();
 
+    const [enterText, setEnterText] = useState("");
     const deafaultMercuryBaseContract = useMercuryBaseContract();
     const mercuryBaseContract = useMercuryBaseContract(true);
     const [loading, setLoading] = useState(false);
@@ -262,6 +263,8 @@ const TacToeMode = () => {
                 testflightSinger.privateKey,
             );
             setLoading(true);
+            setEnterText("Entering bot game");
+
             const receipt = await testflightContract("playTestMint", [], {
                 usePaymaster: true,
             });
@@ -340,6 +343,7 @@ const TacToeMode = () => {
             const tokenId = planeList[currentPlaneIndex].tokenId;
             if (loading) return;
             setLoading(true);
+            setEnterText("Entering tournament");
 
             const defaultSinger = getDefaultWithProvider(tokenId, chainId);
             await checkBurnerBalanceAndApprove(
@@ -368,6 +372,8 @@ const TacToeMode = () => {
     const handleCreatePrivateLobby = async () => {
         try {
             setLoading(true);
+            setEnterText("Entering lobby");
+
             const privateLobbySigner = getPrivateLobbySigner();
             if (bttPrivateLobbyContract) {
                 await bttPrivateLobbyContract("quitPrivateLobby", [], {
@@ -423,8 +429,7 @@ const TacToeMode = () => {
             });
 
             const url =
-                `/btt/privatelobby?lobbyAddress=` +
-                result.args.privateLobbyAddress;
+                `/btt/lobby?lobbyAddress=` + result.args.privateLobbyAddress;
             navigate(url);
         } catch (error) {
             console.log(error);
@@ -460,7 +465,7 @@ const TacToeMode = () => {
     };
 
     const handlePreviousLobbyConfirm = async () => {
-        navigate(`/btt/privatelobby?lobbyAddress=${activeLobbyAddress}`);
+        navigate(`/btt/lobby?lobbyAddress=${activeLobbyAddress}`);
     };
 
     useEffect(() => {
@@ -597,7 +602,7 @@ const TacToeMode = () => {
                                         marginRight: "20px",
                                     }}
                                 >
-                                    Entering lobby
+                                    {enterText}
                                 </Text>
                                 <Box
                                     sx={{
@@ -612,77 +617,80 @@ const TacToeMode = () => {
                         )}
                     </Box>
                 </Box>
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        position: "absolute",
-                        bottom: "2.6042vw",
-                        left: "6.25vw",
-                    }}
-                >
-                    {planeList.length === 0 ? (
-                        <NoPlaneContent></NoPlaneContent>
-                    ) : (
-                        <PlaneList
-                            planeList={planeList}
-                            onPlaneChange={(index) => {
-                                setCurrentPlaneIndex(index);
-                            }}
-                        ></PlaneList>
-                    )}
+                {!isPrivateLobbyMode && (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            position: "absolute",
+                            bottom: "2.6042vw",
+                            left: "6.25vw",
+                        }}
+                    >
+                        {planeList.length === 0 ? (
+                            <NoPlaneContent></NoPlaneContent>
+                        ) : (
+                            <PlaneList
+                                planeList={planeList}
+                                onPlaneChange={(index) => {
+                                    setCurrentPlaneIndex(index);
+                                }}
+                            ></PlaneList>
+                        )}
 
-                    {isConnected ? (
-                        <RequestNextButton
-                            sx={{
-                                background: "transparent !important",
-                                borderRadius: "0.9375vw",
-                                border: "1px solid #616161",
-                                height: "2.6042vw !important",
-                                lineHeight: "2.6042vw !important",
-                                color: "#D9D9D9 !important",
-                                width: "25vw !important",
-                                fontSize: "1.25vw !important",
-                                "&:hover": {
-                                    boxShadow: "0px 4px 4px #fbc53e !important",
-                                },
-                            }}
-                            onClick={() => {
-                                window.open(
-                                    "https://docs.google.com/forms/d/1NUrQ8185o6lJlQzpgFlhGraHsnHbd7J4qJMN5HDcEiM/edit",
-                                    "_blank",
-                                );
-                            }}
-                        ></RequestNextButton>
-                    ) : (
-                        <ConnectKitButton.Custom>
-                            {({ show }) => {
-                                return (
-                                    <Box
-                                        onClick={() => {
-                                            show();
-                                        }}
-                                        sx={{
-                                            background: `url(${ConnectWalletBg}) no-repeat center`,
-                                            backgroundSize: "100% 100%",
-                                            height: "2.6042vw !important",
+                        {address ? (
+                            <RequestNextButton
+                                sx={{
+                                    background: "transparent !important",
+                                    borderRadius: "0.9375vw",
+                                    border: "1px solid #616161",
+                                    height: "2.6042vw !important",
+                                    lineHeight: "2.6042vw !important",
+                                    color: "#D9D9D9 !important",
+                                    width: "25vw !important",
+                                    fontSize: "1.25vw !important",
+                                    "&:hover": {
+                                        boxShadow:
+                                            "0px 4px 4px #fbc53e !important",
+                                    },
+                                }}
+                                onClick={() => {
+                                    window.open(
+                                        "https://docs.google.com/forms/d/1NUrQ8185o6lJlQzpgFlhGraHsnHbd7J4qJMN5HDcEiM/edit",
+                                        "_blank",
+                                    );
+                                }}
+                            ></RequestNextButton>
+                        ) : (
+                            <ConnectKitButton.Custom>
+                                {({ show }) => {
+                                    return (
+                                        <Box
+                                            onClick={() => {
+                                                show();
+                                            }}
+                                            sx={{
+                                                background: `url(${ConnectWalletBg}) no-repeat center`,
+                                                backgroundSize: "100% 100%",
+                                                height: "2.6042vw !important",
 
-                                            width: "25vw !important",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            fontSize: "1.0417vw",
-                                            paddingTop: "2px",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        Connect Wallet
-                                    </Box>
-                                );
-                            }}
-                        </ConnectKitButton.Custom>
-                    )}
-                </Box>
+                                                width: "25vw !important",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                fontSize: "1.0417vw",
+                                                paddingTop: "2px",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            Connect Wallet
+                                        </Box>
+                                    );
+                                }}
+                            </ConnectKitButton.Custom>
+                        )}
+                    </Box>
+                )}
                 <PreviousLobbyModal
                     lobbyName={lobbyName}
                     isOpen={isPreviousLobbyModalOpen}

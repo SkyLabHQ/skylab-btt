@@ -30,23 +30,20 @@ const AppRoutes = (): ReactElement => {
             <Route path="/" element={<App />}>
                 <Route index element={<Activities />} />
                 <Route path="/btt/game" element={<TacToe />}></Route>
-                <Route path="/btt/mode" element={<TacToeMode />}></Route>
+                <Route path="/btt" element={<TacToeMode />}></Route>
                 <Route path="/btt/history" element={<BttHistory />}></Route>
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>
                 <Route path="/btt/live" element={<BttLiveGame />}></Route>
                 <Route path="/btt/rules" element={<BttRules />}></Route>
                 <Route path="/btt/joinlobby" element={<JoinLobby />}></Route>
+                <Route path="/btt/lobby" element={<PrivateLobby />}></Route>
+                <Route path="/btt/lobbyRoom" element={<PrivateRoom />} />
                 <Route
-                    path="/btt/privatelobby"
-                    element={<PrivateLobby />}
-                ></Route>
-                <Route path="/btt/privateRoom" element={<PrivateRoom />} />
-                <Route
-                    path="/btt/privatePlayback"
+                    path="/btt/lobbyPlayback"
                     element={<PrivatePlayBack />}
                 />
                 <Route
-                    path="/btt/privateLive"
+                    path="/btt/lobbyLive"
                     element={<PrivateLiveGame />}
                 ></Route>
             </Route>

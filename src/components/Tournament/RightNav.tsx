@@ -49,6 +49,7 @@ const Mileage = ({
                 {({ show }) => {
                     return (
                         <MyPilot
+                            className="pilot-avatar"
                             img={activePilot.img}
                             showSupport={activePilot.owner !== address}
                             onClick={async () => {
@@ -67,6 +68,7 @@ const Mileage = ({
             <Popover>
                 <PopoverTrigger>
                     <Box
+                        className="pilot-mileage"
                         sx={{
                             display: "flex",
                             alignItems: "center",
@@ -235,7 +237,7 @@ const Mileage = ({
                                 </Text>
                                 <Image
                                     onClick={() => {
-                                        navigate(`/btt/mode`);
+                                        navigate(`/btt`);
                                     }}
                                     src={MileageArrow}
                                     sx={{
@@ -259,98 +261,102 @@ const RightNav = ({
 }) => {
     const { address } = useAccount();
     const navigate = useNavigate();
-    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
+    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true });
     const { activePilot } = usePilotInfo(address);
 
     return (
         <Box
             right="1.1979vw"
-            top="3.2407vh"
+            top="1.8229vw"
             pos={"absolute"}
             sx={{
                 width: "22.3958vw",
             }}
         >
             <Mileage value={activePilot.xp} onNextRound={onNextRound}></Mileage>
-            <Box
-                sx={{
-                    position: "relative",
-                    marginTop: "1.8519vh",
-                    height: "75vh",
-                }}
-            >
-                <GameLeaderboard show={isOpen}></GameLeaderboard>
-            </Box>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "0.7292vw",
-                }}
-            >
+            <Box className="leaderboard">
                 <Box
                     sx={{
                         position: "relative",
+                        marginTop: "1.8519vh",
+                        height: "75vh",
                     }}
                 >
-                    <Image
-                        src={DownArrow}
+                    <GameLeaderboard show={isOpen}></GameLeaderboard>
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginTop: "0.7292vw",
+                    }}
+                >
+                    <Box
                         sx={{
-                            position: "absolute",
-                            left: "50%",
-                            top: "-0.7813vw",
-                            transform: isOpen
-                                ? "translateX(-50%)"
-                                : "translateX(-50%) rotate(180deg)",
-                            transition: "all 0.3s",
-                            transformOrigin: "center center",
-                            width: "2.0833vw",
-                            zIndex: 9,
+                            position: "relative",
                         }}
-                    ></Image>
+                    >
+                        <Image
+                            src={DownArrow}
+                            sx={{
+                                position: "absolute",
+                                left: "50%",
+                                top: "-0.7813vw",
+                                transform: isOpen
+                                    ? "translateX(-50%)"
+                                    : "translateX(-50%) rotate(180deg)",
+                                transition: "all 0.3s",
+                                transformOrigin: "center center",
+                                width: "2.0833vw",
+                                zIndex: 9,
+                            }}
+                        ></Image>
+                        <YellowButton
+                            sx={{
+                                width: "11.0417vw",
+                                height: "2.7083vw",
+                            }}
+                            onClick={() => {
+                                if (isOpen) {
+                                    onClose();
+                                } else {
+                                    onOpen();
+                                }
+                            }}
+                        >
+                            <Image
+                                src={LeaderboardIcon}
+                                sx={{
+                                    width: "1.8229vw",
+                                    marginRight: "0.1042vw",
+                                }}
+                            ></Image>
+                            <Text>Leaderboard</Text>
+                        </YellowButton>
+                    </Box>
+
                     <YellowButton
+                        className="rules"
                         sx={{
                             width: "11.0417vw",
                             height: "2.7083vw",
                         }}
                         onClick={() => {
-                            if (isOpen) {
-                                onClose();
-                            } else {
-                                onOpen();
-                            }
+                            navigate("/btt/rules");
                         }}
                     >
                         <Image
-                            src={LeaderboardIcon}
+                            src={RulesIcon}
                             sx={{
                                 width: "1.8229vw",
                                 marginRight: "0.1042vw",
                             }}
                         ></Image>
-                        <Text>Leaderboard</Text>
+                        <Text>Detailed Rules</Text>
                     </YellowButton>
                 </Box>
-
-                <YellowButton
-                    sx={{
-                        width: "11.0417vw",
-                        height: "2.7083vw",
-                    }}
-                    onClick={() => {
-                        navigate("/btt/rules");
-                    }}
-                >
-                    <Image
-                        src={RulesIcon}
-                        sx={{
-                            width: "1.8229vw",
-                            marginRight: "0.1042vw",
-                        }}
-                    ></Image>
-                    <Text>Detailed Rules</Text>
-                </YellowButton>
             </Box>
+
             <Box
                 sx={{
                     display: "flex",
