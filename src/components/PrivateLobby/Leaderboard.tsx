@@ -12,6 +12,7 @@ import {
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import avatars from "@/skyConstants/avatars";
+import Loading from "../Loading";
 
 const Top3Item = ({ detail }: { detail: any }) => {
     const { avatar, rank, name, win, game } = detail;
@@ -132,12 +133,13 @@ const GameList = ({ list }: { list: any[] }) => {
 const Leaderboard = () => {
     const [list, setList] = useState<any[]>([]);
     const { lobbyAddress } = usePrivateLobbyContext();
-
+    const [loading, setLoading] = useState<boolean>(false);
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
 
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
     const handleGetGameList = async () => {
+        setLoading(true);
         const [players] = await multiProvider.all([
             multiMercuryBTTPrivateLobby.getPlayers(),
         ]);
@@ -170,6 +172,7 @@ const Leaderboard = () => {
             });
 
         setList(playersCounts);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -186,59 +189,65 @@ const Leaderboard = () => {
                     height: "594px",
                     overflow: "scroll",
                     paddingTop: "70px",
+                    position: "relative",
                 }}
             >
-                <Box
-                    sx={{
-                        width: "700px",
-                        margin: "0 auto",
-                    }}
-                >
-                    {list?.[0] && (
-                        <Flex justify={"center"}>
-                            <Top3Item
-                                detail={{
-                                    avatar: list[0].avatar,
-                                    name: list[0].name,
-                                    win: list[0].win,
-                                    game: list[0].win + list[0].lose,
-                                    rank: 1,
-                                }}
-                            ></Top3Item>
-                        </Flex>
-                    )}
-                    <Flex
-                        justify={"space-between"}
+                {loading ? (
+                    <Loading></Loading>
+                ) : (
+                    <Box
                         sx={{
-                            marginTop: "100px",
+                            width: "700px",
+                            margin: "0 auto",
                         }}
                     >
-                        {list?.[1] && (
-                            <Top3Item
-                                detail={{
-                                    avatar: list[1].avatar,
-                                    name: list[1].name,
-                                    win: list[1].win,
-                                    game: list[1].win + list[1].lose,
-                                    rank: 2,
-                                }}
-                            ></Top3Item>
+                        {list?.[0] && (
+                            <Flex justify={"center"}>
+                                <Top3Item
+                                    detail={{
+                                        avatar: list[0].avatar,
+                                        name: list[0].name,
+                                        win: list[0].win,
+                                        game: list[0].win + list[0].lose,
+                                        rank: 1,
+                                    }}
+                                ></Top3Item>
+                            </Flex>
                         )}
-                        {list?.[2] && (
-                            <Top3Item
-                                detail={{
-                                    avatar: list?.[2].avatar,
-                                    name: list?.[2].name,
-                                    win: list?.[2].win,
-                                    game: list?.[2].win + list[2].lose,
-                                    rank: 3,
-                                }}
-                            ></Top3Item>
-                        )}
-                    </Flex>
-                    <GameList list={list.slice(3)}></GameList>
-                </Box>
+                        <Flex
+                            justify={"space-between"}
+                            sx={{
+                                marginTop: "100px",
+                            }}
+                        >
+                            {list?.[1] && (
+                                <Top3Item
+                                    detail={{
+                                        avatar: list[1].avatar,
+                                        name: list[1].name,
+                                        win: list[1].win,
+                                        game: list[1].win + list[1].lose,
+                                        rank: 2,
+                                    }}
+                                ></Top3Item>
+                            )}
+                            {list?.[2] && (
+                                <Top3Item
+                                    detail={{
+                                        avatar: list?.[2].avatar,
+                                        name: list?.[2].name,
+                                        win: list?.[2].win,
+                                        game: list?.[2].win + list[2].lose,
+                                        rank: 3,
+                                    }}
+                                ></Top3Item>
+                            )}
+                        </Flex>
+                        <GameList list={list.slice(3)}></GameList>
+                    </Box>
+                )}
             </Box>
+
             <LobbyInfo></LobbyInfo>
         </Box>
     );

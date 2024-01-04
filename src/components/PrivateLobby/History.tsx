@@ -10,8 +10,9 @@ import {
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import avatars from "@/skyConstants/avatars";
+import Loading from "../Loading";
 
-const GameList = ({ list }: { list: any[] }) => {
+const GameList = ({ list, loading }: { list: any[]; loading: boolean }) => {
     const { lobbyAddress } = usePrivateLobbyContext();
 
     const navigate = useNavigate();
@@ -30,144 +31,153 @@ const GameList = ({ list }: { list: any[] }) => {
                 border: "1px solid #FFF",
                 borderRadius: "20px",
                 marginTop: "10px",
+                position: "relative",
             }}
         >
-            <SimpleGrid
-                justifyContent={"space-between"}
-                columns={2}
-                spacingX={"110px"}
-                spacingY={"20px"}
-            >
-                {list.map((item, index) => {
-                    return (
-                        <Box w="400px" key={index}>
-                            <Flex align={"center"}>
-                                <Flex
-                                    sx={{}}
-                                    direction={"column"}
-                                    align={"center"}
-                                >
-                                    <Box
-                                        sx={{
-                                            width: "90px",
-                                            height: "90px",
-                                            borderRadius: "20px",
-                                            border: "1px solid #FFF",
-                                            position: "relative",
-
-                                            background:
-                                                avatars[item.loseUserAvatar],
-                                        }}
+            {loading ? (
+                <Loading></Loading>
+            ) : (
+                <SimpleGrid
+                    justifyContent={"space-between"}
+                    columns={2}
+                    spacingX={"110px"}
+                    spacingY={"20px"}
+                >
+                    {list.map((item, index) => {
+                        return (
+                            <Box w="400px" key={index}>
+                                <Flex align={"center"}>
+                                    <Flex
+                                        sx={{}}
+                                        direction={"column"}
+                                        align={"center"}
                                     >
-                                        <Flex
+                                        <Box
                                             sx={{
-                                                position: "absolute",
-                                                bottom: "10px",
-                                                left: "50%",
-                                                transform: "translateX(-50%)",
-                                                width: "54px",
-                                                height: "24px",
-                                                borderRadius: "10px",
-                                                background: "#D9D9D9",
-                                                color: "#303030",
-                                                fontSize: "16px",
-                                            }}
-                                            align={"center"}
-                                            justify={"center"}
-                                        >
-                                            Lose
-                                        </Flex>
-                                    </Box>
+                                                width: "90px",
+                                                height: "90px",
+                                                borderRadius: "20px",
+                                                border: "1px solid #FFF",
+                                                position: "relative",
 
+                                                background:
+                                                    avatars[
+                                                        item.loseUserAvatar
+                                                    ],
+                                            }}
+                                        >
+                                            <Flex
+                                                sx={{
+                                                    position: "absolute",
+                                                    bottom: "10px",
+                                                    left: "50%",
+                                                    transform:
+                                                        "translateX(-50%)",
+                                                    width: "54px",
+                                                    height: "24px",
+                                                    borderRadius: "10px",
+                                                    background: "#D9D9D9",
+                                                    color: "#303030",
+                                                    fontSize: "16px",
+                                                }}
+                                                align={"center"}
+                                                justify={"center"}
+                                            >
+                                                Lose
+                                            </Flex>
+                                        </Box>
+
+                                        <Text
+                                            sx={{
+                                                color: "#BCBBBE",
+                                                fontSize: "16px",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            {item.loseUserName}
+                                        </Text>
+                                    </Flex>
                                     <Text
                                         sx={{
-                                            color: "#BCBBBE",
-                                            fontSize: "16px",
-                                            fontWeight: "bold",
+                                            fontSize: "24px",
+                                            margin: "0 20px",
                                         }}
                                     >
-                                        {item.loseUserName}
+                                        VS
                                     </Text>
-                                </Flex>
-                                <Text
-                                    sx={{
-                                        fontSize: "24px",
-                                        margin: "0 20px",
-                                    }}
-                                >
-                                    VS
-                                </Text>
-                                <Flex
-                                    sx={{
-                                        marginRight: "24px",
-                                    }}
-                                    direction={"column"}
-                                    align={"center"}
-                                >
-                                    <Box
+                                    <Flex
                                         sx={{
-                                            width: "90px",
-                                            height: "90px",
-                                            borderRadius: "20px",
-                                            border: "1px solid #FFF",
-                                            position: "relative",
-                                            background:
-                                                avatars[item.winUserAvatar],
+                                            marginRight: "24px",
                                         }}
+                                        direction={"column"}
+                                        align={"center"}
                                     >
-                                        {" "}
-                                        <Flex
+                                        <Box
                                             sx={{
-                                                position: "absolute",
-                                                bottom: "10px",
-                                                left: "50%",
-                                                transform: "translateX(-50%)",
-                                                width: "54px",
-                                                height: "24px",
-                                                borderRadius: "10px",
-                                                background: "#FDDC2D",
-                                                color: "#303030",
-                                                fontSize: "16px",
+                                                width: "90px",
+                                                height: "90px",
+                                                borderRadius: "20px",
+                                                border: "1px solid #FFF",
+                                                position: "relative",
+                                                background:
+                                                    avatars[item.winUserAvatar],
                                             }}
-                                            align={"center"}
-                                            justify={"center"}
                                         >
-                                            Win
-                                        </Flex>
-                                    </Box>
+                                            {" "}
+                                            <Flex
+                                                sx={{
+                                                    position: "absolute",
+                                                    bottom: "10px",
+                                                    left: "50%",
+                                                    transform:
+                                                        "translateX(-50%)",
+                                                    width: "54px",
+                                                    height: "24px",
+                                                    borderRadius: "10px",
+                                                    background: "#FDDC2D",
+                                                    color: "#303030",
+                                                    fontSize: "16px",
+                                                }}
+                                                align={"center"}
+                                                justify={"center"}
+                                            >
+                                                Win
+                                            </Flex>
+                                        </Box>
 
-                                    <Text
+                                        <Text
+                                            sx={{
+                                                color: "#BCBBBE",
+                                                fontSize: "16px",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            {item.winUserName}
+                                        </Text>
+                                    </Flex>
+                                    <Image
+                                        onClick={() => handleToPlayBack(item)}
+                                        src={PlayBackIcon}
                                         sx={{
-                                            color: "#BCBBBE",
-                                            fontSize: "16px",
-                                            fontWeight: "bold",
+                                            width: "30px",
+                                            marginLeft: "30px",
+                                            cursor: "pointer",
                                         }}
-                                    >
-                                        {item.winUserName}
-                                    </Text>
+                                    ></Image>
                                 </Flex>
-                                <Image
-                                    onClick={() => handleToPlayBack(item)}
-                                    src={PlayBackIcon}
+                                <Box
                                     sx={{
-                                        width: "30px",
-                                        marginLeft: "30px",
-                                        cursor: "pointer",
+                                        height: "1px",
+                                        marginTop: "12px",
+                                        background:
+                                            "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFF 9.44%, rgba(255, 255, 255, 0.39) 85.56%, rgba(255, 255, 255, 0.00) 100%)",
                                     }}
-                                ></Image>
-                            </Flex>
-                            <Box
-                                sx={{
-                                    height: "1px",
-                                    marginTop: "12px",
-                                    background:
-                                        "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFF 9.44%, rgba(255, 255, 255, 0.39) 85.56%, rgba(255, 255, 255, 0.00) 100%)",
-                                }}
-                            ></Box>
-                        </Box>
-                    );
-                })}
-            </SimpleGrid>
+                                ></Box>
+                            </Box>
+                        );
+                    })}
+                </SimpleGrid>
+            )}
         </Box>
     );
 };
@@ -175,12 +185,13 @@ const GameList = ({ list }: { list: any[] }) => {
 const History = () => {
     const [list, setList] = useState([]);
     const { lobbyAddress } = usePrivateLobbyContext();
-
+    const [loading, setLoading] = useState(false);
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
 
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
     const handleGetGameList = async () => {
+        setLoading(true);
         const [gameHistory] = await multiProvider.all([
             multiMercuryBTTPrivateLobby.getGameHistory(),
         ]);
@@ -207,6 +218,7 @@ const History = () => {
         });
 
         setList(list);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -215,7 +227,7 @@ const History = () => {
 
     return (
         <Box>
-            <GameList list={list}></GameList>
+            <GameList loading={loading} list={list}></GameList>
             <LobbyInfo></LobbyInfo>
         </Box>
     );

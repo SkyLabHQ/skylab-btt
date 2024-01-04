@@ -207,7 +207,7 @@ const PrivateLobby = () => {
     };
 
     const handleBack = () => {
-        navigate("/btt/joinlobby");
+        navigate("/btt");
     };
 
     useEffect(() => {
