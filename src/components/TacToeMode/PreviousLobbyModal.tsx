@@ -43,7 +43,7 @@ const PreviousLobbyModal = ({
                     }}
                 >
                     <Text
-                        fontSize="24px"
+                        fontSize="1.25vw"
                         sx={{
                             marginTop: "1.0417vw",
                         }}
@@ -51,7 +51,7 @@ const PreviousLobbyModal = ({
                         You were previously in
                     </Text>
                     <Text
-                        fontSize="24px"
+                        fontSize="1.25vw"
                         sx={{
                             marginTop: "1.0417vw",
                             color: "#FDDC2D",
@@ -60,7 +60,7 @@ const PreviousLobbyModal = ({
                         Lobby {lobbyName}
                     </Text>
                     <Text
-                        fontSize="24px"
+                        fontSize="1.25vw"
                         sx={{
                             marginTop: "1.0417vw",
                         }}

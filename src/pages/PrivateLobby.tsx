@@ -50,7 +50,7 @@ export const usePrivateLobbyContext = () => useContext(PrivateLobbyContext);
 
 const PrivateLobby = () => {
     const [avatarIndex, setAvatarIndex] = useState<number>(
-        Math.floor(Math.random() * 14),
+        Math.floor(Math.random() * 12),
     );
     const [nickname, setNickname] = useState<string>("");
     const localSinger = getPrivateLobbySigner();
