@@ -39,8 +39,10 @@ const tourList = [
 
 const Header = ({
     onNextRound,
+    onShowLeaderboard,
 }: {
     onNextRound: (step: number | string) => void;
+    onShowLeaderboard: () => void;
 }) => {
     const { setIsOpen, setCurrentStep } = useTour();
     const menuList = [
@@ -60,13 +62,13 @@ const Header = ({
         //     icon: Lock,
         //     title: "Mercury Overview",
         // },
-        {
-            icon: Airdrop,
-            title: "Reward History",
-            onClick: () => {
-                onNextRound(0);
-            },
-        },
+        // {
+        //     icon: Airdrop,
+        //     title: "Reward History",
+        //     onClick: () => {
+        //         onNextRound(0);
+        //     },
+        // },
         {
             icon: SkylabIcon,
             title: "About",
@@ -325,6 +327,9 @@ const Header = ({
                                 <Flex
                                     onMouseMove={() => {
                                         setCurrentStep(index);
+                                        if (index === 3) {
+                                            onShowLeaderboard();
+                                        }
                                     }}
                                     align={"center"}
                                     justifyContent={"center"}

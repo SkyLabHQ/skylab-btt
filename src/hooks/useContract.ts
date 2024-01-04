@@ -6,7 +6,6 @@ import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import MERCURYPILOTS_ABI from "@/skyConstants/abis/MercuryPilots.json";
 import BABYMERCS_ABI from "@/skyConstants/abis/BabyMercs.json";
-import MERCURYBTTPRIVATELOBBY_ABI from "@/skyConstants/abis/MercuryBTTPrivateLobby.json";
 import qs from "query-string";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 
@@ -28,22 +27,6 @@ export const skylabTournamentAddress: ChainIdToAddressMap = {
     [ChainId.POLYGON]: "0xb806EFDba9DB957b5960B7a58b5F7d57187dFF17",
     [ChainId.BASE]: "0xe0f81c4004A15439d390aBFa412DE51A311F9919",
     [ChainId.BASEGOERLI]: "0xC1340AF808B82EA76fB701399ec3259469128c89",
-};
-
-export const skylabGameFlightRaceTestAddress: ChainIdToAddressMap = {
-    [ChainId.MUMBAI]: "0x6Fa257B58436a60f8F0909EdC2de0a5dF753028a",
-};
-export const skylabGameFlightRaceTournamentAddress: ChainIdToAddressMap = {
-    [ChainId.MUMBAI]: "0x6B120220575B3acbB5EA560fC6FaC57b54DE4075",
-    [ChainId.POLYGON]: "0x71F676D892fBcf1e6ac61a7bDf62be105f8505E6",
-};
-
-export const skylabResourcesTestAddress: ChainIdToAddressMap = {
-    [ChainId.MUMBAI]: "0x2cCee5bbA7BC5DF4972b6a07f394aFE38826d932",
-};
-export const skylabResourcesAddress: ChainIdToAddressMap = {
-    [ChainId.MUMBAI]: "0xC86aA7751E2fF3fAf8C2d05E45198ed59b3dAf13",
-    [ChainId.POLYGON]: "0x16dd2704c8adcbddc6c12dbf26289e0407d75139",
 };
 
 export const skylabBidTacToeAddress: ChainIdToAddressMap = {

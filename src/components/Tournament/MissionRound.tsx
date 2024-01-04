@@ -137,7 +137,7 @@ const tourConfig: StepType[] = [
                     <Text
                         sx={{
                             color: "#fff",
-                            fontSize: "1.0417vw",
+                            fontSize: "0.8333vw",
                             fontWeight: 600,
                         }}
                     >
@@ -152,15 +152,11 @@ const tourConfig: StepType[] = [
         position: "left",
         content: () => {
             return (
-                <Box
-                    sx={{
-                        width: "15.625vw",
-                    }}
-                >
+                <Box>
                     <Text
                         sx={{
                             color: "#fff",
-                            fontSize: "1.0417vw",
+                            fontSize: "0.8333vw",
                             fontWeight: 600,
                         }}
                     >
@@ -176,6 +172,7 @@ const tourConfig: StepType[] = [
                             padding: "0.2083vw 0.5208vw",
                             borderRadius: "2.0833vw",
                             background: "rgba(217, 217, 217, 0.50)",
+                            fontSize: "0.8333vw",
                         }}
                     >
                         More on pilots
@@ -195,15 +192,11 @@ const tourConfig: StepType[] = [
         position: "left",
         content: () => {
             return (
-                <Box
-                    sx={{
-                        width: "15.625vw",
-                    }}
-                >
+                <Box>
                     <Text
                         sx={{
                             color: "#fff",
-                            fontSize: "1.0417vw",
+                            fontSize: "0.8333vw",
                             fontWeight: 600,
                         }}
                     >
@@ -219,6 +212,7 @@ const tourConfig: StepType[] = [
                             padding: "0.2083vw 0.5208vw",
                             borderRadius: "2.0833vw",
                             background: "rgba(217, 217, 217, 0.50)",
+                            fontSize: "0.8333vw",
                         }}
                     >
                         More on mileadge
@@ -238,11 +232,7 @@ const tourConfig: StepType[] = [
         position: "left",
         content: () => {
             return (
-                <Box
-                    sx={{
-                        width: "15.625vw",
-                    }}
-                >
+                <Box>
                     <Text
                         sx={{
                             color: "#fff",
@@ -262,6 +252,7 @@ const tourConfig: StepType[] = [
                             padding: "0.2083vw 0.5208vw",
                             borderRadius: "2.0833vw",
                             background: "rgba(217, 217, 217, 0.50)",
+                            fontSize: "0.8333vw",
                         }}
                     >
                         More on mileadge
@@ -281,15 +272,11 @@ const tourConfig: StepType[] = [
         position: "left",
         content: () => {
             return (
-                <Box
-                    sx={{
-                        width: "15.625vw",
-                    }}
-                >
+                <Box>
                     <Text
                         sx={{
                             color: "#fff",
-                            fontSize: "1.0417vw",
+                            fontSize: "0.8333vw",
                             fontWeight: 600,
                         }}
                     >
@@ -308,6 +295,7 @@ interface ChildProps {
 const MissionRound = ({ onNextRound }: ChildProps) => {
     const [active, setActive] = useState(1);
     const [showAllActivities, setShowAllActivities] = useState(false);
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
 
     return (
         <TourProvider
@@ -350,7 +338,12 @@ const MissionRound = ({ onNextRound }: ChildProps) => {
                 sx={{ color: "#000", fontWeight: 600 }}
                 onClick={() => {}}
             >
-                <Header onNextRound={onNextRound}></Header>
+                <Header
+                    onNextRound={onNextRound}
+                    onShowLeaderboard={() => {
+                        setShowLeaderboard(true);
+                    }}
+                ></Header>
                 <PlanetList
                     active={active}
                     showAllActivities={showAllActivities}
@@ -361,7 +354,10 @@ const MissionRound = ({ onNextRound }: ChildProps) => {
                         setShowAllActivities(flag);
                     }}
                 ></PlanetList>
-                <RightNav onNextRound={onNextRound}></RightNav>
+                <RightNav
+                    onNextRound={onNextRound}
+                    showLeaderboard={showLeaderboard}
+                ></RightNav>
             </Box>
         </TourProvider>
     );

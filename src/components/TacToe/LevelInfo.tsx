@@ -149,22 +149,27 @@ const LevelInfo = ({}) => {
         if (myConfirmTimeout <= 0 && opConfirmTimeout <= 0) {
             return;
         }
-        const now = getNowSecondsTimestamp();
+        const now = Date.now();
 
         if (myConfirmTimeout > now) {
-            start(myConfirmTimeout - now);
+            start(Math.floor((myConfirmTimeout - now) / 1000) * 1000);
         } else if (opConfirmTimeout > now) {
-            start(opConfirmTimeout - now);
+            start(Math.floor((opConfirmTimeout - now) / 1000) * 1000);
         }
+
+        console.log(opConfirmTimeout, "opConfirmTimeout");
         let timer: any = null;
-        if (opConfirmTimeout !== 0) {
-            if (opConfirmTimeout <= now) {
-                handleActiveQueueTimeout();
-            } else {
-                timer = setTimeout(() => {
+        if (opConfirmTimeout < now && myConfirmTimeout < now) {
+            handleActiveQueueTimeout();
+        } else {
+            const delOp = opConfirmTimeout - now;
+            const delMy = myConfirmTimeout - now;
+            timer = setTimeout(
+                () => {
                     handleActiveQueueTimeout();
-                }, opConfirmTimeout - now);
-            }
+                },
+                delOp ? delOp : delMy,
+            );
         }
 
         return () => {

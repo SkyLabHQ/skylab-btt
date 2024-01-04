@@ -21,6 +21,7 @@ import MyPilot from "./MyPilot";
 import MileageArrow from "./assets/mileage-arrow.svg";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
+import { useEffect } from "react";
 
 const Mileage = ({
     value,
@@ -255,14 +256,24 @@ const Mileage = ({
 };
 
 const RightNav = ({
+    showLeaderboard,
     onNextRound,
 }: {
+    showLeaderboard: boolean;
     onNextRound: (step: number | string) => void;
 }) => {
     const { address } = useAccount();
     const navigate = useNavigate();
-    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true });
+    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
     const { activePilot } = usePilotInfo(address);
+
+    useEffect(() => {
+        if (showLeaderboard) {
+            onOpen();
+        } else {
+            onClose();
+        }
+    }, [showLeaderboard]);
 
     return (
         <Box

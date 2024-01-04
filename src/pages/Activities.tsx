@@ -21,7 +21,7 @@ import TournamentHelmet from "@/components/Helmet/TournamentHelmet";
 
 const Activities = (): ReactElement => {
     const { search } = useLocation();
-    const [step, setStep] = useState<number | string>(0);
+    const [step, setStep] = useState<number | string>(1);
     const [currentRound, setCurrentRound] = useState(-1);
     const ethcallProvider = useMultiProvider(DEAFAULT_CHAINID);
 
