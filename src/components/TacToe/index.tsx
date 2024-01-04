@@ -138,8 +138,6 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const ethcallProvider = useMultiProvider(realChainId);
     const [loading, setLoading] = useState<boolean>(false);
 
-    console.log(myInfo, "myInfo");
-    console.log(opInfo, "opInfo");
     const handleGetGameInfo = async () => {
         const [
             resCurrentGrid,
