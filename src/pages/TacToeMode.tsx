@@ -591,15 +591,15 @@ const TacToeMode = () => {
                             display: "flex",
                             alignItems: "center",
                             marginTop: "10vh",
-                            height: "44px",
+                            height: "2.2917vw",
                         }}
                     >
                         {loading && (
                             <>
                                 <Text
                                     sx={{
-                                        fontSize: "24px",
-                                        marginRight: "20px",
+                                        fontSize: "1.25vw",
+                                        marginRight: "1.0417vw",
                                     }}
                                 >
                                     {enterText}
@@ -607,8 +607,8 @@ const TacToeMode = () => {
                                 <Box
                                     sx={{
                                         position: "relative",
-                                        width: "44px",
-                                        height: "44px",
+                                        width: "2.2917vw",
+                                        height: "2.2917vw",
                                     }}
                                 >
                                     <Loading size={44}></Loading>

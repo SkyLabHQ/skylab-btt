@@ -352,7 +352,7 @@ const GameList = ({
                 <Box
                     sx={{
                         height: "100%",
-                        width: "690px",
+                        // width: "690px",
                         margin: "0 auto",
                     }}
                 >

@@ -237,7 +237,7 @@ const TacToe = () => {
             } else {
                 operateAddress = tacToeBurner.account.address;
             }
-            // console.log(operateAddress, "operateAddress");
+
             const [bidTacToeGameAddress, defaultGameQueue, opPlayer] =
                 await multiProvider.all([
                     multiSkylabBidTacToeFactoryContract.gamePerPlayer(
@@ -253,6 +253,9 @@ const TacToe = () => {
                     ),
                 ]);
 
+            console.log(operateAddress, "operateAddress");
+            console.log(defaultGameQueue, "defaultGameQueue");
+            console.log(opPlayer, "opPlayer");
             if (bidTacToeGameAddress === ZERO_DATA) {
                 if (
                     operateAddress !== defaultGameQueue &&
