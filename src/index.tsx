@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { Box, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { WagmiConfig, createConfig } from "wagmi";
 import {
     ConnectKitProvider,
@@ -49,7 +49,7 @@ root.render(
         <ColorModeScript />
         <ChakraProvider theme={theme}>
             <Global styles={GlobalStyles} />
-            <HashRouter>
+            <BrowserRouter>
                 <WagmiConfig config={config}>
                     <ConnectKitProvider>
                         <BlockNumberProvider>
@@ -62,10 +62,9 @@ root.render(
                                 </Fragment>
                             </KnobVisibilityContextProvider>
                         </BlockNumberProvider>
-                        <ConnectKitButton />
                     </ConnectKitProvider>
                 </WagmiConfig>
-            </HashRouter>
+            </BrowserRouter>
         </ChakraProvider>
     </Box>,
 );

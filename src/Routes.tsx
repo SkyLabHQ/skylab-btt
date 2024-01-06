@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import App from "./App";
 import Activities from "./pages/Activities";
 import TacToe from "./pages/TacToe";
@@ -18,7 +18,6 @@ export const ScrollToTop = () => {
 
     return <></>;
 };
-
 const AppRoutes = (): ReactElement => {
     return (
         <Routes>
