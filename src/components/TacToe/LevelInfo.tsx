@@ -219,7 +219,7 @@ const LevelInfo = ({
         try {
             await bttFactoryContract("setActiveQueue", [], {
                 signer: tacToeBurner,
-                gasLimit: 200000,
+                gasLimit: 1200000,
             });
             setLoading(false);
         } catch (e) {
@@ -311,7 +311,7 @@ const LevelInfo = ({
         try {
             await bttFactoryContract("activeQueueTimeout", [], {
                 signer: tacToeBurner,
-                gasLimit: 200000,
+                gasLimit: 500000,
             });
         } catch (e) {
             console.log(e);
@@ -350,8 +350,8 @@ const LevelInfo = ({
         if (opConfirmTimeout < now && myConfirmTimeout < now) {
             handleActiveQueueTimeout();
         } else {
-            const delOp = opConfirmTimeout - now + 3000;
-            const delMy = myConfirmTimeout - now + 3000;
+            const delOp = opConfirmTimeout - now;
+            const delMy = myConfirmTimeout - now;
             timer = setTimeout(
                 () => {
                     handleActiveQueueTimeout();
