@@ -1,18 +1,29 @@
-import { Info, useGameContext } from "@/pages/TacToe";
+import { GameType, Info, useGameContext } from "@/pages/TacToe";
 import { Box, Text, Image } from "@chakra-ui/react";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import LevelUpIcon from "./assets/level-up.svg";
 import LevelDownIcon from "./assets/level-down.svg";
 import useCountDown from "react-countdown-hook";
 import { getLevel } from "@/utils/level";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { GrayButton } from "../Button/Index";
-import getNowSecondsTimestamp from "@/utils/nowTime";
 import { useBttFactoryRetry } from "@/hooks/useRetryContract";
-import { useTacToeSigner } from "@/hooks/useSigner";
+import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import Loading from "../Loading";
+import { getSCWallet } from "@/hooks/useSCWallet";
+import {
+    useMultiMercuryBaseContract,
+    useMultiProvider,
+    useMultiSkylabBidTacToeFactoryContract,
+    useMultiSkylabBidTacToeGameContract,
+} from "@/hooks/useMultiContract";
+import { ZERO_DATA } from "@/skyConstants";
+import { useNavigate } from "react-router-dom";
+import { useBlockNumber } from "@/contexts/BlockNumber";
+import { getMetadataImg } from "@/utils/ipfsImg";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 
 export const PlaneImg = ({
     detail,
@@ -82,25 +93,124 @@ export const PlaneImg = ({
     );
 };
 
-const LevelInfo = ({}) => {
+const LevelInfo = ({
+    onGameType,
+    onChangeInfo,
+    onChangeMileage,
+    onChangePoint,
+}: {
+    onGameType: (type: GameType) => void;
+    onChangeMileage: (winMileage: number, loseMileage: number) => void;
+    onChangePoint: (winPoint: number, losePoint: number) => void;
+    onChangeInfo: (position: "my" | "op", info: Info) => void;
+}) => {
     const {
         myInfo,
         opInfo,
-        myConfirmTimeout,
-        opConfirmTimeout,
+        realChainId,
         points,
         myActivePilot,
         opActivePilot,
         tokenId,
+        onStep,
+        istest,
+        avaitionAddress,
+        bidTacToeGameAddress,
+        setBidTacToeGameAddress,
     } = useGameContext();
+    const navigate = useNavigate();
+    const multiProvider = useMultiProvider(realChainId);
     const [timeLeft, { start }] = useCountDown(0, 1000);
-
+    const [myConfirmTimeout, setMyConfirmTimeout] = useState(-1);
+    const [opConfirmTimeout, setOpConfirmTimeout] = useState(-1);
     const { winPoint, losePoint } = points;
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
     const [tacToeBurner] = useTacToeSigner(tokenId);
+    const { blockNumber } = useBlockNumber();
+    const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
+    const multiSkylabBidTacToeGameContract =
+        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+    const multiSkylabBidTacToeFactoryContract =
+        useMultiSkylabBidTacToeFactoryContract(realChainId);
 
     const bttFactoryContract = useBttFactoryRetry(false);
+
+    const handleGetHuamnAndHumanInfo = async (
+        playerAddress1: string,
+        playerAddress2: string,
+    ) => {
+        const [tokenId1, tokenId2] = await multiProvider.all([
+            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
+                playerAddress1,
+            ),
+            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
+                playerAddress2,
+            ),
+        ]);
+        const [
+            account1,
+            level1,
+            mtadata1,
+            point1,
+            account2,
+            level2,
+            mtadata2,
+            point2,
+            player1Move,
+            player2Move,
+            [player1WinMileage, player1LoseMileage],
+            [player2WinMileage, player2LoseMileage],
+        ] = await multiProvider.all([
+            multiMercuryBaseContract.ownerOf(tokenId1),
+            multiMercuryBaseContract.aviationLevels(tokenId1),
+            multiMercuryBaseContract.tokenURI(tokenId1),
+            multiMercuryBaseContract.aviationPoints(tokenId1),
+            multiMercuryBaseContract.ownerOf(tokenId2),
+            multiMercuryBaseContract.aviationLevels(tokenId2),
+            multiMercuryBaseContract.tokenURI(tokenId2),
+            multiMercuryBaseContract.aviationPoints(tokenId2),
+            multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId2),
+            multiMercuryBaseContract.estimatePointsToMove(tokenId2, tokenId1),
+            multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId2),
+            multiMercuryBaseContract.estimateMileageToGain(tokenId2, tokenId1),
+        ]);
+
+        const player1Info = {
+            burner: playerAddress1,
+            address: account1,
+            point: point1.toNumber(),
+            level: level1.toNumber(),
+            img: getMetadataImg(mtadata1),
+        };
+        const player2Info = {
+            burner: playerAddress2,
+            address: account2,
+            point: point2.toNumber(),
+            level: level2.toNumber(),
+            img: getMetadataImg(mtadata2),
+        };
+
+        if (player1Info.burner === tacToeBurner.account.address) {
+            onChangePoint(player1Move.toNumber(), player2Move.toNumber());
+            onChangeMileage(
+                player1WinMileage.toNumber(),
+                player1LoseMileage.toNumber(),
+            );
+            onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
+            onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
+        } else {
+            onChangeMileage(
+                player2WinMileage.toNumber(),
+                player2LoseMileage.toNumber(),
+            );
+            onChangePoint(player2Move.toNumber(), player1Move.toNumber());
+            onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
+            onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
+        }
+        onGameType(GameType.HumanWithHuman);
+        onStep(2);
+    };
 
     // activeQueueTimeout
     const handleConfirmMatch = async () => {
@@ -109,6 +219,7 @@ const LevelInfo = ({}) => {
         try {
             await bttFactoryContract("setActiveQueue", [], {
                 signer: tacToeBurner,
+                gasLimit: 200000,
             });
             setLoading(false);
         } catch (e) {
@@ -118,11 +229,89 @@ const LevelInfo = ({}) => {
         }
     };
 
+    const handleGetAllPlayerInfo = async () => {
+        const [playerAddress1, playerAddress2] = await multiProvider.all([
+            multiSkylabBidTacToeGameContract.player1(),
+            multiSkylabBidTacToeGameContract.player2(),
+        ]);
+
+        console.log("playerAddress1", playerAddress1);
+        console.log("playerAddress2", playerAddress2);
+        handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
+    };
+
+    const handleGetGameInfo = async () => {
+        try {
+            let operateAddress = "";
+            if (istest) {
+                const testflightSinger = getTestflightSigner(realChainId);
+                const { sCWAddress } = await getSCWallet(
+                    testflightSinger.privateKey,
+                );
+                operateAddress = sCWAddress;
+            } else {
+                operateAddress = tacToeBurner.account.address;
+            }
+
+            const [bidTacToeGameAddress, defaultGameQueue, opPlayer] =
+                await multiProvider.all([
+                    multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                        operateAddress,
+                    ),
+                    multiSkylabBidTacToeFactoryContract.defaultGameQueue(
+                        avaitionAddress,
+                    ),
+                    multiSkylabBidTacToeFactoryContract.playerToOpponent(
+                        operateAddress,
+                    ),
+                ]);
+
+            console.log(bidTacToeGameAddress, "bidTacToeGameAddress");
+            console.log(defaultGameQueue, "defaultGameQueue");
+            console.log(opPlayer, "opPlayer");
+            if (bidTacToeGameAddress === ZERO_DATA) {
+                if (
+                    operateAddress !== defaultGameQueue &&
+                    opPlayer === ZERO_DATA
+                ) {
+                    navigate("/btt");
+                    return;
+                }
+
+                if (opPlayer === ZERO_DATA) {
+                    onStep(0);
+                    return;
+                }
+
+                const [myConfirmTimeout, opConfirmTimeout] =
+                    await multiProvider.all([
+                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
+                            operateAddress,
+                        ),
+                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
+                            opPlayer,
+                        ),
+                    ]);
+
+                setMyConfirmTimeout(myConfirmTimeout.toNumber() * 1000);
+                setOpConfirmTimeout(opConfirmTimeout.toNumber() * 1000);
+            } else {
+                setBidTacToeGameAddress(bidTacToeGameAddress);
+                setMyConfirmTimeout(0);
+                setOpConfirmTimeout(0);
+            }
+        } catch (e: any) {
+            console.log(e);
+            navigate("/btt");
+        }
+    };
+
     // activeQueueTimeout
     const handleActiveQueueTimeout = async () => {
         try {
             await bttFactoryContract("activeQueueTimeout", [], {
                 signer: tacToeBurner,
+                gasLimit: 200000,
             });
         } catch (e) {
             console.log(e);
@@ -157,18 +346,17 @@ const LevelInfo = ({}) => {
             start(Math.floor((opConfirmTimeout - now) / 1000) * 1000);
         }
 
-        console.log(opConfirmTimeout, "opConfirmTimeout");
         let timer: any = null;
         if (opConfirmTimeout < now && myConfirmTimeout < now) {
             handleActiveQueueTimeout();
         } else {
-            const delOp = opConfirmTimeout - now;
-            const delMy = myConfirmTimeout - now;
+            const delOp = opConfirmTimeout - now + 3000;
+            const delMy = myConfirmTimeout - now + 3000;
             timer = setTimeout(
                 () => {
                     handleActiveQueueTimeout();
                 },
-                delOp ? delOp : delMy,
+                delOp > delMy ? delOp : delMy,
             );
         }
 
@@ -177,6 +365,41 @@ const LevelInfo = ({}) => {
         };
     }, [myConfirmTimeout, opConfirmTimeout]);
 
+    useEffect(() => {
+        if (
+            !blockNumber ||
+            !tokenId ||
+            !tacToeBurner ||
+            !multiSkylabBidTacToeFactoryContract ||
+            !multiProvider
+        ) {
+            return;
+        }
+        handleGetGameInfo();
+    }, [
+        multiProvider,
+        blockNumber,
+        tokenId,
+        tacToeBurner,
+        multiMercuryBaseContract,
+    ]);
+
+    useEffect(() => {
+        if (
+            !multiProvider ||
+            !multiMercuryBaseContract ||
+            !multiSkylabBidTacToeGameContract ||
+            !multiSkylabBidTacToeFactoryContract
+        )
+            return;
+
+        handleGetAllPlayerInfo();
+    }, [
+        multiProvider,
+        multiMercuryBaseContract,
+        multiSkylabBidTacToeGameContract,
+        multiSkylabBidTacToeFactoryContract,
+    ]);
     return (
         <Box
             sx={{

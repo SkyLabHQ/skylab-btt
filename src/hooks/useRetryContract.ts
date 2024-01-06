@@ -206,7 +206,7 @@ export const getBurnerRetryContract = ({
 
                         console.log(receipt, "receipt");
 
-                        if (receipt.status === 0) {
+                        if (receipt.status !== "success") {
                             const reason = await getReason(provider, hash);
 
                             if (reason) {
@@ -375,7 +375,10 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                 address,
                             );
 
-                            console.log(Number(gas), "gasLimit");
+                            console.log(gasLimit);
+                            console.log(Number(gas));
+
+                            console.log(gasLimit > Number(gas));
                             const hash = await newSigner.writeContract({
                                 address: contract.address,
                                 abi: contract.abi,
@@ -395,7 +398,7 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
 
                             console.log(receipt, "receipt");
 
-                            if (receipt.status === 0) {
+                            if (receipt.status !== "success") {
                                 const reason = await getReason(provider, hash);
 
                                 if (reason) {

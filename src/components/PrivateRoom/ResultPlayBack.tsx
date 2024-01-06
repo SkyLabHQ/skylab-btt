@@ -287,14 +287,14 @@ const ResultPlayBack = () => {
         }/#/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${bidTacToeGameAddress}&show=true&round=${currentRound}&address=${shortenAddressWithout0x(
             myInfo.address,
         )}`;
-        const text = `Bid Tac Toe is a fully on-chain cryptoeconomic tic tac toe game, on @0xPolygon . You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
+        const text = `Bid Tac Toe is a fully on-chain cryptoeconomic game, on @base. You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
 
 Watch my replay here!
 
 ${url}  
         
 @skylabHQ 
-https://app.projmercury.io/#/`;
+https://app.projmercury.io/#/btt`;
 
         window.open(
             `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,

@@ -88,6 +88,7 @@ const UserProfile = ({
                                 sx={{
                                     cursor: "pointer",
                                     marginTop: "-1.5625vw",
+                                    width: "1.6667vw",
                                 }}
                             ></Image>
                         </PopoverTrigger>

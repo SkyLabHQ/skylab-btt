@@ -103,6 +103,8 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
         handleGetGas,
     } = useGameContext();
 
+    console.log(bidTacToeGameAddress, "bidTacToeGameAddress");
+
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const { blockNumber } = useBlockNumber();
     const [revealing, setRevealing] = useState<boolean>(false);
@@ -329,7 +331,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
             );
 
             await tacToeGameRetryWrite("commitBid", [hash], {
-                gasLimit: gameType === GameType.HumanWithBot ? 500000 : 100000,
+                gasLimit: gameType === GameType.HumanWithBot ? 500000 : 300000,
                 usePaymaster: istest,
             });
             handleGetGameInfo();

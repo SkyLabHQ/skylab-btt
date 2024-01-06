@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Image, Text, useDisclosure } from "@chakra-ui/react";
 import { Info, UserMarkType, useGameContext, GameType } from "@/pages/TacToe";
 import { motion } from "framer-motion";
@@ -12,11 +12,15 @@ import {
 } from "@/hooks/useMultiContract";
 import ToolBar from "./Toolbar";
 import { PilotInfo } from "@/hooks/usePilotInfo";
+import { useBlockNumber } from "@/contexts/BlockNumber";
+
 import { botAddress } from "@/hooks/useContract";
 import { GrayButton } from "../Button/Index";
 import QuitModal from "./QuitModal";
-import { useAccount } from "wagmi";
-import { useTacToeSigner } from "@/hooks/useSigner";
+import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
+import { getSCWallet } from "@/hooks/useSCWallet";
+import { ZERO_DATA } from "@/skyConstants";
+import { useNavigate } from "react-router-dom";
 
 export const PlaneImg = ({
     detail,
@@ -90,7 +94,6 @@ export const PlaneImg = ({
 };
 
 const StopMatch = ({ onClick }: { onClick: () => void }) => {
-    const [checked, setChecked] = React.useState(false);
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -188,7 +191,8 @@ export const MatchPage = ({
     onChangeInfo: (position: "my" | "op", info: Info) => void;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { address } = useAccount();
+    const navigate = useNavigate();
+    const { blockNumber } = useBlockNumber();
     const {
         realChainId,
         myInfo,
@@ -197,10 +201,13 @@ export const MatchPage = ({
         myActivePilot,
         opActivePilot,
         tokenId,
+        istest,
+        avaitionAddress,
+        onStep,
+        setBidTacToeGameAddress,
     } = useGameContext();
-    const ethcallProvider = useMultiProvider(realChainId);
+    const multiProvider = useMultiProvider(realChainId);
     const [tacToeBurner] = useTacToeSigner(tokenId);
-
     const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
@@ -211,7 +218,7 @@ export const MatchPage = ({
         playerAddress1: string,
         playerAddress2: string,
     ) => {
-        const [tokenId1] = await ethcallProvider.all([
+        const [tokenId1] = await multiProvider.all([
             multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
                 playerAddress1,
             ),
@@ -223,7 +230,7 @@ export const MatchPage = ({
             point1,
             player1Move,
             [player1WinMileage, player1LoseMileage],
-        ] = await ethcallProvider.all([
+        ] = await multiProvider.all([
             multiMercuryBaseContract.ownerOf(tokenId1),
             multiMercuryBaseContract.aviationLevels(tokenId1),
             multiMercuryBaseContract.tokenURI(tokenId1),
@@ -260,7 +267,7 @@ export const MatchPage = ({
         playerAddress1: string,
         playerAddress2: string,
     ) => {
-        const [tokenId1, tokenId2] = await ethcallProvider.all([
+        const [tokenId1, tokenId2] = await multiProvider.all([
             multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
                 playerAddress1,
             ),
@@ -281,7 +288,7 @@ export const MatchPage = ({
             player2Move,
             [player1WinMileage, player1LoseMileage],
             [player2WinMileage, player2LoseMileage],
-        ] = await ethcallProvider.all([
+        ] = await multiProvider.all([
             multiMercuryBaseContract.ownerOf(tokenId1),
             multiMercuryBaseContract.aviationLevels(tokenId1),
             multiMercuryBaseContract.tokenURI(tokenId1),
@@ -311,7 +318,7 @@ export const MatchPage = ({
             img: getMetadataImg(mtadata2),
         };
 
-        if (player1Info.address === tacToeBurner.account.address) {
+        if (player1Info.burner === tacToeBurner.account.address) {
             onChangePoint(player1Move.toNumber(), player2Move.toNumber());
             onChangeMileage(
                 player1WinMileage.toNumber(),
@@ -329,10 +336,11 @@ export const MatchPage = ({
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         }
         onGameType(GameType.HumanWithHuman);
+        onStep(1);
     };
 
     const handleGetAllPlayerInfo = async () => {
-        const [playerAddress1, playerAddress2] = await ethcallProvider.all([
+        const [playerAddress1, playerAddress2] = await multiProvider.all([
             multiSkylabBidTacToeGameContract.player1(),
             multiSkylabBidTacToeGameContract.player2(),
         ]);
@@ -347,9 +355,123 @@ export const MatchPage = ({
         }
     };
 
+    // get my and op info
+    const handleGetGameInfo = async () => {
+        try {
+            let operateAddress = "";
+            if (istest) {
+                const testflightSinger = getTestflightSigner(realChainId);
+                const { sCWAddress } = await getSCWallet(
+                    testflightSinger.privateKey,
+                );
+                operateAddress = sCWAddress;
+            } else {
+                operateAddress = tacToeBurner.account.address;
+            }
+
+            const [bidTacToeGameAddress, defaultGameQueue, opPlayer] =
+                await multiProvider.all([
+                    multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                        operateAddress,
+                    ),
+                    multiSkylabBidTacToeFactoryContract.defaultGameQueue(
+                        avaitionAddress,
+                    ),
+                    multiSkylabBidTacToeFactoryContract.playerToOpponent(
+                        operateAddress,
+                    ),
+                ]);
+
+            if (bidTacToeGameAddress === ZERO_DATA) {
+                if (
+                    operateAddress !== defaultGameQueue &&
+                    opPlayer === ZERO_DATA
+                ) {
+                    navigate("/btt");
+                    return;
+                }
+
+                if (opPlayer === ZERO_DATA) {
+                    const [account, level, mtadata, point] =
+                        await multiProvider.all([
+                            multiMercuryBaseContract.ownerOf(tokenId),
+                            multiMercuryBaseContract.aviationLevels(tokenId),
+                            multiMercuryBaseContract.tokenURI(tokenId),
+                            multiMercuryBaseContract.aviationPoints(tokenId),
+                        ]);
+                    onChangeInfo("my", {
+                        burner: operateAddress,
+                        address: account,
+                        level: level.toNumber(),
+                        point: point.toNumber(),
+                        img: getMetadataImg(mtadata),
+                        mark: null,
+                    });
+                    onChangeInfo("op", {
+                        burner: "",
+                        address: "",
+                        level: 0,
+                        point: 0,
+                        img: "",
+                        mark: null,
+                    });
+                } else {
+                    const [opTokenId] = await multiProvider.all([
+                        multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
+                            opPlayer,
+                        ),
+                    ]);
+
+                    const [
+                        account,
+                        level,
+                        mtadata,
+                        point,
+                        opAccount,
+                        opLevel,
+                        opMtadata,
+                        opPoint,
+                    ] = await multiProvider.all([
+                        multiMercuryBaseContract.ownerOf(tokenId),
+                        multiMercuryBaseContract.aviationLevels(tokenId),
+                        multiMercuryBaseContract.tokenURI(tokenId),
+                        multiMercuryBaseContract.aviationPoints(tokenId),
+                        multiMercuryBaseContract.ownerOf(opTokenId),
+                        multiMercuryBaseContract.aviationLevels(opTokenId),
+                        multiMercuryBaseContract.tokenURI(opTokenId),
+                        multiMercuryBaseContract.aviationPoints(opTokenId),
+                    ]);
+
+                    onChangeInfo("my", {
+                        burner: operateAddress,
+                        address: account,
+                        level: level.toNumber(),
+                        point: point.toNumber(),
+                        img: getMetadataImg(mtadata),
+                        mark: null,
+                    });
+                    onChangeInfo("op", {
+                        burner: opPlayer,
+                        address: opAccount,
+                        level: opLevel.toNumber(),
+                        point: opPoint.toNumber(),
+                        img: getMetadataImg(opMtadata),
+                        mark: null,
+                    });
+                    onStep(1);
+                }
+            } else {
+                setBidTacToeGameAddress(bidTacToeGameAddress);
+            }
+        } catch (e: any) {
+            console.log(e);
+            navigate("/btt");
+        }
+    };
+
     useEffect(() => {
         if (
-            !ethcallProvider ||
+            !multiProvider ||
             !multiMercuryBaseContract ||
             !multiSkylabBidTacToeGameContract ||
             !multiSkylabBidTacToeFactoryContract
@@ -358,9 +480,29 @@ export const MatchPage = ({
 
         handleGetAllPlayerInfo();
     }, [
-        ethcallProvider,
+        multiProvider,
         multiMercuryBaseContract,
         multiSkylabBidTacToeGameContract,
+        multiSkylabBidTacToeFactoryContract,
+    ]);
+
+    useEffect(() => {
+        if (
+            !blockNumber ||
+            !tokenId ||
+            !tacToeBurner ||
+            !multiSkylabBidTacToeFactoryContract ||
+            !multiProvider
+        ) {
+            return;
+        }
+        handleGetGameInfo();
+    }, [
+        multiProvider,
+        blockNumber,
+        tokenId,
+        tacToeBurner,
+        multiMercuryBaseContract,
         multiSkylabBidTacToeFactoryContract,
     ]);
 
