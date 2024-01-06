@@ -49,7 +49,7 @@ const Timer = ({
             setAutoCommitTimeoutTime(timeLeft);
 
             if (timeLeft === 0) {
-                // autoBidRef.current();
+                autoBidRef.current();
             }
         };
 
@@ -112,11 +112,11 @@ const Timer = ({
             const timeLeft = event.data;
 
             if (timeLeft === 0) {
-                // handleCallTimeOut();
+                handleCallTimeOut();
             }
         };
         if (autoCallTimeoutTime === 0) {
-            // handleCallTimeOut();
+            handleCallTimeOut();
         } else {
             commitWorkerRef.postMessage({
                 action: "start",
