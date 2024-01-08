@@ -386,7 +386,7 @@ const RightNav = ({
                 >
                     <Image
                         onClick={() => {
-                            window.open("/#/?part=primitives", "_blank");
+                            window.open("/?part=primitives", "_blank");
                         }}
                         src={ProMerTab}
                     ></Image>

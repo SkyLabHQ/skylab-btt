@@ -94,7 +94,7 @@ const PrivateLobbyPlayBack = ({
                             color: "rgb(172,172,172)",
                         }}
                     >
-                        https://app.projmercury.io/#/
+                        https://app.projmercury.io/
                     </Text>
                 </Box>
             </Box>

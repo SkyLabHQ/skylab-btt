@@ -27,7 +27,7 @@ const Activities = (): ReactElement => {
 
     const handleNextStep = (nextStep?: number | string) => {
         setStep(nextStep);
-        window.history.pushState({}, "", `/#/?step=${nextStep}`);
+        window.history.pushState({}, "", `?step=${nextStep}`);
     };
 
     const handleGetRound = async () => {

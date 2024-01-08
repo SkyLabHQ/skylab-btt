@@ -184,11 +184,16 @@ export const MatchPage = ({
     onChangeInfo,
     onChangeMileage,
     onChangePoint,
+    onSetConfirmTimeout,
 }: {
     onGameType: (type: GameType) => void;
     onChangeMileage: (winMileage: number, loseMileage: number) => void;
     onChangePoint: (winPoint: number, losePoint: number) => void;
     onChangeInfo: (position: "my" | "op", info: Info) => void;
+    onSetConfirmTimeout: (
+        myConfirmTimeout: number,
+        opConfirmTimeout: number,
+    ) => void;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
@@ -208,6 +213,7 @@ export const MatchPage = ({
     } = useGameContext();
     const multiProvider = useMultiProvider(realChainId);
     const [tacToeBurner] = useTacToeSigner(tokenId);
+
     const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
@@ -261,6 +267,7 @@ export const MatchPage = ({
             player1LoseMileage.toNumber(),
         );
         onGameType(GameType.HumanWithBot);
+        onStep(2);
     };
 
     const handleGetHuamnAndHumanInfo = async (
@@ -297,12 +304,11 @@ export const MatchPage = ({
             multiMercuryBaseContract.aviationLevels(tokenId2),
             multiMercuryBaseContract.tokenURI(tokenId2),
             multiMercuryBaseContract.aviationPoints(tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId2, tokenId1),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId2),
+            multiMercuryBaseContract.estimatePointsToMove(tokenId, tokenId2),
+            multiMercuryBaseContract.estimatePointsToMove(tokenId2, tokenId),
+            multiMercuryBaseContract.estimateMileageToGain(tokenId, tokenId2),
             multiMercuryBaseContract.estimateMileageToGain(tokenId2, tokenId1),
         ]);
-
         const player1Info = {
             burner: playerAddress1,
             address: account1,
@@ -336,7 +342,7 @@ export const MatchPage = ({
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         }
         onGameType(GameType.HumanWithHuman);
-        onStep(1);
+        onStep(2);
     };
 
     const handleGetAllPlayerInfo = async () => {
@@ -431,6 +437,11 @@ export const MatchPage = ({
                         opLevel,
                         opMtadata,
                         opPoint,
+                        myWinMove,
+                        myLoseMove,
+                        [myWinMileage, myLoseMileage],
+                        myConfirmTimeout,
+                        opConfirmTimeout,
                     ] = await multiProvider.all([
                         multiMercuryBaseContract.ownerOf(tokenId),
                         multiMercuryBaseContract.aviationLevels(tokenId),
@@ -440,6 +451,24 @@ export const MatchPage = ({
                         multiMercuryBaseContract.aviationLevels(opTokenId),
                         multiMercuryBaseContract.tokenURI(opTokenId),
                         multiMercuryBaseContract.aviationPoints(opTokenId),
+                        multiMercuryBaseContract.estimatePointsToMove(
+                            tokenId,
+                            opTokenId,
+                        ),
+                        multiMercuryBaseContract.estimatePointsToMove(
+                            opTokenId,
+                            tokenId,
+                        ),
+                        multiMercuryBaseContract.estimateMileageToGain(
+                            tokenId,
+                            opTokenId,
+                        ),
+                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
+                            operateAddress,
+                        ),
+                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
+                            opPlayer,
+                        ),
                     ]);
 
                     onChangeInfo("my", {
@@ -458,6 +487,15 @@ export const MatchPage = ({
                         img: getMetadataImg(opMtadata),
                         mark: null,
                     });
+                    onSetConfirmTimeout(
+                        myConfirmTimeout.toNumber() * 1000,
+                        opConfirmTimeout.toNumber() * 1000,
+                    );
+                    onChangePoint(myWinMove.toNumber(), myLoseMove.toNumber());
+                    onChangeMileage(
+                        myWinMileage.toNumber(),
+                        myLoseMileage.toNumber(),
+                    );
                     onStep(1);
                 }
             } else {

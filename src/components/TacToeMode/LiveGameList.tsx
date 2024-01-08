@@ -7,7 +7,7 @@ import { useChainId } from "wagmi";
 export const LiveGame = ({ list }: { list: onGoingGame[] }) => {
     const chainId = useChainId();
     const handleWatch = (gameAddress: string) => {
-        const url = `${window.location.origin}/#/btt/live?gameAddress=${gameAddress}&chainId=${chainId}`;
+        const url = `${window.location.origin}/btt/live?gameAddress=${gameAddress}&chainId=${chainId}`;
         window.open(url, "_blank");
     };
     return (

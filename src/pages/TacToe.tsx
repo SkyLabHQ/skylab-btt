@@ -167,7 +167,8 @@ const TacToe = () => {
     const avaitionAddress = istest
         ? skylabTestFlightAddress[TESTFLIGHT_CHAINID]
         : skylabTournamentAddress[realChainId];
-
+    const [myConfirmTimeout, setMyConfirmTimeout] = useState(-1);
+    const [opConfirmTimeout, setOpConfirmTimeout] = useState(-1);
     const [myInfo, setMyInfo] = useState<Info>({
         burner: "",
         address: "",
@@ -251,29 +252,7 @@ const TacToe = () => {
         return () => setIsKnobVisible(true);
     }, []);
 
-    // useEffect(() => {
-    //     const params = qs.parse(search) as any;
-    //     if (tokenId === 0) {
-    //         setTokenId(params.tokenId);
-    //     } else if (!params.tokenId) {
-    //         navigate(`/`);
-    //     } else if (tokenId != params.tokenId) {
-    //         navigate(`/`);
-    //     }
-    // }, [search, tokenId]);
-
-    useEffect(() => {
-        if (istest) {
-            return;
-        }
-
-        // if (myInfo.address) {
-        //     if (myInfo.address !== account) {
-        //         navigate("/");
-        //         return;
-        //     }
-        // }
-    }, [myInfo, account]);
+    console.log(opConfirmTimeout, "opConfirmTimeout");
 
     return (
         <>
@@ -310,6 +289,13 @@ const TacToe = () => {
                     <Box>
                         {step === 0 && (
                             <Match
+                                onSetConfirmTimeout={(
+                                    myConfirmTimeout: number,
+                                    opConfirmTimeout: number,
+                                ) => {
+                                    setMyConfirmTimeout(myConfirmTimeout);
+                                    setOpConfirmTimeout(opConfirmTimeout);
+                                }}
                                 onGameType={(type: GameType) => {
                                     setGameType(type);
                                 }}
@@ -339,6 +325,15 @@ const TacToe = () => {
                         )}
                         {step === 1 && (
                             <LevelInfo
+                                myConfirmTimeout={myConfirmTimeout}
+                                opConfirmTimeout={opConfirmTimeout}
+                                onSetConfirmTimeout={(
+                                    myConfirmTimeout: number,
+                                    opConfirmTimeout: number,
+                                ) => {
+                                    setMyConfirmTimeout(myConfirmTimeout);
+                                    setOpConfirmTimeout(opConfirmTimeout);
+                                }}
                                 onGameType={(type: GameType) => {
                                     setGameType(type);
                                 }}
@@ -351,18 +346,6 @@ const TacToe = () => {
                                         setOpInfo(info);
                                         return;
                                     }
-                                }}
-                                onChangeMileage={(winMileage, loseMileage) => {
-                                    setMileages({
-                                        winMileage,
-                                        loseMileage,
-                                    });
-                                }}
-                                onChangePoint={(winPoint, losePoint) => {
-                                    setPoints({
-                                        winPoint,
-                                        losePoint,
-                                    });
                                 }}
                             ></LevelInfo>
                         )}

@@ -56,7 +56,7 @@ const QuitModal = ({
                 navigate(url);
             } else {
                 await tacToeGameRetryWrite("surrender", [], {
-                    gasLimit: 500000,
+                    gasLimit: 800000,
                     usePaymaster: istest,
                 });
             }

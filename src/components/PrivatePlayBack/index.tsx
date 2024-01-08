@@ -469,7 +469,7 @@ const PrivatePlayBackPage = () => {
     const handleShare = () => {
         const url = `${
             window.location.origin
-        }/#/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${gameAddress}&show=true&round=${currentRound}&burner=${shortenAddressWithout0x(
+        }/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${gameAddress}&show=true&round=${currentRound}&burner=${shortenAddressWithout0x(
             myInfo.address,
         )}`;
         const text = `Bid Tac Toe is a fully on-chain cryptoeconomic game, on @base. You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
@@ -479,7 +479,7 @@ Watch my replay here!
 ${url}  
         
 @skylabHQ 
-https://app.projmercury.io/#/btt`;
+https://app.projmercury.io/btt`;
 
         window.open(
             `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,

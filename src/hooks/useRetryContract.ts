@@ -375,7 +375,6 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                 address,
                             );
 
-                            console.log(gasLimit, gas, "gasLimit");
                             const hash = await newSigner.writeContract({
                                 address: contract.address,
                                 abi: contract.abi,

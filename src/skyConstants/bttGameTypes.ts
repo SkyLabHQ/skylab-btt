@@ -173,5 +173,5 @@ ${gridString}
 ${border}
 ${mark}${mark}${emojiList.join("")}${mark}${mark}
 @skylabHQ
-https://app.projmercury.io/#/btt`;
+https://app.projmercury.io/btt`;
 };
