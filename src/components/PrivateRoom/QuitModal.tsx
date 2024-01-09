@@ -52,7 +52,7 @@ const QuitModal = ({
                         signer: privateLobbySigner,
                     },
                 );
-                navigate(`/btt/privateLobby?lobbyAddress=${lobbyAddress}`);
+                navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
             } else {
                 await tacToeGameRetryWrite("surrender", [], {
                     usePaymaster: true,

@@ -84,6 +84,7 @@ const Chat = ({
             onLoading(type, MessageStatus.Sending, index);
             await tacToeGameRetryWrite(type, [index], {
                 usePaymaster: istest,
+                gasLimit: 200000,
             });
             onLoading(type, MessageStatus.Sent, index);
 

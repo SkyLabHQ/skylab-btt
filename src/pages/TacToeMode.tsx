@@ -1,5 +1,11 @@
 import { useCheckBurnerBalanceAndApprove } from "@/hooks/useBurnerWallet";
-import { Box, Text, useBoolean, useDisclosure } from "@chakra-ui/react";
+import {
+    Box,
+    Text,
+    useBoolean,
+    useDisclosure,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -84,6 +90,7 @@ const TacToeMode = () => {
     } = useDisclosure();
     const navigate = useNavigate();
     const { address, isConnected } = useAccount();
+    const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
 
     const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
@@ -333,12 +340,12 @@ const TacToeMode = () => {
         }
 
         try {
-            // if (planeList[currentPlaneIndex].state) {
-            //     navigate(
-            //         `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
-            //     );
-            //     return;
-            // }
+            if (planeList[currentPlaneIndex].state) {
+                navigate(
+                    `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
+                );
+                return;
+            }
 
             const tokenId = planeList[currentPlaneIndex].tokenId;
             if (loading) return;
@@ -628,16 +635,17 @@ const TacToeMode = () => {
                             left: "6.25vw",
                         }}
                     >
-                        {planeList.length === 0 ? (
-                            <NoPlaneContent></NoPlaneContent>
-                        ) : (
-                            <PlaneList
-                                planeList={planeList}
-                                onPlaneChange={(index) => {
-                                    setCurrentPlaneIndex(index);
-                                }}
-                            ></PlaneList>
-                        )}
+                        {address &&
+                            (planeList.length === 0 ? (
+                                <NoPlaneContent></NoPlaneContent>
+                            ) : (
+                                <PlaneList
+                                    planeList={planeList}
+                                    onPlaneChange={(index) => {
+                                        setCurrentPlaneIndex(index);
+                                    }}
+                                ></PlaneList>
+                            ))}
 
                         {address ? (
                             <RequestNextButton

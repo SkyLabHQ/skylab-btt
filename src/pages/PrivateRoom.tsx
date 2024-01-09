@@ -88,7 +88,7 @@ const PrivateRoom = () => {
         ]);
 
         if (playerAddress1 !== sCWAddress && playerAddress2 !== sCWAddress) {
-            navigate(`/btt/privateLobby?lobbyAddress=${params.lobbyAddress}`);
+            navigate(`/btt/lobby?lobbyAddress=${params.lobbyAddress}`);
             return;
         }
 
