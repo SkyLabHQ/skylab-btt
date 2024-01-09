@@ -1,8 +1,7 @@
-import { Box, Button, Text, Image, Flex } from "@chakra-ui/react";
+import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import HumanPlane from "./assets/human-plane.png";
 import RobotIcon from "./assets/robot.png";
-import SetIcon from "./assets/set.svg";
 import GrayHumanPlane from "./assets/gray-human-plane.png";
 import { GrayButton } from "../Button/Index";
 import PrivateLobbyIcon from "./assets/private-lobby.svg";
@@ -18,20 +17,37 @@ export const PlayButtonGroup = ({
     onPlayWithBot: () => void;
     onPlayTestLobby: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     return (
         <Box
             sx={{
                 display: "flex",
                 flexDirection: "column",
                 fontFamily: "Quantico",
+                "& button": {
+                    width: "100% !important",
+                    height: `${isPc ? "4.7917vw" : "70px"} !important`,
+                    justifyContent: "flex-end",
+                    borderRadius: "18px !important",
+                },
+                "& .text-wrapper": {
+                    width: `${isPc ? "15.625vw" : "180px"} !important`,
+                },
+                "& .play-button-text": {
+                    fontSize: isPc ? "1.6667vw" : "20px",
+                    fontWeight: "400",
+                },
+                "& .play-button-text2": {
+                    fontSize: isPc ? "1.0417vw" : "12px",
+                    fontWeight: "400",
+                },
             }}
         >
             <GrayButton
                 onClick={onPlayTournament}
                 sx={{
                     paddingLeft: "5.2083vw !important",
-                    width: "19.6875vw !important",
-                    height: "4.7917vw !important",
                     opacity: tournamentDisabled ? 0.5 : 1,
                 }}
                 variant="outline"
@@ -39,7 +55,7 @@ export const PlayButtonGroup = ({
                 <Image
                     src={tournamentDisabled ? GrayHumanPlane : HumanPlane}
                     sx={{
-                        width: "6.25vw",
+                        width: isPc ? "6.25vw" : "80px",
                         position: "absolute",
                         left: "0.2604vw",
                         top: "50%",
@@ -51,24 +67,23 @@ export const PlayButtonGroup = ({
                         textAlign: "center",
                         width: "100%",
                     }}
+                    className="text-wrapper"
                 >
                     <Text
+                        className="play-button-text"
                         sx={{
                             color: tournamentDisabled ? "#bcbbbe" : "#fff",
-                            fontSize: "1.6667vw",
-                            fontWeight: "400",
                         }}
                     >
                         Play
                     </Text>
                     <Text
                         sx={{
-                            fontSize: "1.25vw",
                             color: tournamentDisabled
                                 ? "#bcbbbe"
                                 : "rgba(215, 200, 120, 1)",
-                            fontWeight: "400",
                         }}
+                        className="play-button-text2"
                     >
                         Tournament
                     </Text>
@@ -77,9 +92,6 @@ export const PlayButtonGroup = ({
             <GrayButton
                 onClick={onPlayWithBot}
                 sx={{
-                    paddingLeft: "7.2917vw !important",
-                    width: "19.6875vw !important",
-                    height: "4.7917vw !important",
                     marginTop: "1.0417vw",
                 }}
                 variant="outline"
@@ -88,51 +100,27 @@ export const PlayButtonGroup = ({
                 <Image
                     src={RobotIcon}
                     sx={{
-                        width: "2.2917vw",
+                        width: isPc ? "2.2917vw" : "40px",
                         position: "absolute",
                         left: "1.0417vw",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
                 ></Image>
-                <Image
-                    src={SetIcon}
-                    sx={{
-                        width: "3.3333vw",
-                        position: "absolute",
-                        right: "-1.0417vw",
-                        top: "-1.5625vw",
-                    }}
-                ></Image>
+
                 <Box
                     sx={{
                         textAlign: "center",
                     }}
+                    className="text-wrapper"
                 >
-                    <Text
-                        sx={{
-                            fontSize: "1.6667vw",
-                            fontWeight: "400",
-                        }}
-                    >
-                        Quick Start
-                    </Text>
-                    <Text
-                        sx={{
-                            fontSize: "1.0417vw",
-                            fontWeight: "400",
-                        }}
-                    >
-                        Against Bot
-                    </Text>
+                    <Text className="play-button-text">Quick Start</Text>
+                    <Text className="play-button-text2">Against Bot</Text>
                 </Box>
             </GrayButton>
             <GrayButton
                 onClick={onPlayTestLobby}
                 sx={{
-                    paddingLeft: "4.1667vw !important",
-                    width: "19.6875vw !important",
-                    height: "4.7917vw !important",
                     marginTop: "1.0417vw",
                 }}
                 variant="outline"
@@ -140,27 +128,15 @@ export const PlayButtonGroup = ({
                 <Image
                     src={PrivateLobbyIcon}
                     sx={{
-                        width: "4.1667vw",
+                        width: isPc ? "4.1667vw" : "60px",
                         position: "absolute",
                         left: "0.2083vw",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
                 ></Image>
-                <Box
-                    sx={{
-                        textAlign: "center",
-                        width: "100%",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: "1.6667vw",
-                            fontWeight: "400",
-                        }}
-                    >
-                        Private Lobby
-                    </Text>
+                <Box className="text-wrapper">
+                    <Text className="play-button-text">Private Lobby</Text>
                 </Box>
             </GrayButton>
         </Box>

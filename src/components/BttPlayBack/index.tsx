@@ -17,13 +17,17 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
-import { GameState, getWinState, winPatterns } from "../TacToe";
 import Loading from "../Loading";
 import { shortenAddressWithout0x } from "@/utils";
 import ButtonGroup from "./ButtonGroup";
 import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "./BttPlayBackContent";
 import { botAddress } from "@/hooks/useContract";
+import {
+    GameState,
+    getWinState,
+    winPatterns,
+} from "@/skyConstants/bttGameTypes";
 
 const StartJourney = () => {
     const navigate = useNavigate();

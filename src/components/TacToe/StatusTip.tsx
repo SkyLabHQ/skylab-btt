@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
-import { GameState } from ".";
+import { GameState } from "@/skyConstants/bttGameTypes";
 
 const StatusTip = ({
     loading,

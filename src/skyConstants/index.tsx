@@ -13,41 +13,25 @@ export const PolygonIcon = createIcon({
 });
 
 export const GlobalStyles = css`
+    * {
+        box-sizing: border-box;
+    }
+    html {
+        height: 100%;
+    }
     body {
         margin: 0;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background: white;
         background: black;
+        height: 100%;
     }
-
-    a:active,
-    a:focus {
-        box-shadow: none !important;
+    #root {
+        height: 100%;
     }
-    a.underline {
-        display: block;
-        position: relative;
-        overflow: hidden;
-    }
-    a.underline:hover {
-        text-decoration: none !important;
-    }
-    a.underline:hover::after,
-    a.underline:focus::after {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-    a.underline::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 0.2em;
-        background-color: var(--chakra-colors-blue-500);
-        transition: opacity 600ms, transform 300ms;
-        transform: translate3d(-100%, 0, 0);
+    p {
+        margin: 0;
     }
 `;
 

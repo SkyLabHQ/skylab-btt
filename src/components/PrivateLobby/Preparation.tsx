@@ -1,4 +1,14 @@
-import { Box } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Flex,
+    SimpleGrid,
+    useClipboard,
+    Image,
+    Text,
+    useMediaQuery,
+} from "@chakra-ui/react";
+import FriendIcon from "./assets/friend.svg";
 import React, { useEffect, useState } from "react";
 import Games from "./Games";
 import History from "./History";
@@ -6,6 +16,8 @@ import Leaderboard from "./Leaderboard";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
+import useSkyToast from "@/hooks/useSkyToast";
+import LobbyInfo from "./LobbyInfo";
 const tabs = [
     {
         label: "Games",
@@ -28,25 +40,31 @@ const Tabs = ({
     activeIndex: number;
     onChangeActive: (activeIndex: number) => void;
 }) => {
+    const toast = useSkyToast();
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box sx={{ display: "flex" }}>
+        <SimpleGrid
+            columns={3}
+            spacingX={isPc ? "12px" : "6px"}
+            sx={{
+                width: isPc && "40vw",
+            }}
+        >
             {tabs.map((item, index) => {
                 return (
                     <Box
                         key={index}
                         sx={{
-                            width: "11.875vw",
-                            height: "2.8646vw",
-                            borderRadius: "1.0417vw",
-                            border: "2px solid #FFF",
+                            height: isPc ? "2.8646vw" : "30px",
+                            borderRadius: isPc ? "1.0417vw" : "10px",
+                            border: isPc ? "2px solid #FFF" : "1px solid #FFF",
                             background:
                                 activeIndex === index ? "#000" : "transparent",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                             cursor: "pointer",
-                            marginRight: "0.625vw",
-                            fontSize: "1.25vw",
+                            fontSize: isPc ? "1.25vw" : "12px",
                         }}
                         onClick={() => {
                             onChangeActive(index);
@@ -56,11 +74,14 @@ const Tabs = ({
                     </Box>
                 );
             })}
-        </Box>
+        </SimpleGrid>
     );
 };
 
 const Preparation = () => {
+    const toast = useSkyToast();
+    const { onCopy } = useClipboard(window.location.href ?? "");
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { handleStepChange } = usePrivateLobbyContext();
     const [activeIndex, setActiveIndex] = useState(0);
     const { search } = useLocation();
@@ -76,9 +97,10 @@ const Preparation = () => {
     return (
         <Box
             sx={{
-                width: "71.1458vw",
+                width: isPc && "71.1458vw",
                 margin: "0 auto",
                 paddingTop: "5.2083vw",
+                height: "100%",
             }}
         >
             <Tabs
@@ -87,11 +109,48 @@ const Preparation = () => {
                     setActiveIndex(index);
                 }}
             ></Tabs>
-            <Box>
+            <Box
+                sx={{
+                    height: isPc ? "600px" : "450px",
+                    marginTop: "10px",
+                    border: "1px solid #FFF",
+                    borderRadius: isPc ? "0.625vw" : "10px",
+                    overflow: "hidden",
+                }}
+            >
                 {activeIndex === 0 && <Games></Games>}
                 {activeIndex === 1 && <History></History>}
                 {activeIndex === 2 && <Leaderboard></Leaderboard>}
             </Box>
+            <LobbyInfo></LobbyInfo>
+            {activeIndex === 0 && (
+                <Flex justify={"center"}>
+                    <Button
+                        onClick={() => {
+                            onCopy();
+                            toast("Copy link success");
+                        }}
+                        sx={{
+                            width: isPc ? "12.5vw" : "160px",
+                            height: isPc ? "2.8646vw" : "40px",
+                            borderRadius: isPc ? "0.9375vw" : "8px",
+                            border: "2px solid #FFF",
+                            background: "#303030",
+                            fontSize: isPc ? "1.25vw" : "20px",
+                            marginTop: "3.8542vw",
+                        }}
+                    >
+                        <Image
+                            src={FriendIcon}
+                            sx={{
+                                width: isPc ? "1.7708vw" : "22px",
+                                marginRight: "0.5208vw",
+                            }}
+                        ></Image>
+                        <Text>Invite Friend</Text>
+                    </Button>
+                </Flex>
+            )}
         </Box>
     );
 };

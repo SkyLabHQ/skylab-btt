@@ -1,14 +1,15 @@
 import React from "react";
 import BackIcon from "@/assets/back-arrow.svg";
-import { Flex, Text, Image } from "@chakra-ui/react";
+import { Flex, Image, useMediaQuery } from "@chakra-ui/react";
 
 const Back = ({ onClick }: { onClick?: () => void }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex flexDir={"column"} align={"center"} onClick={onClick}>
             <Image
                 src={BackIcon}
                 sx={{
-                    width: "2.0833vw",
+                    width: isPc ? "2.0833vw" : "32px",
                     cursor: "pointer",
                 }}
             ></Image>

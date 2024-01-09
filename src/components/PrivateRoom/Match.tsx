@@ -1,6 +1,13 @@
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
 import avatars from "@/skyConstants/avatars";
-import { Box, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Flex,
+    Text,
+    useDisclosure,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import Loading from "../Loading";
 import useCountDown from "react-countdown-hook";
@@ -10,10 +17,12 @@ import QuitModal from "./QuitModal";
 
 const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
     const isMy = status === "my";
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 position: "relative",
+                width: isPc ? "8.5417vw" : "96px",
             }}
         >
             {detail?.address ? (
@@ -27,15 +36,16 @@ const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
                 >
                     <Box
                         sx={{
-                            borderRadius: "1.0417vw",
+                            borderRadius: isPc ? "1.0417vw" : "12px",
                             border: `1px solid  ${isMy ? "#fddc2d" : "#fff"}`,
                             background: avatars[detail?.avatar],
-                            width: "8.5417vw",
-                            height: "8.5417vw",
+                            width: isPc ? "8.5417vw" : "76px",
+                            height: isPc ? "8.5417vw" : "76px",
                         }}
                     ></Box>
                     <Text
                         sx={{
+                            fontSize: isPc ? "0.8333vw" : "12px",
                             marginTop: "0.5208vw",
                         }}
                     >
@@ -43,6 +53,7 @@ const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
                     </Text>
                     <Text
                         sx={{
+                            fontSize: isPc ? "0.8333vw" : "12px",
                             marginTop: "1.3021vw",
                         }}
                     >
@@ -51,13 +62,14 @@ const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
                     </Text>
                 </Flex>
             ) : (
-                <Loading></Loading>
+                <Loading size={"52px"}></Loading>
             )}
         </Box>
     );
 };
 
 const Match = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { search } = useLocation();
@@ -90,14 +102,14 @@ const Match = () => {
 
             <Box
                 sx={{
-                    width: "31.25vw",
+                    width: isPc ? "31.25vw" : "240px",
                 }}
             >
                 <Flex align={"center"} justify={"space-between"} w={"100%"}>
                     <UserInfo detail={myInfo} status="my"></UserInfo>
                     <Text
                         sx={{
-                            fontSize: "2.5vw",
+                            fontSize: isPc ? "2.5vw" : "20px",
                         }}
                     >
                         VS
@@ -116,7 +128,7 @@ const Match = () => {
                         <Box>
                             <Text
                                 sx={{
-                                    fontSize: "1.25vw",
+                                    fontSize: isPc ? "1.25vw" : "12px",
                                     textAlign: "center",
                                 }}
                             >
@@ -124,8 +136,8 @@ const Match = () => {
                             </Text>
                             <Box
                                 sx={{
-                                    width: "21.875vw",
-                                    height: "0.2083vw",
+                                    width: isPc ? "21.875vw" : "184px",
+                                    height: isPc ? "0.2083vw" : "3px",
                                     display: "flex",
                                     justifyContent: "flex-end",
                                     background: "#616161",
@@ -136,7 +148,7 @@ const Match = () => {
                                     sx={{
                                         width: (timeLeft / 5000) * 100 + "%",
                                         transition: "width 0.5s",
-                                        height: "0.2083vw",
+                                        height: isPc ? "0.2083vw" : "3px",
                                         background: "#BCBBBE",
                                     }}
                                 ></Box>
@@ -146,12 +158,12 @@ const Match = () => {
                         <Button
                             onClick={handleWithdrawFromQueue}
                             sx={{
-                                width: "12.5vw",
-                                height: "2.8646vw",
-                                borderRadius: "0.9375vw",
+                                width: isPc ? "12.5vw" : "160px",
+                                height: isPc ? "2.8646vw" : "40px",
+                                borderRadius: isPc ? "0.9375vw" : "12px",
                                 border: "2px solid #FFF",
                                 background: "#303030",
-                                fontSize: "1.25vw",
+                                fontSize: isPc ? "1.25vw" : "20px",
                                 marginTop: "3.8542vw",
                             }}
                         >

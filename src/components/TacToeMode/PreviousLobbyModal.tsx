@@ -8,6 +8,7 @@ import {
     ModalFooter,
     ModalOverlay,
     ModalCloseButton,
+    useMediaQuery,
 } from "@chakra-ui/react";
 
 const PreviousLobbyModal = ({
@@ -21,16 +22,18 @@ const PreviousLobbyModal = ({
     onClose: () => void;
     onConfirm: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
             <ModalContent
                 bg="#383838"
-                border="3px solid #fff"
-                borderRadius="1.0417vw"
+                border={isPc ? "3px solid #fff" : "1px solid #fff"}
+                borderRadius={isPc ? "1.0417vw" : "8px"}
                 sx={{
-                    width: "31.25vw",
-                    maxWidth: "31.25vw",
+                    width: isPc ? "31.25vw" : "350px",
+                    maxWidth: isPc && "31.25vw",
                 }}
             >
                 <ModalCloseButton></ModalCloseButton>
@@ -38,12 +41,11 @@ const PreviousLobbyModal = ({
                     pb="0"
                     pt="1.875vw"
                     sx={{
-                        width: "31.25vw",
                         textAlign: "center",
                     }}
                 >
                     <Text
-                        fontSize="1.25vw"
+                        fontSize={isPc ? "1.25vw" : "20px"}
                         sx={{
                             marginTop: "1.0417vw",
                         }}
@@ -51,7 +53,7 @@ const PreviousLobbyModal = ({
                         You were previously in
                     </Text>
                     <Text
-                        fontSize="1.25vw"
+                        fontSize={isPc ? "1.25vw" : "20px"}
                         sx={{
                             marginTop: "1.0417vw",
                             color: "#FDDC2D",
@@ -60,7 +62,7 @@ const PreviousLobbyModal = ({
                         Lobby {lobbyName}
                     </Text>
                     <Text
-                        fontSize="1.25vw"
+                        fontSize={isPc ? "1.25vw" : "20px"}
                         sx={{
                             marginTop: "1.0417vw",
                         }}
@@ -76,23 +78,23 @@ const PreviousLobbyModal = ({
                 >
                     <Button
                         onClick={onConfirm}
-                        fontSize="1.25vw"
-                        w="10.9375vw"
+                        fontSize={isPc ? "1.25vw" : "20px"}
+                        w={isPc ? "10.9375vw" : "120px"}
                         padding="1.6667vw 0"
-                        borderRadius="1.0417vw"
+                        borderRadius={isPc ? "1.0417vw" : "8px"}
                         fontWeight={400}
-                        height={"3vw"}
+                        height={isPc ? "3vw" : "32px"}
                     >
                         Yes
                     </Button>
                     <Button
                         colorScheme="white"
                         onClick={onClose}
-                        fontSize="1.25vw"
-                        w="10.9375vw"
-                        height={"3vw"}
+                        fontSize={isPc ? "1.25vw" : "20px"}
+                        w={isPc ? "10.9375vw" : "120px"}
+                        height={isPc ? "3vw" : "32px"}
                         padding="1.6667vw 0"
-                        borderRadius="1.0417vw"
+                        borderRadius={isPc ? "1.0417vw" : "8px"}
                         fontWeight={400}
                         variant={"outline"}
                     >

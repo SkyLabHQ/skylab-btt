@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
 import React from "react";
 
-const Loading = ({ size = 100 }: { size?: number }) => {
+const Loading = ({ size = 100 }: { size?: number | string }) => {
+    const ss = typeof size === "string" ? size : `${size}px`;
+
     return (
         <Box
             sx={{
@@ -11,8 +13,8 @@ const Loading = ({ size = 100 }: { size?: number }) => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                height: `${size}px`,
-                width: `${size}px`,
+                height: ss,
+                width: ss,
                 zIndex: 999,
             }}
         >
@@ -20,7 +22,7 @@ const Loading = ({ size = 100 }: { size?: number }) => {
                 src={LoadingIcon}
                 style={{
                     rotate: 0,
-                    height: `${size}px`,
+                    height: ss,
                 }}
                 transition={{
                     repeat: Infinity,

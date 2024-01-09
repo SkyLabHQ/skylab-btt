@@ -1,5 +1,5 @@
 import { MyBid, OpBid } from "./UserBid";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Board from "@/components/TacToe/Board";
 import Timer from "./Timer";
@@ -32,15 +32,22 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { Message } from "./Message";
+import MLayout from "./MLayout";
+import getNowSecondsTimestamp from "@/utils/nowTime";
+import { SixtySecond, ThirtySecond } from "./BttTimer";
 
 const PlayGame = ({
     onChangeGame,
 }: {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState<boolean>(false);
     const toast = useSkyToast();
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
+    const [bufferTime, setBufferTime] = useState(0);
+    const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
+
     const {
         myGameInfo,
         opGameInfo,
@@ -369,6 +376,15 @@ const PlayGame = ({
         }
     };
 
+    const handleBidAmount = (value: number) => {
+        if (loading) return;
+        if (myGameInfo.gameState !== GameState.WaitingForBid) return;
+
+        if (value < 0) return;
+        if (value > myGameInfo.balance) return;
+        setBidAmount(value);
+    };
+
     const handleGameOver = async () => {
         deleteTokenIdCommited();
         handleStepChange(2);
@@ -408,7 +424,124 @@ const PlayGame = ({
         handleGameOver();
     }, [gameOver, deleteTokenIdCommited]);
 
-    return (
+    useEffect(() => {
+        if (
+            myGameInfo.gameState !== GameState.WaitingForBid ||
+            !bidTacToeGameAddress
+        ) {
+            return;
+        }
+        const commitWorkerRef = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+        const time = myGameInfo.timeout * 1000;
+        const now = getNowSecondsTimestamp();
+        commitWorkerRef.onmessage = async (event) => {
+            const timeLeft = event.data;
+            setAutoCommitTimeoutTime(timeLeft);
+
+            if (timeLeft === 0) {
+                // handleBid();
+            }
+        };
+
+        const remainTime = time - now;
+
+        if (remainTime > ThirtySecond) {
+            const bufferKey = bidTacToeGameAddress;
+            let bufferTime = sessionStorage.getItem(bufferKey) ?? 0;
+            sessionStorage.setItem(bufferKey, "");
+
+            if (Number(bufferTime) === 0 || remainTime > Number(bufferTime)) {
+                if (remainTime > SixtySecond) {
+                    bufferTime = remainTime - SixtySecond;
+                } else if (remainTime > ThirtySecond) {
+                    bufferTime = remainTime - ThirtySecond;
+                } else {
+                    bufferTime = remainTime;
+                }
+            } else {
+                bufferTime = remainTime;
+            }
+
+            setBufferTime(Number(bufferTime));
+            commitWorkerRef.postMessage({
+                action: "start",
+                timeToCount: remainTime - ThirtySecond,
+            });
+        } else {
+            commitWorkerRef.postMessage({
+                action: "stop",
+            });
+        }
+
+        return () => {
+            commitWorkerRef.terminate();
+        };
+    }, [myGameInfo.timeout, myGameInfo.gameState]);
+
+    useEffect(() => {
+        if (
+            !opGameInfo.timeout ||
+            !opGameInfo.gameState ||
+            !myGameInfo.gameState
+        )
+            return;
+        const now = getNowSecondsTimestamp();
+        const autoCallTimeoutTime =
+            opGameInfo.timeout * 1000 - now > 0
+                ? opGameInfo.timeout * 1000 - now
+                : 0;
+
+        const commitWorkerRef = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+
+        commitWorkerRef.onmessage = async (event) => {
+            const timeLeft = event.data;
+
+            if (timeLeft === 0) {
+                // handleCallTimeOut();
+            }
+        };
+        if (autoCallTimeoutTime === 0) {
+            // handleCallTimeOut();
+        } else {
+            commitWorkerRef.postMessage({
+                action: "start",
+                timeToCount: autoCallTimeoutTime,
+            });
+        }
+
+        return () => {
+            commitWorkerRef.terminate();
+        };
+    }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
+
+    useEffect(() => {
+        if (!bidTacToeGameAddress) {
+            return;
+        }
+        const handleBufferTime = () => {
+            const bufferKey = bidTacToeGameAddress;
+            let remainBufferTime = 0;
+            if (autoCommitTimeoutTime > bufferTime) {
+                remainBufferTime = bufferTime;
+            } else {
+                remainBufferTime = autoCommitTimeoutTime;
+            }
+
+            sessionStorage.setItem(bufferKey, String(remainBufferTime));
+        };
+
+        window.addEventListener("beforeunload", handleBufferTime);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBufferTime);
+        };
+    }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
+
+    return isPc ? (
         <Box
             sx={{
                 padding: "1.4063vw 3.125vw",
@@ -421,16 +554,16 @@ const PlayGame = ({
             }}
         >
             <Box>
-                <Timer
-                    myGameInfo={myGameInfo}
-                    opGameInfo={opGameInfo}
-                    autoBid={handleBid}
-                    loading={loading}
-                    bidTacToeGameAddress={bidTacToeGameAddress}
-                    handleCallTimeOut={() => {
-                        handleCallTimeOut();
-                    }}
-                ></Timer>
+                {myGameInfo.gameState < GameState.Commited && (
+                    <Timer
+                        time1={autoCommitTimeoutTime}
+                        time2={bufferTime}
+                        time1Gray={
+                            myGameInfo.gameState === GameState.Commited ||
+                            loading
+                        }
+                    ></Timer>
+                )}
                 <StatusTip
                     loading={loading}
                     myGameState={myGameInfo.gameState}
@@ -480,17 +613,7 @@ const PlayGame = ({
                         balance={myGameInfo.balance}
                         bidAmount={bidAmount}
                         onConfirm={handleBid}
-                        onInputChange={(value) => {
-                            if (loading) return;
-                            if (
-                                myGameInfo.gameState !== GameState.WaitingForBid
-                            )
-                                return;
-
-                            if (value < 0) return;
-                            if (value > myGameInfo.balance) return;
-                            setBidAmount(value);
-                        }}
+                        onInputChange={handleBidAmount}
                     ></MyBid>
                 </Box>
 
@@ -544,6 +667,16 @@ const PlayGame = ({
             </Box>
             <Chat onSetMessage={handleSetMessage}></Chat>
         </Box>
+    ) : (
+        <MLayout
+            nextDrawWinner={nextDrawWinner}
+            autoCommitTimeoutTime={autoCommitTimeoutTime}
+            bufferTime={bufferTime}
+            showAnimateNumber={showAnimateNumber}
+            bidAmount={bidAmount}
+            onInputChange={handleBidAmount}
+            onConfirm={handleBid}
+        ></MLayout>
     );
 };
 

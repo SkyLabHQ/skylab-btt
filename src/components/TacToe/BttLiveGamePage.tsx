@@ -16,7 +16,6 @@ import {
     useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
 import Board from "../TacToe/Board";
-import { GameState, getWinState, winPatterns } from "../TacToe";
 import { UserCard } from "../BttPlayBack/UserCard";
 import Loading from "../Loading";
 import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
@@ -27,6 +26,11 @@ import { shortenAddressWithout0x } from "@/utils";
 import { aviationImg } from "@/utils/aviationImg";
 import { ZERO_DATA } from "@/skyConstants";
 import { botAddress } from "@/hooks/useContract";
+import {
+    GameState,
+    getWinState,
+    winPatterns,
+} from "@/skyConstants/bttGameTypes";
 
 interface Info {
     burner?: string;

@@ -1,7 +1,6 @@
-import { Box, Flex, Text, Image, Button, useClipboard } from "@chakra-ui/react";
+import { Box, Flex, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import PairingIcon from "./assets/pairing.svg";
 import RightArrow from "./assets/right-arrow.svg";
-import FriendIcon from "./assets/friend.svg";
 import InGameIcon from "./assets/in-game.svg";
 import React, { useEffect, useState } from "react";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
@@ -12,7 +11,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
-import LobbyInfo from "./LobbyInfo";
 import Loading from "../Loading";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
@@ -47,16 +45,17 @@ const GameButton = ({
     border?: string;
     background?: string;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
             onClick={onClick}
             align={"center"}
             justify={"space-between"}
             sx={{
-                width: "9.4792vw",
-                height: "2.1875vw",
+                width: isPc ? "9.4792vw" : "96px",
+                height: isPc ? "2.1875vw" : "36px",
                 fontSize: "1.25vw",
-                borderRadius: "0.5208vw",
+                borderRadius: isPc ? "0.5208vw" : "10px",
                 padding: "0 0.5208vw",
                 color: "#303030",
                 cursor: "pointer",
@@ -66,7 +65,7 @@ const GameButton = ({
         >
             <Text
                 sx={{
-                    fontSize: "1.25vw",
+                    fontSize: isPc ? "1.25vw" : "20px",
                 }}
             >
                 {label}
@@ -74,7 +73,7 @@ const GameButton = ({
             <Image
                 src={RightArrow}
                 sx={{
-                    width: "0.8333vw",
+                    width: isPc ? "0.8333vw" : "16px",
                 }}
             ></Image>
         </Flex>
@@ -91,16 +90,17 @@ const Header = ({
         loseCount: number;
     };
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { avatarIndex, nickname } = usePrivateLobbyContext();
 
     return (
         <Flex
             sx={{
-                height: "6.5104vw",
+                height: isPc ? "6.5104vw" : "76px",
                 borderRadius: "1.0417vw 1.0417vw 0 0",
                 background:
                     "linear-gradient(180deg, #303030 0%, rgba(120, 120, 120, 0.30) 100%)",
-                padding: "0 1.0417vw",
+                padding: isPc ? "0 1.0417vw" : "0 18px",
                 borderBottom: "1px solid #FFF",
             }}
             align={"center"}
@@ -111,9 +111,9 @@ const Header = ({
                     sx={{
                         border: "1px solid #FDDC2D",
                         padding: "0.1563vw",
-                        width: "5vw",
-                        height: "5vw",
-                        borderRadius: "1.1458vw",
+                        width: isPc ? "5vw" : "54px",
+                        height: isPc ? "5vw" : "54px",
+                        borderRadius: isPc ? "1.1458vw" : "10px",
                         marginRight: "1.25vw",
                     }}
                 >
@@ -122,13 +122,13 @@ const Header = ({
                             background: avatars[avatarIndex],
                             height: "100%",
                             width: "100%",
-                            borderRadius: "1.0417vw",
+                            borderRadius: isPc ? "1.1458vw" : "10px",
                         }}
                     ></Box>
                 </Box>
                 <Text
                     sx={{
-                        fontSize: "1.25vw",
+                        fontSize: isPc ? "1.25vw" : "12px",
                         fontWeight: 700,
                         marginRight: "5.2083vw",
                         color: "#FDDC2D",
@@ -138,7 +138,7 @@ const Header = ({
                 </Text>
                 <Text
                     sx={{
-                        fontSize: "1.25vw",
+                        fontSize: isPc ? "1.25vw" : "12px",
                         color: "#FDDC2D",
                     }}
                 >
@@ -147,7 +147,7 @@ const Header = ({
                 </Text>
             </Flex>
             <GameButton
-                label="Start Game"
+                label={isPc ? "Start Game" : "Start"}
                 onClick={() => {
                     onStartGame();
                 }}
@@ -161,18 +161,19 @@ enum GameStatusEnum {
 }
 
 const GameStatus = ({ type }: { type: GameStatusEnum }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Flex>
+        <Flex align={"center"}>
             <Image
                 src={type === GameStatusEnum.pairing ? PairingIcon : InGameIcon}
                 sx={{
-                    width: "1.25vw",
-                    marginRight: "0.2083vw",
+                    width: isPc ? "1.25vw" : "16px",
+                    marginRight: isPc ? "0.2083vw" : "2px",
                 }}
             ></Image>
             <Text
                 sx={{
-                    fontSize: "1.25vw",
+                    fontSize: isPc ? "1.25vw" : "12px",
                     marginRight: "0.5208vw",
                 }}
             >
@@ -189,12 +190,13 @@ const ListUserProfile = ({
     avatar: number;
     name: string;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex sx={{}} direction={"column"} align={"center"}>
             <Box
                 sx={{
-                    width: "4.6875vw",
-                    height: "4.6875vw",
+                    width: isPc ? "4.6875vw" : "52px",
+                    height: isPc ? "4.6875vw" : "52px",
                     borderRadius: "1.0417vw",
                     border: "1px solid #FFF",
                     background: avatars[avatar],
@@ -220,8 +222,14 @@ const QueueItem = ({
     detail: any;
     onButtonClick: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box w="100%">
+        <Box
+            w="100%"
+            sx={{
+                padding: isPc ? "1.0417vw" : "12px 18px",
+            }}
+        >
             <Flex align={"center"} justify={"space-between"}>
                 <Flex align={"center"}>
                     <ListUserProfile
@@ -230,7 +238,7 @@ const QueueItem = ({
                     ></ListUserProfile>
                     <Text
                         sx={{
-                            fontSize: "1.25vw",
+                            fontSize: isPc ? "1.25vw" : "20px",
                             margin: "0 1.0417vw",
                         }}
                     >
@@ -245,8 +253,8 @@ const QueueItem = ({
                     >
                         <Box
                             sx={{
-                                width: "4.6875vw",
-                                height: "4.6875vw",
+                                width: isPc ? "4.6875vw" : "52px",
+                                height: isPc ? "4.6875vw" : "52px",
                                 borderRadius: "1.0417vw",
                                 border: "1px solid #787878",
                                 background: "transparent",
@@ -256,21 +264,17 @@ const QueueItem = ({
                         <Text
                             sx={{
                                 color: "#BCBBBE",
-                                fontSize: "0.8333vw",
+                                fontSize: isPc ? "0.8333vw" : "12px",
                             }}
                         >
                             ...
                         </Text>
                     </Flex>
                 </Flex>
-                <Flex
-                    sx={{
-                        paddingRight: "1.0417vw",
-                    }}
-                >
+                <Flex>
                     <GameStatus type={GameStatusEnum.pairing}></GameStatus>
                     <GameButton
-                        label="Join Game"
+                        label={isPc ? "Join Game" : "Join"}
                         onClick={onButtonClick}
                     ></GameButton>
                 </Flex>
@@ -336,14 +340,13 @@ const GameList = ({
     onJoinGame: (gameAddress: string) => void;
     onWatchGame: (gameAddress: string) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
-                padding: "1.0417vw",
-                overflowY: "scroll",
+                overflowY: "auto",
                 position: "relative",
                 height: "100%",
-                flex: 1,
             }}
         >
             {loading ? (
@@ -352,7 +355,6 @@ const GameList = ({
                 <Box
                     sx={{
                         height: "100%",
-                        // width: "690px",
                         margin: "0 auto",
                     }}
                 >
@@ -385,7 +387,7 @@ const GameList = ({
 };
 
 const Games = () => {
-    const { onCopy } = useClipboard(window.location.href ?? "");
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { blockNumber } = useBlockNumber();
     const [queueList, setQueueList] = useState([]);
     const [onGameList, setOnGameList] = useState([]);
@@ -612,66 +614,84 @@ const Games = () => {
     }, [multiMercuryBTTPrivateLobby, multiProvider, blockNumber]);
 
     return (
-        <Box>
+        <Box
+            sx={{
+                height: "100%",
+            }}
+        >
             {loading && <Loading></Loading>}
             <Box
                 sx={{
-                    border: "1px solid #FFF",
-                    borderRadius: "1.0417vw",
-                    marginTop: "0.5208vw",
-                    overflow: "hidden",
+                    height: "100%",
                 }}
             >
                 <Header
                     gameCount={myGameCount}
                     onStartGame={handleStartGame}
                 ></Header>
-                <Flex
-                    sx={{
-                        height: "24.375vw",
-                    }}
-                >
-                    <GameList
-                        onJoinGame={(gameAddress: string) => {
-                            handleJoinGame(gameAddress);
-                        }}
-                        onWatchGame={(gameAddress: string) => {
-                            handleWatchGame(gameAddress);
-                        }}
-                        loading={listLoading}
-                        queueList={queueList}
-                        onGameList={onGameList}
-                    ></GameList>
-                    <Vacant list={vacantList}></Vacant>
-                </Flex>
-            </Box>
-            <LobbyInfo></LobbyInfo>
-            <Flex justify={"center"}>
-                <Button
-                    onClick={() => {
-                        onCopy();
-                        toast("Copy link success");
-                    }}
-                    sx={{
-                        width: "12.5vw",
-                        height: "2.8646vw",
-                        borderRadius: "0.9375vw",
-                        border: "2px solid #FFF",
-                        background: "#303030",
-                        fontSize: "1.25vw",
-                        marginTop: "3.8542vw",
-                    }}
-                >
-                    <Image
-                        src={FriendIcon}
+                {isPc ? (
+                    <Flex
                         sx={{
-                            width: "1.7708vw",
-                            marginRight: "0.5208vw",
+                            height: "475px",
                         }}
-                    ></Image>
-                    <Text>Invite Friend</Text>
-                </Button>
-            </Flex>
+                    >
+                        <Box
+                            sx={{
+                                height: "100%",
+                                flex: 1,
+                                overflowY: "auto",
+                            }}
+                        >
+                            <GameList
+                                onJoinGame={(gameAddress: string) => {
+                                    handleJoinGame(gameAddress);
+                                }}
+                                onWatchGame={(gameAddress: string) => {
+                                    handleWatchGame(gameAddress);
+                                }}
+                                loading={listLoading}
+                                queueList={queueList}
+                                onGameList={onGameList}
+                            ></GameList>
+                        </Box>
+                        <Box
+                            sx={{
+                                width: "26.0417vw",
+                                height: "100%",
+                            }}
+                        >
+                            <Vacant list={vacantList}></Vacant>
+                        </Box>
+                    </Flex>
+                ) : (
+                    <Box>
+                        <Box
+                            sx={{
+                                height: "274px",
+                            }}
+                        >
+                            <GameList
+                                onJoinGame={(gameAddress: string) => {
+                                    handleJoinGame(gameAddress);
+                                }}
+                                onWatchGame={(gameAddress: string) => {
+                                    handleWatchGame(gameAddress);
+                                }}
+                                loading={listLoading}
+                                queueList={queueList}
+                                onGameList={onGameList}
+                            ></GameList>
+                        </Box>
+                        <Box
+                            sx={{
+                                height: "98px",
+                            }}
+                        >
+                            <Vacant list={vacantList}></Vacant>
+                        </Box>
+                    </Box>
+                )}
+            </Box>
         </Box>
     );
 };

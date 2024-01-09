@@ -242,7 +242,9 @@ const PrivateLobby = () => {
             <Box
                 sx={{
                     background: "#303030",
-                    height: "100vh",
+                    padding: "32px 12px 0",
+                    height: "100%",
+                    overflow: "hidden",
                 }}
             >
                 {!init ? (

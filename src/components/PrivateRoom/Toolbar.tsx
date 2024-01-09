@@ -1,4 +1,10 @@
-import { Box, Image, Text, useDisclosure } from "@chakra-ui/react";
+import {
+    Box,
+    Image,
+    Text,
+    useDisclosure,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import React from "react";
 import TutorialIcon from "./assets/tutorial-icon.svg";
 import QuitModal from "./QuitModal";
@@ -6,6 +12,7 @@ import KeyBoard from "../BttComponents/KeyBoard";
 import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
 
 const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const {

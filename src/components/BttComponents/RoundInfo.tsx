@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 
 const RoundInfo = ({
@@ -8,22 +8,23 @@ const RoundInfo = ({
     currentRound: number;
     allRound: number;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 borderRadius: "1.0417vw",
                 background: "#d9d9d9",
                 display: "flex",
-                width: "6.875vw",
+                width: isPc ? "6.875vw" : "70px",
                 alignItems: "center",
                 justifyContent: "center",
                 margin: "2.6042vw auto 0",
-                height: "1.875vw",
+                height: isPc ? "1.875vw" : "16px",
             }}
         >
             <Text
                 sx={{
-                    fontSize: "0.8333vw",
+                    fontSize: isPc ? "0.8333vw" : "12px",
                     color: "#303030",
                 }}
             >
@@ -31,7 +32,7 @@ const RoundInfo = ({
                 <span
                     style={{
                         color: "#616161",
-                        fontSize: "0.7292vw",
+                        fontSize: isPc ? "0.7292vw" : "12px",
                     }}
                 >
                     /{allRound}

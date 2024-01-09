@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { Box, Flex, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import Medal1 from "@/assets/medal1.svg";
 import Medal2 from "@/assets/medal2.svg";
 import Medal3 from "@/assets/medal3.svg";
@@ -16,6 +16,7 @@ import Loading from "../Loading";
 
 const Top3Item = ({ detail }: { detail: any }) => {
     const { avatar, rank, name, win, game } = detail;
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex align={"flex-end"}>
             <Box
@@ -26,20 +27,20 @@ const Top3Item = ({ detail }: { detail: any }) => {
             >
                 <Box
                     sx={{
-                        width: "90px",
-                        height: "90px",
+                        width: isPc ? "90px" : "40px",
+                        height: isPc ? "90px" : "40px",
                         background: avatars[avatar],
                         border: "1px solid #FFF",
-                        borderRadius: "20px",
+                        borderRadius: isPc ? "20px" : "4px",
                     }}
                 ></Box>
                 <Image
                     src={rank === 1 ? Medal1 : rank === 2 ? Medal2 : Medal3}
                     sx={{
                         position: "absolute",
-                        top: "-10px",
+                        top: isPc ? "-10px" : "-5px",
                         right: "0",
-                        width: "40px",
+                        width: isPc ? "40px" : "20px",
                         transform: "translateX(50%)",
                     }}
                 ></Image>
@@ -57,8 +58,12 @@ const Top3Item = ({ detail }: { detail: any }) => {
                     WebkitTextFillColor: "transparent",
                 }}
             >
-                <Text sx={{}}>{name}</Text>
-                <Text>
+                <Text sx={{ fontSize: isPc ? "16px" : "12px" }}>{name}</Text>
+                <Text
+                    sx={{
+                        fontSize: isPc ? "16px" : "12px",
+                    }}
+                >
                     Win {win}/Game {game}
                 </Text>
             </Box>
@@ -67,6 +72,7 @@ const Top3Item = ({ detail }: { detail: any }) => {
 };
 
 const GameList = ({ list }: { list: any[] }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box sx={{ marginTop: "40px" }}>
             {list.map((item, index) => {
@@ -74,16 +80,15 @@ const GameList = ({ list }: { list: any[] }) => {
                     <Box
                         key={index}
                         sx={{
-                            height: "78px",
+                            height: isPc ? "4.0625vw" : "40px",
                         }}
                     >
                         <Flex align={"center"} justify={"space-between"}>
                             <Flex align={"center"}>
                                 <Text
                                     sx={{
-                                        fontSize: "16px",
-                                        marginRight: "40px",
-                                        width: "100px",
+                                        fontSize: isPc ? "0.8333vw" : "16px",
+                                        width: isPc ? "100px" : "50px",
                                     }}
                                 >
                                     {index + 4}
@@ -91,9 +96,11 @@ const GameList = ({ list }: { list: any[] }) => {
                                 <Flex sx={{}} align={"center"}>
                                     <Box
                                         sx={{
-                                            width: "70px",
-                                            height: "70px",
-                                            borderRadius: "20px",
+                                            width: isPc ? "70px" : "32px",
+                                            height: isPc ? "70px" : "32px",
+                                            borderRadius: isPc
+                                                ? "20px"
+                                                : "10px",
                                             border: "1px solid #FFF",
                                             background: "#C96F9D",
                                             marginRight: "12px",
@@ -102,7 +109,9 @@ const GameList = ({ list }: { list: any[] }) => {
                                     <Text
                                         sx={{
                                             color: "#BCBBBE",
-                                            fontSize: "16px",
+                                            fontSize: isPc
+                                                ? "0.8333vw"
+                                                : "16px",
                                         }}
                                     >
                                         {item.name}
@@ -111,7 +120,11 @@ const GameList = ({ list }: { list: any[] }) => {
                             </Flex>
 
                             <Flex>
-                                <Text>
+                                <Text
+                                    sx={{
+                                        fontSize: isPc ? "0.8333vw" : "16px",
+                                    }}
+                                >
                                     {item.win} win/ {item.game} games
                                 </Text>
                             </Flex>
@@ -131,6 +144,7 @@ const GameList = ({ list }: { list: any[] }) => {
 };
 
 const Leaderboard = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [list, setList] = useState<any[]>([]);
     const { lobbyAddress } = usePrivateLobbyContext();
     const [loading, setLoading] = useState<boolean>(false);
@@ -180,75 +194,68 @@ const Leaderboard = () => {
     }, []);
 
     return (
-        <Box>
-            <Box
-                sx={{
-                    border: "1px solid #FFF",
-                    borderRadius: "20px",
-                    marginTop: "10px",
-                    height: "594px",
-                    overflow: "scroll",
-                    paddingTop: "70px",
-                    position: "relative",
-                }}
-            >
-                {loading ? (
-                    <Loading></Loading>
-                ) : (
-                    <Box
+        <Box
+            sx={{
+                overflow: "scroll",
+                position: "relative",
+                height: "100%",
+                padding: isPc ? "70px 0 0" : "20px 18px",
+            }}
+        >
+            {loading ? (
+                <Loading></Loading>
+            ) : (
+                <Box
+                    sx={{
+                        width: isPc ? "36.4583vw" : "100%",
+                        margin: "0 auto",
+                    }}
+                >
+                    {list?.[0] && (
+                        <Flex justify={"center"}>
+                            <Top3Item
+                                detail={{
+                                    avatar: list[0].avatar,
+                                    name: list[0].name,
+                                    win: list[0].win,
+                                    game: list[0].win + list[0].lose,
+                                    rank: 1,
+                                }}
+                            ></Top3Item>
+                        </Flex>
+                    )}
+                    <Flex
+                        justify={"space-between"}
                         sx={{
-                            width: "700px",
-                            margin: "0 auto",
+                            marginTop: isPc ? "5.2083vw" : "42px",
                         }}
                     >
-                        {list?.[0] && (
-                            <Flex justify={"center"}>
-                                <Top3Item
-                                    detail={{
-                                        avatar: list[0].avatar,
-                                        name: list[0].name,
-                                        win: list[0].win,
-                                        game: list[0].win + list[0].lose,
-                                        rank: 1,
-                                    }}
-                                ></Top3Item>
-                            </Flex>
+                        {list?.[1] && (
+                            <Top3Item
+                                detail={{
+                                    avatar: list[1].avatar,
+                                    name: list[1].name,
+                                    win: list[1].win,
+                                    game: list[1].win + list[1].lose,
+                                    rank: 2,
+                                }}
+                            ></Top3Item>
                         )}
-                        <Flex
-                            justify={"space-between"}
-                            sx={{
-                                marginTop: "100px",
-                            }}
-                        >
-                            {list?.[1] && (
-                                <Top3Item
-                                    detail={{
-                                        avatar: list[1].avatar,
-                                        name: list[1].name,
-                                        win: list[1].win,
-                                        game: list[1].win + list[1].lose,
-                                        rank: 2,
-                                    }}
-                                ></Top3Item>
-                            )}
-                            {list?.[2] && (
-                                <Top3Item
-                                    detail={{
-                                        avatar: list?.[2].avatar,
-                                        name: list?.[2].name,
-                                        win: list?.[2].win,
-                                        game: list?.[2].win + list[2].lose,
-                                        rank: 3,
-                                    }}
-                                ></Top3Item>
-                            )}
-                        </Flex>
-                        <GameList list={list.slice(3)}></GameList>
-                    </Box>
-                )}
-            </Box>
-
-            <LobbyInfo></LobbyInfo>
+                        {list?.[2] && (
+                            <Top3Item
+                                detail={{
+                                    avatar: list?.[2].avatar,
+                                    name: list?.[2].name,
+                                    win: list?.[2].win,
+                                    game: list?.[2].win + list[2].lose,
+                                    rank: 3,
+                                }}
+                            ></Top3Item>
+                        )}
+                    </Flex>
+                    <GameList list={list.slice(3)}></GameList>
+                </Box>
+            )}
         </Box>
     );
 };

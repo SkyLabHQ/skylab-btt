@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "@/components/TacToe/Board";
-import Timer from "@/components/TacToe/Timer";
 import ToolBar from "./Toolbar";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
@@ -34,52 +33,17 @@ import Chat from "./Chat";
 import { ZERO_DATA } from "@/skyConstants";
 import A0Testflight from "@/assets/aviations/a0-testflight.png";
 import A2Testflight from "@/assets/aviations/a2-testflight.png";
-
-export const getWinState = (gameState: GameState) => {
-    return [
-        GameState.WinByConnecting,
-        GameState.WinByGridCount,
-        GameState.WinBySurrender,
-        GameState.WinByTimeout,
-    ].includes(gameState);
-};
-
-// 定义所有可能的获胜组合
-export const winPatterns = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8], // 横排
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8], // 竖排
-    [0, 4, 8],
-    [2, 4, 6], // 对角线
-];
+import Timer from "../PrivateRoom/Timer";
+import {
+    GameState,
+    MessageStatus,
+    getWinState,
+    winPatterns,
+} from "@/skyConstants/bttGameTypes";
 
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
     onChangeNewInfo: (info: MyNewInfo) => void;
-}
-
-export enum GameState {
-    Unknown = 0,
-    WaitingForBid = 1,
-    Commited = 2,
-    Revealed = 3,
-    WinByConnecting = 4,
-    LoseByConnecting = 5,
-    WinByTimeout = 6,
-    LoseByTimeout = 7,
-    WinBySurrender = 8,
-    LoseBySurrender = 9,
-    WinByGridCount = 10,
-    LoseByGridCount = 11,
-}
-
-export enum MessageStatus {
-    Unknown = 0,
-    Sending = 1,
-    Sent = 2,
 }
 
 const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
@@ -482,13 +446,18 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
             }}
         >
             <Box>
-                <Timer
+                {/* <Timer
                     myGameInfo={myGameInfo}
                     opGameInfo={opGameInfo}
-                    autoBid={handleBid}
+                    autoBid={() => {
+                        // handleBid();
+                    }}
                     loading={loading}
-                    handleCallTimeOut={handleCallTimeOut}
-                ></Timer>
+                    bidTacToeGameAddress={bidTacToeGameAddress}
+                    handleCallTimeOut={() => {
+                        // handleCallTimeOut();
+                    }}
+                ></Timer> */}
                 <StatusTip
                     loading={loading}
                     myGameState={myGameInfo.gameState}

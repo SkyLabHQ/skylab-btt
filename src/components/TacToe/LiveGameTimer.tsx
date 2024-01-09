@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { GameInfo } from "@/pages/TacToe";
 import { Box } from "@chakra-ui/react";
-import { GameState } from ".";
 import BttTimer, { BufferTimer, SixtySecond, ThirtySecond } from "./BttTimer";
 import getNowSecondsTimestamp from "@/utils/nowTime";
+import { GameState } from "@/skyConstants/bttGameTypes";
 
 const LiveGameTimer = ({ myGameInfo }: { myGameInfo?: GameInfo }) => {
     const [bufferTime, setBufferTime] = useState(0); // [ms

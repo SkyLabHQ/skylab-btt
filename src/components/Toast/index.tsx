@@ -1,4 +1,4 @@
-import { Box, Image } from "@chakra-ui/react";
+import { Box, Image, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import Close from "./assets/close.svg";
 
@@ -11,15 +11,16 @@ const SkyToast = ({
     onClose?: () => void;
     isCloseAble?: boolean;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             color="white"
             p={3}
             bg="#ABABAB"
             borderRadius="20px"
-            fontSize="30px"
+            fontSize={isPc ? "1.5625vw" : "16px"}
             sx={{
-                maxWidth: "40vw",
+                maxWidth: isPc ? "40vw" : "300px",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 display: "-webkit-box",

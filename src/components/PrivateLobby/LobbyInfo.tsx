@@ -1,9 +1,10 @@
 import useSkyToast from "@/hooks/useSkyToast";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
-import { Flex, Text, useClipboard } from "@chakra-ui/react";
+import { Flex, Text, useClipboard, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 
 const LobbyInfo = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { lobbyName, gameCount } = usePrivateLobbyContext();
     const { onCopy } = useClipboard(lobbyName);
     const toast = useSkyToast();
@@ -12,7 +13,7 @@ const LobbyInfo = () => {
         <Flex
             justify={"flex-end"}
             sx={{
-                fontSize: "1.25vw",
+                fontSize: isPc ? "1.25vw" : "12px",
             }}
         >
             <Text

@@ -37,7 +37,7 @@ const config = createConfig(
 );
 
 root.render(
-    <Box>
+    <Box sx={{ height: "100%" }}>
         <ColorModeScript />
         <ChakraProvider theme={theme}>
             <Global styles={GlobalStyles} />

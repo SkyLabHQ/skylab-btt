@@ -3,7 +3,7 @@ import StartIcon from "./assets/start.svg";
 import PreStepIcon from "./assets/pre-step.svg";
 import NextStepIcon from "./assets/next-step.svg";
 import EndIcon from "./assets/end.svg";
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex, Image, SimpleGrid, useMediaQuery } from "@chakra-ui/react";
 
 const PlayBackButton = ({
     showPre,
@@ -20,6 +20,7 @@ const PlayBackButton = ({
     handleNextStep: () => void;
     handleEndStep: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     useEffect(() => {
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
@@ -40,54 +41,57 @@ const PlayBackButton = ({
     }, [handlePreStep, handleNextStep]);
 
     return (
-        <Flex
+        <SimpleGrid
+            columns={4}
             sx={{
-                display: "flex",
-                justifyContent: "center",
                 marginTop: "2.0833vw",
+                width: isPc ? "10.4167vw" : "200px",
+                "& img": {
+                    width: isPc ? "1.25vw" : "16px",
+                },
             }}
         >
-            <Image
-                src={StartIcon}
-                sx={{
-                    marginRight: "3.125vw",
-                    width: "1.25vw",
-                    opacity: showPre ? 1 : 0.5,
-                    cursor: showPre ? "pointer" : "not-allowed",
-                }}
-                onClick={handleStartStep}
-            ></Image>
-            <Image
-                src={PreStepIcon}
-                sx={{
-                    marginRight: "3.125vw",
-                    width: "1.25vw",
-                    opacity: showPre ? 1 : 0.5,
-                    cursor: showPre ? "pointer" : "not-allowed",
-                }}
-                onClick={handlePreStep}
-            ></Image>
-
-            <Image
-                src={NextStepIcon}
-                sx={{
-                    marginRight: "3.125vw",
-                    width: "1.25vw",
-                    opacity: showNext ? 1 : 0.5,
-                    cursor: showNext ? "pointer" : "not-allowed",
-                }}
-                onClick={handleNextStep}
-            ></Image>
-            <Image
-                src={EndIcon}
-                onClick={handleEndStep}
-                sx={{
-                    width: "1.25vw",
-                    opacity: showNext ? 1 : 0.5,
-                    cursor: showNext ? "pointer" : "not-allowed",
-                }}
-            ></Image>
-        </Flex>
+            <Flex justify={"center"}>
+                <Image
+                    src={StartIcon}
+                    sx={{
+                        opacity: showPre ? 1 : 0.5,
+                        cursor: showPre ? "pointer" : "not-allowed",
+                    }}
+                    onClick={handleStartStep}
+                ></Image>
+            </Flex>
+            <Flex justify={"center"}>
+                <Image
+                    src={PreStepIcon}
+                    sx={{
+                        opacity: showPre ? 1 : 0.5,
+                        cursor: showPre ? "pointer" : "not-allowed",
+                    }}
+                    onClick={handlePreStep}
+                ></Image>
+            </Flex>
+            <Flex justify={"center"}>
+                <Image
+                    src={NextStepIcon}
+                    sx={{
+                        opacity: showNext ? 1 : 0.5,
+                        cursor: showNext ? "pointer" : "not-allowed",
+                    }}
+                    onClick={handleNextStep}
+                ></Image>
+            </Flex>
+            <Flex justify={"center"}>
+                <Image
+                    src={EndIcon}
+                    onClick={handleEndStep}
+                    sx={{
+                        opacity: showNext ? 1 : 0.5,
+                        cursor: showNext ? "pointer" : "not-allowed",
+                    }}
+                ></Image>
+            </Flex>
+        </SimpleGrid>
     );
 };
 

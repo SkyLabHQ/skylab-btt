@@ -16,7 +16,7 @@ export const LiveGame = ({ list }: { list: onGoingGame[] }) => {
                 width: "16.6667vw",
             }}
         >
-            <Box
+            {/* <Box
                 sx={{
                     display: "flex",
                 }}
@@ -65,7 +65,7 @@ export const LiveGame = ({ list }: { list: onGoingGame[] }) => {
                         {list.length * 2} in Games
                     </Text>
                 </Box>
-            </Box>
+            </Box> */}
             <Box
                 sx={{
                     marginTop: "2.5926vh",

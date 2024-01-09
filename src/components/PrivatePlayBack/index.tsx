@@ -16,7 +16,6 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
-import { GameState, getWinState, winPatterns } from "../TacToe";
 import Loading from "../Loading";
 import { ZERO_DATA } from "@/skyConstants";
 import PrivateLobbyPlayBack from "../PrivateRoom/PrivateLobbyPlayBack";
@@ -24,7 +23,12 @@ import Back from "../Back";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import ShareButtons from "../PrivateRoom/ShareButton";
 import { shortenAddressWithout0x } from "@/utils";
-import { getShareEmoji } from "@/skyConstants/bttGameTypes";
+import {
+    GameState,
+    getShareEmoji,
+    getWinState,
+    winPatterns,
+} from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 
 const StartJourney = () => {

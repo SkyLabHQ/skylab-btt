@@ -82,6 +82,8 @@ export interface onGoingGame {
 }
 
 const TacToeMode = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
     const {
         isOpen: isPreviousLobbyModalOpen,
@@ -90,7 +92,7 @@ const TacToeMode = () => {
     } = useDisclosure();
     const navigate = useNavigate();
     const { address, isConnected } = useAccount();
-    const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
+    const [isMobile] = useMediaQuery("(min-width: 800px)");
 
     const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
@@ -544,6 +546,7 @@ const TacToeMode = () => {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
+                        width: isPc ? "19.6875vw" : "250px",
                     }}
                 >
                     <LiveGame list={onGoingGames}></LiveGame>
@@ -553,6 +556,7 @@ const TacToeMode = () => {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
+                            width: "100%",
                         }}
                     >
                         <motion.div
@@ -560,6 +564,9 @@ const TacToeMode = () => {
                             animate={{ opacity: 1, x: 0 }} // 结束状态：完全不透明且在原位置
                             exit={{ opacity: 0, x: -100 }} // 退出状态：透明且在原位置左边100px的位置
                             transition={{ duration: 0.5 }}
+                            style={{
+                                width: "100%",
+                            }}
                         >
                             {isPrivateLobbyMode ? (
                                 <PrivateLobbyButtons
@@ -605,7 +612,7 @@ const TacToeMode = () => {
                             <>
                                 <Text
                                     sx={{
-                                        fontSize: "1.25vw",
+                                        fontSize: isPc ? "1.25vw" : "16px",
                                         marginRight: "1.0417vw",
                                     }}
                                 >
@@ -614,8 +621,8 @@ const TacToeMode = () => {
                                 <Box
                                     sx={{
                                         position: "relative",
-                                        width: "2.2917vw",
-                                        height: "2.2917vw",
+                                        width: isPc ? "2.2917vw" : "24px",
+                                        height: isPc ? "2.2917vw" : "24px",
                                     }}
                                 >
                                     <Loading size={44}></Loading>
@@ -624,7 +631,7 @@ const TacToeMode = () => {
                         )}
                     </Box>
                 </Box>
-                {!isPrivateLobbyMode && (
+                {false && !isPrivateLobbyMode && (
                     <Box
                         sx={{
                             display: "flex",

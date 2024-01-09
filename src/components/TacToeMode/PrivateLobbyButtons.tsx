@@ -1,4 +1,4 @@
-import { Box, Text, Image } from "@chakra-ui/react";
+import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import { GrayButton } from "../Button/Index";
 import BackIcon from "./assets/back.svg";
@@ -14,12 +14,30 @@ const PrivateLobbyButtons = ({
     onJoinLobby: () => void;
     onBack: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 display: "flex",
                 flexDirection: "column",
                 fontFamily: "Quantico",
+                "& button": {
+                    width: "100% !important",
+                    height: `${isPc ? "4.7917vw" : "70px"} !important`,
+                    justifyContent: "flex-end",
+                    borderRadius: "18px !important",
+                },
+                "& .text-wrapper": {
+                    width: `${isPc ? "15.625vw" : "180px"} !important`,
+                },
+                "& .play-button-text": {
+                    fontSize: isPc ? "1.6667vw" : "20px",
+                    fontWeight: "400",
+                },
+                "& .play-button-text2": {
+                    fontSize: isPc ? "1.0417vw" : "12px",
+                    fontWeight: "400",
+                },
             }}
         >
             <Image
@@ -33,9 +51,6 @@ const PrivateLobbyButtons = ({
             <GrayButton
                 onClick={onCreateLobby}
                 sx={{
-                    paddingLeft: "4.1667vw !important",
-                    width: "19.6875vw !important",
-                    height: "4.7917vw !important",
                     marginTop: "1.0417vw",
                 }}
                 variant="outline"
@@ -43,36 +58,20 @@ const PrivateLobbyButtons = ({
                 <Image
                     src={NewLobbyIcon}
                     sx={{
-                        width: "2.5vw",
+                        width: isPc ? "2.5vw" : "40px",
                         position: "absolute",
-                        left: "18px",
+                        left: "0.9375vw",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
                 ></Image>
-                <Box
-                    sx={{
-                        textAlign: "center",
-                        width: "100%",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            color: "#fff",
-                            fontSize: "1.4583vw",
-                            fontWeight: "400",
-                        }}
-                    >
-                        Start a new lobby
-                    </Text>
+                <Box className="text-wrapper">
+                    <Text>Start a new lobby</Text>
                 </Box>
             </GrayButton>
             <GrayButton
                 onClick={onJoinLobby}
                 sx={{
-                    paddingLeft: "4.1667vw !important",
-                    width: "19.6875vw !important",
-                    height: "4.7917vw !important",
                     marginTop: "1.0417vw",
                 }}
                 variant="outline"
@@ -81,7 +80,7 @@ const PrivateLobbyButtons = ({
                 <Image
                     src={JoinLobbyIcon}
                     sx={{
-                        width: "2.5vw",
+                        width: isPc ? "2.5vw" : "40px",
                         position: "absolute",
                         left: "0.9375vw",
                         top: "50%",
@@ -89,19 +88,8 @@ const PrivateLobbyButtons = ({
                     }}
                 ></Image>
 
-                <Box
-                    sx={{
-                        textAlign: "center",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: "1.4583vw",
-                            fontWeight: "400",
-                        }}
-                    >
-                        Join an existing lobby{" "}
-                    </Text>
+                <Box className="text-wrapper">
+                    <Text>Join an existing lobby </Text>
                 </Box>
             </GrayButton>
         </Box>

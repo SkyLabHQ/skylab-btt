@@ -1,61 +1,68 @@
 import avatars from "@/skyConstants/avatars";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 
 const Vacant = ({ list }: { list: any }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
-                width: "26.0417vw",
                 border: "1px solid #FFF",
                 background:
                     "linear-gradient(90deg, #000 -20.03%, rgba(0, 0, 0, 0.00) 43.82%)",
                 height: "100%",
-                padding: "1.0417vw 1.5625vw",
+                padding: isPc ? "1.0417vw 1.5625vw" : "10px 18px",
+                overflow: "auto",
             }}
         >
             <Text
                 sx={{
-                    fontSize: "1.25vw",
+                    fontSize: isPc ? "1.25vw" : "12px",
                 }}
             >
                 Vacant Member
             </Text>
 
             <SimpleGrid
-                columns={4}
+                columns={isPc ? 4 : 6}
+                spacingY={isPc ? "1.0417vw" : "20px"}
+                // spacingX={isPc ? "1.0417vw" : "12px"}
                 sx={{
                     marginTop: "0.625vw",
                 }}
             >
                 {list.map((item: any, index: number) => {
                     return (
-                        <Flex
+                        <Box
                             key={index}
-                            align={"center"}
-                            flexDir={"column"}
                             sx={{
-                                width: "4.1667vw",
+                                width: "100%",
                             }}
                         >
                             <Box
                                 sx={{
-                                    width: "4.1667vw",
-                                    height: "4.1667vw",
-                                    borderRadius: "1.0417vw",
+                                    width: isPc ? "4.1667vw" : "38px",
+                                    height: isPc ? "4.1667vw" : "38px",
+                                    borderRadius: isPc ? "1.0417vw" : "10px",
                                     border: "1px solid #FFF",
                                     background: avatars[item.avatar],
-                                }}
-                            ></Box>
-                            <Text
-                                sx={{
-                                    color: "#BCBBBE",
-                                    fontSize: "0.8333vw",
+                                    position: "relative",
                                 }}
                             >
-                                {item.name}
-                            </Text>
-                        </Flex>
+                                <Text
+                                    sx={{
+                                        color: "#BCBBBE",
+                                        fontSize: isPc ? "0.8333vw" : "12px",
+                                        position: "absolute",
+                                        bottom: "-20px",
+                                        left: "50%",
+                                        transform: "translateX(-50%)",
+                                    }}
+                                >
+                                    {item.name}
+                                </Text>
+                            </Box>
+                        </Box>
                     );
                 })}
             </SimpleGrid>

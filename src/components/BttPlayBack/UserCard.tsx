@@ -3,9 +3,9 @@ import { Box, Image, Text } from "@chakra-ui/react";
 import GoldIcon from "@/components/TacToe/assets/gold.svg";
 import Plane1 from "@/assets/aviations/a1.png";
 import { AdvantageTip, Message } from "../TacToe/UserCard";
-import { GameState, getWinState } from "../TacToe";
 import BotIcon from "./assets/bot.png";
 import GearIcon from "./assets/gear.svg";
+import { GameState, getWinState } from "@/skyConstants/bttGameTypes";
 
 interface UserCardProps {
     gameState?: GameState;

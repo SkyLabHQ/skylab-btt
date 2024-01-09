@@ -1,17 +1,10 @@
 import { Box, Button, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import StartIcon from "./assets/start.svg";
-import PreStepIcon from "./assets/pre-step.svg";
-import NextStepIcon from "./assets/next-step.svg";
-import PlayIcon from "./assets/play.svg";
-import EndIcon from "./assets/end.svg";
-import StopIcon from "./assets/stop.svg";
 import SaveIcon from "@/components/TacToe/assets/save-icon.svg";
 import saveAs from "file-saver";
 import html2canvas from "html2canvas";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import RightArrowWhite from "./assets/right-arrow.svg";
-import { getWinState } from "../TacToe";
 import { shortenAddressWithout0x } from "@/utils";
 import ShareEmojiIcon from "./assets/share-emoji.svg";
 import { useChainId } from "wagmi";
@@ -19,6 +12,7 @@ import {
     BoardItem,
     GameInfo,
     getShareEmoji,
+    getWinState,
 } from "@/skyConstants/bttGameTypes";
 import { Info } from "@/pages/TacToe";
 import PlayBackButton from "./PlayBackButton";

@@ -7,13 +7,14 @@ import {
     InputGroup,
     Button,
     Flex,
+    useMediaQuery,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import EditIcon from "./assets/edit.svg";
 import BackIcon from "./assets/back.svg";
 import React, { useState } from "react";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
-import { useWalletClient } from "wagmi";
 import LobbyInfo from "./LobbyInfo";
 import Loading from "../Loading";
 import avatars from "@/skyConstants/avatars";
@@ -28,17 +29,21 @@ const NickName = ({
     nickname: string;
     onChangeNickname: (nickname: string) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     return (
         <Box
             sx={{
                 display: "flex",
                 marginTop: "6.875vw",
+                alignItems: isPc && "center",
+                flexDirection: isPc ? "row" : "column",
             }}
         >
             <Text
                 sx={{
-                    width: "7.8125vw",
-                    fontSize: "1.25vw",
+                    width: isPc ? "7.8125vw" : "120px",
+                    fontSize: isPc ? "1.25vw" : "20px",
                     display: "flex",
                     alignItems: "center",
                     fontWeight: "bold",
@@ -48,13 +53,11 @@ const NickName = ({
             </Text>
             <InputGroup
                 sx={{
-                    width: "20.3125vw",
-                    height: "3.125vw",
+                    width: isPc ? "20.3125vw" : "100%",
+                    height: isPc ? "3.125vw" : "38px",
                     borderRadius: "0.2604vw",
                     paddingLeft: "0.5208vw",
                     background: "#787878",
-                    boxShadow:
-                        "0.2083vw 0.2083vw 0.3229vw 0vw rgba(255, 255, 255, 0.25)",
                     padding: "0 1.0417vw",
                 }}
             >
@@ -62,7 +65,9 @@ const NickName = ({
                     variant={"unstyled"}
                     value={nickname}
                     sx={{
-                        fontSize: "1.25vw",
+                        fontSize: isPc ? "1.25vw" : "20px",
+                        border: "none",
+                        color: "#fff",
                     }}
                     onChange={(e) => {
                         onChangeNickname(
@@ -75,12 +80,12 @@ const NickName = ({
                 <InputRightElement
                     sx={{
                         height: "100%",
-                        width: "5.2083vw",
+                        width: isPc ? "5.2083vw" : "54px",
                     }}
                 >
                     <Text
                         sx={{
-                            fontSize: "1.25vw",
+                            fontSize: isPc ? "1.25vw" : "20px",
                             color: "#FFF",
                             textAlign: "right",
                         }}
@@ -100,12 +105,14 @@ const CurrentAvatar = ({
     avatarIndex: number;
     onModeChange: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     return (
         <Box
             sx={{
-                width: "5.4167vw",
-                height: "5.4167vw",
-                borderRadius: "1.1458vw",
+                width: isPc ? "5.4167vw" : "74px",
+                height: isPc ? "5.4167vw" : "74px",
+                borderRadius: isPc ? "1.1458vw" : "8px",
                 position: "relative",
                 border: "1px solid #FDDC2D",
                 display: "flex",
@@ -115,10 +122,10 @@ const CurrentAvatar = ({
         >
             <Box
                 sx={{
-                    width: "5vw",
-                    height: "5vw",
+                    width: isPc ? "5vw" : "68px",
+                    height: isPc ? "5vw" : "68px",
                     border: "1px solid #FDDC2D",
-                    borderRadius: "1.1458vw",
+                    borderRadius: isPc ? "1.1458vw" : "8px",
                     alignItems: "center",
                     justifyContent: "center",
                     display: "flex",
@@ -126,9 +133,9 @@ const CurrentAvatar = ({
             >
                 <Box
                     sx={{
-                        width: "3.8542vw",
-                        height: "3.8542vw",
-                        borderRadius: "0.5208vw",
+                        width: isPc ? "3.8542vw" : "52px",
+                        height: isPc ? "3.8542vw" : "52px",
+                        borderRadius: isPc ? "0.5208vw" : "8px",
                         background: avatars[avatarIndex],
                     }}
                 ></Box>
@@ -138,8 +145,8 @@ const CurrentAvatar = ({
                         position: "absolute",
                         right: "0",
                         bottom: "0",
-                        width: "2.5vw",
-                        height: "2.5vw",
+                        width: isPc ? "2.5vw" : "35px",
+                        height: isPc ? "2.5vw" : "35px",
                         transform: "translate(30%, 30%)",
                         cursor: "pointer",
                     }}
@@ -155,18 +162,21 @@ const Avatar = ({
 }: {
     onAvatarChange: (color: number) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
-                paddingLeft: "7.8125vw",
-                marginTop: "2.0833vw",
+                paddingLeft: isPc && "7.8125vw",
             }}
         >
-            <Box
+            <SimpleGrid
+                justifyContent={"space-between"}
+                columns={6}
+                spacingX={"12px"}
+                spacingY={"16px"}
                 sx={{
-                    width: "28.125vw",
-                    display: "flex",
-                    flexWrap: "wrap",
+                    width: isPc && "28.125vw",
+                    paddingTop: isPc ? "2.0833vw" : "20px",
                 }}
             >
                 {avatars.map((item, index) => {
@@ -177,17 +187,16 @@ const Avatar = ({
                             }}
                             key={item}
                             sx={{
-                                width: "3.75vw",
-                                height: "3.75vw",
+                                width: isPc ? "3.75vw" : "38px",
+                                height: isPc ? "3.75vw" : "38px",
                                 background: item,
-                                borderRadius: "0.5208vw",
+                                borderRadius: isPc ? "0.5208vw" : "8px",
                                 cursor: "pointer",
-                                margin: "0 0.9375vw 0.9375vw 0",
                             }}
                         ></Box>
                     );
                 })}
-            </Box>
+            </SimpleGrid>
         </Box>
     );
 };
@@ -199,6 +208,7 @@ const Profile = ({
     onNicknameChange: (nickname: string) => void;
     onAvatarChange: (color: number) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<"name" | "avatar">("name");
     const { lobbyAddress, avatarIndex, nickname, handleStepChange } =
@@ -209,6 +219,11 @@ const Profile = ({
 
     const handleSetUserInfo = async () => {
         try {
+            if (nickname.length === 0) {
+                toast("Please input nickname");
+                return;
+            }
+
             setLoading(true);
             const privateLobbySigner = getPrivateLobbySigner();
 
@@ -230,33 +245,38 @@ const Profile = ({
 
     return (
         <Flex
-            justify={"center"}
             flexDir={"column"}
+            align={"center"}
             sx={{
-                width: "71.1458vw",
+                width: isPc ? "71.1458vw" : "100%",
+                height: "100%",
+                paddingTop: isPc ? "1.875vw" : "36px",
                 margin: "0 auto",
-                height: "100vh",
             }}
         >
             {loading && <Loading></Loading>}
-            <Text
-                sx={{
-                    fontSize: "1.25vw",
-                }}
-            >
-                Your Profile in Private Lobby
-            </Text>
+            {isPc && (
+                <Text
+                    sx={{
+                        textAlign: "left",
+                        fontSize: "0.8333vw",
+                        width: "100%",
+                    }}
+                >
+                    Your Profile in Private Lobby
+                </Text>
+            )}
             <Box
                 sx={{
-                    border: "2px solid #FFF",
-                    padding: "5.2083vw 15.625vw ",
-                    borderRadius: "0.5208vw",
-                    marginTop: "1.875vw",
+                    border: isPc ? "2px solid #FFF" : "1px solid #FFF",
+                    padding: isPc ? "5.2083vw 15.625vw " : "20px 20px",
+                    borderRadius: isPc ? "0.5208vw" : "8px",
                     position: "relative",
-                    height: "30.9375vw",
+                    height: isPc && "30.9375vw",
+                    width: "100%",
                 }}
             >
-                {mode === "avatar" && (
+                {isPc && mode === "avatar" && (
                     <Image
                         src={BackIcon}
                         sx={{
@@ -273,13 +293,14 @@ const Profile = ({
                 <Box
                     sx={{
                         display: "flex",
-                        alignItems: "center",
+                        alignItems: isPc && "center",
+                        flexDirection: isPc ? "row" : "column",
                     }}
                 >
                     <Text
                         sx={{
-                            fontSize: "1.25vw",
-                            width: "7.8125vw",
+                            width: isPc ? "7.8125vw" : "100px",
+                            fontSize: isPc ? "1.25vw" : "20px",
                             fontWeight: "bold",
                         }}
                     >
@@ -292,32 +313,46 @@ const Profile = ({
                         }}
                     ></CurrentAvatar>
                 </Box>
-                {mode === "name" && (
+                <Box
+                    sx={{
+                        height: !isPc && "112px",
+                    }}
+                >
+                    {mode === "avatar" && (
+                        <Avatar
+                            onAvatarChange={(color: number) => {
+                                onAvatarChange(color);
+                                setMode("name");
+                            }}
+                        ></Avatar>
+                    )}
+                </Box>
+
+                {(mode === "name" || !isPc) && (
                     <NickName
                         nickname={nickname}
                         onChangeNickname={onNicknameChange}
                     ></NickName>
                 )}
-                {mode === "avatar" && (
-                    <Avatar
-                        onAvatarChange={(color: number) => {
-                            onAvatarChange(color);
-                            setMode("name");
-                        }}
-                    ></Avatar>
-                )}
             </Box>
-            <LobbyInfo></LobbyInfo>
+            <Flex
+                sx={{
+                    width: "100%",
+                    justifyContent: "flex-end",
+                }}
+            >
+                <LobbyInfo></LobbyInfo>
+            </Flex>
             <Flex justify={"center"}>
                 <Button
                     onClick={handleSetUserInfo}
                     variant={"outline"}
                     sx={{
                         border: "0.1563vw solid #FFF",
-                        width: "14.0625vw",
-                        height: "3.3854vw",
-                        fontSize: "1.25vw",
-                        borderRadius: "0.9375vw",
+                        width: isPc ? "14.0625vw" : "160px",
+                        height: isPc ? "3.3854vw" : "40px",
+                        fontSize: isPc ? "1.25vw" : "20px",
+                        borderRadius: isPc ? "0.9375vw" : "8px",
                         marginTop: "3.9583vw",
                     }}
                 >

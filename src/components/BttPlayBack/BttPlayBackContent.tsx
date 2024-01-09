@@ -5,12 +5,12 @@ import BttIcon from "@/assets/btt-icon.png";
 import XIcon from "@/components/TacToe/assets/x.svg";
 import { BoardItem, GameInfo, Info } from "@/pages/TacToe";
 import Board from "../TacToe/Board";
-import { GameState } from "../TacToe";
 import { UserCard } from "./UserCard";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
 import { aviationImg } from "@/utils/aviationImg";
 import RoundInfo from "../BttComponents/RoundInfo";
+import { GameState } from "@/skyConstants/bttGameTypes";
 
 const BttPlayBackContent = ({
     myInfo,

@@ -1,4 +1,4 @@
-import { Box, keyframes, Text } from "@chakra-ui/react";
+import { Box, keyframes, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 export const SixtySecond = 60 * 1000;
 export const ThirtySecond = 30 * 1000;
@@ -14,6 +14,7 @@ const BttTimer = ({
     show?: boolean;
     gray?: boolean;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
@@ -27,9 +28,9 @@ const BttTimer = ({
                         : show
                         ? "3px solid #FFF"
                         : "3px solid #616161",
-                    width: "21.4583vw",
+                    width: isPc ? "21.4583vw" : "200px",
                     background: "transparent",
-                    height: "1.25vw",
+                    height: isPc ? "1.25vw" : "16px",
                     display: "flex",
                     justifyContent: "flex-end",
                     padding: "0.1042vw",
@@ -77,6 +78,7 @@ export const BufferTimer = ({
     width: string;
     show: boolean;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
@@ -86,8 +88,8 @@ export const BufferTimer = ({
             <Box
                 sx={{
                     background: "#616161",
-                    height: "0.3125vw",
-                    width: "21.4583vw",
+                    height: isPc ? "0.3125vw" : "4px",
+                    width: isPc ? "21.4583vw" : "200px",
                     marginTop: "1.4815vh",
                     display: "flex",
                     justifyContent: "flex-end",
@@ -110,7 +112,7 @@ export const BufferTimer = ({
                 {show && (
                     <Text
                         sx={{
-                            fontSize: "1.0417vw",
+                            fontSize: isPc ? "1.0417vw" : "12px",
                             width: "100%",
                             textAlign: "center",
                         }}

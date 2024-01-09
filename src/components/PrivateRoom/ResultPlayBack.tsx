@@ -1,7 +1,14 @@
-import { Box, Button, Flex, Image, Text, useBoolean } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-    useMultiMercuryBTTPrivateLobby,
+    Box,
+    Button,
+    Flex,
+    Image,
+    Text,
+    useBoolean,
+    useMediaQuery,
+} from "@chakra-ui/react";
+import React, { useEffect, useMemo, useState } from "react";
+import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
@@ -27,6 +34,7 @@ import ShareButtons from "./ShareButton";
 import { useNavigate } from "react-router-dom";
 
 const ResultPlayBack = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [showShareButton, setShowShareButton] = useBoolean(false);
     const navigate = useNavigate();
     const {
@@ -412,7 +420,7 @@ https://app.projmercury.io/btt`;
                 >
                     <Text
                         sx={{
-                            fontSize: "1.25vw",
+                            fontSize: isPc ? "1.25vw" : "12px",
                             textDecorationLine: "underline",
                             marginRight: "0.4167vw",
                         }}

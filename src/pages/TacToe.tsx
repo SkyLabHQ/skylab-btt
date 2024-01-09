@@ -5,14 +5,8 @@ import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import { useTacToeSigner } from "@/hooks/useSigner";
-import {
-    useMultiProvider,
-    useMultiSkylabBidTacToeFactoryContract,
-    useMultiMercuryBaseContract,
-} from "@/hooks/useMultiContract";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import ResultPage from "@/components/TacToe/ResultPage";
-import TacToePage, { GameState } from "@/components/TacToe";
+import TacToePage from "@/components/TacToe";
 import Match from "@/components/TacToe/Match";
 import SettlementPage from "@/components/TacToe/SettlementPage";
 import LevelInfo from "@/components/TacToe/LevelInfo";
@@ -31,6 +25,7 @@ import {
     skylabTestFlightAddress,
     skylabTournamentAddress,
 } from "@/hooks/useContract";
+import { GameState } from "@/skyConstants/bttGameTypes";
 
 export enum UserMarkType {
     Empty = -1,

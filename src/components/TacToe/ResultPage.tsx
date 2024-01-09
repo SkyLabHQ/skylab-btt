@@ -7,7 +7,6 @@ import {
 } from "@/pages/TacToe";
 import { Box } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { GameState, getWinState, winPatterns } from ".";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -16,6 +15,11 @@ import {
 import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "../BttPlayBack/BttPlayBackContent";
 import ButtonGroup from "../BttPlayBack/ButtonGroup";
+import {
+    GameState,
+    getWinState,
+    winPatterns,
+} from "@/skyConstants/bttGameTypes";
 
 const ResultPage = () => {
     const {

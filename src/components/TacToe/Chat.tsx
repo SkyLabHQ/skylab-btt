@@ -19,7 +19,7 @@ import Merc10 from "./assets/emotes/10.png";
 
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
-import { MessageStatus } from ".";
+import { MessageStatus } from "@/skyConstants/bttGameTypes";
 
 export const MESSAGES = [
     "I really need the grid.",

@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Button, Image, Text } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Image,
+    SimpleGrid,
+    Text,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import saveAs from "file-saver";
 import html2canvas from "html2canvas";
 import SaveIcon from "@/components/TacToe/assets/save-icon.svg";
@@ -15,32 +22,28 @@ const ShareButtons = ({
     handleShareEmoji?: () => void;
     handleShare: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box
+        <SimpleGrid
+            columns={isPc ? 3 : 2}
             sx={{
-                display: "flex",
-                justifyContent: "center",
                 marginTop: "1.0417vw",
                 position: "relative",
+                "& button": {
+                    width: isPc ? "9.375vw" : "98px",
+                    height: isPc ? "2.7083vw" : "32px",
+                    borderRadius: isPc ? "0.9375vw" : "10px",
+                    fontSize: isPc ? "1.0417vw" : "12px",
+                    border: isPc
+                        ? "3px solid #bcbbbe !important"
+                        : "2px solid #bcbbbe !important",
+                    color: "#d9d9d9",
+                },
             }}
         >
-            <Box
-                sx={{
-                    width: "9.375vw",
-                    height: "2.7083vw",
-                    marginRight: "0.625vw",
-                }}
-            >
+            <Box>
                 {showShareEmoji && (
                     <Button
-                        sx={{
-                            border: "3px solid #bcbbbe !important",
-                            borderRadius: "0.9375vw",
-                            width: "9.375vw",
-                            height: "2.7083vw",
-                            color: "#d9d9d9",
-                            fontSize: "1.0417vw",
-                        }}
                         variant={"outline"}
                         onClick={() => {
                             handleShareEmoji();
@@ -49,7 +52,7 @@ const ShareButtons = ({
                         <Image
                             src={ShareEmojiIcon}
                             sx={{
-                                width: "1.5625vw",
+                                width: isPc ? "1.5625vw" : "16px",
                             }}
                         ></Image>
                         <Text
@@ -65,15 +68,6 @@ const ShareButtons = ({
             </Box>
 
             <Button
-                sx={{
-                    border: "3px solid #bcbbbe !important",
-                    borderRadius: "0.9375vw",
-                    width: "9.375vw",
-                    height: "2.7083vw",
-                    color: "#d9d9d9",
-                    fontSize: "1.0417vw",
-                    marginRight: "0.625vw",
-                }}
                 variant={"outline"}
                 onClick={async (e) => {
                     e.stopPropagation();
@@ -89,7 +83,10 @@ const ShareButtons = ({
             >
                 <Image
                     src={SaveIcon}
-                    sx={{ marginRight: "5px", width: "1.5625vw" }}
+                    sx={{
+                        marginRight: "5px",
+                        width: isPc ? "1.5625vw" : "16px",
+                    }}
                 ></Image>
                 <Text
                     sx={{
@@ -101,14 +98,6 @@ const ShareButtons = ({
                 </Text>
             </Button>
             <Button
-                sx={{
-                    border: "3px solid #bcbbbe !important",
-                    borderRadius: "0.9375vw",
-                    width: "9.375vw",
-                    height: "2.7083vw",
-                    color: "#d9d9d9",
-                    fontSize: "1.0417vw",
-                }}
                 variant={"outline"}
                 onClick={() => {
                     handleShare();
@@ -117,7 +106,7 @@ const ShareButtons = ({
                 <Image
                     src={TwLogo}
                     sx={{
-                        width: "1.5625vw",
+                        width: isPc ? "1.5625vw" : "16px",
                     }}
                 ></Image>
                 <Text
@@ -129,7 +118,7 @@ const ShareButtons = ({
                     Share Replay{" "}
                 </Text>
             </Button>
-        </Box>
+        </SimpleGrid>
     );
 };
 

@@ -1,4 +1,11 @@
-import { Box, Grid, GridItem, Image, keyframes } from "@chakra-ui/react";
+import {
+    Box,
+    Grid,
+    GridItem,
+    Image,
+    keyframes,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import React from "react";
 import BaseGrid from "./assets/base-grid.svg";
 import BlackXIcon from "./assets/black-x.svg";
@@ -24,6 +31,7 @@ export const BoardGrid = ({
     opMark,
     showAnimate,
 }: BoardItem) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <GridItem
             sx={{
@@ -43,77 +51,74 @@ export const BoardGrid = ({
                     alignItems: "center",
                 }}
             >
-                {mark !== UserMarkType.Square && mark !== UserMarkType.Empty && (
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            left: "0",
-                            bottom: "0",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            width: "100%",
-                            padding: "0 0.5208vw",
-                        }}
-                    >
+                {mark !== UserMarkType.Square &&
+                    mark !== UserMarkType.Empty && (
                         <Box
                             sx={{
-                                width: "3.3333vw",
-                                height: "0.9375vw",
-                                background: "#D9D9D9",
-                                borderRadius: "0.9375vw",
+                                position: "absolute",
+                                left: "0",
+                                bottom: "0",
                                 display: "flex",
                                 alignItems: "center",
-                                color: "#000000",
-                                padding: "0 0.2083vw",
-                                fontSize: "0.8333vw",
+                                justifyContent: "space-between",
+                                width: "100%",
+                                padding: "0 0.5208vw",
+                                fontSize: isPc ? "0.8333vw" : "12px",
+                                "& img": {
+                                    width: isPc ? "0.7813vw" : "10px",
+                                    height: isPc ? "0.7813vw" : "10px",
+                                },
+                                "& >div": {
+                                    width: isPc ? "3.3333vw" : "35px",
+                                    height: isPc ? "0.9375vw" : "12px",
+                                    background: "#D9D9D9",
+                                    borderRadius: isPc ? "0.9375vw" : "4px",
+                                    color: "#000000",
+                                },
                             }}
                         >
-                            <Image
-                                width={"0.7813vw"}
-                                height={"0.7813vw"}
-                                src={
-                                    myMark === UserMarkType.Circle
-                                        ? BlackCircle
-                                        : BlackXIcon
-                                }
+                            <Box
                                 sx={{
-                                    marginRight: "0.5208vw",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "0 0.2083vw",
                                 }}
-                            ></Image>
-                            {myValue}
-                        </Box>
+                            >
+                                <Image
+                                    src={
+                                        myMark === UserMarkType.Circle
+                                            ? BlackCircle
+                                            : BlackXIcon
+                                    }
+                                    sx={{
+                                        marginRight: "0.5208vw",
+                                    }}
+                                ></Image>
+                                {myValue}
+                            </Box>
 
-                        <Box
-                            sx={{
-                                width: "3.3333vw",
-                                height: "0.9375vw",
-                                background: "#D9D9D9",
-                                borderRadius: "0.9375vw",
-                                display: "flex",
-                                alignItems: "center",
-                                color: "#000000",
-                                padding: "0 0.2083vw",
-                                fontSize: "0.8333vw",
-                            }}
-                        >
-                            <Image
-                                width={"0.7813vw"}
-                                height={"0.7813vw"}
-                                src={
-                                    opMark === UserMarkType.Circle
-                                        ? BlackCircle
-                                        : BlackXIcon
-                                }
+                            <Box
                                 sx={{
-                                    marginRight: "0.5208vw",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "0 0.2083vw",
                                 }}
-                            ></Image>
+                            >
+                                <Image
+                                    src={
+                                        opMark === UserMarkType.Circle
+                                            ? BlackCircle
+                                            : BlackXIcon
+                                    }
+                                    sx={{
+                                        marginRight: "0.5208vw",
+                                    }}
+                                ></Image>
 
-                            {opValue}
+                                {opValue}
+                            </Box>
                         </Box>
-                    </Box>
-                )}
+                    )}
                 {mark === UserMarkType.Square && (
                     <Box
                         width={"70%"}
@@ -186,14 +191,16 @@ const Board = ({
     list: BoardItem[];
     showAnimateNumber?: number;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     return (
         <Box
             sx={{
                 background: `url(${BaseGrid})`,
                 backgroundSize: "100% 100%",
             }}
-            w={"26.0938vw"}
-            h={"26.0938vw"}
+            w={isPc ? "26.0938vw" : "278px"}
+            h={isPc ? "26.0938vw" : "278px"}
         >
             <Grid
                 templateColumns="repeat(3, 1fr)"

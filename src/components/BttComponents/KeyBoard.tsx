@@ -8,6 +8,7 @@ import {
     PopoverContent,
     PopoverTrigger,
     Text,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import KeyboardIcon from "./assets/keyboard.svg";
@@ -48,6 +49,8 @@ const KeyBoard = ({
     onToggle: () => void;
     onClose: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     return (
         <Box>
             {type ? (
@@ -63,9 +66,9 @@ const KeyBoard = ({
                                 onToggle();
                             }}
                             sx={{
-                                borderRadius: "0.5208vw",
-                                height: "2.3958vw",
-                                width: "2.3958vw",
+                                borderRadius: isPc ? "0.5208vw" : "8px",
+                                height: isPc ? "2.3958vw" : "32px",
+                                width: isPc ? "2.3958vw" : "32px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -77,8 +80,8 @@ const KeyBoard = ({
                             <Image
                                 src={KeyboardIcon}
                                 sx={{
-                                    width: "1.9792vw",
-                                    height: "1.9792vw",
+                                    height: isPc ? "1.9792vw" : "28px",
+                                    width: isPc ? "1.9792vw" : "28px",
                                 }}
                             ></Image>
                         </Box>
@@ -218,9 +221,9 @@ const KeyBoard = ({
                         <Button
                             variant={"unstyled"}
                             sx={{
-                                borderRadius: "0.5208vw",
-                                height: "2.3958vw",
-                                width: "2.3958vw",
+                                borderRadius: isPc ? "0.5208vw" : "8px",
+                                height: isPc ? "2.3958vw" : "32px",
+                                width: isPc ? "2.3958vw" : "32px",
                                 minWidth: "2.3958vw",
                                 display: "flex",
                                 alignItems: "center",
@@ -236,8 +239,8 @@ const KeyBoard = ({
                             <Image
                                 src={KeyboardIcon}
                                 sx={{
-                                    width: "1.9792vw",
-                                    height: "1.9792vw",
+                                    height: isPc ? "1.9792vw" : "28px",
+                                    width: isPc ? "1.9792vw" : "28px",
                                 }}
                             ></Image>
                         </Button>
