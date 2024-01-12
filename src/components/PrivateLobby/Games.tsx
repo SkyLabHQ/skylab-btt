@@ -96,7 +96,7 @@ const Header = ({
     return (
         <Flex
             sx={{
-                height: isPc ? "6.5104vw" : "76px",
+                height: isPc ? "125px" : "76px",
                 borderRadius: "1.0417vw 1.0417vw 0 0",
                 background:
                     "linear-gradient(180deg, #303030 0%, rgba(120, 120, 120, 0.30) 100%)",
@@ -206,7 +206,7 @@ const ListUserProfile = ({
             <Text
                 sx={{
                     color: "#BCBBBE",
-                    fontSize: "0.8333vw",
+                    fontSize: isPc ? "0.8333vw" : "12px",
                 }}
             >
                 {name}
@@ -291,8 +291,14 @@ const OnGameItem = ({
     detail: any;
     onButtonClick: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box w="100%">
+        <Box
+            w="100%"
+            sx={{
+                padding: isPc ? "1.0417vw" : "12px 18px",
+            }}
+        >
             <Flex align={"center"} justify={"space-between"}>
                 <Flex align={"center"}>
                     <ListUserProfile
@@ -657,7 +663,7 @@ const Games = () => {
                         <Box
                             sx={{
                                 width: "26.0417vw",
-                                height: "100%",
+                                height: "475px",
                             }}
                         >
                             <Vacant list={vacantList}></Vacant>

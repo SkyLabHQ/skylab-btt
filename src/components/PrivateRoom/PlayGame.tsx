@@ -19,7 +19,7 @@ import {
 } from "@/hooks/useTacToeStore";
 import { ZERO_DATA } from "@/skyConstants";
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
-import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { CHAIN_NAMES, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import UserProfile from "./UserProfile";
 import StatusTip from "../TacToe/StatusTip";
 import ToolBar from "./Toolbar";
@@ -35,6 +35,7 @@ import { Message } from "./Message";
 import MLayout from "./MLayout";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import { SixtySecond, ThirtySecond } from "./BttTimer";
+import { shortenAddressWithout0x } from "@/utils";
 
 const PlayGame = ({
     onChangeGame,
@@ -53,6 +54,7 @@ const PlayGame = ({
         opGameInfo,
         bidTacToeGameAddress,
         myInfo,
+        lobbyAddress,
         opInfo,
         list,
         onList,
@@ -89,6 +91,12 @@ const PlayGame = ({
     const [emoteIndex, setEmoteIndex] = useState<number>(0);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+
+    const inviteLink = useMemo(() => {
+        if (!bidTacToeGameAddress) return "";
+
+        return `${window.location.origin}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}`;
+    }, [bidTacToeGameAddress, myInfo]);
 
     const handleGetGameInfo = async () => {
         const [
@@ -390,6 +398,17 @@ const PlayGame = ({
         handleStepChange(2);
     };
 
+    const handleShareTw = () => {
+        const text = `${window.location.host}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}
+⭕️❌⭕️❌Watch me play Bid tac toe and crush the opponent！⭕️❌⭕️❌
+Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NAMES[TESTFLIGHT_CHAINID]}
+(Twitter)@skylabHQ`;
+
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+        );
+    };
+
     useEffect(() => {
         if (
             !myInfo.address ||
@@ -441,7 +460,7 @@ const PlayGame = ({
             setAutoCommitTimeoutTime(timeLeft);
 
             if (timeLeft === 0) {
-                // handleBid();
+                handleBid();
             }
         };
 
@@ -501,11 +520,11 @@ const PlayGame = ({
             const timeLeft = event.data;
 
             if (timeLeft === 0) {
-                // handleCallTimeOut();
+                handleCallTimeOut();
             }
         };
         if (autoCallTimeoutTime === 0) {
-            // handleCallTimeOut();
+            handleCallTimeOut();
         } else {
             commitWorkerRef.postMessage({
                 action: "start",
@@ -553,7 +572,7 @@ const PlayGame = ({
                 justifyContent: "space-between",
             }}
         >
-            <Box>
+            <Flex flexDir={"column"} align={"center"}>
                 {myGameInfo.gameState < GameState.Commited && (
                     <Timer
                         time1={autoCommitTimeoutTime}
@@ -569,7 +588,7 @@ const PlayGame = ({
                     myGameState={myGameInfo.gameState}
                     opGameState={opGameInfo.gameState}
                 ></StatusTip>
-            </Box>
+            </Flex>
             <ToolBar quitType="game"></ToolBar>
             <Box
                 sx={{
@@ -669,6 +688,8 @@ const PlayGame = ({
         </Box>
     ) : (
         <MLayout
+            inviteLink={inviteLink}
+            handleShareTw={handleShareTw}
             nextDrawWinner={nextDrawWinner}
             autoCommitTimeoutTime={autoCommitTimeoutTime}
             bufferTime={bufferTime}
@@ -676,6 +697,8 @@ const PlayGame = ({
             bidAmount={bidAmount}
             onInputChange={handleBidAmount}
             onConfirm={handleBid}
+            onSetMessage={handleSetMessage}
+            loading={loading}
         ></MLayout>
     );
 };

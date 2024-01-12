@@ -8,17 +8,20 @@ const BttTimer = ({
     time,
     show = true,
     gray = false,
+    direction = "right",
 }: {
     width: string;
     time: string;
     show?: boolean;
     gray?: boolean;
+    direction?: "top" | "right";
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 position: "relative",
+                width: "100%",
             }}
         >
             <Box
@@ -28,12 +31,12 @@ const BttTimer = ({
                         : show
                         ? "3px solid #FFF"
                         : "3px solid #616161",
-                    width: isPc ? "21.4583vw" : "200px",
+                    width: isPc ? "21.4583vw" : "100%",
                     background: "transparent",
                     height: isPc ? "1.25vw" : "16px",
                     display: "flex",
                     justifyContent: "flex-end",
-                    padding: "0.1042vw",
+                    padding: isPc ? "0.1042vw" : "1px",
                 }}
             >
                 <Box
@@ -46,11 +49,15 @@ const BttTimer = ({
             {show && (
                 <Text
                     sx={{
-                        fontSize: "1.25vw",
+                        fontSize: isPc ? "1.25vw" : "12px",
                         position: "absolute",
-                        right: "-100px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
+                        right: direction === "right" && "-100px",
+                        top: direction === "right" ? "50%" : "-20px",
+                        left: direction === "top" && "50%",
+                        transform:
+                            direction === "right"
+                                ? "translateY(-50%)"
+                                : "translateX(-50%)",
                         color: gray ? "#616161" : "#fff",
                     }}
                 >
@@ -83,13 +90,14 @@ export const BufferTimer = ({
         <Box
             sx={{
                 position: "relative",
+                width: "100%",
             }}
         >
             <Box
                 sx={{
                     background: "#616161",
                     height: isPc ? "0.3125vw" : "4px",
-                    width: isPc ? "21.4583vw" : "200px",
+                    width: isPc ? "21.4583vw" : "100%",
                     marginTop: "1.4815vh",
                     display: "flex",
                     justifyContent: "flex-end",
@@ -117,7 +125,7 @@ export const BufferTimer = ({
                             textAlign: "center",
                         }}
                     >
-                        On Chain Buffer Time. Please Submit ASAP
+                        {/* On Chain Buffer Time. Please Submit ASAP */}
                     </Text>
                 )}
             </Box>

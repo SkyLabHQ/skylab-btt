@@ -29,7 +29,6 @@ import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import PrivateLobbyPlayBack from "./PrivateLobbyPlayBack";
 import { shortenAddressWithout0x } from "@/utils";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
-import RightArrow from "./assets/arrow-right.svg";
 import ShareButtons from "./ShareButton";
 import { useNavigate } from "react-router-dom";
 
@@ -376,64 +375,13 @@ https://app.projmercury.io/btt`;
                     handlePreStep={handlePreStep}
                     handleStartStep={handleStartStep}
                 ></PlayBackButton>
-                {showShareButton ? (
-                    <ShareButtons
-                        showShareEmoji={gameOver}
-                        handleShareEmoji={handleShareEmoji}
-                        handleShare={handleShare}
-                    ></ShareButtons>
-                ) : (
-                    <Button
-                        sx={{
-                            border: "2px solid #fff",
-                            borderRadius: "0.9375vw",
-                            width: "9.375vw",
-                            height: "2.7083vw",
-                            color: "#d9d9d9",
-                            fontSize: "1.0417vw",
-                            marginTop: "1.0417vw",
-                        }}
-                        variant={"outline"}
-                        onClick={() => {
-                            setShowShareButton.on();
-                        }}
-                    >
-                        <Text
-                            sx={{
-                                flex: 1,
-                                textAlign: "center",
-                            }}
-                        >
-                            Share
-                        </Text>
-                    </Button>
-                )}
 
-                <Flex
-                    onClick={handleBackToPrivateLobby}
-                    sx={{
-                        position: "absolute",
-                        right: "0",
-                        bottom: "0",
-                        cursor: "pointer",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: isPc ? "1.25vw" : "12px",
-                            textDecorationLine: "underline",
-                            marginRight: "0.4167vw",
-                        }}
-                    >
-                        Back to Private Lobby
-                    </Text>
-                    <Image
-                        src={RightArrow}
-                        sx={{
-                            width: "1.25vw",
-                        }}
-                    ></Image>
-                </Flex>
+                <ShareButtons
+                    showShareEmoji={gameOver}
+                    handleShareEmoji={handleShareEmoji}
+                    handleShare={handleShare}
+                    handleBackToPrivateLobby={handleBackToPrivateLobby}
+                ></ShareButtons>
             </Flex>
         </Box>
     );

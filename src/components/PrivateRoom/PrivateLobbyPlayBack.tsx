@@ -6,9 +6,9 @@ import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "../TacToe/Board";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
-import UserProfile, { MUserProfile } from "./UserProfile";
+import UserProfile, { MUserProfile, MUserProfileResult } from "./UserProfile";
 import { OpBid } from "./UserBid";
-import { BoardItem, GameInfo } from "@/skyConstants/bttGameTypes";
+import { BoardItem, GameInfo, getWinState } from "@/skyConstants/bttGameTypes";
 import RoundInfo from "../BttComponents/RoundInfo";
 import MBalance from "../BttComponents/MBalance";
 
@@ -40,6 +40,7 @@ const PrivateLobbyPlayBack = ({
     showList: BoardItem[];
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const isMyWIn = getWinState(myGameInfo.gameState);
 
     return isPc ? (
         <Box
@@ -226,8 +227,9 @@ const PrivateLobbyPlayBack = ({
                 width: "100%",
                 border: "2px solid #fff",
                 boxShadow: "5px 4px 8px 0px rgba(255, 255, 255, 0.50)",
-                padding: "1.5vh 1.5vw",
                 position: "relative",
+                padding: "20px 0",
+                borderRadius: "8px",
             }}
         >
             <Box
@@ -237,101 +239,59 @@ const PrivateLobbyPlayBack = ({
             >
                 <Flex justify={"space-between"}>
                     <Box>
-                        <MUserProfile
-                            status="my"
-                            avatar={myInfo.avatar}
-                            name={myInfo.name}
+                        <Box
+                            sx={{
+                                paddingLeft: "12px",
+                            }}
+                        >
+                            <MUserProfileResult
+                                status="my"
+                                avatar={myInfo.avatar}
+                                name={myInfo.name}
+                                mark={myInfo.mark}
+                            ></MUserProfileResult>
+                        </Box>
+
+                        <MBalance
+                            balance={myBalance}
                             mark={myInfo.mark}
-                            showAdvantageTip={myIsNextDrawWinner}
-                        ></MUserProfile>
-                        <MBalance balance={myBalance}></MBalance>
+                        ></MBalance>
                     </Box>
 
-                    <Box>
-                        <MUserProfile
+                    <Flex flexDir={"column"} align={"flex"}>
+                        <Box
+                            sx={{
+                                paddingRight: "12px",
+                            }}
+                        >
+                            <MUserProfileResult
+                                status="op"
+                                avatar={opInfo.avatar}
+                                name={opInfo.name}
+                                mark={opInfo.mark}
+                                showAdvantageTip={!myIsNextDrawWinner}
+                            ></MUserProfileResult>
+                        </Box>
+
+                        <MBalance
+                            balance={opBalance}
                             status="op"
-                            avatar={opInfo.avatar}
-                            name={opInfo.name}
                             mark={opInfo.mark}
-                            showAdvantageTip={!myIsNextDrawWinner}
-                        ></MUserProfile>
-                        <MBalance balance={opBalance}></MBalance>
-                    </Box>
+                        ></MBalance>
+                    </Flex>
                 </Flex>
-                <Flex align={"center"} flexDir={"column"}>
+                <Flex
+                    align={"center"}
+                    flexDir={"column"}
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
                     <Board list={showList}></Board>
                     <RoundInfo
                         currentRound={currentRound}
                         allRound={allSelectedGrids.length}
                     ></RoundInfo>
-                </Flex>
-                <Flex
-                    justify={"space-between"}
-                    sx={{
-                        marginTop: "20px",
-                    }}
-                >
-                    <Flex
-                        sx={{
-                            alignItems: "center",
-                        }}
-                    >
-                        <Image
-                            src={BttIcon}
-                            sx={{
-                                width: "30px",
-                            }}
-                        ></Image>
-                        <Text
-                            sx={{
-                                fontSize: "12px",
-                                fontWeight: "700",
-                            }}
-                        >
-                            Bid Tac Toe
-                        </Text>
-                    </Flex>
-                    <Box sx={{}}>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                            }}
-                        >
-                            <Image
-                                src={TwLogo}
-                                sx={{ marginRight: "4px", width: "12px" }}
-                            ></Image>
-                            <Text
-                                sx={{
-                                    fontSize: "12px",
-                                    color: "rgb(172,172,172)",
-                                }}
-                            >
-                                @skylabHQ
-                            </Text>
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginTop: "2px",
-                            }}
-                        >
-                            <Image
-                                src={EarthIcon}
-                                sx={{ marginRight: "4px", width: "12px" }}
-                            ></Image>
-                            <Text
-                                sx={{
-                                    fontSize: "12px",
-                                    color: "rgb(172,172,172)",
-                                }}
-                            >
-                                https://app.projmercury.io/
-                            </Text>
-                        </Box>
-                    </Box>
                 </Flex>
             </Box>
         </Box>

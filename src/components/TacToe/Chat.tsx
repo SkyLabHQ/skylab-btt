@@ -6,43 +6,14 @@ import EmoteActiveIcon from "./assets/emote-active.svg";
 import EmoteIcon from "./assets/emote.svg";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { useGameContext } from "@/pages/TacToe";
-import Merc1 from "./assets/emotes/1.png";
-import Merc2 from "./assets/emotes/2.png";
-import Merc3 from "./assets/emotes/3.png";
-import Merc4 from "./assets/emotes/4.png";
-import Merc5 from "./assets/emotes/5.png";
-import Merc6 from "./assets/emotes/6.png";
-import Merc7 from "./assets/emotes/7.png";
-import Merc8 from "./assets/emotes/8.png";
-import Merc9 from "./assets/emotes/9.png";
-import Merc10 from "./assets/emotes/10.png";
-
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
-import { MessageStatus } from "@/skyConstants/bttGameTypes";
-
-export const MESSAGES = [
-    "I really need the grid.",
-    "I do not want this grid.",
-    "I would bid really high.",
-    "I would bid really low.",
-    "I have so many ways to win.",
-];
-
-export const MERCS = [
-    Merc1,
-    Merc2,
-    Merc3,
-    Merc4,
-    Merc5,
-    Merc6,
-    Merc7,
-    Merc8,
-    Merc9,
-    Merc10,
-];
-
-export const EMOTES = ["🥱", "🤔", "🤯", "😭", "🥺", "🤩", "🥳"];
+import {
+    EMOTES,
+    MERCS,
+    MESSAGES,
+    MessageStatus,
+} from "@/skyConstants/bttGameTypes";
 
 const Chat = ({
     onLoading,

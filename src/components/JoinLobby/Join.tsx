@@ -1,5 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { Box, Text, Input, Flex } from "@chakra-ui/react";
+import {
+    Box,
+    Text,
+    Input,
+    Flex,
+    useMediaQuery,
+    SimpleGrid,
+} from "@chakra-ui/react";
 import { GrayButton } from "../Button/Index";
 import Loading from "../Loading";
 import {
@@ -12,6 +19,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { useNavigate } from "react-router-dom";
 
 const Join = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
@@ -103,28 +111,28 @@ const Join = () => {
     }, []);
 
     return (
-        <Box
+        <Flex
             sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                height: "100vh",
-                width: "21.3542vw",
+                height: "100%",
+                width: isPc ? "24vw" : "260px",
                 margin: "0 auto",
             }}
         >
             <Text
                 sx={{
-                    width: "21.3542vw",
-                    fontSize: "1.25vw",
+                    fontSize: isPc ? "1.25vw" : "12px",
+                    width: "100%",
                 }}
             >
                 Lobby Code
             </Text>
-            <Flex
-                justify={"space-between"}
-                w={"100%"}
+            <SimpleGrid
+                columns={6}
+                width={"100%"}
                 sx={{
                     marginTop: "0.2083vw",
                     position: "relative",
@@ -153,9 +161,9 @@ const Join = () => {
                             }}
                             variant={"unstyled"}
                             sx={{
-                                fontSize: "1.25vw",
-                                width: "3.125vw",
-                                height: "3.125vw",
+                                fontSize: isPc ? "1.25vw" : "14px",
+                                width: isPc ? "3.125vw" : "36px",
+                                height: isPc ? "3.125vw" : "36px",
                                 border: "2px solid #fff",
                                 padding: "0 0.5208vw",
                                 background: loading ? "#BCBBBE" : "#616161",
@@ -168,7 +176,7 @@ const Join = () => {
                     <Box
                         sx={{
                             position: "absolute",
-                            right: "-1.6667vw",
+                            right: isPc ? "-1.6667vw" : "-20px",
                             top: "50%",
                             translateY: "-50%",
                         }}
@@ -176,17 +184,17 @@ const Join = () => {
                         <Loading size={40}></Loading>
                     </Box>
                 )}
-            </Flex>
-
+            </SimpleGrid>
             <GrayButton
                 sx={{
-                    width: "14.0625vw !important",
-                    height: "3.3854vw !important",
+                    width: isPc ? "14.0625vw !important" : "160px !important",
+                    height: isPc ? "3.3854vw !important" : "40px !important",
                     justifyContent: "center !important",
-                    marginTop: "1.6667vw",
+                    marginTop: isPc ? "1.6667vw" : "20px",
                     background: loading ? "#BCBBBE" : "#616161",
                     boxShadow: loading && "none !important",
                     border: loading && "2px solid #fff !important",
+                    borderRadius: isPc ? "0.5208vw" : "8px !important",
                     "&:hover": {
                         background: loading ? "#BCBBBE" : "#616161",
                         boxShadow: loading && "none !important",
@@ -197,21 +205,15 @@ const Join = () => {
                 position={"relative"}
                 onClick={handleJoin}
             >
-                <Box
+                <Text
                     sx={{
-                        textAlign: "center",
+                        fontSize: isPc ? "1.25vw" : "20px",
                     }}
                 >
-                    <Text
-                        sx={{
-                            fontSize: "1.25vw",
-                        }}
-                    >
-                        Join{" "}
-                    </Text>
-                </Box>
+                    Join
+                </Text>
             </GrayButton>
-        </Box>
+        </Flex>
     );
 };
 

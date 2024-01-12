@@ -12,6 +12,8 @@ const GameOver = () => {
     const { myInfo, opInfo, myGameInfo, opGameInfo, list, handleStepChange } =
         usePrivateGameContext();
 
+    const isMyWin = getWinState(myGameInfo.gameState);
+
     return isPc ? (
         <Flex
             sx={{
@@ -33,7 +35,7 @@ const GameOver = () => {
             >
                 <ResultUserCard
                     showResult
-                    win={getWinState(myGameInfo.gameState)}
+                    win={isMyWin}
                     userInfo={myInfo}
                 ></ResultUserCard>
             </Box>
@@ -59,7 +61,7 @@ const GameOver = () => {
                 }}
             >
                 <ResultUserCard
-                    win={getWinState(opGameInfo.gameState)}
+                    win={!isMyWin}
                     userInfo={opInfo}
                 ></ResultUserCard>
             </Box>
@@ -67,34 +69,61 @@ const GameOver = () => {
     ) : (
         <Box
             sx={{
-                padding: "6vw 3.125vw",
+                paddingTop: "100px",
                 position: "relative",
-                width: "100vw",
-                height: "100vh",
+                width: "100%",
+                height: "100%",
             }}
             onClick={() => {
                 handleStepChange(3);
             }}
         >
-            <Flex justify={"space-between"}>
-                <Box>
-                    <MUserProfile
-                        status="my"
-                        avatar={myInfo.avatar}
-                        name={myInfo.name}
-                        mark={myInfo.mark}
-                    ></MUserProfile>
-                    <MBalance balance={myGameInfo.balance}></MBalance>
-                </Box>
-                <Box>
-                    <MUserProfile
-                        status="op"
-                        avatar={opInfo.avatar}
-                        name={opInfo.name}
-                        mark={opInfo.mark}
-                    ></MUserProfile>
-                    <MBalance balance={opGameInfo.balance}></MBalance>
-                </Box>
+            <Flex
+                sx={{
+                    position: "absolute",
+                    top: "24px",
+                    left: 0,
+                    alignItems: "flex-start",
+                }}
+                flexDir={"column"}
+            >
+                <MUserProfile
+                    status="op"
+                    avatar={opInfo.avatar}
+                    name={opInfo.name}
+                    mark={opInfo.mark}
+                    open={true}
+                ></MUserProfile>
+                <MBalance
+                    balance={opGameInfo.balance}
+                    mark={opInfo.mark}
+                    showResult={true}
+                    win={!isMyWin}
+                ></MBalance>
+            </Flex>
+            <Flex
+                sx={{
+                    position: "absolute",
+                    right: 0,
+                    top: "480px",
+                }}
+                flexDir={"column"}
+                align={"flex-end"}
+            >
+                <MUserProfile
+                    status="my"
+                    avatar={myInfo.avatar}
+                    name={myInfo.name}
+                    mark={myInfo.mark}
+                    open={true}
+                ></MUserProfile>
+                <MBalance
+                    balance={myGameInfo.balance}
+                    status="op"
+                    mark={myInfo.mark}
+                    showResult={true}
+                    win={isMyWin}
+                ></MBalance>
             </Flex>
 
             <Flex

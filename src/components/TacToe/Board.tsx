@@ -65,12 +65,12 @@ export const BoardGrid = ({
                                 padding: "0 0.5208vw",
                                 fontSize: isPc ? "0.8333vw" : "12px",
                                 "& img": {
-                                    width: isPc ? "0.7813vw" : "10px",
-                                    height: isPc ? "0.7813vw" : "10px",
+                                    width: isPc ? "0.7813vw" : "8px",
+                                    height: isPc ? "0.7813vw" : "8px",
                                 },
                                 "& >div": {
-                                    width: isPc ? "3.3333vw" : "35px",
-                                    height: isPc ? "0.9375vw" : "12px",
+                                    width: isPc ? "3.3333vw" : "28px",
+                                    height: isPc ? "0.9375vw" : "10px",
                                     background: "#D9D9D9",
                                     borderRadius: isPc ? "0.9375vw" : "4px",
                                     color: "#000000",
@@ -199,8 +199,8 @@ const Board = ({
                 background: `url(${BaseGrid})`,
                 backgroundSize: "100% 100%",
             }}
-            w={isPc ? "26.0938vw" : "278px"}
-            h={isPc ? "26.0938vw" : "278px"}
+            w={isPc ? "26.0938vw" : "220px"}
+            h={isPc ? "26.0938vw" : "220px"}
         >
             <Grid
                 templateColumns="repeat(3, 1fr)"

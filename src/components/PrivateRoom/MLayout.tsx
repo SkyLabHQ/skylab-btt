@@ -1,16 +1,195 @@
-import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
-import { Box, Button, Image, Flex, Text, SimpleGrid } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Image,
+    Flex,
+    Text,
+    SimpleGrid,
+    useDisclosure,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { MUserProfile } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 import Timer from "./Timer";
-import { GameState } from "@/skyConstants/bttGameTypes";
+import {
+    EMOTES,
+    GameState,
+    MERCS,
+    MESSAGES,
+} from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
-import AddIcon from "@/assets/add-icon.svg";
-import SubIcon from "@/assets/sub-icon.svg";
+import AddIcon from "@/components/BttComponents/assets/add.svg";
+import SubIcon from "@/components/BttComponents/assets/sub.svg";
+import MessageIcon1 from "@/assets/message-icon.svg";
+import MessageActiveIcon from "@/components/TacToe/assets/message-active.svg";
+import MessageIcon from "@/components/TacToe/assets/message.svg";
+import EmoteActiveIcon from "@/components/TacToe/assets/emote-active.svg";
+import EmoteIcon from "@/components/TacToe/assets/emote.svg";
+import useSkyToast from "@/hooks/useSkyToast";
+import ToolBar from "./Toolbar";
+const ChatMessage = ({
+    onSetMessage,
+}: {
+    onSetMessage: (
+        type: "setMessage" | "setEmote",
+        emoteIndex?: number,
+    ) => void;
+}) => {
+    const toast = useSkyToast();
+    const [active, setActive] = React.useState("message");
+    const [messageLoading, setMessageLoading] = React.useState(false);
+    const [emoteLoading, setEmoteLoading] = React.useState(false);
+
+    const handleChangeActive = (type: string) => {
+        setActive(type);
+    };
+    return (
+        <Flex height={"100%"}>
+            <Box
+                sx={{
+                    width: "38px",
+                    borderRight: "1px solid #fff",
+                }}
+            >
+                <Flex
+                    align={"center"}
+                    justify={"center"}
+                    flexDirection={"column"}
+                    sx={{
+                        height: "54px",
+                    }}
+                >
+                    <Image
+                        src={
+                            active === "message"
+                                ? MessageActiveIcon
+                                : MessageIcon
+                        }
+                        sx={{
+                            marginRight: "0.5208vw",
+                            cursor: "pointer",
+                            width: "30px",
+                            height: "30px",
+                        }}
+                        onClick={() => handleChangeActive("message")}
+                    />
+                </Flex>
+                <Flex
+                    align={"center"}
+                    justify={"center"}
+                    flexDirection={"column"}
+                    sx={{
+                        height: "54px",
+                        borderTop: "1px solid #fff",
+                    }}
+                >
+                    <Image
+                        src={active === "emote" ? EmoteActiveIcon : EmoteIcon}
+                        sx={{
+                            cursor: "pointer",
+                            width: "30px",
+                            height: "30px",
+                        }}
+                        onClick={() => handleChangeActive("emote")}
+                    />
+                </Flex>
+            </Box>
+            <Box
+                sx={{
+                    paddingTop: "20px",
+                    height: "100px",
+                    overflow: "auto",
+                    flex: 1,
+                }}
+            >
+                <SimpleGrid
+                    margin={"0 auto"}
+                    width={"180px"}
+                    columns={active === "message" ? 1 : 5}
+                    spacingY={"4px"}
+                >
+                    {active === "message" &&
+                        MESSAGES.map((message, index) => {
+                            return (
+                                <Flex
+                                    onClick={() => {
+                                        onSetMessage("setMessage", index + 1);
+                                    }}
+                                    key={index + 1}
+                                    sx={{
+                                        border: "2px solid #d9d9d9",
+                                        borderRadius: "10px",
+                                        paddingLeft: "5px",
+                                        fontSize: "12px",
+                                        width: "180px",
+                                        height: "28px",
+                                    }}
+                                    align={"center"}
+                                >
+                                    {message}
+                                </Flex>
+                            );
+                        })}
+                    {active === "emote" && (
+                        <>
+                            {MERCS.map((message, index) => {
+                                return (
+                                    <Image
+                                        key={index}
+                                        src={message}
+                                        onClick={() => {
+                                            onSetMessage("setEmote", index + 1);
+                                        }}
+                                        sx={{
+                                            width: "30px",
+                                            height: "30px",
+                                            cursor: "pointer",
+                                            marginRight: "0.4167vw",
+                                            border: "2px solid #d9d9d9",
+                                            borderRadius: "0.5208vw",
+                                        }}
+                                    ></Image>
+                                );
+                            })}
+                            {EMOTES.map((message, index) => {
+                                return (
+                                    <Box
+                                        onClick={() => {
+                                            onSetMessage(
+                                                "setEmote",
+                                                MERCS.length + index + 1,
+                                            );
+                                        }}
+                                        key={index + MERCS.length}
+                                        sx={{
+                                            border: "2px solid #d9d9d9",
+                                            borderRadius: "0.5208vw",
+                                            marginRight: "0.4167vw",
+                                            width: "30px",
+                                            height: "30px",
+                                            lineHeight: "30px",
+                                            cursor: "pointer",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            fontSize: "0.8333vw",
+                                        }}
+                                    >
+                                        {message}
+                                    </Box>
+                                );
+                            })}
+                        </>
+                    )}
+                </SimpleGrid>
+            </Box>
+        </Flex>
+    );
+};
 
 const MLayout = ({
+    handleShareTw,
     nextDrawWinner,
     autoCommitTimeoutTime,
     bufferTime,
@@ -18,60 +197,62 @@ const MLayout = ({
     showAnimateNumber,
     onInputChange,
     onConfirm,
+    onSetMessage,
+    loading,
 }: any) => {
-    const [loading, setLoading] = useState<boolean>(false);
-    const {
-        myGameInfo,
-        opGameInfo,
-        bidTacToeGameAddress,
-        myInfo,
-        opInfo,
-        list,
-        onList,
-        handleStepChange,
-    } = usePrivateGameContext();
-    const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress);
+    const { isOpen, onOpen, onClose } = useDisclosure({
+        defaultIsOpen: true,
+    });
+    const { isOpen: opIsOpen, onToggle: opOnToggle } = useDisclosure({
+        defaultIsOpen: true,
+    });
+
+    const { isOpen: keyBoardIsOpen, onToggle: keyBoardOnToggle } =
+        useDisclosure();
+
+    const [inputMode, setInputMode] = useState<"message" | "keyboard">(null);
+
+    const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
+        usePrivateGameContext();
     const myGameState = myGameInfo.gameState;
     const balance = myGameInfo.balance;
 
     return (
         <Box
             sx={{
-                padding: "12px",
+                position: "relative",
+                paddingTop: "100px",
+                height: "100%",
             }}
         >
-            <Flex justify={"space-between"}>
-                <Box>
-                    <MUserProfile
-                        status="my"
-                        avatar={myInfo.avatar}
-                        name={myInfo.name}
-                        mark={myInfo.mark}
-                        showAdvantageTip={myInfo.address === nextDrawWinner}
-                    ></MUserProfile>
-                    <MBalance balance={myGameInfo.balance}></MBalance>
-                </Box>
+            <ToolBar quitType="game" handleShareTw={handleShareTw}></ToolBar>
 
-                <Box>
-                    <MUserProfile
-                        status="op"
-                        avatar={opInfo.avatar}
-                        name={opInfo.name}
-                        mark={opInfo.mark}
-                        showAdvantageTip={opInfo.address === nextDrawWinner}
-                    ></MUserProfile>
-                    <MBalance balance={opGameInfo.balance}></MBalance>
-                </Box>
+            <Flex
+                sx={{
+                    position: "absolute",
+                    top: "24px",
+                    left: 0,
+                    alignItems: "flex-start",
+                }}
+                flexDir={"column"}
+            >
+                <MUserProfile
+                    status="op"
+                    avatar={opInfo.avatar}
+                    name={opInfo.name}
+                    mark={opInfo.mark}
+                    showAdvantageTip={opInfo.address === nextDrawWinner}
+                    open={opIsOpen}
+                    onClick={() => {
+                        opOnToggle();
+                    }}
+                ></MUserProfile>
+                <MBalance
+                    balance={opGameInfo.balance}
+                    mark={opInfo.mark}
+                ></MBalance>
             </Flex>
-            {myGameInfo.gameState < GameState.Commited && (
-                <Timer
-                    time1={autoCommitTimeoutTime}
-                    time2={bufferTime}
-                    time1Gray={
-                        myGameInfo.gameState === GameState.Commited || loading
-                    }
-                ></Timer>
-            )}
+
             <Flex
                 align={"center"}
                 justify={"center"}
@@ -86,17 +267,79 @@ const MLayout = ({
             </Flex>
             <Box
                 sx={{
-                    background: "#787878",
                     position: "absolute",
                     bottom: "0",
                     left: "0",
                     width: "100%",
                 }}
             >
+                <Box
+                    sx={{
+                        height: "80px",
+                        position: "relative",
+                    }}
+                >
+                    <Flex justify={"space-between"} align={"flex-end"}>
+                        {myGameInfo.gameState < GameState.Commited && (
+                            <Box
+                                sx={{
+                                    width: "220px",
+                                    position: "absolute",
+                                    left: "12px",
+                                    bottom: 0,
+                                }}
+                            >
+                                <Timer
+                                    direction="top"
+                                    time1={autoCommitTimeoutTime}
+                                    time2={bufferTime}
+                                    time1Gray={
+                                        myGameInfo.gameState ===
+                                            GameState.Commited || loading
+                                    }
+                                ></Timer>
+                            </Box>
+                        )}
+                    </Flex>
+                    <Flex
+                        sx={{
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                        }}
+                        flexDir={"column"}
+                        align={"flex-end"}
+                    >
+                        <MUserProfile
+                            status="my"
+                            avatar={myInfo.avatar}
+                            name={myInfo.name}
+                            mark={myInfo.mark}
+                            showAdvantageTip={myInfo.address === nextDrawWinner}
+                            open={isOpen}
+                            onClick={() => {
+                                if (isOpen) {
+                                    onClose();
+                                } else {
+                                    onOpen();
+                                }
+                            }}
+                        ></MUserProfile>
+                        <MBalance
+                            balance={myGameInfo.balance}
+                            status="op"
+                            mark={myInfo.mark}
+                        ></MBalance>
+                    </Flex>
+                </Box>
+
                 <Flex
                     sx={{
                         height: "48px",
+                        background: "#787878",
+                        padding: "0 16px",
                     }}
+                    justify={"space-between"}
                     align={"center"}
                 >
                     <Flex
@@ -112,7 +355,8 @@ const MLayout = ({
                         <Image
                             src={SubIcon}
                             sx={{
-                                width: "16px",
+                                width: "18px",
+                                margin: "4px",
                             }}
                             onClick={() => {
                                 if (bidAmount - 1 < 0) return;
@@ -120,7 +364,18 @@ const MLayout = ({
                                 onInputChange(bidAmount - 1);
                             }}
                         ></Image>
-                        <Box>
+                        <Box
+                            onClick={(e) => {
+                                if (inputMode === "keyboard") {
+                                    keyBoardOnToggle();
+                                } else {
+                                    setInputMode("keyboard");
+                                    if (!keyBoardIsOpen) {
+                                        keyBoardOnToggle();
+                                    }
+                                }
+                            }}
+                        >
                             {bidAmount !== "" ? (
                                 <Text
                                     sx={{
@@ -152,7 +407,8 @@ const MLayout = ({
                                 onInputChange(bidAmount + 1);
                             }}
                             sx={{
-                                width: "16px",
+                                width: "18px",
+                                margin: "4px",
                             }}
                         ></Image>
                     </Flex>
@@ -164,11 +420,9 @@ const MLayout = ({
                                 variant={"outline"}
                                 sx={{
                                     color: "#BCBBBE",
-                                    borderRadius: "0.9375vw",
-                                    fontSize: "20px",
+                                    fontSize: "18px",
                                     height: "32px",
                                     width: "100px",
-                                    marginTop: "0.5208vw",
                                     "&:disabled": {
                                         border: "2px solid #fff !important",
                                         opacity: 1,
@@ -194,16 +448,14 @@ const MLayout = ({
                                 sx={{
                                     color: "#fddc2d",
                                     border: "2px solid #fddc2d !important",
-                                    borderRadius: "0.9375vw",
                                     background:
                                         myGameState === GameState.Commited ||
                                         myGameState === GameState.Revealed
                                             ? "linear-gradient(180deg, rgba(253, 220, 45, 0.50) 0%, rgba(253, 220, 45, 0.00) 100%)"
                                             : "transparent",
-                                    fontSize: "20px",
+                                    fontSize: "18px",
                                     height: "32px",
                                     width: "100px",
-                                    marginTop: "0.5208vw",
                                     "&:disabled": {
                                         border: "2px solid #fddc2d !important",
                                         opacity: 1,
@@ -225,42 +477,72 @@ const MLayout = ({
                             </Button>
                         )}
                     </>
+                    <Image
+                        src={MessageIcon1}
+                        onClick={() => {
+                            if (inputMode === "message") {
+                                keyBoardOnToggle();
+                            } else {
+                                setInputMode("message");
+                                if (!keyBoardIsOpen) {
+                                    keyBoardOnToggle();
+                                }
+                            }
+                        }}
+                    ></Image>
                 </Flex>
                 <Box
                     sx={{
                         background: "#303030",
-                        padding: "10px",
+                        height: keyBoardIsOpen ? "108px" : "0px",
+                        overflow: "hidden",
+                        transition: "height 0.3s",
                     }}
                 >
-                    <SimpleGrid columns={3} spacingX={2} spacingY={2}>
-                        {[1, 2, 3, 4, 5, 6].map((item) => {
-                            return (
-                                <Flex
-                                    onClick={() => {
-                                        if (
-                                            item + bidAmount >
-                                            myGameInfo.balance
-                                        ) {
-                                            onInputChange(myGameInfo.balance);
-                                            return;
-                                        }
-                                        onInputChange(item + bidAmount);
-                                    }}
-                                    align={"center"}
-                                    justify={"center"}
-                                    key={item}
-                                    sx={{
-                                        borderRadius: "4px",
-                                        background: "#787878",
-                                        height: "40px",
-                                        fontSize: "28px",
-                                    }}
-                                >
-                                    +{item}
-                                </Flex>
-                            );
-                        })}
-                    </SimpleGrid>
+                    {inputMode === "keyboard" && (
+                        <SimpleGrid
+                            columns={3}
+                            spacingX={2}
+                            spacingY={2}
+                            sx={{
+                                padding: "10px",
+                            }}
+                        >
+                            {[1, 2, 3, 4, 5, 6].map((item) => {
+                                return (
+                                    <Flex
+                                        onClick={() => {
+                                            if (
+                                                item + bidAmount >
+                                                myGameInfo.balance
+                                            ) {
+                                                onInputChange(
+                                                    myGameInfo.balance,
+                                                );
+                                                return;
+                                            }
+                                            onInputChange(item + bidAmount);
+                                        }}
+                                        align={"center"}
+                                        justify={"center"}
+                                        key={item}
+                                        sx={{
+                                            borderRadius: "4px",
+                                            background: "#787878",
+                                            height: "40px",
+                                            fontSize: "28px",
+                                        }}
+                                    >
+                                        +{item}
+                                    </Flex>
+                                );
+                            })}
+                        </SimpleGrid>
+                    )}
+
+                    {inputMode === "message" && (
+                        <ChatMessage onSetMessage={onSetMessage}></ChatMessage>
+                    )}
                 </Box>
             </Box>
         </Box>

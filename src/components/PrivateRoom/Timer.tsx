@@ -6,10 +6,12 @@ const Timer = ({
     time1,
     time2,
     time1Gray,
+    direction = "right",
 }: {
     time1: number;
     time2: number;
     time1Gray: boolean;
+    direction?: "top" | "right";
 }) => {
     const {
         minutes,
@@ -58,6 +60,7 @@ const Timer = ({
             }}
         >
             <BttTimer
+                direction={direction}
                 width={(fisrtTimeout / ThirtySecond) * 100 + "%"}
                 time={`${minutes}:${second}`}
                 show={bttShow}

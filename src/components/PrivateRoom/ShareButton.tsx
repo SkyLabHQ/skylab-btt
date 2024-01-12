@@ -2,6 +2,7 @@ import React from "react";
 import {
     Box,
     Button,
+    Flex,
     Image,
     SimpleGrid,
     Text,
@@ -12,31 +13,37 @@ import html2canvas from "html2canvas";
 import SaveIcon from "@/components/TacToe/assets/save-icon.svg";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import ShareEmojiIcon from "./assets/share-emoji.svg";
+import RightArrow from "./assets/arrow-right.svg";
 
 const ShareButtons = ({
     showShareEmoji,
     handleShareEmoji,
     handleShare,
+    handleBackToPrivateLobby,
 }: {
     showShareEmoji?: boolean;
     handleShareEmoji?: () => void;
     handleShare: () => void;
+    handleBackToPrivateLobby?: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <SimpleGrid
-            columns={isPc ? 3 : 2}
+            columns={4}
+            spacingX={"12px"}
             sx={{
-                marginTop: "1.0417vw",
+                marginTop: "20px",
                 position: "relative",
+                width: "100%",
+
                 "& button": {
-                    width: isPc ? "9.375vw" : "98px",
+                    width: isPc ? "9.375vw" : "80px",
                     height: isPc ? "2.7083vw" : "32px",
                     borderRadius: isPc ? "0.9375vw" : "10px",
                     fontSize: isPc ? "1.0417vw" : "12px",
                     border: isPc
-                        ? "3px solid #bcbbbe !important"
-                        : "2px solid #bcbbbe !important",
+                        ? "3px solid #fff !important"
+                        : "2px solid #fff !important",
                     color: "#d9d9d9",
                 },
             }}
@@ -55,18 +62,19 @@ const ShareButtons = ({
                                 width: isPc ? "1.5625vw" : "16px",
                             }}
                         ></Image>
-                        <Text
-                            sx={{
-                                flex: 1,
-                                textAlign: "center",
-                            }}
-                        >
-                            Share Emoji
-                        </Text>
+                        {isPc && (
+                            <Text
+                                sx={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                }}
+                            >
+                                Share Emoji
+                            </Text>
+                        )}
                     </Button>
                 )}
             </Box>
-
             <Button
                 variant={"outline"}
                 onClick={async (e) => {
@@ -84,18 +92,19 @@ const ShareButtons = ({
                 <Image
                     src={SaveIcon}
                     sx={{
-                        marginRight: "5px",
                         width: isPc ? "1.5625vw" : "16px",
                     }}
                 ></Image>
-                <Text
-                    sx={{
-                        flex: 1,
-                        textAlign: "center",
-                    }}
-                >
-                    Save Image
-                </Text>
+                {isPc && (
+                    <Text
+                        sx={{
+                            flex: 1,
+                            textAlign: "center",
+                        }}
+                    >
+                        Save Image
+                    </Text>
+                )}
             </Button>
             <Button
                 variant={"outline"}
@@ -109,15 +118,42 @@ const ShareButtons = ({
                         width: isPc ? "1.5625vw" : "16px",
                     }}
                 ></Image>
+                {isPc && (
+                    <Text
+                        sx={{
+                            flex: 1,
+                            textAlign: "center",
+                        }}
+                    >
+                        Share Replay{" "}
+                    </Text>
+                )}
+            </Button>
+            <Flex
+                onClick={handleBackToPrivateLobby}
+                sx={{
+                    width: "80px",
+                    justifyContent: "flex-end",
+                }}
+            >
                 <Text
                     sx={{
-                        flex: 1,
+                        fontSize: isPc ? "1.25vw" : "12px",
+                        textDecorationLine: "underline",
+                        marginRight: "0.4167vw",
+                        width: "48px",
                         textAlign: "center",
                     }}
                 >
-                    Share Replay{" "}
+                    Back to Lobby
                 </Text>
-            </Button>
+                <Image
+                    src={RightArrow}
+                    sx={{
+                        width: isPc ? "1.25vw" : "12px",
+                    }}
+                ></Image>
+            </Flex>
         </SimpleGrid>
     );
 };

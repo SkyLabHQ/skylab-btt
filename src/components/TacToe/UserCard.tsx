@@ -23,13 +23,18 @@ import DotIcon from "./assets/dot3.svg";
 import UnlockIcon from "./assets/unlock.svg";
 import LockIcon from "./assets/lock.svg";
 import Plane1 from "@/assets/aviations/a1.png";
-import { EMOTES, MERCS, MESSAGES } from "./Chat";
 import useSkyToast from "@/hooks/useSkyToast";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import BotIcon from "./assets/bot.png";
 import GearIcon from "./assets/gear.svg";
 import { useCountUp } from "react-countup";
-import { GameState, MessageStatus } from "@/skyConstants/bttGameTypes";
+import {
+    EMOTES,
+    GameState,
+    MERCS,
+    MESSAGES,
+    MessageStatus,
+} from "@/skyConstants/bttGameTypes";
 
 export const Message = ({
     message = 0,

@@ -1,17 +1,28 @@
-import {
-    Box,
-    Image,
-    Text,
-    useDisclosure,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Image, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import TutorialIcon from "./assets/tutorial-icon.svg";
 import QuitModal from "./QuitModal";
 import KeyBoard from "../BttComponents/KeyBoard";
 import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
+import QuitIcon from "@/components/BttComponents/assets/quit.svg";
+import { ToolShare } from "../BttComponents/ToolShare";
 
-const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
+const ToolBar = ({
+    inviteLink,
+    quitType,
+    handleShareTw,
+}: {
+    inviteLink?: string;
+    quitType?: "wait" | "game";
+    handleShareTw?: () => void;
+}) => {
+    const {
+        isOpen: shareOpen,
+        onToggle: shareOnToggle,
+        onClose: shareOnClose,
+    } = useDisclosure({
+        defaultIsOpen: true,
+    });
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -34,50 +45,46 @@ const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
                 },
             }}
         >
-            <KeyBoard
-                type={false}
-                isOpen={keyBoardOpen}
-                onToggle={() => {
-                    keyBoardOnToggle();
-                }}
-                onClose={keyBoardOnClose}
-            ></KeyBoard>
-            <Box
-                sx={{
-                    borderRadius: "0.5208vw",
-                    height: "2.3958vw",
-                    width: "2.3958vw",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "2px solid #fff",
-                    marginRight: "0.7292vw",
-                }}
-            >
-                <BidTacToeTutorial>
-                    <Image
-                        src={TutorialIcon}
-                        sx={{
-                            width: "1.5625vw",
-                            height: "1.5625vw",
-                        }}
-                    ></Image>
-                </BidTacToeTutorial>
-            </Box>
-            <Box
+            {isPc && (
+                <KeyBoard
+                    type={false}
+                    isOpen={keyBoardOpen}
+                    onToggle={() => {
+                        keyBoardOnToggle();
+                    }}
+                    onClose={keyBoardOnClose}
+                ></KeyBoard>
+            )}
+
+            {quitType === "game" && (
+                <ToolShare
+                    inviteLink={inviteLink}
+                    handleShareTw={handleShareTw}
+                    isOpen={shareOpen}
+                    onToggle={shareOnToggle}
+                    onClose={shareOnClose}
+                ></ToolShare>
+            )}
+            <BidTacToeTutorial>
+                <Image
+                    src={TutorialIcon}
+                    sx={{
+                        height: isPc ? "2.3958vw" : "32px",
+                        width: isPc ? "2.3958vw" : "32px",
+                        marginRight: "0.7292vw",
+                    }}
+                ></Image>
+            </BidTacToeTutorial>
+            <Image
                 onClick={onOpen}
+                src={QuitIcon}
                 sx={{
-                    borderRadius: "0.5208vw",
-                    height: "2.3958vw",
-                    width: "2.3958vw",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "2px solid #fff",
+                    height: isPc ? "2.3958vw" : "32px",
+                    width: isPc ? "2.3958vw" : "32px",
+                    cursor: "pointer",
                 }}
-            >
-                <Text sx={{ fontSize: "0.8333vw" }}>Quit</Text>
-            </Box>
+            ></Image>
+
             <QuitModal
                 isOpen={isOpen}
                 onClose={onClose}

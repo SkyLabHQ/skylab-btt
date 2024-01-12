@@ -83,9 +83,13 @@ const Match = () => {
     useEffect(() => {
         if (myInfo.address && opInfo.address) {
             start();
-            setTimeout(() => {
-                handleStepChange(1);
-            }, 5000);
+            setTimeout(
+                () => {
+                    handleStepChange(1);
+                },
+                0,
+                // 5000
+            );
         }
     }, [myInfo.address, opInfo.address]);
 

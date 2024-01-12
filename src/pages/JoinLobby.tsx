@@ -14,7 +14,7 @@ const JoinLobby = () => {
         <Box
             sx={{
                 background: "#303030",
-                height: "100vh",
+                height: "100%",
             }}
         >
             <Box
