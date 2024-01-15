@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Image, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Image, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import { Info, UserMarkType, useGameContext, GameType } from "@/pages/TacToe";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
@@ -16,11 +16,13 @@ import { useBlockNumber } from "@/contexts/BlockNumber";
 
 import { botAddress } from "@/hooks/useContract";
 import { GrayButton } from "../Button/Index";
-import QuitModal from "./QuitModal";
+import QuitModal from "@/components/BttComponents/QuitModal";
 import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
 import { getSCWallet } from "@/hooks/useSCWallet";
 import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
+import { handleError } from "@/utils/error";
+import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
 
 export const PlaneImg = ({
     detail,
@@ -197,6 +199,7 @@ export const MatchPage = ({
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
+    const toast = useToast();
     const { blockNumber } = useBlockNumber();
     const {
         realChainId,
@@ -208,9 +211,13 @@ export const MatchPage = ({
         tokenId,
         istest,
         avaitionAddress,
+        handleGetGas,
         onStep,
         setBidTacToeGameAddress,
     } = useGameContext();
+
+    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
+
     const multiProvider = useMultiProvider(realChainId);
     const [tacToeBurner] = useTacToeSigner(tokenId);
 
@@ -507,6 +514,26 @@ export const MatchPage = ({
         }
     };
 
+    const handleQuit = async () => {
+        try {
+            await tacToeFactoryRetryWrite("withdrawFromQueue", [], {
+                gasLimit: 250000,
+                usePaymaster: istest,
+            });
+            const url = istest
+                ? `/btt?tokenId=${tokenId}&testflight=true`
+                : `/btt?tokenId=${tokenId}`;
+            if (!istest) {
+                handleGetGas();
+            }
+            navigate(url);
+            onClose();
+        } catch (error) {
+            console.log(error);
+            toast(handleError(error, istest));
+        }
+    };
+
     useEffect(() => {
         if (
             !multiProvider ||
@@ -565,7 +592,12 @@ export const MatchPage = ({
                     width: "100%",
                 }}
             >
-                <ToolBar quitType="wait"></ToolBar>
+                <ToolBar
+                    quitType="wait"
+                    onQuitClick={() => {
+                        onOpen();
+                    }}
+                ></ToolBar>
             </Box>
             <Box
                 sx={{
@@ -588,9 +620,10 @@ export const MatchPage = ({
                 }}
             ></StopMatch>
             <QuitModal
+                onConfirm={handleQuit}
                 isOpen={isOpen}
                 onClose={onClose}
-                quitType={"wait"}
+                quitType="wait"
             ></QuitModal>
         </Box>
     );

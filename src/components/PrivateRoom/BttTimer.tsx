@@ -1,7 +1,5 @@
 import { Box, keyframes, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
-export const SixtySecond = 60 * 1000;
-export const ThirtySecond = 30 * 1000;
 
 const BttTimer = ({
     width,

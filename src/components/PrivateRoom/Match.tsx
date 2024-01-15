@@ -11,9 +11,11 @@ import {
 import React, { useEffect } from "react";
 import Loading from "../Loading";
 import useCountDown from "react-countdown-hook";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ToolBar from "./Toolbar";
-import QuitModal from "./QuitModal";
+import { getPrivateLobbySigner } from "@/hooks/useSigner";
+import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import QuitModal from "../BttComponents/QuitModal";
 
 const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
     const isMy = status === "my";
@@ -71,13 +73,21 @@ const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
 const Match = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const navigate = useNavigate();
+    const { bidTacToeGameAddress, lobbyAddress } = usePrivateGameContext();
 
     const { search } = useLocation();
     const [timeLeft, { start }] = useCountDown(5000, 1000);
     const { myInfo, opInfo, handleStepChange } = usePrivateGameContext();
+    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
 
-    const handleWithdrawFromQueue = async () => {
-        onOpen();
+    const handleQuit = async () => {
+        const privateLobbySigner = getPrivateLobbySigner();
+        await bttPrivateLobbyContract("deleteRoom", [bidTacToeGameAddress], {
+            usePaymaster: true,
+            signer: privateLobbySigner,
+        });
+        navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
     };
 
     useEffect(() => {
@@ -102,7 +112,12 @@ const Match = () => {
                 padding: "0 1.0417vw",
             }}
         >
-            <ToolBar quitType="wait"></ToolBar>
+            <ToolBar
+                quitType="wait"
+                onQuitClick={() => {
+                    onOpen();
+                }}
+            ></ToolBar>
 
             <Box
                 sx={{
@@ -160,7 +175,9 @@ const Match = () => {
                         </Box>
                     ) : (
                         <Button
-                            onClick={handleWithdrawFromQueue}
+                            onClick={() => {
+                                onOpen();
+                            }}
                             sx={{
                                 width: isPc ? "12.5vw" : "160px",
                                 height: isPc ? "2.8646vw" : "40px",
@@ -177,6 +194,7 @@ const Match = () => {
                 </Flex>
             </Box>
             <QuitModal
+                onConfirm={handleQuit}
                 isOpen={isOpen}
                 onClose={onClose}
                 quitType={"wait"}

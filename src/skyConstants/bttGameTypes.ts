@@ -175,3 +175,6 @@ ${mark}${mark}${emojiList.join("")}${mark}${mark}
 @skylabHQ
 https://app.projmercury.io/btt`;
 };
+
+export const SixtySecond = 60 * 1000;
+export const ThirtySecond = 30 * 1000;

@@ -8,7 +8,7 @@ import {
     SimpleGrid,
     useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MUserProfile } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 import Timer from "./Timer";
@@ -187,6 +187,7 @@ const ChatMessage = ({
 };
 
 const MLayout = ({
+    handleQuitClick,
     handleShareTw,
     nextDrawWinner,
     autoCommitTimeoutTime,
@@ -219,6 +220,12 @@ const MLayout = ({
     const myGameState = myGameInfo.gameState;
     const balance = myGameInfo.balance;
 
+    useEffect(() => {
+        if (messageLoading || emoteLoading) {
+            onClose();
+        }
+    }, [messageLoading, emoteLoading]);
+
     return (
         <Box
             sx={{
@@ -227,7 +234,11 @@ const MLayout = ({
                 height: "100%",
             }}
         >
-            <ToolBar quitType="game" handleShareTw={handleShareTw}></ToolBar>
+            <ToolBar
+                quitType="game"
+                handleShareTw={handleShareTw}
+                onQuitClick={handleQuitClick}
+            ></ToolBar>
             <Flex
                 sx={{
                     position: "absolute",

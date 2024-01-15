@@ -10,63 +10,35 @@ import {
     ModalOverlay,
 } from "@chakra-ui/react";
 import CloseIcon from "@/assets/icon-close.svg";
-import { handleError } from "@/utils/error";
 import Loading from "../Loading";
 import useSkyToast from "@/hooks/useSkyToast";
-import {
-    useBidTacToeFactoryRetry,
-    useBttGameRetry,
-} from "@/hooks/useRetryContract";
-import { useGameContext } from "@/pages/TacToe";
-import { useNavigate } from "react-router-dom";
+import { handleError } from "@/utils/error";
 
 const QuitModal = ({
+    onConfirm,
     quitType,
     isOpen,
     onClose,
 }: {
+    onConfirm: () => void;
     quitType: "wait" | "game";
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const navigate = useNavigate();
-    const { tokenId, bidTacToeGameAddress, istest, handleGetGas } =
-        useGameContext();
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
-    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
 
-    const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress, tokenId);
+    const handleConfirm = async () => {
+        if (loading) return;
 
-    const handleRetreat = async () => {
         try {
             setLoading(true);
-            if (loading) return;
-            if (quitType === "wait") {
-                await tacToeFactoryRetryWrite("withdrawFromQueue", [], {
-                    gasLimit: 250000,
-                    usePaymaster: istest,
-                });
-                const url = istest
-                    ? `/btt?tokenId=${tokenId}&testflight=true`
-                    : `/btt?tokenId=${tokenId}`;
-                if (!istest) {
-                    handleGetGas();
-                }
-                navigate(url);
-            } else {
-                await tacToeGameRetryWrite("surrender", [], {
-                    gasLimit: 800000,
-                    usePaymaster: istest,
-                });
-            }
-
+            await onConfirm();
             setLoading(false);
             onClose();
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-            toast(handleError(error, istest));
+        } catch (e) {
+            console.log(e);
+            toast(handleError(e, true));
         }
     };
 
@@ -118,7 +90,7 @@ const QuitModal = ({
                     <Button
                         bg="white"
                         colorScheme="white"
-                        onClick={handleRetreat}
+                        onClick={handleConfirm}
                         fontSize="1.25vw"
                         w="10.9375vw"
                         padding="1.6667vw 0"

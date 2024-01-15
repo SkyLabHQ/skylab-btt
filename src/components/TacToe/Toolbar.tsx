@@ -9,19 +9,21 @@ import {
     Text,
     useClipboard,
     useDisclosure,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useMemo } from "react";
-import TutorialIcon from "./assets/tutorial-icon.svg";
+import TutorialIcon from "@/components/BttComponents/assets/tutorial-icon.svg";
 import ShareIcon from "./assets/share.svg";
 import BidTacToeTutorial from "./BidTacToeTutorial";
 import LinkIcon from "./assets/link.svg";
 import TwIcon from "./assets/tw.svg";
-import QuitModal from "./QuitModal";
+import QuitModal from "@/components/BttComponents/QuitModal";
 import { useGameContext } from "@/pages/TacToe";
 import useSkyToast from "@/hooks/useSkyToast";
 import { CHAIN_NAMES } from "@/utils/web3Utils";
 import { shortenAddressWithout0x } from "@/utils";
 import KeyBoard from "../BttComponents/KeyBoard";
+import QuitIcon from "@/components/BttComponents/assets/quit.svg";
 import { useChainId } from "wagmi";
 
 const ShareLink = ({
@@ -176,8 +178,14 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     );
 };
 
-const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+const ToolBar = ({
+    quitType,
+    onQuitClick,
+}: {
+    quitType?: "wait" | "game";
+    onQuitClick: () => void;
+}) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
 
     const {
         isOpen: keyBoardOpen,
@@ -224,49 +232,25 @@ const ToolBar = ({ quitType }: { quitType?: "wait" | "game" }) => {
                     onClose={shareOnClose}
                 ></ShareLink>
             )}
-            <Box
+            <BidTacToeTutorial>
+                <Image
+                    src={TutorialIcon}
+                    sx={{
+                        height: isPc ? "2.3958vw" : "32px",
+                        width: isPc ? "2.3958vw" : "32px",
+                        marginRight: "0.7292vw",
+                    }}
+                ></Image>
+            </BidTacToeTutorial>
+            <Image
+                onClick={onQuitClick}
+                src={QuitIcon}
                 sx={{
-                    borderRadius: "0.5208vw",
-                    height: "2.3958vw",
-                    width: "2.3958vw",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "2px solid #fff",
-                    marginRight: "0.7292vw",
+                    height: isPc ? "2.3958vw" : "32px",
+                    width: isPc ? "2.3958vw" : "32px",
+                    cursor: "pointer",
                 }}
-            >
-                <BidTacToeTutorial>
-                    <Image
-                        src={TutorialIcon}
-                        sx={{
-                            width: "1.5625vw",
-                            height: "1.5625vw",
-                        }}
-                    ></Image>
-                </BidTacToeTutorial>
-            </Box>
-            <Box
-                onClick={onOpen}
-                sx={{
-                    borderRadius: "0.5208vw",
-                    height: "2.3958vw",
-                    width: "2.3958vw",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "2px solid #fff",
-                }}
-            >
-                <Text sx={{ fontSize: "0.8333vw" }}>Quit</Text>
-            </Box>
-            {quitType && (
-                <QuitModal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    quitType={quitType}
-                ></QuitModal>
-            )}
+            ></Image>
         </Box>
     );
 };

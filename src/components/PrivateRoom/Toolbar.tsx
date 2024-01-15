@@ -1,7 +1,6 @@
 import { Box, Image, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
-import TutorialIcon from "./assets/tutorial-icon.svg";
-import QuitModal from "./QuitModal";
+import TutorialIcon from "@/components/BttComponents/assets/tutorial-icon.svg";
 import KeyBoard from "../BttComponents/KeyBoard";
 import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
 import QuitIcon from "@/components/BttComponents/assets/quit.svg";
@@ -11,10 +10,12 @@ const ToolBar = ({
     inviteLink,
     quitType,
     handleShareTw,
+    onQuitClick,
 }: {
     inviteLink?: string;
     quitType?: "wait" | "game";
     handleShareTw?: () => void;
+    onQuitClick: () => void;
 }) => {
     const {
         isOpen: shareOpen,
@@ -76,7 +77,7 @@ const ToolBar = ({
                 ></Image>
             </BidTacToeTutorial>
             <Image
-                onClick={onOpen}
+                onClick={onQuitClick}
                 src={QuitIcon}
                 sx={{
                     height: isPc ? "2.3958vw" : "32px",
@@ -84,12 +85,6 @@ const ToolBar = ({
                     cursor: "pointer",
                 }}
             ></Image>
-
-            <QuitModal
-                isOpen={isOpen}
-                onClose={onClose}
-                quitType={quitType}
-            ></QuitModal>
         </Box>
     );
 };

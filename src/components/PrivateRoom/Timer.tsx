@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Box } from "@chakra-ui/react";
-import BttTimer, { BufferTimer, ThirtySecond } from "./BttTimer";
+import BttTimer, { BufferTimer } from "./BttTimer";
+import { ThirtySecond } from "@/skyConstants/bttGameTypes";
 
 const Timer = ({
     time1,

@@ -1,5 +1,5 @@
 import { MyBid, OpBid } from "./UserBid";
-import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Board from "@/components/TacToe/Board";
 import Timer from "./Timer";
@@ -27,6 +27,8 @@ import Chat from "./Chat";
 import {
     GameState,
     MessageStatus,
+    SixtySecond,
+    ThirtySecond,
     getWinState,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
@@ -34,14 +36,14 @@ import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { Message } from "./Message";
 import MLayout from "./MLayout";
 import getNowSecondsTimestamp from "@/utils/nowTime";
-import { SixtySecond, ThirtySecond } from "./BttTimer";
-import { shortenAddressWithout0x } from "@/utils";
+import QuitModal from "../BttComponents/QuitModal";
 
 const PlayGame = ({
     onChangeGame,
 }: {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
 }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState<boolean>(false);
     const toast = useSkyToast();
@@ -393,6 +395,14 @@ const PlayGame = ({
         setBidAmount(value);
     };
 
+    const handleQuit = async () => {
+        const privateLobbySigner = getPrivateLobbySigner();
+        await tacToeGameRetryWrite("surrender", [], {
+            usePaymaster: true,
+            signer: privateLobbySigner,
+        });
+    };
+
     const handleGameOver = async () => {
         deleteTokenIdCommited();
         handleStepChange(2);
@@ -560,148 +570,170 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
         };
     }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
 
-    return isPc ? (
-        <Box
-            sx={{
-                padding: "1.4063vw 3.125vw",
-                position: "relative",
-                width: "100vw",
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-            }}
-        >
-            <Flex flexDir={"column"} align={"center"}>
-                {myGameInfo.gameState < GameState.Commited && (
-                    <Timer
-                        time1={autoCommitTimeoutTime}
-                        time2={bufferTime}
-                        time1Gray={
-                            myGameInfo.gameState === GameState.Commited ||
-                            loading
-                        }
-                    ></Timer>
-                )}
-                <StatusTip
+    return (
+        <Box>
+            {isPc ? (
+                <Box
+                    sx={{
+                        padding: "1.4063vw 3.125vw",
+                        position: "relative",
+                        width: "100vw",
+                        height: "100vh",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <Flex flexDir={"column"} align={"center"}>
+                        {myGameInfo.gameState < GameState.Commited && (
+                            <Timer
+                                time1={autoCommitTimeoutTime}
+                                time2={bufferTime}
+                                time1Gray={
+                                    myGameInfo.gameState ===
+                                        GameState.Commited || loading
+                                }
+                            ></Timer>
+                        )}
+                        <StatusTip
+                            loading={loading}
+                            myGameState={myGameInfo.gameState}
+                            opGameState={opGameInfo.gameState}
+                        ></StatusTip>
+                    </Flex>
+                    <ToolBar
+                        quitType="game"
+                        onQuitClick={() => {
+                            onOpen();
+                        }}
+                    ></ToolBar>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: "15.625vw",
+                            }}
+                        >
+                            <Flex>
+                                <UserProfile
+                                    status="my"
+                                    avatar={myInfo.avatar}
+                                    name={myInfo.name}
+                                    mark={myInfo.mark}
+                                    showAdvantageTip={
+                                        myInfo.address === nextDrawWinner
+                                    }
+                                ></UserProfile>
+                                <Box
+                                    sx={{
+                                        margin: "0.5208vw 0 0 0.5208vw",
+                                    }}
+                                >
+                                    <Message
+                                        message={myGameInfo.message}
+                                        emote={myGameInfo.emote}
+                                        messageLoading={messageLoading}
+                                        emoteLoading={emoteLoading}
+                                        status={"my"}
+                                        emoteIndex={emoteIndex}
+                                        messageIndex={messageIndex}
+                                    ></Message>
+                                </Box>
+                            </Flex>
+
+                            <MyBid
+                                loading={loading}
+                                myGameState={myGameInfo.gameState}
+                                balance={myGameInfo.balance}
+                                bidAmount={bidAmount}
+                                onConfirm={handleBid}
+                                onInputChange={handleBidAmount}
+                            ></MyBid>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                paddingTop: "1.5625vw",
+                            }}
+                        >
+                            <Board
+                                list={list}
+                                showAnimateNumber={showAnimateNumber}
+                            ></Board>
+                        </Box>
+                        <Flex
+                            sx={{
+                                width: "15.625vw",
+                            }}
+                            flexDir={"column"}
+                            alignItems={"flex-end"}
+                        >
+                            <Flex justify={"flex-end"}>
+                                <Box
+                                    sx={{
+                                        margin: "0.5208vw 0.5208vw 0 0",
+                                    }}
+                                >
+                                    <Message
+                                        message={opGameInfo.message}
+                                        emote={opGameInfo.emote}
+                                        status={"op"}
+                                    ></Message>
+                                </Box>
+
+                                <UserProfile
+                                    status="op"
+                                    avatar={opInfo.avatar}
+                                    name={opInfo.name}
+                                    mark={opInfo.mark}
+                                    showAdvantageTip={
+                                        opInfo.address === nextDrawWinner
+                                    }
+                                ></UserProfile>
+                            </Flex>
+
+                            <OpBid
+                                myGameState={myGameInfo.gameState}
+                                opGameState={opGameInfo.gameState}
+                                balance={opGameInfo.balance}
+                            ></OpBid>
+                        </Flex>
+                    </Box>
+                    <Chat onSetMessage={handleSetMessage}></Chat>
+                </Box>
+            ) : (
+                <MLayout
+                    inviteLink={inviteLink}
+                    handleShareTw={handleShareTw}
+                    nextDrawWinner={nextDrawWinner}
+                    autoCommitTimeoutTime={autoCommitTimeoutTime}
+                    bufferTime={bufferTime}
+                    showAnimateNumber={showAnimateNumber}
+                    bidAmount={bidAmount}
+                    onInputChange={handleBidAmount}
+                    onConfirm={handleBid}
+                    onSetMessage={handleSetMessage}
+                    emoteIndex={emoteIndex}
+                    messageIndex={messageIndex}
+                    messageLoading={messageLoading}
+                    emoteLoading={emoteLoading}
+                    handleQuitClick={() => {
+                        onOpen();
+                    }}
                     loading={loading}
-                    myGameState={myGameInfo.gameState}
-                    opGameState={opGameInfo.gameState}
-                ></StatusTip>
-            </Flex>
-            <ToolBar quitType="game"></ToolBar>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                }}
-            >
-                <Box
-                    sx={{
-                        width: "15.625vw",
-                    }}
-                >
-                    <Flex>
-                        <UserProfile
-                            status="my"
-                            avatar={myInfo.avatar}
-                            name={myInfo.name}
-                            mark={myInfo.mark}
-                            showAdvantageTip={myInfo.address === nextDrawWinner}
-                        ></UserProfile>
-                        <Box
-                            sx={{
-                                margin: "0.5208vw 0 0 0.5208vw",
-                            }}
-                        >
-                            <Message
-                                message={myGameInfo.message}
-                                emote={myGameInfo.emote}
-                                messageLoading={messageLoading}
-                                emoteLoading={emoteLoading}
-                                status={"my"}
-                                emoteIndex={emoteIndex}
-                                messageIndex={messageIndex}
-                            ></Message>
-                        </Box>
-                    </Flex>
-
-                    <MyBid
-                        loading={loading}
-                        myGameState={myGameInfo.gameState}
-                        balance={myGameInfo.balance}
-                        bidAmount={bidAmount}
-                        onConfirm={handleBid}
-                        onInputChange={handleBidAmount}
-                    ></MyBid>
-                </Box>
-
-                <Box
-                    sx={{
-                        paddingTop: "1.5625vw",
-                    }}
-                >
-                    <Board
-                        list={list}
-                        showAnimateNumber={showAnimateNumber}
-                    ></Board>
-                </Box>
-                <Flex
-                    sx={{
-                        width: "15.625vw",
-                    }}
-                    flexDir={"column"}
-                    alignItems={"flex-end"}
-                >
-                    <Flex justify={"flex-end"}>
-                        <Box
-                            sx={{
-                                margin: "0.5208vw 0.5208vw 0 0",
-                            }}
-                        >
-                            <Message
-                                message={opGameInfo.message}
-                                emote={opGameInfo.emote}
-                                status={"op"}
-                            ></Message>
-                        </Box>
-
-                        <UserProfile
-                            status="op"
-                            avatar={opInfo.avatar}
-                            name={opInfo.name}
-                            mark={opInfo.mark}
-                            showAdvantageTip={opInfo.address === nextDrawWinner}
-                        ></UserProfile>
-                    </Flex>
-
-                    <OpBid
-                        myGameState={myGameInfo.gameState}
-                        opGameState={opGameInfo.gameState}
-                        balance={opGameInfo.balance}
-                    ></OpBid>
-                </Flex>
-            </Box>
-            <Chat onSetMessage={handleSetMessage}></Chat>
+                ></MLayout>
+            )}
+            <QuitModal
+                onConfirm={handleQuit}
+                isOpen={isOpen}
+                onClose={onClose}
+                quitType={"wait"}
+            ></QuitModal>
         </Box>
-    ) : (
-        <MLayout
-            inviteLink={inviteLink}
-            handleShareTw={handleShareTw}
-            nextDrawWinner={nextDrawWinner}
-            autoCommitTimeoutTime={autoCommitTimeoutTime}
-            bufferTime={bufferTime}
-            showAnimateNumber={showAnimateNumber}
-            bidAmount={bidAmount}
-            onInputChange={handleBidAmount}
-            onConfirm={handleBid}
-            onSetMessage={handleSetMessage}
-            emoteIndex={emoteIndex}
-            messageIndex={messageIndex}
-            messageLoading={messageLoading}
-            emoteLoading={emoteLoading}
-            loading={loading}
-        ></MLayout>
     );
 };
 

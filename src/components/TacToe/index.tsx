@@ -1,12 +1,15 @@
 import { MyUserCard, OpUserCard } from "@/components/TacToe/UserCard";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "@/components/TacToe/Board";
 import ToolBar from "./Toolbar";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-import { useBttGameRetry } from "@/hooks/useRetryContract";
+import {
+    useBidTacToeFactoryRetry,
+    useBttGameRetry,
+} from "@/hooks/useRetryContract";
 import {
     GameInfo,
     GameType,
@@ -37,9 +40,14 @@ import Timer from "../PrivateRoom/Timer";
 import {
     GameState,
     MessageStatus,
+    SixtySecond,
+    ThirtySecond,
     getWinState,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
+import getNowSecondsTimestamp from "@/utils/nowTime";
+import { useNavigate } from "react-router-dom";
+import QuitModal from "../BttComponents/QuitModal";
 
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
@@ -48,6 +56,7 @@ interface TacToeProps {
 
 const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const toast = useSkyToast();
+    const navigate = useNavigate();
 
     const {
         istest,
@@ -66,6 +75,9 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
         realChainId,
         handleGetGas,
     } = useGameContext();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
 
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const { blockNumber } = useBlockNumber();
@@ -101,6 +113,8 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
 
     const ethcallProvider = useMultiProvider(realChainId);
     const [loading, setLoading] = useState<boolean>(false);
+    const [bufferTime, setBufferTime] = useState(0);
+    const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 
     const handleGetGameInfo = async () => {
         const [
@@ -338,6 +352,23 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
         }
     };
 
+    const handleRetreat = async () => {
+        try {
+            setLoading(true);
+            if (loading) return;
+            await tacToeGameRetryWrite("surrender", [], {
+                gasLimit: 800000,
+                usePaymaster: istest,
+            });
+
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+            toast(handleError(error, istest));
+        }
+    };
+
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
@@ -423,9 +454,138 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
         }
     };
 
+    const handleQuit = async () => {
+        try {
+            await tacToeGameRetryWrite("surrender", [], {
+                gasLimit: 800000,
+                usePaymaster: istest,
+            });
+        } catch (error) {
+            console.log(error);
+            toast(handleError(error, istest));
+        }
+    };
+
     useEffect(() => {
         handleGameOver();
     }, [myGameInfo.gameState, deleteTokenIdCommited, addBttTransaction]);
+
+    useEffect(() => {
+        if (
+            myGameInfo.gameState !== GameState.WaitingForBid ||
+            !bidTacToeGameAddress
+        ) {
+            return;
+        }
+        const commitWorkerRef = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+        const time = myGameInfo.timeout * 1000;
+        const now = getNowSecondsTimestamp();
+        commitWorkerRef.onmessage = async (event) => {
+            const timeLeft = event.data;
+            setAutoCommitTimeoutTime(timeLeft);
+
+            if (timeLeft === 0) {
+                handleBid();
+            }
+        };
+
+        const remainTime = time - now;
+
+        if (remainTime > ThirtySecond) {
+            const bufferKey = bidTacToeGameAddress;
+            let bufferTime = sessionStorage.getItem(bufferKey) ?? 0;
+            sessionStorage.setItem(bufferKey, "");
+
+            if (Number(bufferTime) === 0 || remainTime > Number(bufferTime)) {
+                if (remainTime > SixtySecond) {
+                    bufferTime = remainTime - SixtySecond;
+                } else if (remainTime > ThirtySecond) {
+                    bufferTime = remainTime - ThirtySecond;
+                } else {
+                    bufferTime = remainTime;
+                }
+            } else {
+                bufferTime = remainTime;
+            }
+
+            setBufferTime(Number(bufferTime));
+            commitWorkerRef.postMessage({
+                action: "start",
+                timeToCount: remainTime - ThirtySecond,
+            });
+        } else {
+            commitWorkerRef.postMessage({
+                action: "stop",
+            });
+        }
+
+        return () => {
+            commitWorkerRef.terminate();
+        };
+    }, [myGameInfo.timeout, myGameInfo.gameState]);
+
+    useEffect(() => {
+        if (
+            !opGameInfo.timeout ||
+            !opGameInfo.gameState ||
+            !myGameInfo.gameState
+        )
+            return;
+        const now = getNowSecondsTimestamp();
+        const autoCallTimeoutTime =
+            opGameInfo.timeout * 1000 - now > 0
+                ? opGameInfo.timeout * 1000 - now
+                : 0;
+
+        const commitWorkerRef = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+
+        commitWorkerRef.onmessage = async (event) => {
+            const timeLeft = event.data;
+
+            if (timeLeft === 0) {
+                handleCallTimeOut();
+            }
+        };
+        if (autoCallTimeoutTime === 0) {
+            handleCallTimeOut();
+        } else {
+            commitWorkerRef.postMessage({
+                action: "start",
+                timeToCount: autoCallTimeoutTime,
+            });
+        }
+
+        return () => {
+            commitWorkerRef.terminate();
+        };
+    }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
+
+    useEffect(() => {
+        if (!bidTacToeGameAddress) {
+            return;
+        }
+        const handleBufferTime = () => {
+            const bufferKey = bidTacToeGameAddress;
+            let remainBufferTime = 0;
+            if (autoCommitTimeoutTime > bufferTime) {
+                remainBufferTime = bufferTime;
+            } else {
+                remainBufferTime = autoCommitTimeoutTime;
+            }
+
+            sessionStorage.setItem(bufferKey, String(remainBufferTime));
+        };
+
+        window.addEventListener("beforeunload", handleBufferTime);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBufferTime);
+        };
+    }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
 
     return (
         <Box
@@ -445,28 +605,31 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
                 myGameInfo.gameState > 3 && onStep(3);
             }}
         >
-            <Box>
-                {/* <Timer
-                    myGameInfo={myGameInfo}
-                    opGameInfo={opGameInfo}
-                    autoBid={() => {
-                        // handleBid();
-                    }}
-                    loading={loading}
-                    bidTacToeGameAddress={bidTacToeGameAddress}
-                    handleCallTimeOut={() => {
-                        // handleCallTimeOut();
-                    }}
-                ></Timer> */}
+            <Flex flexDir={"column"} align={"center"}>
+                {myGameInfo.gameState < GameState.Commited && (
+                    <Timer
+                        time1={autoCommitTimeoutTime}
+                        time2={bufferTime}
+                        time1Gray={
+                            myGameInfo.gameState === GameState.Commited ||
+                            loading
+                        }
+                    ></Timer>
+                )}
                 <StatusTip
                     loading={loading}
                     myGameState={myGameInfo.gameState}
                     opGameState={opGameInfo.gameState}
                 ></StatusTip>
-            </Box>
+            </Flex>
 
             {myGameInfo.gameState <= GameState.Revealed && (
-                <ToolBar quitType="game"></ToolBar>
+                <ToolBar
+                    quitType="game"
+                    onQuitClick={() => {
+                        onOpen();
+                    }}
+                ></ToolBar>
             )}
             <Box
                 sx={{
@@ -601,6 +764,13 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
                     }}
                 ></Chat>
             )}
+
+            <QuitModal
+                onConfirm={handleQuit}
+                isOpen={isOpen}
+                onClose={onClose}
+                quitType="game"
+            ></QuitModal>
         </Box>
     );
 };
