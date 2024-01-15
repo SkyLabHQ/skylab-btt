@@ -37,46 +37,54 @@ const ListBorder = () => {
 const GameButton = ({
     label,
     onClick,
-    border = "2px solid #303030",
-    background = "linear-gradient(95deg, #BCBBBE 0.99%, #FFF 0.99%, #D7C878 46.9%, rgba(216, 209, 169, 0.49) 68.71%, #FFF 104.68%)",
+    borderColor = "#FDDC2D",
+    backgroundColor = "#FDDC2D",
 }: {
     label: string;
     onClick?: () => void;
-    border?: string;
-    background?: string;
+    borderColor?: string;
+    backgroundColor?: string;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Flex
-            onClick={onClick}
-            align={"center"}
-            justify={"space-between"}
+        <Box
             sx={{
-                width: isPc ? "9.4792vw" : "96px",
-                height: isPc ? "2.1875vw" : "36px",
-                fontSize: "1.25vw",
+                border: `1px solid ${borderColor}`,
+                padding: "2px",
                 borderRadius: isPc ? "0.5208vw" : "10px",
-                padding: "0 0.5208vw",
-                color: "#303030",
-                cursor: "pointer",
-                border,
-                background,
             }}
+            onClick={onClick}
         >
-            <Text
+            <Flex
+                align={"center"}
+                justify={"space-between"}
                 sx={{
-                    fontSize: isPc ? "1.25vw" : "20px",
+                    width: isPc ? "9.4792vw" : "96px",
+                    height: isPc ? "2.1875vw" : "36px",
+                    fontSize: "1.25vw",
+                    padding: "0 0.5208vw",
+                    borderRadius: isPc ? "0.5208vw" : "8px",
+                    color: "#303030",
+                    cursor: "pointer",
+                    background: backgroundColor,
+                    border: `1px solid ${borderColor}`,
                 }}
             >
-                {label}
-            </Text>
-            <Image
-                src={RightArrow}
-                sx={{
-                    width: isPc ? "0.8333vw" : "16px",
-                }}
-            ></Image>
-        </Flex>
+                <Text
+                    sx={{
+                        fontSize: isPc ? "1.25vw" : "20px",
+                    }}
+                >
+                    {label}
+                </Text>
+                <Image
+                    src={RightArrow}
+                    sx={{
+                        width: isPc ? "0.8333vw" : "16px",
+                    }}
+                ></Image>
+            </Flex>
+        </Box>
     );
 };
 
@@ -197,7 +205,7 @@ const ListUserProfile = ({
                 sx={{
                     width: isPc ? "4.6875vw" : "52px",
                     height: isPc ? "4.6875vw" : "52px",
-                    borderRadius: "1.0417vw",
+                    borderRadius: isPc ? "1.0417vw" : "10px",
                     border: "1px solid #FFF",
                     background: avatars[avatar],
                 }}
@@ -255,7 +263,7 @@ const QueueItem = ({
                             sx={{
                                 width: isPc ? "4.6875vw" : "52px",
                                 height: isPc ? "4.6875vw" : "52px",
-                                borderRadius: "1.0417vw",
+                                borderRadius: isPc ? "1.0417vw" : "10px",
                                 border: "1px solid #787878",
                                 background: "transparent",
                             }}
@@ -276,6 +284,8 @@ const QueueItem = ({
                     <GameButton
                         label={isPc ? "Join Game" : "Join"}
                         onClick={onButtonClick}
+                        borderColor="#fff"
+                        backgroundColor="#fff"
                     ></GameButton>
                 </Flex>
             </Flex>
@@ -323,8 +333,8 @@ const OnGameItem = ({
                     <GameButton
                         label="Watch"
                         onClick={onButtonClick}
-                        border={"2px solid #303030"}
-                        background={"#D9D9D9"}
+                        borderColor="#fff"
+                        backgroundColor="transparent"
                     ></GameButton>
                 </Flex>
             </Flex>
