@@ -9,7 +9,7 @@ import {
     PopoverTrigger,
     useClipboard,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import CopyIcon from "./assets/copy-icon.svg";
 import avatars from "@/skyConstants/avatars";
 import { UserMarkIcon, UserMarkType } from "@/skyConstants/bttGameTypes";
@@ -17,6 +17,8 @@ import AdvantageIcon from "@/assets/advantage-icon.svg";
 import { shortenAddress } from "@/utils";
 import useSkyToast from "@/hooks/useSkyToast";
 import { motion } from "framer-motion";
+import UserLeftArrow from "./assets/user-left-arrow.svg";
+import UserIcon from "./assets/user.svg";
 
 const UserProfile = ({
     address,
@@ -43,15 +45,18 @@ const UserProfile = ({
             flexDir={"column"}
             align={status === "my" ? "flex-start" : "flex-end"}
         >
-            <Box
-                sx={{
-                    borderRadius: "1.0417vw",
-                    border: "1px solid #FDDC2D",
-                    background: avatars[avatar],
-                    width: "4.1667vw",
-                    height: "4.1667vw",
-                }}
-            ></Box>
+            <Flex>
+                <Box
+                    sx={{
+                        borderRadius: "1.0417vw",
+                        border: "1px solid #FDDC2D",
+                        background: avatars[avatar],
+                        width: "4.1667vw",
+                        height: "4.1667vw",
+                    }}
+                ></Box>
+            </Flex>
+
             <Text
                 sx={{
                     color: "#fff",
@@ -184,14 +189,33 @@ export const MUserProfile = ({
     onClick?: () => void;
 }) => {
     const direction = status === "my" ? "row" : "row-reverse";
+
+    const arrow = useMemo(() => {
+        if (status === "my") {
+            if (open) {
+                return "rotate(180deg)";
+            } else {
+                return "";
+            }
+        } else {
+            if (open) {
+                return "";
+            } else {
+                return "rotate(180deg)";
+            }
+        }
+    }, [open, status]);
+
     return (
         <Box
             onClick={() => {
                 onClick?.();
             }}
         >
-            <Flex sx={{ flexDirection: direction }}>
-                <Box
+            <Flex sx={{ flexDirection: direction }} alignItems={"flex-end"}>
+                <Flex
+                    justify={"center"}
+                    align={"center"}
                     sx={{
                         background: "rgb(214,214,214)",
                         width: "30px",
@@ -199,45 +223,67 @@ export const MUserProfile = ({
                         borderRadius:
                             status === "my" ? "16px 0 0 16px" : "0 16px 16px 0",
                     }}
-                ></Box>
+                >
+                    <Image
+                        src={UserLeftArrow}
+                        sx={{
+                            width: "10px",
+                            transform: arrow,
+                        }}
+                    ></Image>
+                </Flex>
                 <motion.div
                     style={{
+                        height: "60px",
                         width: open ? "110px" : 0,
-                        background: "rgb(168,168,168)",
-                        height: "40px",
+                        transition: "all 0.1s linear",
                         position: "relative",
-                        transition: "all 0.1s ease-in-out",
+                        overflow: "hidden",
+                        display: "flex",
+                        alignItems: "flex-end",
                     }}
                 >
-                    {open && (
+                    <motion.div
+                        style={{
+                            background: "#bcbbbe",
+                            width: "100%",
+                            height: "40px",
+                            position: "relative",
+                            transition: "all 1s linear",
+                        }}
+                    ></motion.div>
+                    <Box
+                        sx={{
+                            margin:
+                                status === "my"
+                                    ? "-20px 0 0 48px"
+                                    : "-20px 0 0 16px",
+                            position: "absolute",
+                            top: "20px",
+                            left: status === "my" ? "0" : "auto",
+                            right: status === "my" ? "auto" : "40px",
+                        }}
+                    >
                         <Box
                             sx={{
-                                margin:
-                                    status === "my"
-                                        ? "-20px 0 0 48px"
-                                        : "-20px 0 0 16px",
+                                borderRadius: "12px",
+                                border: "1px solid #FDDC2D",
+                                background: avatars[avatar],
+                                width: "40px",
+                                height: "40px",
+                            }}
+                        ></Box>
+
+                        <Text
+                            sx={{
+                                fontSize: "14px",
+                                fontWeight: 700,
+                                color: "#000",
                             }}
                         >
-                            <Box
-                                sx={{
-                                    borderRadius: "12px",
-                                    border: "1px solid #FDDC2D",
-                                    background: avatars[avatar],
-                                    width: "40px",
-                                    height: "40px",
-                                }}
-                            ></Box>
-                            <Text
-                                sx={{
-                                    fontSize: "14px",
-                                    fontWeight: 700,
-                                    color: "#000",
-                                }}
-                            >
-                                {name}
-                            </Text>
-                        </Box>
-                    )}
+                            {name}
+                        </Text>
+                    </Box>
                 </motion.div>
             </Flex>
         </Box>
@@ -262,15 +308,26 @@ export const MUserProfileResult = ({
             flexDir={"column"}
             align={status === "my" ? "flex-start" : "flex-end"}
         >
-            <Box
-                sx={{
-                    borderRadius: "12px",
-                    border: "1px solid #FDDC2D",
-                    background: avatars[avatar],
-                    width: "40px",
-                    height: "40px",
-                }}
-            ></Box>
+            <Flex align={"flex-end"}>
+                <Box
+                    sx={{
+                        borderRadius: "12px",
+                        border: "1px solid #FDDC2D",
+                        background: avatars[avatar],
+                        width: "40px",
+                        height: "40px",
+                    }}
+                ></Box>
+                {status === "my" && (
+                    <Image
+                        src={UserIcon}
+                        sx={{
+                            marginLeft: "10px",
+                        }}
+                    ></Image>
+                )}
+            </Flex>
+
             <Text
                 sx={{
                     fontSize: "14px",

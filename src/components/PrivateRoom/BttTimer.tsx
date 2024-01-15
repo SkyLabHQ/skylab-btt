@@ -98,7 +98,7 @@ export const BufferTimer = ({
                     background: "#616161",
                     height: isPc ? "0.3125vw" : "4px",
                     width: isPc ? "21.4583vw" : "100%",
-                    marginTop: "1.4815vh",
+                    marginTop: isPc ? "1.4815vh" : "8px",
                     display: "flex",
                     justifyContent: "flex-end",
                 }}

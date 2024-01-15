@@ -663,8 +663,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
                                 message={opGameInfo.message}
                                 emote={opGameInfo.emote}
                                 status={"op"}
-                                emoteIndex={emoteIndex}
-                                messageIndex={messageIndex}
                             ></Message>
                         </Box>
 
@@ -698,6 +696,10 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
             onInputChange={handleBidAmount}
             onConfirm={handleBid}
             onSetMessage={handleSetMessage}
+            emoteIndex={emoteIndex}
+            messageIndex={messageIndex}
+            messageLoading={messageLoading}
+            emoteLoading={emoteLoading}
             loading={loading}
         ></MLayout>
     );

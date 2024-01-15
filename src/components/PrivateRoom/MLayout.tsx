@@ -26,8 +26,10 @@ import MessageActiveIcon from "@/components/TacToe/assets/message-active.svg";
 import MessageIcon from "@/components/TacToe/assets/message.svg";
 import EmoteActiveIcon from "@/components/TacToe/assets/emote-active.svg";
 import EmoteIcon from "@/components/TacToe/assets/emote.svg";
-import useSkyToast from "@/hooks/useSkyToast";
 import ToolBar from "./Toolbar";
+import { MMessage } from "./Message";
+import KeyDeleteIcon from "./assets/key-delete.svg";
+
 const ChatMessage = ({
     onSetMessage,
 }: {
@@ -36,10 +38,7 @@ const ChatMessage = ({
         emoteIndex?: number,
     ) => void;
 }) => {
-    const toast = useSkyToast();
     const [active, setActive] = React.useState("message");
-    const [messageLoading, setMessageLoading] = React.useState(false);
-    const [emoteLoading, setEmoteLoading] = React.useState(false);
 
     const handleChangeActive = (type: string) => {
         setActive(type);
@@ -147,7 +146,7 @@ const ChatMessage = ({
                                             cursor: "pointer",
                                             marginRight: "0.4167vw",
                                             border: "2px solid #d9d9d9",
-                                            borderRadius: "0.5208vw",
+                                            borderRadius: "8px",
                                         }}
                                     ></Image>
                                 );
@@ -164,8 +163,7 @@ const ChatMessage = ({
                                         key={index + MERCS.length}
                                         sx={{
                                             border: "2px solid #d9d9d9",
-                                            borderRadius: "0.5208vw",
-                                            marginRight: "0.4167vw",
+                                            borderRadius: "8px",
                                             width: "30px",
                                             height: "30px",
                                             lineHeight: "30px",
@@ -173,7 +171,7 @@ const ChatMessage = ({
                                             display: "flex",
                                             justifyContent: "center",
                                             alignItems: "center",
-                                            fontSize: "0.8333vw",
+                                            fontSize: "16px",
                                         }}
                                     >
                                         {message}
@@ -198,6 +196,10 @@ const MLayout = ({
     onInputChange,
     onConfirm,
     onSetMessage,
+    emoteIndex,
+    messageIndex,
+    emoteLoading,
+    messageLoading,
     loading,
 }: any) => {
     const { isOpen, onOpen, onClose } = useDisclosure({
@@ -226,27 +228,36 @@ const MLayout = ({
             }}
         >
             <ToolBar quitType="game" handleShareTw={handleShareTw}></ToolBar>
-
             <Flex
                 sx={{
                     position: "absolute",
-                    top: "24px",
+                    top: "12px",
                     left: 0,
                     alignItems: "flex-start",
                 }}
                 flexDir={"column"}
             >
-                <MUserProfile
-                    status="op"
-                    avatar={opInfo.avatar}
-                    name={opInfo.name}
-                    mark={opInfo.mark}
-                    showAdvantageTip={opInfo.address === nextDrawWinner}
-                    open={opIsOpen}
-                    onClick={() => {
-                        opOnToggle();
-                    }}
-                ></MUserProfile>
+                <Flex align={"flex-end"}>
+                    <MUserProfile
+                        status="op"
+                        avatar={opInfo.avatar}
+                        name={opInfo.name}
+                        mark={opInfo.mark}
+                        showAdvantageTip={opInfo.address === nextDrawWinner}
+                        open={opIsOpen}
+                        onClick={() => {
+                            opOnToggle();
+                        }}
+                    ></MUserProfile>
+                    {!opIsOpen && (
+                        <MMessage
+                            message={opGameInfo.message}
+                            emote={opGameInfo.emote}
+                            status={"op"}
+                        ></MMessage>
+                    )}
+                </Flex>
+
                 <MBalance
                     balance={opGameInfo.balance}
                     mark={opInfo.mark}
@@ -257,7 +268,7 @@ const MLayout = ({
                 align={"center"}
                 justify={"center"}
                 sx={{
-                    marginTop: "10px",
+                    marginTop: "60px",
                 }}
             >
                 <Board
@@ -275,7 +286,7 @@ const MLayout = ({
             >
                 <Box
                     sx={{
-                        height: "80px",
+                        height: "100px",
                         position: "relative",
                     }}
                 >
@@ -286,7 +297,7 @@ const MLayout = ({
                                     width: "200px",
                                     position: "absolute",
                                     left: "12px",
-                                    bottom: 0,
+                                    bottom: "4px",
                                 }}
                             >
                                 <Timer
@@ -310,21 +321,37 @@ const MLayout = ({
                         flexDir={"column"}
                         align={"flex-end"}
                     >
-                        <MUserProfile
-                            status="my"
-                            avatar={myInfo.avatar}
-                            name={myInfo.name}
-                            mark={myInfo.mark}
-                            showAdvantageTip={myInfo.address === nextDrawWinner}
-                            open={isOpen}
-                            onClick={() => {
-                                if (isOpen) {
-                                    onClose();
-                                } else {
-                                    onOpen();
+                        <Flex align={"flex-end"}>
+                            {!isOpen && (
+                                <MMessage
+                                    message={myGameInfo.message}
+                                    emote={myGameInfo.emote}
+                                    status={"my"}
+                                    emoteIndex={emoteIndex}
+                                    messageIndex={messageIndex}
+                                    emoteLoading={emoteLoading}
+                                    messageLoading={messageLoading}
+                                ></MMessage>
+                            )}
+                            <MUserProfile
+                                status="my"
+                                avatar={myInfo.avatar}
+                                name={myInfo.name}
+                                mark={myInfo.mark}
+                                showAdvantageTip={
+                                    myInfo.address === nextDrawWinner
                                 }
-                            }}
-                        ></MUserProfile>
+                                open={isOpen}
+                                onClick={() => {
+                                    if (isOpen) {
+                                        onClose();
+                                    } else {
+                                        onOpen();
+                                    }
+                                }}
+                            ></MUserProfile>
+                        </Flex>
+
                         <MBalance
                             balance={myGameInfo.balance}
                             status="op"
@@ -360,7 +387,6 @@ const MLayout = ({
                             }}
                             onClick={() => {
                                 if (bidAmount - 1 < 0) return;
-
                                 onInputChange(bidAmount - 1);
                             }}
                         ></Image>
@@ -508,12 +534,12 @@ const MLayout = ({
                                 padding: "10px",
                             }}
                         >
-                            {[1, 2, 3, 4, 5, 6].map((item) => {
+                            {[5, 10, 15, 20, 30].map((item) => {
                                 return (
                                     <Flex
                                         onClick={() => {
                                             if (
-                                                item + bidAmount >
+                                                item + Number(bidAmount) >
                                                 myGameInfo.balance
                                             ) {
                                                 onInputChange(
@@ -521,7 +547,9 @@ const MLayout = ({
                                                 );
                                                 return;
                                             }
-                                            onInputChange(item + bidAmount);
+                                            onInputChange(
+                                                item + Number(bidAmount),
+                                            );
                                         }}
                                         align={"center"}
                                         justify={"center"}
@@ -537,6 +565,19 @@ const MLayout = ({
                                     </Flex>
                                 );
                             })}
+
+                            <Image
+                                onClick={() => {
+                                    const value = bidAmount.toString();
+                                    const length = value.length;
+                                    const newValue = value.slice(0, length - 1);
+                                    onInputChange(newValue);
+                                }}
+                                src={KeyDeleteIcon}
+                                sx={{
+                                    width: "100%",
+                                }}
+                            ></Image>
                         </SimpleGrid>
                     )}
 

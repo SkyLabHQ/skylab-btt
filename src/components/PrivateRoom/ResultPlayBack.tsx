@@ -1,12 +1,4 @@
-import {
-    Box,
-    Button,
-    Flex,
-    Image,
-    Text,
-    useBoolean,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,
@@ -33,8 +25,6 @@ import ShareButtons from "./ShareButton";
 import { useNavigate } from "react-router-dom";
 
 const ResultPlayBack = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-    const [showShareButton, setShowShareButton] = useBoolean(false);
     const navigate = useNavigate();
     const {
         bidTacToeGameAddress,
@@ -375,7 +365,6 @@ https://app.projmercury.io/btt`;
                     handlePreStep={handlePreStep}
                     handleStartStep={handleStartStep}
                 ></PlayBackButton>
-
                 <ShareButtons
                     showShareEmoji={gameOver}
                     handleShareEmoji={handleShareEmoji}

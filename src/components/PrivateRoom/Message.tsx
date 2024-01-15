@@ -1,4 +1,4 @@
-import { Box, Text, Image } from "@chakra-ui/react";
+import { Box, Text, Image, Flex } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 
 import {
@@ -197,5 +197,196 @@ export const Message = ({
                 </Text>
             )}
         </Box>
+    );
+};
+
+export const MMessage = ({
+    message = 0,
+    emote = 0,
+    messageLoading = MessageStatus.Unknown,
+    emoteLoading = MessageStatus.Unknown,
+    emoteIndex = 0,
+    messageIndex = 0,
+    status = "my",
+}: {
+    message: number;
+    emote: number;
+    messageLoading?: MessageStatus;
+    emoteLoading?: MessageStatus;
+    emoteIndex?: number;
+    messageIndex?: number;
+    status?: "my" | "op";
+}) => {
+    const [whiteTriangle, transparentTriangle] = useMemo(() => {
+        if (status === "my") {
+            return [
+                {
+                    borderLeftColor: "#fff",
+                    top: "3px",
+                    right: "-20px",
+                },
+                {
+                    borderLeftColor: "#303030",
+                    top: "3px",
+                    right: "-18px",
+                },
+            ];
+        } else {
+            return [
+                {
+                    borderRightColor: "#fff",
+                    top: "3px",
+                    left: "-20px",
+                },
+                {
+                    borderRightColor: "#303030",
+                    top: "3px",
+                    left: "-18px",
+                },
+            ];
+        }
+    }, [status]);
+
+    const sendText = useMemo(() => {
+        if (
+            messageLoading === MessageStatus.Sending ||
+            emoteLoading === MessageStatus.Sending
+        ) {
+            return "Sending";
+        }
+
+        if (
+            messageLoading === MessageStatus.Sent ||
+            emoteLoading === MessageStatus.Sent
+        ) {
+            return "Sent";
+        }
+
+        return "";
+    }, [messageLoading, emoteLoading]);
+
+    const showMessage = useMemo(() => {
+        if (messageLoading !== MessageStatus.Unknown) {
+            return MESSAGES[messageIndex - 1];
+        } else if (message > 0) {
+            return MESSAGES[message - 1];
+        }
+        return "";
+    }, [message, messageLoading, messageIndex]);
+
+    const showMercs = useMemo(() => {
+        if (emoteLoading !== MessageStatus.Unknown) {
+            return MERCS[emoteIndex - 1];
+        } else if (emote > MERCS.length && emote === 0) {
+            return "";
+        } else if (emote > 0) {
+            return MERCS[emote - 1];
+        }
+
+        return "";
+    }, [emote, emoteLoading, emoteIndex]);
+
+    const showEmote = useMemo(() => {
+        if (emoteLoading !== MessageStatus.Unknown) {
+            return EMOTES[emoteIndex - MERCS.length - 1];
+        } else if (emote <= MERCS.length) {
+            return "";
+        } else if (emote > 0) {
+            return EMOTES[emote - MERCS.length - 1];
+        }
+
+        return "";
+    }, [emote, emoteLoading, emoteIndex]);
+
+    return (
+        <Flex
+            sx={{
+                position: "relative",
+                display:
+                    emote === 0 &&
+                    message === 0 &&
+                    emoteLoading === MessageStatus.Unknown &&
+                    messageLoading == MessageStatus.Unknown
+                        ? "none"
+                        : "flex",
+            }}
+            align={"center"}
+        >
+            {sendText && (
+                <Text
+                    sx={{
+                        color: "#bcbbbe",
+                        fontSize: "12px",
+                        marginRight: "10px",
+                    }}
+                >
+                    {sendText}
+                </Text>
+            )}
+            <Box
+                sx={{
+                    border: "2px solid #fff",
+                    height: "30px",
+                    lineHeight: "30px",
+                    borderRadius: "8px",
+                    position: "relative",
+                    padding: "0 10px",
+                    display: "flex",
+                    alignItems: "center",
+                    margin: status === "my" ? "0 10px 5px 0px" : "0 0 5px 10px",
+                }}
+            >
+                <Box
+                    sx={{
+                        width: "0",
+                        height: "0",
+                        border: "10px solid transparent",
+                        position: "absolute",
+                        ...whiteTriangle,
+                    }}
+                ></Box>
+                <Box
+                    sx={{
+                        width: "0",
+                        height: "0",
+                        border: "10px solid transparent",
+                        position: "absolute",
+                        ...transparentTriangle,
+                    }}
+                ></Box>
+
+                {showMessage && (
+                    <Text
+                        sx={{
+                            whiteSpace: "nowrap",
+                            marginRight: "0.2604vw",
+                            fontSize: "12px",
+                        }}
+                    >
+                        {showMessage}
+                    </Text>
+                )}
+                {showMercs && (
+                    <Box
+                        sx={{
+                            height: "20px",
+                            width: "20px",
+                        }}
+                    >
+                        <Image src={showMercs}></Image>
+                    </Box>
+                )}
+
+                {showEmote && (
+                    <Text
+                        sx={{
+                            whiteSpace: "nowrap",
+                        }}
+                    >
+                        {showEmote}
+                    </Text>
+                )}
+            </Box>
+        </Flex>
     );
 };
