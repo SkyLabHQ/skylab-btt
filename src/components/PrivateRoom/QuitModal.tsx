@@ -90,12 +90,7 @@ const QuitModal = ({
                     cursor="pointer"
                     onClick={() => onClose()}
                 />
-                <ModalBody
-                    pb="0"
-                    sx={{
-                        width: "340px",
-                    }}
-                >
+                <ModalBody pb="0">
                     <Text
                         color="black"
                         fontSize="20px"
@@ -108,7 +103,11 @@ const QuitModal = ({
                     {loading && <Loading size={50}></Loading>}
                 </ModalBody>
 
-                <ModalFooter display="flex" justifyContent="space-between">
+                <ModalFooter
+                    display="flex"
+                    justifyContent="space-between"
+                    padding={"10px"}
+                >
                     <Button
                         bg="white"
                         colorScheme="white"

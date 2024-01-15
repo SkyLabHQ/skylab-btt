@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Modal, useDisclosure } from "@chakra-ui/react";
+import { Box, Modal, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { TourProvider } from "@reactour/tour";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { doArrow, tourConfig } from "@/components/TacToe/config";
@@ -8,6 +8,7 @@ import TacToeTutorial from "@/components/TacToe/TacTocTutorial";
 
 const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isPc] = useMediaQuery("(min-width: 800px)");
 
     useEffect(() => {
         const tutorialShow = localStorage.getItem("tutorialShow");
@@ -18,7 +19,11 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <Box>
+        <Box
+            sx={{
+                height: isPc ? "2.3958vw" : "32px",
+            }}
+        >
             <Box
                 onClick={() => {
                     onOpen();

@@ -33,8 +33,8 @@ const MBalance = ({
 
     return (
         <Flex
-            align={"center"}
             flexDir={status === "my" ? "row" : "row-reverse"}
+            alignItems={"center"}
         >
             <Flex
                 sx={{
@@ -49,7 +49,7 @@ const MBalance = ({
                 <Image
                     src={GoldIcon}
                     sx={{
-                        width: "36px",
+                        width: "24px",
                         margin: "0 6px",
                     }}
                 ></Image>
@@ -62,10 +62,12 @@ const MBalance = ({
                     {balance}
                 </Text>
             </Flex>
-            <Box
+            <Flex
                 sx={{
                     margin: status === "my" ? "0 0 0 10px" : "0 10px 0 0",
                 }}
+                align={"center"}
+                justify={"center"}
             >
                 {mark === UserMarkType.Circle && (
                     <Image
@@ -81,7 +83,7 @@ const MBalance = ({
                         src={UserMarkIcon.Cross}
                     ></Image>
                 )}
-            </Box>
+            </Flex>
 
             {showAdvantageTip && (
                 <Popover placement={popoverDirection}>

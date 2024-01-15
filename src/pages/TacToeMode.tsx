@@ -625,7 +625,9 @@ const TacToeMode = () => {
                                         height: isPc ? "2.2917vw" : "24px",
                                     }}
                                 >
-                                    <Loading size={44}></Loading>
+                                    <Loading
+                                        size={isPc ? "2.2917vw" : "24px"}
+                                    ></Loading>
                                 </Box>
                             </>
                         )}
