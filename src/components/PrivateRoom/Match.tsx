@@ -11,11 +11,11 @@ import {
 import React, { useEffect } from "react";
 import Loading from "../Loading";
 import useCountDown from "react-countdown-hook";
-import { useLocation, useNavigate } from "react-router-dom";
-import ToolBar from "./Toolbar";
+import { useNavigate } from "react-router-dom";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 import QuitModal from "../BttComponents/QuitModal";
+import ToolBar from "../BttComponents/Toolbar";
 
 const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
     const isMy = status === "my";
@@ -91,13 +91,9 @@ const Match = () => {
     useEffect(() => {
         if (myInfo.address && opInfo.address) {
             start();
-            setTimeout(
-                () => {
-                    handleStepChange(1);
-                },
-                // 0,
-                5000,
-            );
+            setTimeout(() => {
+                handleStepChange(1);
+            }, 5000);
         }
     }, [myInfo.address, opInfo.address]);
 

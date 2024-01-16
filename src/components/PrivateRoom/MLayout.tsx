@@ -5,11 +5,11 @@ import { MUserProfile } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
-import ToolBar from "./Toolbar";
 import { MMessage } from "./Message";
 import BottomKeyBoard from "../BttComponents/ChatMessage";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
+import ToolBar from "../BttComponents/Toolbar";
 
 const MLayout = ({
     handleQuitClick,
@@ -43,7 +43,6 @@ const MLayout = ({
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
         usePrivateGameContext();
     const myGameState = myGameInfo.gameState;
-    const balance = myGameInfo.balance;
 
     useEffect(() => {
         if (messageLoading || emoteLoading) {

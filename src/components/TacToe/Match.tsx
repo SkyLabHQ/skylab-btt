@@ -10,10 +10,8 @@ import {
     useMultiSkylabBidTacToeGameContract,
     useMultiMercuryBaseContract,
 } from "@/hooks/useMultiContract";
-import ToolBar from "./Toolbar";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-
 import { botAddress } from "@/hooks/useContract";
 import { GrayButton } from "../Button/Index";
 import QuitModal from "@/components/BttComponents/QuitModal";
@@ -24,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
 import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
+import ToolBar from "../BttComponents/Toolbar";
 
 export const PlaneImg = ({
     detail,

@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
-import ToolBar from "./Toolbar";
 import { MMessage } from "@/components/PrivateRoom/Message";
 import BottomKeyBoard from "../BttComponents/ChatMessage";
 import { useGameContext } from "@/pages/TacToe";
 import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
+import ToolBar from "../BttComponents/Toolbar";
 
 const MLayout = ({
     inviteLink,

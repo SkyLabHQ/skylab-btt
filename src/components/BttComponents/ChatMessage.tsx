@@ -1,11 +1,10 @@
 import { Box, Image, Flex, SimpleGrid } from "@chakra-ui/react";
 import React from "react";
 import { EMOTES, MERCS, MESSAGES } from "@/skyConstants/bttGameTypes";
-
-import MessageActiveIcon from "@/components/TacToe/assets/message-active.svg";
-import MessageIcon from "@/components/TacToe/assets/message.svg";
-import EmoteActiveIcon from "@/components/TacToe/assets/emote-active.svg";
-import EmoteIcon from "@/components/TacToe/assets/emote.svg";
+import MessageActiveIcon from "./assets/message-active.svg";
+import MessageIcon from "./assets/message.svg";
+import EmoteActiveIcon from "./assets/emote-active.svg";
+import EmoteIcon from "./assets/emote.svg";
 import KeyDeleteIcon from "./assets/key-delete.svg";
 
 const ChatMessage = ({

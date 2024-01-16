@@ -10,7 +10,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "@/components/TacToe/Board";
-import ToolBar from "./Toolbar";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import {
     useBidTacToeFactoryRetry,
@@ -49,8 +48,9 @@ import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
 import MLayout from "./MLayout";
 import { CHAIN_NAMES } from "@/utils/web3Utils";
-import Chat from "../PrivateRoom/Chat";
 import Timer from "../BttComponents/Timer";
+import ToolBar from "../BttComponents/Toolbar";
+import Chat from "../BttComponents/Chat";
 
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;

@@ -1,10 +1,10 @@
 import { Box, Image, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import TutorialIcon from "@/components/BttComponents/assets/tutorial-icon.svg";
-import BidTacToeTutorial from "./BidTacToeTutorial";
 import KeyBoard from "../BttComponents/KeyBoard";
 import QuitIcon from "@/components/BttComponents/assets/quit.svg";
 import { ToolShare } from "../BttComponents/ToolShare";
+import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
 
 const ToolBar = ({
     inviteLink,
@@ -46,16 +46,16 @@ const ToolBar = ({
                 },
             }}
         >
-            {quitType === "game" && (
-                <KeyBoard
-                    isOpen={keyBoardOpen}
-                    onToggle={() => {
-                        keyBoardOnToggle();
-                        shareOnClose();
-                    }}
-                    onClose={keyBoardOnClose}
-                ></KeyBoard>
-            )}
+            <KeyBoard
+                type={false}
+                isOpen={keyBoardOpen}
+                onToggle={() => {
+                    keyBoardOnToggle();
+                    quitType === "game" && shareOnClose();
+                }}
+                onClose={keyBoardOnClose}
+            ></KeyBoard>
+
             {quitType === "game" && (
                 <ToolShare
                     inviteLink={inviteLink}

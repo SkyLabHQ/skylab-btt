@@ -20,8 +20,6 @@ import { usePrivateGameContext } from "@/pages/PrivateRoom";
 import { CHAIN_NAMES, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import UserProfile from "./UserProfile";
 import StatusTip from "../TacToe/StatusTip";
-import ToolBar from "./Toolbar";
-import Chat from "./Chat";
 import {
     GameInfo,
     GameState,
@@ -38,6 +36,8 @@ import MLayout from "./MLayout";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
 import Timer from "../BttComponents/Timer";
+import ToolBar from "../BttComponents/Toolbar";
+import Chat from "../BttComponents/Chat";
 
 const PlayGame = ({
     onChangeGame,
