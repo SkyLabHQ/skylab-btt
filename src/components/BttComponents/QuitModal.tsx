@@ -48,31 +48,25 @@ const QuitModal = ({
             <ModalContent
                 bg="rgba(255, 255, 255, 0.7)"
                 border="3px solid #FDDC2D"
-                borderRadius="1.0417vw"
+                borderRadius="8px"
                 sx={{
-                    width: "31.25vw",
-                    maxWidth: "31.25vw",
+                    width: "90%",
+                    maxWidth: "500px",
                 }}
             >
                 <Img
                     pos="absolute"
-                    top="0.8333vw"
-                    right="0.8333vw"
-                    w="1.6667vw"
+                    top="4px"
+                    right="4px"
+                    w="20px"
                     src={CloseIcon}
                     cursor="pointer"
                     onClick={() => onClose()}
                 />
-                <ModalBody
-                    pb="0"
-                    pt="1.875vw"
-                    sx={{
-                        width: "31.25vw",
-                    }}
-                >
+                <ModalBody pb="0">
                     <Text
                         color="black"
-                        fontSize="1.4583vw"
+                        fontSize="20px"
                         fontWeight="600"
                         fontFamily={"Orbitron"}
                         textAlign={"center"}
@@ -85,29 +79,27 @@ const QuitModal = ({
                 <ModalFooter
                     display="flex"
                     justifyContent="space-between"
-                    pt="2.6042vw"
+                    padding={"10px"}
                 >
                     <Button
                         bg="white"
                         colorScheme="white"
                         onClick={handleConfirm}
-                        fontSize="1.25vw"
-                        w="10.9375vw"
-                        padding="1.6667vw 0"
-                        borderRadius="1.0417vw"
+                        fontSize="16px"
+                        w="135px"
+                        borderRadius="8px"
                         fontWeight={400}
-                        height={"3vw"}
+                        height={"40px"}
                     >
                         Quit
                     </Button>
                     <Button
                         colorScheme="yellow"
                         onClick={onClose}
-                        fontSize="1.25vw"
-                        w="10.9375vw"
-                        height={"3vw"}
-                        padding="1.6667vw 0"
-                        borderRadius="1.0417vw"
+                        fontSize="16px"
+                        w="135px"
+                        height={"40px"}
+                        borderRadius="8px"
                         fontWeight={400}
                     >
                         Continue to {quitType}
