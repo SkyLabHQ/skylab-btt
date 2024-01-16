@@ -571,7 +571,11 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
     }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
 
     return (
-        <Box>
+        <Box
+            style={{
+                height: "100%",
+            }}
+        >
             {isPc ? (
                 <Box
                     sx={{
