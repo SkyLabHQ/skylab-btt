@@ -16,15 +16,17 @@ import ShareEmojiIcon from "./assets/share-emoji.svg";
 import RightArrow from "./assets/arrow-right.svg";
 
 const ShareButtons = ({
+    text = "Back to Lobby",
     showShareEmoji,
     handleShareEmoji,
     handleShare,
-    handleBackToPrivateLobby,
+    handleTextClick,
 }: {
+    text?: string;
     showShareEmoji?: boolean;
     handleShareEmoji?: () => void;
     handleShare: () => void;
-    handleBackToPrivateLobby?: () => void;
+    handleTextClick?: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
@@ -130,22 +132,22 @@ const ShareButtons = ({
                 )}
             </Button>
             <Flex
-                onClick={handleBackToPrivateLobby}
+                onClick={handleTextClick}
                 sx={{
                     width: "80px",
                     justifyContent: "flex-end",
+                    alignItems: "center",
                 }}
             >
                 <Text
                     sx={{
                         fontSize: isPc ? "1.25vw" : "12px",
                         textDecorationLine: "underline",
-                        marginRight: "0.4167vw",
-                        width: "48px",
+                        maxWidth: "48px",
                         textAlign: "center",
                     }}
                 >
-                    Back to Lobby
+                    {text}
                 </Text>
                 <Image
                     src={RightArrow}

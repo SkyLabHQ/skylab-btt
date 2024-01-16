@@ -6,9 +6,9 @@ import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "../TacToe/Board";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
-import UserProfile, { MUserProfile, MUserProfileResult } from "./UserProfile";
+import UserProfile, { MUserProfileResult } from "./UserProfile";
 import { OpBid } from "./UserBid";
-import { BoardItem, GameInfo, getWinState } from "@/skyConstants/bttGameTypes";
+import { BoardItem, GameInfo } from "@/skyConstants/bttGameTypes";
 import RoundInfo from "../BttComponents/RoundInfo";
 import MBalance from "../BttComponents/MBalance";
 
@@ -40,7 +40,6 @@ const PrivateLobbyPlayBack = ({
     showList: BoardItem[];
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const isMyWIn = getWinState(myGameInfo.gameState);
 
     return isPc ? (
         <Box

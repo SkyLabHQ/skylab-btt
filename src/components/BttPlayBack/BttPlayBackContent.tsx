@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import Logo from "@/assets/logo.svg";
 import BttIcon from "@/assets/btt-icon.png";
@@ -11,6 +11,8 @@ import EarthIcon from "@/components/TacToe/assets/earth.svg";
 import { aviationImg } from "@/utils/aviationImg";
 import RoundInfo from "../BttComponents/RoundInfo";
 import { BoardItem, GameInfo, GameState } from "@/skyConstants/bttGameTypes";
+import MBalance from "../BttComponents/MBalance";
+import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 
 const BttPlayBackContent = ({
     myInfo,
@@ -45,7 +47,9 @@ const BttPlayBackContent = ({
     opGameInfo: GameInfo;
     showList: BoardItem[];
 }) => {
-    return (
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
+    return isPc ? (
         <Box
             id="share-content"
             sx={{
@@ -212,6 +216,83 @@ const BttPlayBackContent = ({
                             : GameState.WaitingForBid
                     }
                 ></UserCard>
+            </Box>
+        </Box>
+    ) : (
+        <Box
+            id="share-content"
+            sx={{
+                background: "#303030",
+                margin: "0 auto",
+                width: "100%",
+                border: "2px solid #fff",
+                boxShadow: "5px 4px 8px 0px rgba(255, 255, 255, 0.50)",
+                position: "relative",
+                padding: "20px 0",
+                borderRadius: "8px",
+            }}
+        >
+            <Box
+                sx={{
+                    marginTop: "1.0417vw",
+                }}
+            >
+                <Flex justify={"space-between"}>
+                    <Box>
+                        <Box
+                            sx={{
+                                paddingLeft: "12px",
+                            }}
+                        >
+                            <MUserProfileResult
+                                status="my"
+                                address={myInfo.address}
+                                img={myInfo.img}
+                                mark={myInfo.mark}
+                            ></MUserProfileResult>
+                        </Box>
+
+                        <MBalance
+                            balance={myBalance}
+                            mark={myInfo.mark}
+                        ></MBalance>
+                    </Box>
+
+                    <Flex flexDir={"column"} align={"flex"}>
+                        <Box
+                            sx={{
+                                paddingRight: "12px",
+                            }}
+                        >
+                            <MUserProfileResult
+                                status="op"
+                                address={opInfo.address}
+                                img={opInfo.img}
+                                mark={opInfo.mark}
+                                showAdvantageTip={!myIsNextDrawWinner}
+                            ></MUserProfileResult>
+                        </Box>
+
+                        <MBalance
+                            balance={opBalance}
+                            status="op"
+                            mark={opInfo.mark}
+                        ></MBalance>
+                    </Flex>
+                </Flex>
+                <Flex
+                    align={"center"}
+                    flexDir={"column"}
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
+                    <Board list={showList}></Board>
+                    <RoundInfo
+                        currentRound={currentRound}
+                        allRound={allSelectedGrids.length}
+                    ></RoundInfo>
+                </Flex>
             </Box>
         </Box>
     );

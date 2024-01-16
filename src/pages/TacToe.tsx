@@ -2,20 +2,14 @@ import { Box } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useKnobVisibility } from "@/contexts/KnobVisibilityContext";
 import "@reactour/popover/dist/index.css"; // arrow css
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import qs from "query-string";
 import { useTacToeSigner } from "@/hooks/useSigner";
-import ResultPage from "@/components/TacToe/ResultPage";
+import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import Match from "@/components/TacToe/Match";
 import SettlementPage from "@/components/TacToe/SettlementPage";
 import LevelInfo from "@/components/TacToe/LevelInfo";
-import CircleIcon from "@/components/TacToe/assets/circle.svg";
-import CrossIcon from "@/components/TacToe/assets/x.svg";
-import YellowCircle from "@/components/TacToe/assets/yellow-circle.svg";
-import YellowCross from "@/components/TacToe/assets/yellow-x.svg";
-import BotX from "@/components/TacToe/assets/bot-x.svg";
-import YellowBotX from "@/components/TacToe/assets/yellow-bot-x.svg";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
@@ -32,6 +26,7 @@ import {
     UserMarkType,
     initBoard,
 } from "@/skyConstants/bttGameTypes";
+import GameOver from "@/components/TacToe/GameOver";
 
 // plane related info
 export interface Info {
@@ -79,7 +74,7 @@ const GameContext = createContext<{
         winPoint: number;
         losePoint: number;
     };
-    onStep: (step: number) => void;
+    onStep: (step?: number) => void;
     onList: (list: BoardItem[]) => void;
     handleGetGas: () => void;
     setBidTacToeGameAddress: (address: string) => void;
@@ -162,7 +157,11 @@ const TacToe = () => {
 
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
 
-    const handleStep = (step: number) => {
+    const handleStep = (step?: number) => {
+        if (step === undefined) {
+            setStep((step) => step + 1);
+            return;
+        }
         setStep(step);
     };
 
@@ -319,8 +318,9 @@ const TacToe = () => {
                                 }}
                             ></TacToePage>
                         )}
-                        {step === 3 && <ResultPage></ResultPage>}
-                        {step === 4 && <SettlementPage></SettlementPage>}
+                        {step === 3 && <GameOver></GameOver>}
+                        {step === 4 && <ResultPlayBack></ResultPlayBack>}
+                        {step === 5 && <SettlementPage></SettlementPage>}
                     </Box>
                 </GameContext.Provider>
             </Box>

@@ -35,7 +35,7 @@ const PrivateGameContext = createContext<{
     step: number;
     myInfo: any;
     opInfo: any;
-    handleStepChange: (step: number) => void;
+    handleStepChange: (step?: number) => void;
     onList: (list: BoardItem[]) => void;
 }>(null);
 export const usePrivateGameContext = () => useContext(PrivateGameContext);
@@ -74,7 +74,11 @@ const PrivateRoom = () => {
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
 
-    const handleStepChange = (step: number) => {
+    const handleStep = (step?: number) => {
+        if (step === undefined) {
+            setStep((step) => step + 1);
+            return;
+        }
         setStep(step);
     };
 
@@ -264,7 +268,7 @@ const PrivateRoom = () => {
                         step,
                         myInfo,
                         opInfo,
-                        handleStepChange,
+                        handleStepChange: handleStep,
                         onList: handleChangeList,
                     }}
                 >

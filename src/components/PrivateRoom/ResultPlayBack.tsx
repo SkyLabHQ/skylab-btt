@@ -298,7 +298,7 @@ https://app.projmercury.io/btt`;
         );
     };
 
-    const handleBackToPrivateLobby = async () => {
+    const handleTextClick = async () => {
         navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
     };
 
@@ -369,7 +369,7 @@ https://app.projmercury.io/btt`;
                     showShareEmoji={gameOver}
                     handleShareEmoji={handleShareEmoji}
                     handleShare={handleShare}
-                    handleBackToPrivateLobby={handleBackToPrivateLobby}
+                    handleTextClick={handleTextClick}
                 ></ShareButtons>
             </Flex>
         </Box>

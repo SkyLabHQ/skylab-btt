@@ -8,6 +8,7 @@ import {
     ModalContent,
     ModalFooter,
     ModalOverlay,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import CloseIcon from "@/assets/icon-close.svg";
 import Loading from "../Loading";
@@ -25,6 +26,7 @@ const QuitModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
 
@@ -66,7 +68,7 @@ const QuitModal = ({
                 <ModalBody pb="0">
                     <Text
                         color="black"
-                        fontSize="20px"
+                        fontSize={isPc ? "24px" : "20px"}
                         fontWeight="600"
                         fontFamily={"Orbitron"}
                         textAlign={"center"}
@@ -80,6 +82,9 @@ const QuitModal = ({
                     display="flex"
                     justifyContent="space-between"
                     padding={"10px"}
+                    sx={{
+                        marginTop: "20px",
+                    }}
                 >
                     <Button
                         bg="white"

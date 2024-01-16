@@ -1,20 +1,11 @@
 import { MyUserCard, OpUserCard } from "@/components/TacToe/UserCard";
-import {
-    Box,
-    Flex,
-    Text,
-    useDisclosure,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "@/components/TacToe/Board";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-import {
-    useBidTacToeFactoryRetry,
-    useBttGameRetry,
-} from "@/hooks/useRetryContract";
+import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { GameType, MyNewInfo, useGameContext } from "@/pages/TacToe";
 import { ethers } from "ethers";
 import {
@@ -30,7 +21,6 @@ import {
     useGridCommited,
 } from "@/hooks/useTacToeStore";
 import StatusTip from "./StatusTip";
-import ResultUserCard from "./ResultUserCard";
 import { ZERO_DATA } from "@/skyConstants";
 import A0Testflight from "@/assets/aviations/a0-testflight.png";
 import A2Testflight from "@/assets/aviations/a2-testflight.png";
@@ -80,8 +70,6 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     } = useGameContext();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
-
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const { blockNumber } = useBlockNumber();
     const [revealing, setRevealing] = useState<boolean>(false);
@@ -99,9 +87,6 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const [messageIndex, setMessageIndex] = useState<number>(0);
     const [emoteIndex, setEmoteIndex] = useState<number>(0);
 
-    const gameOver = useMemo(() => {
-        return myGameInfo.gameState > GameState.Revealed;
-    }, [myGameInfo.gameState]);
     const { getGridCommited, addGridCommited } = useGridCommited(
         tokenId,
         currentGrid,
@@ -381,23 +366,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
         }
     };
 
-    const handleRetreat = async () => {
-        try {
-            setLoading(true);
-            if (loading) return;
-            await tacToeGameRetryWrite("surrender", [], {
-                gasLimit: 800000,
-                usePaymaster: istest,
-            });
-
-            setLoading(false);
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-            toast(handleError(error, istest));
-        }
-    };
-
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
@@ -426,6 +394,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
     const handleGameOver = async () => {
         if (myGameInfo.gameState <= GameState.Revealed) return;
         deleteTokenIdCommited();
+        onStep();
 
         const gameResult = getWinState(myGameInfo.gameState);
 
@@ -703,15 +672,12 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
                             opGameState={opGameInfo.gameState}
                         ></StatusTip>
                     </Flex>
-
-                    {myGameInfo.gameState <= GameState.Revealed && (
-                        <ToolBar
-                            quitType="game"
-                            onQuitClick={() => {
-                                onOpen();
-                            }}
-                        ></ToolBar>
-                    )}
+                    <ToolBar
+                        quitType="game"
+                        onQuitClick={() => {
+                            onOpen();
+                        }}
+                    ></ToolBar>
                     <Box
                         sx={{
                             display: "flex",
@@ -723,108 +689,80 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
                                 width: "15.625vw",
                             }}
                         >
-                            {gameOver ? (
-                                <ResultUserCard
-                                    showResult
-                                    win={getWinState(myGameInfo.gameState)}
-                                    userInfo={myInfo}
-                                ></ResultUserCard>
-                            ) : (
-                                <MyUserCard
-                                    isBot={myInfo.isBot}
-                                    pilotInfo={myActivePilot}
-                                    loading={loading}
-                                    messageLoading={messageLoading}
-                                    emoteLoading={emoteLoading}
-                                    showAdvantageTip={
-                                        myInfo.burner === nextDrawWinner
-                                    }
-                                    myGameState={myGameInfo.gameState}
-                                    message={myGameInfo.message}
-                                    emote={myGameInfo.emote}
-                                    level={myInfo.level}
-                                    messageIndex={messageIndex}
-                                    emoteIndex={emoteIndex}
-                                    markIcon={
-                                        myInfo.mark === UserMarkType.Circle
-                                            ? CircleIcon
-                                            : XIcon
-                                    }
-                                    address={myInfo.address}
-                                    balance={myGameInfo.balance}
-                                    bidAmount={bidAmount}
-                                    onConfirm={handleBid}
-                                    onInputChange={handleBidAmount}
-                                    status="my"
-                                    planeUrl={myInfo.img}
-                                ></MyUserCard>
-                            )}
+                            <MyUserCard
+                                isBot={myInfo.isBot}
+                                pilotInfo={myActivePilot}
+                                loading={loading}
+                                messageLoading={messageLoading}
+                                emoteLoading={emoteLoading}
+                                showAdvantageTip={
+                                    myInfo.burner === nextDrawWinner
+                                }
+                                myGameState={myGameInfo.gameState}
+                                message={myGameInfo.message}
+                                emote={myGameInfo.emote}
+                                level={myInfo.level}
+                                messageIndex={messageIndex}
+                                emoteIndex={emoteIndex}
+                                markIcon={
+                                    myInfo.mark === UserMarkType.Circle
+                                        ? CircleIcon
+                                        : XIcon
+                                }
+                                address={myInfo.address}
+                                balance={myGameInfo.balance}
+                                bidAmount={bidAmount}
+                                onConfirm={handleBid}
+                                onInputChange={handleBidAmount}
+                                status="my"
+                                planeUrl={myInfo.img}
+                            ></MyUserCard>
                         </Box>
 
-                        <Box sx={{}}>
-                            <Box
-                                sx={{
-                                    paddingTop: "1.5625vw",
-                                }}
-                            >
-                                <Board
-                                    list={list}
-                                    showAnimateNumber={showAnimateNumber}
-                                ></Board>
-                            </Box>
-                            {myGameInfo.gameState > 3 && (
-                                <Text
-                                    sx={{
-                                        textAlign: "center",
-                                        fontSize: "1.25vw",
-                                        marginTop: "1.5625vw",
-                                    }}
-                                >
-                                    Tap anywhere to continue
-                                </Text>
-                            )}
+                        <Box
+                            sx={{
+                                paddingTop: "1.5625vw",
+                            }}
+                        >
+                            <Board
+                                list={list}
+                                showAnimateNumber={showAnimateNumber}
+                            ></Board>
                         </Box>
                         <Box
                             sx={{
                                 width: "15.625vw",
                             }}
                         >
-                            {gameOver ? (
-                                <ResultUserCard
-                                    win={getWinState(opGameInfo.gameState)}
-                                    userInfo={opInfo}
-                                ></ResultUserCard>
-                            ) : (
-                                <OpUserCard
-                                    isBot={opInfo.isBot}
-                                    pilotInfo={opActivePilot}
-                                    markIcon={
-                                        opInfo.mark === UserMarkType.Circle
-                                            ? CircleIcon
-                                            : XIcon
-                                    }
-                                    level={opInfo.level}
-                                    showAdvantageTip={
-                                        opInfo.burner === nextDrawWinner
-                                    }
-                                    myGameState={myGameInfo.gameState}
-                                    opGameState={opGameInfo.gameState}
-                                    message={opGameInfo.message}
-                                    emote={opGameInfo.emote}
-                                    address={opInfo.address}
-                                    balance={opGameInfo?.balance}
-                                    bidAmount={
-                                        list.length > 0 && currentGrid >= 0
-                                            ? list[currentGrid].opValue
-                                            : 0
-                                    }
-                                    status="op"
-                                    planeUrl={opInfo.img}
-                                ></OpUserCard>
-                            )}
+                            <OpUserCard
+                                isBot={opInfo.isBot}
+                                pilotInfo={opActivePilot}
+                                markIcon={
+                                    opInfo.mark === UserMarkType.Circle
+                                        ? CircleIcon
+                                        : XIcon
+                                }
+                                level={opInfo.level}
+                                showAdvantageTip={
+                                    opInfo.burner === nextDrawWinner
+                                }
+                                myGameState={myGameInfo.gameState}
+                                opGameState={opGameInfo.gameState}
+                                message={opGameInfo.message}
+                                emote={opGameInfo.emote}
+                                address={opInfo.address}
+                                balance={opGameInfo?.balance}
+                                bidAmount={
+                                    list.length > 0 && currentGrid >= 0
+                                        ? list[currentGrid].opValue
+                                        : 0
+                                }
+                                status="op"
+                                planeUrl={opInfo.img}
+                            ></OpUserCard>
                         </Box>
                     </Box>
-                    {!gameOver && <Chat onSetMessage={handleSetMessage}></Chat>}
+                    <Chat onSetMessage={handleSetMessage}></Chat>
                 </Box>
             ) : (
                 <MLayout

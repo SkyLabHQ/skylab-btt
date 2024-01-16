@@ -289,6 +289,7 @@ export const MUserProfile = ({
                                 src={img}
                                 sx={{
                                     width: "40px",
+                                    height: "40px",
                                     transform:
                                         status === "my" ? "rotate(180deg)" : "",
                                 }}
@@ -324,15 +325,18 @@ export const MUserProfile = ({
 };
 
 export const MUserProfileResult = ({
+    address,
+    img,
     avatar,
     name,
     status,
 }: {
-    avatar: number;
-    name: string;
+    address?: string;
+    img?: string;
+    avatar?: number;
+    name?: string;
     showAdvantageTip?: boolean;
     mark?: number;
-    address?: string;
     status?: "my" | "op";
 }) => {
     return (
@@ -342,15 +346,28 @@ export const MUserProfileResult = ({
             align={status === "my" ? "flex-start" : "flex-end"}
         >
             <Flex align={"flex-end"}>
-                <Box
-                    sx={{
-                        borderRadius: "12px",
-                        border: "1px solid #FDDC2D",
-                        background: avatars[avatar],
-                        width: "40px",
-                        height: "40px",
-                    }}
-                ></Box>
+                {avatar && (
+                    <Box
+                        sx={{
+                            borderRadius: "12px",
+                            border: "1px solid #FDDC2D",
+                            background: avatars[avatar],
+                            width: "40px",
+                            height: "40px",
+                        }}
+                    ></Box>
+                )}
+
+                {img && (
+                    <Image
+                        src={img}
+                        sx={{
+                            width: "40px",
+                            height: "40px",
+                        }}
+                    ></Image>
+                )}
+
                 {status === "my" && (
                     <Image
                         src={UserIcon}
@@ -361,15 +378,29 @@ export const MUserProfileResult = ({
                 )}
             </Flex>
 
-            <Text
-                sx={{
-                    fontSize: "14px",
-                    fontWeight: 700,
-                    color: "#fff",
-                }}
-            >
-                {name}
-            </Text>
+            {name && (
+                <Text
+                    sx={{
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        color: "#fff",
+                    }}
+                >
+                    {name}
+                </Text>
+            )}
+
+            {address && (
+                <Text
+                    sx={{
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        color: "#fff",
+                    }}
+                >
+                    {shortenAddress(address, 4, 4)}
+                </Text>
+            )}
         </Flex>
     );
 };
