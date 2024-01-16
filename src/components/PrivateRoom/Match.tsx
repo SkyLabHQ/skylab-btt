@@ -75,8 +75,6 @@ const Match = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
     const { bidTacToeGameAddress, lobbyAddress } = usePrivateGameContext();
-
-    const { search } = useLocation();
     const [timeLeft, { start }] = useCountDown(5000, 1000);
     const { myInfo, opInfo, handleStepChange } = usePrivateGameContext();
     const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
@@ -97,8 +95,8 @@ const Match = () => {
                 () => {
                     handleStepChange(1);
                 },
-                0,
-                // 5000
+                // 0,
+                5000,
             );
         }
     }, [myInfo.address, opInfo.address]);

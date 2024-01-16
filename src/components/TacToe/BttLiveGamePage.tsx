@@ -101,16 +101,15 @@ const StartJourney = () => {
 
 const BttLiveGamePage = () => {
     const { blockNumber } = useBlockNumber();
-    const navigate = useNavigate();
     const [init, setInit] = useState(false);
     const [list, setList] = useState<BoardItem[]>(initBoard());
     const { search } = useLocation();
     const params = qs.parse(search) as any;
 
     const ethcallProvider = useMultiProvider(params.chainId);
-    const [bttGameAddress, setBttGameAddress] = useState("");
+    const [bttGameAddress] = useState(params.gameAddress);
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
-
+    console.log(bttGameAddress, "bttGameAddress");
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(params.chainId);
     const multiSkylabBidTacToeGameContract =
@@ -188,6 +187,7 @@ const BttLiveGamePage = () => {
         ) {
             return;
         }
+        console.log("jinlaia a a ");
 
         const [
             currentGrid,
@@ -348,6 +348,7 @@ const BttLiveGamePage = () => {
             multiSkylabBidTacToeGameContract.player2(),
         ]);
 
+        console.log("！！！！");
         const [level1, points1, level2, points2] = metadata;
         const params = qs.parse(search) as any;
         const burner = params.burner;
@@ -380,17 +381,6 @@ const BttLiveGamePage = () => {
     };
 
     useEffect(() => {
-        const params = qs.parse(search) as any;
-        if (bttGameAddress === "") {
-            setBttGameAddress(params.gameAddress);
-        } else if (!params.gameAddress) {
-            navigate(`/`);
-        } else if (bttGameAddress != params.gameAddress) {
-            navigate(`/`);
-        }
-    }, [search, bttGameAddress]);
-
-    useEffect(() => {
         handleGetGameInfo();
     }, [
         myInfo.burner,
@@ -401,6 +391,15 @@ const BttLiveGamePage = () => {
     ]);
 
     useEffect(() => {
+        console.log(
+            multiSkylabBidTacToeFactoryContract,
+            "multiSkylabBidTacToeFactoryContract",
+        );
+        console.log(
+            multiSkylabBidTacToeGameContract,
+            "multiSkylabBidTacToeGameContract",
+        );
+        console.log(ethcallProvider, "ethcallProvider");
         handleGetPlayer();
     }, [
         multiSkylabBidTacToeFactoryContract,

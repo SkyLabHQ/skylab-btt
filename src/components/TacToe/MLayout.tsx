@@ -1,17 +1,18 @@
-import { usePrivateGameContext } from "@/pages/PrivateRoom";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { MUserProfile } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
 import ToolBar from "./Toolbar";
-import { MMessage } from "./Message";
+import { MMessage } from "@/components/PrivateRoom/Message";
 import BottomKeyBoard from "../BttComponents/ChatMessage";
+import { useGameContext } from "@/pages/TacToe";
+import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 
 const MLayout = ({
+    inviteLink,
     handleQuitClick,
     handleShareTw,
     nextDrawWinner,
@@ -40,10 +41,8 @@ const MLayout = ({
 
     const [inputMode, setInputMode] = useState<"message" | "keyboard">(null);
 
-    const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
-        usePrivateGameContext();
+    const { myGameInfo, opGameInfo, myInfo, opInfo, list } = useGameContext();
     const myGameState = myGameInfo.gameState;
-    const balance = myGameInfo.balance;
 
     useEffect(() => {
         if (messageLoading || emoteLoading) {
@@ -61,6 +60,7 @@ const MLayout = ({
         >
             <ToolBar
                 quitType="game"
+                inviteLink={inviteLink}
                 handleShareTw={handleShareTw}
                 onQuitClick={handleQuitClick}
             ></ToolBar>
@@ -76,8 +76,8 @@ const MLayout = ({
                 <Flex align={"flex-end"}>
                     <MUserProfile
                         status="op"
-                        avatar={opInfo.avatar}
-                        name={opInfo.name}
+                        address={opInfo.address}
+                        img={opInfo.img}
                         mark={opInfo.mark}
                         showAdvantageTip={opInfo.address === nextDrawWinner}
                         open={opIsOpen}
@@ -93,7 +93,6 @@ const MLayout = ({
                         ></MMessage>
                     )}
                 </Flex>
-
                 <MBalance
                     balance={opGameInfo.balance}
                     mark={opInfo.mark}
@@ -171,8 +170,8 @@ const MLayout = ({
                             )}
                             <MUserProfile
                                 status="my"
-                                avatar={myInfo.avatar}
-                                name={myInfo.name}
+                                address={myInfo.address}
+                                img={myInfo.img}
                                 mark={myInfo.mark}
                                 showAdvantageTip={
                                     myInfo.address === nextDrawWinner

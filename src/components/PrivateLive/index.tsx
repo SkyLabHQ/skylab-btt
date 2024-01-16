@@ -13,7 +13,6 @@ import Board from "../TacToe/Board";
 import Loading from "../Loading";
 import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-import LiveGameTimer from "./LiveGameTimer";
 import LiveStatusTip from "./LiveStatusTip";
 import { shortenAddressWithout0x } from "@/utils";
 import { ZERO_DATA } from "@/skyConstants";
@@ -21,6 +20,8 @@ import {
     BoardItem,
     GameInfo,
     GameState,
+    SixtySecond,
+    ThirtySecond,
     UserMarkType,
     getWinState,
     initBoard,
@@ -30,6 +31,8 @@ import UserProfile from "../PrivateRoom/UserProfile";
 import { OpBid } from "../PrivateRoom/UserBid";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { Message } from "../PrivateRoom/Message";
+import Timer from "../BttComponents/Timer";
+import getNowSecondsTimestamp from "@/utils/nowTime";
 
 const StartJourney = () => {
     const navigate = useNavigate();
@@ -93,6 +96,7 @@ const StartJourney = () => {
 
 const BttLiveGamePage = () => {
     const { blockNumber } = useBlockNumber();
+    const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
     const [init, setInit] = useState(false);
     const [list, setList] = useState<BoardItem[]>(initBoard());
     const { search } = useLocation();
@@ -107,6 +111,7 @@ const BttLiveGamePage = () => {
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
+    const [bufferTime, setBufferTime] = useState(0);
 
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(gameAddress);
@@ -298,6 +303,8 @@ const BttLiveGamePage = () => {
             multiSkylabBidTacToeGameContract.player2(),
         ]);
 
+        console.log(player1, player2, "--");
+
         const [
             userInfo1,
             userInfo2,
@@ -363,6 +370,53 @@ const BttLiveGamePage = () => {
         multiSkylabBidTacToeGameContract,
         ethcallProvider,
     ]);
+
+    useEffect(() => {
+        if (myGameInfo.gameState !== GameState.WaitingForBid) {
+            return;
+        }
+        const commitWorkerRef = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+        const time = myGameInfo.timeout * 1000;
+        const now = getNowSecondsTimestamp();
+        commitWorkerRef.onmessage = async (event) => {
+            const timeLeft = event.data;
+            setAutoCommitTimeoutTime(timeLeft);
+        };
+
+        const remainTime = time - now;
+
+        if (remainTime > ThirtySecond) {
+            let bufferTime = 0;
+
+            if (Number(bufferTime) === 0 || remainTime > bufferTime) {
+                if (remainTime > SixtySecond) {
+                    bufferTime = remainTime - SixtySecond;
+                } else if (remainTime > ThirtySecond) {
+                    bufferTime = remainTime - ThirtySecond;
+                } else {
+                    bufferTime = remainTime;
+                }
+            } else {
+                bufferTime = remainTime;
+            }
+
+            setBufferTime(Number(bufferTime));
+            commitWorkerRef.postMessage({
+                action: "start",
+                timeToCount: remainTime - ThirtySecond,
+            });
+        } else {
+            commitWorkerRef.postMessage({
+                action: "stop",
+            });
+        }
+
+        return () => {
+            commitWorkerRef.terminate();
+        };
+    }, [myGameInfo.timeout, myGameInfo.gameState]);
 
     return (
         <Box
@@ -440,9 +494,17 @@ const BttLiveGamePage = () => {
                                     Live
                                 </Text>
                             </Box>
-                            <LiveGameTimer
-                                myGameInfo={myGameInfo}
-                            ></LiveGameTimer>
+
+                            {myGameInfo.gameState < GameState.Commited && (
+                                <Timer
+                                    time1={autoCommitTimeoutTime}
+                                    time2={bufferTime}
+                                    time1Gray={
+                                        myGameInfo.gameState ===
+                                        GameState.Commited
+                                    }
+                                ></Timer>
+                            )}
                             <LiveStatusTip
                                 myGameState={myGameInfo.gameState}
                                 opGameState={opGameInfo.gameState}

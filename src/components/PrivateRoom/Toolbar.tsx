@@ -46,16 +46,14 @@ const ToolBar = ({
                 },
             }}
         >
-            {isPc && (
-                <KeyBoard
-                    type={false}
-                    isOpen={keyBoardOpen}
-                    onToggle={() => {
-                        keyBoardOnToggle();
-                    }}
-                    onClose={keyBoardOnClose}
-                ></KeyBoard>
-            )}
+            <KeyBoard
+                type={false}
+                isOpen={keyBoardOpen}
+                onToggle={() => {
+                    keyBoardOnToggle();
+                }}
+                onClose={keyBoardOnClose}
+            ></KeyBoard>
 
             {quitType === "game" && (
                 <ToolShare

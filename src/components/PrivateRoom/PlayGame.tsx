@@ -2,7 +2,6 @@ import { MyBid, OpBid } from "./UserBid";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Board from "@/components/TacToe/Board";
-import Timer from "./Timer";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { GameInfo, UserMarkType } from "@/pages/TacToe";
@@ -37,6 +36,7 @@ import { Message } from "./Message";
 import MLayout from "./MLayout";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
+import Timer from "../BttComponents/Timer";
 
 const PlayGame = ({
     onChangeGame,

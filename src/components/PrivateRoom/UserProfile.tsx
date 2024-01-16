@@ -173,17 +173,20 @@ const UserProfile = ({
 };
 
 export const MUserProfile = ({
+    address,
+    img,
     avatar,
     name,
     status,
     open,
     onClick,
 }: {
-    avatar: number;
-    name: string;
+    address?: string;
+    img?: string;
+    avatar?: number;
+    name?: string;
     showAdvantageTip?: boolean;
     mark?: number;
-    address?: string;
     status?: "my" | "op";
     open: boolean;
     onClick?: () => void;
@@ -205,6 +208,14 @@ export const MUserProfile = ({
             }
         }
     }, [open, status]);
+
+    const info = useMemo(() => {
+        if (status === "my") {
+            return { right: "20px", alignItems: "flex-end" };
+        } else {
+            return { left: "20px", alignItems: "flex-start" };
+        }
+    }, [status]);
 
     return (
         <Box
@@ -252,38 +263,60 @@ export const MUserProfile = ({
                             transition: "all 1s linear",
                         }}
                     ></motion.div>
-                    <Box
+                    <Flex
                         sx={{
                             margin:
-                                status === "my"
-                                    ? "-20px 0 0 48px"
-                                    : "-20px 0 0 16px",
+                                status === "my" ? "-20px 0 0 0" : "-20px 0 0 0",
                             position: "absolute",
                             top: "20px",
-                            left: status === "my" ? "0" : "auto",
-                            right: status === "my" ? "auto" : "40px",
+                            ...info,
                         }}
+                        flexDir={"column"}
                     >
-                        <Box
-                            sx={{
-                                borderRadius: "12px",
-                                border: "1px solid #FDDC2D",
-                                background: avatars[avatar],
-                                width: "40px",
-                                height: "40px",
-                            }}
-                        ></Box>
-
-                        <Text
-                            sx={{
-                                fontSize: "14px",
-                                fontWeight: 700,
-                                color: "#000",
-                            }}
-                        >
-                            {name}
-                        </Text>
-                    </Box>
+                        {avatar && (
+                            <Box
+                                sx={{
+                                    borderRadius: "12px",
+                                    border: "1px solid #FDDC2D",
+                                    background: avatars[avatar],
+                                    width: "40px",
+                                    height: "40px",
+                                }}
+                            ></Box>
+                        )}
+                        {img && (
+                            <Image
+                                src={img}
+                                sx={{
+                                    width: "40px",
+                                    transform:
+                                        status === "my" ? "rotate(180deg)" : "",
+                                }}
+                            ></Image>
+                        )}
+                        {name && (
+                            <Text
+                                sx={{
+                                    fontSize: "14px",
+                                    fontWeight: 700,
+                                    color: "#000",
+                                }}
+                            >
+                                {name}
+                            </Text>
+                        )}
+                        {address && (
+                            <Text
+                                sx={{
+                                    fontSize: "14px",
+                                    fontWeight: 700,
+                                    color: "#000",
+                                }}
+                            >
+                                {shortenAddress(address, 4, 4)}
+                            </Text>
+                        )}
+                    </Flex>
                 </motion.div>
             </Flex>
         </Box>

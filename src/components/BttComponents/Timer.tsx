@@ -1,5 +1,6 @@
-import { Box, keyframes, Text, useMediaQuery } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
+import { Box, Text, keyframes, useMediaQuery } from "@chakra-ui/react";
+import { ThirtySecond } from "@/skyConstants/bttGameTypes";
 
 const BttTimer = ({
     width,
@@ -76,13 +77,7 @@ const move = keyframes`
     }
 `;
 
-export const BufferTimer = ({
-    width,
-    show,
-}: {
-    width: string;
-    show: boolean;
-}) => {
+const BufferTimer = ({ width, show }: { width: string; show: boolean }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
@@ -130,5 +125,76 @@ export const BufferTimer = ({
         </Box>
     );
 };
+const Timer = ({
+    time1,
+    time2,
+    time1Gray,
+    direction = "right",
+}: {
+    time1: number;
+    time2: number;
+    time1Gray: boolean;
+    direction?: "top" | "right";
+}) => {
+    const {
+        minutes,
+        second,
+        time: fisrtTimeout,
+        show: bttShow,
+    } = useMemo(() => {
+        let time = 0;
+        let show = false;
+        if (time1 > time2) {
+            time = time1 - time2;
+            show = true;
+        }
 
-export default BttTimer;
+        let minutes: string | number = Math.floor(time / 60000);
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+
+        let second: string | number = Math.floor((time / 1000) % 60);
+        if (second < 10) {
+            second = `0${second}`;
+        }
+        return { minutes, second, time, show };
+    }, [time1, time2]);
+
+    const { time: secondTimeout, show: showBuffer } = useMemo(() => {
+        let time = 0;
+        let show = false;
+        if (time1 > time2) {
+            time = time2;
+        } else {
+            time = time1;
+            show = true;
+        }
+
+        return { time, show };
+    }, [time1, time2]);
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+            }}
+        >
+            <BttTimer
+                direction={direction}
+                width={(fisrtTimeout / ThirtySecond) * 100 + "%"}
+                time={`${minutes}:${second}`}
+                show={bttShow}
+                gray={time1Gray}
+            ></BttTimer>
+            <BufferTimer
+                width={(secondTimeout / time2) * 100 + "%"}
+                show={showBuffer}
+            ></BufferTimer>
+        </Box>
+    );
+};
+
+export default Timer;

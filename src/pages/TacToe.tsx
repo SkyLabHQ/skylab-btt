@@ -255,6 +255,7 @@ const TacToe = () => {
             <Box
                 sx={{
                     background: "#303030",
+                    height: "100%",
                 }}
             >
                 <GameContext.Provider
@@ -281,7 +282,11 @@ const TacToe = () => {
                         setBidTacToeGameAddress,
                     }}
                 >
-                    <Box>
+                    <Box
+                        sx={{
+                            height: "100%",
+                        }}
+                    >
                         {step === 0 && (
                             <Match
                                 onSetConfirmTimeout={(

@@ -168,6 +168,7 @@ const Join = () => {
                                 padding: "0 0.5208vw",
                                 background: loading ? "#BCBBBE" : "#616161",
                                 textAlign: "center",
+                                color: "#fff",
                             }}
                         />
                     );
