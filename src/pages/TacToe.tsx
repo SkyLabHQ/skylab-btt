@@ -25,39 +25,13 @@ import {
     skylabTestFlightAddress,
     skylabTournamentAddress,
 } from "@/hooks/useContract";
-import { GameState } from "@/skyConstants/bttGameTypes";
-
-export enum UserMarkType {
-    Empty = -1,
-    Square = 0,
-    Circle = 1,
-    Cross = 2,
-    YellowCircle = 3,
-    YellowCross = 4,
-    BotX = 5,
-    YellowBotX = 6,
-}
-
-export const UserMarkIcon = {
-    Circle: CircleIcon,
-    Cross: CrossIcon,
-    YellowCircle: YellowCircle,
-    YellowCross: YellowCross,
-    BotX: BotX,
-    YellowBotX: YellowBotX,
-};
-
-export const initBoard = () => {
-    return Array(9)
-        .fill("")
-        .map(() => ({
-            mark: -1,
-            myValue: 0,
-            opValue: 0,
-            myMark: UserMarkType.Empty,
-            opMark: UserMarkType.Empty,
-        }));
-};
+import {
+    BoardItem,
+    GameInfo,
+    GameState,
+    UserMarkType,
+    initBoard,
+} from "@/skyConstants/bttGameTypes";
 
 // plane related info
 export interface Info {
@@ -68,24 +42,6 @@ export interface Info {
     img: string;
     mark: UserMarkType;
     isBot?: boolean;
-}
-
-export interface BoardItem {
-    mark: UserMarkType;
-    myValue: number;
-    opValue: number;
-    myMark: UserMarkType;
-    opMark: UserMarkType;
-    showAnimate?: boolean;
-}
-
-// user state in game
-export interface GameInfo {
-    balance: number;
-    gameState: number;
-    timeout: number;
-    message: number;
-    emote: number;
 }
 
 export interface MyNewInfo {
@@ -151,12 +107,11 @@ const TacToe = () => {
         losePoint: 0,
     });
 
-    const navigate = useNavigate();
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const istest = params.testflight === "true";
     const { setIsKnobVisible } = useKnobVisibility();
-    const [tokenId, setTokenId] = useState<number>(params.tokenId);
+    const [tokenId] = useState<number>(params.tokenId);
     const [myNewInfo, setMyNewInfo] = useState<MyNewInfo>(null); // if game over update my info
     const realChainId = istest ? TESTFLIGHT_CHAINID : chainId;
     const avaitionAddress = istest
@@ -246,8 +201,6 @@ const TacToe = () => {
         setIsKnobVisible(false);
         return () => setIsKnobVisible(true);
     }, []);
-
-    console.log(opConfirmTimeout, "opConfirmTimeout");
 
     return (
         <>

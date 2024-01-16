@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Image, Text, useDisclosure, useToast } from "@chakra-ui/react";
-import { Info, UserMarkType, useGameContext, GameType } from "@/pages/TacToe";
+import { Info, useGameContext, GameType } from "@/pages/TacToe";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
 import { getMetadataImg } from "@/utils/ipfsImg";
@@ -23,6 +23,7 @@ import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
 import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 
 export const PlaneImg = ({
     detail,

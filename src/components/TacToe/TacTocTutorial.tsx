@@ -6,7 +6,6 @@ import XIcon from "@/components/TacToe/assets/x.svg";
 import { BoardGrid } from "@/components/TacToe/Board";
 import BaseGrid from "./assets/base-grid.svg";
 import { useTour } from "@reactour/tour";
-import { UserMarkType } from "@/pages/TacToe";
 import PlayStartWhite from "./assets/play-start-white.svg";
 import PlayStartGray from "./assets/play-start-gray.svg";
 import PlayPreviouWhite from "./assets/play-previous-white.svg";
@@ -17,7 +16,7 @@ import PlayEndWhite from "./assets/play-end-white.svg";
 import PlayEndGray from "./assets/play-end-gray.svg";
 import CloseIcon from "./assets/close.svg";
 import BttTimer from "./BttTimer";
-import { GameState } from "@/skyConstants/bttGameTypes";
+import { GameState, UserMarkType } from "@/skyConstants/bttGameTypes";
 
 const FirstBoard = () => {
     const list = [

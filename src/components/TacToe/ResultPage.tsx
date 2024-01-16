@@ -1,10 +1,4 @@
-import {
-    BoardItem,
-    initBoard,
-    useGameContext,
-    UserMarkIcon,
-    UserMarkType,
-} from "@/pages/TacToe";
+import { useGameContext } from "@/pages/TacToe";
 import { Box } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -16,8 +10,12 @@ import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "../BttPlayBack/BttPlayBackContent";
 import ButtonGroup from "../BttPlayBack/ButtonGroup";
 import {
+    BoardItem,
     GameState,
+    UserMarkIcon,
+    UserMarkType,
     getWinState,
+    initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 

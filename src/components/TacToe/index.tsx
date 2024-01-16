@@ -16,13 +16,7 @@ import {
     useBidTacToeFactoryRetry,
     useBttGameRetry,
 } from "@/hooks/useRetryContract";
-import {
-    GameInfo,
-    GameType,
-    MyNewInfo,
-    useGameContext,
-    UserMarkType,
-} from "@/pages/TacToe";
+import { GameType, MyNewInfo, useGameContext } from "@/pages/TacToe";
 import { ethers } from "ethers";
 import {
     useMultiProvider,
@@ -42,15 +36,16 @@ import { ZERO_DATA } from "@/skyConstants";
 import A0Testflight from "@/assets/aviations/a0-testflight.png";
 import A2Testflight from "@/assets/aviations/a2-testflight.png";
 import {
+    GameInfo,
     GameState,
     MessageStatus,
     SixtySecond,
     ThirtySecond,
+    UserMarkType,
     getWinState,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import getNowSecondsTimestamp from "@/utils/nowTime";
-import { useNavigate } from "react-router-dom";
 import QuitModal from "../BttComponents/QuitModal";
 import MLayout from "./MLayout";
 import { CHAIN_NAMES } from "@/utils/web3Utils";
@@ -65,7 +60,6 @@ interface TacToeProps {
 const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
-    const navigate = useNavigate();
 
     const {
         istest,

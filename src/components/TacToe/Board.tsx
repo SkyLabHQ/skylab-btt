@@ -10,7 +10,11 @@ import React from "react";
 import BaseGrid from "./assets/base-grid.svg";
 import BlackXIcon from "./assets/black-x.svg";
 import BlackCircle from "./assets/black-circle.svg";
-import { BoardItem, UserMarkIcon, UserMarkType } from "@/pages/TacToe";
+import {
+    BoardItem,
+    UserMarkIcon,
+    UserMarkType,
+} from "@/skyConstants/bttGameTypes";
 
 const move = keyframes`
     0% {

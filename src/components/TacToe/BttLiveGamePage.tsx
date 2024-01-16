@@ -3,13 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BttIcon from "@/assets/btt-icon.png";
 import qs from "query-string";
-import {
-    BoardItem,
-    GameInfo,
-    initBoard,
-    UserMarkIcon,
-    UserMarkType,
-} from "@/pages/TacToe";
+
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -20,17 +14,25 @@ import { UserCard } from "../BttPlayBack/UserCard";
 import Loading from "../Loading";
 import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-import LiveGameTimer from "./LiveGameTimer";
 import LiveStatusTip from "./LiveStatusTip";
 import { shortenAddressWithout0x } from "@/utils";
 import { aviationImg } from "@/utils/aviationImg";
 import { ZERO_DATA } from "@/skyConstants";
 import { botAddress } from "@/hooks/useContract";
 import {
+    BoardItem,
+    GameInfo,
     GameState,
+    SixtySecond,
+    ThirtySecond,
+    UserMarkIcon,
+    UserMarkType,
     getWinState,
+    initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
+import Timer from "../BttComponents/Timer";
+import getNowSecondsTimestamp from "@/utils/nowTime";
 
 interface Info {
     burner?: string;
@@ -101,6 +103,8 @@ const StartJourney = () => {
 
 const BttLiveGamePage = () => {
     const { blockNumber } = useBlockNumber();
+    const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
+
     const [init, setInit] = useState(false);
     const [list, setList] = useState<BoardItem[]>(initBoard());
     const { search } = useLocation();
@@ -109,7 +113,7 @@ const BttLiveGamePage = () => {
     const ethcallProvider = useMultiProvider(params.chainId);
     const [bttGameAddress] = useState(params.gameAddress);
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
-    console.log(bttGameAddress, "bttGameAddress");
+    const [bufferTime, setBufferTime] = useState(0);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(params.chainId);
     const multiSkylabBidTacToeGameContract =
@@ -187,7 +191,6 @@ const BttLiveGamePage = () => {
         ) {
             return;
         }
-        console.log("jinlaia a a ");
 
         const [
             currentGrid,
@@ -348,7 +351,6 @@ const BttLiveGamePage = () => {
             multiSkylabBidTacToeGameContract.player2(),
         ]);
 
-        console.log("！！！！");
         const [level1, points1, level2, points2] = metadata;
         const params = qs.parse(search) as any;
         const burner = params.burner;
@@ -391,21 +393,59 @@ const BttLiveGamePage = () => {
     ]);
 
     useEffect(() => {
-        console.log(
-            multiSkylabBidTacToeFactoryContract,
-            "multiSkylabBidTacToeFactoryContract",
-        );
-        console.log(
-            multiSkylabBidTacToeGameContract,
-            "multiSkylabBidTacToeGameContract",
-        );
-        console.log(ethcallProvider, "ethcallProvider");
         handleGetPlayer();
     }, [
         multiSkylabBidTacToeFactoryContract,
         multiSkylabBidTacToeGameContract,
         ethcallProvider,
     ]);
+
+    useEffect(() => {
+        if (myGameInfo.gameState !== GameState.WaitingForBid) {
+            return;
+        }
+        const commitWorkerRef = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+        const time = myGameInfo.timeout * 1000;
+        const now = getNowSecondsTimestamp();
+        commitWorkerRef.onmessage = async (event) => {
+            const timeLeft = event.data;
+            setAutoCommitTimeoutTime(timeLeft);
+        };
+
+        const remainTime = time - now;
+
+        if (remainTime > ThirtySecond) {
+            let bufferTime = 0;
+
+            if (Number(bufferTime) === 0 || remainTime > bufferTime) {
+                if (remainTime > SixtySecond) {
+                    bufferTime = remainTime - SixtySecond;
+                } else if (remainTime > ThirtySecond) {
+                    bufferTime = remainTime - ThirtySecond;
+                } else {
+                    bufferTime = remainTime;
+                }
+            } else {
+                bufferTime = remainTime;
+            }
+
+            setBufferTime(Number(bufferTime));
+            commitWorkerRef.postMessage({
+                action: "start",
+                timeToCount: remainTime - ThirtySecond,
+            });
+        } else {
+            commitWorkerRef.postMessage({
+                action: "stop",
+            });
+        }
+
+        return () => {
+            commitWorkerRef.terminate();
+        };
+    }, [myGameInfo.timeout, myGameInfo.gameState]);
 
     return (
         <Box
@@ -483,9 +523,16 @@ const BttLiveGamePage = () => {
                                     Live
                                 </Text>
                             </Box>
-                            <LiveGameTimer
-                                myGameInfo={myGameInfo}
-                            ></LiveGameTimer>
+                            {myGameInfo.gameState < GameState.Commited && (
+                                <Timer
+                                    time1={autoCommitTimeoutTime}
+                                    time2={bufferTime}
+                                    time1Gray={
+                                        myGameInfo.gameState ===
+                                        GameState.Commited
+                                    }
+                                ></Timer>
+                            )}
                             <LiveStatusTip
                                 myGameState={myGameInfo.gameState}
                                 opGameState={opGameInfo.gameState}

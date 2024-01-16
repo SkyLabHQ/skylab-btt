@@ -5,13 +5,7 @@ import BackIcon from "@/components/TacToe/assets/back-arrow.svg";
 import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
 import BttIcon from "@/assets/btt-icon.png";
 import qs from "query-string";
-import {
-    BoardItem,
-    Info,
-    initBoard,
-    UserMarkIcon,
-    UserMarkType,
-} from "@/pages/TacToe";
+import { Info } from "@/pages/TacToe";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -24,8 +18,12 @@ import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "./BttPlayBackContent";
 import { botAddress } from "@/hooks/useContract";
 import {
+    BoardItem,
     GameState,
+    UserMarkIcon,
+    UserMarkType,
     getWinState,
+    initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 

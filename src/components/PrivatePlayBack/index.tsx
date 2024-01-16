@@ -5,12 +5,6 @@ import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
 import BttIcon from "@/assets/btt-icon.png";
 import qs from "query-string";
 import {
-    BoardItem,
-    initBoard,
-    UserMarkIcon,
-    UserMarkType,
-} from "@/pages/TacToe";
-import {
     useMultiMercuryBTTPrivateLobby,
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -24,9 +18,13 @@ import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import ShareButtons from "../PrivateRoom/ShareButton";
 import { shortenAddressWithout0x } from "@/utils";
 import {
+    BoardItem,
     GameState,
+    UserMarkIcon,
+    UserMarkType,
     getShareEmoji,
     getWinState,
+    initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";

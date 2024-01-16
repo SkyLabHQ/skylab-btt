@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Board from "@/components/TacToe/Board";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
-import { GameInfo, UserMarkType } from "@/pages/TacToe";
 import { ethers } from "ethers";
 import {
     useMultiProvider,
@@ -24,10 +23,12 @@ import StatusTip from "../TacToe/StatusTip";
 import ToolBar from "./Toolbar";
 import Chat from "./Chat";
 import {
+    GameInfo,
     GameState,
     MessageStatus,
     SixtySecond,
     ThirtySecond,
+    UserMarkType,
     getWinState,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
