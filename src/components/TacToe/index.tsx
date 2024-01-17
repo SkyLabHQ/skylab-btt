@@ -41,6 +41,7 @@ import { CHAIN_NAMES } from "@/utils/web3Utils";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
+import { shortenAddressWithout0x } from "@/utils";
 
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
@@ -107,13 +108,23 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const inviteLink = useMemo(() => {
         if (!bidTacToeGameAddress) return "";
 
-        return `${window.location.origin}/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}`;
+        return `${
+            window.location.origin
+        }/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}&burner=${shortenAddressWithout0x(
+            myInfo.burner,
+        )}`;
     }, [bidTacToeGameAddress, myInfo]);
 
     const handleShareTw = () => {
-        const text = `${window.location.host}/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}
+        const text = `${
+            window.location.host
+        }/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}&burner=${shortenAddressWithout0x(
+            myInfo.burner,
+        )}
 ⭕️❌⭕️❌Watch me play Bid tac toe and crush the opponent！⭕️❌⭕️❌
-Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NAMES[realChainId]}
+Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
+            CHAIN_NAMES[realChainId]
+        }
 (Twitter)@skylabHQ`;
 
         window.open(

@@ -244,7 +244,7 @@ const PrivateLobbyPlayBack = ({
                             }}
                         >
                             <MUserProfileResult
-                                status="my"
+                                position="left"
                                 avatar={myInfo.avatar}
                                 name={myInfo.name}
                                 mark={myInfo.mark}
@@ -264,7 +264,7 @@ const PrivateLobbyPlayBack = ({
                             }}
                         >
                             <MUserProfileResult
-                                status="op"
+                                position="right"
                                 avatar={opInfo.avatar}
                                 name={opInfo.name}
                                 mark={opInfo.mark}

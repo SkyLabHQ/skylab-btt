@@ -9,6 +9,7 @@ import Merc8 from "./emotes/8.png";
 import Merc9 from "./emotes/9.png";
 import Merc10 from "./emotes/10.png";
 
+import Robot from "@/components/BttComponents/assets/robot.png";
 import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import CrossIcon from "@/components/TacToe/assets/x.svg";
 import YellowCircle from "@/components/TacToe/assets/yellow-circle.svg";
@@ -132,6 +133,8 @@ export interface GameInfo {
 
 const winEmoji = ["❤️", "👑", "🦋", "🌻", "🥳", "🤪", "😎", "🤭", "🤩"];
 const loseEmoji = ["🥀", "💔", "🥲", "🥶", "🤬", "🥺", "🤕", "☠️"];
+
+export const RobotImg = Robot;
 
 export const getShareEmoji = (
     myMark: UserMarkType,

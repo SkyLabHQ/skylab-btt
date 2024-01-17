@@ -4,12 +4,12 @@ import Board from "@/components/TacToe/Board";
 import ResultUserCard from "../TacToe/ResultUserCard";
 import { getWinState } from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
-import { MUserProfile } from "../PrivateRoom/UserProfile";
-import { useGameContext } from "@/pages/TacToe";
+import { MUserProfileResult } from "../PrivateRoom/UserProfile";
+import { GameType, useGameContext } from "@/pages/TacToe";
 
 const GameOver = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { myInfo, opInfo, myGameInfo, opGameInfo, list, onStep } =
+    const { myInfo, opInfo, myGameInfo, opGameInfo, list, onStep, gameType } =
         useGameContext();
 
     const isMyWin = getWinState(myGameInfo.gameState);
@@ -86,13 +86,16 @@ const GameOver = () => {
                 }}
                 flexDir={"column"}
             >
-                <MUserProfile
-                    status="op"
-                    address={opInfo.address}
+                <MUserProfileResult
+                    address={
+                        gameType === GameType.HumanWithBot ? "" : opInfo.address
+                    }
+                    position="left"
                     img={opInfo.img}
                     mark={opInfo.mark}
-                    open={true}
-                ></MUserProfile>
+                    level={opInfo.level}
+                    showUserIcon={false}
+                ></MUserProfileResult>
                 <MBalance
                     balance={opGameInfo.balance}
                     mark={opInfo.mark}
@@ -109,13 +112,16 @@ const GameOver = () => {
                 flexDir={"column"}
                 align={"flex-end"}
             >
-                <MUserProfile
-                    status="my"
-                    address={myInfo.address}
+                <MUserProfileResult
+                    position="right"
+                    address={
+                        gameType === GameType.HumanWithBot ? "" : myInfo.address
+                    }
                     img={myInfo.img}
                     mark={myInfo.mark}
-                    open={true}
-                ></MUserProfile>
+                    level={myInfo.level}
+                    showUserIcon={false}
+                ></MUserProfileResult>
                 <MBalance
                     balance={myGameInfo.balance}
                     status="op"

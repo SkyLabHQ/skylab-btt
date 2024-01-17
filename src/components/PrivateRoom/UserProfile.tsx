@@ -173,6 +173,7 @@ const UserProfile = ({
 };
 
 export const MUserProfile = ({
+    level,
     address,
     img,
     avatar,
@@ -181,6 +182,7 @@ export const MUserProfile = ({
     open,
     onClick,
 }: {
+    level?: number;
     address?: string;
     img?: string;
     avatar?: number;
@@ -211,9 +213,9 @@ export const MUserProfile = ({
 
     const info = useMemo(() => {
         if (status === "my") {
-            return { right: "20px", alignItems: "flex-end" };
+            return { right: "10px", alignItems: "flex-end" };
         } else {
-            return { left: "20px", alignItems: "flex-start" };
+            return { left: "10px", alignItems: "flex-start" };
         }
     }, [status]);
 
@@ -246,7 +248,7 @@ export const MUserProfile = ({
                 <motion.div
                     style={{
                         height: "60px",
-                        width: open ? "110px" : 0,
+                        width: open ? (level ? "140px" : "110px") : 0,
                         transition: "all 0.1s linear",
                         position: "relative",
                         overflow: "hidden",
@@ -306,17 +308,36 @@ export const MUserProfile = ({
                                 {name}
                             </Text>
                         )}
-                        {address && (
-                            <Text
-                                sx={{
-                                    fontSize: "14px",
-                                    fontWeight: 700,
-                                    color: "#000",
-                                }}
-                            >
-                                {shortenAddress(address, 4, 4)}
-                            </Text>
-                        )}
+                        <Flex
+                            sx={{
+                                flexDirection: direction,
+                            }}
+                            align={"center"}
+                        >
+                            {address && (
+                                <Text
+                                    sx={{
+                                        fontSize: "12px",
+                                        fontWeight: 700,
+                                        color: "#000",
+                                    }}
+                                >
+                                    {shortenAddress(address, 4, 4)}
+                                </Text>
+                            )}
+                            {level && (
+                                <Text
+                                    sx={{
+                                        fontSize: "14px",
+                                        fontWeight: 700,
+                                        color: "#000",
+                                        margin: "0 4px",
+                                    }}
+                                >
+                                    Lvl.{level}
+                                </Text>
+                            )}
+                        </Flex>
                     </Flex>
                 </motion.div>
             </Flex>
@@ -325,25 +346,32 @@ export const MUserProfile = ({
 };
 
 export const MUserProfileResult = ({
+    level,
     address,
     img,
     avatar,
     name,
-    status,
+    showUserIcon = true,
+    showAdvantageTip,
+    position,
 }: {
+    level?: number;
+    showUserIcon?: boolean;
     address?: string;
     img?: string;
     avatar?: number;
     name?: string;
     showAdvantageTip?: boolean;
     mark?: number;
-    status?: "my" | "op";
+    position?: "left" | "right";
 }) => {
     return (
         <Flex
-            sx={{}}
             flexDir={"column"}
-            align={status === "my" ? "flex-start" : "flex-end"}
+            align={position === "left" ? "flex-start" : "flex-end"}
+            sx={{
+                padding: "0 12px",
+            }}
         >
             <Flex align={"flex-end"}>
                 {avatar && (
@@ -359,16 +387,28 @@ export const MUserProfileResult = ({
                 )}
 
                 {img && (
-                    <Image
-                        src={img}
+                    <Flex
+                        flexDir={"column"}
+                        align={"flex-end"}
+                        justify={"flex-end"}
                         sx={{
                             width: "40px",
                             height: "40px",
                         }}
-                    ></Image>
+                    >
+                        <Image
+                            src={img}
+                            sx={{
+                                width: "40px",
+                                // height: "40px",
+                                transform:
+                                    position === "left" ? "" : "rotate(180deg)",
+                            }}
+                        ></Image>
+                    </Flex>
                 )}
 
-                {status === "my" && (
+                {position === "left" && showUserIcon && (
                     <Image
                         src={UserIcon}
                         sx={{
@@ -390,17 +430,31 @@ export const MUserProfileResult = ({
                 </Text>
             )}
 
-            {address && (
-                <Text
-                    sx={{
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        color: "#fff",
-                    }}
-                >
-                    {shortenAddress(address, 4, 4)}
-                </Text>
-            )}
+            <Flex>
+                {level && (
+                    <Text
+                        sx={{
+                            fontSize: "14px",
+                            fontWeight: 700,
+                            color: "#fff",
+                            margin: "0 4px",
+                        }}
+                    >
+                        Lvl.{level}
+                    </Text>
+                )}
+                {address && (
+                    <Text
+                        sx={{
+                            fontSize: "14px",
+
+                            color: "#fff",
+                        }}
+                    >
+                        {shortenAddress(address, 4, 4)}
+                    </Text>
+                )}
+            </Flex>
         </Flex>
     );
 };

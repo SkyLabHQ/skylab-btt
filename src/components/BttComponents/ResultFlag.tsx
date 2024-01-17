@@ -6,12 +6,12 @@ export const Lose = () => {
         <Box
             sx={{
                 width: "60px",
-                height: "28px",
+                height: "24px",
                 borderRadius: "12px",
                 background: "#D9D9D9",
                 color: "#303030",
                 textAlign: "center",
-                lineHeight: "28px",
+                lineHeight: "24px",
             }}
         >
             Lose
@@ -24,12 +24,12 @@ export const Win = () => {
         <Box
             sx={{
                 width: "60px",
-                height: "28px",
+                height: "24px",
                 borderRadius: "12px",
                 background: "#FDDC2D",
                 textAlign: "center",
                 color: "#303030",
-                lineHeight: "28px",
+                lineHeight: "24px",
             }}
         >
             Win

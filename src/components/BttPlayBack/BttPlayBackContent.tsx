@@ -239,19 +239,13 @@ const BttPlayBackContent = ({
             >
                 <Flex justify={"space-between"}>
                     <Box>
-                        <Box
-                            sx={{
-                                paddingLeft: "12px",
-                            }}
-                        >
-                            <MUserProfileResult
-                                status="my"
-                                address={myInfo.address}
-                                img={myInfo.img}
-                                mark={myInfo.mark}
-                            ></MUserProfileResult>
-                        </Box>
-
+                        <MUserProfileResult
+                            position="left"
+                            address={myInfo.address}
+                            img={myInfo.img}
+                            mark={myInfo.mark}
+                            level={myInfo.level}
+                        ></MUserProfileResult>
                         <MBalance
                             balance={myBalance}
                             mark={myInfo.mark}
@@ -259,19 +253,14 @@ const BttPlayBackContent = ({
                     </Box>
 
                     <Flex flexDir={"column"} align={"flex"}>
-                        <Box
-                            sx={{
-                                paddingRight: "12px",
-                            }}
-                        >
-                            <MUserProfileResult
-                                status="op"
-                                address={opInfo.address}
-                                img={opInfo.img}
-                                mark={opInfo.mark}
-                                showAdvantageTip={!myIsNextDrawWinner}
-                            ></MUserProfileResult>
-                        </Box>
+                        <MUserProfileResult
+                            position="right"
+                            address={opInfo.address}
+                            img={opInfo.img}
+                            mark={opInfo.mark}
+                            showAdvantageTip={!myIsNextDrawWinner}
+                            level={opInfo.level}
+                        ></MUserProfileResult>
 
                         <MBalance
                             balance={opBalance}

@@ -188,13 +188,6 @@ const KeyBoard = ({
                                 onToggle();
                             }}
                             sx={{
-                                borderRadius: isPc ? "0.5208vw" : "8px",
-                                height: isPc ? "2.3958vw" : "32px",
-                                width: isPc ? "2.3958vw" : "32px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                border: "2px solid #fff",
                                 marginRight: "0.7292vw",
                                 cursor: "pointer",
                             }}
@@ -202,8 +195,8 @@ const KeyBoard = ({
                             <Image
                                 src={KeyboardIcon}
                                 sx={{
-                                    height: isPc ? "1.9792vw" : "28px",
-                                    width: isPc ? "1.9792vw" : "28px",
+                                    height: isPc ? "2.3958vw" : "32px",
+                                    width: isPc ? "2.3958vw" : "32px",
                                 }}
                             ></Image>
                         </Box>
@@ -216,16 +209,12 @@ const KeyBoard = ({
                         <Button
                             variant={"unstyled"}
                             sx={{
-                                borderRadius: isPc ? "0.5208vw" : "8px",
-                                height: isPc ? "2.3958vw" : "32px",
-                                width: isPc ? "2.3958vw" : "32px",
-                                minWidth: "2.3958vw",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                border: "2px solid #fff",
-                                marginRight: "0.7292vw",
                                 cursor: "pointer",
+                                height: isPc ? "2.3958vw" : "32px",
+                                width: isPc ? "2.3958vw" : "32px",
                                 "&:focus": {
                                     boxShadow: "none",
                                 },
@@ -234,8 +223,8 @@ const KeyBoard = ({
                             <Image
                                 src={KeyboardIcon}
                                 sx={{
-                                    height: isPc ? "1.9792vw" : "28px",
-                                    width: isPc ? "1.9792vw" : "28px",
+                                    height: isPc ? "2.3958vw" : "32px",
+                                    width: isPc ? "2.3958vw" : "32px",
                                 }}
                             ></Image>
                         </Button>

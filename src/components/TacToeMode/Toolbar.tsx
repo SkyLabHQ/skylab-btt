@@ -42,14 +42,14 @@ export const Toolbar = () => {
                     navigate("/btt/history");
                 }}
             ></Image>
-            <KeyBoard
+            {/* <KeyBoard
                 type={false}
                 isOpen={keyBoardOpen}
                 onToggle={() => {
                     keyBoardOnToggle();
                 }}
                 onClose={keyBoardOnClose}
-            ></KeyBoard>
+            ></KeyBoard> */}
             <BidTacToeTutorial>
                 <Box
                     sx={{

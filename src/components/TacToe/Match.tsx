@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Image, Text, useDisclosure, useToast } from "@chakra-ui/react";
+import {
+    Box,
+    Image,
+    Text,
+    useDisclosure,
+    useMediaQuery,
+    useToast,
+} from "@chakra-ui/react";
 import { Info, useGameContext, GameType } from "@/pages/TacToe";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
@@ -21,7 +28,7 @@ import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
 import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
-import { UserMarkType } from "@/skyConstants/bttGameTypes";
+import { RobotImg, UserMarkType } from "@/skyConstants/bttGameTypes";
 import ToolBar from "../BttComponents/Toolbar";
 
 export const PlaneImg = ({
@@ -33,6 +40,7 @@ export const PlaneImg = ({
     flip?: boolean;
     pilotInfo: PilotInfo;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <>
             {detail?.level ? (
@@ -44,8 +52,8 @@ export const PlaneImg = ({
                     <Image
                         src={detail?.img}
                         sx={{
-                            width: "14.5833vw",
-                            height: "14.5833vw",
+                            width: isPc ? "14.5833vw" : "136px",
+                            height: isPc ? "14.5833vw" : "136px",
                             transform: flip ? "scaleX(-1)" : "",
                             /*兼容IE*/
                             filter: "FlipH",
@@ -54,7 +62,7 @@ export const PlaneImg = ({
                     {pilotInfo.img && (
                         <Image
                             sx={{
-                                width: "3.3333vw",
+                                width: isPc ? "3.3333vw" : "34px",
                                 position: "absolute",
                                 left: "50%",
                                 top: "50%",
@@ -69,8 +77,8 @@ export const PlaneImg = ({
             ) : (
                 <Box
                     sx={{
-                        width: "14.5833vw",
-                        height: "14.5833vw",
+                        width: isPc ? "14.5833vw" : "136px",
+                        height: isPc ? "14.5833vw" : "136px",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -79,7 +87,7 @@ export const PlaneImg = ({
                     <motion.img
                         src={LoadingIcon}
                         style={{
-                            width: "6.25vw",
+                            width: isPc ? "6.25vw" : "58px",
                             rotate: 0,
                         }}
                         transition={{
@@ -96,6 +104,8 @@ export const PlaneImg = ({
 };
 
 const StopMatch = ({ onClick }: { onClick: () => void }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -118,15 +128,16 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
             <GrayButton
                 onClick={onClick}
                 sx={{
-                    width: "13.3333vw !important",
-                    height: "3.3333vw !important",
+                    width: isPc ? "13.3333vw !important" : "210px !important",
+                    height: isPc ? "3.3333vw !important" : "50px !important",
                     background: "transparent",
-                    marginTop: "20vh",
+                    marginTop: isPc ? "20vh" : "85px",
+                    borderRadius: isPc ? "0.8333vw" : "10px !important",
                 }}
             >
                 <Text
                     sx={{
-                        fontSize: "1.25vw",
+                        fontSize: isPc ? "1.25vw" : "20px",
                         textAlign: "center !important",
                         flex: 1,
                     }}
@@ -140,26 +151,31 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
                         sx={{
                             width: 0,
                             height: 0,
-                            borderLeft: "0.4427vw solid transparent",
-                            borderRight: "0.4427vw solid transparent",
-                            borderBottom: "0.7668vw solid #fff",
-                            marginTop: "0.5208vw",
+                            borderLeft: `${
+                                isPc ? "0.4427vw " : "8px"
+                            } solid transparent`,
+                            borderRight: `${
+                                isPc ? "0.4427vw " : "8px"
+                            } solid transparent`,
+                            borderBottom: `${
+                                isPc ? "0.7668vw " : "12px"
+                            } solid #fff`,
+                            marginTop: isPc ? "0.5208vw" : "4px",
                         }}
                     ></Box>
                     <Box
                         sx={{
-                            width: "35.8333vw",
-                            height: "6.25vw",
+                            width: isPc ? "35.8333vw" : "335px",
                             border: "0.0521vw solid #616161",
                             backdropFilter: "blur(1.3021vw)",
-                            padding: "1.0417vw 3.125vw 0",
-                            borderRadius: "0.8333vw",
-                            marginTop: "1.0417vw",
+                            padding: isPc ? "1.0417vw 3.125vw" : "12px",
+                            borderRadius: isPc ? "0.8333vw" : "8px",
+                            marginTop: isPc ? "1.0417vw" : "9px",
                         }}
                     >
                         <Text
                             sx={{
-                                fontSize: "1.25vw",
+                                fontSize: isPc ? "1.25vw" : "12px",
                                 textAlign: "center",
                             }}
                         >
@@ -197,6 +213,7 @@ export const MatchPage = ({
         opConfirmTimeout: number,
     ) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
     const toast = useToast();
@@ -263,7 +280,7 @@ export const MatchPage = ({
             address: playerAddress2,
             point: point1.toNumber(),
             level: level1.toNumber(),
-            img: getMetadataImg(mtadata1),
+            img: RobotImg,
             isBot: true,
         };
         onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
@@ -584,6 +601,7 @@ export const MatchPage = ({
             sx={{
                 padding: "1.4063vw 3.125vw",
             }}
+            justifyContent={isPc ? "flex-start" : "center"}
         >
             <Box
                 sx={{
@@ -607,7 +625,14 @@ export const MatchPage = ({
                 }}
             >
                 <PlaneImg detail={myInfo} pilotInfo={myActivePilot}></PlaneImg>
-                <Text sx={{ fontSize: "2.5vw", margin: "0 1.5625vw" }}>VS</Text>
+                <Text
+                    sx={{
+                        fontSize: isPc ? "2.5vw" : "36px",
+                        margin: "0 1.5625vw",
+                    }}
+                >
+                    VS
+                </Text>
                 <PlaneImg
                     detail={opInfo}
                     flip={true}

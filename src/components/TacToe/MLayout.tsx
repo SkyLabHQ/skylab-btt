@@ -84,6 +84,7 @@ const MLayout = ({
                         onClick={() => {
                             opOnToggle();
                         }}
+                        level={opInfo.level}
                     ></MUserProfile>
                     {!opIsOpen && (
                         <MMessage
@@ -129,7 +130,7 @@ const MLayout = ({
                         {myGameInfo.gameState < GameState.Commited && (
                             <Box
                                 sx={{
-                                    width: "200px",
+                                    width: "195px",
                                     position: "absolute",
                                     left: "12px",
                                     bottom: "4px",
@@ -184,6 +185,7 @@ const MLayout = ({
                                         onOpen();
                                     }
                                 }}
+                                level={myInfo.level}
                             ></MUserProfile>
                         </Flex>
 

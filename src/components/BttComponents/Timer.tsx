@@ -105,23 +105,25 @@ const BufferTimer = ({ width, show }: { width: string; show: boolean }) => {
                     }}
                 ></Box>
             </Box>
-            <Box
-                sx={{
-                    height: "1.4583vw",
-                }}
-            >
-                {show && (
-                    <Text
-                        sx={{
-                            fontSize: isPc ? "1.0417vw" : "12px",
-                            width: "100%",
-                            textAlign: "center",
-                        }}
-                    >
-                        {/* On Chain Buffer Time. Please Submit ASAP */}
-                    </Text>
-                )}
-            </Box>
+            {isPc && (
+                <Box
+                    sx={{
+                        height: "1.4583vw",
+                    }}
+                >
+                    {show && (
+                        <Text
+                            sx={{
+                                fontSize: isPc ? "1.0417vw" : "12px",
+                                width: "100%",
+                                textAlign: "center",
+                            }}
+                        >
+                            {/* On Chain Buffer Time. Please Submit ASAP */}
+                        </Text>
+                    )}
+                </Box>
+            )}
         </Box>
     );
 };

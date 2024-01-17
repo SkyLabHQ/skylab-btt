@@ -39,7 +39,6 @@ const ResultPage = () => {
     const [allSelectedGrids, setAllSelectedGrids] = useState<any[]>([]);
     const [currentRound, setCurrentRound] = useState(0);
 
-    const timer = useRef<any>(null);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract();
     const multiSkylabBidTacToeGameContract =

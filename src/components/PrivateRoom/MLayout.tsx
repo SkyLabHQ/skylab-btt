@@ -129,7 +129,7 @@ const MLayout = ({
                         {myGameInfo.gameState < GameState.Commited && (
                             <Box
                                 sx={{
-                                    width: "200px",
+                                    width: "195px",
                                     position: "absolute",
                                     left: "12px",
                                     bottom: "4px",

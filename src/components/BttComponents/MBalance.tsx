@@ -57,6 +57,7 @@ const MBalance = ({
                     sx={{
                         fontSize: "20px",
                         color: "#fff",
+                        lineHeight: "24px",
                     }}
                 >
                     {balance}
@@ -81,6 +82,13 @@ const MBalance = ({
                         width={"18px"}
                         height={"18px"}
                         src={UserMarkIcon.Cross}
+                    ></Image>
+                )}
+                {mark === UserMarkType.BotX && (
+                    <Image
+                        width={"18px"}
+                        height={"18px"}
+                        src={UserMarkIcon.BotX}
                     ></Image>
                 )}
             </Flex>

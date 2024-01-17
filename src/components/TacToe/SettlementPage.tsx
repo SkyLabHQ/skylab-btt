@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import Bg from "./assets/settlement-bg.png";
 import GardenIcon from "./assets/garden-icon.png";
@@ -253,6 +253,8 @@ const WinResult = ({
     myInfo: Info;
     myNewInfo: MyNewInfo;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     const [highlight, rightPlaneImg, rightPlaneLevel] = useMemo(() => {
         if (myNewInfo.level === myInfo.level) {
             return [false, aviationImg(myInfo.level + 1), myInfo.level + 1];
@@ -269,7 +271,7 @@ const WinResult = ({
         <Box>
             <Text
                 sx={{
-                    fontSize: "2.5vw",
+                    fontSize: isPc ? "2.5vw" : "28px",
                     fontWeight: "bold",
                     textAlign: "center",
                     color: "#FDDC2D",
@@ -288,41 +290,57 @@ const WinResult = ({
                     <Image
                         src={aviationImg(myInfo.level)}
                         sx={{
-                            width: "15.625vw",
-                            height: "15.625vw",
+                            width: isPc ? "15.625vw" : "100px",
+                            height: isPc ? "15.625vw" : "100px",
                             opacity: highlight ? "0.5" : "1",
                         }}
                     ></Image>
-                    <Text sx={{ fontSize: "1.875vw", textAlign: "center" }}>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "1.875vw" : "20px",
+                            textAlign: "center",
+                        }}
+                    >
                         Lvl.{myInfo.level}
                     </Text>
                 </Box>
 
-                <Image src={UpIcon} sx={{ margin: "0 4.1667vw" }}></Image>
+                <Image
+                    src={UpIcon}
+                    sx={{
+                        width: isPc ? "40px" : "20px",
+                        margin: isPc ? "0 4.1667vw" : "20px",
+                    }}
+                ></Image>
                 <Box>
                     <Image
                         src={rightPlaneImg}
                         sx={{
-                            width: "15.625vw",
-                            height: "15.625vw",
+                            width: isPc ? "15.625vw" : "100px",
+                            height: isPc ? "15.625vw" : "100px",
                             opacity: highlight ? "1" : "0.5",
                         }}
                     ></Image>
-                    <Text sx={{ fontSize: "1.875vw", textAlign: "center" }}>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "1.875vw" : "20px",
+                            textAlign: "center",
+                        }}
+                    >
                         Lvl.{rightPlaneLevel}
                     </Text>
                 </Box>
             </Box>
             <Box
                 sx={{
-                    width: "34.6354vw",
+                    width: isPc ? "34.6354vw" : "100%",
                     margin: "0 auto",
                 }}
             >
                 <Text
                     sx={{
                         textAlign: "right",
-                        fontSize: "1.25vw",
+                        fontSize: isPc ? "1.25vw" : "12px",
                     }}
                 >
                     {myInfo.point} pt{"   "}
@@ -333,10 +351,10 @@ const WinResult = ({
                 </Text>
                 <Box
                     sx={{
-                        height: "1.7188vw",
-                        border: "0.1042vw solid #FFF",
-                        borderRadius: "1.0417vw",
-                        padding: "0.3125vw",
+                        height: isPc ? "1.7188vw" : "15px",
+                        border: isPc ? "0.1042vw solid #FFF" : "2px solid #fff",
+                        borderRadius: isPc ? "1.0417vw" : "10px",
+                        padding: isPc ? "0.3125vw" : "2px",
                     }}
                 >
                     <Box
@@ -346,7 +364,7 @@ const WinResult = ({
                                 "%",
                             height: "100%",
                             background: "#fff",
-                            borderRadius: "1.0417vw",
+                            borderRadius: isPc ? "1.0417vw" : "10px",
                         }}
                     ></Box>
                 </Box>
@@ -362,11 +380,12 @@ const LoseResult = ({
     myInfo: Info;
     myNewInfo: MyNewInfo;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box>
             <Text
                 sx={{
-                    fontSize: "2.5vw",
+                    fontSize: isPc ? "2.5vw" : "28px",
                     fontWeight: "bold",
                     textAlign: "center",
                 }}
@@ -388,39 +407,55 @@ const LoseResult = ({
                                 : aviationImg(myNewInfo.level)
                         }
                         sx={{
-                            width: "15.625vw",
-                            height: "15.625vw",
+                            width: isPc ? "15.625vw" : "100px",
+                            height: isPc ? "15.625vw" : "100px",
                         }}
                     ></Image>
-                    <Text sx={{ fontSize: "1.875vw", textAlign: "center" }}>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "1.875vw" : "20px",
+                            textAlign: "center",
+                        }}
+                    >
                         Lvl.{myNewInfo.level}
                     </Text>
                 </Box>
-                <Image src={DownIcon} sx={{ margin: "0 4.1667vw" }}></Image>
+                <Image
+                    src={DownIcon}
+                    sx={{
+                        width: isPc ? "40px" : "20px",
+                        margin: isPc ? "0 4.1667vw" : "20px",
+                    }}
+                ></Image>
                 <Box>
                     <Image
                         src={myInfo.img}
                         sx={{
-                            width: "15.625vw",
-                            height: "15.625vw",
+                            width: isPc ? "15.625vw" : "100px",
+                            height: isPc ? "15.625vw" : "100px",
                             opacity: "0.5",
                         }}
                     ></Image>
-                    <Text sx={{ fontSize: "1.875vw", textAlign: "center" }}>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "1.875vw" : "20px",
+                            textAlign: "center",
+                        }}
+                    >
                         Lvl.{myInfo.level}
                     </Text>
                 </Box>
             </Box>
             <Box
                 sx={{
-                    width: "34.6354vw",
+                    width: isPc ? "34.6354vw" : "100%",
                     margin: "0 auto",
                 }}
             >
                 <Text
                     sx={{
                         textAlign: "right",
-                        fontSize: "1.25vw",
+                        fontSize: isPc ? "1.25vw" : "12px",
                     }}
                 >
                     {myInfo.point} pt{"   "}
@@ -431,10 +466,10 @@ const LoseResult = ({
                 </Text>
                 <Box
                     sx={{
-                        height: "1.7188vw",
-                        border: "0.1042vw solid #FFF",
-                        borderRadius: "1.0417vw",
-                        padding: "0.3125vw",
+                        height: isPc ? "1.7188vw" : "15px",
+                        border: isPc ? "0.1042vw solid #FFF" : "2px solid #fff",
+                        borderRadius: isPc ? "1.0417vw" : "10px",
+                        padding: isPc ? "0.3125vw" : "2px",
                     }}
                 >
                     <Box
@@ -446,7 +481,7 @@ const LoseResult = ({
                                 ) + "%",
                             height: "100%",
                             background: "#fff",
-                            borderRadius: "1.0417vw",
+                            borderRadius: isPc ? "1.0417vw" : "10px",
                         }}
                     ></Box>
                 </Box>
@@ -456,9 +491,21 @@ const LoseResult = ({
 };
 
 const SettlementPage = ({}) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const { myGameInfo, myInfo, myNewInfo, mileages, istest } =
-        useGameContext();
+    const {
+        myGameInfo,
+        myInfo,
+        // myNewInfo,
+        mileages,
+        istest,
+    } = useGameContext();
+
+    const myNewInfo = {
+        level: 0,
+        point: 0,
+        img: "",
+    };
 
     const win = useMemo(() => {
         return [
@@ -473,7 +520,7 @@ const SettlementPage = ({}) => {
         <Box
             sx={{
                 width: "100vw",
-                height: "100vh",
+                height: "100%",
                 background: `url(${Bg}) no-repeat center center`,
                 backgroundSize: "cover",
                 display: "flex",
@@ -481,6 +528,7 @@ const SettlementPage = ({}) => {
                 flexDirection: "column",
                 justifyContent: "center",
                 fontFamily: "Orbitron",
+                padding: "0 20px",
             }}
         >
             <Box
@@ -500,19 +548,19 @@ const SettlementPage = ({}) => {
                     }
                     sx={{
                         display: "flex",
-                        marginRight: "1.0417vw",
+                        marginRight: isPc ? "1.0417vw" : "10px",
                     }}
                 >
                     <Image
                         src={GardenIcon}
                         sx={{
-                            width: "5.4167vw",
+                            width: isPc ? "5.4167vw" : "50px",
                         }}
                     ></Image>
                     <Image
                         src={BackIcon}
                         sx={{
-                            width: "2.6563vw",
+                            width: isPc ? "2.6563vw" : "32px",
                         }}
                     ></Image>
                 </Box>
@@ -549,8 +597,8 @@ const SettlementPage = ({}) => {
                         {istest && (
                             <Box
                                 sx={{
-                                    fontSize: "1.25vw",
-                                    marginTop: "3.125vw",
+                                    fontSize: isPc ? "1.25vw" : "12px",
+                                    marginTop: isPc ? "3.125vw" : "20px",
                                     textAlign: "center",
                                 }}
                             >
@@ -582,6 +630,18 @@ const SettlementPage = ({}) => {
                             <RequestNextButton
                                 sx={{
                                     margin: "2.0833vw auto",
+                                    width: isPc
+                                        ? "26.0417vw !important"
+                                        : "240px !important",
+                                    height: isPc
+                                        ? "4.1146vw !important"
+                                        : "40px !important",
+                                    fontSize: isPc
+                                        ? "1.25vw !important"
+                                        : "12px !important",
+                                    lineHeight: isPc
+                                        ? "4.1146vw !important"
+                                        : "40px !important",
                                 }}
                                 onClick={() => {
                                     window.open(
@@ -596,11 +656,11 @@ const SettlementPage = ({}) => {
                             sx={{
                                 border: "3px solid #f2d861",
                                 color: "#f2d861",
-                                width: "11.4583vw",
-                                height: "3.2292vw",
+                                width: isPc ? "11.4583vw" : "240px",
+                                height: isPc ? "3.2292vw" : "50px",
                                 cursor: "pointer",
-                                borderRadius: "0.8333vw",
-                                fontSize: "1.4583vw",
+                                borderRadius: isPc ? "0.8333vw" : "10px",
+                                fontSize: isPc ? "1.4583vw" : "20px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
