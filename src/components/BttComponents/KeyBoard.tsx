@@ -174,7 +174,11 @@ const KeyBoard = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
     return (
-        <Box>
+        <Box
+            sx={{
+                marginRight: "0.7292vw",
+            }}
+        >
             {type ? (
                 <Popover
                     isOpen={isOpen}
@@ -188,7 +192,6 @@ const KeyBoard = ({
                                 onToggle();
                             }}
                             sx={{
-                                marginRight: "0.7292vw",
                                 cursor: "pointer",
                             }}
                         >

@@ -1,6 +1,6 @@
 import { useGameContext } from "@/pages/TacToe";
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -8,7 +8,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "../BttPlayBack/BttPlayBackContent";
-import ButtonGroup from "../BttPlayBack/ButtonGroup";
 import {
     BoardItem,
     GameState,

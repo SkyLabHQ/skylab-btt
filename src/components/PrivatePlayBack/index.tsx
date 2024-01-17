@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Image, Text, useBoolean } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Flex,
+    Image,
+    Text,
+    useBoolean,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
@@ -94,6 +102,7 @@ const StartJourney = () => {
 };
 
 const PrivatePlayBackPage = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [showShareButton, setShowShareButton] = useBoolean(false);
     const navigate = useNavigate();
     const [init, setInit] = useState(false);
@@ -554,7 +563,7 @@ https://app.projmercury.io/btt`;
                         align={"center"}
                         sx={{
                             position: "relative",
-                            width: "100%",
+                            width: isPc ? "50vw" : "100%",
                         }}
                     >
                         <PlayBackButton
@@ -565,39 +574,13 @@ https://app.projmercury.io/btt`;
                             handlePreStep={handlePreStep}
                             handleStartStep={handleStartStep}
                         ></PlayBackButton>
-                        {showShareButton ? (
-                            <ShareButtons
-                                showShareEmoji={gameOver}
-                                handleShareEmoji={handleShareEmoji}
-                                handleShare={handleShare}
-                            ></ShareButtons>
-                        ) : (
-                            <Button
-                                sx={{
-                                    border: "2px solid #fff",
-                                    borderRadius: "0.9375vw",
-                                    width: "9.375vw",
-                                    height: "2.7083vw",
-                                    color: "#d9d9d9",
-                                    fontSize: "1.0417vw",
-                                    marginTop: "1.0417vw",
-                                }}
-                                variant={"outline"}
-                                onClick={() => {
-                                    setShowShareButton.on();
-                                }}
-                            >
-                                <Text
-                                    sx={{
-                                        flex: 1,
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    Share
-                                </Text>
-                            </Button>
-                        )}
-                        {onlyShow && <StartJourney></StartJourney>}
+                        <ShareButtons
+                            showShareEmoji={gameOver}
+                            handleShareEmoji={handleShareEmoji}
+                            handleShare={handleShare}
+                            // handleTextClick={handleTextClick}
+                            showText={!onlyShow}
+                        ></ShareButtons>
                     </Flex>
                 </>
             )}

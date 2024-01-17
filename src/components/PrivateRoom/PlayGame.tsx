@@ -96,10 +96,12 @@ const PlayGame = ({
         useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
 
     const inviteLink = useMemo(() => {
-        if (!bidTacToeGameAddress) return "";
+        if (!bidTacToeGameAddress || !lobbyAddress) return "";
 
         return `${window.location.origin}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}`;
-    }, [bidTacToeGameAddress, myInfo]);
+    }, [bidTacToeGameAddress, lobbyAddress]);
+
+    console.log(inviteLink, "inviteLink");
 
     const handleGetGameInfo = async () => {
         const [
@@ -471,7 +473,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
             setAutoCommitTimeoutTime(timeLeft);
 
             if (timeLeft === 0) {
-                handleBid();
+                // handleBid();
             }
         };
 
@@ -531,11 +533,11 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
             const timeLeft = event.data;
 
             if (timeLeft === 0) {
-                handleCallTimeOut();
+                // handleCallTimeOut();
             }
         };
         if (autoCallTimeoutTime === 0) {
-            handleCallTimeOut();
+            // handleCallTimeOut();
         } else {
             commitWorkerRef.postMessage({
                 action: "start",
@@ -607,10 +609,12 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NA
                         ></StatusTip>
                     </Flex>
                     <ToolBar
+                        inviteLink={inviteLink}
                         quitType="game"
                         onQuitClick={() => {
                             onOpen();
                         }}
+                        handleShareTw={handleShareTw}
                     ></ToolBar>
                     <Box
                         sx={{

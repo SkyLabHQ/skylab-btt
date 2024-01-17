@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BttIcon from "@/assets/btt-icon.png";
@@ -27,74 +27,219 @@ import {
     initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
-import UserProfile from "../PrivateRoom/UserProfile";
+import UserProfile, { MUserProfileResult } from "../PrivateRoom/UserProfile";
 import { OpBid } from "../PrivateRoom/UserBid";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { Message } from "../PrivateRoom/Message";
+import { MMessage, Message } from "../PrivateRoom/Message";
 import Timer from "../BttComponents/Timer";
 import getNowSecondsTimestamp from "@/utils/nowTime";
+import MBalance from "../BttComponents/MBalance";
+import StartJourney from "../BttComponents/StartJourney";
 
-const StartJourney = () => {
-    const navigate = useNavigate();
+const MBttLiveGame = ({
+    autoCommitTimeoutTime,
+    myGameInfo,
+    bufferTime,
+    opInfo,
+    opGameInfo,
+    myInfo,
+
+    nextDrawWinner,
+    list,
+}: any) => {
+    const isMyWin = getWinState(myGameInfo.gameState);
+
+    const gameOver = myGameInfo.gameState > GameState.Revealed;
+    console.log(isMyWin, "opInfo");
+
     return (
         <Box
             sx={{
                 display: "flex",
-                background: "#fff",
-                borderRadius: "0.9375vw",
-                color: "#000",
-                padding: "0.2083vw 0.3125vw",
-                fontFamily: "Orbitron",
-                cursor: "pointer",
-                marginTop: "1.5625vw",
-                width: "20.8333vw",
-            }}
-            onClick={() => {
-                navigate("/btt");
+                flexDirection: "column",
+                alignItems: "center",
+                height: "100%",
+                justifyContent: "center",
+                background: "#303030",
+                padding: "0px 18px 0",
             }}
         >
-            <Image
-                src={BttIcon}
-                sx={{ height: "3.8542vw", marginRight: "0.7813vw" }}
-            ></Image>
-            <Box>
+            <Box
+                id="share-content"
+                sx={{
+                    background: "#303030",
+                    margin: "0 auto",
+                    width: "100%",
+                    border: "2px solid #fff",
+                    boxShadow: "5px 4px 8px 0px rgba(255, 255, 255, 0.50)",
+                    padding: "25px 0 100px",
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                    borderRadius: "10px",
+                }}
+            >
                 <Box
                     sx={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "space-between",
+                        position: "absolute",
+                        right: "20px",
+                        top: "20px",
                     }}
                 >
-                    <Text
-                        sx={{
-                            fontSize: "1.6667vw",
-                            fontWeight: "bold",
-                            marginRight: "0.7813vw",
-                        }}
-                    >
-                        Bid Tac Toe
-                    </Text>
                     <Box
                         sx={{
-                            borderLeft: "1px solid #000",
-                            paddingLeft: "0.5208vw",
+                            border: "2px solid #fff",
+                            width: "20px",
+                            height: "20px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginRight: "4px",
                         }}
                     >
-                        <Image
-                            src={RightArrow}
-                            sx={{ height: "1.6667vw" }}
-                        ></Image>
+                        <Box
+                            sx={{
+                                width: "10px",
+                                height: "10px",
+                                borderRadius: "50%",
+                                background: "#fff",
+                            }}
+                        ></Box>
                     </Box>
+                    <Text
+                        sx={{
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                        }}
+                    >
+                        Live
+                    </Text>
                 </Box>
-                <Text sx={{ fontWeight: "bold", fontSize: "1.0417vw" }}>
-                    Start your journey
-                </Text>
+                <Flex
+                    sx={{
+                        alignItems: "flex-start",
+                    }}
+                    flexDir={"column"}
+                >
+                    <Flex>
+                        <MUserProfileResult
+                            showUserIcon={false}
+                            position="left"
+                            avatar={opInfo.avatar}
+                            mark={opInfo.mark}
+                            showAdvantageTip={opInfo.burner === nextDrawWinner}
+                            name={opInfo.name}
+                        ></MUserProfileResult>
+                        <MMessage
+                            message={opGameInfo.message}
+                            emote={opGameInfo.emote}
+                            status={"op"}
+                        ></MMessage>
+                    </Flex>
+                    <MBalance
+                        balance={opGameInfo.balance}
+                        mark={opInfo.mark}
+                        win={!isMyWin}
+                        showResult={gameOver}
+                    ></MBalance>
+                </Flex>
+                <Box
+                    sx={{
+                        position: "absolute",
+                        bottom: "15px",
+                        left: "0",
+                        width: "100%",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            width: "180px",
+                            position: "absolute",
+                            left: "12px",
+                            bottom: "4px",
+                        }}
+                    >
+                        {myGameInfo.gameState < GameState.Commited && (
+                            <Timer
+                                time1={autoCommitTimeoutTime}
+                                time2={bufferTime}
+                                time1Gray={
+                                    myGameInfo.gameState === GameState.Commited
+                                }
+                            ></Timer>
+                        )}
+                    </Box>
+                    <Flex
+                        sx={{
+                            position: "absolute",
+                            bottom: "0",
+                            right: 0,
+                        }}
+                        flexDir={"column"}
+                        align={"flex-end"}
+                    >
+                        <Flex>
+                            <MMessage
+                                message={myGameInfo.message}
+                                emote={myGameInfo.emote}
+                                status={"my"}
+                            ></MMessage>
+                            <MUserProfileResult
+                                name={myInfo.name}
+                                position="right"
+                                showUserIcon={false}
+                                mark={myInfo.mark}
+                                avatar={myInfo.avatar}
+                                showAdvantageTip={
+                                    myInfo.address === nextDrawWinner
+                                }
+                            ></MUserProfileResult>
+                        </Flex>
+                        <MBalance
+                            balance={myGameInfo.balance}
+                            status="op"
+                            mark={myInfo.mark}
+                            win={isMyWin}
+                            showResult={gameOver}
+                        ></MBalance>
+                    </Flex>
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flex: 1,
+                        justifyContent: "center",
+                        marginTop: "20px",
+                    }}
+                >
+                    <Board list={list}></Board>
+
+                    {/* <UserCard
+                        isBot={opInfo.isBot}
+                        message={opGameInfo.message}
+                        emote={opGameInfo.emote}
+                        level={opInfo.level}
+                        markIcon={opMark}
+                        status="op"
+                        balance={opGameInfo.balance}
+                        bidAmount={
+                            lastBidIndex !== -1 ? list[lastBidIndex].opValue : 0
+                        }
+                        showAdvantageTip={opInfo.burner === nextDrawWinner}
+                        planeUrl={aviationImg(opInfo.level)}
+                    ></UserCard> */}
+                </Box>
             </Box>
+            <StartJourney></StartJourney>
         </Box>
     );
 };
 
 const BttLiveGamePage = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { blockNumber } = useBlockNumber();
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
     const [init, setInit] = useState(false);
@@ -421,19 +566,23 @@ const BttLiveGamePage = () => {
     return (
         <Box
             sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                height: "100vh",
-                justifyContent: "center",
-                background: "#303030",
-                padding: "0px 4.1667vw 0",
+                height: "100%",
             }}
         >
             {!init ? (
                 <Loading></Loading>
-            ) : (
-                <>
+            ) : isPc ? (
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        height: "100vh",
+                        justifyContent: "center",
+                        background: "#303030",
+                        padding: "0px 4.1667vw 0",
+                    }}
+                >
                     <Box
                         id="share-content"
                         sx={{
@@ -608,7 +757,19 @@ const BttLiveGamePage = () => {
                         </Box>
                     </Box>
                     <StartJourney></StartJourney>
-                </>
+                </Box>
+            ) : (
+                <MBttLiveGame
+                    autoCommitTimeoutTime={autoCommitTimeoutTime}
+                    myGameInfo={myGameInfo}
+                    lastBidIndex={lastBidIndex}
+                    bufferTime={bufferTime}
+                    opInfo={opInfo}
+                    opGameInfo={opGameInfo}
+                    myInfo={myInfo}
+                    nextDrawWinner={nextDrawWinner}
+                    list={list}
+                ></MBttLiveGame>
             )}
         </Box>
     );

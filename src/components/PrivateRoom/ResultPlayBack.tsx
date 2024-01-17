@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,
@@ -25,6 +25,7 @@ import ShareButtons from "./ShareButton";
 import { useNavigate } from "react-router-dom";
 
 const ResultPlayBack = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const {
         bidTacToeGameAddress,
@@ -354,7 +355,7 @@ https://app.projmercury.io/btt`;
                 align={"center"}
                 sx={{
                     position: "relative",
-                    width: "100%",
+                    width: isPc ? "600px" : "100%",
                 }}
             >
                 <PlayBackButton

@@ -14,6 +14,7 @@ import SaveIcon from "@/components/TacToe/assets/save-icon.svg";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import ShareEmojiIcon from "./assets/share-emoji.svg";
 import RightArrow from "./assets/arrow-right.svg";
+import StartJourney from "../BttComponents/StartJourney";
 
 const ShareButtons = ({
     text = "Back to Lobby",
@@ -21,17 +22,19 @@ const ShareButtons = ({
     handleShareEmoji,
     handleShare,
     handleTextClick,
+    showText,
 }: {
     text?: string;
     showShareEmoji?: boolean;
     handleShareEmoji?: () => void;
     handleShare: () => void;
     handleTextClick?: () => void;
+    showText?: boolean;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <SimpleGrid
-            columns={4}
+            columns={showText ? 4 : 3}
             spacingX={"12px"}
             sx={{
                 marginTop: "20px",
@@ -50,112 +53,125 @@ const ShareButtons = ({
                 },
             }}
         >
-            <Box>
-                {showShareEmoji && (
-                    <Button
-                        variant={"outline"}
-                        onClick={() => {
-                            handleShareEmoji();
-                        }}
-                    >
-                        <Image
-                            src={ShareEmojiIcon}
-                            sx={{
-                                width: isPc ? "1.5625vw" : "16px",
+            <Flex justify={"center"}>
+                <Box>
+                    {showShareEmoji && (
+                        <Button
+                            variant={"outline"}
+                            onClick={() => {
+                                handleShareEmoji();
                             }}
-                        ></Image>
-                        {isPc && (
-                            <Text
+                        >
+                            <Image
+                                src={ShareEmojiIcon}
                                 sx={{
-                                    flex: 1,
-                                    textAlign: "center",
+                                    width: isPc ? "1.5625vw" : "16px",
                                 }}
-                            >
-                                Share Emoji
-                            </Text>
-                        )}
-                    </Button>
-                )}
-            </Box>
-            <Button
-                variant={"outline"}
-                onClick={async (e) => {
-                    e.stopPropagation();
-                    const content = document.getElementById("share-content");
-                    const canvas = await html2canvas(content);
-                    canvas.toBlob((blob: any) => {
-                        if (!blob) {
-                            return;
-                        }
-                        saveAs(blob, "result.jpg");
-                    });
-                }}
-            >
-                <Image
-                    src={SaveIcon}
-                    sx={{
-                        width: isPc ? "1.5625vw" : "16px",
-                    }}
-                ></Image>
-                {isPc && (
-                    <Text
-                        sx={{
-                            flex: 1,
-                            textAlign: "center",
-                        }}
-                    >
-                        Save Image
-                    </Text>
-                )}
-            </Button>
-            <Button
-                variant={"outline"}
-                onClick={() => {
-                    handleShare();
-                }}
-            >
-                <Image
-                    src={TwLogo}
-                    sx={{
-                        width: isPc ? "1.5625vw" : "16px",
-                    }}
-                ></Image>
-                {isPc && (
-                    <Text
-                        sx={{
-                            flex: 1,
-                            textAlign: "center",
-                        }}
-                    >
-                        Share Replay{" "}
-                    </Text>
-                )}
-            </Button>
-            <Flex
-                onClick={handleTextClick}
-                sx={{
-                    width: "80px",
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                }}
-            >
-                <Text
-                    sx={{
-                        fontSize: isPc ? "1.25vw" : "12px",
-                        textDecorationLine: "underline",
-                        maxWidth: "48px",
-                        textAlign: "center",
+                            ></Image>
+                            {isPc && (
+                                <Text
+                                    sx={{
+                                        flex: 1,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    Share Emoji
+                                </Text>
+                            )}
+                        </Button>
+                    )}
+                </Box>
+            </Flex>
+            <Flex justify={"center"}>
+                {" "}
+                <Button
+                    variant={"outline"}
+                    onClick={async (e) => {
+                        e.stopPropagation();
+                        const content =
+                            document.getElementById("share-content");
+                        const canvas = await html2canvas(content);
+                        canvas.toBlob((blob: any) => {
+                            if (!blob) {
+                                return;
+                            }
+                            saveAs(blob, "result.jpg");
+                        });
                     }}
                 >
-                    {text}
-                </Text>
-                <Image
-                    src={RightArrow}
-                    sx={{
-                        width: isPc ? "1.25vw" : "12px",
-                    }}
-                ></Image>
+                    <Image
+                        src={SaveIcon}
+                        sx={{
+                            width: isPc ? "1.5625vw" : "16px",
+                        }}
+                    ></Image>
+                    {isPc && (
+                        <Text
+                            sx={{
+                                flex: 1,
+                                textAlign: "center",
+                            }}
+                        >
+                            Save Image
+                        </Text>
+                    )}
+                </Button>
             </Flex>
+            <Flex justify={"center"}>
+                {" "}
+                <Button
+                    variant={"outline"}
+                    onClick={() => {
+                        handleShare();
+                    }}
+                >
+                    <Image
+                        src={TwLogo}
+                        sx={{
+                            width: isPc ? "1.5625vw" : "16px",
+                        }}
+                    ></Image>
+                    {isPc && (
+                        <Text
+                            sx={{
+                                flex: 1,
+                                textAlign: "center",
+                            }}
+                        >
+                            Share Replay{" "}
+                        </Text>
+                    )}
+                </Button>
+            </Flex>
+            {showText && (
+                <Flex justify={"center"}>
+                    <Flex
+                        onClick={handleTextClick}
+                        sx={{
+                            // width: isPc ? "200px" : "80px",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Text
+                            sx={{
+                                fontSize: isPc ? "1.25vw" : "12px",
+                                textDecorationLine: "underline",
+                                maxWidth: isPc ? "150px" : "48px",
+                                textAlign: "center",
+                            }}
+                        >
+                            {text}
+                        </Text>
+                        <Image
+                            src={RightArrow}
+                            sx={{
+                                width: isPc ? "1.25vw" : "12px",
+                            }}
+                        ></Image>
+                    </Flex>
+                </Flex>
+            )}
         </SimpleGrid>
     );
 };

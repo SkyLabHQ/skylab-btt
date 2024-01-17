@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BackIcon from "@/components/TacToe/assets/back-arrow.svg";
@@ -13,7 +13,6 @@ import {
 } from "@/hooks/useMultiContract";
 import Loading from "../Loading";
 import { shortenAddressWithout0x } from "@/utils";
-import ButtonGroup from "./ButtonGroup";
 import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "./BttPlayBackContent";
 import { botAddress } from "@/hooks/useContract";
@@ -22,10 +21,13 @@ import {
     GameState,
     UserMarkIcon,
     UserMarkType,
+    getShareEmoji,
     getWinState,
     initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
+import PlayBackButton from "./PlayBackButton";
+import ShareButtons from "../PrivateRoom/ShareButton";
 
 const StartJourney = () => {
     const navigate = useNavigate();
@@ -92,6 +94,7 @@ const StartJourney = () => {
 };
 
 const BttPlayBackPage = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
 
     const [onlyShow, setOnlyShow] = useState(false);
@@ -456,46 +459,54 @@ const BttPlayBackPage = () => {
     const handleNextStep = () => {
         setCurrentRound((currentRound) => {
             if (currentRound >= allSelectedGrids.length) {
-                handleStopPlay();
                 return currentRound;
             }
             return currentRound + 1;
         });
     };
 
-    const handleStopPlay = () => {
-        setStartPlay(false);
-        window.clearTimeout(timer.current);
-    };
-
     const handleStartStep = () => {
         setCurrentRound(0);
-        handleStopPlay();
     };
 
     const handleEndStep = () => {
         setCurrentRound(allSelectedGrids.length);
-        handleStopPlay();
     };
 
-    const handleStartPlay = () => {
-        setStartPlay(true);
-        handleNextStep();
+    const handleShare = () => {
+        const url = `${
+            window.location.origin
+        }/btt/playback?gameAddress=${bttGameAddress}&show=true&round=${currentRound}&address=${shortenAddressWithout0x(
+            myInfo.address,
+        )}`;
+        const text = `Bid Tac Toe is a fully on-chain cryptoeconomic game, on @base. You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
+
+Watch my replay here!
+
+${url}  
+        
+@skylabHQ 
+https://app.projmercury.io/btt`;
+
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+        );
     };
 
-    const handleAutoPlay = () => {
-        if (!startPlay || !init) return;
-        timer.current = setTimeout(() => {
-            handleNextStep();
-        }, 2000);
+    const handleShareEmoji = () => {
+        const text = getShareEmoji(
+            myInfo.mark,
+            resultList,
+            getWinState(myGameInfo.gameState),
+        );
+
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+        );
     };
     useEffect(() => {
         handleGetGameInfo();
     }, [multiSkylabBidTacToeGameContract, multiSkylabBidTacToeFactoryContract]);
-
-    useEffect(() => {
-        handleAutoPlay();
-    }, [init, startPlay, currentRound]);
 
     return (
         <Box
@@ -540,30 +551,29 @@ const BttPlayBackPage = () => {
                         opGameInfo={opGameInfo}
                         showList={showList}
                     ></BttPlayBackContent>
-                    <Box
+                    <Flex
+                        flexDir={"column"}
+                        align={"center"}
                         sx={{
-                            width: "100%",
                             position: "relative",
+                            width: isPc ? "50vw" : "100%",
                         }}
                     >
-                        <ButtonGroup
+                        <PlayBackButton
                             showPre={currentRound > 0}
                             showNext={currentRound < allSelectedGrids.length}
-                            list={showList}
-                            myInfo={myInfo}
-                            myGameInfo={myGameInfo}
-                            bttGameAddress={bttGameAddress}
-                            currentRound={currentRound}
-                            startPlay={startPlay}
                             handleEndStep={handleEndStep}
                             handleNextStep={handleNextStep}
                             handlePreStep={handlePreStep}
-                            handleStartPlay={handleStartPlay}
                             handleStartStep={handleStartStep}
-                            showShareEmoji={false}
-                        ></ButtonGroup>
-                        {onlyShow && <StartJourney></StartJourney>}
-                    </Box>
+                        ></PlayBackButton>
+                        <ShareButtons
+                            showShareEmoji={gameOver}
+                            handleShareEmoji={handleShareEmoji}
+                            handleShare={handleShare}
+                            showText={!onlyShow}
+                        ></ShareButtons>
+                    </Flex>
                 </>
             )}
         </Box>

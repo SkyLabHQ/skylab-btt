@@ -542,7 +542,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             setAutoCommitTimeoutTime(timeLeft);
 
             if (timeLeft === 0) {
-                // handleBid();
+                handleBid();
             }
         };
 
@@ -602,11 +602,11 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             const timeLeft = event.data;
 
             if (timeLeft === 0) {
-                // handleCallTimeOut();
+                handleCallTimeOut();
             }
         };
         if (autoCallTimeoutTime === 0) {
-            // handleCallTimeOut();
+            handleCallTimeOut();
         } else {
             commitWorkerRef.postMessage({
                 action: "start",

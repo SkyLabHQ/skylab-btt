@@ -45,7 +45,7 @@ const PlayBackButton = ({
             columns={4}
             sx={{
                 marginTop: "20px",
-                width: isPc ? "10.4167vw" : "340px",
+                width: isPc ? "30.4167vw" : "340px",
                 "& img": {
                     width: isPc ? "1.25vw" : "16px",
                 },
