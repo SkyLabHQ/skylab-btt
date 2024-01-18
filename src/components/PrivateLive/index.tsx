@@ -50,7 +50,6 @@ const MBttLiveGame = ({
     const isMyWin = getWinState(myGameInfo.gameState);
 
     const gameOver = myGameInfo.gameState > GameState.Revealed;
-    console.log(isMyWin, "opInfo");
 
     return (
         <Box
@@ -216,24 +215,15 @@ const MBttLiveGame = ({
                     }}
                 >
                     <Board list={list}></Board>
-
-                    {/* <UserCard
-                        isBot={opInfo.isBot}
-                        message={opGameInfo.message}
-                        emote={opGameInfo.emote}
-                        level={opInfo.level}
-                        markIcon={opMark}
-                        status="op"
-                        balance={opGameInfo.balance}
-                        bidAmount={
-                            lastBidIndex !== -1 ? list[lastBidIndex].opValue : 0
-                        }
-                        showAdvantageTip={opInfo.burner === nextDrawWinner}
-                        planeUrl={aviationImg(opInfo.level)}
-                    ></UserCard> */}
                 </Box>
             </Box>
-            <StartJourney></StartJourney>
+            <Box
+                sx={{
+                    marginTop: "20px",
+                }}
+            >
+                <StartJourney></StartJourney>
+            </Box>
         </Box>
     );
 };
@@ -447,8 +437,6 @@ const BttLiveGamePage = () => {
             multiSkylabBidTacToeGameContract.player1(),
             multiSkylabBidTacToeGameContract.player2(),
         ]);
-
-        console.log(player1, player2, "--");
 
         const [
             userInfo1,
@@ -756,7 +744,13 @@ const BttLiveGamePage = () => {
                             </Flex>
                         </Box>
                     </Box>
-                    <StartJourney></StartJourney>
+                    <Box
+                        sx={{
+                            marginTop: "20px",
+                        }}
+                    >
+                        <StartJourney></StartJourney>
+                    </Box>
                 </Box>
             ) : (
                 <MBttLiveGame

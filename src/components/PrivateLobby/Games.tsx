@@ -1,6 +1,8 @@
 import { Box, Flex, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import PairingIcon from "./assets/pairing.svg";
 import RightArrow from "./assets/right-arrow.svg";
+import WRightArrow from "./assets/w-right-arrow.svg";
+
 import InGameIcon from "./assets/in-game.svg";
 import React, { useEffect, useState } from "react";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
@@ -37,10 +39,12 @@ const ListBorder = () => {
 const GameButton = ({
     label,
     onClick,
+    color = "#303030",
     borderColor = "#FDDC2D",
     backgroundColor = "#FDDC2D",
 }: {
     label: string;
+    color?: string;
     onClick?: () => void;
     borderColor?: string;
     backgroundColor?: string;
@@ -64,7 +68,7 @@ const GameButton = ({
                     fontSize: "1.25vw",
                     padding: "0 0.5208vw",
                     borderRadius: isPc ? "0.5208vw" : "8px",
-                    color: "#303030",
+                    color: color,
                     cursor: "pointer",
                     background: backgroundColor,
                     border: `1px solid ${borderColor}`,
@@ -78,7 +82,7 @@ const GameButton = ({
                     {label}
                 </Text>
                 <Image
-                    src={RightArrow}
+                    src={color === "#fff" ? WRightArrow : RightArrow}
                     sx={{
                         width: isPc ? "0.8333vw" : "16px",
                     }}
@@ -119,8 +123,8 @@ const Header = ({
                     sx={{
                         border: "1px solid #FDDC2D",
                         padding: "0.1563vw",
-                        width: isPc ? "5vw" : "54px",
-                        height: isPc ? "5vw" : "54px",
+                        width: isPc ? "96px" : "54px",
+                        height: isPc ? "96px" : "54px",
                         borderRadius: isPc ? "1.1458vw" : "10px",
                         marginRight: "1.25vw",
                     }}
@@ -317,7 +321,7 @@ const OnGameItem = ({
                     ></ListUserProfile>
                     <Text
                         sx={{
-                            fontSize: "1.25vw",
+                            fontSize: isPc ? "1.25vw" : "20px",
                             margin: "0 1.0417vw",
                         }}
                     >
@@ -333,6 +337,7 @@ const OnGameItem = ({
                     <GameButton
                         label="Watch"
                         onClick={onButtonClick}
+                        color="#fff"
                         borderColor="#fff"
                         backgroundColor="transparent"
                     ></GameButton>

@@ -14,7 +14,6 @@ import SaveIcon from "@/components/TacToe/assets/save-icon.svg";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import ShareEmojiIcon from "./assets/share-emoji.svg";
 import RightArrow from "./assets/arrow-right.svg";
-import StartJourney from "../BttComponents/StartJourney";
 
 const ShareButtons = ({
     text = "Back to Lobby",
@@ -22,7 +21,7 @@ const ShareButtons = ({
     handleShareEmoji,
     handleShare,
     handleTextClick,
-    showText,
+    showText = true,
 }: {
     text?: string;
     showShareEmoji?: boolean;

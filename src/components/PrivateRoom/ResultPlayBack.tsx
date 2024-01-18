@@ -355,7 +355,7 @@ https://app.projmercury.io/btt`;
                 align={"center"}
                 sx={{
                     position: "relative",
-                    width: isPc ? "600px" : "100%",
+                    width: isPc ? "50vw" : "100%",
                 }}
             >
                 <PlayBackButton

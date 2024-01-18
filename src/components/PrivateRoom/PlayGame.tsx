@@ -412,10 +412,13 @@ const PlayGame = ({
     };
 
     const handleShareTw = () => {
-        const text = `${window.location.host}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}
-⭕️❌⭕️❌Watch me play Bid tac toe and crush the opponent！⭕️❌⭕️❌
-Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${CHAIN_NAMES[TESTFLIGHT_CHAINID]}
-(Twitter)@skylabHQ`;
+        const text = `⭕️❌⭕️❌Watch me crush the opponent！⭕️❌⭕️❌
+
+${window.location.host}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}
+
+bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base 
+
+@skylabHQ`;
 
         window.open(
             `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,

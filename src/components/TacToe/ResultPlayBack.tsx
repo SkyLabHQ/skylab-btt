@@ -1,5 +1,5 @@
 import { useGameContext } from "@/pages/TacToe";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,
@@ -23,6 +23,8 @@ import ShareButtons from "../PrivateRoom/ShareButton";
 import { shortenAddressWithout0x } from "@/utils";
 
 const ResultPage = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     const {
         realChainId,
         bidTacToeGameAddress,
@@ -345,7 +347,7 @@ https://app.projmercury.io/btt`;
                 align={"center"}
                 sx={{
                     position: "relative",
-                    width: "100%",
+                    width: isPc ? "50vw" : "100%",
                 }}
             >
                 <PlayBackButton

@@ -16,12 +16,8 @@ import Loading from "@/components/Loading";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Back from "@/components/Back";
-import {
-    getBurnerRetryContract,
-    useBttPrivateLobbyContract,
-} from "@/hooks/useRetryContract";
+import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 import { ZERO_DATA } from "@/skyConstants";
-import { getBurnerMercuryBTTPrivateLobbyContract } from "@/hooks/useBurnerContract";
 
 interface GameCount {
     allGameCount: number;
@@ -56,6 +52,7 @@ const PrivateLobby = () => {
     const localSinger = getPrivateLobbySigner();
     const { sCWAddress } = useSCWallet(localSinger.privateKey);
     const [init, setInit] = useState<boolean>(false);
+    const [init2, setInit2] = useState<boolean>(false);
 
     const [gameCount, setGameCount] = useState({
         allGameCount: 0,
@@ -73,11 +70,14 @@ const PrivateLobby = () => {
         winCount: 0,
         loseCount: 0,
     });
+
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
 
     const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
+    const activeBttPrivateLobbyContract =
+        useBttPrivateLobbyContract(activeLobbyAddress);
 
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
@@ -117,29 +117,6 @@ const PrivateLobby = () => {
             multiMercuryBTTPrivateLobby.getPlayers(),
         ]);
 
-        if (activeLobbyAddress !== lobbyAddress) {
-            const privateLobbySigner = getPrivateLobbySigner();
-            if (activeLobbyAddress && activeLobbyAddress !== ZERO_DATA) {
-                const contract =
-                    getBurnerMercuryBTTPrivateLobbyContract(activeLobbyAddress);
-
-                const beforeBttPrivateLobbyContract = getBurnerRetryContract({
-                    signer: privateLobbySigner,
-                    contract,
-                    chainId: TESTFLIGHT_CHAINID,
-                });
-
-                await beforeBttPrivateLobbyContract("quitPrivateLobby", [], {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                });
-            }
-
-            await bttPrivateLobbyContract("joinPrivateLobby", [], {
-                usePaymaster: true,
-                signer: privateLobbySigner,
-            });
-        }
         setMyGameCount({
             winCount: winCount.toNumber(),
             loseCount: loseCount.toNumber(),
@@ -195,20 +172,55 @@ const PrivateLobby = () => {
             );
             return;
         }
-        if (userInfo.avatar.toNumber() >= 1) {
+        if (userInfo.avatar.toNumber() - 1 >= 0) {
             setNickname(userInfo.name);
             setAvatarIndex(userInfo.avatar.toNumber() - 1);
-            setStep(1);
-        } else {
-            setStep(0);
         }
 
+        setActiveLobbyAddress(activeLobbyAddress);
         setInit(true);
     };
 
     const handleBack = () => {
         navigate("/btt");
     };
+
+    useEffect(() => {
+        const handleJoin = async () => {
+            const privateLobbySigner = getPrivateLobbySigner();
+            if (
+                activeLobbyAddress !== ZERO_DATA &&
+                activeLobbyAddress.toLocaleLowerCase() !==
+                    lobbyAddress.toLocaleLowerCase()
+            ) {
+                await activeBttPrivateLobbyContract("quitPrivateLobby", [], {
+                    usePaymaster: true,
+                    signer: privateLobbySigner,
+                });
+            }
+
+            if (
+                activeLobbyAddress.toLocaleLowerCase() !==
+                lobbyAddress.toLocaleLowerCase()
+            ) {
+                await bttPrivateLobbyContract("joinPrivateLobby", [], {
+                    usePaymaster: true,
+                    signer: privateLobbySigner,
+                });
+            }
+
+            if (nickname) {
+                setStep(1);
+            } else {
+                setStep(0);
+            }
+            setInit2(true);
+        };
+
+        if (init && activeLobbyAddress && !init2) {
+            handleJoin();
+        }
+    }, [init, activeLobbyAddress, init2]);
 
     useEffect(() => {
         if (!lobbyAddress) {
@@ -247,7 +259,7 @@ const PrivateLobby = () => {
                     overflow: "hidden",
                 }}
             >
-                {!init ? (
+                {!init2 ? (
                     <Loading></Loading>
                 ) : (
                     <PrivateLobbyContext.Provider
