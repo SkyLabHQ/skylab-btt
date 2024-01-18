@@ -17,7 +17,7 @@ import {
 } from "@/hooks/useTacToeStore";
 import { ZERO_DATA } from "@/skyConstants";
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
-import { CHAIN_NAMES, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import UserProfile from "./UserProfile";
 import StatusTip from "../TacToe/StatusTip";
 import {
@@ -476,7 +476,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
             setAutoCommitTimeoutTime(timeLeft);
 
             if (timeLeft === 0) {
-                // handleBid();
+                handleBid();
             }
         };
 
@@ -536,11 +536,11 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
             const timeLeft = event.data;
 
             if (timeLeft === 0) {
-                // handleCallTimeOut();
+                handleCallTimeOut();
             }
         };
         if (autoCallTimeoutTime === 0) {
-            // handleCallTimeOut();
+            handleCallTimeOut();
         } else {
             commitWorkerRef.postMessage({
                 action: "start",

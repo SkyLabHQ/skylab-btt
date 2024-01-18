@@ -1,5 +1,5 @@
 import { GameType, Info, useGameContext } from "@/pages/TacToe";
-import { Box, Text, Image } from "@chakra-ui/react";
+import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import LevelUpIcon from "./assets/level-up.svg";
 import LevelDownIcon from "./assets/level-down.svg";
@@ -22,7 +22,6 @@ import {
 import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-import { getMetadataImg } from "@/utils/ipfsImg";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
 
 export const PlaneImg = ({
@@ -34,6 +33,7 @@ export const PlaneImg = ({
     flip?: boolean;
     pilotInfo: PilotInfo;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box>
             <Box
@@ -44,8 +44,8 @@ export const PlaneImg = ({
                 <Image
                     src={detail.img}
                     sx={{
-                        width: "14.5833vw",
-                        height: "14.5833vw",
+                        width: isPc ? "14.5833vw" : "136px",
+                        height: isPc ? "14.5833vw" : "136px",
                         transform: flip ? "scaleX(-1)" : "",
                         /*兼容IE*/
                         filter: "FlipH",
@@ -54,7 +54,7 @@ export const PlaneImg = ({
                 {pilotInfo.img && (
                     <Image
                         sx={{
-                            width: "3.3333vw",
+                            width: isPc ? "3.3333vw" : "36px",
                             position: "absolute",
                             left: "50%",
                             top: "50%",
@@ -74,7 +74,7 @@ export const PlaneImg = ({
             >
                 <Text
                     sx={{
-                        fontSize: "0.8333vw",
+                        fontSize: isPc ? "0.8333vw" : "12px",
                         fontWeight: "bold",
                     }}
                 >
@@ -82,7 +82,7 @@ export const PlaneImg = ({
                 </Text>
                 <Text
                     sx={{
-                        fontSize: "0.8333vw",
+                        fontSize: isPc ? "0.8333vw" : "12px",
                         fontWeight: "bold",
                     }}
                 >
@@ -109,6 +109,7 @@ const LevelInfo = ({
         opConfirmTimeout: number,
     ) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const {
         myInfo,
         opInfo,
@@ -365,7 +366,14 @@ const LevelInfo = ({
                 }}
             >
                 <PlaneImg detail={myInfo} pilotInfo={myActivePilot}></PlaneImg>
-                <Text sx={{ fontSize: "2.5vw", margin: "0 1.5625vw" }}>VS</Text>
+                <Text
+                    sx={{
+                        fontSize: isPc ? "2.5vw" : "36px",
+                        margin: "0 1.5625vw",
+                    }}
+                >
+                    VS
+                </Text>
                 <PlaneImg
                     detail={opInfo}
                     flip={true}
@@ -375,7 +383,7 @@ const LevelInfo = ({
             <Box
                 sx={{
                     fontWeight: "bold",
-                    marginTop: "10vh",
+                    marginTop: isPc ? "10vh" : "30px",
                 }}
             >
                 <Box
@@ -389,15 +397,16 @@ const LevelInfo = ({
                     <Text
                         sx={{
                             color: "#FDDC2D",
-                            fontSize: "1.0417vw",
-                            width: "13.0208vw",
+                            fontSize: isPc ? "1.0417vw" : "12px",
+                            width: isPc ? "13.0208vw" : "110px",
                         }}
                     >
                         Victory reward
                     </Text>
                     <Text
                         sx={{
-                            marginRight: "0.5208vw",
+                            fontSize: isPc ? "1.0417vw" : "12px",
+                            marginRight: isPc ? "0.5208vw" : "8px",
                         }}
                     >
                         +{winPoint} pt
@@ -405,14 +414,14 @@ const LevelInfo = ({
                     <Image
                         src={LevelUpIcon}
                         sx={{
-                            width: "1.25vw",
-                            marginRight: "1.0417vw",
+                            width: isPc ? "1.25vw" : "20px",
+                            marginRight: isPc ? "1.0417vw" : "30px",
                         }}
                     ></Image>
                     <Box sx={{ textAlign: "center" }}>
                         <Text
                             sx={{
-                                fontSize: "1.0417vw",
+                                fontSize: isPc ? "1.0417vw" : "12px",
                             }}
                         >
                             Level {myWinNewLevel}
@@ -432,15 +441,16 @@ const LevelInfo = ({
                     <Text
                         sx={{
                             color: "#fff",
-                            fontSize: "1.0417vw",
-                            width: "13.0208vw",
+                            fontSize: isPc ? "1.0417vw" : "12px",
+                            width: isPc ? "13.0208vw" : "110px",
                         }}
                     >
                         Defeat penalty
                     </Text>
                     <Text
                         sx={{
-                            marginRight: "0.5208vw",
+                            fontSize: isPc ? "1.0417vw" : "12px",
+                            marginRight: isPc ? "0.5208vw" : "8px",
                         }}
                     >
                         -{losePoint} pt
@@ -448,14 +458,14 @@ const LevelInfo = ({
                     <Image
                         src={LevelDownIcon}
                         sx={{
-                            width: "1.25vw",
-                            marginRight: "1.0417vw",
+                            width: isPc ? "1.25vw" : "20px",
+                            marginRight: isPc ? "1.0417vw" : "30px",
                         }}
                     ></Image>
                     <Box sx={{ textAlign: "center" }}>
                         <Text
                             sx={{
-                                fontSize: "1.0417vw",
+                                fontSize: isPc ? "1.0417vw" : "12px",
                             }}
                         >
                             Level {myLoseNewLevel}
@@ -467,9 +477,13 @@ const LevelInfo = ({
             <GrayButton
                 onClick={handleConfirmMatch}
                 sx={{
-                    width: "21.875vw !important",
-                    height: "3.3333vw !important",
+                    width: isPc ? "21.875vw !important" : "210px !important",
+                    height: isPc ? "3.3333vw !important" : "40px !important",
                     marginTop: "40px",
+                    borderRadius: isPc
+                        ? "0.5208vw !important"
+                        : "8px !important",
+                    fontWeight: "bold",
                 }}
                 isDisabled={myConfirmTimeout === 0}
                 variant="outline"
@@ -482,7 +496,7 @@ const LevelInfo = ({
                 >
                     <Text
                         sx={{
-                            fontSize: "1.25vw",
+                            fontSize: isPc ? "1.25vw" : "20px",
 
                             fontWeight: "400",
                         }}
@@ -494,7 +508,7 @@ const LevelInfo = ({
 
             <Text
                 sx={{
-                    fontSize: "1.25vw",
+                    fontSize: isPc ? "1.25vw" : "12px",
                     marginTop: "10px",
                 }}
             >
@@ -502,19 +516,19 @@ const LevelInfo = ({
             </Text>
             <Box
                 sx={{
-                    width: "21.875vw",
-                    height: "0.2083vw",
+                    width: isPc ? "21.875vw" : "200px",
+                    height: isPc ? "0.2083vw" : "4px",
                     display: "flex",
                     justifyContent: "flex-end",
                     background: "#616161",
-                    marginTop: "0.4167vw",
+                    marginTop: isPc ? "0.4167vw" : "4px",
                 }}
             >
                 <Box
                     sx={{
                         width: (timeLeft / 30000) * 100 + "%",
                         transition: "width 0.5s",
-                        height: "0.2083vw",
+                        height: isPc ? "0.2083vw" : "4px",
                         background: "#BCBBBE",
                     }}
                 ></Box>

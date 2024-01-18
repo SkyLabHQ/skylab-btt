@@ -28,7 +28,6 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/TacToe/GameOver";
 
-// plane related info
 export interface Info {
     burner: string;
     address: string;
