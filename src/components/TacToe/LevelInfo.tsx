@@ -1,6 +1,6 @@
 import { GameType, Info, useGameContext } from "@/pages/TacToe";
 import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import LevelUpIcon from "./assets/level-up.svg";
 import LevelDownIcon from "./assets/level-down.svg";
 import useCountDown from "react-countdown-hook";
@@ -129,7 +129,6 @@ const LevelInfo = ({
     const [timeLeft, { start }] = useCountDown(0, 1000);
 
     const { winPoint, losePoint } = points;
-    console.log(points, "points");
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
     const [tacToeBurner] = useTacToeSigner(tokenId);

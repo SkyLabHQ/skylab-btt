@@ -35,7 +35,6 @@ const BttPlayBackPage = () => {
     const [onlyShow, setOnlyShow] = useState(false);
     const [loading, setLoading] = useState(false);
     const [init, setInit] = useState(false);
-    const [startPlay, setStartPlay] = useState(false);
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const ethcallProvider = useMultiProvider(params.chainId);
@@ -411,9 +410,9 @@ const BttPlayBackPage = () => {
     const handleShare = () => {
         const url = `${
             window.location.origin
-        }/btt/playback?gameAddress=${bttGameAddress}&show=true&round=${currentRound}&address=${shortenAddressWithout0x(
-            myInfo.address,
-        )}`;
+        }/btt/playback?gameAddress=${bttGameAddress}&show=true&round=${currentRound}&chainId=${
+            params.chainId
+        }&address=${shortenAddressWithout0x(myInfo.address)}`;
         const text = `Bid Tac Toe is a fully on-chain cryptoeconomic game, on @base. You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
 
 Watch my replay here!

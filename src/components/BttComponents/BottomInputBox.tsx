@@ -7,13 +7,13 @@ import MessageIcon1 from "@/assets/message-icon.svg";
 
 const BottomInputBox = ({
     bidAmount,
-
     loading,
     myGameState,
     onSubClick,
     onAddClick,
     onConfirm,
     onMessageClick,
+    onInputAmountClick,
 }: {
     bidAmount: string;
     loading: boolean;
@@ -22,6 +22,7 @@ const BottomInputBox = ({
     onAddClick: () => void;
     onConfirm: () => void;
     onMessageClick: () => void;
+    onInputAmountClick: () => void;
 }) => {
     return (
         <Flex
@@ -53,7 +54,11 @@ const BottomInputBox = ({
                     }}
                     onClick={onSubClick}
                 ></Image>
-                <Box onClick={(e) => {}}>
+                <Box
+                    onClick={(e) => {
+                        onInputAmountClick();
+                    }}
+                >
                     {bidAmount !== "" ? (
                         <Text
                             sx={{

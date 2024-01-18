@@ -61,7 +61,6 @@ export const Toolbar = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        marginRight: "0.7292vw",
                         cursor: "pointer",
                         position: "relative",
                     }}
@@ -74,16 +73,16 @@ export const Toolbar = () => {
                         src={BulbIcon}
                     ></Image>
 
-                    {isPc && (
+                    {/* {isPc && (
                         <Box
                             sx={{
                                 position: "absolute",
                                 bottom: "-4.6875vw",
-                                left: "50%",
-                                transform: "translateX(-50%)",
+                                right: "0%",
+                                // transform: "translateX(-50%)",
                                 width: "10.4167vw",
                                 display: "flex",
-                                alignItems: "center",
+                                alignItems: "flex-end",
                                 flexDirection: "column",
                             }}
                         >
@@ -107,7 +106,7 @@ export const Toolbar = () => {
                                 You can always revisit tutorial here
                             </Text>
                         </Box>
-                    )}
+                    )} */}
                 </Box>
             </BidTacToeTutorial>
         </Box>

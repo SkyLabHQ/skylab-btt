@@ -200,6 +200,16 @@ const MLayout = ({
                     bidAmount={bidAmount}
                     myGameState={myGameState}
                     loading={loading}
+                    onInputAmountClick={() => {
+                        if (inputMode === "keyboard") {
+                            keyBoardOnToggle();
+                        } else {
+                            setInputMode("keyboard");
+                            if (!keyBoardIsOpen) {
+                                keyBoardOnToggle();
+                            }
+                        }
+                    }}
                     onSubClick={() => {
                         if (bidAmount - 1 < 0) return;
                         onInputChange(bidAmount - 1);
@@ -216,14 +226,12 @@ const MLayout = ({
                     }}
                     onConfirm={onConfirm}
                     onMessageClick={() => {
-                        {
-                            if (inputMode === "message") {
+                        if (inputMode === "message") {
+                            keyBoardOnToggle();
+                        } else {
+                            setInputMode("message");
+                            if (!keyBoardIsOpen) {
                                 keyBoardOnToggle();
-                            } else {
-                                setInputMode("message");
-                                if (!keyBoardIsOpen) {
-                                    keyBoardOnToggle();
-                                }
                             }
                         }
                     }}

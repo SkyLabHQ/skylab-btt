@@ -198,6 +198,16 @@ const MLayout = ({
                     bidAmount={bidAmount}
                     myGameState={myGameState}
                     loading={loading}
+                    onInputAmountClick={() => {
+                        if (inputMode === "keyboard") {
+                            keyBoardOnToggle();
+                        } else {
+                            setInputMode("keyboard");
+                            if (!keyBoardIsOpen) {
+                                keyBoardOnToggle();
+                            }
+                        }
+                    }}
                     onSubClick={() => {
                         if (bidAmount - 1 < 0) return;
                         onInputChange(bidAmount - 1);
