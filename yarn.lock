@@ -11781,6 +11781,11 @@ react-app-rewired@^2.2.1:
   dependencies:
     semver "^5.6.0"
 
+react-canvas-nest@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-canvas-nest/-/react-canvas-nest-1.1.1.tgz#e53687ad725a2131101276b565b144dde6863015"
+  integrity sha512-IPIzgsvom4ZCTjCZxEQZMMrqdus9jYFdnKclHd20EzUIE74I+qchNMTFKTGB3vtfo6FSrfBcjLQjdIKeDiUINA==
+
 react-clientside-effect@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/react-clientside-effect/-/react-clientside-effect-1.2.6.tgz#29f9b14e944a376b03fb650eed2a754dd128ea3a"

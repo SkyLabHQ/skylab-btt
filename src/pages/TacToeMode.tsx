@@ -62,6 +62,7 @@ import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
 import Back from "@/components/Back";
 import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
+import ReactCanvasNest from "react-canvas-nest";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -519,6 +520,7 @@ const TacToeMode = () => {
     return (
         <>
             <BttHelmet></BttHelmet>
+
             <Box
                 sx={{
                     display: "flex",
@@ -531,6 +533,19 @@ const TacToeMode = () => {
                     position: "relative",
                 }}
             >
+                <ReactCanvasNest
+                    className="canvasNest"
+                    config={{
+                        count: 150,
+                        pointColor: " 255, 255, 255 ",
+                        dist: 2000,
+                        lineColor: "255,255,255",
+                        lineWidth: 2,
+                        mouseDist: 10000,
+                    }}
+                    style={{ zIndex: 99 }}
+                />
+
                 <Box
                     sx={{
                         position: "absolute",
