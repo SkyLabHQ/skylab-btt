@@ -521,18 +521,6 @@ const TacToeMode = () => {
         <>
             <BttHelmet></BttHelmet>
 
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    count: isPc ? 150 : 88,
-                    pointColor: " 255, 255, 255 ",
-                    dist: 2000,
-                    lineColor: "255,255,255",
-                    lineWidth: 2,
-                    mouseDist: 10000,
-                }}
-                style={{ zIndex: 99 }}
-            />
             <Box
                 sx={{
                     display: "flex",
@@ -540,11 +528,23 @@ const TacToeMode = () => {
                     paddingTop: "10vh",
                     flexDirection: "column",
                     height: "100vh",
-                    background: "rgb(54,54,54)",
+                    // background: "rgb(54,54,54)",
                     fontFamily: "Orbitron",
                     position: "relative",
                 }}
             >
+                {/* <ReactCanvasNest
+                    className="canvasNest"
+                    config={{
+                        count: isPc ? 150 : 88,
+                        pointColor: " 255, 255, 255 ",
+                        dist: 2000,
+                        lineColor: "255,255,255",
+                        lineWidth: 2,
+                        mouseDist: 10000,
+                    }}
+                    style={{ zIndex: 1 }}
+                /> */}
                 <Box
                     sx={{
                         position: "absolute",

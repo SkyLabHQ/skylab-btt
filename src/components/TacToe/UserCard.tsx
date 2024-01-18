@@ -737,14 +737,24 @@ export const MyUserCard = ({
             <Box
                 sx={{
                     position: "relative",
+                    width: "6.9792vw",
+                    height: "6.9792vw",
                 }}
             >
-                <Image
+                <Box
                     sx={{
                         width: "6.9792vw",
+                        height: "6.9792vw",
                     }}
-                    src={planeUrl}
-                ></Image>
+                >
+                    <Image
+                        sx={{
+                            width: "6.9792vw",
+                        }}
+                        src={planeUrl}
+                    ></Image>
+                </Box>
+
                 {pilotInfo?.img && (
                     <Image
                         src={pilotInfo.img}
@@ -886,13 +896,21 @@ export const OpUserCard = ({
                     position: "relative",
                 }}
             >
-                <Image
+                <Box
                     sx={{
                         width: "6.9792vw",
-                        transform: "scaleX(-1)",
+                        height: "6.9792vw",
                     }}
-                    src={planeUrl}
-                ></Image>
+                >
+                    <Image
+                        sx={{
+                            width: "6.9792vw",
+                            transform: "scaleX(-1)",
+                        }}
+                        src={planeUrl}
+                    ></Image>
+                </Box>
+
                 {pilotInfo?.img && (
                     <Image
                         src={pilotInfo.img}
