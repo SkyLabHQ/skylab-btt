@@ -684,6 +684,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                         ></StatusTip>
                     </Flex>
                     <ToolBar
+                        inviteLink={inviteLink}
+                        handleShareTw={handleShareTw}
                         quitType="game"
                         onQuitClick={() => {
                             onOpen();
@@ -701,7 +703,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                             }}
                         >
                             <MyUserCard
-                                isBot={myInfo.isBot}
                                 pilotInfo={myActivePilot}
                                 loading={loading}
                                 messageLoading={messageLoading}
@@ -746,7 +747,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                             }}
                         >
                             <OpUserCard
-                                isBot={opInfo.isBot}
                                 pilotInfo={opActivePilot}
                                 markIcon={
                                     opInfo.mark === UserMarkType.Circle

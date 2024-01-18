@@ -180,7 +180,6 @@ const BttPlayBackContent = ({
                 }}
             >
                 <UserCard
-                    isBot={myInfo.isBot}
                     markIcon={myMark}
                     level={myInfo.level}
                     status="my"
@@ -202,7 +201,6 @@ const BttPlayBackContent = ({
                     ></RoundInfo>
                 </Box>
                 <UserCard
-                    isBot={opInfo.isBot}
                     markIcon={opMark}
                     level={opInfo.level}
                     status="op"

@@ -18,11 +18,9 @@ interface UserCardProps {
     message?: number;
     status?: "my" | "op";
     planeUrl?: string;
-    isBot?: boolean;
 }
 
 export const UserCard = ({
-    isBot,
     message,
     emote,
     level,
@@ -64,43 +62,13 @@ export const UserCard = ({
                     ></Message>
                 </Box>
 
-                {isBot ? (
-                    <Box
-                        sx={{
-                            transform: isMy ? "" : "scaleX(-1)",
-                            position: "relative",
-                            background: `url(${GearIcon}) no-repeat`,
-                            backgroundPosition: "0 0",
-                            backgroundSize: "50%",
-                        }}
-                    >
-                        <Image
-                            src={BotIcon}
-                            sx={{
-                                width: "2.5vw",
-                                position: "absolute",
-                                right: "22%",
-                            }}
-                        ></Image>
-                        <Image
-                            sx={{
-                                width: "6.9792vw",
-                                height: "6.9792vw",
-                            }}
-                            src={planeUrl}
-                        ></Image>
-                    </Box>
-                ) : (
-                    <Image
-                        sx={{
-                            width: "6.9792vw",
-                            height: "6.9792vw",
-                            transform: isMy ? "" : "scaleX(-1)",
-                        }}
-                        src={planeUrl}
-                    ></Image>
-                )}
-
+                <Image
+                    sx={{
+                        width: "6.9792vw",
+                        transform: isMy ? "" : "scaleX(-1)",
+                    }}
+                    src={planeUrl}
+                ></Image>
                 <Text
                     sx={{
                         fontSize: "0.8333vw",

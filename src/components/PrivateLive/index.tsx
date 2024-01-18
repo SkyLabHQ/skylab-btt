@@ -163,6 +163,7 @@ const MBttLiveGame = ({
                     >
                         {myGameInfo.gameState < GameState.Commited && (
                             <Timer
+                                direction="top"
                                 time1={autoCommitTimeoutTime}
                                 time2={bufferTime}
                                 time1Gray={

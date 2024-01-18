@@ -173,6 +173,7 @@ const MBttLiveGame = ({
                     >
                         {myGameInfo.gameState < GameState.Commited && (
                             <Timer
+                                direction="top"
                                 time1={autoCommitTimeoutTime}
                                 time2={bufferTime}
                                 time1Gray={
@@ -670,16 +671,24 @@ const BttLiveGamePage = () => {
                                     Live
                                 </Text>
                             </Box>
-                            {myGameInfo.gameState < GameState.Commited && (
-                                <Timer
-                                    time1={autoCommitTimeoutTime}
-                                    time2={bufferTime}
-                                    time1Gray={
-                                        myGameInfo.gameState ===
-                                        GameState.Commited
-                                    }
-                                ></Timer>
-                            )}
+                            <Flex
+                                justify={"center"}
+                                sx={{
+                                    height: "70px",
+                                }}
+                            >
+                                {myGameInfo.gameState < GameState.Commited && (
+                                    <Timer
+                                        time1={autoCommitTimeoutTime}
+                                        time2={bufferTime}
+                                        time1Gray={
+                                            myGameInfo.gameState ===
+                                            GameState.Commited
+                                        }
+                                    ></Timer>
+                                )}
+                            </Flex>
+
                             <LiveStatusTip
                                 myGameState={myGameInfo.gameState}
                                 opGameState={opGameInfo.gameState}
@@ -721,7 +730,6 @@ const BttLiveGamePage = () => {
                                 </Box>
                             </Box>
                             <UserCard
-                                isBot={opInfo.isBot}
                                 message={opGameInfo.message}
                                 emote={opGameInfo.emote}
                                 level={opInfo.level}
