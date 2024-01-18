@@ -101,7 +101,7 @@ const BufferTimer = ({ width, show }: { width: string; show: boolean }) => {
                     sx={{
                         width: width,
                         background: show ? "#fff" : "#616161",
-                        height: "0.3125vw",
+                        height: isPc ? "0.3125vw" : "4px",
                     }}
                 ></Box>
             </Box>

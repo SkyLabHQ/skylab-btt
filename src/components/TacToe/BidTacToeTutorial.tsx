@@ -2,9 +2,10 @@ import React from "react";
 import { Box, Modal, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { TourProvider } from "@reactour/tour";
 import "@reactour/popover/dist/index.css"; // arrow css
-import { doArrow, tourConfig } from "@/components/TacToe/config";
+import { doArrow, mTourConfig, tourConfig } from "@/components/TacToe/config";
 import ContentComponent from "@/components/TacToe/TourComponent";
 import TacToeTutorial from "@/components/TacToe/TacTocTutorial";
+import MTacToeTutorial from "./MTacTocTutorial";
 
 const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,10 +27,10 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
             <Modal isOpen={isOpen} onClose={onClose} size="full">
                 <TourProvider
                     onClickMask={() => {}}
-                    steps={tourConfig}
+                    steps={isPc ? tourConfig : mTourConfig}
                     padding={{
                         mask: 5,
-                        popover: 35,
+                        popover: [35, 0, 0, 10],
                     }}
                     beforeClose={() => {
                         onClose();
@@ -43,7 +44,9 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
                             return {
                                 ...base,
                                 boxShadow: "none",
-                                borderRadius: "0.8333vw",
+                                borderRadius: isPc ? "0.8333vw" : "8px",
+                                padding: isPc ? "24px 30px" : "6px 6px",
+                                textAlign: isPc ? "left" : "center",
                                 ...doArrow(
                                     state.position,
                                     state.verticalAlign,
@@ -62,7 +65,11 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
                         }),
                     }}
                 >
-                    <TacToeTutorial></TacToeTutorial>
+                    {isPc ? (
+                        <TacToeTutorial></TacToeTutorial>
+                    ) : (
+                        <MTacToeTutorial></MTacToeTutorial>
+                    )}
                 </TourProvider>
             </Modal>
         </Box>

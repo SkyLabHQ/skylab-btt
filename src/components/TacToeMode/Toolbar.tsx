@@ -24,7 +24,7 @@ export const Toolbar = () => {
     return (
         <Box
             sx={{
-                position: "fixed",
+                position: "absolute",
                 right: "3.125vw",
                 top: "1.4063vw",
                 display: "flex",

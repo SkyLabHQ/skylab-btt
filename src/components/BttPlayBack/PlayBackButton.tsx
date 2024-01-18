@@ -58,7 +58,9 @@ const PlayBackButton = ({
                         opacity: showPre ? 1 : 0.5,
                         cursor: showPre ? "pointer" : "not-allowed",
                     }}
-                    onClick={handleStartStep}
+                    onClick={() => {
+                        showPre && handleStartStep();
+                    }}
                 ></Image>
             </Flex>
             <Flex justify={"center"}>
@@ -68,7 +70,9 @@ const PlayBackButton = ({
                         opacity: showPre ? 1 : 0.5,
                         cursor: showPre ? "pointer" : "not-allowed",
                     }}
-                    onClick={handlePreStep}
+                    onClick={() => {
+                        showPre && handlePreStep();
+                    }}
                 ></Image>
             </Flex>
             <Flex justify={"center"}>
@@ -78,13 +82,17 @@ const PlayBackButton = ({
                         opacity: showNext ? 1 : 0.5,
                         cursor: showNext ? "pointer" : "not-allowed",
                     }}
-                    onClick={handleNextStep}
+                    onClick={() => {
+                        showNext && handleNextStep();
+                    }}
                 ></Image>
             </Flex>
             <Flex justify={"center"}>
                 <Image
                     src={EndIcon}
-                    onClick={handleEndStep}
+                    onClick={() => {
+                        showNext && handleEndStep();
+                    }}
                     sx={{
                         opacity: showNext ? 1 : 0.5,
                         cursor: showNext ? "pointer" : "not-allowed",

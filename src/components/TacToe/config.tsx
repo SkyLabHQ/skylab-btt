@@ -39,8 +39,7 @@ function doArrow(
         [`--rtp-arrow-border-${position}`]: `${height}px solid ${color}`,
     };
 
-    return;
-    obj;
+    return obj;
 }
 
 const tourConfig: StepType[] = [
@@ -227,6 +226,210 @@ const tourConfig: StepType[] = [
                         sx={{
                             color: "#000",
                             fontSize: "1.0417vw",
+                            fontWeight: 600,
+                        }}
+                    >
+                        After bidding, the
+                        <span style={{ color: "#c8ad23" }}> bid</span> amount is
+                        subtracted from your balance, no matter you won the{" "}
+                        <span
+                            style={{
+                                border: "2px solid #76c551",
+                                color: "#76c551",
+                            }}
+                        >
+                            grid
+                        </span>{" "}
+                        or not.
+                    </Text>
+                </Box>
+            );
+        },
+    },
+];
+
+export const mTourConfig: StepType[] = [
+    {
+        selector: ".btt-first-step",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#000",
+                            fontSize: "18px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        The player with higher{" "}
+                        <span style={{ color: "#c8ad23" }}>bid</span> conquers
+                        the{" "}
+                        <span
+                            style={{
+                                border: "2px solid #76c551",
+                                color: "#76c551",
+                            }}
+                        >
+                            grid
+                        </span>
+                    </Text>
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".btt-fifth-step",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box
+                    sx={{
+                        color: "#000",
+                        fontSize: "18px",
+                        fontWeight: 600,
+                    }}
+                >
+                    The player who first form 3 connected{" "}
+                    <Box
+                        sx={{
+                            position: "relative",
+                            display: "inline-block",
+                        }}
+                    >
+                        <span
+                            style={{
+                                color: "#76c551",
+                            }}
+                        >
+                            grids
+                        </span>
+                        <Box
+                            sx={{
+                                position: "absolute",
+                                top: "-4px",
+                                left: 0,
+                                display: "flex",
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    width: "12px",
+                                    height: "12px",
+                                    border: "3px solid #76c551",
+                                    marginRight: "4px",
+                                }}
+                            ></Box>
+                            <Box
+                                sx={{
+                                    width: "12px",
+                                    height: "12px",
+                                    border: "3px solid #76c551",
+                                    marginRight: "4px",
+                                }}
+                            ></Box>
+                            <Box
+                                sx={{
+                                    width: "12px",
+                                    height: "12px",
+                                    border: "3px solid #76c551",
+                                    marginRight: "4px",
+                                }}
+                            ></Box>
+                        </Box>
+                    </Box>{" "}
+                    win.{" "}
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".btt-sixth-step",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box>
+                    <Box
+                        sx={{
+                            color: "#000",
+                            fontSize: "18px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        If there's no 3 connected{" "}
+                        <Box
+                            sx={{
+                                position: "relative",
+                                display: "inline-block",
+                            }}
+                        >
+                            <span
+                                style={{
+                                    color: "#76c551",
+                                }}
+                            >
+                                grids
+                            </span>
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    top: "-4px",
+                                    left: 0,
+                                    display: "flex",
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        width: "12px",
+                                        height: "12px",
+                                        border: "3px solid #76c551",
+                                        marginRight: "4px",
+                                    }}
+                                ></Box>
+                                <Box
+                                    sx={{
+                                        width: "12px",
+                                        height: "12px",
+                                        border: "3px solid #76c551",
+                                        marginRight: "4px",
+                                    }}
+                                ></Box>
+                                <Box
+                                    sx={{
+                                        width: "12px",
+                                        height: "12px",
+                                        border: "3px solid #76c551",
+                                        marginRight: "4px",
+                                    }}
+                                ></Box>
+                            </Box>
+                        </Box>{" "}
+                        and the board is full, then the player who has occupied
+                        more{" "}
+                        <span
+                            style={{
+                                border: "2px solid #76c551",
+                                color: "#76c551",
+                            }}
+                        >
+                            grid
+                        </span>{" "}
+                        wins.
+                    </Box>
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".btt-third-step",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#000",
+                            fontSize: "18px",
                             fontWeight: 600,
                         }}
                     >

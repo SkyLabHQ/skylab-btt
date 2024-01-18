@@ -28,7 +28,7 @@ const BottomInputBox = ({
             sx={{
                 height: "48px",
                 background: "#787878",
-                padding: "0 16px",
+                padding: "0 12px",
             }}
             justify={"space-between"}
             align={"center"}
@@ -37,9 +37,11 @@ const BottomInputBox = ({
                 sx={{
                     borderRadius: "8px",
                     border: "2px solid #fff",
-                    width: "172px",
+                    // width: "172px",
                     height: "32px",
                     background: "#616161",
+                    flex: 1,
+                    marginRight: "10px",
                 }}
                 justify={"space-between"}
             >
