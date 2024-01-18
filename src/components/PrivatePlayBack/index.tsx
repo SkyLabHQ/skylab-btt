@@ -511,14 +511,8 @@ https://app.projmercury.io/btt`;
                             handlePreStep={handlePreStep}
                             handleStartStep={handleStartStep}
                         ></PlayBackButton>
-                        <ShareButtons
-                            showShareEmoji={gameOver}
-                            handleShareEmoji={handleShareEmoji}
-                            handleShare={handleShare}
-                            // handleTextClick={handleTextClick}
-                            showText={!onlyShow}
-                        ></ShareButtons>
-                        {onlyShow && (
+
+                        {onlyShow ? (
                             <Box
                                 sx={{
                                     marginTop: "20px",
@@ -526,6 +520,14 @@ https://app.projmercury.io/btt`;
                             >
                                 <StartJourney></StartJourney>
                             </Box>
+                        ) : (
+                            <ShareButtons
+                                showShareEmoji={gameOver}
+                                handleShareEmoji={handleShareEmoji}
+                                handleShare={handleShare}
+                                // handleTextClick={handleTextClick}
+                                showText={!onlyShow}
+                            ></ShareButtons>
                         )}
                     </Flex>
                 </>

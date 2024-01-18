@@ -73,6 +73,7 @@ const Chat = ({
                                 padding: "0 0.4167vw",
                                 cursor: "pointer",
                                 fontSize: "0.8333vw",
+                                background: "#303030",
                             }}
                         >
                             {message}

@@ -24,8 +24,7 @@ const ChatMessage = ({
         <Flex height={"100%"}>
             <Box
                 sx={{
-                    width: "38px",
-                    borderRight: "1px solid #fff",
+                    paddingLeft: "12px",
                 }}
             >
                 <Flex
@@ -45,8 +44,7 @@ const ChatMessage = ({
                         sx={{
                             marginRight: "0.5208vw",
                             cursor: "pointer",
-                            width: "30px",
-                            height: "30px",
+                            width: "40px",
                         }}
                         onClick={() => handleChangeActive("message")}
                     />
@@ -57,15 +55,13 @@ const ChatMessage = ({
                     flexDirection={"column"}
                     sx={{
                         height: "54px",
-                        borderTop: "1px solid #fff",
                     }}
                 >
                     <Image
                         src={active === "emote" ? EmoteActiveIcon : EmoteIcon}
                         sx={{
                             cursor: "pointer",
-                            width: "30px",
-                            height: "30px",
+                            width: "40px",
                         }}
                         onClick={() => handleChangeActive("emote")}
                     />
