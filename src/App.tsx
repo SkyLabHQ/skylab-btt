@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 const App = ({ children }: React.PropsWithChildren<unknown>): ReactElement => {
     return (
         // TO-DO: use color mode when implementing light/dark
-        <Box minH="100%" bg="black" color="white" height={"100%"}>
+        <Box minH="100%" color="white" height={"100%"}>
             {children}
             <Outlet />
         </Box>

@@ -518,7 +518,11 @@ const TacToeMode = () => {
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
 
     return (
-        <>
+        <Box
+            sx={{
+                height: "100%",
+            }}
+        >
             <BttHelmet></BttHelmet>
 
             <Box
@@ -528,23 +532,14 @@ const TacToeMode = () => {
                     paddingTop: "10vh",
                     flexDirection: "column",
                     height: "100vh",
-                    // background: "rgb(54,54,54)",
+                    background: "rgb(54,54,54,0.5)",
                     fontFamily: "Orbitron",
-                    position: "relative",
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: "100%",
                 }}
             >
-                {/* <ReactCanvasNest
-                    className="canvasNest"
-                    config={{
-                        count: isPc ? 150 : 88,
-                        pointColor: " 255, 255, 255 ",
-                        dist: 2000,
-                        lineColor: "255,255,255",
-                        lineWidth: 2,
-                        mouseDist: 10000,
-                    }}
-                    style={{ zIndex: 1 }}
-                /> */}
                 <Box
                     sx={{
                         position: "absolute",
@@ -729,7 +724,18 @@ const TacToeMode = () => {
                     onClose={handlePreviousLobbyClose}
                 ></PreviousLobbyModal>
             </Box>
-        </>
+            <ReactCanvasNest
+                className="canvasNest"
+                config={{
+                    count: isPc ? 150 : 88,
+                    pointColor: " 255, 255, 255 ",
+                    dist: 2000,
+                    lineColor: "255,255,255",
+                    lineWidth: 2,
+                    mouseDist: 10000,
+                }}
+            />
+        </Box>
     );
 };
 
