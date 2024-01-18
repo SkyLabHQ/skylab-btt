@@ -406,7 +406,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     const handleGameOver = async () => {
         if (myGameInfo.gameState <= GameState.Revealed) return;
         deleteTokenIdCommited();
-        onStep();
+        onStep(3);
 
         const gameResult = getWinState(myGameInfo.gameState);
 
