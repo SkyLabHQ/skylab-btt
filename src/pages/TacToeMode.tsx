@@ -549,6 +549,7 @@ const TacToeMode = () => {
                 >
                     <Back onClick={() => navigate("/")}></Back>
                 </Box>
+
                 <Toolbar></Toolbar>
                 <Box
                     sx={{
@@ -558,6 +559,31 @@ const TacToeMode = () => {
                         width: isPc ? "19.6875vw" : "250px",
                     }}
                 >
+                    <Box
+                        onClick={() => {
+                            var addToHomeScreenLink =
+                                document.createElement("a");
+                            addToHomeScreenLink.setAttribute("href", "/");
+                            addToHomeScreenLink.innerHTML =
+                                '请点击右上角的分享按钮，然后选择"添加到主屏幕"';
+
+                            // 将a标签添加到body中
+                            document.body.appendChild(addToHomeScreenLink);
+
+                            // 创建一个点击事件并触发
+                            var event = new MouseEvent("click", {
+                                bubbles: true,
+                                cancelable: true,
+                                view: window,
+                            });
+                            addToHomeScreenLink.dispatchEvent(event);
+
+                            // 移除a标签
+                            document.body.removeChild(addToHomeScreenLink);
+                        }}
+                    >
+                        测试
+                    </Box>
                     <LiveGame list={onGoingGames}></LiveGame>
                     <Box
                         sx={{
@@ -727,7 +753,7 @@ const TacToeMode = () => {
             <ReactCanvasNest
                 className="canvasNest"
                 config={{
-                    count: isPc ? 150 : 88,
+                    count: isPc ? 150 : 50,
                     pointColor: " 255, 255, 255 ",
                     dist: 2000,
                     lineColor: "255,255,255",

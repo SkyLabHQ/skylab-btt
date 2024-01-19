@@ -525,11 +525,11 @@ const MTacToeTutorial = ({}) => {
                         }}
                     >
                         <Box>
-                            {[0, 3].includes(currentStep) && (
+                            {[0, 1].includes(currentStep) && (
                                 <FirstBoard></FirstBoard>
                             )}
-                            {currentStep === 1 && <SecondBoard></SecondBoard>}
-                            {currentStep === 2 && <ThirdBoard></ThirdBoard>}
+                            {currentStep === 2 && <SecondBoard></SecondBoard>}
+                            {currentStep === 3 && <ThirdBoard></ThirdBoard>}
                         </Box>
                     </Box>
                 </Box>

@@ -73,6 +73,36 @@ const tourConfig: StepType[] = [
         },
     },
     {
+        selector: ".btt-third-step",
+        position: "right",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#000",
+                            fontSize: "1.0417vw",
+                            fontWeight: 600,
+                        }}
+                    >
+                        After bidding, the
+                        <span style={{ color: "#c8ad23" }}> bid</span> amount is
+                        subtracted from your balance, no matter you won the{" "}
+                        <span
+                            style={{
+                                border: "2px solid #76c551",
+                                color: "#76c551",
+                            }}
+                        >
+                            grid
+                        </span>{" "}
+                        or not.
+                    </Text>
+                </Box>
+            );
+        },
+    },
+    {
         selector: ".btt-fifth-step",
         position: "right",
         content: () => {
@@ -216,36 +246,6 @@ const tourConfig: StepType[] = [
             );
         },
     },
-    {
-        selector: ".btt-third-step",
-        position: "right",
-        content: () => {
-            return (
-                <Box>
-                    <Text
-                        sx={{
-                            color: "#000",
-                            fontSize: "1.0417vw",
-                            fontWeight: 600,
-                        }}
-                    >
-                        After bidding, the
-                        <span style={{ color: "#c8ad23" }}> bid</span> amount is
-                        subtracted from your balance, no matter you won the{" "}
-                        <span
-                            style={{
-                                border: "2px solid #76c551",
-                                color: "#76c551",
-                            }}
-                        >
-                            grid
-                        </span>{" "}
-                        or not.
-                    </Text>
-                </Box>
-            );
-        },
-    },
 ];
 
 export const mTourConfig: StepType[] = [
@@ -273,6 +273,36 @@ export const mTourConfig: StepType[] = [
                         >
                             grid
                         </span>
+                    </Text>
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".btt-third-step",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#000",
+                            fontSize: "18px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        After bidding, the
+                        <span style={{ color: "#c8ad23" }}> bid</span> amount is
+                        subtracted from your balance, no matter you won the{" "}
+                        <span
+                            style={{
+                                border: "2px solid #76c551",
+                                color: "#76c551",
+                            }}
+                        >
+                            grid
+                        </span>{" "}
+                        or not.
                     </Text>
                 </Box>
             );
@@ -416,36 +446,6 @@ export const mTourConfig: StepType[] = [
                         </span>{" "}
                         wins.
                     </Box>
-                </Box>
-            );
-        },
-    },
-    {
-        selector: ".btt-third-step",
-        position: "bottom",
-        content: () => {
-            return (
-                <Box>
-                    <Text
-                        sx={{
-                            color: "#000",
-                            fontSize: "18px",
-                            fontWeight: 600,
-                        }}
-                    >
-                        After bidding, the
-                        <span style={{ color: "#c8ad23" }}> bid</span> amount is
-                        subtracted from your balance, no matter you won the{" "}
-                        <span
-                            style={{
-                                border: "2px solid #76c551",
-                                color: "#76c551",
-                            }}
-                        >
-                            grid
-                        </span>{" "}
-                        or not.
-                    </Text>
                 </Box>
             );
         },

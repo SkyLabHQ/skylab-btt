@@ -125,7 +125,7 @@ const GameList = ({ list }: { list: any[] }) => {
                                         fontSize: isPc ? "0.8333vw" : "16px",
                                     }}
                                 >
-                                    {item.win} win/ {item.game} games
+                                    {item.win} win/ {item.win + item.lose} games
                                 </Text>
                             </Flex>
                         </Flex>

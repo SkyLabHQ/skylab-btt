@@ -211,17 +211,15 @@ const MLayout = ({
                         }
                     }}
                     onSubClick={() => {
-                        if (bidAmount - 1 < 0) return;
-                        onInputChange(bidAmount - 1);
+                        if (Number(bidAmount) - 1 < 0) return;
+                        onInputChange(Number(bidAmount) - 1);
                     }}
                     onAddClick={() => {
-                        if (inputMode === "keyboard") {
-                            keyBoardOnToggle();
-                        } else {
-                            setInputMode("keyboard");
-                            if (!keyBoardIsOpen) {
-                                keyBoardOnToggle();
-                            }
+                        if (
+                            Number(bidAmount) + 1 <
+                            Number(myGameInfo.balance)
+                        ) {
+                            onInputChange(Number(bidAmount) + 1);
                         }
                     }}
                     onConfirm={onConfirm}

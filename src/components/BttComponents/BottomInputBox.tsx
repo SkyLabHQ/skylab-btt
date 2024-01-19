@@ -58,14 +58,16 @@ const BottomInputBox = ({
                     onClick={(e) => {
                         onInputAmountClick();
                     }}
+                    sx={{
+                        flex: 1,
+                        textAlign: "center",
+                    }}
                 >
                     {bidAmount !== "" ? (
                         <Text
                             sx={{
-                                width: "100px",
                                 color: "#fff",
                                 fontSize: "20px",
-                                textAlign: "center",
                             }}
                         >
                             {bidAmount}
@@ -73,7 +75,6 @@ const BottomInputBox = ({
                     ) : (
                         <Text
                             sx={{
-                                width: "100px",
                                 color: "rgba(120, 120, 120, 1)",
                                 fontSize: "20px",
                             }}
@@ -155,7 +156,7 @@ const BottomInputBox = ({
                     </Button>
                 )}
             </>
-            <Image src={MessageIcon1} onClick={onMessageClick}></Image>
+            <Image src={MessageIcon1} onClick={onMessageClick} sx={{}}></Image>
         </Flex>
     );
 };

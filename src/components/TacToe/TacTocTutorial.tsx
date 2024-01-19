@@ -17,6 +17,7 @@ import PlayEndGray from "./assets/play-end-gray.svg";
 import CloseIcon from "./assets/close.svg";
 import BttTimer from "./BttTimer";
 import { GameState, UserMarkType } from "@/skyConstants/bttGameTypes";
+import PlayBackButton from "../BttPlayBack/PlayBackButton";
 
 const FirstBoard = () => {
     const list = [
@@ -398,6 +399,22 @@ const TacToeTutorial = ({}) => {
         }, 200);
     }, []);
 
+    const handlePreStep = () => {
+        setCurrentStep(currentStep - 1);
+    };
+
+    const handleNextStep = () => {
+        setCurrentStep(currentStep + 1);
+    };
+
+    const handleStartStep = () => {
+        setCurrentStep(1);
+    };
+
+    const handleEndStep = () => {
+        setCurrentStep(steps.length - 1);
+    };
+
     return (
         <Box
             sx={{
@@ -502,11 +519,11 @@ const TacToeTutorial = ({}) => {
                             bidAmount={15}
                         ></MyUserCard>
                         <Box>
-                            {[0, 3].includes(currentStep) && (
+                            {[0, 1].includes(currentStep) && (
                                 <FirstBoard></FirstBoard>
                             )}
-                            {currentStep === 1 && <SecondBoard></SecondBoard>}
-                            {currentStep === 2 && <ThirdBoard></ThirdBoard>}
+                            {currentStep === 2 && <SecondBoard></SecondBoard>}
+                            {currentStep === 3 && <ThirdBoard></ThirdBoard>}
                         </Box>
 
                         <OpUserCard
@@ -555,77 +572,14 @@ const TacToeTutorial = ({}) => {
                 >
                     {currentStep + 1}/{steps.length}
                 </Box>
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: "0.7813vw",
-                        justifyContent: "space-between",
-                        width: "12.5vw",
-                    }}
-                >
-                    <Image
-                        src={currentStep === 0 ? PlayStartGray : PlayStartWhite}
-                        onClick={() => {
-                            currentStep !== 0 && setCurrentStep(0);
-                        }}
-                        sx={{
-                            cursor: currentStep === 0 ? "no-drop" : "pointer",
-                        }}
-                    ></Image>
-                    <Image
-                        src={
-                            currentStep === 0
-                                ? PlayPreviouGray
-                                : PlayPreviouWhite
-                        }
-                        sx={{
-                            marginLeft: "1.0417vw",
-                            cursor: currentStep === 0 ? "no-drop" : "pointer",
-                        }}
-                        onClick={() => {
-                            currentStep !== 0 &&
-                                setCurrentStep(currentStep - 1);
-                        }}
-                    ></Image>
-                    <Image
-                        src={
-                            currentStep + 1 === steps.length
-                                ? PlayNextGray
-                                : PlayNextWhite
-                        }
-                        sx={{
-                            marginLeft: "1.0417vw",
-
-                            cursor:
-                                currentStep + 1 === steps.length
-                                    ? "no-drop"
-                                    : "pointer",
-                        }}
-                        onClick={() => {
-                            currentStep + 1 !== steps.length &&
-                                setCurrentStep(currentStep + 1);
-                        }}
-                    ></Image>
-                    <Image
-                        src={
-                            currentStep + 1 === steps.length
-                                ? PlayEndGray
-                                : PlayEndWhite
-                        }
-                        sx={{
-                            marginLeft: "1.0417vw",
-                            cursor:
-                                currentStep + 1 === steps.length
-                                    ? "no-drop"
-                                    : "pointer",
-                        }}
-                        onClick={() => {
-                            currentStep + 1 !== steps.length &&
-                                setCurrentStep(steps.length - 1);
-                        }}
-                    ></Image>
-                </Box>
+                <PlayBackButton
+                    showPre={currentStep > 0}
+                    showNext={currentStep + 1 < steps.length}
+                    handleEndStep={handleEndStep}
+                    handleNextStep={handleNextStep}
+                    handlePreStep={handlePreStep}
+                    handleStartStep={handleStartStep}
+                ></PlayBackButton>
             </Box>
         </Box>
     );
