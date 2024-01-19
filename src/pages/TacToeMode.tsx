@@ -92,9 +92,7 @@ const TacToeMode = () => {
         onClose: onPreviousLobbyModalClose,
     } = useDisclosure();
     const navigate = useNavigate();
-    const { address, isConnected } = useAccount();
-    const [isMobile] = useMediaQuery("(min-width: 800px)");
-    const [deferredPrompt, setDeferredPropmpt] = useState<any>(null);
+    const { address } = useAccount();
 
     const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
@@ -518,18 +516,6 @@ const TacToeMode = () => {
         handleGetLoobyName();
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
 
-    useEffect(() => {
-        window.addEventListener("beforeinstallprompt", (e) => {
-            e.preventDefault();
-            setDeferredPropmpt(e);
-        });
-
-        window.addEventListener("appinstalled", (evt) => {
-            console.log("appinstalled", evt);
-            setDeferredPropmpt(null);
-        });
-    }, []);
-
     return (
         <Box
             sx={{
@@ -572,13 +558,6 @@ const TacToeMode = () => {
                         width: isPc ? "19.6875vw" : "250px",
                     }}
                 >
-                    <Box
-                        onClick={() => {
-                            deferredPrompt.prompt();
-                        }}
-                    >
-                        测试
-                    </Box>
                     <LiveGame list={onGoingGames}></LiveGame>
                     <Box
                         sx={{
@@ -748,7 +727,6 @@ const TacToeMode = () => {
             <ReactCanvasNest
                 className="canvasNest"
                 config={{
-                    count: isPc ? 150 : 30,
                     pointColor: " 255, 255, 255 ",
                     dist: 2000,
                     lineColor: "255,255,255",

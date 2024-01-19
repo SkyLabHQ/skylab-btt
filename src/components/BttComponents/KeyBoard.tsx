@@ -179,62 +179,40 @@ const KeyBoard = ({
                 marginRight: "0.7292vw",
             }}
         >
-            {type ? (
-                <Popover
-                    isOpen={isOpen}
-                    onClose={() => {
-                        onClose();
-                    }}
-                >
-                    <PopoverTrigger>
-                        <Box
-                            onClick={(e) => {
-                                onToggle();
-                            }}
+            <Popover
+                onClose={() => {
+                    onClose();
+                }}
+            >
+                <PopoverTrigger>
+                    <Button
+                        onClick={() => {
+                            onToggle();
+                        }}
+                        variant={"unstyled"}
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            height: isPc ? "2.3958vw" : "32px",
+                            width: isPc ? "2.3958vw" : "32px",
+                            "&:focus": {
+                                boxShadow: "none",
+                            },
+                        }}
+                    >
+                        <Image
+                            src={KeyboardIcon}
                             sx={{
-                                cursor: "pointer",
-                            }}
-                        >
-                            <Image
-                                src={KeyboardIcon}
-                                sx={{
-                                    height: isPc ? "2.3958vw" : "32px",
-                                    width: isPc ? "2.3958vw" : "32px",
-                                }}
-                            ></Image>
-                        </Box>
-                    </PopoverTrigger>
-                    <Content></Content>
-                </Popover>
-            ) : (
-                <Popover>
-                    <PopoverTrigger>
-                        <Button
-                            variant={"unstyled"}
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                cursor: "pointer",
                                 height: isPc ? "2.3958vw" : "32px",
                                 width: isPc ? "2.3958vw" : "32px",
-                                "&:focus": {
-                                    boxShadow: "none",
-                                },
                             }}
-                        >
-                            <Image
-                                src={KeyboardIcon}
-                                sx={{
-                                    height: isPc ? "2.3958vw" : "32px",
-                                    width: isPc ? "2.3958vw" : "32px",
-                                }}
-                            ></Image>
-                        </Button>
-                    </PopoverTrigger>
-                    <Content></Content>
-                </Popover>
-            )}
+                        ></Image>
+                    </Button>
+                </PopoverTrigger>
+                <Content></Content>
+            </Popover>
         </Box>
     );
 };

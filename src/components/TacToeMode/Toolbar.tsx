@@ -1,25 +1,26 @@
-import {
-    Box,
-    Text,
-    Image,
-    useDisclosure,
-    useMediaQuery,
-} from "@chakra-ui/react";
-import React from "react";
+import { Box, Image, useMediaQuery } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import BidTacToeTutorial from "@/components/TacToe/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
-import KeyBoard from "../BttComponents/KeyBoard";
 import PlayBackIcon from "./assets/playback-icon.svg";
 import { useNavigate } from "react-router-dom";
 
 export const Toolbar = () => {
+    const [deferredPrompt, setDeferredPropmpt] = useState<any>(null);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const {
-        isOpen: keyBoardOpen,
-        onToggle: keyBoardOnToggle,
-        onClose: keyBoardOnClose,
-    } = useDisclosure();
+
+    useEffect(() => {
+        window.addEventListener("beforeinstallprompt", (e: any) => {
+            e.preventDefault();
+            setDeferredPropmpt(e);
+        });
+
+        window.addEventListener("appinstalled", (evt) => {
+            console.log("appinstalled", evt);
+            setDeferredPropmpt(null);
+        });
+    }, []);
 
     return (
         <Box
@@ -30,6 +31,20 @@ export const Toolbar = () => {
                 display: "flex",
             }}
         >
+            {!window.matchMedia("(display-mode: standalone)").matches && (
+                <Box
+                    sx={{
+                        border: "1px solid #fff",
+                        borderRadius: "0.5208vw",
+                        marginRight: "0.7292vw",
+                    }}
+                    onClick={() => {
+                        deferredPrompt.prompt();
+                    }}
+                >
+                    Add
+                </Box>
+            )}
             <Image
                 src={PlayBackIcon}
                 sx={{
@@ -42,14 +57,6 @@ export const Toolbar = () => {
                     navigate("/btt/history");
                 }}
             ></Image>
-            {/* <KeyBoard
-                type={false}
-                isOpen={keyBoardOpen}
-                onToggle={() => {
-                    keyBoardOnToggle();
-                }}
-                onClose={keyBoardOnClose}
-            ></KeyBoard> */}
             <BidTacToeTutorial>
                 <Box
                     sx={{

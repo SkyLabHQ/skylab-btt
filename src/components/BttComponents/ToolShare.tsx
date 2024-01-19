@@ -54,6 +54,7 @@ export const ToolShare = ({
                         height: isPc ? "2.3958vw" : "32px",
                         width: isPc ? "2.3958vw" : "32px",
                         marginRight: isPc ? "0.7292vw" : "5px",
+                        cursor: "pointer",
                     }}
                 ></Image>
             </PopoverTrigger>

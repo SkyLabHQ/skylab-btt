@@ -47,11 +47,13 @@ const ToolBar = ({
             }}
         >
             <KeyBoard
-                type={false}
+                type={true}
                 isOpen={keyBoardOpen}
                 onToggle={() => {
+                    console.log(11111);
                     keyBoardOnToggle();
                     quitType === "game" && shareOnClose();
+                    console.log("触发啊啊");
                 }}
                 onClose={keyBoardOnClose}
             ></KeyBoard>
@@ -61,7 +63,10 @@ const ToolBar = ({
                     inviteLink={inviteLink}
                     handleShareTw={handleShareTw}
                     isOpen={shareOpen}
-                    onToggle={shareOnToggle}
+                    onToggle={() => {
+                        shareOnToggle();
+                        keyBoardOnClose();
+                    }}
                     onClose={shareOnClose}
                 ></ToolShare>
             )}

@@ -27,6 +27,7 @@ import {
     initBoard,
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/TacToe/GameOver";
+import ReactCanvasNest from "react-canvas-nest";
 
 export interface Info {
     burner: string;
@@ -201,12 +202,22 @@ const TacToe = () => {
     }, []);
 
     return (
-        <>
+        <Box
+            sx={{
+                height: "100%",
+            }}
+        >
             <BttHelmet></BttHelmet>
             <Box
                 sx={{
-                    background: "#303030",
+                    background: "#36363680",
                     height: "100%",
+                    //  background: "rgb(54,54,54,0.5)",
+                    fontFamily: "Orbitron",
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: "100%",
                 }}
             >
                 <GameContext.Provider
@@ -323,7 +334,17 @@ const TacToe = () => {
                     </Box>
                 </GameContext.Provider>
             </Box>
-        </>
+            <ReactCanvasNest
+                className="canvasNest"
+                config={{
+                    pointColor: " 255, 255, 255 ",
+                    dist: 2000,
+                    lineColor: "255,255,255",
+                    lineWidth: 2,
+                    mouseDist: 10000,
+                }}
+            />
+        </Box>
     );
 };
 

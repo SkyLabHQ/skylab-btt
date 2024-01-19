@@ -354,7 +354,7 @@ const MTacToeTutorial = ({}) => {
     };
 
     const handleStartStep = () => {
-        setCurrentStep(1);
+        setCurrentStep(0);
     };
 
     const handleEndStep = () => {
