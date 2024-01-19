@@ -293,7 +293,7 @@ export const MUserProfile = ({
                                     width: "40px",
                                     height: "40px",
                                     transform:
-                                        status === "my" ? "rotate(180deg)" : "",
+                                        status === "my" ? "scaleX(-1)" : "",
                                 }}
                             ></Image>
                         )}
@@ -402,7 +402,7 @@ export const MUserProfileResult = ({
                                 width: "40px",
                                 // height: "40px",
                                 transform:
-                                    position === "left" ? "" : "rotate(180deg)",
+                                    position === "left" ? "" : "scaleX(-1)",
                             }}
                         ></Image>
                     </Flex>
