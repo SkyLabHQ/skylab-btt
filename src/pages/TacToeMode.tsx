@@ -94,6 +94,7 @@ const TacToeMode = () => {
     const navigate = useNavigate();
     const { address, isConnected } = useAccount();
     const [isMobile] = useMediaQuery("(min-width: 800px)");
+    const [deferredPrompt, setDeferredPropmpt] = useState<any>(null);
 
     const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
@@ -517,6 +518,18 @@ const TacToeMode = () => {
         handleGetLoobyName();
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
 
+    useEffect(() => {
+        window.addEventListener("beforeinstallprompt", (e) => {
+            e.preventDefault();
+            setDeferredPropmpt(e);
+        });
+
+        window.addEventListener("appinstalled", (evt) => {
+            console.log("appinstalled", evt);
+            setDeferredPropmpt(null);
+        });
+    }, []);
+
     return (
         <Box
             sx={{
@@ -561,25 +574,7 @@ const TacToeMode = () => {
                 >
                     <Box
                         onClick={() => {
-                            var addToHomeScreenLink =
-                                document.createElement("a");
-                            addToHomeScreenLink.setAttribute("href", "/");
-                            addToHomeScreenLink.innerHTML =
-                                '请点击右上角的分享按钮，然后选择"添加到主屏幕"';
-
-                            // 将a标签添加到body中
-                            document.body.appendChild(addToHomeScreenLink);
-
-                            // 创建一个点击事件并触发
-                            var event = new MouseEvent("click", {
-                                bubbles: true,
-                                cancelable: true,
-                                view: window,
-                            });
-                            addToHomeScreenLink.dispatchEvent(event);
-
-                            // 移除a标签
-                            document.body.removeChild(addToHomeScreenLink);
+                            deferredPrompt.prompt();
                         }}
                     >
                         测试
@@ -753,7 +748,7 @@ const TacToeMode = () => {
             <ReactCanvasNest
                 className="canvasNest"
                 config={{
-                    count: isPc ? 150 : 50,
+                    count: isPc ? 150 : 30,
                     pointColor: " 255, 255, 255 ",
                     dist: 2000,
                     lineColor: "255,255,255",
