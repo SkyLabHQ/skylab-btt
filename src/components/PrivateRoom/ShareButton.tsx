@@ -41,7 +41,7 @@ const ShareButtons = ({
                 width: "100%",
 
                 "& button": {
-                    width: isPc ? "9.375vw" : "80px",
+                    width: isPc ? "12vw" : "80px",
                     height: isPc ? "2.7083vw" : "32px",
                     borderRadius: isPc ? "0.9375vw" : "10px",
                     fontSize: isPc ? "1.0417vw" : "12px",
@@ -117,7 +117,6 @@ const ShareButtons = ({
                 </Button>
             </Flex>
             <Flex justify={"center"}>
-                {" "}
                 <Button
                     variant={"outline"}
                     onClick={() => {
