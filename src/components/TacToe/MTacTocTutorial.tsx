@@ -10,8 +10,6 @@ import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import { aviationImg } from "@/utils/aviationImg";
 import BottomInputBox from "../BttComponents/BottomInputBox";
-import PlayBackButton from "../BttPlayBack/PlayBackButton";
-import RoundInfo from "../BttComponents/RoundInfo";
 
 const FirstBoard = () => {
     const list = [
@@ -118,6 +116,17 @@ const FirstBoard = () => {
                         top: "16.4063vw",
                         right: "50%",
                         transform: "translateX(50%)",
+                    }}
+                ></Box>
+                <Box
+                    className="btt-0-step"
+                    sx={{
+                        width: "56px",
+                        height: "56px",
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
                     }}
                 ></Box>
             </Grid>
@@ -337,29 +346,13 @@ const ThirdBoard = () => {
 };
 
 const MTacToeTutorial = ({}) => {
-    const { currentStep, steps, setIsOpen, setCurrentStep } = useTour();
+    const { currentStep, setIsOpen } = useTour();
 
     useEffect(() => {
         setTimeout(() => {
             setIsOpen(true);
         }, 200);
     }, []);
-
-    const handlePreStep = () => {
-        setCurrentStep(currentStep - 1);
-    };
-
-    const handleNextStep = () => {
-        setCurrentStep(currentStep + 1);
-    };
-
-    const handleStartStep = () => {
-        setCurrentStep(0);
-    };
-
-    const handleEndStep = () => {
-        setCurrentStep(steps.length - 1);
-    };
 
     return (
         <Box
@@ -426,7 +419,7 @@ const MTacToeTutorial = ({}) => {
                         width: "100%",
                         border: "2px solid #fff",
                         boxShadow: "5px 4px 8px 0px rgba(255, 255, 255, 0.50)",
-                        padding: "0 0 140px",
+                        padding: "20px 0 140px",
                         position: "relative",
                         display: "flex",
                         flexDirection: "column",
@@ -533,56 +526,6 @@ const MTacToeTutorial = ({}) => {
                         </Box>
                     </Box>
                 </Box>
-            </Box>
-
-            <Box
-                sx={{
-                    position: "fixed",
-                    bottom: "20px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    zIndex: 99999999,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}
-            >
-                <Box
-                    sx={{
-                        borderRadius: "8px",
-                        background: "#d9d9d9",
-                        display: "flex",
-                        width: "50px",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "16px",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: "12px",
-                            color: "#303030",
-                        }}
-                    >
-                        {currentStep + 1}
-                        <span
-                            style={{
-                                color: "#616161",
-                                fontSize: "12px",
-                            }}
-                        >
-                            /{steps.length}
-                        </span>
-                    </Text>
-                </Box>
-                <PlayBackButton
-                    showPre={currentStep > 0}
-                    showNext={currentStep + 1 < steps.length}
-                    handleEndStep={handleEndStep}
-                    handleNextStep={handleNextStep}
-                    handlePreStep={handlePreStep}
-                    handleStartStep={handleStartStep}
-                ></PlayBackButton>
             </Box>
         </Box>
     );

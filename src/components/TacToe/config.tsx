@@ -2,6 +2,7 @@ import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 import { StepType } from "@reactour/tour";
 import { CSSObject } from "@emotion/react";
+import "@reactour/popover/dist/index.css";
 
 const opositeSide = {
     top: "bottom",
@@ -20,8 +21,8 @@ function doArrow(
         return {};
     }
 
-    const width = 40;
-    const height = 30;
+    const width = 16;
+    const height = 12;
     const isVertical = position === "top" || position === "bottom";
     const spaceFromSide = 25;
 
@@ -44,7 +45,7 @@ function doArrow(
 
 const tourConfig: StepType[] = [
     {
-        selector: ".btt-first-step",
+        selector: ".btt-0-step",
         position: "top",
         content: () => {
             return (
@@ -250,8 +251,7 @@ const tourConfig: StepType[] = [
 
 export const mTourConfig: StepType[] = [
     {
-        selector: ".btt-first-step",
-        position: "bottom",
+        selector: ".btt-0-step",
         content: () => {
             return (
                 <Box>
@@ -279,8 +279,7 @@ export const mTourConfig: StepType[] = [
         },
     },
     {
-        selector: ".btt-third-step",
-        position: "bottom",
+        selector: ".btt-1-step",
         content: () => {
             return (
                 <Box>
@@ -310,14 +309,15 @@ export const mTourConfig: StepType[] = [
     },
     {
         selector: ".btt-fifth-step",
-        position: "bottom",
+        position: "left",
         content: () => {
             return (
                 <Box
                     sx={{
                         color: "#000",
-                        fontSize: "18px",
+                        fontSize: "16px",
                         fontWeight: 600,
+                        width: "135px",
                     }}
                 >
                     The player who first form 3 connected{" "}
@@ -384,6 +384,7 @@ export const mTourConfig: StepType[] = [
                             color: "#000",
                             fontSize: "18px",
                             fontWeight: 600,
+                            width: "262px",
                         }}
                     >
                         If there's no 3 connected{" "}

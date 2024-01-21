@@ -45,9 +45,6 @@ const MBttHistory = ({
     allRecords: RecordInfo[];
     handleToPlayBack: (value: RecordInfo) => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-    const navigate = useNavigate();
-
     return (
         <Box
             sx={{
@@ -196,7 +193,7 @@ const BttHistory = () => {
                     top: "1.0417vw",
                 }}
             >
-                <Back onClick={() => navigate("/")}></Back>
+                <Back onClick={() => navigate("/btt")}></Back>
             </Box>
 
             {isPc ? (

@@ -35,10 +35,10 @@ const BottomInputBox = ({
             align={"center"}
         >
             <Flex
+                className="btt-1-step"
                 sx={{
                     borderRadius: "8px",
                     border: "2px solid #fff",
-                    // width: "172px",
                     height: "32px",
                     background: "#616161",
                     flex: 1,

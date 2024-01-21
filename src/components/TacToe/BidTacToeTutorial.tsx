@@ -30,7 +30,7 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
                     steps={isPc ? tourConfig : mTourConfig}
                     padding={{
                         mask: 5,
-                        popover: [35, 0, 0, 10],
+                        // popover: [35, 0, 0, 10],
                     }}
                     beforeClose={() => {
                         onClose();
@@ -45,13 +45,13 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
                                 ...base,
                                 boxShadow: "none",
                                 borderRadius: isPc ? "0.8333vw" : "8px",
-                                padding: isPc ? "24px 30px" : "6px 6px",
-                                textAlign: isPc ? "left" : "center",
-                                ...doArrow(
-                                    state.position,
-                                    state.verticalAlign,
-                                    state.horizontalAlign,
-                                ),
+                                background: "transparent",
+                                padding: 0,
+                                // ...doArrow(
+                                //     state.position,
+                                //     state.verticalAlign,
+                                //     state.horizontalAlign,
+                                // ),
                             };
                         },
                         highlightedArea: (base: any, props: any) => ({

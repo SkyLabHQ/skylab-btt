@@ -83,6 +83,7 @@ const GameOver = () => {
                     top: "24px",
                     left: 0,
                     alignItems: "flex-start",
+                    opacity: isMyWin ? 1 : 0,
                 }}
                 flexDir={"column"}
             >
@@ -108,6 +109,7 @@ const GameOver = () => {
                     position: "absolute",
                     right: 0,
                     top: "480px",
+                    opacity: isMyWin ? 0.5 : 1,
                 }}
                 flexDir={"column"}
                 align={"flex-end"}
@@ -127,7 +129,7 @@ const GameOver = () => {
                     status="op"
                     mark={myInfo.mark}
                     showResult={true}
-                    win={isMyWin}
+                    win={!isMyWin}
                 ></MBalance>
             </Flex>
 

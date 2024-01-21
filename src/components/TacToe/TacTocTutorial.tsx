@@ -6,18 +6,9 @@ import XIcon from "@/components/TacToe/assets/x.svg";
 import { BoardGrid } from "@/components/TacToe/Board";
 import BaseGrid from "./assets/base-grid.svg";
 import { useTour } from "@reactour/tour";
-import PlayStartWhite from "./assets/play-start-white.svg";
-import PlayStartGray from "./assets/play-start-gray.svg";
-import PlayPreviouWhite from "./assets/play-previous-white.svg";
-import PlayPreviouGray from "./assets/play-previous-gray.svg";
-import PlayNextWhite from "./assets/play-next-white.svg";
-import PlayNextGray from "./assets/play-next-gray.svg";
-import PlayEndWhite from "./assets/play-end-white.svg";
-import PlayEndGray from "./assets/play-end-gray.svg";
 import CloseIcon from "./assets/close.svg";
 import BttTimer from "./BttTimer";
 import { GameState, UserMarkType } from "@/skyConstants/bttGameTypes";
-import PlayBackButton from "../BttPlayBack/PlayBackButton";
 
 const FirstBoard = () => {
     const list = [
@@ -114,7 +105,6 @@ const FirstBoard = () => {
                         ></BoardGrid>
                     );
                 })}
-
                 <Box
                     className="btt-fourth-step"
                     sx={{
@@ -124,6 +114,17 @@ const FirstBoard = () => {
                         top: "16.4063vw",
                         right: "50%",
                         transform: "translateX(50%)",
+                    }}
+                ></Box>
+                <Box
+                    className="btt-0-step"
+                    sx={{
+                        width: "7vw",
+                        height: "7vw",
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
                     }}
                 ></Box>
             </Grid>
@@ -399,22 +400,6 @@ const TacToeTutorial = ({}) => {
         }, 200);
     }, []);
 
-    const handlePreStep = () => {
-        setCurrentStep(currentStep - 1);
-    };
-
-    const handleNextStep = () => {
-        setCurrentStep(currentStep + 1);
-    };
-
-    const handleStartStep = () => {
-        setCurrentStep(0);
-    };
-
-    const handleEndStep = () => {
-        setCurrentStep(steps.length - 1);
-    };
-
     return (
         <Box
             sx={{
@@ -545,41 +530,6 @@ const TacToeTutorial = ({}) => {
                         ></OpUserCard>
                     </Box>
                 </Box>{" "}
-            </Box>
-            <Box
-                sx={{
-                    position: "fixed",
-                    top: "88vh",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    zIndex: 99999999,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}
-            >
-                <Box
-                    sx={{
-                        textAlign: "center",
-                        width: "5.2083vw",
-                        height: "1.875vw",
-                        borderRadius: "1.0417vw",
-                        background: "#D9D9D9",
-                        color: "#303030",
-                        fontFamily: "Quantico",
-                        fontSize: "1.25vw",
-                    }}
-                >
-                    {currentStep + 1}/{steps.length}
-                </Box>
-                <PlayBackButton
-                    showPre={currentStep > 0}
-                    showNext={currentStep + 1 < steps.length}
-                    handleEndStep={handleEndStep}
-                    handleNextStep={handleNextStep}
-                    handlePreStep={handlePreStep}
-                    handleStartStep={handleStartStep}
-                ></PlayBackButton>
             </Box>
         </Box>
     );
