@@ -1,6 +1,5 @@
 import { Box } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useKnobVisibility } from "@/contexts/KnobVisibilityContext";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
@@ -106,7 +105,6 @@ const TacToe = () => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const istest = params.testflight === "true";
-    const { setIsKnobVisible } = useKnobVisibility();
     const [tokenId] = useState<number>(params.tokenId);
     const [myNewInfo, setMyNewInfo] = useState<MyNewInfo>(null); // if game over update my info
     const realChainId = istest ? TESTFLIGHT_CHAINID : chainId;
@@ -196,11 +194,6 @@ const TacToe = () => {
 
         console.log("transfer remain balance", transferResult);
     };
-
-    useEffect(() => {
-        setIsKnobVisible(false);
-        return () => setIsKnobVisible(true);
-    }, []);
 
     return (
         <Box

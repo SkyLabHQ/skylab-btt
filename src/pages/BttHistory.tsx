@@ -1,7 +1,6 @@
 import { Box, Image, Text, useMediaQuery } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useKnobVisibility } from "@/contexts/KnobVisibilityContext";
 import { useAllBttTransaction } from "@/hooks/useTacToeStore";
 import BttIcon from "@/assets/btt-icon.png";
 import LevelUpIcon from "@/assets/level-up.svg";
@@ -168,7 +167,6 @@ const MBttHistory = ({
 const BttHistory = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const { setIsKnobVisible } = useKnobVisibility();
     const allRecords = useAllBttTransaction();
 
     const handleToPlayBack = (record: RecordInfo) => {
@@ -179,13 +177,6 @@ const BttHistory = () => {
             )}&chainId=${chainId}`,
         );
     };
-
-    useEffect(() => {
-        setIsKnobVisible(false);
-        return () => setIsKnobVisible(true);
-    }, []);
-
-    console.log(allRecords, "allRecords");
 
     return (
         <Box

@@ -514,6 +514,7 @@ https://app.projmercury.io/btt`;
                                 showShareEmoji={gameOver}
                                 handleShareEmoji={handleShareEmoji}
                                 handleShare={handleShare}
+                                showText={false}
                             ></ShareButtons>
                         )}
                     </Flex>

@@ -11,7 +11,6 @@ import AppRoutes, { ScrollToTop } from "./Routes";
 import theme from "./theme";
 import { HelmetProvider } from "react-helmet-async";
 
-import { KnobVisibilityContextProvider } from "./contexts/KnobVisibilityContext";
 import { BlockNumberProvider } from "./contexts/BlockNumber";
 import { base, baseGoerli } from "viem/chains";
 
@@ -45,14 +44,12 @@ root.render(
                 <WagmiConfig config={config}>
                     <ConnectKitProvider>
                         <BlockNumberProvider>
-                            <KnobVisibilityContextProvider>
-                                <Fragment>
-                                    <ScrollToTop />
-                                    <HelmetProvider>
-                                        <AppRoutes />
-                                    </HelmetProvider>
-                                </Fragment>
-                            </KnobVisibilityContextProvider>
+                            <Fragment>
+                                <ScrollToTop />
+                                <HelmetProvider>
+                                    <AppRoutes />
+                                </HelmetProvider>
+                            </Fragment>
                         </BlockNumberProvider>
                     </ConnectKitProvider>
                 </WagmiConfig>
