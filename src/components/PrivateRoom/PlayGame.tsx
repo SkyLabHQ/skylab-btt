@@ -101,8 +101,6 @@ const PlayGame = ({
         return `${window.location.origin}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}`;
     }, [bidTacToeGameAddress, lobbyAddress]);
 
-    console.log(inviteLink, "inviteLink");
-
     const handleGetGameInfo = async () => {
         const [
             resCurrentGrid,

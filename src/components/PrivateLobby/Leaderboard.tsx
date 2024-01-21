@@ -102,7 +102,7 @@ const GameList = ({ list }: { list: any[] }) => {
                                                 ? "20px"
                                                 : "10px",
                                             border: "1px solid #FFF",
-                                            background: "#C96F9D",
+                                            background: avatars[item.avatar],
                                             marginRight: "12px",
                                         }}
                                     ></Box>
