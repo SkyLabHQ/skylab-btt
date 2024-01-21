@@ -274,7 +274,7 @@ const PrivateLobbyPlayBack = ({
 
                         <MBalance
                             balance={opBalance}
-                            status="op"
+                            status="right"
                             mark={opInfo.mark}
                         ></MBalance>
                     </Flex>

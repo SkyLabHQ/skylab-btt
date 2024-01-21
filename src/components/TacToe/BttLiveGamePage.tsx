@@ -210,7 +210,7 @@ const MBttLiveGame = ({
                         </Flex>
                         <MBalance
                             balance={myGameInfo.balance}
-                            status="op"
+                            status="right"
                             mark={myInfo.mark}
                             win={isMyWin}
                             showResult={gameOver}

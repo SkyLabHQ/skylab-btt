@@ -16,24 +16,24 @@ import { Lose, Win } from "./ResultFlag";
 
 const MBalance = ({
     balance,
-    status = "my",
+    status = "right",
     mark,
     showAdvantageTip,
     showResult,
     win,
 }: {
     balance: number;
-    status?: "op" | "my";
+    status?: "left" | "right";
     mark?: number;
     showAdvantageTip?: boolean;
     showResult?: boolean;
     win?: boolean;
 }) => {
-    const popoverDirection = status === "my" ? "right" : "left";
+    const popoverDirection = status === "right" ? "right" : "left";
 
     return (
         <Flex
-            flexDir={status === "my" ? "row" : "row-reverse"}
+            flexDir={status === "right" ? "row" : "row-reverse"}
             alignItems={"center"}
         >
             <Flex
@@ -41,7 +41,7 @@ const MBalance = ({
                     width: "98px",
                     height: "24px",
                     borderRadius:
-                        status == "my" ? "0 26px 26px 0" : "26px 0 0 26px",
+                        status == "right" ? "0 26px 26px 0" : "26px 0 0 26px",
                     background: "rgba(96, 96, 96, 1)",
                 }}
                 align={"center"}
@@ -65,7 +65,7 @@ const MBalance = ({
             </Flex>
             <Flex
                 sx={{
-                    margin: status === "my" ? "0 0 0 10px" : "0 10px 0 0",
+                    margin: status === "right" ? "0 0 0 10px" : "0 10px 0 0",
                 }}
                 align={"center"}
                 justify={"center"}
@@ -132,7 +132,7 @@ const MBalance = ({
                                     [Draw Advantage]
                                 </span>
                                 If your next bid equals to your opponent,
-                                {status === "op"
+                                {status === "left"
                                     ? "your opponent will win the grid"
                                     : "your will win the grid."}
                             </Text>

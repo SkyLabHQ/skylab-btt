@@ -204,7 +204,7 @@ const MLayout = ({
 
                         <MBalance
                             balance={myGameInfo.balance}
-                            status="op"
+                            status="right"
                             mark={myInfo.mark}
                         ></MBalance>
                     </Flex>

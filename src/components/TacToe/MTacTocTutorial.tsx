@@ -492,7 +492,7 @@ const MTacToeTutorial = ({}) => {
                                 </Flex>
                                 <MBalance
                                     balance={88}
-                                    status="op"
+                                    status="right"
                                     mark={1}
                                 ></MBalance>
                             </Flex>

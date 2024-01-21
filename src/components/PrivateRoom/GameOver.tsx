@@ -84,6 +84,7 @@ const GameOver = () => {
                     top: "24px",
                     left: 0,
                     alignItems: "flex-start",
+                    opacity: !isMyWin ? 1 : 0.5,
                 }}
                 flexDir={"column"}
             >
@@ -106,6 +107,7 @@ const GameOver = () => {
                     position: "absolute",
                     right: 0,
                     top: "480px",
+                    opacity: isMyWin ? 1 : 0.5,
                 }}
                 flexDir={"column"}
                 align={"flex-end"}
@@ -119,7 +121,7 @@ const GameOver = () => {
                 ></MUserProfile>
                 <MBalance
                     balance={myGameInfo.balance}
-                    status="op"
+                    status="right"
                     mark={myInfo.mark}
                     showResult={true}
                     win={isMyWin}
