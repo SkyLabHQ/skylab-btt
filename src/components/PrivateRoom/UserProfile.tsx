@@ -410,8 +410,8 @@ export const MUserProfileResult = ({
                             src={img}
                             sx={{
                                 position: "absolute",
-                                right: status === "my" ? "0" : "auto",
-                                left: status === "my" ? "auto" : "0",
+                                left: position === "left" ? "0" : "auto",
+                                right: position === "left" ? "auto" : "0",
                                 bottom: 0,
                                 width: "70px",
                                 maxWidth: "70px",
@@ -444,7 +444,7 @@ export const MUserProfileResult = ({
                 </Text>
             )}
 
-            <Flex>
+            <Flex align={"center"}>
                 {level && (
                     <Text
                         sx={{
@@ -460,8 +460,7 @@ export const MUserProfileResult = ({
                 {address && (
                     <Text
                         sx={{
-                            fontSize: "14px",
-
+                            fontSize: "12px",
                             color: "#fff",
                         }}
                     >

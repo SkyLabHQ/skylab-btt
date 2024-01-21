@@ -10,6 +10,7 @@ import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
+import StatusTip from "../BttComponents/StatusTip";
 
 const MLayout = ({
     inviteLink,
@@ -103,14 +104,26 @@ const MLayout = ({
             <Flex
                 align={"center"}
                 justify={"center"}
+                flexDir={"column"}
                 sx={{
                     marginTop: "60px",
                 }}
             >
-                <Board
-                    list={list}
-                    showAnimateNumber={showAnimateNumber}
-                ></Board>
+                <StatusTip
+                    loading={loading}
+                    myGameState={myGameInfo.gameState}
+                    opGameState={opGameInfo.gameState}
+                ></StatusTip>
+                <Box
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
+                    <Board
+                        list={list}
+                        showAnimateNumber={showAnimateNumber}
+                    ></Board>
+                </Box>
             </Flex>
             <Box
                 sx={{

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useMediaQuery } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
 import { GameState } from "@/skyConstants/bttGameTypes";
@@ -13,14 +13,15 @@ const StatusTip = ({
     myGameState: number;
     opGameState: number;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "0.8333vw",
-                height: `1.5625vw`,
+                fontSize: isPc ? "0.8333vw" : "12px",
+                height: isPc ? `1.5625vw` : "16px",
             }}
         >
             <Text sx={{ textAlign: "center" }}>
@@ -53,7 +54,7 @@ const StatusTip = ({
                     {(loading || myGameState === 3 || opGameState === 3) && (
                         <Box
                             sx={{
-                                marginLeft: "1.0417vw",
+                                marginLeft: isPc ? "1.0417vw" : "6px",
                                 display: "flex",
                                 justifyContent: "center",
                             }}
@@ -62,7 +63,7 @@ const StatusTip = ({
                                 src={LoadingIcon}
                                 style={{
                                     rotate: 0,
-                                    height: `1.5625vw`,
+                                    height: isPc ? `1.5625vw` : "14px",
                                 }}
                                 transition={{
                                     repeat: Infinity,

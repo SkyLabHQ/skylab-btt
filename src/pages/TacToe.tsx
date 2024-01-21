@@ -28,6 +28,7 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/TacToe/GameOver";
 import ReactCanvasNest from "react-canvas-nest";
+import Nest from "@/components/Nest";
 
 export interface Info {
     burner: string;
@@ -334,16 +335,7 @@ const TacToe = () => {
                     </Box>
                 </GameContext.Provider>
             </Box>
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    pointColor: " 255, 255, 255 ",
-                    dist: 2000,
-                    lineColor: "255,255,255",
-                    lineWidth: 2,
-                    mouseDist: 10000,
-                }}
-            />
+            <Nest></Nest>
         </Box>
     );
 };

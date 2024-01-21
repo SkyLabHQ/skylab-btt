@@ -85,7 +85,7 @@ export const BoardGrid = ({
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
-                                    padding: "0 0.2083vw",
+                                    padding: isPc ? "0 0.2083vw" : "0 2px",
                                 }}
                             >
                                 <Image
@@ -95,17 +95,17 @@ export const BoardGrid = ({
                                             : BlackXIcon
                                     }
                                     sx={{
-                                        marginRight: "0.5208vw",
+                                        marginRight: isPc ? "0.5208vw" : "2px",
                                     }}
                                 ></Image>
-                                {myValue}
+                                <Box> {myValue}</Box>
                             </Box>
 
                             <Box
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
-                                    padding: "0 0.2083vw",
+                                    padding: isPc ? "0 0.2083vw" : "0 2px",
                                 }}
                             >
                                 <Image
@@ -115,11 +115,10 @@ export const BoardGrid = ({
                                             : BlackXIcon
                                     }
                                     sx={{
-                                        marginRight: "0.5208vw",
+                                        marginRight: isPc ? "0.5208vw" : "2px",
                                     }}
                                 ></Image>
-
-                                {opValue}
+                                <Box>{opValue}</Box>
                             </Box>
                         </Box>
                     )}

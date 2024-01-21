@@ -62,7 +62,7 @@ import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
 import Back from "@/components/Back";
 import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
-import ReactCanvasNest from "react-canvas-nest";
+import Nest from "@/components/Nest";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -724,16 +724,7 @@ const TacToeMode = () => {
                     onClose={handlePreviousLobbyClose}
                 ></PreviousLobbyModal>
             </Box>
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    pointColor: " 255, 255, 255 ",
-                    dist: 2000,
-                    lineColor: "255,255,255",
-                    lineWidth: 2,
-                    mouseDist: 10000,
-                }}
-            />
+            <Nest></Nest>
         </Box>
     );
 };

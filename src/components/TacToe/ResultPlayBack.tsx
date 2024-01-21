@@ -318,7 +318,7 @@ https://app.projmercury.io/btt`;
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                minHeight: "100vh",
+                minHeight: "100%",
                 justifyContent: "center",
                 background: "#303030",
                 padding: "0px 4.1667vw 0",

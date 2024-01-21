@@ -232,7 +232,7 @@ const BttPlayBackContent = ({
         >
             <Box
                 sx={{
-                    marginTop: "1.0417vw",
+                    marginTop: "20px",
                 }}
             >
                 <Flex justify={"space-between"}>
