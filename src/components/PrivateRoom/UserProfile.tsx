@@ -287,15 +287,27 @@ export const MUserProfile = ({
                             ></Box>
                         )}
                         {img && (
-                            <Image
-                                src={img}
+                            <Box
                                 sx={{
                                     width: "40px",
                                     height: "40px",
-                                    transform:
-                                        status === "my" ? "scaleX(-1)" : "",
+                                    position: "relative",
                                 }}
-                            ></Image>
+                            >
+                                <Image
+                                    src={img}
+                                    sx={{
+                                        position: "absolute",
+                                        right: status === "my" ? "0" : "auto",
+                                        left: status === "my" ? "auto" : "0",
+                                        bottom: 0,
+                                        width: "70px",
+                                        maxWidth: "70px",
+                                        transform:
+                                            status === "my" ? "scaleX(-1)" : "",
+                                    }}
+                                ></Image>
+                            </Box>
                         )}
                         {name && (
                             <Text
@@ -387,25 +399,27 @@ export const MUserProfileResult = ({
                 )}
 
                 {img && (
-                    <Flex
-                        flexDir={"column"}
-                        align={"flex-end"}
-                        justify={"flex-end"}
+                    <Box
                         sx={{
                             width: "40px",
                             height: "40px",
+                            position: "relative",
                         }}
                     >
                         <Image
                             src={img}
                             sx={{
-                                width: "40px",
-                                // height: "40px",
+                                position: "absolute",
+                                right: status === "my" ? "0" : "auto",
+                                left: status === "my" ? "auto" : "0",
+                                bottom: 0,
+                                width: "70px",
+                                maxWidth: "70px",
                                 transform:
                                     position === "left" ? "" : "scaleX(-1)",
                             }}
                         ></Image>
-                    </Flex>
+                    </Box>
                 )}
 
                 {position === "left" && showUserIcon && (

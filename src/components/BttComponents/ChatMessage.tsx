@@ -94,7 +94,7 @@ const ChatMessage = ({
                                         borderRadius: "10px",
                                         paddingLeft: "5px",
                                         fontSize: "12px",
-                                        width: "180px",
+                                        width: "210px",
                                         height: "28px",
                                     }}
                                     align={"center"}

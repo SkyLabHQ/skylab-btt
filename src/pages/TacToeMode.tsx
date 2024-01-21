@@ -530,7 +530,7 @@ const TacToeMode = () => {
                     alignItems: "center",
                     paddingTop: "10vh",
                     flexDirection: "column",
-                    height: "100vh",
+                    height: "100%",
                     background: "rgb(54,54,54,0.5)",
                     fontFamily: "Orbitron",
                     position: "absolute",

@@ -3,7 +3,7 @@ import React from "react";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
 import SubIcon from "@/components/BttComponents/assets/sub.svg";
-import MessageIcon1 from "@/assets/message-icon.svg";
+import MessageIcon1 from "./assets/message-dot.svg";
 
 const BottomInputBox = ({
     bidAmount,
@@ -93,16 +93,20 @@ const BottomInputBox = ({
                 ></Image>
             </Flex>
 
-            <>
+            <Box
+                sx={{
+                    marginRight: "10px",
+                }}
+            >
                 {loading ? (
                     <Button
                         disabled={true}
                         variant={"outline"}
                         sx={{
                             color: "#BCBBBE",
-                            fontSize: "18px",
+                            fontSize: "16px",
                             height: "32px",
-                            width: "100px",
+                            width: "104px",
                             "&:disabled": {
                                 border: "2px solid #fff !important",
                                 opacity: 1,
@@ -133,9 +137,9 @@ const BottomInputBox = ({
                                 myGameState === GameState.Revealed
                                     ? "linear-gradient(180deg, rgba(253, 220, 45, 0.50) 0%, rgba(253, 220, 45, 0.00) 100%)"
                                     : "transparent",
-                            fontSize: "18px",
+                            fontSize: "16px",
                             height: "32px",
-                            width: "100px",
+                            width: "104px",
                             "&:disabled": {
                                 border: "2px solid #fddc2d !important",
                                 opacity: 1,
@@ -155,8 +159,14 @@ const BottomInputBox = ({
                             : "Confirm"}
                     </Button>
                 )}
-            </>
-            <Image src={MessageIcon1} onClick={onMessageClick} sx={{}}></Image>
+            </Box>
+            <Image
+                src={MessageIcon1}
+                onClick={onMessageClick}
+                sx={{
+                    width: "32px",
+                }}
+            ></Image>
         </Flex>
     );
 };
