@@ -127,7 +127,7 @@ const GameOver = () => {
                 ></MUserProfileResult>
                 <MBalance
                     balance={myGameInfo.balance}
-                    status="left"
+                    status="right"
                     mark={myInfo.mark}
                     showResult={true}
                     win={isMyWin}

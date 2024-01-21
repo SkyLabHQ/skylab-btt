@@ -4,7 +4,7 @@ import Board from "@/components/TacToe/Board";
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
 import ResultUserCard from "../TacToe/ResultUserCard";
 import { getWinState } from "@/skyConstants/bttGameTypes";
-import { MUserProfile } from "./UserProfile";
+import { MUserProfile, MUserProfileResult } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 
 const GameOver = () => {
@@ -88,13 +88,12 @@ const GameOver = () => {
                 }}
                 flexDir={"column"}
             >
-                <MUserProfile
-                    status="op"
+                <MUserProfileResult
+                    position="left"
                     avatar={opInfo.avatar}
                     name={opInfo.name}
                     mark={opInfo.mark}
-                    open={true}
-                ></MUserProfile>
+                ></MUserProfileResult>
                 <MBalance
                     balance={opGameInfo.balance}
                     mark={opInfo.mark}
@@ -113,13 +112,12 @@ const GameOver = () => {
                 flexDir={"column"}
                 align={"flex-end"}
             >
-                <MUserProfile
-                    status="my"
+                <MUserProfileResult
+                    position="right"
                     avatar={myInfo.avatar}
                     name={myInfo.name}
                     mark={myInfo.mark}
-                    open={true}
-                ></MUserProfile>
+                ></MUserProfileResult>
                 <MBalance
                     balance={myGameInfo.balance}
                     status="right"
