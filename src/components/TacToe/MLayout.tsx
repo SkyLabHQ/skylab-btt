@@ -98,6 +98,7 @@ const MLayout = ({
                 <MBalance
                     balance={opGameInfo.balance}
                     mark={opInfo.mark}
+                    status="left"
                 ></MBalance>
             </Flex>
 

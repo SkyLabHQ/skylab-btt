@@ -102,6 +102,7 @@ const GameOver = () => {
                     mark={opInfo.mark}
                     showResult={true}
                     win={!isMyWin}
+                    status="left"
                 ></MBalance>
             </Flex>
             <Flex
