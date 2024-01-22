@@ -15,7 +15,7 @@ const Loading = ({ size = 100 }: { size?: number | string }) => {
                 transform: "translate(-50%, -50%)",
                 height: ss,
                 width: ss,
-                // zIndex: 9,
+                zIndex: 1,
             }}
         >
             <motion.img
