@@ -147,7 +147,7 @@ export const UserCard = ({
                     height: "9.8958vw",
                     padding: "0.3646vw 0.8333vw 0.625vw 0.7292vw",
                     marginTop: "0.7813vw",
-                    width: "12.6042vw",
+                    width: "13.5417vw",
                 }}
             >
                 <Box
@@ -217,7 +217,7 @@ export const UserCard = ({
                                 sx={{
                                     fontSize: "1.6667vw",
                                     textAlign: "right",
-                                    margin: "0vw 0 0 0.5208vw",
+                                    margin: "0 0 0 0.5208vw",
                                     flex: 1,
                                     color: "#bcbbbe",
                                 }}

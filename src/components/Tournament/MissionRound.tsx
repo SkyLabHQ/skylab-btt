@@ -1,12 +1,71 @@
-import { Box, Text, Image, Flex } from "@chakra-ui/react";
+import { Box, Text, Image, Flex, useMediaQuery } from "@chakra-ui/react";
 import { useState } from "react";
 import PlanetList from "./PlanetList";
 import RightNav from "./RightNav";
 import Header from "./Header";
 import { StepType, TourProvider } from "@reactour/tour";
 import WhiteArrowIcon from "./assets/white-arrow.svg";
-
+import MBttHome from "./MBttHome";
+import Discord from "./assets/discord.svg";
+import Tw from "./assets/tw.svg";
+import Telegram from "./assets/telegram.svg";
+import SkylabIcon from "./assets/skylab-icon.svg";
+import Airdrop from "./assets/airdrop-icon.svg";
 export const arrowPosition = ["", "", "", "", "right"];
+
+export const menuList = [
+    // {
+    //     icon: CosmeticRewardIcon,
+    //     title: "Cosmetic Reward",
+    // },
+    // {
+    //     icon: TasksIcon,
+    //     title: "Tasks",
+    // },
+    // {
+    //     icon: FactionIcon,
+    //     title: "Faction",
+    // },
+    // {
+    //     icon: Lock,
+    //     title: "Mercury Overview",
+    // },
+    // {
+    //     icon: Airdrop,
+    //     title: "Reward History",
+    //     onClick: () => {
+    //         onNextRound(0);
+    //     },
+    // },
+    {
+        icon: SkylabIcon,
+        title: "About",
+        onClick: () => {
+            window.open("https://app.projmercury.io", "_blank");
+        },
+    },
+];
+
+export const menuList2 = [
+    {
+        icon: Tw,
+        onClick: () => {
+            window.open("https://twitter.com/skylabHQ", "_blank");
+        },
+    },
+    {
+        icon: Discord,
+        onClick: () => {
+            window.open("https://discord.gg/qWxPz8Qr87", "_blank");
+        },
+    },
+    {
+        icon: Telegram,
+        onClick: () => {
+            window.open("https://t.me/skylabHQ", "_blank");
+        },
+    },
+];
 
 const getArrowStyles = (direction: any, arrowPos: any) => {
     let mainSideStyle = {};
@@ -293,6 +352,7 @@ interface ChildProps {
 }
 
 const MissionRound = ({ onNextRound }: ChildProps) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [active, setActive] = useState(1);
     const [showAllActivities, setShowAllActivities] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -332,33 +392,42 @@ const MissionRound = ({ onNextRound }: ChildProps) => {
                 }),
             }}
         >
-            <Box
-                h={"100vh"}
-                w={"100vw"}
-                sx={{ color: "#000", fontWeight: 600 }}
-                onClick={() => {}}
-            >
-                <Header
+            {isPc ? (
+                <Box
+                    h={"100%"}
+                    w={"100vw"}
+                    sx={{ color: "#000", fontWeight: 600 }}
+                    onClick={() => {}}
+                >
+                    <Header
+                        onNextRound={onNextRound}
+                        onShowLeaderboard={() => {
+                            setShowLeaderboard(true);
+                        }}
+                    ></Header>
+                    <PlanetList
+                        active={active}
+                        showAllActivities={showAllActivities}
+                        onChangeActive={(index) => {
+                            setActive(index);
+                        }}
+                        onChangeAllActivities={(flag) => {
+                            setShowAllActivities(flag);
+                        }}
+                    ></PlanetList>
+                    <RightNav
+                        onNextRound={onNextRound}
+                        showLeaderboard={showLeaderboard}
+                    ></RightNav>
+                </Box>
+            ) : (
+                <MBttHome
                     onNextRound={onNextRound}
                     onShowLeaderboard={() => {
                         setShowLeaderboard(true);
                     }}
-                ></Header>
-                <PlanetList
-                    active={active}
-                    showAllActivities={showAllActivities}
-                    onChangeActive={(index) => {
-                        setActive(index);
-                    }}
-                    onChangeAllActivities={(flag) => {
-                        setShowAllActivities(flag);
-                    }}
-                ></PlanetList>
-                <RightNav
-                    onNextRound={onNextRound}
-                    showLeaderboard={showLeaderboard}
-                ></RightNav>
-            </Box>
+                ></MBttHome>
+            )}
         </TourProvider>
     );
 };

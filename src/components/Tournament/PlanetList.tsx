@@ -1,42 +1,13 @@
 import React, { useEffect } from "react";
-import { Box, Text, Image } from "@chakra-ui/react";
+import { Box, Image, Flex } from "@chakra-ui/react";
 import SectionActivities from "@/components/Tournament/assets/ring.svg";
 import BluePlanet from "@/components/Tournament/assets/blue-planet.png";
 import GrayPlanet from "@/components/Tournament/assets/gray-planet.png";
-import ButtonBg from "@/components/Tournament/assets/button-bg.svg";
+import BttTitle from "@/components/Tournament/assets/btt-title.png";
+import EnterBt from "@/components/Tournament/assets/enter-bt.png";
 import { useNavigate } from "react-router-dom";
 import GrayPlanetBg from "./assets/gray-planet-bg.svg";
 import { motion, useAnimation } from "framer-motion";
-import { PrimaryButton } from "../Button/Index";
-
-const PlayButton = ({ onClick }: { onClick: () => void }) => {
-    return (
-        <PrimaryButton
-            sx={{
-                backgroundSize: "100% 100%",
-                width: "10.4167vw",
-                height: "3.8542vw",
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-                backdropFilter: "blur(5px)",
-                borderRadius: "0.9375vw",
-                border: "3px solid #f2d861",
-                color: "#f2d861",
-            }}
-            onClick={onClick}
-        >
-            <Text
-                sx={{
-                    fontSize: "1.25vw",
-                    fontWeight: 600,
-                }}
-            >
-                Enter
-            </Text>
-        </PrimaryButton>
-    );
-};
 
 const PlanetList = ({
     active,
@@ -118,75 +89,6 @@ const PlanetList = ({
             >
                 {planetList.map((item, index) => {
                     const isCurrent = index === active;
-
-                    const Content = () => {
-                        return (
-                            <Box
-                                className="bid-tac-toe"
-                                sx={{
-                                    position: "relative",
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        paddingBottom: "29.2%",
-                                        position: "relative",
-                                        width: "95%",
-                                        margin: "0 auto",
-                                        transition: "all 0.2s",
-                                    }}
-                                >
-                                    <Image
-                                        src={ButtonBg}
-                                        sx={{
-                                            position: "absolute",
-                                            width: "100%",
-                                            left: "50%",
-                                            top: "50%",
-                                            transform: "translate(-50%, -50%)",
-                                        }}
-                                    ></Image>
-                                    <Text
-                                        sx={{
-                                            color: "#fff",
-                                            fontSize: "2.9167vw",
-                                            fontWeight: 800,
-                                            position: "absolute",
-                                            left: "50%",
-                                            top: "50%",
-                                            transform: "translate(-50%, -50%)",
-                                            width: "100%",
-                                            textAlign: "center",
-                                        }}
-                                    >
-                                        {item.text}
-                                    </Text>
-                                </Box>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        transition: "all 0.2s",
-                                        justifyContent: "center",
-                                    }}
-                                >
-                                    <Box
-                                        sx={{
-                                            marginRight: "0.5vw",
-                                        }}
-                                    >
-                                        <PlayButton
-                                            onClick={item.play}
-                                        ></PlayButton>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        );
-                    };
-
                     return (
                         <Box
                             key={index}
@@ -226,10 +128,10 @@ const PlanetList = ({
                                     <motion.div
                                         style={{
                                             position: "absolute",
-                                            left: "0%",
-                                            top: "0%",
-                                            width: "100%",
-                                            height: "100%",
+                                            left: "-5%",
+                                            top: "-5%",
+                                            width: "110%",
+                                            height: "110%",
                                             backgroundImage: `url(${GrayPlanetBg})`,
                                             backgroundSize: "100% 100%",
                                         }}
@@ -243,6 +145,7 @@ const PlanetList = ({
                                         }}
                                     ></motion.div>
                                 )}
+
                                 <Box
                                     sx={{
                                         zIndex: 10,
@@ -325,7 +228,20 @@ const PlanetList = ({
                                             src={item.img}
                                         ></Image>
                                     )}
-
+                                    {isCurrent && (
+                                        <Box
+                                            sx={{
+                                                width: "140%",
+                                                position: "absolute",
+                                                left: "50%",
+                                                top: "50%",
+                                                transform:
+                                                    "translate(-49%, -50%)",
+                                            }}
+                                        >
+                                            <Image src={BttTitle}></Image>
+                                        </Box>
+                                    )}
                                     {isCurrent && !showAllActivities && (
                                         <motion.div
                                             style={{
@@ -352,7 +268,25 @@ const PlanetList = ({
                                                 );
                                             }}
                                         >
-                                            {Content()}
+                                            <Flex
+                                                className="bid-tac-toe"
+                                                sx={{
+                                                    position: "relative",
+                                                    justifyContent: "center",
+                                                }}
+                                                onClick={() => {
+                                                    item?.play();
+                                                }}
+                                            >
+                                                <Image
+                                                    src={EnterBt}
+                                                    sx={{
+                                                        width: "20vw",
+                                                        marginTop: "5.5vw",
+                                                        cursor: "pointer",
+                                                    }}
+                                                ></Image>
+                                            </Flex>
                                         </motion.div>
                                     )}
                                 </Box>

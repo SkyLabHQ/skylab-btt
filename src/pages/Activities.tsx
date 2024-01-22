@@ -61,7 +61,7 @@ const Activities = (): ReactElement => {
             <TournamentHelmet></TournamentHelmet>
             <Box
                 w="100vw"
-                h="100vh"
+                h="100%"
                 pos="relative"
                 background={`url(${MercuryBg}), url(${BlueBg})`}
                 backgroundPosition="center center, 0 0"
@@ -71,8 +71,8 @@ const Activities = (): ReactElement => {
                 fontFamily="Orbitron"
                 id="test"
             >
-                <Box w="100vw" h="100vh">
-                    <Box zIndex={9}>
+                <Box w="100vw" h="100%">
+                    <Box zIndex={9} h="100%">
                         {step == 0 && (
                             <Leaderboard
                                 currentRound={currentRound}

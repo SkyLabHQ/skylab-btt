@@ -107,7 +107,7 @@ const MLayout = ({
                 justify={"center"}
                 flexDir={"column"}
                 sx={{
-                    marginTop: "60px",
+                    marginTop: "50px",
                 }}
             >
                 <StatusTip

@@ -178,7 +178,7 @@ export const MyBid = ({
                 sx={{
                     background: "#787878",
                     borderRadius: "1.0417vw",
-                    height: "12.6042vw",
+                    height: "13.5417vw",
                     padding: "0.3646vw 0.8333vw 0.625vw 1.9792vw",
                     marginTop: "0.7813vw",
                 }}
@@ -436,7 +436,7 @@ export const OpBid = ({
             sx={{
                 background: "#787878",
                 borderRadius: "1.0417vw",
-                height: "12.6042vw",
+                height: "13.5417vw",
                 padding: "0.3646vw 0.8333vw 0.625vw 0.8333vw",
                 marginTop: "0.7813vw",
                 width: "13.0208vw",

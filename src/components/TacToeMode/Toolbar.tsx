@@ -3,7 +3,14 @@ import React, { useEffect, useState } from "react";
 import BidTacToeTutorial from "@/components/TacToe/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
 import PlayBackIcon from "./assets/playback-icon.svg";
+import AddScreenIcon from "./assets/add-screen.svg";
+
 import { useNavigate } from "react-router-dom";
+
+const isIos = () => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(userAgent);
+};
 
 export const Toolbar = () => {
     const [deferredPrompt, setDeferredPropmpt] = useState<any>(null);
@@ -31,20 +38,22 @@ export const Toolbar = () => {
                 display: "flex",
             }}
         >
-            {!window.matchMedia("(display-mode: standalone)").matches && (
-                <Box
-                    sx={{
-                        border: "1px solid #fff",
-                        borderRadius: "0.5208vw",
-                        marginRight: "0.7292vw",
-                    }}
-                    onClick={() => {
-                        deferredPrompt.prompt();
-                    }}
-                >
-                    Add
-                </Box>
-            )}
+            {!isIos() &&
+                !isPc &&
+                !window.matchMedia("(display-mode: standalone)").matches && (
+                    <Image
+                        onClick={() => {
+                            deferredPrompt.prompt();
+                        }}
+                        src={AddScreenIcon}
+                        sx={{
+                            width: isPc ? "2.3958vw" : "32px",
+                            height: isPc ? "2.3958vw" : "32px",
+                            marginRight: "0.7292vw",
+                            cursor: "pointer",
+                        }}
+                    ></Image>
+                )}
             <Image
                 src={PlayBackIcon}
                 sx={{

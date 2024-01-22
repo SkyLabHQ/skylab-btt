@@ -103,7 +103,7 @@ const MLayout = ({
                 align={"center"}
                 justify={"center"}
                 sx={{
-                    marginTop: "60px",
+                    marginTop: "50px",
                 }}
             >
                 <Board

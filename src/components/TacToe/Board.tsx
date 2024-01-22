@@ -66,14 +66,14 @@ export const BoardGrid = ({
                                 alignItems: "center",
                                 justifyContent: "space-between",
                                 width: "100%",
-                                padding: "0 0.5208vw",
-                                fontSize: isPc ? "0.8333vw" : "12px",
+                                padding: isPc ? "0 0.5208vw" : "0 3px",
+                                fontSize: isPc ? "0.8333vw" : "10px",
                                 "& img": {
                                     width: isPc ? "0.7813vw" : "8px",
                                     height: isPc ? "0.7813vw" : "8px",
                                 },
                                 "& >div": {
-                                    width: isPc ? "3.3333vw" : "28px",
+                                    width: isPc ? "3.3333vw" : "30px",
                                     height: isPc ? "0.9375vw" : "10px",
                                     background: "#D9D9D9",
                                     borderRadius: isPc ? "0.9375vw" : "4px",

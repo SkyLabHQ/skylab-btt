@@ -33,15 +33,14 @@ const ShareButtons = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <SimpleGrid
-            columns={showText ? 4 : 3}
+            columns={showText ? 3 : 2}
             spacingX={"12px"}
             sx={{
                 marginTop: "20px",
                 position: "relative",
                 width: "100%",
-
                 "& button": {
-                    width: isPc ? "12vw" : "80px",
+                    width: isPc ? "12vw" : "120px",
                     height: isPc ? "2.7083vw" : "32px",
                     borderRadius: isPc ? "0.9375vw" : "10px",
                     fontSize: isPc ? "1.0417vw" : "12px",
@@ -53,36 +52,6 @@ const ShareButtons = ({
             }}
         >
             <Flex justify={"center"}>
-                <Box>
-                    {showShareEmoji && (
-                        <Button
-                            variant={"outline"}
-                            onClick={() => {
-                                handleShareEmoji();
-                            }}
-                        >
-                            <Image
-                                src={ShareEmojiIcon}
-                                sx={{
-                                    width: isPc ? "1.5625vw" : "16px",
-                                }}
-                            ></Image>
-                            {isPc && (
-                                <Text
-                                    sx={{
-                                        flex: 1,
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    Share Emoji
-                                </Text>
-                            )}
-                        </Button>
-                    )}
-                </Box>
-            </Flex>
-            <Flex justify={"center"}>
-                {" "}
                 <Button
                     variant={"outline"}
                     onClick={async (e) => {
