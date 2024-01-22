@@ -39,11 +39,10 @@ export const Toolbar = () => {
             }}
         >
             {!isIos() &&
-                !isPc &&
                 !window.matchMedia("(display-mode: standalone)").matches && (
                     <Image
                         onClick={() => {
-                            deferredPrompt.prompt();
+                            deferredPrompt?.prompt();
                         }}
                         src={AddScreenIcon}
                         sx={{
