@@ -65,12 +65,13 @@ export const SubmitButton = ({
                     width: "100%",
                     display: "flex",
                     padding: "0.5208vw",
+                    height: "100%",
                 }}
             >
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "2.7604vw",
+                        height: "100%",
                         width: "0.5208vw",
                         transform: " skewX(-45deg)",
                         marginRight: "0.5208vw",
@@ -79,7 +80,7 @@ export const SubmitButton = ({
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "2.7604vw",
+                        height: "100%",
                         width: "0.5208vw",
                         transform: " skewX(-45deg)",
                         marginRight: "0.5208vw",
@@ -88,7 +89,7 @@ export const SubmitButton = ({
                 <Box
                     sx={{
                         width: "100%",
-                        height: "2.7604vw",
+                        height: "100%",
                         position: "relative",
                         display: "flex",
                         alignItems: "center",
@@ -103,7 +104,7 @@ export const SubmitButton = ({
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "2.7604vw",
+                        height: "100%",
                         width: "0.5208vw",
                         transform: " skewX(-45deg)",
                         marginLeft: "0.5208vw",
@@ -112,7 +113,7 @@ export const SubmitButton = ({
                 <Box
                     sx={{
                         background: isLoading ? "#ABABAB" : "#8DF6F5",
-                        height: "2.7604vw",
+                        height: "100%",
                         width: "0.5208vw",
                         transform: " skewX(-45deg)",
                         marginLeft: "0.5208vw",

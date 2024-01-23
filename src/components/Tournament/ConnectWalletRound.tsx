@@ -1,4 +1,4 @@
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { ConnectKitButton } from "connectkit";
 import { useEffect } from "react";
 import { SubmitButton } from "../Button/Index";
@@ -9,6 +9,7 @@ interface ChildProps {
 }
 
 const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { address } = useAccount();
 
     useEffect(() => {
@@ -22,24 +23,19 @@ const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
             sx={{
                 position: "relative",
                 width: "100vw",
-                height: "100vh",
+                height: "100%",
                 background: "rgba(0, 0, 0, 0.3)",
                 zIndex: 200,
             }}
         >
-            <Box
-                w="25.2604vw"
-                left="50%"
-                top="50%"
-                transform="translateX(-50%)"
-                paddingTop="1.0417vw"
+            <Flex
                 zIndex={22}
-                pos="absolute"
-                cursor={"pointer"}
                 sx={{
-                    display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    height: "100%",
+                    justifyContent: "center",
+                    width: "100%",
                 }}
             >
                 <ConnectKitButton.Custom>
@@ -49,11 +45,12 @@ const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
                                 width="100%"
                                 onClick={show}
                                 style={{
-                                    height: "3.8021vw",
+                                    width: isPc ? "25.2604vw" : "250px",
+                                    height: isPc ? "3.8021vw" : "30px",
                                 }}
                             >
                                 <Text
-                                    fontSize="1.875vw"
+                                    fontSize={isPc ? "1.875vw" : "16px"}
                                     color="#000"
                                     fontWeight="600"
                                     textAlign="center"
@@ -70,17 +67,20 @@ const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
                     onClick={() => {
                         onNextRound(2);
                     }}
+                    sx={{
+                        padding: 0,
+                    }}
                 >
                     <Text
                         sx={{
                             textDecoration: "underline",
-                            fontSize: "0.8333vw",
+                            fontSize: isPc ? "0.8333vw" : "12px",
                         }}
                     >
                         Skip
                     </Text>
                 </Button>
-            </Box>
+            </Flex>
         </Box>
     );
 };

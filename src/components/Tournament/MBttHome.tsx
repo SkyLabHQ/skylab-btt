@@ -323,13 +323,13 @@ const MBttHome = ({
                     <Image
                         src={LeaderboardIcon}
                         sx={{
-                            width: "24px",
+                            width: "20px",
                             marginRight: "5px",
                         }}
                     ></Image>
                     <Text
                         sx={{
-                            fontSize: "16px",
+                            fontSize: "14px",
                         }}
                     >
                         Leaderboard
@@ -350,13 +350,13 @@ const MBttHome = ({
                     <Image
                         src={RulesIcon}
                         sx={{
-                            width: "24px",
+                            width: "20px",
                             marginRight: "5px",
                         }}
                     ></Image>
                     <Text
                         sx={{
-                            fontSize: "16px",
+                            fontSize: "14px",
                         }}
                     >
                         Detailed Rules

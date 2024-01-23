@@ -463,7 +463,11 @@ const mTourConfig: StepType[] = [
         position: "bottom",
         content: () => {
             return (
-                <Box>
+                <Box
+                    sx={{
+                        width: "250px",
+                    }}
+                >
                     <Text
                         sx={{
                             color: "#fff",
