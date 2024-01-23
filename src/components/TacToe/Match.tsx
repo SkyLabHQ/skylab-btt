@@ -592,7 +592,7 @@ export const MatchPage = ({
         <Box
             pos="relative"
             bgRepeat="no-repeat,no-repeat"
-            height="100vh"
+            height="100%"
             bgPos={"center bottom,center center"}
             bgSize={"100%,100% 100%"}
             display="flex"

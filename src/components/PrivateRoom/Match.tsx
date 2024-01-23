@@ -100,7 +100,7 @@ const Match = () => {
     return (
         <Flex
             align={"center"}
-            h={"100vh"}
+            h={"100%"}
             justify={"center"}
             sx={{
                 padding: "0 1.0417vw",

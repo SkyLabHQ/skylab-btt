@@ -1,6 +1,12 @@
 import { MyUserCard, OpUserCard } from "@/components/TacToe/UserCard";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "@/components/TacToe/Board";
@@ -70,6 +76,9 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
         handleGetGas,
     } = useGameContext();
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const commitWorkerRef = useRef<Worker>(null);
+    const callTimeoutWorkerRef = useRef<Worker>(null);
 
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const { blockNumber } = useBlockNumber();
@@ -522,23 +531,16 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         }
     };
 
-    useEffect(() => {
-        handleGameOver();
-    }, [myGameInfo.gameState, deleteTokenIdCommited, addBttTransaction]);
-
-    useEffect(() => {
-        if (
-            myGameInfo.gameState !== GameState.WaitingForBid ||
-            !bidTacToeGameAddress
-        ) {
-            return;
+    const handleCommitWorker = () => {
+        if (commitWorkerRef.current) {
+            commitWorkerRef.current.terminate();
         }
-        const commitWorkerRef = new Worker(
+        commitWorkerRef.current = new Worker(
             new URL("../../utils/timerWorker.ts", import.meta.url),
         );
         const time = myGameInfo.timeout * 1000;
         const now = getNowSecondsTimestamp();
-        commitWorkerRef.onmessage = async (event) => {
+        commitWorkerRef.current.onmessage = async (event) => {
             const timeLeft = event.data;
             setAutoCommitTimeoutTime(timeLeft);
 
@@ -567,28 +569,22 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             }
 
             setBufferTime(Number(bufferTime));
-            commitWorkerRef.postMessage({
+            commitWorkerRef.current.postMessage({
                 action: "start",
                 timeToCount: remainTime - ThirtySecond,
             });
         } else {
-            commitWorkerRef.postMessage({
+            setBufferTime(Number(0));
+            commitWorkerRef.current.postMessage({
                 action: "stop",
             });
         }
+    };
 
-        return () => {
-            commitWorkerRef.terminate();
-        };
-    }, [myGameInfo.timeout, myGameInfo.gameState]);
-
-    useEffect(() => {
-        if (
-            !opGameInfo.timeout ||
-            !opGameInfo.gameState ||
-            !myGameInfo.gameState
-        )
-            return;
+    const handleCallTimeoutWorkerRef = () => {
+        if (callTimeoutWorkerRef.current) {
+            callTimeoutWorkerRef.current.terminate();
+        }
         const now = getNowSecondsTimestamp();
         const autoCallTimeoutTime =
             opGameInfo.timeout * 1000 - now > 0
@@ -614,10 +610,30 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 timeToCount: autoCallTimeoutTime,
             });
         }
+    };
 
-        return () => {
-            commitWorkerRef.terminate();
-        };
+    useEffect(() => {
+        handleGameOver();
+    }, [myGameInfo.gameState, deleteTokenIdCommited, addBttTransaction]);
+
+    useEffect(() => {
+        if (
+            myGameInfo.gameState !== GameState.WaitingForBid ||
+            !bidTacToeGameAddress
+        ) {
+            return;
+        }
+        handleCommitWorker();
+    }, [myGameInfo.timeout, myGameInfo.gameState]);
+
+    useEffect(() => {
+        if (
+            !opGameInfo.timeout ||
+            !opGameInfo.gameState ||
+            !myGameInfo.gameState
+        )
+            return;
+        handleCallTimeoutWorkerRef();
     }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
 
     useEffect(() => {
@@ -642,6 +658,30 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             window.removeEventListener("beforeunload", handleBufferTime);
         };
     }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (commitWorkerRef.current) {
+                    commitWorkerRef.current.terminate();
+                }
+                if (callTimeoutWorkerRef.current) {
+                    callTimeoutWorkerRef.current.terminate();
+                }
+            } else {
+                handleCommitWorker();
+                handleCallTimeoutWorkerRef();
+            }
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange,
+            );
+        };
+    }, []);
 
     return (
         <Box

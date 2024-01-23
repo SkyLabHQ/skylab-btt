@@ -1,6 +1,12 @@
 import { MyBid, OpBid } from "./UserBid";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import Board from "@/components/TacToe/Board";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
@@ -44,6 +50,8 @@ const PlayGame = ({
 }: {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
 }) => {
+    const commitWorkerRef = useRef<Worker>(null);
+    const callTimeoutWorkerRef = useRef<Worker>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState<boolean>(false);
@@ -63,6 +71,7 @@ const PlayGame = ({
         onList,
         handleStepChange,
     } = usePrivateGameContext();
+
     const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress);
 
     const deleteTokenIdCommited =
@@ -423,6 +432,87 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         );
     };
 
+    const handleCommitWorker = () => {
+        if (commitWorkerRef.current) {
+            commitWorkerRef.current.terminate();
+        }
+        commitWorkerRef.current = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+        const time = myGameInfo.timeout * 1000;
+        const now = getNowSecondsTimestamp();
+        commitWorkerRef.current.onmessage = async (event) => {
+            const timeLeft = event.data;
+            setAutoCommitTimeoutTime(timeLeft);
+
+            if (timeLeft === 0) {
+                handleBid();
+            }
+        };
+
+        const remainTime = time - now;
+
+        if (remainTime > ThirtySecond) {
+            const bufferKey = bidTacToeGameAddress;
+            let bufferTime = sessionStorage.getItem(bufferKey) ?? 0;
+            sessionStorage.setItem(bufferKey, "");
+
+            if (Number(bufferTime) === 0 || remainTime > Number(bufferTime)) {
+                if (remainTime > SixtySecond) {
+                    bufferTime = remainTime - SixtySecond;
+                } else if (remainTime > ThirtySecond) {
+                    bufferTime = remainTime - ThirtySecond;
+                } else {
+                    bufferTime = remainTime;
+                }
+            } else {
+                bufferTime = remainTime;
+            }
+
+            setBufferTime(Number(bufferTime));
+            commitWorkerRef.current.postMessage({
+                action: "start",
+                timeToCount: remainTime - ThirtySecond,
+            });
+        } else {
+            setBufferTime(Number(0));
+            commitWorkerRef.current.postMessage({
+                action: "stop",
+            });
+        }
+    };
+
+    const handleCallTimeoutWorkerRef = () => {
+        if (callTimeoutWorkerRef.current) {
+            callTimeoutWorkerRef.current.terminate();
+        }
+        const now = getNowSecondsTimestamp();
+        const autoCallTimeoutTime =
+            opGameInfo.timeout * 1000 - now > 0
+                ? opGameInfo.timeout * 1000 - now
+                : 0;
+
+        const commitWorkerRef = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+
+        commitWorkerRef.onmessage = async (event) => {
+            const timeLeft = event.data;
+
+            if (timeLeft === 0) {
+                handleCallTimeOut();
+            }
+        };
+        if (autoCallTimeoutTime === 0) {
+            handleCallTimeOut();
+        } else {
+            commitWorkerRef.postMessage({
+                action: "start",
+                timeToCount: autoCallTimeoutTime,
+            });
+        }
+    };
+
     useEffect(() => {
         if (
             !myInfo.address ||
@@ -464,53 +554,8 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         ) {
             return;
         }
-        const commitWorkerRef = new Worker(
-            new URL("../../utils/timerWorker.ts", import.meta.url),
-        );
-        const time = myGameInfo.timeout * 1000;
-        const now = getNowSecondsTimestamp();
-        commitWorkerRef.onmessage = async (event) => {
-            const timeLeft = event.data;
-            setAutoCommitTimeoutTime(timeLeft);
 
-            if (timeLeft === 0) {
-                handleBid();
-            }
-        };
-
-        const remainTime = time - now;
-
-        if (remainTime > ThirtySecond) {
-            const bufferKey = bidTacToeGameAddress;
-            let bufferTime = sessionStorage.getItem(bufferKey) ?? 0;
-            sessionStorage.setItem(bufferKey, "");
-
-            if (Number(bufferTime) === 0 || remainTime > Number(bufferTime)) {
-                if (remainTime > SixtySecond) {
-                    bufferTime = remainTime - SixtySecond;
-                } else if (remainTime > ThirtySecond) {
-                    bufferTime = remainTime - ThirtySecond;
-                } else {
-                    bufferTime = remainTime;
-                }
-            } else {
-                bufferTime = remainTime;
-            }
-
-            setBufferTime(Number(bufferTime));
-            commitWorkerRef.postMessage({
-                action: "start",
-                timeToCount: remainTime - ThirtySecond,
-            });
-        } else {
-            commitWorkerRef.postMessage({
-                action: "stop",
-            });
-        }
-
-        return () => {
-            commitWorkerRef.terminate();
-        };
+        handleCommitWorker();
     }, [myGameInfo.timeout, myGameInfo.gameState]);
 
     useEffect(() => {
@@ -520,35 +565,8 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
             !myGameInfo.gameState
         )
             return;
-        const now = getNowSecondsTimestamp();
-        const autoCallTimeoutTime =
-            opGameInfo.timeout * 1000 - now > 0
-                ? opGameInfo.timeout * 1000 - now
-                : 0;
 
-        const commitWorkerRef = new Worker(
-            new URL("../../utils/timerWorker.ts", import.meta.url),
-        );
-
-        commitWorkerRef.onmessage = async (event) => {
-            const timeLeft = event.data;
-
-            if (timeLeft === 0) {
-                handleCallTimeOut();
-            }
-        };
-        if (autoCallTimeoutTime === 0) {
-            handleCallTimeOut();
-        } else {
-            commitWorkerRef.postMessage({
-                action: "start",
-                timeToCount: autoCallTimeoutTime,
-            });
-        }
-
-        return () => {
-            commitWorkerRef.terminate();
-        };
+        handleCallTimeoutWorkerRef();
     }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
 
     useEffect(() => {
@@ -574,6 +592,30 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         };
     }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
 
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (commitWorkerRef.current) {
+                    commitWorkerRef.current.terminate();
+                }
+                if (callTimeoutWorkerRef.current) {
+                    callTimeoutWorkerRef.current.terminate();
+                }
+            } else {
+                handleCommitWorker();
+                handleCallTimeoutWorkerRef();
+            }
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange,
+            );
+        };
+    }, []);
+
     return (
         <Box
             style={{
@@ -586,7 +628,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                         padding: "1.4063vw 3.125vw",
                         position: "relative",
                         width: "100vw",
-                        height: "100vh",
+                        height: "100%",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
