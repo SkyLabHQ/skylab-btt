@@ -280,39 +280,34 @@ const ResultPlayBack = () => {
     };
 
     const handleShare = () => {
-        const url = `${
-            window.location.origin
-        }/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${bidTacToeGameAddress}&show=true&round=${currentRound}&address=${shortenAddressWithout0x(
-            myInfo.address,
-        )}`;
-        const text = `Bid Tac Toe is a fully on-chain cryptoeconomic game, on @base. You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
-
-Watch my replay here!
-
-${url}  
-        
-@skylabHQ 
-https://app.projmercury.io/btt`;
-
-        window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
-        );
-    };
-
-    const handleTextClick = async () => {
-        navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
-    };
-
-    const handleShareEmoji = () => {
         const text = getShareEmoji(
             myInfo.mark,
             resultList,
             getWinState(myGameInfo.gameState),
         );
 
+        const url = `${
+            window.location.origin
+        }/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${bidTacToeGameAddress}&show=true&round=${currentRound}&address=${shortenAddressWithout0x(
+            myInfo.address,
+        )}`;
+
+        const des = `Btt is a fully on-chain cryptoeconomic game`;
+
+        const value = `${text}
+
+${url}
+                
+${des}`;
         window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                value,
+            )}`,
         );
+    };
+
+    const handleTextClick = async () => {
+        navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
     };
 
     useEffect(() => {
@@ -367,8 +362,6 @@ https://app.projmercury.io/btt`;
                     handleStartStep={handleStartStep}
                 ></PlayBackButton>
                 <ShareButtons
-                    showShareEmoji={gameOver}
-                    handleShareEmoji={handleShareEmoji}
                     handleShare={handleShare}
                     handleTextClick={handleTextClick}
                 ></ShareButtons>

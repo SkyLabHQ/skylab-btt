@@ -17,15 +17,11 @@ import RightArrow from "./assets/arrow-right.svg";
 
 const ShareButtons = ({
     text = "Back to Lobby",
-    showShareEmoji,
-    handleShareEmoji,
     handleShare,
     handleTextClick,
     showText = true,
 }: {
     text?: string;
-    showShareEmoji?: boolean;
-    handleShareEmoji?: () => void;
     handleShare: () => void;
     handleTextClick?: () => void;
     showText?: boolean;

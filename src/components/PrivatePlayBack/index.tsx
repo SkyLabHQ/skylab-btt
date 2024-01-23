@@ -278,18 +278,6 @@ const PrivatePlayBackPage = () => {
         setInit(true);
     };
 
-    const handleShareEmoji = () => {
-        const text = getShareEmoji(
-            myInfo.mark,
-            resultList,
-            getWinState(myGameInfo.gameState),
-        );
-
-        window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
-        );
-    };
-
     const [showList, myBalance, opBalance, myBid, opBid, myIsNextDrawWinner] =
         useMemo(() => {
             let myBalance = 100,
@@ -415,22 +403,29 @@ const PrivatePlayBackPage = () => {
     };
 
     const handleShare = () => {
+        const text = getShareEmoji(
+            myInfo.mark,
+            resultList,
+            getWinState(myGameInfo.gameState),
+        );
+
         const url = `${
             window.location.origin
         }/btt/lobbyPlayback?lobbyAddress=${lobbyAddress}&gameAddress=${gameAddress}&show=true&round=${currentRound}&burner=${shortenAddressWithout0x(
             myInfo.address,
         )}`;
-        const text = `Bid Tac Toe is a fully on-chain cryptoeconomic game, on @base. You one-shot blind bid to conquer grids to connect a line. It's a contest of deduction and psychology. 
 
-Watch my replay here!
+        const des = `Btt is a fully on-chain cryptoeconomic game`;
 
-${url}  
-        
-@skylabHQ 
-https://app.projmercury.io/btt`;
+        const value = `${text}
 
+${url}
+                
+${des}`;
         window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                value,
+            )}`,
         );
     };
 
@@ -522,8 +517,6 @@ https://app.projmercury.io/btt`;
                             </Box>
                         ) : (
                             <ShareButtons
-                                showShareEmoji={gameOver}
-                                handleShareEmoji={handleShareEmoji}
                                 handleShare={handleShare}
                                 // handleTextClick={handleTextClick}
                                 showText={!onlyShow}

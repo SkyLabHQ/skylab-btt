@@ -1,4 +1,4 @@
-import { Box, Image, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAllBttTransaction } from "@/hooks/useTacToeStore";
@@ -10,6 +10,7 @@ import PlayBackIcon from "@/assets/playback-icon.svg";
 import { shortenAddressWithout0x } from "@/utils";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import Back from "@/components/Back";
+import EmptyIcon from "@/assets/empty.svg";
 
 const ListBorder = () => {
     return (
@@ -69,93 +70,110 @@ const MBttHistory = ({
                     marginTop: "30px",
                 }}
             >
-                {allRecords.map((item) => {
-                    return (
-                        <Box
-                            key={item.gameAddress}
+                {allRecords.length === 0 ? (
+                    <Flex
+                        sx={{ height: "100%" }}
+                        flexDir={"column"}
+                        align={"center"}
+                        justify={"center"}
+                    >
+                        <Image
+                            src={EmptyIcon}
                             sx={{
-                                padding: "6px 0 12px",
+                                width: "300px",
                             }}
-                        >
+                        ></Image>
+                    </Flex>
+                ) : (
+                    allRecords.map((item) => {
+                        return (
                             <Box
+                                key={item.gameAddress}
                                 sx={{
-                                    display: "flex",
-                                    alignItems: "flex-start",
-                                    justifyContent: "space-between",
-                                    fontSize: "12px",
+                                    padding: "6px 0 12px",
                                 }}
                             >
                                 <Box
                                     sx={{
                                         display: "flex",
-                                        alignItems: "center",
+                                        alignItems: "flex-start",
+                                        justifyContent: "space-between",
+                                        fontSize: "12px",
                                     }}
                                 >
-                                    <Text
+                                    <Box
                                         sx={{
-                                            fontWeight: 800,
-                                            color: item.win
-                                                ? "#FDDC2D"
-                                                : "#BCBBBE",
-                                            width: "32px",
+                                            display: "flex",
+                                            alignItems: "center",
                                         }}
                                     >
-                                        {item.win ? "Win" : "Lose"}
+                                        <Text
+                                            sx={{
+                                                fontWeight: 800,
+                                                color: item.win
+                                                    ? "#FDDC2D"
+                                                    : "#BCBBBE",
+                                                width: "32px",
+                                            }}
+                                        >
+                                            {item.win ? "Win" : "Lose"}
+                                        </Text>
+                                        <Image
+                                            sx={{
+                                                marginRight: "10px",
+                                            }}
+                                            src={
+                                                item.win
+                                                    ? LevelUpIcon
+                                                    : LevelDownIcon
+                                            }
+                                        ></Image>
+                                    </Box>
+
+                                    <Box>
+                                        <Text
+                                            sx={{
+                                                whiteSpace: "nowrap",
+                                            }}
+                                        >
+                                            Lvl.{item.oldLevel} {">>"} Lvl.
+                                            {item.newLevel}{" "}
+                                        </Text>
+                                        <Text>
+                                            Pts {item.oldPoint} (
+                                            {item.win
+                                                ? "+" +
+                                                  (item.newPoint -
+                                                      item.oldPoint)
+                                                : item.newPoint - item.oldPoint}
+                                            )
+                                        </Text>
+                                    </Box>
+
+                                    <Text
+                                        sx={{
+                                            width: "140px",
+                                            textAlign: "right",
+                                        }}
+                                    >
+                                        {dayjs(item.time).format(
+                                            "HH:mm MM-DD-YYYY",
+                                        )}
                                     </Text>
                                     <Image
                                         sx={{
-                                            marginRight: "10px",
+                                            cursor: "pointer",
+                                            width: "21px",
                                         }}
-                                        src={
-                                            item.win
-                                                ? LevelUpIcon
-                                                : LevelDownIcon
-                                        }
+                                        onClick={() => handleToPlayBack(item)}
+                                        src={PlayBackIcon}
                                     ></Image>
                                 </Box>
-
-                                <Box>
-                                    <Text
-                                        sx={{
-                                            whiteSpace: "nowrap",
-                                        }}
-                                    >
-                                        Lvl.{item.oldLevel} {">>"} Lvl.
-                                        {item.newLevel}{" "}
-                                    </Text>
-                                    <Text>
-                                        Pts {item.oldPoint} (
-                                        {item.win
-                                            ? "+" +
-                                              (item.newPoint - item.oldPoint)
-                                            : item.newPoint - item.oldPoint}
-                                        )
-                                    </Text>
-                                </Box>
-
-                                <Text
-                                    sx={{
-                                        width: "140px",
-                                        textAlign: "right",
-                                    }}
-                                >
-                                    {dayjs(item.time).format(
-                                        "HH:mm MM-DD-YYYY",
-                                    )}
-                                </Text>
-                                <Image
-                                    sx={{
-                                        cursor: "pointer",
-                                        width: "21px",
-                                    }}
-                                    onClick={() => handleToPlayBack(item)}
-                                    src={PlayBackIcon}
-                                ></Image>
+                                <ListBorder></ListBorder>
                             </Box>
-                            <ListBorder></ListBorder>
-                        </Box>
-                    );
-                })}
+                        );
+                    })
+                )}
             </Box>
         </Box>
     );
@@ -180,7 +198,7 @@ const BttHistory = () => {
             sx={{
                 height: "100%",
                 position: "relative",
-                padding: isPc ? "140px 150px" : "60px 20px 20px",
+                padding: isPc ? "100px 100px" : "60px 20px 20px",
                 fontFamily: "Quantico",
                 background: "#303030",
             }}
@@ -223,100 +241,118 @@ const BttHistory = () => {
                                 overflowY: "auto",
                             }}
                         >
-                            {allRecords.map((item) => {
-                                return (
-                                    <Box
-                                        key={item.gameAddress}
+                            {allRecords.length === 0 ? (
+                                <Flex
+                                    sx={{ height: "100%" }}
+                                    flexDir={"column"}
+                                    align={"center"}
+                                    justify={"center"}
+                                >
+                                    <Image
+                                        src={EmptyIcon}
                                         sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
+                                            width: "300px",
                                         }}
-                                    >
+                                    ></Image>
+                                </Flex>
+                            ) : (
+                                allRecords.map((item) => {
+                                    return (
                                         <Box
+                                            key={item.gameAddress}
                                             sx={{
                                                 display: "flex",
                                                 alignItems: "center",
-                                                width: "200px",
+                                                justifyContent: "space-between",
                                             }}
                                         >
-                                            <Image
-                                                src={BttIcon}
+                                            <Box
                                                 sx={{
-                                                    width: "74px",
-                                                    marginRight: "15px",
-                                                }}
-                                            ></Image>
-                                            <Text
-                                                sx={{
-                                                    fontSize: "24px",
-                                                    fontWeight: 800,
-                                                    color: item.win
-                                                        ? "#FDDC2D"
-                                                        : "#BCBBBE",
-                                                    width: "100px",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    width: "200px",
                                                 }}
                                             >
-                                                {item.win ? "Win" : "Lose"}
-                                            </Text>
-                                        </Box>
+                                                <Image
+                                                    src={BttIcon}
+                                                    sx={{
+                                                        width: "74px",
+                                                        marginRight: "15px",
+                                                    }}
+                                                ></Image>
+                                                <Text
+                                                    sx={{
+                                                        fontSize: "24px",
+                                                        fontWeight: 800,
+                                                        color: item.win
+                                                            ? "#FDDC2D"
+                                                            : "#BCBBBE",
+                                                        width: "100px",
+                                                    }}
+                                                >
+                                                    {item.win ? "Win" : "Lose"}
+                                                </Text>
+                                            </Box>
 
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                width: "200px",
-                                            }}
-                                        >
-                                            <Image
+                                            <Box
                                                 sx={{
-                                                    marginRight: "10px",
-                                                }}
-                                                src={
-                                                    item.win
-                                                        ? LevelUpIcon
-                                                        : LevelDownIcon
-                                                }
-                                            ></Image>
-                                            <Text
-                                                sx={{
-                                                    whiteSpace: "nowrap",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    width: "200px",
                                                 }}
                                             >
-                                                Lvl.{item.oldLevel} {">>"} Lvl.
-                                                {item.newLevel}{" "}
+                                                <Image
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                    }}
+                                                    src={
+                                                        item.win
+                                                            ? LevelUpIcon
+                                                            : LevelDownIcon
+                                                    }
+                                                ></Image>
+                                                <Text
+                                                    sx={{
+                                                        whiteSpace: "nowrap",
+                                                    }}
+                                                >
+                                                    Lvl.{item.oldLevel} {">>"}{" "}
+                                                    Lvl.
+                                                    {item.newLevel}{" "}
+                                                </Text>
+                                            </Box>
+                                            <Text sx={{ width: "260px" }}>
+                                                Points net {item.oldPoint} (
+                                                {item.win
+                                                    ? "+" +
+                                                      (item.newPoint -
+                                                          item.oldPoint)
+                                                    : item.newPoint -
+                                                      item.oldPoint}
+                                                )
                                             </Text>
+                                            <Text
+                                                sx={{
+                                                    width: "280px",
+                                                }}
+                                            >
+                                                {dayjs(item.time).format(
+                                                    "HH:mm MM-DD-YYYY",
+                                                )}
+                                            </Text>
+                                            <Image
+                                                sx={{
+                                                    cursor: "pointer",
+                                                }}
+                                                onClick={() =>
+                                                    handleToPlayBack(item)
+                                                }
+                                                src={PlayBackIcon}
+                                            ></Image>
                                         </Box>
-                                        <Text sx={{ width: "260px" }}>
-                                            Points net {item.oldPoint} (
-                                            {item.win
-                                                ? "+" +
-                                                  (item.newPoint -
-                                                      item.oldPoint)
-                                                : item.newPoint - item.oldPoint}
-                                            )
-                                        </Text>
-                                        <Text
-                                            sx={{
-                                                width: "280px",
-                                            }}
-                                        >
-                                            {dayjs(item.time).format(
-                                                "HH:mm MM-DD-YYYY",
-                                            )}
-                                        </Text>
-                                        <Image
-                                            sx={{
-                                                cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                                handleToPlayBack(item)
-                                            }
-                                            src={PlayBackIcon}
-                                        ></Image>
-                                    </Box>
-                                );
-                            })}
+                                    );
+                                })
+                            )}
                         </Box>
                     </Box>
                 </Box>

@@ -31,6 +31,7 @@ import { ZERO_DATA } from "@/skyConstants";
 import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
 import UnknownPilotIcon from "./assets/unknow-pilot2.svg";
 import { useAccount, useChainId } from "wagmi";
+import { getViemClients } from "@/utils/viem";
 
 const CustomButton = styled(Button)`
     width: 10.4167vw;
@@ -245,12 +246,20 @@ const CurrentPilot = ({
                 return;
             }
             setActiveLoading(true);
-            const res = await mercuryPilotsContract.setActivePilot(
+            console.log(mercuryPilotsContract, "mercuryPilotsContract");
+            const res = await mercuryPilotsContract.write.setActivePilot([
                 selectPilotInfo.address,
                 selectPilotInfo.pilotId,
                 address,
-            );
-            await res.wait();
+            ]);
+            const publicClient = getViemClients({
+                chainId,
+            });
+
+            // @ts-ignore
+            const receipt = await publicClient.waitForTransactionReceipt({
+                hash: res,
+            });
             setActiveLoading(false);
             setSelectPilotInfo({
                 address: "",

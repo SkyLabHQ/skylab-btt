@@ -196,7 +196,7 @@ const Leaderboard = () => {
     return (
         <Box
             sx={{
-                overflow: "scroll",
+                overflow: "auto",
                 position: "relative",
                 height: "100%",
                 padding: isPc ? "70px 0 0" : "20px 18px",

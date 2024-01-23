@@ -175,8 +175,7 @@ ${border}
 ${gridString}
 ${border}
 ${mark}${mark}${emojiList.join("")}${mark}${mark}
-@skylabHQ
-https://app.projmercury.io/btt`;
+@skylabHQ on @base`;
 };
 
 export const SixtySecond = 60 * 1000;

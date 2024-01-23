@@ -35,7 +35,7 @@ const GameList = ({ list, loading }: { list: any[]; loading: boolean }) => {
             sx={{
                 padding: "20px",
                 height: "100%",
-                overflowY: "scroll",
+                overflowY: "auto",
                 position: "relative",
             }}
         >
