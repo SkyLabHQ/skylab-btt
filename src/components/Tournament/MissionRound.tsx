@@ -10,8 +10,8 @@ import Discord from "./assets/discord.svg";
 import Tw from "./assets/tw.svg";
 import Telegram from "./assets/telegram.svg";
 import SkylabIcon from "./assets/skylab-icon.svg";
-import Airdrop from "./assets/airdrop-icon.svg";
-export const arrowPosition = ["", "", "", "", "right"];
+export const arrowPosition = ["left", "left", "left", "top", "right"];
+export const mArrowPosition = ["left", "left", "left", "left", "right"];
 
 export const menuList = [
     // {
@@ -67,11 +67,10 @@ export const menuList2 = [
     },
 ];
 
-const getArrowStyles = (direction: any, arrowPos: any) => {
+const getArrowStyles = (direction: any, arrowPos: any, width = 20) => {
     let mainSideStyle = {};
     let beforeSideStyle = {};
 
-    const width = 20;
     const baseStyle = {
         position: "absolute",
         height: 0,
@@ -82,17 +81,19 @@ const getArrowStyles = (direction: any, arrowPos: any) => {
         },
     };
 
+    console.log(direction, arrowPos);
+
     switch (direction) {
         case "left":
             mainSideStyle = {
                 borderLeft: `${width}px solid #F2D861`,
                 borderTop: `${width}px solid transparent`,
                 borderBottom: `${width}px solid transparent`,
-                right: "-20px",
-                bottom: "20px",
+                right: `-${width}px`,
+                bottom: `${width}px`,
             };
             beforeSideStyle = {
-                bottom: "-20px",
+                bottom: `-${width}px`,
                 right: "2px",
                 borderLeft: `${width}px solid #4A4A4A`,
                 borderTop: `${width}px solid transparent`,
@@ -104,11 +105,11 @@ const getArrowStyles = (direction: any, arrowPos: any) => {
                 borderRight: `${width}px solid #F2D861`,
                 borderTop: `${width}px solid transparent`,
                 borderBottom: `${width}px solid transparent`,
-                left: "-20px",
-                bottom: "20px",
+                left: `-${width}px`,
+                bottom: `${width}px`,
             };
             beforeSideStyle = {
-                bottom: "-20px",
+                bottom: `-${width}px`,
                 left: "2px",
                 borderRight: `${width}px solid #4A4A4A`,
                 borderTop: `${width}px solid transparent`,
@@ -120,14 +121,14 @@ const getArrowStyles = (direction: any, arrowPos: any) => {
                 borderBottom: `${width}px solid #F2D861`,
                 borderLeft: `${width}px solid transparent`,
                 borderRight: `${width}px solid transparent`,
-                top: "-20px",
-                left: arrowPos === "left" ? "20px" : undefined,
-                right: arrowPos === "right" ? "20px" : undefined,
+                top: `-${width}px`,
+                left: arrowPos === "left" ? `${width}px` : undefined,
+                right: arrowPos === "right" ? `${width}px` : undefined,
             };
             beforeSideStyle = {
                 top: "2px",
-                left: arrowPos === "left" ? "-20px" : undefined,
-                right: arrowPos === "right" ? "-20px" : undefined,
+                left: arrowPos === "left" ? `-${width}px` : undefined,
+                right: arrowPos === "right" ? `-${width}px` : undefined,
                 borderBottom: `${width}px solid #4A4A4A`,
                 borderLeft: `${width}px solid transparent`,
                 borderRight: `${width}px solid transparent`,
@@ -138,12 +139,12 @@ const getArrowStyles = (direction: any, arrowPos: any) => {
                 borderTop: `${width}px solid #F2D861`,
                 borderLeft: `${width}px solid transparent`,
                 borderRight: `${width}px solid transparent`,
-                bottom: "-20px",
-                [arrowPos ? arrowPos : "left"]: "20px",
+                bottom: `-${width}px`,
+                [arrowPos ? arrowPos : "left"]: `${width}px`,
             };
             beforeSideStyle = {
                 bottom: "2px",
-                [arrowPos ? arrowPos : "left"]: "-20px",
+                [arrowPos ? arrowPos : "left"]: `-${width}px`,
                 borderTop: `${width}px solid #4A4A4A`,
                 borderLeft: `${width}px solid transparent`,
                 borderRight: `${width}px solid transparent`,
@@ -165,9 +166,12 @@ const getArrowStyles = (direction: any, arrowPos: any) => {
 };
 
 const ContentComponent = (props: any) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const content = props.steps[props.currentStep].content;
     const position = props.steps[props.currentStep].position;
-    const arrowPos = arrowPosition[props.currentStep];
+    const arrowPos = isPc
+        ? arrowPosition[props.currentStep]
+        : mArrowPosition[props.currentStep];
     return (
         <Box
             sx={{
@@ -179,9 +183,10 @@ const ContentComponent = (props: any) => {
                 background: "#4A4A4A",
                 color: "#000",
                 fontFamily: "Orbitron",
+                padding: "10px",
             }}
         >
-            <Box sx={getArrowStyles(position, arrowPos)}></Box>
+            <Box sx={getArrowStyles(position, arrowPos, isPc ? 20 : 10)}></Box>
             {typeof content === "function" ? content({ ...props }) : content}
         </Box>
     );
@@ -347,6 +352,174 @@ const tourConfig: StepType[] = [
     },
 ];
 
+const mTourConfig: StepType[] = [
+    {
+        selector: ".bid-tac-toe",
+        position: "top",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#fff",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        Enter game here
+                    </Text>
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".pilot-avatar",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box
+                    sx={{
+                        width: "200px",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            color: "#fff",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        Set a pilot here to accumulate mileage.{" "}
+                    </Text>
+                    <Flex
+                        align={"center"}
+                        sx={{
+                            width: "fit-content",
+                            marginTop: "12px",
+                            color: "#fff",
+                            height: "24px",
+                            padding: "4px 10px",
+                            borderRadius: "8px",
+                            background: "rgba(217, 217, 217, 0.50)",
+                            fontSize: "12px",
+                        }}
+                    >
+                        More on pilots
+                        <Image
+                            src={WhiteArrowIcon}
+                            sx={{
+                                width: "12px",
+                                marginLeft: "4px",
+                            }}
+                        ></Image>
+                    </Flex>
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".pilot-mileage",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#fff",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        Playing games will earn mileage.{" "}
+                    </Text>
+                    <Flex
+                        align={"center"}
+                        sx={{
+                            width: "fit-content",
+                            marginTop: "12px",
+                            color: "#fff",
+                            height: "24px",
+                            padding: "4px 10px",
+                            borderRadius: "8px",
+                            background: "rgba(217, 217, 217, 0.50)",
+                            fontSize: "12px",
+                        }}
+                    >
+                        More on mileadge
+                        <Image
+                            src={WhiteArrowIcon}
+                            sx={{
+                                width: "12px",
+                                marginLeft: "4px",
+                            }}
+                        ></Image>
+                    </Flex>
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".leaderboard",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#fff",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        Check the leaderboards and see where your peers are at.{" "}
+                    </Text>
+                    <Flex
+                        align={"center"}
+                        sx={{
+                            width: "fit-content",
+                            marginTop: "12px",
+                            color: "#fff",
+                            height: "24px",
+                            padding: "4px 10px",
+                            borderRadius: "8px",
+                            background: "rgba(217, 217, 217, 0.50)",
+                            fontSize: "12px",
+                        }}
+                    >
+                        More on mileadge
+                        <Image
+                            src={WhiteArrowIcon}
+                            sx={{
+                                width: "12px",
+                                marginLeft: "4px",
+                            }}
+                        ></Image>
+                    </Flex>
+                </Box>
+            );
+        },
+    },
+    {
+        selector: ".rules",
+        position: "bottom",
+        content: () => {
+            return (
+                <Box>
+                    <Text
+                        sx={{
+                            color: "#fff",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                        }}
+                    >
+                        Click here for more info about Project Mercury{" "}
+                    </Text>
+                </Box>
+            );
+        },
+    },
+];
+
 interface ChildProps {
     onNextRound: (step: number | string) => void;
 }
@@ -356,14 +529,14 @@ const MissionRound = ({ onNextRound }: ChildProps) => {
     const [active, setActive] = useState(1);
     const [showAllActivities, setShowAllActivities] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
-
     return (
         <TourProvider
             onClickMask={() => {}}
-            steps={tourConfig}
+            key={isPc ? "pc" : "mobile"}
+            steps={isPc ? tourConfig : mTourConfig}
             padding={{
                 mask: 5,
-                popover: 35,
+                // popover: 35,
             }}
             beforeClose={() => {}}
             ContentComponent={ContentComponent}
@@ -375,7 +548,7 @@ const MissionRound = ({ onNextRound }: ChildProps) => {
                     return {
                         ...base,
                         boxShadow: "none",
-                        borderRadius: "0.8333vw",
+                        borderRadius: isPc ? "0.8333vw" : "8px",
                         background: "#4A4A4A",
                         border: "1px solid #F2D861",
                         padding: "0.625vw",

@@ -22,8 +22,8 @@ const TopMenu = () => {
             <MenuButton
                 as={Button}
                 sx={{
-                    width: isPc ? "2.2917vw" : "32px",
-                    height: isPc ? "2.2917vw" : "32px",
+                    width: isPc ? "2.2917vw" : "40px",
+                    height: isPc ? "2.2917vw" : "40px",
                     background: "transparent !important",
                     border: "2px solid #F2D861",
                     display: "flex",
@@ -33,8 +33,8 @@ const TopMenu = () => {
                     cursor: "pointer",
                     padding: "4px",
                     justifyContent: "center",
-                    minWidth: isPc ? "2.2917vw" : "32px",
-                    minHeight: isPc ? "2.2917vw" : "32px",
+                    minWidth: isPc ? "2.2917vw" : "40px",
+                    minHeight: isPc ? "2.2917vw" : "40px",
                     borderRadius: isPc ? "0.625vw" : "8px",
                 }}
             >
