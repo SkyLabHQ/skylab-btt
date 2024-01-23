@@ -114,11 +114,13 @@ const TacToeMode = () => {
     const localSinger = getPrivateLobbySigner();
 
     const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
+    const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");
 
     const [lobbyName, setLobbyName] = useState<string>("");
     const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
         localSinger.privateKey,
     );
+
     const { data: signer } = useWalletClient();
 
     const [onGoingGames, setOnGoingGames] = useState<any>([]);
@@ -452,11 +454,15 @@ const TacToeMode = () => {
     };
 
     const handleGetActiveLobby = async () => {
-        const [activeLobbyAddress] = await testProvider.all([
+        const [activeLobbyAddress, gameAddress] = await testProvider.all([
             testMultiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
                 privateLobbySCWAddress,
             ),
+            multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                privateLobbySCWAddress,
+            ),
         ]);
+        setLobbyGameAddress(gameAddress);
         setActiveLobbyAddress(activeLobbyAddress);
     };
 
@@ -494,7 +500,8 @@ const TacToeMode = () => {
         if (
             !testMultiSkylabBidTacToeFactoryContract ||
             !testProvider ||
-            !privateLobbySCWAddress
+            !privateLobbySCWAddress ||
+            !multiSkylabBidTacToeFactoryContract
         )
             return;
 
@@ -503,6 +510,7 @@ const TacToeMode = () => {
         testProvider,
         testMultiSkylabBidTacToeFactoryContract,
         privateLobbySCWAddress,
+        multiSkylabBidTacToeFactoryContract,
     ]);
 
     useEffect(() => {
@@ -593,6 +601,12 @@ const TacToeMode = () => {
                                         if (activeLobbyAddress === "") {
                                             toast(
                                                 "Querying lobby address, please try again later",
+                                            );
+                                        } else if (
+                                            lobbyGameAddress !== ZERO_DATA
+                                        ) {
+                                            navigate(
+                                                `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
                                             );
                                         } else if (
                                             activeLobbyAddress === ZERO_DATA
