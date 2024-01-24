@@ -49,7 +49,7 @@ const PrivateRoom = () => {
     const { search } = useLocation();
     const [step, setStep] = useState<number>(0);
     const params = qs.parse(search) as any;
-    const [lobbyName] = useState<string>(params.lobbyName);
+    const [lobbyName, setLobbyName] = useState<string>("");
     const [lobbyAddress] = useState<string>(params.lobbyAddress);
     const [bidTacToeGameAddress] = useState<string>(params.gameAddress);
     const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
@@ -201,6 +201,20 @@ const PrivateRoom = () => {
             }
         }
     };
+
+    const handleGetLobbyName = async () => {
+        const [lobbyName] = await multiProvider.all([
+            multiMercuryBTTPrivateLobby.lobbyName(),
+        ]);
+        setLobbyName(lobbyName);
+    };
+
+    useEffect(() => {
+        if (!multiMercuryBTTPrivateLobby || !multiProvider) {
+            return;
+        }
+        handleGetLobbyName();
+    }, [multiProvider, multiMercuryBTTPrivateLobby]);
 
     useEffect(() => {
         if (

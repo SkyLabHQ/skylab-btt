@@ -536,8 +536,9 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
                 border: "2px solid #F2D861",
                 background: "#424242",
                 width: "100%",
-                opacity: show ? 1 : 0,
+                // opacity: show ? 1 : 0,
                 transition: "all 0.3s",
+                display: show ? "block" : "none",
                 zIndex: 1000,
             }}
         >

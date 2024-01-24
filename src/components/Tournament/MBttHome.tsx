@@ -293,7 +293,6 @@ const MBttHome = ({
         navigate(`/btt`);
     };
 
-    console.log(isOpen, "isOpen");
     return (
         <Box
             sx={{
@@ -321,8 +320,8 @@ const MBttHome = ({
                             left: "50%",
                             bottom: "-8px",
                             transform: isOpen
-                                ? "translateX(-50%) rotate(180deg)"
-                                : "translateX(-50%) ",
+                                ? "translateX(-50%) "
+                                : "translateX(-50%) rotate(180deg)",
                             transition: "all 0.3s",
                             transformOrigin: "center center",
                             width: "24px",

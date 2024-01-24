@@ -74,7 +74,8 @@ const Match = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
-    const { bidTacToeGameAddress, lobbyAddress } = usePrivateGameContext();
+    const { bidTacToeGameAddress, lobbyAddress, lobbyName } =
+        usePrivateGameContext();
     const [timeLeft, { start }] = useCountDown(5000, 1000);
     const { myInfo, opInfo, handleStepChange } = usePrivateGameContext();
     const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
@@ -118,7 +119,14 @@ const Match = () => {
                     width: isPc ? "31.25vw" : "240px",
                 }}
             >
-                <Flex align={"center"} justify={"space-between"} w={"100%"}>
+                <Flex
+                    align={"center"}
+                    justify={"space-between"}
+                    w={"100%"}
+                    sx={{
+                        height: isPc ? "10vw" : "120px",
+                    }}
+                >
                     <UserInfo detail={myInfo} status="my"></UserInfo>
                     <Text
                         sx={{
@@ -129,14 +137,7 @@ const Match = () => {
                     </Text>
                     <UserInfo detail={opInfo} status="op"></UserInfo>
                 </Flex>
-                <Flex
-                    justify={"center"}
-                    flexDir={"column"}
-                    align={"center"}
-                    sx={{
-                        marginTop: "5.2083vw",
-                    }}
-                >
+                <Flex justify={"center"} flexDir={"column"} align={"center"}>
                     {myInfo.address && opInfo.address ? (
                         <Box>
                             <Text
@@ -179,13 +180,23 @@ const Match = () => {
                                 border: "2px solid #FFF",
                                 background: "#303030",
                                 fontSize: isPc ? "1.25vw" : "20px",
-                                marginTop: "3.8542vw",
+                                marginTop: isPc ? "3.8542vw" : "20px",
                             }}
                         >
                             <Text>Quit Match</Text>
                         </Button>
                     )}
                 </Flex>
+                <Box
+                    sx={{
+                        textAlign: "center",
+                        fontSize: "16px",
+                        marginTop: "10px",
+                    }}
+                >
+                    <Text>Lobby Code</Text>
+                    <Text>{lobbyName}</Text>
+                </Box>
             </Box>
             <QuitModal
                 onConfirm={handleQuit}
