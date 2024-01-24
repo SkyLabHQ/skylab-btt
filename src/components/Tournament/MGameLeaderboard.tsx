@@ -7,6 +7,7 @@ import {
     MenuItem,
     MenuButton,
     useClipboard,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import SupportIcon from "./assets/support.svg";
 import React, { useEffect, useMemo, useState } from "react";
@@ -81,12 +82,12 @@ const ListItem = ({
         <Box
             sx={{
                 display: "flex",
-                height: isTop3 ? "3.6458vw" : "3.125vw",
+                height: isTop3 ? "48px" : "40px",
                 alignItems: "center",
                 background: RankBackground[rank],
-                padding: "0 1.0417vw 0 0.625vw",
-                borderRadius: isTop3 ? "0.5208vw" : "0",
-                marginBottom: "0.3125vw",
+                padding: "0 12px 0 6px",
+                borderRadius: isTop3 ? "8px" : "0",
+                marginBottom: "4px",
                 borderBottom: "1px solid #fff",
             }}
         >
@@ -94,17 +95,17 @@ const ListItem = ({
                 <Image
                     src={RankMedal[rank]}
                     sx={{
-                        width: "2.3958vw",
-                        height: "2.3958vw",
+                        width: "32px",
+                        height: "32px",
                         marginRight: "1.1458vw",
                     }}
                 ></Image>
             ) : (
                 <Text
                     sx={{
-                        width: "2.3958vw",
-                        marginRight: "1.1458vw",
-                        fontSize: "1.25vw",
+                        width: "32px",
+                        marginRight: "12px",
+                        fontSize: "16px",
                         textAlign: "center",
                         color: "#fff",
                     }}
@@ -116,8 +117,8 @@ const ListItem = ({
             <Box
                 sx={{
                     position: "relative",
-                    width: isTop3 ? "2.3958vw" : "1.7708vw",
-                    height: isTop3 ? "2.3958vw" : "1.7708vw",
+                    width: isTop3 ? "40px" : "36px",
+                    height: isTop3 ? "40px" : "36px",
                 }}
             >
                 {pilotImg ? (
@@ -127,7 +128,7 @@ const ListItem = ({
                             width: "100%",
                             height: "100%",
                             border: "1px solid #fff",
-                            borderRadius: "0.5208vw",
+                            borderRadius: "8px",
                         }}
                     ></Image>
                 ) : (
@@ -138,7 +139,7 @@ const ListItem = ({
                             height: "100%",
                             background: getColorByNumber(rank),
                             border: "1px solid #fff",
-                            borderRadius: "0.5208vw",
+                            borderRadius: "8px",
                         }}
                     ></Box>
                 )}
@@ -163,7 +164,7 @@ const ListItem = ({
                     flex: 1,
                     color: "#fff",
                     textAlign: "center",
-                    fontSize: "0.8333vw",
+                    fontSize: "14px",
                     cursor: "pointer",
                 }}
                 onClick={handleOnCopy}
@@ -181,7 +182,7 @@ const ValueContent = ({ detail }: { detail: any }) => {
         <Text
             sx={{
                 color: "#BCBBBE",
-                fontSize: "0.8333vw",
+                fontSize: "12px",
             }}
         >
             {value}
@@ -197,7 +198,7 @@ const AviationContent = ({ detail }: { detail: any }) => {
                 color: "#BCBBBE",
                 textAlign: "right",
                 fontFamily: "Quantico",
-                fontSize: "0.8333vw",
+                fontSize: "12px",
             }}
         >
             <Text>Lvl {level}</Text>
@@ -530,44 +531,40 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
     return (
         <Box
             sx={{
-                height: "75vh",
-                borderRadius: "1.0417vw",
-                border: "3px solid #F2D861",
+                height: "100%",
+                borderRadius: "8px",
+                border: "2px solid #F2D861",
                 background: "#424242",
-                position: "absolute",
                 width: "100%",
-                right: show ? "0" : "-100%",
                 opacity: show ? 1 : 0,
-                top: 0,
                 transition: "all 0.3s",
                 zIndex: 1000,
             }}
         >
             <Box
                 sx={{
-                    height: "4.1667vh",
+                    height: "30px",
                     background:
                         "linear-gradient(180deg, rgba(99, 99, 99, 0.10) 0%, #636363 100%)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    padding: "0 1.4583vw",
+                    padding: "0 12px",
                 }}
             >
                 <Text
                     sx={{
-                        fontSize: "1.0417vw",
+                        fontSize: "16px",
                         color: "#fff",
                     }}
                 >
                     Leaderboard{" "}
                 </Text>
-                {/* <Box>Find Me</Box> */}
             </Box>
             <Box>
                 <Box
                     sx={{
-                        padding: "0 1.4583vw",
+                        padding: "0 8px",
                     }}
                 >
                     <Menu autoSelect={false}>
@@ -582,16 +579,17 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
                                         <Image
                                             src={GrayArrow}
                                             sx={{
-                                                marginRight: "0.2604vw",
+                                                marginRight: "5px",
                                                 transform: isOpen
                                                     ? "rotate(270deg)"
                                                     : "rotate(0deg)",
+                                                width: "12px",
                                             }}
                                         ></Image>
                                         <Text
                                             sx={{
                                                 color: "#BCBBBE",
-                                                fontSize: "1.0417vw",
+                                                fontSize: "16px",
                                             }}
                                         >
                                             {currentMenu}
@@ -612,8 +610,8 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
                                                 key={index}
                                                 sx={{
                                                     color: "#BCBBBE",
-                                                    fontSize: "1.0417vw",
-                                                    paddingLeft: "0.5208vw",
+                                                    fontSize: "16px",
+                                                    paddingLeft: "10px",
                                                     background: "#4A4A4A",
                                                 }}
                                             >
@@ -628,35 +626,39 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
                 </Box>
                 <Box
                     sx={{
-                        height: "45.3704vh",
+                        height: "400px",
                         overflowY: "overlay",
-                        padding: "0 1.4583vw",
+                        padding: "0 12px",
                     }}
                 >
                     {loading ? (
                         <Loading></Loading>
                     ) : (
-                        list.map((item, index) => {
-                            return (
-                                <ListItem
-                                    key={index}
-                                    detail={item}
-                                    rank={index + 1}
-                                    valueContent={
-                                        currentMenu ===
-                                        MenuProps.AviationLevel ? (
-                                            <AviationContent
-                                                detail={item}
-                                            ></AviationContent>
-                                        ) : (
-                                            <ValueContent
-                                                detail={item}
-                                            ></ValueContent>
-                                        )
-                                    }
-                                ></ListItem>
-                            );
-                        })
+                        list
+                            .concat(list)
+                            .concat(list)
+                            .concat(list)
+                            .map((item, index) => {
+                                return (
+                                    <ListItem
+                                        key={index}
+                                        detail={item}
+                                        rank={index + 1}
+                                        valueContent={
+                                            currentMenu ===
+                                            MenuProps.AviationLevel ? (
+                                                <AviationContent
+                                                    detail={item}
+                                                ></AviationContent>
+                                            ) : (
+                                                <ValueContent
+                                                    detail={item}
+                                                ></ValueContent>
+                                            )
+                                        }
+                                    ></ListItem>
+                                );
+                            })
                     )}
                 </Box>
             </Box>

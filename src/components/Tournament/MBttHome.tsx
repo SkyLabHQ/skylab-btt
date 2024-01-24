@@ -7,6 +7,7 @@ import {
     PopoverContent,
     PopoverBody,
     Flex,
+    useDisclosure,
 } from "@chakra-ui/react";
 import MileageIcon from "./assets/mileage-icon.svg";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +26,8 @@ import { motion, useAnimation } from "framer-motion";
 import { YellowButton } from "../Button/Index";
 import LeaderboardIcon from "./assets/leaderboard-icon.svg";
 import RulesIcon from "./assets/rules-icon.svg";
+import MGameLeaderboard from "./MGameLeaderboard";
+import DownArrow from "./assets/down-arrow.svg";
 
 const MileagePopover = ({ value }: { value: any }) => {
     const navigate = useNavigate();
@@ -281,7 +284,7 @@ const MBttHome = ({
     onShowLeaderboard: () => void;
 }) => {
     const navigate = useNavigate();
-
+    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
     const { address } = useAccount();
     const { activePilot } = usePilotInfo(address);
     const imgAnimation = useAnimation();
@@ -290,6 +293,7 @@ const MBttHome = ({
         navigate(`/btt`);
     };
 
+    console.log(isOpen, "isOpen");
     return (
         <Box
             sx={{
@@ -304,37 +308,59 @@ const MBttHome = ({
                 }}
             >
                 <TopMenu></TopMenu>
-                <YellowButton
-                    className="leaderboard"
+                <Box
                     sx={{
-                        // width: "150px",
-                        height: "40px",
+                        position: "relative",
                         marginLeft: "10px",
-                        borderRadius: "8px !important",
-                    }}
-                    onClick={() => {
-                        // if (isOpen) {
-                        //     onClose();
-                        // } else {
-                        //     onOpen();
-                        // }
                     }}
                 >
                     <Image
-                        src={LeaderboardIcon}
+                        src={DownArrow}
                         sx={{
-                            width: "20px",
-                            marginRight: "5px",
+                            position: "absolute",
+                            left: "50%",
+                            bottom: "-8px",
+                            transform: isOpen
+                                ? "translateX(-50%) rotate(180deg)"
+                                : "translateX(-50%) ",
+                            transition: "all 0.3s",
+                            transformOrigin: "center center",
+                            width: "24px",
+                            zIndex: 9,
                         }}
                     ></Image>
-                    <Text
+                    <YellowButton
+                        className="leaderboard"
                         sx={{
-                            fontSize: "14px",
+                            // width: "150px",
+                            height: "40px",
+                            borderRadius: "8px !important",
+                        }}
+                        onClick={() => {
+                            if (isOpen) {
+                                onClose();
+                            } else {
+                                onOpen();
+                            }
                         }}
                     >
-                        Leaderboard
-                    </Text>
-                </YellowButton>
+                        <Image
+                            src={LeaderboardIcon}
+                            sx={{
+                                width: "20px",
+                                marginRight: "5px",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                fontSize: "14px",
+                            }}
+                        >
+                            Leaderboard
+                        </Text>
+                    </YellowButton>
+                </Box>
+
                 <YellowButton
                     className="rules"
                     sx={{
@@ -471,7 +497,19 @@ const MBttHome = ({
                     ></Image>
                 </Flex>
             </Box>
-
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: "160px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                    zIndex: 9999999999,
+                    padding: "0 12px",
+                }}
+            >
+                <MGameLeaderboard show={isOpen}></MGameLeaderboard>
+            </Box>
             <Box
                 sx={{
                     position: "fixed",
