@@ -15,7 +15,8 @@ const Chat = ({
     ) => void;
 }) => {
     const [active, setActive] = React.useState("message");
-
+    const [selectMessageIndex, setSelectMessageIndex] = React.useState(-1);
+    const [selectEmojiIndex, setSelectEmojiIndex] = React.useState(-1);
     const handleChangeActive = (type: string) => {
         setActive(type);
     };
@@ -62,10 +63,10 @@ const Chat = ({
                         <Box
                             onClick={() => {
                                 onSetMessage("setMessage", index + 1);
+                                setSelectMessageIndex(index);
                             }}
                             key={index + 1}
                             sx={{
-                                border: "2px solid #d9d9d9",
                                 borderRadius: "0.5208vw",
                                 marginRight: "0.4167vw",
                                 height: "1.9792vw",
@@ -73,7 +74,14 @@ const Chat = ({
                                 padding: "0 0.4167vw",
                                 cursor: "pointer",
                                 fontSize: "0.8333vw",
-                                background: "#303030",
+                                background:
+                                    selectMessageIndex === index
+                                        ? "#D9D9D9"
+                                        : "#303030",
+                                color:
+                                    selectMessageIndex === index
+                                        ? "#303030"
+                                        : "#D9D9D9",
                             }}
                         >
                             {message}
@@ -89,6 +97,7 @@ const Chat = ({
                                 src={message}
                                 onClick={() => {
                                     onSetMessage("setEmote", index + 1);
+                                    setSelectEmojiIndex(index);
                                 }}
                                 sx={{
                                     width: "1.9792vw",
@@ -109,6 +118,7 @@ const Chat = ({
                                         "setEmote",
                                         MERCS.length + index + 1,
                                     );
+                                    setSelectEmojiIndex(MERCS.length + index);
                                 }}
                                 key={index + MERCS.length}
                                 sx={{

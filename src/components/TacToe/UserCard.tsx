@@ -737,8 +737,6 @@ export const MyUserCard = ({
             <Box
                 sx={{
                     position: "relative",
-                    width: "6.9792vw",
-                    height: "6.9792vw",
                 }}
             >
                 <Box

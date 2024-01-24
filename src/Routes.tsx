@@ -13,6 +13,7 @@ import PrivateLobby from "./pages/PrivateLobby";
 import PrivateRoom from "./pages/PrivateRoom";
 import PrivatePlayBack from "./pages/PrivatePlayBack";
 import PrivateLiveGame from "./pages/PrivateLiveGame";
+import AddToHome from "./pages/AddToHome";
 
 export const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -45,6 +46,7 @@ const AppRoutes = (): ReactElement => {
                     path="/btt/lobbyLive"
                     element={<PrivateLiveGame />}
                 ></Route>
+                <Route path="/toHome" element={<AddToHome />}></Route>
             </Route>
         </Routes>
     );

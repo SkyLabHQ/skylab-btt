@@ -391,14 +391,13 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         if (
             !multiSkylabBidTacToeGameContract ||
             !blockNumber ||
-            myGameInfo.gameState > GameState.Revealed ||
-            loading ||
-            revealing
+            !ethcallProvider ||
+            myGameInfo.gameState > GameState.Revealed
         )
             return;
 
         handleGetGameInfo();
-    }, [blockNumber, multiSkylabBidTacToeGameContract]);
+    }, [blockNumber, multiSkylabBidTacToeGameContract, ethcallProvider]);
 
     useEffect(() => {
         if (revealing) return;
@@ -660,6 +659,10 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
 
     useEffect(() => {
+        if (isPc) {
+            return;
+        }
+
         const handleVisibilityChange = () => {
             if (document.hidden) {
                 if (commitWorkerRef.current) {
@@ -681,7 +684,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 handleVisibilityChange,
             );
         };
-    }, []);
+    }, [isPc]);
 
     return (
         <Box
