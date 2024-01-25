@@ -382,7 +382,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             });
             setRevealing(false);
             setBidAmount(0);
-            handleGetGameInfo();
         } catch (e) {
             setRevealing(false);
             console.log(e);
