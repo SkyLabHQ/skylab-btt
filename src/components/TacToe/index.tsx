@@ -348,7 +348,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 gasLimit: gameType === GameType.HumanWithBot ? 500000 : 300000,
                 usePaymaster: istest,
             });
-            handleGetGameInfo();
             onChangeGame("my", {
                 ...myGameInfo,
                 gameState: GameState.Commited,
@@ -563,6 +562,9 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 }
                 setBufferTime(temBufferTime);
             }
+            console.log(remainTime, "remainTime");
+            console.log(temBufferTime, "temBufferTime");
+
             commitWorkerRef.current.postMessage({
                 action: "start",
                 timeToCount: remainTime - ThirtySecond,
@@ -628,11 +630,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             return;
         handleCallTimeoutWorkerRef();
     }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
-
-    useEffect(() => {
-        if (currentGrid === -1 || !bidTacToeGameAddress) return;
-        sessionStorage.setItem(bidTacToeGameAddress, "0");
-    }, [currentGrid, bidTacToeGameAddress]);
 
     useEffect(() => {
         if (isPc) {
