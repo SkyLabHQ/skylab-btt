@@ -49,7 +49,7 @@ import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
 
-const myNow = getNowSecondsTimestamp() + 80000;
+const myNow = getNowSecondsTimestamp() + 80000; //test
 
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
@@ -540,7 +540,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         commitWorkerRef.current = new Worker(
             new URL("../../utils/timerWorker.ts", import.meta.url),
         );
-        const time = myNow; // myGameInfo.timeout * 1000;
+        const time = myGameInfo.timeout * 1000;
         const now = getNowSecondsTimestamp();
         commitWorkerRef.current.onmessage = async (event) => {
             const timeLeft = event.data;
