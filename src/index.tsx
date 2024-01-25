@@ -13,6 +13,7 @@ import { HelmetProvider } from "react-helmet-async";
 
 import { BlockNumberProvider } from "./contexts/BlockNumber";
 import { base, baseGoerli } from "viem/chains";
+import { SubmitRequestProvider } from "./contexts/SubmitRequest";
 
 if (window && window.ethereum) {
     window.ethereum.autoRefreshOnNetworkChange = false;
@@ -44,12 +45,14 @@ root.render(
                 <WagmiConfig config={config}>
                     <ConnectKitProvider>
                         <BlockNumberProvider>
-                            <Fragment>
-                                <ScrollToTop />
-                                <HelmetProvider>
-                                    <AppRoutes />
-                                </HelmetProvider>
-                            </Fragment>
+                            <SubmitRequestProvider>
+                                <Fragment>
+                                    <ScrollToTop />
+                                    <HelmetProvider>
+                                        <AppRoutes />
+                                    </HelmetProvider>
+                                </Fragment>
+                            </SubmitRequestProvider>
                         </BlockNumberProvider>
                     </ConnectKitProvider>
                 </WagmiConfig>

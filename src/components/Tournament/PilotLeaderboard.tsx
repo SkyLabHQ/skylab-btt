@@ -286,7 +286,7 @@ const PilotLeaderboard = () => {
                 <Image
                     sx={{}}
                     src={BackIcon}
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/home")}
                 ></Image>
             </Box>
             <Box

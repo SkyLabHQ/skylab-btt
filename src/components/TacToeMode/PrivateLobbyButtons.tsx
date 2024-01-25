@@ -66,7 +66,13 @@ const PrivateLobbyButtons = ({
                     }}
                 ></Image>
                 <Box className="text-wrapper">
-                    <Text>Start a new lobby</Text>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "1.0417vw" : "16px",
+                        }}
+                    >
+                        Start a new lobby
+                    </Text>
                 </Box>
             </GrayButton>
             <GrayButton
@@ -89,7 +95,13 @@ const PrivateLobbyButtons = ({
                 ></Image>
 
                 <Box className="text-wrapper">
-                    <Text>Join an existing lobby </Text>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "1.0417vw" : "16px",
+                        }}
+                    >
+                        Join an existing lobby{" "}
+                    </Text>
                 </Box>
             </GrayButton>
         </Box>

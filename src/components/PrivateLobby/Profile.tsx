@@ -21,6 +21,7 @@ import avatars from "@/skyConstants/avatars";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 const NickName = ({
     nickname,
@@ -208,6 +209,7 @@ const Profile = ({
     onNicknameChange: (nickname: string) => void;
     onAvatarChange: (color: number) => void;
 }) => {
+    const { openLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<"name" | "avatar">("name");
@@ -224,7 +226,7 @@ const Profile = ({
                 return;
             }
 
-            setLoading(true);
+            openLoading();
             const privateLobbySigner = getPrivateLobbySigner();
 
             await bttPrivateLobbyContract(

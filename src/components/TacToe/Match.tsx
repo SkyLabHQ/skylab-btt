@@ -417,7 +417,7 @@ export const MatchPage = ({
                     operateAddress !== defaultGameQueue &&
                     opPlayer === ZERO_DATA
                 ) {
-                    navigate("/btt");
+                    navigate("/");
                     return;
                 }
 
@@ -527,7 +527,7 @@ export const MatchPage = ({
             }
         } catch (e: any) {
             console.log(e);
-            navigate("/btt");
+            navigate("/");
         }
     };
 

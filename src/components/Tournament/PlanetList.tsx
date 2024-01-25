@@ -25,7 +25,7 @@ const PlanetList = ({
     const navigate = useNavigate();
 
     const handleToBtt = async () => {
-        navigate(`/btt`);
+        navigate(`/`);
     };
 
     const planetList = [

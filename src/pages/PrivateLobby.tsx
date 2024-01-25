@@ -18,6 +18,7 @@ import { useSCWallet } from "@/hooks/useSCWallet";
 import Back from "@/components/Back";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 import { ZERO_DATA } from "@/skyConstants";
+import LoadingPage from "@/components/PrivateLobby/LoadingPage";
 
 interface GameCount {
     allGameCount: number;
@@ -182,7 +183,7 @@ const PrivateLobby = () => {
     };
 
     const handleBack = () => {
-        navigate("/btt");
+        navigate("/");
     };
 
     useEffect(() => {
@@ -256,11 +257,10 @@ const PrivateLobby = () => {
                     background: "#303030",
                     padding: "32px 12px 0",
                     height: "100%",
-                    overflow: "hidden",
                 }}
             >
                 {!init2 ? (
-                    <Loading></Loading>
+                    <LoadingPage></LoadingPage>
                 ) : (
                     <PrivateLobbyContext.Provider
                         value={{

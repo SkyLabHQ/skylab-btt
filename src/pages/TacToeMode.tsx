@@ -65,8 +65,9 @@ import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
 import ReactCanvasNest from "react-canvas-nest";
 import useCountDown from "react-countdown-hook";
-import EnterLoadingIcon from "@/components/TacToeMode/assets/enter-loading.gif";
+import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import DotLoading from "@/components/Loading/DotLoading";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -560,7 +561,7 @@ const TacToeMode = () => {
                         top: "1.0417vw",
                     }}
                 >
-                    <Back onClick={() => navigate("/")}></Back>
+                    <Back onClick={() => navigate("/home")}></Back>
                 </Box>
 
                 <Toolbar></Toolbar>

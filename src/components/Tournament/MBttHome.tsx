@@ -208,7 +208,7 @@ const MileagePopover = ({ value }: { value: any }) => {
                             </Text>
                             <Image
                                 onClick={() => {
-                                    navigate(`/btt`);
+                                    navigate(`/`);
                                 }}
                                 src={MileageArrow}
                                 sx={{
@@ -290,7 +290,7 @@ const MBttHome = ({
     const imgAnimation = useAnimation();
 
     const handleToBtt = async () => {
-        navigate(`/btt`);
+        navigate(`/`);
     };
 
     return (

@@ -211,7 +211,7 @@ const BttHistory = () => {
                     top: "1.0417vw",
                 }}
             >
-                <Back onClick={() => navigate("/btt")}></Back>
+                <Back onClick={() => navigate("/")}></Back>
             </Box>
 
             {isPc ? (

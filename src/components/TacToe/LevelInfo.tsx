@@ -208,7 +208,7 @@ const LevelInfo = ({
                     operateAddress !== defaultGameQueue &&
                     opPlayer === ZERO_DATA
                 ) {
-                    navigate("/btt");
+                    navigate("/");
                     return;
                 }
 
@@ -246,7 +246,7 @@ const LevelInfo = ({
             }
         } catch (e: any) {
             console.log(e);
-            navigate("/btt");
+            navigate("/");
         }
     };
 

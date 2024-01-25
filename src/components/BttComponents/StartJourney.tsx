@@ -22,7 +22,7 @@ const StartJourney = () => {
                 alignItems: "center",
             }}
             onClick={() => {
-                navigate("/btt");
+                navigate("/");
             }}
         >
             <Image

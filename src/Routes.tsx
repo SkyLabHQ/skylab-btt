@@ -28,9 +28,9 @@ const AppRoutes = (): ReactElement => {
     return (
         <Routes>
             <Route path="/" element={<App />}>
-                <Route index element={<Activities />} />
+                <Route index path="/" element={<TacToeMode />}></Route>
+                <Route path="/home" element={<Activities />} />
                 <Route path="/btt/game" element={<TacToe />}></Route>
-                <Route path="/btt" element={<TacToeMode />}></Route>
                 <Route path="/btt/history" element={<BttHistory />}></Route>
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>
                 <Route path="/btt/live" element={<BttLiveGame />}></Route>

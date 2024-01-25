@@ -171,7 +171,7 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                     marginTop: "5px",
                                 }}
                                 onClick={() => {
-                                    navigate("/?step=currentPilot", {
+                                    navigate("/home?step=currentPilot", {
                                         replace: true,
                                     });
                                 }}
@@ -542,7 +542,7 @@ const SettlementPage = ({}) => {
             >
                 <Box
                     onClick={() =>
-                        navigate("/?step=2", {
+                        navigate("/home?step=2", {
                             replace: true,
                         })
                     }
@@ -668,7 +668,7 @@ const SettlementPage = ({}) => {
                                 margin: "1vh auto 0",
                             }}
                             onClick={() => {
-                                navigate("/btt");
+                                navigate("/");
                             }}
                         >
                             Play Again

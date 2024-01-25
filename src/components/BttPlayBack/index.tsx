@@ -277,9 +277,9 @@ const BttPlayBackPage = () => {
             setBttGameAddress(params.gameAddress);
             setOnlyShow(params.show === "true");
         } else if (!params.gameAddress) {
-            navigate(`/`);
+            navigate(`/home`);
         } else if (bttGameAddress != params.gameAddress) {
-            navigate(`/`);
+            navigate(`/home`);
         }
     }, [search, bttGameAddress]);
 
@@ -452,7 +452,7 @@ ${des}`;
         >
             <Image
                 src={BackIcon}
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/home")}
                 sx={{
                     position: "absolute",
                     left: "1.0417vw",

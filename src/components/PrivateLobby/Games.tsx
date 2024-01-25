@@ -10,6 +10,7 @@ import {
     getMultiSkylabBidTacToeGameContract,
     useMultiMercuryBTTPrivateLobby,
     useMultiProvider,
+    useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
@@ -22,6 +23,7 @@ import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import Vacant from "./Vacant";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 const ListBorder = () => {
     return (
@@ -408,6 +410,7 @@ const GameList = ({
 };
 
 const Games = () => {
+    const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { blockNumber } = useBlockNumber();
     const [queueList, setQueueList] = useState([]);
@@ -416,12 +419,13 @@ const Games = () => {
     const toast = useSkyToast();
     const [vacantList, setVacantList] = useState([]);
     const [listLoading, setListLoading] = useState(false);
-    const [loading, setLoading] = useState(false);
     const { lobbyAddress, setGameCount, lobbyName, myGameCount } =
         usePrivateLobbyContext();
 
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
+    const multiSkylabBidTacToeFactoryContract =
+        useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
     const { sCWAddress } = useSCWallet(localSinger.privateKey);
 
@@ -429,71 +433,43 @@ const Games = () => {
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
 
     const handleStartGame = async () => {
-        if (loading) {
+        if (isLoading) {
             return;
         }
 
-        const privateLobbySigner = getPrivateLobbySigner();
         try {
-            setLoading(true);
+            openLoading();
             await bttPrivateLobbyContract(
                 "createRoom",
                 [[3, 3, 3, 100, 1, 0, false]],
                 {
                     usePaymaster: true,
-                    signer: privateLobbySigner,
+                    signer: localSinger,
                 },
             );
 
-            const [queueList] = await multiProvider.all([
-                multiMercuryBTTPrivateLobby.getLobbyGameQueue(),
+            const [gameAddress] = await multiProvider.all([
+                multiSkylabBidTacToeFactoryContract.gamePerPlayer(sCWAddress),
             ]);
 
-            const p1 = queueList.map((item: any) => {
-                const multiSkylabBidTacToeGameContract =
-                    getMultiSkylabBidTacToeGameContract(item);
-                return multiSkylabBidTacToeGameContract.player1();
-            });
-
-            const playerAddresses = await multiProvider.all(p1);
-            const p2 = playerAddresses.map((item: any) => {
-                return multiMercuryBTTPrivateLobby.userInfo(item);
-            });
-            const userInfos = await multiProvider.all(p2);
-            const queueUserList = queueList.map((item: any, index: number) => {
-                return {
-                    address: playerAddresses[index],
-                    gameAddress: item,
-                    avatar: userInfos[index].avatar.toNumber() - 1,
-                    name: userInfos[index].name,
-                };
-            });
-
-            const isOnGame = queueUserList.find((item: any) => {
-                return item.address === sCWAddress;
-            });
-
-            if (isOnGame) {
-                navigate(
-                    `/btt/lobbyRoom?gameAddress=${isOnGame.gameAddress}&lobbyAddress=${lobbyAddress}`,
-                );
-                return;
-            }
-            setLoading(false);
+            closeLoading();
+            navigate(
+                `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
+            );
         } catch (e) {
             console.log(e);
-            setLoading(false);
+            closeLoading();
             toast(handleError(e, true));
         }
     };
 
     const handleJoinGame = async (gameAddress: string) => {
-        if (loading) {
+        if (isLoading) {
             return;
         }
         const privateLobbySigner = getPrivateLobbySigner();
         try {
-            setLoading(true);
+            openLoading();
             await bttPrivateLobbyContract("joinRoom", [gameAddress], {
                 usePaymaster: true,
                 signer: privateLobbySigner,
@@ -501,9 +477,9 @@ const Games = () => {
             navigate(
                 `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
             );
-            setLoading(false);
+            closeLoading();
         } catch (e) {
-            setLoading(false);
+            closeLoading();
             toast(handleError(e));
         }
     };
@@ -640,7 +616,6 @@ const Games = () => {
                 height: "100%",
             }}
         >
-            {loading && <Loading></Loading>}
             <Box
                 sx={{
                     height: "100%",

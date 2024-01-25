@@ -52,8 +52,7 @@ const QuitModal = ({
                 border="3px solid #FDDC2D"
                 borderRadius="8px"
                 sx={{
-                    width: "90%",
-                    maxWidth: "500px",
+                    width: "300px",
                 }}
             >
                 <Img
@@ -65,15 +64,24 @@ const QuitModal = ({
                     cursor="pointer"
                     onClick={() => onClose()}
                 />
-                <ModalBody pb="0">
+                <ModalBody pb="0" pt={"20px"}>
                     <Text
                         color="black"
                         fontSize={isPc ? "24px" : "20px"}
-                        fontWeight="600"
+                        fontWeight="700"
                         fontFamily={"Orbitron"}
                         textAlign={"center"}
                     >
-                        Are you sure you want to quit?
+                        Are you sure
+                    </Text>
+                    <Text
+                        color="black"
+                        fontSize={isPc ? "24px" : "20px"}
+                        fontWeight="700"
+                        fontFamily={"Orbitron"}
+                        textAlign={"center"}
+                    >
+                        you want to quit?
                     </Text>
                     {loading && <Loading size={50}></Loading>}
                 </ModalBody>
@@ -90,7 +98,7 @@ const QuitModal = ({
                         bg="white"
                         colorScheme="white"
                         onClick={handleConfirm}
-                        fontSize="16px"
+                        fontSize={isPc ? "16px" : "14px"}
                         w="135px"
                         borderRadius="8px"
                         fontWeight={400}
@@ -101,7 +109,7 @@ const QuitModal = ({
                     <Button
                         colorScheme="yellow"
                         onClick={onClose}
-                        fontSize="16px"
+                        fontSize={isPc ? "16px" : "14px"}
                         w="135px"
                         height={"40px"}
                         borderRadius="8px"
