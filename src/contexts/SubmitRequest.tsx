@@ -45,6 +45,7 @@ export const SubmitRequestProvider = ({
                             top: "0",
                             left: "0",
                             background: "rgba(0, 0, 0, 0.37)",
+                            zIndex: "10000",
                         }}
                         flexDir={"column"}
                         align={"center"}

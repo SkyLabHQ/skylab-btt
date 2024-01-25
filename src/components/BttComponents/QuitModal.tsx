@@ -11,9 +11,9 @@ import {
     useMediaQuery,
 } from "@chakra-ui/react";
 import CloseIcon from "@/assets/icon-close.svg";
-import Loading from "../Loading";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 const QuitModal = ({
     onConfirm,
@@ -26,19 +26,20 @@ const QuitModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
-    const [loading, setLoading] = React.useState(false);
 
     const handleConfirm = async () => {
-        if (loading) return;
+        if (isLoading) return;
 
         try {
-            setLoading(true);
+            openLoading();
             await onConfirm();
-            setLoading(false);
+            closeLoading();
             onClose();
         } catch (e) {
+            closeLoading();
             console.log(e);
             toast(handleError(e, true));
         }
@@ -83,7 +84,6 @@ const QuitModal = ({
                     >
                         you want to quit?
                     </Text>
-                    {loading && <Loading size={50}></Loading>}
                 </ModalBody>
 
                 <ModalFooter
@@ -99,7 +99,7 @@ const QuitModal = ({
                         colorScheme="white"
                         onClick={handleConfirm}
                         fontSize={isPc ? "16px" : "14px"}
-                        w="135px"
+                        w="130px"
                         borderRadius="8px"
                         fontWeight={400}
                         height={"40px"}
@@ -107,13 +107,14 @@ const QuitModal = ({
                         Quit
                     </Button>
                     <Button
-                        colorScheme="yellow"
                         onClick={onClose}
                         fontSize={isPc ? "16px" : "14px"}
-                        w="135px"
+                        w="130px"
                         height={"40px"}
                         borderRadius="8px"
                         fontWeight={400}
+                        background={"#FDDC2D"}
+                        color={"#000"}
                     >
                         Continue to {quitType}
                     </Button>
