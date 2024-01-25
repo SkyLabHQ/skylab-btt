@@ -57,7 +57,7 @@ const PlayGame = ({
     const [loading, setLoading] = useState<boolean>(false);
     const toast = useSkyToast();
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
-    const [bufferTime, setBufferTime] = useState(0);
+    const [bufferTime, setBufferTime] = useState(-1);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 
     const {
@@ -149,6 +149,7 @@ const PlayGame = ({
             setShowAnimate(resCurrentGrid.toNumber());
         } else if (resCurrentGrid.toNumber() !== currentGrid) {
             setShowAnimate(currentGrid);
+            setBufferTime(-1);
         }
 
         const _list = JSON.parse(JSON.stringify(list));
@@ -256,7 +257,6 @@ const PlayGame = ({
             });
             setRevealing(false);
             setBidAmount(0);
-            handleGetGameInfo();
         } catch (e) {
             setRevealing(false);
             console.log(e);
@@ -327,7 +327,6 @@ const PlayGame = ({
                 usePaymaster: true,
                 signer: privateLobbySigner,
             });
-            handleGetGameInfo();
             onChangeGame("my", {
                 ...myGameInfo,
                 gameState: GameState.Commited,
@@ -451,31 +450,24 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         };
 
         const remainTime = time - now;
-
         if (remainTime > ThirtySecond) {
-            const bufferKey = bidTacToeGameAddress;
-            let bufferTime = sessionStorage.getItem(bufferKey) ?? 0;
-            sessionStorage.setItem(bufferKey, "");
-
-            if (Number(bufferTime) === 0 || remainTime > Number(bufferTime)) {
+            let temBufferTime = -1;
+            if (bufferTime === -1) {
                 if (remainTime > SixtySecond) {
-                    bufferTime = remainTime - SixtySecond;
+                    temBufferTime = remainTime - SixtySecond;
                 } else if (remainTime > ThirtySecond) {
-                    bufferTime = remainTime - ThirtySecond;
+                    temBufferTime = remainTime - ThirtySecond;
                 } else {
-                    bufferTime = remainTime;
+                    temBufferTime = remainTime;
                 }
-            } else {
-                bufferTime = remainTime;
+                setBufferTime(temBufferTime);
             }
 
-            setBufferTime(Number(bufferTime));
             commitWorkerRef.current.postMessage({
                 action: "start",
                 timeToCount: remainTime - ThirtySecond,
             });
         } else {
-            setBufferTime(Number(0));
             commitWorkerRef.current.postMessage({
                 action: "stop",
             });
@@ -594,6 +586,9 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
     }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
 
     useEffect(() => {
+        if (isPc) {
+            return;
+        }
         const handleVisibilityChange = () => {
             if (document.hidden) {
                 if (commitWorkerRef.current) {
@@ -615,7 +610,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                 handleVisibilityChange,
             );
         };
-    }, []);
+    }, [isPc, bufferTime]);
 
     return (
         <Box

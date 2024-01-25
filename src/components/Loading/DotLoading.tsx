@@ -11,7 +11,7 @@ const DotLoading = () => {
         <motion.div
             style={{
                 position: "relative",
-                height: "12px",
+                height: "10px",
                 width: "24px",
             }}
         >

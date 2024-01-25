@@ -1,10 +1,41 @@
-import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
+import { Box, Text, Image, useMediaQuery, BoxProps } from "@chakra-ui/react";
 import React from "react";
 import HumanPlane from "./assets/human-plane.png";
 import RobotIcon from "./assets/robot.png";
 import GrayHumanPlane from "./assets/gray-human-plane.png";
-import { GrayButton } from "../Button/Index";
 import PrivateLobbyIcon from "./assets/private-lobby.svg";
+import styled from "@emotion/styled";
+
+export const GrayButtonStyle = styled(Box)`
+    text-align: center;
+    position: relative;
+    align-items: center;
+    display: flex;
+    border: 3px solid #bcbbbe;
+    border-radius: 0.9375vw;
+    height: 3.3333vw;
+    fontsize: 1.25vw;
+    textalign: left;
+    outline: none;
+    width: 20.8333vw;
+    box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
+    justify-content: flex-start;
+    padding: 0;
+    &:focus {
+        box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
+    }
+    &: [data-focus] {
+        box-shadow: 0.2083vw 0.2083vw 0px 0px rgba(255, 255, 255, 0.5);
+    }
+    & .chakra-button__icon {
+        position: absolute;
+        right: 0.7813vw;
+    }
+`;
+
+export const GrayButton = (props: BoxProps) => {
+    return <GrayButtonStyle {...props}></GrayButtonStyle>;
+};
 
 export const PlayButtonGroup = ({
     tournamentDisabled,
@@ -25,7 +56,7 @@ export const PlayButtonGroup = ({
                 display: "flex",
                 flexDirection: "column",
                 fontFamily: "Quantico",
-                "& button": {
+                "&>div": {
                     width: "100% !important",
                     height: `${isPc ? "4.7917vw" : "70px"} !important`,
                     justifyContent: "flex-end",
@@ -50,7 +81,6 @@ export const PlayButtonGroup = ({
                     paddingLeft: "5.2083vw !important",
                     opacity: tournamentDisabled ? 0.5 : 1,
                 }}
-                variant="outline"
             >
                 <Image
                     src={tournamentDisabled ? GrayHumanPlane : HumanPlane}
@@ -94,7 +124,6 @@ export const PlayButtonGroup = ({
                 sx={{
                     marginTop: "1.0417vw",
                 }}
-                variant="outline"
                 position={"relative"}
             >
                 <Image
@@ -123,7 +152,6 @@ export const PlayButtonGroup = ({
                 sx={{
                     marginTop: "1.0417vw",
                 }}
-                variant="outline"
             >
                 <Image
                     src={PrivateLobbyIcon}
