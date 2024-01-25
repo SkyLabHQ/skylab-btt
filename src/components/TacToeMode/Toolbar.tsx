@@ -38,7 +38,7 @@ export const Toolbar = () => {
                 display: "flex",
             }}
         >
-            {!isIos() &&
+            {/* {!isIos() &&
                 !window.matchMedia("(display-mode: standalone)").matches && (
                     <Image
                         onClick={() => {
@@ -52,7 +52,7 @@ export const Toolbar = () => {
                             cursor: "pointer",
                         }}
                     ></Image>
-                )}
+                )} */}
             <Image
                 src={PlayBackIcon}
                 sx={{

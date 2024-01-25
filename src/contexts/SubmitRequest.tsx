@@ -1,6 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { createContext, useContext, useState } from "react";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
+import DotLoading from "@/components/Loading/DotLoading";
 const SubmitRequestContext = createContext<{
     isLoading: boolean;
     openLoading: () => void;
@@ -57,7 +58,8 @@ export const SubmitRequestProvider = ({
                                 width: "60px",
                             }}
                         ></Image>
-                        <Text>Submit request...</Text>
+                        <Text>Submit request </Text>
+                        <DotLoading></DotLoading>
                     </Flex>
                 )}
 

@@ -34,7 +34,7 @@ const AddToHome = () => {
                     fontSize: "12px",
                 }}
             >
-                An onchain drawing game
+                A Bidding Strategy Game
             </Text>
             <Text
                 sx={{
@@ -57,7 +57,7 @@ const AddToHome = () => {
                     }}
                 >
                     Add to Home Screen in the
-                </span>
+                </span>{" "}
                 options. Then open the Bid Tac Toe app on your home screen
             </Text>
         </Flex>
