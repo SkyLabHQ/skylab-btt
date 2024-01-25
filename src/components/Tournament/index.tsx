@@ -674,7 +674,7 @@ export const Leaderboard = ({
         const infos = await ethcallProvider.all(p);
 
         setTokenIdList(
-            infos.map((item) => {
+            infos.map((item: any) => {
                 return item
                     .map((cItem: any) => {
                         return {

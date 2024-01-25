@@ -190,7 +190,7 @@ const SelectPilotCollections = ({
         const res = await multiProvider.all(p);
 
         setCurrentMyNfts(
-            pilotIds.map((item, index) => {
+            pilotIds.map((item: any, index: number) => {
                 return {
                     pilotId: item.toNumber(),
                     img: getMetadataImg(res[index * 2]),

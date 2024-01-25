@@ -456,7 +456,7 @@ const Games = () => {
             });
 
             const playerAddresses = await multiProvider.all(p1);
-            const p2 = playerAddresses.map((item) => {
+            const p2 = playerAddresses.map((item: any) => {
                 return multiMercuryBTTPrivateLobby.userInfo(item);
             });
             const userInfos = await multiProvider.all(p2);
@@ -553,7 +553,7 @@ const Games = () => {
         const playerInfos = await multiProvider.all(p2);
 
         const allValidPlayers = playerInfos
-            .map((item, index) => {
+            .map((item: any, index: number) => {
                 return {
                     avatar: item.avatar.toNumber() - 1,
                     name: item.name,

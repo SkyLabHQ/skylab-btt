@@ -47,13 +47,9 @@ const ToolBar = ({
             }}
         >
             <KeyBoard
-                type={true}
-                isOpen={keyBoardOpen}
                 onToggle={() => {
-                    console.log(11111);
                     keyBoardOnToggle();
                     quitType === "game" && shareOnClose();
-                    console.log("触发啊啊");
                 }}
                 onClose={keyBoardOnClose}
             ></KeyBoard>

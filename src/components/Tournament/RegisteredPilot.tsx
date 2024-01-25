@@ -35,7 +35,9 @@ const RegisteredPilot = ({
         try {
             setLoading(true);
             const recentlyActivePilots =
-                await mercuryPilotsContract.getRecentlyActivePilots(address);
+                await mercuryPilotsContract.read.getRecentlyActivePilots([
+                    address,
+                ]);
             const pMileageRequest: any = [];
 
             // filter out invalid pilots
@@ -69,7 +71,7 @@ const RegisteredPilot = ({
             const list = await handlePilotsInfo({
                 chainId,
                 allPilot: uniquePilots,
-                values: mileageRes.map((item) => {
+                values: mileageRes.map((item: any) => {
                     return item.toNumber();
                 }),
             });

@@ -5,6 +5,8 @@ import {
     useBoolean,
     useDisclosure,
     useMediaQuery,
+    Image,
+    Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +17,6 @@ import {
     useBurnerRetryContract,
     useTestflightRetryContract,
 } from "@/hooks/useRetryContract";
-import Loading from "@/components/Loading";
 import { handleError } from "@/utils/error";
 import {
     botAddress,
@@ -63,6 +64,9 @@ import Back from "@/components/Back";
 import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
 import ReactCanvasNest from "react-canvas-nest";
+import useCountDown from "react-countdown-hook";
+import EnterLoadingIcon from "@/components/TacToeMode/assets/enter-loading.gif";
+import DotLoading from "@/components/Loading/DotLoading";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -84,6 +88,7 @@ export interface onGoingGame {
 
 const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [timeLeft, { start }] = useCountDown(30000, 1000);
 
     const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
     const {
@@ -226,7 +231,7 @@ const TacToeMode = () => {
         });
         const planeTokenIds = await ethcallProvider.all(p);
         const p1: any = [];
-        planeTokenIds.forEach((tokenId) => {
+        planeTokenIds.forEach((tokenId: any) => {
             p1.push(tournamentContract.aviationLevels(tokenId));
             p1.push(tournamentContract.tokenURI(tokenId));
             p1.push(tournamentContract.aviationRounds(tokenId));
@@ -253,10 +258,10 @@ const TacToeMode = () => {
         });
 
         const _list = list
-            .filter((item) => {
+            .filter((item: any) => {
                 return item.round === round.toNumber();
             })
-            .sort((item1, item2) => {
+            .sort((item1: any, item2: any) => {
                 return item2.level - item1.level; //  大的 level 排在前面
             })
             .reverse();
@@ -275,6 +280,7 @@ const TacToeMode = () => {
             );
             setLoading(true);
             setEnterText("Entering bot game");
+            start();
 
             const receipt = await testflightContract("playTestMint", [], {
                 usePaymaster: true,
@@ -384,7 +390,7 @@ const TacToeMode = () => {
         try {
             setLoading(true);
             setEnterText("Entering lobby");
-
+            start();
             const privateLobbySigner = getPrivateLobbySigner();
             if (bttPrivateLobbyContract) {
                 await bttPrivateLobbyContract("quitPrivateLobby", [], {
@@ -632,27 +638,50 @@ const TacToeMode = () => {
                         }}
                     >
                         {loading && (
-                            <>
+                            <Flex
+                                flexDir={"column"}
+                                align={"center"}
+                                sx={{
+                                    marginTop: "10px",
+                                }}
+                            >
+                                <Flex align={"center"}>
+                                    {" "}
+                                    <Text
+                                        sx={{
+                                            fontSize: isPc ? "1.25vw" : "16px",
+                                            marginRight: "1.0417vw",
+                                        }}
+                                    >
+                                        {enterText}
+                                    </Text>
+                                    <DotLoading></DotLoading>
+                                </Flex>
+
+                                <Image
+                                    src={EnterLoadingIcon}
+                                    sx={{
+                                        width: "65px",
+                                    }}
+                                ></Image>
                                 <Text
                                     sx={{
-                                        fontSize: isPc ? "1.25vw" : "16px",
-                                        marginRight: "1.0417vw",
+                                        fontSize: isPc ? "1.25vw" : "20px",
                                     }}
                                 >
-                                    {enterText}
+                                    00:{" "}
+                                    {timeLeft < 10000
+                                        ? `0${timeLeft / 1000}`
+                                        : timeLeft / 1000}
                                 </Text>
-                                <Box
+                                <Text
                                     sx={{
-                                        position: "relative",
-                                        width: isPc ? "2.2917vw" : "24px",
-                                        height: isPc ? "2.2917vw" : "24px",
+                                        fontSize: isPc ? "1.25vw" : "12px",
                                     }}
                                 >
-                                    <Loading
-                                        size={isPc ? "2.2917vw" : "24px"}
-                                    ></Loading>
-                                </Box>
-                            </>
+                                    Average time：20sec
+                                </Text>
+                            </Flex>
                         )}
                     </Box>
                 </Box>

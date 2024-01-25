@@ -161,13 +161,9 @@ const Content = () => {
 };
 
 const KeyBoard = ({
-    type = true,
-    isOpen,
     onToggle,
     onClose,
 }: {
-    type?: boolean;
-    isOpen: boolean;
     onToggle: () => void;
     onClose: () => void;
 }) => {
@@ -200,6 +196,7 @@ const KeyBoard = ({
                             "&:focus": {
                                 boxShadow: "none",
                             },
+                            minWidth: "unset",
                         }}
                     >
                         <Image

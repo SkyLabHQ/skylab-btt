@@ -278,7 +278,7 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
 
             const list = await handlePilotsInfo({
                 chainId: DEAFAULT_CHAINID,
-                values: mileageRes.map((item) => item.toNumber()),
+                values: mileageRes.map((item: any) => item.toNumber()),
                 allPilot,
             });
 
@@ -328,7 +328,7 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
             const allPilot: ActivePilotRes[] = [];
             const allPilotWinStreak: number[] = [];
 
-            pilotAndWinStreakRes.forEach((item, index) => {
+            pilotAndWinStreakRes.forEach((item: any, index: number) => {
                 if (index % 2 === 0) {
                     allPilot.push({
                         collectionAddress: item.collectionAddress,
@@ -383,7 +383,7 @@ const GameLeaderboard = ({ show }: { show?: boolean }) => {
             const allPilot: ActivePilotRes[] = [];
             const allPilotNetPoints: string[] = [];
 
-            pilotNetPointsRes.forEach((item, index) => {
+            pilotNetPointsRes.forEach((item: any, index: number) => {
                 if (index % 2 === 0) {
                     allPilot.push({
                         collectionAddress: item.collectionAddress,
