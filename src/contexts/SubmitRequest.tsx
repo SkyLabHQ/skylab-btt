@@ -58,8 +58,10 @@ export const SubmitRequestProvider = ({
                                 width: "60px",
                             }}
                         ></Image>
-                        <Text>Submit request </Text>
-                        <DotLoading></DotLoading>
+                        <Flex>
+                            <Text>Submit request </Text>
+                            <DotLoading></DotLoading>
+                        </Flex>
                     </Flex>
                 )}
 

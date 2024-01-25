@@ -49,6 +49,8 @@ import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
 
+const myNow = getNowSecondsTimestamp() + 80000;
+
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
     onChangeNewInfo: (info: MyNewInfo) => void;
@@ -111,7 +113,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
 
     const ethcallProvider = useMultiProvider(realChainId);
     const [loading, setLoading] = useState<boolean>(false);
-    const [bufferTime, setBufferTime] = useState(0);
+    const [bufferTime, setBufferTime] = useState(-1);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 
     const inviteLink = useMemo(() => {
@@ -180,6 +182,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             setShowAnimate(resCurrentGrid.toNumber());
         } else if (resCurrentGrid.toNumber() !== currentGrid) {
             setShowAnimate(currentGrid);
+            setBufferTime(-1);
         }
 
         const _list = JSON.parse(JSON.stringify(list));
@@ -537,7 +540,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         commitWorkerRef.current = new Worker(
             new URL("../../utils/timerWorker.ts", import.meta.url),
         );
-        const time = myGameInfo.timeout * 1000;
+        const time = myNow; // myGameInfo.timeout * 1000;
         const now = getNowSecondsTimestamp();
         commitWorkerRef.current.onmessage = async (event) => {
             const timeLeft = event.data;
@@ -549,31 +552,24 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         };
 
         const remainTime = time - now;
-
         if (remainTime > ThirtySecond) {
-            const bufferKey = bidTacToeGameAddress;
-            let bufferTime = sessionStorage.getItem(bufferKey) ?? 0;
-            sessionStorage.setItem(bufferKey, "");
-
-            if (Number(bufferTime) === 0 || remainTime > Number(bufferTime)) {
+            let temBufferTime = -1;
+            if (bufferTime === -1) {
                 if (remainTime > SixtySecond) {
-                    bufferTime = remainTime - SixtySecond;
+                    temBufferTime = remainTime - SixtySecond;
                 } else if (remainTime > ThirtySecond) {
-                    bufferTime = remainTime - ThirtySecond;
+                    temBufferTime = remainTime - ThirtySecond;
                 } else {
-                    bufferTime = remainTime;
+                    temBufferTime = remainTime;
                 }
-            } else {
-                bufferTime = remainTime;
             }
-
-            setBufferTime(Number(bufferTime));
+            setBufferTime(temBufferTime);
             commitWorkerRef.current.postMessage({
                 action: "start",
                 timeToCount: remainTime - ThirtySecond,
             });
         } else {
-            setBufferTime(Number(0));
+            setBufferTime(-1);
             commitWorkerRef.current.postMessage({
                 action: "stop",
             });
@@ -636,27 +632,9 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
 
     useEffect(() => {
-        if (!bidTacToeGameAddress) {
-            return;
-        }
-        const handleBufferTime = () => {
-            const bufferKey = bidTacToeGameAddress;
-            let remainBufferTime = 0;
-            if (autoCommitTimeoutTime > bufferTime) {
-                remainBufferTime = bufferTime;
-            } else {
-                remainBufferTime = autoCommitTimeoutTime;
-            }
-
-            sessionStorage.setItem(bufferKey, String(remainBufferTime));
-        };
-
-        window.addEventListener("beforeunload", handleBufferTime);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleBufferTime);
-        };
-    }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
+        if (currentGrid === -1 || !bidTacToeGameAddress) return;
+        sessionStorage.setItem(bidTacToeGameAddress, "0");
+    }, [currentGrid, bidTacToeGameAddress]);
 
     useEffect(() => {
         if (isPc) {
