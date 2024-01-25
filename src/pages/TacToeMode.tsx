@@ -8,7 +8,7 @@ import {
     Image,
     Flex,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     useBidTacToeFactoryRetry,
@@ -152,6 +152,19 @@ const TacToeMode = () => {
             : "",
     );
 
+    const { minutes, second } = useMemo(() => {
+        let minutes: string | number = Math.floor(timeLeft / 60000);
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+
+        let second: string | number = Math.floor((timeLeft / 1000) % 60);
+        if (second < 10) {
+            second = `0${second}`;
+        }
+        return { minutes, second };
+    }, [timeLeft]);
+
     const handleGetLobbyOnGoingGames = async () => {
         const avaitionAddress = skylabTournamentAddress[DEAFAULT_CHAINID];
 
@@ -281,7 +294,7 @@ const TacToeMode = () => {
             );
             setLoading(true);
             setEnterText("Entering bot game");
-            start();
+            start(80000);
 
             const receipt = await testflightContract("playTestMint", [], {
                 usePaymaster: true,
@@ -670,17 +683,17 @@ const TacToeMode = () => {
                                         fontSize: isPc ? "1.25vw" : "20px",
                                     }}
                                 >
-                                    00:{" "}
-                                    {timeLeft < 10000
-                                        ? `0${timeLeft / 1000}`
-                                        : timeLeft / 1000}
+                                    {minutes}:{second}
                                 </Text>
                                 <Text
                                     sx={{
                                         fontSize: isPc ? "1.25vw" : "12px",
                                     }}
                                 >
-                                    Average time：20sec
+                                    Average time:{" "}
+                                    {enterText === "Entering lobby"
+                                        ? "20sec"
+                                        : "40sec"}
                                 </Text>
                             </Flex>
                         )}

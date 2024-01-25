@@ -562,14 +562,13 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 } else {
                     temBufferTime = remainTime;
                 }
+                setBufferTime(temBufferTime);
             }
-            setBufferTime(temBufferTime);
             commitWorkerRef.current.postMessage({
                 action: "start",
                 timeToCount: remainTime - ThirtySecond,
             });
         } else {
-            setBufferTime(-1);
             commitWorkerRef.current.postMessage({
                 action: "stop",
             });
@@ -662,7 +661,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 handleVisibilityChange,
             );
         };
-    }, [isPc]);
+    }, [isPc, bufferTime]);
 
     return (
         <Box
