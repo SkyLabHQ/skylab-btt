@@ -294,7 +294,7 @@ const TacToeMode = () => {
             );
             setLoading(true);
             setEnterText("Entering bot game");
-            start(80000);
+            start(60000);
 
             const receipt = await testflightContract("playTestMint", [], {
                 usePaymaster: true,
@@ -693,7 +693,7 @@ const TacToeMode = () => {
                                     Average time:{" "}
                                     {enterText === "Entering lobby"
                                         ? "20sec"
-                                        : "40sec"}
+                                        : "30sec"}
                                 </Text>
                             </Flex>
                         )}

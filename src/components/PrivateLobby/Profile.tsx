@@ -209,7 +209,7 @@ const Profile = ({
     onNicknameChange: (nickname: string) => void;
     onAvatarChange: (color: number) => void;
 }) => {
-    const { openLoading } = useSubmitRequest();
+    const { openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<"name" | "avatar">("name");
@@ -237,9 +237,11 @@ const Profile = ({
                     signer: privateLobbySigner,
                 },
             );
+            closeLoading();
             handleStepChange(1);
             setLoading(false);
         } catch (e) {
+            closeLoading();
             console.log(e);
             toast(handleError(e));
         }
