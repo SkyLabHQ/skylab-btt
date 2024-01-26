@@ -6,7 +6,7 @@ import { useTour } from "@reactour/tour";
 import CloseIcon from "./assets/close.svg";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
-import { MUserProfileResult } from "../PrivateRoom/UserProfile";
+import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import { aviationImg } from "@/utils/aviationImg";
 import BottomInputBox from "../BttComponents/BottomInputBox";
@@ -21,16 +21,9 @@ const FirstBoard = () => {
             opMark: UserMarkType.Cross,
         },
         {
-            mark: 1,
-            myValue: 12,
-            opValue: 10,
-            myMark: UserMarkType.Circle,
-            opMark: UserMarkType.Cross,
-        },
-        {
-            mark: 2,
-            myValue: 6,
-            opValue: 8,
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
@@ -42,16 +35,16 @@ const FirstBoard = () => {
             opMark: UserMarkType.Cross,
         },
         {
-            mark: 0,
-            myValue: 5,
-            opValue: 8,
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
         {
-            mark: 1,
-            myValue: 7,
-            opValue: 4,
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
@@ -71,8 +64,15 @@ const FirstBoard = () => {
         },
         {
             mark: 1,
-            myValue: 10,
-            opValue: 4,
+            myValue: 3,
+            opValue: 2,
+            myMark: UserMarkType.Circle,
+            opMark: UserMarkType.Cross,
+        },
+        {
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
@@ -121,12 +121,12 @@ const FirstBoard = () => {
                 <Box
                     className="btt-0-step"
                     sx={{
-                        width: "56px",
-                        height: "56px",
+                        width: "58px",
+                        height: "58px",
                         position: "absolute",
-                        top: "50%",
+                        top: "160px",
                         left: "50%",
-                        transform: "translate(-50%, -50%)",
+                        transform: "translateX(-50%)",
                     }}
                 ></Box>
             </Grid>
@@ -345,6 +345,19 @@ const ThirdBoard = () => {
     );
 };
 
+const myBalanceObj = {
+    0: 97,
+    1: 97,
+    2: 55,
+    3: 0,
+};
+const opBalanceObj = {
+    0: 98,
+    1: 98,
+    2: 64,
+    3: 0,
+};
+
 const MTacToeTutorial = ({}) => {
     const { currentStep, setIsOpen } = useTour();
 
@@ -433,15 +446,18 @@ const MTacToeTutorial = ({}) => {
                         flexDir={"column"}
                     >
                         <Flex>
-                            <MUserProfileResult
-                                showUserIcon={false}
-                                position="left"
+                            <MUserProfile
+                                open={true}
+                                status="op"
                                 img={aviationImg(1)}
                                 level={1}
-                            ></MUserProfileResult>
+                            ></MUserProfile>
                         </Flex>
                         <Box className="btt-first-step btt-third-step">
-                            <MBalance balance={88} mark={2}></MBalance>
+                            <MBalance
+                                balance={opBalanceObj[currentStep]}
+                                mark={2}
+                            ></MBalance>
                         </Box>
                     </Flex>
                     <Box
@@ -454,13 +470,14 @@ const MTacToeTutorial = ({}) => {
                     >
                         <Box
                             sx={{
-                                height: "100px",
+                                height: "32px",
                                 position: "relative",
                             }}
+                            className="btt-1-step"
                         >
                             <Box
                                 sx={{
-                                    width: "180px",
+                                    width: "140px",
                                     position: "absolute",
                                     left: "12px",
                                     bottom: "4px",
@@ -482,22 +499,19 @@ const MTacToeTutorial = ({}) => {
                                 flexDir={"column"}
                                 align={"flex-end"}
                             >
-                                <Flex>
-                                    <MUserProfileResult
-                                        level={1}
-                                        position="right"
-                                        showUserIcon={false}
-                                        img={aviationImg(1)}
-                                    ></MUserProfileResult>
-                                </Flex>
+                                <MUserProfile
+                                    level={1}
+                                    open={true}
+                                    status="my"
+                                    img={aviationImg(1)}
+                                ></MUserProfile>
                                 <MBalance
-                                    balance={88}
+                                    balance={myBalanceObj[currentStep]}
                                     status="right"
                                     mark={1}
                                 ></MBalance>
                             </Flex>
                         </Box>
-
                         <BottomInputBox
                             bidAmount={""}
                             myGameState={null}

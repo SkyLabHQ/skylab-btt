@@ -35,7 +35,6 @@ const BottomInputBox = ({
             align={"center"}
         >
             <Flex
-                className="btt-1-step"
                 sx={{
                     borderRadius: "8px",
                     border: "2px solid #fff",

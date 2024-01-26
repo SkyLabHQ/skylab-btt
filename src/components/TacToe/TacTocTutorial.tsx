@@ -20,16 +20,9 @@ const FirstBoard = () => {
             opMark: UserMarkType.Cross,
         },
         {
-            mark: 1,
-            myValue: 12,
-            opValue: 10,
-            myMark: UserMarkType.Circle,
-            opMark: UserMarkType.Cross,
-        },
-        {
-            mark: 2,
-            myValue: 6,
-            opValue: 8,
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
@@ -41,16 +34,16 @@ const FirstBoard = () => {
             opMark: UserMarkType.Cross,
         },
         {
-            mark: 0,
-            myValue: 5,
-            opValue: 8,
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
         {
-            mark: 1,
-            myValue: 7,
-            opValue: 4,
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
@@ -70,8 +63,15 @@ const FirstBoard = () => {
         },
         {
             mark: 1,
-            myValue: 10,
-            opValue: 4,
+            myValue: 3,
+            opValue: 2,
+            myMark: UserMarkType.Circle,
+            opMark: UserMarkType.Cross,
+        },
+        {
+            mark: -1,
+            myValue: 0,
+            opValue: 0,
             myMark: UserMarkType.Circle,
             opMark: UserMarkType.Cross,
         },
@@ -119,12 +119,12 @@ const FirstBoard = () => {
                 <Box
                     className="btt-0-step"
                     sx={{
-                        width: "7vw",
-                        height: "7vw",
+                        width: "7.2vw",
+                        height: "7.2vw",
                         position: "absolute",
-                        top: "50%",
+                        bottom: "0%",
                         left: "50%",
-                        transform: "translate(-50%, -50%)",
+                        transform: "translateX(-50%  )",
                     }}
                 ></Box>
             </Grid>
@@ -343,52 +343,17 @@ const ThirdBoard = () => {
     );
 };
 
-const Timer = () => {
-    return (
-        <Box
-            sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "absolute",
-                width: "fit-content",
-                left: "50%",
-                transform: "translateX(-50%)",
-            }}
-        >
-            <Box
-                sx={{
-                    border: "3px solid #FFF",
-                    width: "21.4583vw",
-                    background: "transparent",
-                    height: "2.0833vw",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                    padding: "0 0.3646vw",
-                }}
-            >
-                <Box
-                    sx={{
-                        height: "1.3021vw",
-                        width: "30%",
-                        background: "#fff",
-                    }}
-                ></Box>
-            </Box>
-            <Text
-                sx={{
-                    fontSize: "1.875vw",
-                    position: "absolute",
-                    right: "-7.2917vw",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                }}
-            >
-                01:30
-            </Text>
-        </Box>
-    );
+const myBalanceObj = {
+    0: 97,
+    1: 97,
+    2: 55,
+    3: 0,
+};
+const opBalanceObj = {
+    0: 98,
+    1: 98,
+    2: 64,
+    3: 0,
 };
 
 const TacToeTutorial = ({}) => {
@@ -494,14 +459,8 @@ const TacToeTutorial = ({}) => {
                             address={
                                 "0x2f49Be6976324000da4Bd091B0217E217b81A93d"
                             }
-                            balance={
-                                [0, 1, 2].includes(currentStep)
-                                    ? 60
-                                    : currentStep === 3
-                                    ? 55
-                                    : 0
-                            }
-                            bidAmount={15}
+                            balance={myBalanceObj[currentStep]}
+                            bidAmount={3}
                         ></MyUserCard>
                         <Box>
                             {[0, 1].includes(currentStep) && (
@@ -518,15 +477,9 @@ const TacToeTutorial = ({}) => {
                             address={
                                 "0x40BA69df5c58A1106480b42aFEF78DA08860081c"
                             }
-                            balance={
-                                [0, 1, 2].includes(currentStep)
-                                    ? 64
-                                    : currentStep == 3
-                                    ? 64
-                                    : 0
-                            }
-                            bidAmount={15}
-                            opGameState={GameState.WaitingForBid}
+                            balance={opBalanceObj[currentStep]}
+                            bidAmount={2}
+                            opGameState={GameState.Revealed}
                         ></OpUserCard>
                     </Box>
                 </Box>{" "}

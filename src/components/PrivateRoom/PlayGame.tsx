@@ -563,29 +563,6 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
     }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
 
     useEffect(() => {
-        if (!bidTacToeGameAddress) {
-            return;
-        }
-        const handleBufferTime = () => {
-            const bufferKey = bidTacToeGameAddress;
-            let remainBufferTime = 0;
-            if (autoCommitTimeoutTime > bufferTime) {
-                remainBufferTime = bufferTime;
-            } else {
-                remainBufferTime = autoCommitTimeoutTime;
-            }
-
-            sessionStorage.setItem(bufferKey, String(remainBufferTime));
-        };
-
-        window.addEventListener("beforeunload", handleBufferTime);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleBufferTime);
-        };
-    }, [bidTacToeGameAddress, autoCommitTimeoutTime, bufferTime]);
-
-    useEffect(() => {
         if (isPc) {
             return;
         }
