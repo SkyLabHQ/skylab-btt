@@ -254,7 +254,6 @@ const CurrentPilot = ({
                 return;
             }
             setActiveLoading(true);
-            console.log(mercuryPilotsContract, "mercuryPilotsContract");
             const res = await mercuryPilotsContract.write.setActivePilot([
                 selectPilotInfo.address,
                 selectPilotInfo.pilotId,
@@ -283,7 +282,6 @@ const CurrentPilot = ({
         }
     };
 
-    console.log(selectPilotInfo, "selectPilotInfo");
     return (
         <Box
             sx={{

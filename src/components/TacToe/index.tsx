@@ -48,6 +48,7 @@ import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
+import StatusProgress from "../BttComponents/StatusProgress";
 
 const myNow = getNowSecondsTimestamp() + 80000; //test
 
@@ -694,11 +695,10 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 }
                             ></Timer>
                         )}
-                        <StatusTip
-                            loading={loading}
+                        <StatusProgress
                             myGameState={myGameInfo.gameState}
                             opGameState={opGameInfo.gameState}
-                        ></StatusTip>
+                        ></StatusProgress>
                     </Flex>
                     <ToolBar
                         inviteLink={inviteLink}

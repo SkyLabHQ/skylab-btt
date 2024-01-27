@@ -11,6 +11,7 @@ import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
 import StatusTip from "../BttComponents/StatusTip";
+import StatusProgress from "../BttComponents/StatusProgress";
 
 const MLayout = ({
     inviteLink,
@@ -110,11 +111,10 @@ const MLayout = ({
                     marginTop: "50px",
                 }}
             >
-                <StatusTip
-                    loading={loading}
+                <StatusProgress
                     myGameState={myGameInfo.gameState}
                     opGameState={opGameInfo.gameState}
-                ></StatusTip>
+                ></StatusProgress>
                 <Box
                     sx={{
                         marginTop: "20px",

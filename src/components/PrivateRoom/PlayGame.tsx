@@ -44,6 +44,7 @@ import QuitModal from "../BttComponents/QuitModal";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
+import StatusProgress from "../BttComponents/StatusProgress";
 
 const PlayGame = ({
     onChangeGame,
@@ -618,11 +619,10 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                                 }
                             ></Timer>
                         )}
-                        <StatusTip
-                            loading={loading}
+                        <StatusProgress
                             myGameState={myGameInfo.gameState}
                             opGameState={opGameInfo.gameState}
-                        ></StatusTip>
+                        ></StatusProgress>
                     </Flex>
                     <ToolBar
                         inviteLink={inviteLink}
