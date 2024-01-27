@@ -43,11 +43,13 @@ const CustomButton = styled(Button)`
     color: #000;
     &[disabled] {
         color: #636363;
-        background: #ababab;
+        background: #ABABAB; 
+        opacity: 1;
     }
     &[disabled]:hover {
         color: #636363;
         background: #ABABAB;
+        opacity: 1;
     },
 `;
 
@@ -158,6 +160,12 @@ const CurrentPilot = ({
 
     const handleInputPilotId = (value: string) => {
         setInputPilotId(value);
+        setSelectPilotInfo({
+            address: currentCollection.address,
+            pilotId: 0,
+            img: "",
+            owner: "",
+        });
     };
 
     const handlePilotIndex = (value: number) => {
@@ -275,6 +283,7 @@ const CurrentPilot = ({
         }
     };
 
+    console.log(selectPilotInfo, "selectPilotInfo");
     return (
         <Box
             sx={{
@@ -405,6 +414,7 @@ const CurrentPilot = ({
                 >
                     {currentTab === 0 && (
                         <CustomButton
+                            isDisabled={inputPilotId.length === 0}
                             variant="unstyled"
                             onClick={handleSearchTokenId}
                             sx={{
@@ -415,7 +425,7 @@ const CurrentPilot = ({
                         </CustomButton>
                     )}
                     <CustomButton
-                        disabled={selectPilotInfo.pilotId === 0}
+                        isDisabled={selectPilotInfo.pilotId === 0}
                         variant="unstyled"
                         onClick={handleSetActive}
                     >

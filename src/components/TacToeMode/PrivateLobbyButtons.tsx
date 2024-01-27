@@ -1,9 +1,9 @@
 import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
-import { GrayButton } from "../Button/Index";
 import BackIcon from "./assets/back.svg";
 import JoinLobbyIcon from "./assets/join-lobby.svg";
 import NewLobbyIcon from "./assets/new-lobby.svg";
+import { GrayButton } from "@/pages/TacToeMode";
 
 const PrivateLobbyButtons = ({
     onBack,
@@ -53,7 +53,6 @@ const PrivateLobbyButtons = ({
                 sx={{
                     marginTop: "1.0417vw",
                 }}
-                variant="outline"
             >
                 <Image
                     src={NewLobbyIcon}
@@ -80,7 +79,6 @@ const PrivateLobbyButtons = ({
                 sx={{
                     marginTop: "1.0417vw",
                 }}
-                variant="outline"
                 position={"relative"}
             >
                 <Image

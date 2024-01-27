@@ -1,6 +1,6 @@
 {
-    "short_name": "SkyLab",
-    "name": "SkyLabHQ",
+    "short_name": "Bid Tac Toe",
+    "name": " Bid Tac Toe",
     "icons": [
         {
             "src": "pwa-logo.svg",
@@ -19,8 +19,8 @@
         }
     ],
     "display": "standalone",
-    "theme_color": "#000000",
-    "background_color": "#000000",
+    "theme_color": "#1B1B1B",
+    "background_color": "#1B1B1B",
     "orientation": "portrait",
     "scope": "/",
     "start_url": "/"

@@ -321,33 +321,31 @@ const SelectPilotCollections = ({
                         >
                             <NumberInputField />
                         </NumberInput>
-                        {currentCollection.enumerable && (
-                            <Box
-                                sx={{
-                                    border: "2px solid #fff",
-                                    background: "rgba(61, 61, 61, 0.10)",
-                                    position: "relative",
-                                    marginTop: "1vh",
-                                    width: "33.3333vw",
-                                    height: "15vw",
-                                    backdropFilter: "blur(5px)",
-                                    borderRadius: "0.8333vw",
-                                    padding: "2.0833vw",
-                                }}
-                            >
-                                <Grid
-                                    templateColumns="repeat(4, 1fr)"
-                                    templateRows={"repeat(3, 1fr)"}
+                        {currentCollection.enumerable &&
+                            currentMyNfts.length !== 0 && (
+                                <Box
                                     sx={{
-                                        width: "100%",
-                                        height: "100%",
-                                        overflow: "auto",
+                                        border: "2px solid #fff",
+                                        background: "rgba(61, 61, 61, 0.10)",
+                                        position: "relative",
+                                        marginTop: "1vh",
+                                        width: "33.3333vw",
+                                        height: "15vw",
+                                        backdropFilter: "blur(5px)",
+                                        borderRadius: "0.8333vw",
+                                        padding: "2.0833vw",
                                     }}
                                 >
-                                    {loading ? (
-                                        <Loading></Loading>
-                                    ) : (
-                                        currentMyNfts.map((item) => {
+                                    <Grid
+                                        templateColumns="repeat(4, 1fr)"
+                                        templateRows={"repeat(3, 1fr)"}
+                                        sx={{
+                                            width: "100%",
+                                            height: "100%",
+                                            overflow: "auto",
+                                        }}
+                                    >
+                                        {currentMyNfts.map((item) => {
                                             return (
                                                 <GridItem
                                                     key={item.pilotId}
@@ -387,11 +385,10 @@ const SelectPilotCollections = ({
                                                     </Text>
                                                 </GridItem>
                                             );
-                                        })
-                                    )}
-                                </Grid>
-                            </Box>
-                        )}
+                                        })}
+                                    </Grid>
+                                </Box>
+                            )}
                     </Box>
                 )}
             </Box>

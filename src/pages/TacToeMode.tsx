@@ -7,6 +7,7 @@ import {
     useMediaQuery,
     Image,
     Flex,
+    BoxProps,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -68,6 +69,7 @@ import useCountDown from "react-countdown-hook";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import DotLoading from "@/components/Loading/DotLoading";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
+import styled from "@emotion/styled";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -86,6 +88,38 @@ export interface onGoingGame {
     level1: number;
     level2: number;
 }
+
+export const GrayButtonStyle = styled(Box)`
+    text-align: center;
+    position: relative;
+    align-items: center;
+    display: flex;
+    border: 3px solid #bcbbbe;
+    border-radius: 0.9375vw;
+    height: 3.3333vw;
+    fontsize: 1.25vw;
+    textalign: left;
+    outline: none;
+    width: 20.8333vw;
+    box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
+    justify-content: flex-start;
+    padding: 0;
+    cursor: pointer;
+    &:focus {
+        box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
+    }
+    &: [data-focus] {
+        box-shadow: 0.2083vw 0.2083vw 0px 0px rgba(255, 255, 255, 0.5);
+    }
+    & .chakra-button__icon {
+        position: absolute;
+        right: 0.7813vw;
+    }
+`;
+
+export const GrayButton = (props: BoxProps) => {
+    return <GrayButtonStyle {...props}></GrayButtonStyle>;
+};
 
 const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
