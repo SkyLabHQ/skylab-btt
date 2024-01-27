@@ -62,6 +62,7 @@ const StatusProgress = ({
                 {new Array(dotLength).fill("").map((item, index) => {
                     return (
                         <Box
+                            key={index}
                             sx={{
                                 height: activeIndex > index ? "9px" : "8px",
                                 width: activeIndex > index ? "9px" : "8px",

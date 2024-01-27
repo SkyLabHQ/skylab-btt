@@ -26,7 +26,6 @@ import {
     useDeleteTokenIdCommited,
     useGridCommited,
 } from "@/hooks/useTacToeStore";
-import StatusTip from "./StatusTip";
 import { ZERO_DATA } from "@/skyConstants";
 import A0Testflight from "@/assets/aviations/a0-testflight.png";
 import A2Testflight from "@/assets/aviations/a2-testflight.png";

@@ -5,7 +5,6 @@ import {
     Text,
     useDisclosure,
     useMediaQuery,
-    useToast,
 } from "@chakra-ui/react";
 import { Info, useGameContext, GameType } from "@/pages/TacToe";
 import { motion } from "framer-motion";
@@ -30,6 +29,7 @@ import { handleError } from "@/utils/error";
 import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
 import { RobotImg, UserMarkType } from "@/skyConstants/bttGameTypes";
 import ToolBar from "../BttComponents/Toolbar";
+import useSkyToast from "@/hooks/useSkyToast";
 
 export const PlaneImg = ({
     detail,
@@ -216,7 +216,7 @@ export const MatchPage = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
-    const toast = useToast();
+    const toast = useSkyToast();
     const { blockNumber } = useBlockNumber();
     const {
         realChainId,

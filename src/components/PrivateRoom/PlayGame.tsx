@@ -25,7 +25,6 @@ import { ZERO_DATA } from "@/skyConstants";
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import UserProfile from "./UserProfile";
-import StatusTip from "../TacToe/StatusTip";
 import {
     GameInfo,
     GameState,

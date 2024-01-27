@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import App from "./App";
 import Activities from "./pages/Activities";
 import TacToe from "./pages/TacToe";
@@ -48,6 +48,7 @@ const AppRoutes = (): ReactElement => {
                 ></Route>
                 <Route path="/toHome" element={<AddToHome />}></Route>
             </Route>
+            <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );
 };

@@ -10,7 +10,6 @@ import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
-import StatusTip from "../BttComponents/StatusTip";
 import StatusProgress from "../BttComponents/StatusProgress";
 
 const MLayout = ({
