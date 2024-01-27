@@ -1,12 +1,13 @@
 import { Box, Image, Text, Button } from "@chakra-ui/react";
 import _ from "lodash";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import OldWhite from "./assets/old-white.svg";
 import OldYellow from "./assets/old-yellow.svg";
 import FindYellow from "./assets/find-yellow.svg";
 import FindWhite from "./assets/find-white.svg";
 import {
     getMultiDelegateERC721Contract,
+    getMultiERC721Contract,
     getMultiProvider,
 } from "@/hooks/useMultiContract";
 import { getPilotImgFromUrl } from "@/utils/ipfsImg";
@@ -141,6 +142,7 @@ const CurrentPilot = ({
     const mercuryPilotsContract = useMercuryPilotsContract();
     const [activeLoading, setActiveLoading] = useState(false);
     const [currentTab, setCurrentTab] = React.useState(0);
+    const [totalSupplys, setTotalSupplys] = useState({});
     const pilotList = AllPilotList[chainId];
 
     const { activePilot, handleGetActivePilot } = usePilotInfo(address);
@@ -151,7 +153,34 @@ const CurrentPilot = ({
         return pilotList[pilotIndex];
     }, [pilotIndex]);
 
+    const handleGetAllTotalSupply = async () => {
+        if (currentCollection.address === "") {
+            return;
+        }
+
+        if (totalSupplys[currentCollection.address]) {
+            return;
+        }
+
+        const multiProvider = getMultiProvider(currentCollection.chainId);
+        const multiDelegateERC721Contract = getMultiERC721Contract(
+            currentCollection.address,
+        );
+
+        const [totalSupply] = await multiProvider.all([
+            multiDelegateERC721Contract.totalSupply(),
+        ]);
+
+        const temTotalSupplys = {
+            ...totalSupplys,
+            [selectPilotInfo.address]: totalSupply.toNumber(),
+        };
+
+        setTotalSupplys(temTotalSupplys);
+    };
+
     const [selectPilotInfo, setSelectPilotInfo] = useState<PilotInfo>({
+        ...currentCollection,
         address: currentCollection.address,
         pilotId: 0,
         img: "",
@@ -161,13 +190,13 @@ const CurrentPilot = ({
     const handleInputPilotId = (value: string) => {
         setInputPilotId(value);
         setSelectPilotInfo({
+            ...currentCollection,
             address: currentCollection.address,
             pilotId: 0,
             img: "",
             owner: "",
         });
     };
-
     const handlePilotIndex = (value: number) => {
         setPilotIndex(value);
         setSelectPilotInfo({
@@ -184,6 +213,7 @@ const CurrentPilot = ({
     const handleSelectPilotId = (value: PilotInfo) => {
         setSelectPilotInfo(value);
     };
+
     const handleSearchTokenId = async () => {
         if (chainId !== Number(DEAFAULT_CHAINID)) {
             await addNetworkToMetask(Number(DEAFAULT_CHAINID));
@@ -221,6 +251,7 @@ const CurrentPilot = ({
 
             if (owner === ZERO_DATA) {
                 toast("Token ID does not exist");
+                setActiveLoading(false);
                 return;
             }
             const img = isSpecialPilot
@@ -281,6 +312,10 @@ const CurrentPilot = ({
             setActiveLoading(false);
         }
     };
+
+    useEffect(() => {
+        handleGetAllTotalSupply();
+    }, [selectPilotInfo]);
 
     return (
         <Box
@@ -387,6 +422,7 @@ const CurrentPilot = ({
                         >
                             {currentTab === 0 && (
                                 <SelectPilotCollections
+                                    totalSupplys={totalSupplys}
                                     currentCollection={currentCollection}
                                     inputPilotId={inputPilotId}
                                     handleInputPilotId={handleInputPilotId}

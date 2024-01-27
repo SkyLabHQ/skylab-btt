@@ -21,6 +21,8 @@ export interface PilotInfo {
     img?: string;
     xp?: number;
     owner?: string;
+    totalSupply?: number;
+    chainId?: number;
 }
 
 export const usePilotInfo = (account: string) => {

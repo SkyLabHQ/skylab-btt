@@ -62,15 +62,15 @@ const App = (): ReactElement => {
     return (
         // TO-DO: use color mode when implementing light/dark
         <Box minH="100%" color="white" height={"100%"}>
-            {<Outlet />}
-            {/* {type === 1 && (
+            {type === 0 && <Outlet />}
+            {type === 1 && (
                 <Service
                     checked={checked}
                     onChecked={setChecked}
                     onEnter={handleEnter}
                 ></Service>
             )}
-            {type === 2 && <AddToHome></AddToHome>} */}
+            {type === 2 && <AddToHome></AddToHome>}
         </Box>
     );
 };

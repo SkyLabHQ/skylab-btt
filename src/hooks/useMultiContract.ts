@@ -8,6 +8,8 @@ import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import DELEGATEERC721_ABI from "@/skyConstants/abis/DelegateERC721.json";
+import ERC721_ABI from "@/skyConstants/abis/ERC721.json";
+
 import PILOTMILEAGE_ABI from "@/skyConstants/abis/PilotMileage.json";
 import PILOTNETPOINTS_ABI from "@/skyConstants/abis/PilotNetPoints.json";
 import PILOTWINSTREAK_ABI from "@/skyConstants/abis/PilotWinStreak.json";
@@ -121,6 +123,10 @@ export const useMultiMercuryPilotsContract = (chainId: number) => {
 
 export const getMultiDelegateERC721Contract = (chainId: number) => {
     return getContract(delegateERC721Address[chainId], DELEGATEERC721_ABI);
+};
+
+export const getMultiERC721Contract = (address: string) => {
+    return getContract(address, ERC721_ABI);
 };
 
 export const useMultiPilotMileageContract = (chainId: number) => {

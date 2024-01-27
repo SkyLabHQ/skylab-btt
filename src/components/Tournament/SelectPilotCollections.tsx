@@ -138,12 +138,14 @@ export const PilotItem = ({
 };
 
 const SelectPilotCollections = ({
+    totalSupplys,
     currentCollection,
     inputPilotId,
     handleInputPilotId,
     handleSelectPilotId,
     handlePilotIndex,
 }: {
+    totalSupplys: any;
     currentCollection: any;
     inputPilotId: string;
     handleInputPilotId: (value: string) => void;
@@ -298,7 +300,17 @@ const SelectPilotCollections = ({
                                     fontSize: "1.0417vw",
                                 }}
                             >
-                                Input Token ID
+                                Input Token ID{" "}
+                                {totalSupplys[currentCollection.address]
+                                    ? `(${currentCollection.start} - ${
+                                          totalSupplys[
+                                              currentCollection.address
+                                          ] -
+                                          (currentCollection.start === 0
+                                              ? 1
+                                              : 0)
+                                      })`
+                                    : ""}
                             </Text>
                         </Box>
                         <NumberInput

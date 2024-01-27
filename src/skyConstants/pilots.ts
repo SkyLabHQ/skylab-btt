@@ -20,14 +20,17 @@ const MainnetPilotList: PilotBaseInfo[] = [
         enumerable: true,
         chainId: ChainId.ETHEREUM,
         openSeaUrl: "https://opensea.io/collection/mfers",
+        start: 0,
     },
     {
         address: "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03",
+
         img: NounsImg,
         name: "Nouns",
         enumerable: true,
         chainId: ChainId.ETHEREUM,
         openSeaUrl: "https://opensea.io/collection/nouns",
+        start: 0,
     },
     {
         address: "0x1CB1A5e65610AEFF2551A50f76a87a7d3fB649C6",
@@ -36,6 +39,7 @@ const MainnetPilotList: PilotBaseInfo[] = [
         enumerable: false,
         chainId: ChainId.ETHEREUM,
         openSeaUrl: "https://opensea.io/collection/cryptoadz-by-gremplin",
+        start: 1,
     },
     {
         address: "0x23581767a106ae21c074b2276D25e5C3e136a68b",
@@ -44,6 +48,7 @@ const MainnetPilotList: PilotBaseInfo[] = [
         enumerable: false,
         chainId: ChainId.ETHEREUM,
         openSeaUrl: "https://opensea.io/collection/proof-moonbirds",
+        start: 0,
     },
 ];
 
@@ -55,6 +60,7 @@ export interface PilotBaseInfo {
     chainId?: ChainId;
     openSeaUrl?: string;
     disabled?: boolean;
+    start: number;
 }
 
 const AllPilotList: {
@@ -68,6 +74,7 @@ const AllPilotList: {
             enumerable: true,
             chainId: ChainId.MUMBAI,
             disabled: true,
+            start: 1,
         },
         {
             address: babyMercsAddress[ChainId.MUMBAI],
@@ -75,6 +82,7 @@ const AllPilotList: {
             name: "Baby Merc",
             enumerable: true,
             chainId: ChainId.MUMBAI,
+            start: 1,
         },
         ...MainnetPilotList,
     ],
@@ -86,6 +94,7 @@ const AllPilotList: {
             enumerable: true,
             chainId: ChainId.MUMBAI,
             disabled: true,
+            start: 1,
         },
         {
             address: babyMercsAddress[ChainId.POLYGON],
@@ -94,6 +103,7 @@ const AllPilotList: {
             enumerable: true,
             chainId: ChainId.POLYGON,
             openSeaUrl: "https://opensea.io/collection/babymercs-2",
+            start: 1,
         },
         ...MainnetPilotList,
     ],
@@ -105,6 +115,7 @@ const AllPilotList: {
             enumerable: true,
             chainId: ChainId.MUMBAI,
             disabled: true,
+            start: 1,
         },
         {
             address: babyMercsAddress[ChainId.POLYGON],
@@ -113,6 +124,7 @@ const AllPilotList: {
             enumerable: true,
             chainId: ChainId.POLYGON,
             openSeaUrl: "https://opensea.io/collection/babymercs-2",
+            start: 1,
         },
         ...MainnetPilotList,
     ],
@@ -124,6 +136,7 @@ const AllPilotList: {
             enumerable: true,
             chainId: ChainId.MUMBAI,
             disabled: true,
+            start: 1,
         },
         {
             address: babyMercsAddress[ChainId.POLYGON],
@@ -132,6 +145,7 @@ const AllPilotList: {
             enumerable: true,
             chainId: ChainId.POLYGON,
             openSeaUrl: "https://opensea.io/collection/babymercs-2",
+            start: 1,
         },
         ...MainnetPilotList,
     ],
@@ -214,7 +228,6 @@ export const handlePilotsInfo = async ({
 
         const multiDelegateERC721Contract =
             getMultiDelegateERC721Contract(pilotChainId);
-        const multiProvider = getMultiProvider(pilotChainId);
 
         if (!allRequests[pilotChainId]) {
             allRequests[pilotChainId] = [];
