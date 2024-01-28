@@ -44,6 +44,7 @@ const ToolBar = ({
                 "& > div": {
                     cursor: "pointer",
                 },
+                zIndex: 100,
             }}
         >
             <KeyBoard

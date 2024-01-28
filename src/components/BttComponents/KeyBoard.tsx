@@ -22,11 +22,11 @@ const KeyItem = ({ children }: { children: React.ReactNode }) => {
         <Box
             sx={{
                 height: isPc ? "1.0417vw" : "20px",
-                mixWidth: isPc ? "1.0417vw" : "20px",
+                mixWidth: isPc ? "1.0417vw" : "40px",
                 borderRadius: isPc ? "0.2604vw" : "4px",
                 border: "1px solid #000",
                 backgroundColor: "rgba(0, 0, 0, 0.20)",
-                width: isPc ? "3.125vw" : "32px",
+                width: isPc ? "3.125vw" : "40px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -47,7 +47,7 @@ const Content = () => {
             sx={{
                 backgroundColor: "#fff",
                 color: "#000",
-                width: isPc ? "14.5833vw" : "200px",
+                width: isPc ? "14.5833vw" : "210px",
                 padding: "0px",
                 "& .chakra-popover__arrow": {
                     background: "#fff !important",
@@ -92,7 +92,7 @@ const Content = () => {
                                 sx={{
                                     fontSize: isPc ? "0.7292vw" : "12px",
                                     fontWeight: "bold",
-                                    width: isPc ? "5.2083vw" : "76px",
+                                    width: isPc ? "5.2083vw" : "90px",
                                     textAlign: "center",
                                 }}
                             >
@@ -119,7 +119,7 @@ const Content = () => {
                                 sx={{
                                     fontSize: isPc ? "0.7292vw" : "12px",
                                     fontWeight: "bold",
-                                    width: isPc ? "5.2083vw" : "76px",
+                                    width: isPc ? "5.2083vw" : "90px",
                                     textAlign: "center",
                                 }}
                             >
@@ -146,7 +146,7 @@ const Content = () => {
                                 sx={{
                                     fontSize: isPc ? "0.7292vw" : "12px",
                                     fontWeight: "bold",
-                                    width: isPc ? "5.2083vw" : "76px",
+                                    width: isPc ? "5.2083vw" : "90px",
                                     textAlign: "center",
                                 }}
                             >
