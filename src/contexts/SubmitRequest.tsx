@@ -59,7 +59,14 @@ export const SubmitRequestProvider = ({
                             }}
                         ></Image>
                         <Flex align={"center"}>
-                            <Text>Submit request </Text>
+                            <Text
+                                sx={{
+                                    fontSize: "16px",
+                                    marginRight: "4px",
+                                }}
+                            >
+                                Submit request{" "}
+                            </Text>
                             <DotLoading></DotLoading>
                         </Flex>
                     </Flex>

@@ -209,8 +209,8 @@ const ListUserProfile = ({
         <Flex sx={{}} direction={"column"} align={"center"}>
             <Box
                 sx={{
-                    width: isPc ? "4.6875vw" : "52px",
-                    height: isPc ? "4.6875vw" : "52px",
+                    width: isPc ? "4.6875vw" : "48px",
+                    height: isPc ? "4.6875vw" : "48px",
                     borderRadius: isPc ? "1.0417vw" : "10px",
                     border: "1px solid #FFF",
                     background: avatars[avatar],

@@ -5,6 +5,7 @@ import {
     Button,
     Flex,
     Text,
+    useClipboard,
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 import QuitModal from "../BttComponents/QuitModal";
 import ToolBar from "../BttComponents/Toolbar";
+import useSkyToast from "@/hooks/useSkyToast";
 
 const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
     const isMy = status === "my";
@@ -71,11 +73,14 @@ const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
 };
 
 const Match = () => {
+    const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
     const { bidTacToeGameAddress, lobbyAddress, lobbyName } =
         usePrivateGameContext();
+    const { onCopy } = useClipboard(lobbyName);
+
     const [timeLeft, { start }] = useCountDown(5000, 1000);
     const { myInfo, opInfo, handleStepChange } = usePrivateGameContext();
     const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
@@ -192,6 +197,10 @@ const Match = () => {
                         textAlign: "center",
                         fontSize: "16px",
                         marginTop: "10px",
+                    }}
+                    onClick={() => {
+                        onCopy();
+                        toast("Copy code success");
                     }}
                 >
                     <Text>Lobby Code</Text>
