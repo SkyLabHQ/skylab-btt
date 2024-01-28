@@ -480,7 +480,7 @@ const MTacToeTutorial = ({}) => {
                                     width: "140px",
                                     position: "absolute",
                                     left: "12px",
-                                    bottom: "4px",
+                                    bottom: "12px",
                                 }}
                             >
                                 <Timer
@@ -493,7 +493,7 @@ const MTacToeTutorial = ({}) => {
                             <Flex
                                 sx={{
                                     position: "absolute",
-                                    bottom: "0",
+                                    bottom: "12px",
                                     right: 0,
                                 }}
                                 flexDir={"column"}

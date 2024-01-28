@@ -168,7 +168,7 @@ const MBttLiveGame = ({
                             width: "180px",
                             position: "absolute",
                             left: "12px",
-                            bottom: "4px",
+                            bottom: "12px",
                         }}
                     >
                         {myGameInfo.gameState < GameState.Commited && (
@@ -185,7 +185,7 @@ const MBttLiveGame = ({
                     <Flex
                         sx={{
                             position: "absolute",
-                            bottom: "0",
+                            bottom: "12px",
                             right: 0,
                         }}
                         flexDir={"column"}
