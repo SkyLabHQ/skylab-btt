@@ -1,33 +1,14 @@
 import { Box, Image, useMediaQuery } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import BidTacToeTutorial from "@/components/TacToe/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
 import PlayBackIcon from "./assets/playback-icon.svg";
-import AddScreenIcon from "./assets/add-screen.svg";
 
 import { useNavigate } from "react-router-dom";
 
-const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-};
-
 export const Toolbar = () => {
-    const [deferredPrompt, setDeferredPropmpt] = useState<any>(null);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-
-    useEffect(() => {
-        window.addEventListener("beforeinstallprompt", (e: any) => {
-            e.preventDefault();
-            setDeferredPropmpt(e);
-        });
-
-        window.addEventListener("appinstalled", (evt) => {
-            console.log("appinstalled", evt);
-            setDeferredPropmpt(null);
-        });
-    }, []);
 
     return (
         <Box
@@ -38,21 +19,6 @@ export const Toolbar = () => {
                 display: "flex",
             }}
         >
-            {/* {!isIos() &&
-                !window.matchMedia("(display-mode: standalone)").matches && (
-                    <Image
-                        onClick={() => {
-                            deferredPrompt?.prompt();
-                        }}
-                        src={AddScreenIcon}
-                        sx={{
-                            width: isPc ? "2.3958vw" : "32px",
-                            height: isPc ? "2.3958vw" : "32px",
-                            marginRight: "0.7292vw",
-                            cursor: "pointer",
-                        }}
-                    ></Image>
-                )} */}
             <Image
                 src={PlayBackIcon}
                 sx={{
