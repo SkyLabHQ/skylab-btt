@@ -21,7 +21,7 @@ const PrivateLobbyButtons = ({
                 display: "flex",
                 flexDirection: "column",
                 fontFamily: "Quantico",
-                "& button": {
+                "&>div": {
                     width: "100% !important",
                     height: `${isPc ? "4.7917vw" : "70px"} !important`,
                     justifyContent: "flex-end",
