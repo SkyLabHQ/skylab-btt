@@ -15,6 +15,8 @@ import { BlockNumberProvider } from "./contexts/BlockNumber";
 import { base, baseGoerli } from "viem/chains";
 import { SubmitRequestProvider } from "./contexts/SubmitRequest";
 
+import logoIcon from "./assets/tournament.jpg";
+
 if (window && window.ethereum) {
     window.ethereum.autoRefreshOnNetworkChange = false;
 }
@@ -31,8 +33,8 @@ const config = createConfig(
         chains,
         walletConnectProjectId: process.env.REACT_APP_WALLETCONNECT_PROJECT_ID,
         appName: "Skylab-Btt",
-        appUrl: "https://app.projmercury.io", // your app's url
-        appIcon: "https://app.projmercury.io/tournament.jpg", // your app's icon, no bigger than 1024x1024px (max. 1MB)
+        appUrl: window.location.host, // your app's url
+        appIcon: logoIcon, // your app's icon, no bigger than 1024x1024px (max. 1MB)
     }),
 );
 

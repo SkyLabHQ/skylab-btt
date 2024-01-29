@@ -41,7 +41,7 @@ export const menuList = [
         icon: SkylabIcon,
         title: "About",
         onClick: () => {
-            window.open("https://app.projmercury.io", "_blank");
+            window.open(window.location.host, "_blank");
         },
     },
 ];
