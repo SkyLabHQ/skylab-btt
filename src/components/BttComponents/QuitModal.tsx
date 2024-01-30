@@ -53,7 +53,7 @@ const QuitModal = ({
                 border="3px solid #FDDC2D"
                 borderRadius="8px"
                 sx={{
-                    width: "300px",
+                    width: isPc ? "350px" : "300px",
                 }}
             >
                 <Img
@@ -99,7 +99,7 @@ const QuitModal = ({
                         colorScheme="white"
                         onClick={handleConfirm}
                         fontSize={isPc ? "16px" : "14px"}
-                        w="130px"
+                        w={isPc ? "150px" : "130px"}
                         borderRadius="8px"
                         fontWeight={400}
                         height={"40px"}
@@ -109,7 +109,7 @@ const QuitModal = ({
                     <Button
                         onClick={onClose}
                         fontSize={isPc ? "16px" : "14px"}
-                        w="130px"
+                        w={isPc ? "150px" : "130px"}
                         height={"40px"}
                         borderRadius="8px"
                         fontWeight={400}

@@ -20,7 +20,7 @@ const GameOver = () => {
                 padding: "6vw 3.125vw",
                 position: "relative",
                 width: "100vw",
-                height: "100vh",
+                height: "100%",
                 display: "flex",
                 justifyContent: "space-between",
             }}

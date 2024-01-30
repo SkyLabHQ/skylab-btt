@@ -324,9 +324,8 @@ ${des}`;
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                minHeight: "100vh",
+                height: "100%",
                 justifyContent: "center",
-                background: "#303030",
                 padding: "0 4.1667vw 0",
             }}
         >
