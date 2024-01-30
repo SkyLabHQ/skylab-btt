@@ -686,16 +686,23 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                     }}
                 >
                     <Flex flexDir={"column"} align={"center"}>
-                        {myGameInfo.gameState < GameState.Commited && (
-                            <Timer
-                                time1={autoCommitTimeoutTime}
-                                time2={bufferTime}
-                                time1Gray={
-                                    myGameInfo.gameState ===
-                                        GameState.Commited || loading
-                                }
-                            ></Timer>
-                        )}
+                        <Box
+                            sx={{
+                                height: "90px",
+                            }}
+                        >
+                            {myGameInfo.gameState < GameState.Commited && (
+                                <Timer
+                                    time1={autoCommitTimeoutTime}
+                                    time2={bufferTime}
+                                    time1Gray={
+                                        myGameInfo.gameState ===
+                                            GameState.Commited || loading
+                                    }
+                                ></Timer>
+                            )}
+                        </Box>
+
                         <StatusProgress
                             myGameState={myGameInfo.gameState}
                             opGameState={opGameInfo.gameState}

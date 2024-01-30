@@ -10,6 +10,7 @@ import BottomKeyBoard from "../BttComponents/ChatMessage";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
+import StatusProgress from "../BttComponents/StatusProgress";
 
 const MLayout = ({
     handleQuitClick,
@@ -102,14 +103,25 @@ const MLayout = ({
             <Flex
                 align={"center"}
                 justify={"center"}
+                flexDir={"column"}
                 sx={{
                     marginTop: "50px",
                 }}
             >
-                <Board
-                    list={list}
-                    showAnimateNumber={showAnimateNumber}
-                ></Board>
+                <StatusProgress
+                    myGameState={myGameInfo.gameState}
+                    opGameState={opGameInfo.gameState}
+                ></StatusProgress>
+                <Box
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
+                    <Board
+                        list={list}
+                        showAnimateNumber={showAnimateNumber}
+                    ></Board>
+                </Box>
             </Flex>
             <Box
                 sx={{
