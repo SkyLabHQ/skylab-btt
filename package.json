@@ -2,7 +2,7 @@
     "name": "skylab-btt",
     "version": "0.1.0",
     "private": true,
-    "homepage": ".",
+    "homepage": "bidtactic.io",
     "dependencies": {
         "@alchemy/aa-accounts": "0.2.0",
         "@alchemy/aa-alchemy": "0.2.0",
