@@ -21,21 +21,6 @@ function shuffleArray(array: string[]) {
 }
 
 const text = [
-    "Rearranging the chessboard",
-    "Sharpening the pawns",
-    "Buffing the bishops",
-    "Knighting the knights",
-    "Conferencing the rooks",
-    "Crowning the kings and queens",
-    "Teaching pawns to walk diagonally",
-    "Setting the stage for the grand strategy",
-    "Calculating optimal moves",
-    "Delegating duties to the knights",
-    "Organizing a royal assembly",
-    "Laying out the tactical board",
-    "Avoiding stalemate situations",
-    "Designing the Sicilian Defense",
-    "Polishing the Nimzo-Indian Attack",
     "Spicing up pixels",
     "Polishing screen pixels",
     "Revving up the hamsters",
@@ -48,8 +33,6 @@ const text = [
     "Dispatching the dwarves",
     "Summoning the internet sprites",
     "Gathering magic dust",
-    "Spooling the hyperdrive",
-    "Generating gravitational field",
     "Performing ritual for good luck",
     "Energizing photon particles",
     "Calling upon the data gods",
@@ -66,6 +49,11 @@ const text = [
     "Jiggling the cosmic web",
     "Dusting off the cobwebs of servers",
     "Awakening the AI gods",
+    "We are cleaning the lobby floor",
+    "Cleaning the game board",
+    "Drawing the board lines",
+    "Preparing gold",
+    "Checking O & X pieces",
 ];
 
 const randomText = shuffleArray(text);
