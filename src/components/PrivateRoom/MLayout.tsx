@@ -13,6 +13,7 @@ import ToolBar from "../BttComponents/Toolbar";
 import StatusProgress from "../BttComponents/StatusProgress";
 
 const MLayout = ({
+    inviteLink,
     handleQuitClick,
     handleShareTw,
     nextDrawWinner,
@@ -60,6 +61,7 @@ const MLayout = ({
             }}
         >
             <ToolBar
+                inviteLink={inviteLink}
                 quitType="game"
                 handleShareTw={handleShareTw}
                 onQuitClick={handleQuitClick}

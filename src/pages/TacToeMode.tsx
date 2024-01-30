@@ -693,18 +693,10 @@ const TacToeMode = () => {
                                     marginTop: "10px",
                                 }}
                             >
-                                <Flex align={"center"}>
-                                    {" "}
-                                    <Text
-                                        sx={{
-                                            fontSize: isPc ? "1.25vw" : "16px",
-                                            marginRight: "1.0417vw",
-                                        }}
-                                    >
-                                        {enterText}
-                                    </Text>
-                                    <DotLoading></DotLoading>
-                                </Flex>
+                                <DotLoading
+                                    text={enterText}
+                                    fontSize={isPc ? "1.25vw" : "16px"}
+                                ></DotLoading>
 
                                 <Image
                                     src={EnterLoadingIcon}

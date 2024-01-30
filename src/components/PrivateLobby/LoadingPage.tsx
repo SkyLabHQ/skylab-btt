@@ -1,8 +1,9 @@
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import BiddingIcon from "./assets/bidding.gif";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
+import DotLoading from "../Loading/DotLoading";
 function shuffleArray(array: string[]) {
     // Create a copy of the original array to avoid modifying the input array
     const shuffledArray = [...array];
@@ -18,34 +19,53 @@ function shuffleArray(array: string[]) {
 
     return shuffledArray;
 }
+
 const text = [
-    "Spicing up pixels...",
-    "Polishing screen pixels...",
-    "Revving up the hamsters...",
-    "Charging the flux capacitor...",
-    "Rounding up the electrons...",
-    "Beaming down the data...",
-    "Perfecting the pixels...",
-    "Summoning the internet sprites...",
-    "Spooling the hyperdrive...",
-    "Performing ritual for good luck...",
-    "Calling upon the data gods...",
-    "Tickling the sub-pixels...",
-    "Bouncing the reality grid...",
-    "Wrestling with time complexity...",
-    "Evolving the hyperspace...",
-    "Dusting off the cobwebs of servers...",
-    "Awakening the AI gods...",
-    "We are cleaning the lobby floor...",
-    "Ready to cleaning the desk...",
-    "Drawing the tac toe line...",
-    "Prepare the Gold...",
-    "Check the O & X chess...",
-    "Rearranging the chessboard...",
+    "Rearranging the chessboard",
+    "Sharpening the pawns",
+    "Buffing the bishops",
+    "Knighting the knights",
+    "Conferencing the rooks",
+    "Crowning the kings and queens",
+    "Teaching pawns to walk diagonally",
+    "Setting the stage for the grand strategy",
     "Calculating optimal moves",
+    "Delegating duties to the knights",
+    "Organizing a royal assembly",
     "Laying out the tactical board",
-    "Mastering the endgame",
-    "Perfecting the bidding structure",
+    "Avoiding stalemate situations",
+    "Designing the Sicilian Defense",
+    "Polishing the Nimzo-Indian Attack",
+    "Spicing up pixels",
+    "Polishing screen pixels",
+    "Revving up the hamsters",
+    "Assembling unicorns",
+    "Charging the flux capacitor",
+    "Rounding up the electrons",
+    "Condensing the clouds",
+    "Beaming down the data",
+    "Perfecting the pixels",
+    "Dispatching the dwarves",
+    "Summoning the internet sprites",
+    "Gathering magic dust",
+    "Spooling the hyperdrive",
+    "Generating gravitational field",
+    "Performing ritual for good luck",
+    "Energizing photon particles",
+    "Calling upon the data gods",
+    "Herding bits",
+    "Fueling up the antimatter engine",
+    "Tickling the sub-pixels",
+    "Bouncing the reality grid",
+    "Cranking up the reality amplifier",
+    "Channeling Matrix",
+    "Wrestling with time complexity",
+    "Unleashing quantum ponies",
+    "Propagating neural synchrony",
+    "Evolving the hyperspace",
+    "Jiggling the cosmic web",
+    "Dusting off the cobwebs of servers",
+    "Awakening the AI gods",
 ];
 
 const randomText = shuffleArray(text);
@@ -91,7 +111,9 @@ const LoadingPage = () => {
                                 textAlign: "center",
                             }}
                         >
-                            {item}
+                            <Flex justify={"center"} align={"center"}>
+                                <DotLoading text={item}></DotLoading>
+                            </Flex>
                         </SwiperSlide>
                     );
                 })}

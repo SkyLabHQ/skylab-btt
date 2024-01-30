@@ -26,7 +26,7 @@ const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
         <Box
             sx={{
                 position: "relative",
-                width: isPc ? "8.5417vw" : "96px",
+                width: isPc ? "8.5417vw" : "120px",
             }}
         >
             {detail?.address ? (
@@ -121,12 +121,12 @@ const Match = () => {
 
             <Box
                 sx={{
-                    width: isPc ? "31.25vw" : "240px",
+                    width: isPc ? "31.25vw" : "350px",
                 }}
             >
                 <Flex
                     align={"center"}
-                    justify={"space-between"}
+                    justify={"space-around"}
                     w={"100%"}
                     sx={{
                         height: isPc ? "10vw" : "120px",
