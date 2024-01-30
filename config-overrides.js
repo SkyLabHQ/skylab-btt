@@ -16,8 +16,7 @@ module.exports = function override(config, env) {
         },
     });
     config.resolve.alias = {
-        ...config.resolve.alias,
-        "@": resolve("./src"),
+        "@": path.resolve(__dirname, "src/"),
     };
     config.resolve.fallback = {
         crypto: require.resolve("crypto-browserify"),
