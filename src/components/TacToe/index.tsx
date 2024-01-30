@@ -349,7 +349,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             );
 
             await tacToeGameRetryWrite("commitBid", [hash], {
-                gasLimit: gameType === GameType.HumanWithBot ? 500000 : 300000,
+                gasLimit: 500000,
                 usePaymaster: istest,
             });
             onChangeGame("my", {
