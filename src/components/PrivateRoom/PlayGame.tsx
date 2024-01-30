@@ -484,13 +484,12 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                 ? opGameInfo.timeout * 1000 - now
                 : 0;
 
-        const commitWorkerRef = new Worker(
+        callTimeoutWorkerRef.current = new Worker(
             new URL("../../utils/timerWorker.ts", import.meta.url),
         );
 
-        commitWorkerRef.onmessage = async (event) => {
+        callTimeoutWorkerRef.current.onmessage = async (event) => {
             const timeLeft = event.data;
-
             if (timeLeft === 0) {
                 handleCallTimeOut();
             }
@@ -498,7 +497,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         if (autoCallTimeoutTime === 0) {
             handleCallTimeOut();
         } else {
-            commitWorkerRef.postMessage({
+            callTimeoutWorkerRef.current.postMessage({
                 action: "start",
                 timeToCount: autoCallTimeoutTime,
             });
@@ -525,7 +524,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
     ]);
 
     useEffect(() => {
-        if (revealing) return;
+        if (revealing || loading) return;
         if (
             myGameInfo.gameState === GameState.Commited &&
             (opGameInfo.gameState === GameState.Commited ||
@@ -533,7 +532,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         ) {
             handleRevealedBid();
         }
-    }, [myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
+    }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
 
     useEffect(() => {
         if (!gameOver) return;
@@ -608,16 +607,23 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                     }}
                 >
                     <Flex flexDir={"column"} align={"center"}>
-                        {myGameInfo.gameState < GameState.Commited && (
-                            <Timer
-                                time1={autoCommitTimeoutTime}
-                                time2={bufferTime}
-                                time1Gray={
-                                    myGameInfo.gameState ===
-                                        GameState.Commited || loading
-                                }
-                            ></Timer>
-                        )}
+                        <Box
+                            sx={{
+                                height: "90px",
+                            }}
+                        >
+                            {myGameInfo.gameState < GameState.Commited && (
+                                <Timer
+                                    time1={autoCommitTimeoutTime}
+                                    time2={bufferTime}
+                                    time1Gray={
+                                        myGameInfo.gameState ===
+                                            GameState.Commited || loading
+                                    }
+                                ></Timer>
+                            )}
+                        </Box>
+
                         <StatusProgress
                             myGameState={myGameInfo.gameState}
                             opGameState={opGameInfo.gameState}
