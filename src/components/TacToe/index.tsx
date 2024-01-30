@@ -588,13 +588,12 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 ? opGameInfo.timeout * 1000 - now
                 : 0;
 
-        const commitWorkerRef = new Worker(
+        callTimeoutWorkerRef.current = new Worker(
             new URL("../../utils/timerWorker.ts", import.meta.url),
         );
 
-        commitWorkerRef.onmessage = async (event) => {
+        callTimeoutWorkerRef.current.onmessage = async (event) => {
             const timeLeft = event.data;
-
             if (timeLeft === 0) {
                 handleCallTimeOut();
             }
@@ -602,7 +601,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         if (autoCallTimeoutTime === 0) {
             handleCallTimeOut();
         } else {
-            commitWorkerRef.postMessage({
+            callTimeoutWorkerRef.current.postMessage({
                 action: "start",
                 timeToCount: autoCallTimeoutTime,
             });
