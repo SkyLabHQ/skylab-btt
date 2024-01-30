@@ -356,8 +356,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 ...myGameInfo,
                 gameState: GameState.Commited,
             });
-            setLoading(false);
             addGridCommited(bidAmount, salt, true);
+            setLoading(false);
         } catch (e) {
             console.log(e);
             setLoading(false);
@@ -405,7 +405,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     }, [blockNumber, multiSkylabBidTacToeGameContract, ethcallProvider]);
 
     useEffect(() => {
-        if (revealing) return;
+        if (revealing || loading) return;
         if (
             myGameInfo.gameState === GameState.Commited &&
             (opGameInfo.gameState === GameState.Commited ||
@@ -413,7 +413,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         ) {
             handleRevealedBid();
         }
-    }, [myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
+    }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
 
     // game over
     const handleGameOver = async () => {

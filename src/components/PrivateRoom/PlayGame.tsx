@@ -490,8 +490,6 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
 
         callTimeoutWorkerRef.current.onmessage = async (event) => {
             const timeLeft = event.data;
-            console.log(timeLeft, "timeLeft");
-
             if (timeLeft === 0) {
                 handleCallTimeOut();
             }
@@ -526,7 +524,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
     ]);
 
     useEffect(() => {
-        if (revealing) return;
+        if (revealing || loading) return;
         if (
             myGameInfo.gameState === GameState.Commited &&
             (opGameInfo.gameState === GameState.Commited ||
@@ -534,7 +532,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         ) {
             handleRevealedBid();
         }
-    }, [myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
+    }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
 
     useEffect(() => {
         if (!gameOver) return;
