@@ -11,9 +11,7 @@ import {
 } from "@/hooks/useMultiContract";
 import Board from "../TacToe/Board";
 import Loading from "../Loading";
-import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-import LiveStatusTip from "./LiveStatusTip";
 import { shortenAddressWithout0x } from "@/utils";
 import { ZERO_DATA } from "@/skyConstants";
 import {
@@ -35,6 +33,7 @@ import Timer from "../BttComponents/Timer";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import MBalance from "../BttComponents/MBalance";
 import StartJourney from "../BttComponents/StartJourney";
+import StatusProgress from "../BttComponents/StatusProgress";
 
 const MBttLiveGame = ({
     autoCommitTimeoutTime,
@@ -633,20 +632,30 @@ const BttLiveGamePage = () => {
                                 </Text>
                             </Box>
 
-                            {myGameInfo.gameState < GameState.Commited && (
-                                <Timer
-                                    time1={autoCommitTimeoutTime}
-                                    time2={bufferTime}
-                                    time1Gray={
-                                        myGameInfo.gameState ===
-                                        GameState.Commited
-                                    }
-                                ></Timer>
-                            )}
-                            <LiveStatusTip
-                                myGameState={myGameInfo.gameState}
-                                opGameState={opGameInfo.gameState}
-                            ></LiveStatusTip>
+                            <Flex flexDir={"column"} align={"center"}>
+                                <Box
+                                    sx={{
+                                        height: "90px",
+                                    }}
+                                >
+                                    {myGameInfo.gameState <
+                                        GameState.Commited && (
+                                        <Timer
+                                            time1={autoCommitTimeoutTime}
+                                            time2={bufferTime}
+                                            time1Gray={
+                                                myGameInfo.gameState ===
+                                                GameState.Commited
+                                            }
+                                        ></Timer>
+                                    )}
+                                </Box>
+
+                                <StatusProgress
+                                    myGameState={myGameInfo.gameState}
+                                    opGameState={opGameInfo.gameState}
+                                ></StatusProgress>
+                            </Flex>
                         </Box>
                         <Box
                             sx={{

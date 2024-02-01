@@ -12,7 +12,6 @@ import saveAs from "file-saver";
 import html2canvas from "html2canvas";
 import SaveIcon from "@/components/TacToe/assets/save-icon.svg";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
-import ShareEmojiIcon from "./assets/share-emoji.svg";
 import RightArrow from "./assets/arrow-right.svg";
 
 const ShareButtons = ({
@@ -120,7 +119,7 @@ const ShareButtons = ({
                             sx={{
                                 fontSize: isPc ? "1.25vw" : "12px",
                                 textDecorationLine: "underline",
-                                maxWidth: isPc ? "150px" : "48px",
+                                maxWidth: isPc ? "150px" : "54px",
                                 textAlign: "center",
                             }}
                         >

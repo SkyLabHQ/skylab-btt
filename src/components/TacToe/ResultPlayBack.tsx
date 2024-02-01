@@ -316,7 +316,6 @@ ${des}`;
                 alignItems: "center",
                 minHeight: "100%",
                 justifyContent: "center",
-                background: "#303030",
                 padding: "0px 4.1667vw 0",
             }}
         >

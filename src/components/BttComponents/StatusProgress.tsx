@@ -1,8 +1,9 @@
 import { GameState } from "@/skyConstants/bttGameTypes";
-import { Box, Text, Image } from "@chakra-ui/react";
+import { Box, Text, Image, Flex } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import React, { useEffect } from "react";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
+import DotLoading from "../Loading/DotLoading";
 
 const dotLength = 3;
 
@@ -14,7 +15,6 @@ const StatusProgress = ({
     opGameState: GameState;
 }) => {
     const [activeIndex, setActiveIndex] = React.useState(0);
-
     useEffect(() => {
         let commitCount = 0;
 
@@ -93,7 +93,11 @@ const StatusProgress = ({
                     }}
                 >
                     <Text>1 Player</Text>
-                    <Text>commited</Text>
+                    <DotLoading
+                        text="commited"
+                        dotSize="3px"
+                        color={activeIndex > 0 ? "#F2d861" : "#fff"}
+                    ></DotLoading>
                 </Box>
                 <Box
                     sx={{
@@ -107,9 +111,13 @@ const StatusProgress = ({
                     }}
                 >
                     <Text>1 Player</Text>
-                    <Text>commited</Text>
+                    <DotLoading
+                        text="commited"
+                        dotSize="3px"
+                        color={activeIndex > 1 ? "#F2d861" : "#fff"}
+                    ></DotLoading>
                 </Box>
-                <Box
+                <Flex
                     sx={{
                         position: "absolute",
                         left: "100%",
@@ -119,9 +127,14 @@ const StatusProgress = ({
                         textAlign: "center",
                         color: activeIndex > 2 ? "#F2d861" : "#fff",
                     }}
+                    alignItems={"center"}
                 >
-                    <Text>Revealing...</Text>
-                </Box>
+                    <DotLoading
+                        text="Revealing"
+                        dotSize="3px"
+                        color={activeIndex > 2 ? "#F2d861" : "#fff"}
+                    ></DotLoading>
+                </Flex>
                 <motion.div
                     style={{
                         borderRadius: "50%",

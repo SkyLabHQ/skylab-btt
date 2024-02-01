@@ -12,9 +12,7 @@ import {
 import Board from "../TacToe/Board";
 import { UserCard } from "../BttPlayBack/UserCard";
 import Loading from "../Loading";
-import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
 import { useBlockNumber } from "@/contexts/BlockNumber";
-import LiveStatusTip from "./LiveStatusTip";
 import { shortenAddressWithout0x } from "@/utils";
 import { aviationImg } from "@/utils/aviationImg";
 import { ZERO_DATA } from "@/skyConstants";
@@ -38,6 +36,7 @@ import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 import { MMessage } from "../PrivateRoom/Message";
 import MBalance from "../BttComponents/MBalance";
 import StartJourney from "../BttComponents/StartJourney";
+import StatusProgress from "../BttComponents/StatusProgress";
 
 interface Info {
     burner?: string;
@@ -671,28 +670,30 @@ const BttLiveGamePage = () => {
                                     Live
                                 </Text>
                             </Box>
-                            <Flex
-                                justify={"center"}
-                                sx={{
-                                    height: "70px",
-                                }}
-                            >
-                                {myGameInfo.gameState < GameState.Commited && (
-                                    <Timer
-                                        time1={autoCommitTimeoutTime}
-                                        time2={bufferTime}
-                                        time1Gray={
-                                            myGameInfo.gameState ===
-                                            GameState.Commited
-                                        }
-                                    ></Timer>
-                                )}
-                            </Flex>
+                            <Flex flexDir={"column"} align={"center"}>
+                                <Box
+                                    sx={{
+                                        height: "90px",
+                                    }}
+                                >
+                                    {myGameInfo.gameState <
+                                        GameState.Commited && (
+                                        <Timer
+                                            time1={autoCommitTimeoutTime}
+                                            time2={bufferTime}
+                                            time1Gray={
+                                                myGameInfo.gameState ===
+                                                GameState.Commited
+                                            }
+                                        ></Timer>
+                                    )}
+                                </Box>
 
-                            <LiveStatusTip
-                                myGameState={myGameInfo.gameState}
-                                opGameState={opGameInfo.gameState}
-                            ></LiveStatusTip>
+                                <StatusProgress
+                                    myGameState={myGameInfo.gameState}
+                                    opGameState={opGameInfo.gameState}
+                                ></StatusProgress>
+                            </Flex>
                         </Box>
                         <Box
                             sx={{

@@ -24,6 +24,7 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
+import ReactCanvasNest from "react-canvas-nest";
 
 const PrivateGameContext = createContext<{
     lobbyName: string;
@@ -263,12 +264,21 @@ const PrivateRoom = () => {
     };
 
     return (
-        <>
+        <Box
+            sx={{
+                height: "100%",
+            }}
+        >
             <BttHelmet></BttHelmet>
             <Box
                 sx={{
-                    background: "#303030",
-                    height: "100vh",
+                    background: "#36363680",
+                    height: "100%",
+                    fontFamily: "Orbitron",
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: "100%",
                 }}
             >
                 <PrivateGameContext.Provider
@@ -305,7 +315,15 @@ const PrivateRoom = () => {
                     {step === 3 && <ResultPlayBack></ResultPlayBack>}
                 </PrivateGameContext.Provider>
             </Box>
-        </>
+            <ReactCanvasNest
+                className="canvasNest"
+                config={{
+                    count: 66,
+                    pointColor: " 255, 255, 255 ",
+                    lineColor: "255,255,255",
+                }}
+            />
+        </Box>
     );
 };
 
