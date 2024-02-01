@@ -285,7 +285,7 @@ const MBttHome = ({
 }) => {
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
     const { activePilot } = usePilotInfo(address);
     const imgAnimation = useAnimation();
 
@@ -300,6 +300,21 @@ const MBttHome = ({
                 padding: "20px 10px",
             }}
         >
+            <ConnectKitButton.Custom>
+                {({ show }) => {
+                    return (
+                        <div onClick={show}>
+                            <Text
+                                color="#000"
+                                fontWeight="600"
+                                textAlign="center"
+                            >
+                                {isConnected ? address : " Connect Wallet"}
+                            </Text>
+                        </div>
+                    );
+                }}
+            </ConnectKitButton.Custom>
             <Mileage value={activePilot.xp} onNextRound={onNextRound}></Mileage>
             <Flex
                 sx={{
