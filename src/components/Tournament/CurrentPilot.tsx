@@ -135,7 +135,7 @@ const CurrentPilot = ({
     onNextRound: (step: number | string) => void;
 }) => {
     const toast = useSkyToast();
-    const { address } = useAccount();
+    const { address, isConnected } = useAccount();
     const chainId = useChainId();
 
     const addNetworkToMetask = useAddNetworkToMetamask();
@@ -285,6 +285,8 @@ const CurrentPilot = ({
                 return;
             }
             setActiveLoading(true);
+
+            console.log(mercuryPilotsContract, "mercuryPilotsContract");
             const res = await mercuryPilotsContract.write.setActivePilot([
                 selectPilotInfo.address,
                 selectPilotInfo.pilotId,

@@ -45,14 +45,24 @@ const BottomInputBox = ({
                 }}
                 justify={"space-between"}
             >
-                <Image
-                    src={SubIcon}
+                <Flex
                     sx={{
-                        width: "18px",
-                        margin: "4px",
+                        width: "32px",
+                        background: "#fff",
                     }}
+                    align={"center"}
+                    justify={"center"}
+                    flexDir={"column"}
                     onClick={onSubClick}
-                ></Image>
+                >
+                    <Image
+                        src={SubIcon}
+                        sx={{
+                            width: "18px",
+                            margin: "4px",
+                        }}
+                    ></Image>
+                </Flex>
                 <Box
                     onClick={(e) => {
                         onInputAmountClick();
@@ -82,14 +92,24 @@ const BottomInputBox = ({
                         </Text>
                     )}
                 </Box>
-                <Image
-                    src={AddIcon}
-                    onClick={onAddClick}
+                <Flex
                     sx={{
-                        width: "18px",
-                        margin: "4px",
+                        width: "32px",
+                        background: "#fff",
                     }}
-                ></Image>
+                    align={"center"}
+                    justify={"center"}
+                    flexDir={"column"}
+                    onClick={onAddClick}
+                >
+                    <Image
+                        src={AddIcon}
+                        sx={{
+                            width: "18px",
+                            margin: "4px",
+                        }}
+                    ></Image>
+                </Flex>
             </Flex>
 
             <Box
@@ -98,65 +118,37 @@ const BottomInputBox = ({
                 }}
             >
                 {loading ? (
-                    <Button
-                        disabled={true}
-                        variant={"outline"}
+                    <Text
                         sx={{
-                            color: "#BCBBBE",
+                            color: "#fff",
                             fontSize: "16px",
-                            height: "32px",
                             width: "104px",
-                            "&:disabled": {
-                                border: "2px solid #fff !important",
-                                opacity: 1,
-                                background: "transparent",
-                            },
-                            "&:hover[disabled]": {
-                                background: "transparent",
-                            },
+                            textAlign: "center",
                         }}
                     >
                         Confirming
-                    </Button>
+                    </Text>
                 ) : (
-                    <Button
+                    <Text
                         onClick={() => {
                             onConfirm();
                         }}
-                        disabled={
-                            myGameState === GameState.Commited ||
-                            myGameState === GameState.Revealed
-                        }
-                        variant={"outline"}
                         sx={{
-                            color: "#fddc2d",
-                            border: "2px solid #fddc2d !important",
-                            background:
-                                myGameState === GameState.Commited ||
-                                myGameState === GameState.Revealed
-                                    ? "linear-gradient(180deg, rgba(253, 220, 45, 0.50) 0%, rgba(253, 220, 45, 0.00) 100%)"
-                                    : "transparent",
-                            fontSize: "16px",
-                            height: "32px",
+                            color:
+                                myGameState === GameState.WaitingForBid
+                                    ? "#FDDC2D"
+                                    : "#414141",
+                            fontSize: "18px",
                             width: "104px",
-                            "&:disabled": {
-                                border: "2px solid #fddc2d !important",
-                                opacity: 1,
-                            },
-                            "&:hover[disabled]": {
-                                background:
-                                    myGameState === GameState.Commited ||
-                                    myGameState === GameState.Revealed
-                                        ? "linear-gradient(180deg, rgba(253, 220, 45, 0.50) 0%, rgba(253, 220, 45, 0.00) 100%)"
-                                        : "transparent",
-                            },
+                            textAlign: "center",
+                            fontWeight: "bold",
                         }}
                     >
                         {myGameState === GameState.Commited ||
                         myGameState === GameState.Revealed
                             ? "Confirmed"
                             : "Confirm"}
-                    </Button>
+                    </Text>
                 )}
             </Box>
             <Image
