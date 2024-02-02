@@ -34,7 +34,7 @@ export const Message = ({
                     left: "-1.0417vw",
                 },
                 {
-                    borderRightColor: "#303030",
+                    borderRightColor: "#1B1B1B",
                     top: "0.5208vw",
                     left: "-0.9375vw",
                 },
@@ -47,7 +47,7 @@ export const Message = ({
                     right: "-1.0417vw",
                 },
                 {
-                    borderLeftColor: "#303030",
+                    borderLeftColor: "#1B1B1B",
                     top: "0.5208vw",
                     right: "-0.9375vw",
                 },
@@ -226,7 +226,7 @@ export const MMessage = ({
                     right: "-20px",
                 },
                 {
-                    borderLeftColor: "#303030",
+                    borderLeftColor: "#1B1B1B",
                     top: "3px",
                     right: "-18px",
                 },
@@ -239,7 +239,7 @@ export const MMessage = ({
                     left: "-20px",
                 },
                 {
-                    borderRightColor: "#303030",
+                    borderRightColor: "#1B1B1B",
                     top: "3px",
                     left: "-18px",
                 },
@@ -316,8 +316,8 @@ export const MMessage = ({
                 <Text
                     sx={{
                         color: "#bcbbbe",
-                        fontSize: "12px",
-                        marginRight: "10px",
+                        fontSize: "10px",
+                        marginRight: "6px",
                     }}
                 >
                     {sendText}
@@ -334,6 +334,7 @@ export const MMessage = ({
                     display: "flex",
                     alignItems: "center",
                     margin: status === "my" ? "0 10px 5px 0px" : "0 0 5px 10px",
+                    background: "#1B1B1B",
                 }}
             >
                 <Box
