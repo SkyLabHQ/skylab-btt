@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import PlayBackIcon from "./assets/playback.svg";
 import React, { useEffect, useState } from "react";
-import LobbyInfo from "./LobbyInfo";
+import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import { useNavigate } from "react-router-dom";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
 import {
@@ -17,7 +17,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import avatars from "@/skyConstants/avatars";
-import Loading from "../Loading";
 
 const GameList = ({ list, loading }: { list: any[]; loading: boolean }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -40,7 +39,22 @@ const GameList = ({ list, loading }: { list: any[]; loading: boolean }) => {
             }}
         >
             {loading ? (
-                <Loading></Loading>
+                <Flex
+                    justify={"center"}
+                    align={"center"}
+                    sx={{
+                        height: "100%",
+
+                        width: "100%",
+                    }}
+                >
+                    <Image
+                        src={EnterLoadingIcon}
+                        sx={{
+                            width: "60px",
+                        }}
+                    ></Image>
+                </Flex>
             ) : (
                 <SimpleGrid
                     justifyContent={"space-between"}

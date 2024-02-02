@@ -2,9 +2,8 @@ import { Box, Flex, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import Medal1 from "@/assets/medal1.svg";
 import Medal2 from "@/assets/medal2.svg";
 import Medal3 from "@/assets/medal3.svg";
-
 import React, { useEffect, useState } from "react";
-import LobbyInfo from "./LobbyInfo";
+import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import {
     useMultiMercuryBTTPrivateLobby,
     useMultiProvider,
@@ -203,7 +202,22 @@ const Leaderboard = () => {
             }}
         >
             {loading ? (
-                <Loading></Loading>
+                <Flex
+                    justify={"center"}
+                    align={"center"}
+                    sx={{
+                        height: "100%",
+
+                        width: "100%",
+                    }}
+                >
+                    <Image
+                        src={EnterLoadingIcon}
+                        sx={{
+                            width: "60px",
+                        }}
+                    ></Image>
+                </Flex>
             ) : (
                 <Box
                     sx={{

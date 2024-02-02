@@ -14,7 +14,7 @@ const StatusProgress = ({
     myGameState: GameState;
     opGameState: GameState;
 }) => {
-    const [activeIndex, setActiveIndex] = React.useState(0);
+    const [activeIndex, setActiveIndex] = React.useState(1);
     useEffect(() => {
         let commitCount = 0;
 
@@ -103,6 +103,7 @@ const StatusProgress = ({
                         text="commited"
                         dotSize="3px"
                         color={activeIndex > 0 ? "#F2d861" : "#fff"}
+                        showLoading={activeIndex === 0}
                     ></DotLoading>
                 </Box>
                 <Box
@@ -116,11 +117,12 @@ const StatusProgress = ({
                         color: activeIndex > 1 ? "#F2d861" : "#fff",
                     }}
                 >
-                    <Text>1 Player</Text>
+                    <Text>2 Player</Text>
                     <DotLoading
                         text="commited"
                         dotSize="3px"
                         color={activeIndex > 1 ? "#F2d861" : "#fff"}
+                        showLoading={activeIndex <= 1}
                     ></DotLoading>
                 </Box>
                 <Flex

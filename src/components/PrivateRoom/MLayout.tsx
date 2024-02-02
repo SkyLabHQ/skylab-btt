@@ -143,7 +143,7 @@ const MLayout = ({
                         {myGameInfo.gameState < GameState.Commited && (
                             <Box
                                 sx={{
-                                    width: "195px",
+                                    width: "176px",
                                     position: "absolute",
                                     left: "12px",
                                     bottom: "12px",
@@ -228,7 +228,7 @@ const MLayout = ({
                     }}
                     onAddClick={() => {
                         if (
-                            Number(bidAmount) + 1 <
+                            Number(bidAmount) + 1 <=
                             Number(myGameInfo.balance)
                         ) {
                             onInputChange(Number(bidAmount) + 1);

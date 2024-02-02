@@ -1,16 +1,6 @@
-import {
-    Box,
-    Button,
-    Flex,
-    Image,
-    Text,
-    useBoolean,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
-import BttIcon from "@/assets/btt-icon.png";
 import qs from "query-string";
 import {
     useMultiMercuryBTTPrivateLobby,
@@ -18,7 +8,6 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
-import Loading from "../Loading";
 import { ZERO_DATA } from "@/skyConstants";
 import PrivateLobbyPlayBack from "../PrivateRoom/PrivateLobbyPlayBack";
 import Back from "../Back";
@@ -37,10 +26,10 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import StartJourney from "../BttComponents/StartJourney";
+import LoadingPage from "../PrivateLobby/LoadingPage";
 
 const PrivatePlayBackPage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const [showShareButton, setShowShareButton] = useBoolean(false);
     const navigate = useNavigate();
     const [init, setInit] = useState(false);
     const { search } = useLocation();
@@ -449,10 +438,13 @@ ${des}`;
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                minHeight: "100vh",
                 justifyContent: "center",
-                background: "#303030",
                 padding: "0px 4.1667vw 0",
+                height: "100%",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
             }}
         >
             <Box
@@ -472,7 +464,7 @@ ${des}`;
             </Box>
 
             {!init ? (
-                <Loading></Loading>
+                <LoadingPage></LoadingPage>
             ) : (
                 <>
                     <PrivateLobbyPlayBack

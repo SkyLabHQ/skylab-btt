@@ -2,8 +2,26 @@ import { Box, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import React from "react";
 
+const dotList = [
+    {
+        left: 0,
+        bottom: 0,
+        delay: 0,
+    },
+    {
+        left: "8px",
+        bottom: 0,
+        delay: 0.2,
+    },
+    {
+        left: "16px",
+        bottom: 0,
+        delay: 0.4,
+    },
+];
+
 const DotLoading = ({
-    showLoading,
+    showLoading = true,
     text,
     color = "#fff",
     fontSize = "12px",
@@ -29,75 +47,71 @@ const DotLoading = ({
             }}
         >
             <Text>{text}</Text>
-            <motion.div
-                style={{
-                    height: "10px",
-                    position: "absolute",
-                    right: "-4px",
-                    bottom: "50%",
-                    transform: "translateY(50%)",
-                }}
-            >
+
+            {showLoading ? (
                 <motion.div
                     style={{
-                        width: dotSize,
-                        height: dotSize,
-                        borderRadius: "50%",
-                        backgroundColor: color,
+                        height: "10px",
                         position: "absolute",
-                        left: "0px",
-                        bottom: "0px",
+                        right: "-4px",
+                        bottom: "50%",
+                        transform: "translateY(50%)",
                     }}
-                    initial="hidden"
-                    animate="visible"
-                    variants={dotVariants}
-                    transition={{
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: 1.2,
-                    }} // 设置无限循环
-                ></motion.div>
-                <motion.div
-                    style={{
-                        width: dotSize,
-                        height: dotSize,
-                        borderRadius: "50%",
-                        backgroundColor: color,
+                >
+                    {dotList.map((item, index) => {
+                        return (
+                            <motion.div
+                                key={index}
+                                style={{
+                                    width: dotSize,
+                                    height: dotSize,
+                                    borderRadius: "50%",
+                                    backgroundColor: color,
+                                    position: "absolute",
+                                    left: item.left,
+                                    bottom: item.bottom,
+                                }}
+                                initial="hidden"
+                                animate="visible"
+                                variants={dotVariants}
+                                transition={{
+                                    delay: item.delay,
+                                    repeat: Infinity,
+                                    repeatType: "loop",
+                                    duration: 1.2,
+                                }} // 设置无限循环
+                            ></motion.div>
+                        );
+                    })}
+                </motion.div>
+            ) : (
+                <Box
+                    sx={{
+                        height: "10px",
                         position: "absolute",
-                        left: "8px",
-                        bottom: "0px",
+                        right: "-4px",
+                        bottom: "50%",
+                        transform: "translateY(50%)",
                     }}
-                    initial="hidden"
-                    animate="visible"
-                    variants={dotVariants}
-                    transition={{
-                        delay: 0.2,
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: 1.2,
-                    }} // 延迟0.2秒显示第二个点
-                ></motion.div>
-                <motion.div
-                    style={{
-                        width: dotSize,
-                        height: dotSize,
-                        borderRadius: "50%",
-                        backgroundColor: color,
-                        position: "absolute",
-                        left: "16px",
-                        bottom: "0px",
-                    }}
-                    initial="hidden"
-                    animate="visible"
-                    variants={dotVariants}
-                    transition={{
-                        delay: 0.4,
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: 1.2,
-                    }} // 延迟0.4秒显示第三个点
-                ></motion.div>
-            </motion.div>
+                >
+                    {dotList.map((item, index) => {
+                        return (
+                            <Box
+                                key={index}
+                                sx={{
+                                    width: dotSize,
+                                    height: dotSize,
+                                    borderRadius: "50%",
+                                    backgroundColor: color,
+                                    position: "absolute",
+                                    left: item.left,
+                                    bottom: item.bottom,
+                                }}
+                            ></Box>
+                        );
+                    })}
+                </Box>
+            )}
         </Box>
     );
 };

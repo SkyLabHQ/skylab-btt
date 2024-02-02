@@ -2,7 +2,7 @@ import { Box, Flex, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import PairingIcon from "./assets/pairing.svg";
 import RightArrow from "./assets/right-arrow.svg";
 import WRightArrow from "./assets/w-right-arrow.svg";
-
+import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import InGameIcon from "./assets/in-game.svg";
 import React, { useEffect, useState } from "react";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
@@ -14,7 +14,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
-import Loading from "../Loading";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import avatars from "@/skyConstants/avatars";
@@ -373,7 +372,22 @@ const GameList = ({
             }}
         >
             {loading ? (
-                <Loading></Loading>
+                <Flex
+                    justify={"center"}
+                    align={"center"}
+                    sx={{
+                        height: "100%",
+
+                        width: "100%",
+                    }}
+                >
+                    <Image
+                        src={EnterLoadingIcon}
+                        sx={{
+                            width: "60px",
+                        }}
+                    ></Image>
+                </Flex>
             ) : (
                 <Box
                     sx={{
@@ -410,6 +424,7 @@ const GameList = ({
 };
 
 const Games = () => {
+    const [listInit, setListInit] = useState(false);
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { blockNumber } = useBlockNumber();
@@ -491,6 +506,9 @@ const Games = () => {
     };
 
     const handleGetGameList = async () => {
+        if (!listInit) {
+            setListLoading(true);
+        }
         const [queueList, onGameList, players] = await multiProvider.all([
             multiMercuryBTTPrivateLobby.getLobbyGameQueue(),
             multiMercuryBTTPrivateLobby.getLobbyOnGoingGames(),
@@ -600,6 +618,10 @@ const Games = () => {
             allGameCount: allValidPlayers.length,
             inGameCount: queueList.length + onGameList.length * 2,
         });
+        setListLoading(false);
+        if (!listInit) {
+            setListInit(true);
+        }
     };
 
     useEffect(() => {

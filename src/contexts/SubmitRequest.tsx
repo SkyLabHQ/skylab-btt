@@ -1,7 +1,6 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { createContext, useContext, useState } from "react";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
-import DotLoading from "@/components/Loading/DotLoading";
 import LoadingText from "@/components/BttComponents/LoadingText";
 const SubmitRequestContext = createContext<{
     isLoading: boolean;
