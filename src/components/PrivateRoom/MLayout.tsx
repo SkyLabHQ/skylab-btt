@@ -107,7 +107,7 @@ const MLayout = ({
                 justify={"center"}
                 flexDir={"column"}
                 sx={{
-                    marginTop: "50px",
+                    marginTop: "36px",
                 }}
             >
                 <StatusProgress

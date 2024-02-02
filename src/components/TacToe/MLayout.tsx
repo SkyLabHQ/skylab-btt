@@ -107,7 +107,7 @@ const MLayout = ({
                 justify={"center"}
                 flexDir={"column"}
                 sx={{
-                    marginTop: "50px",
+                    marginTop: "36px",
                 }}
             >
                 <StatusProgress
@@ -228,6 +228,10 @@ const MLayout = ({
                         onInputChange(Number(bidAmount) - 1);
                     }}
                     onAddClick={() => {
+                        console.log(
+                            Number(bidAmount) + 1,
+                            Number(myGameInfo.balance),
+                        );
                         if (
                             Number(bidAmount) + 1 <=
                             Number(myGameInfo.balance)
