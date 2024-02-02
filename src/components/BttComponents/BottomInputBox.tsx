@@ -1,4 +1,4 @@
-import { Box, Button, Image, Flex, Text } from "@chakra-ui/react";
+import { Box, Image, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
@@ -40,7 +40,6 @@ const BottomInputBox = ({
                     border: "2px solid #fff",
                     height: "32px",
                     background: "#616161",
-                    flex: 1,
                     marginRight: "10px",
                 }}
                 justify={"space-between"}
@@ -68,7 +67,7 @@ const BottomInputBox = ({
                         onInputAmountClick();
                     }}
                     sx={{
-                        flex: 1,
+                        width: "108px",
                         textAlign: "center",
                     }}
                 >
