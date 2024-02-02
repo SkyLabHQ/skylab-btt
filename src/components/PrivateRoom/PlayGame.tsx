@@ -288,12 +288,12 @@ const PlayGame = ({
         }
 
         try {
-            // const privateLobbySigner = getPrivateLobbySigner();
-            // await tacToeGameRetryWrite("claimTimeoutPenalty", [], {
-            //     usePaymaster: true,
-            //     signer: privateLobbySigner,
-            // });
-            // handleGetGameInfo();
+            const privateLobbySigner = getPrivateLobbySigner();
+            await tacToeGameRetryWrite("claimTimeoutPenalty", [], {
+                usePaymaster: true,
+                signer: privateLobbySigner,
+            });
+            handleGetGameInfo();
         } catch (e) {
             console.log(e);
             toast(handleError(e, true));

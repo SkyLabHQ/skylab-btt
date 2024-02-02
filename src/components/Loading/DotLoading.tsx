@@ -3,11 +3,13 @@ import { motion } from "framer-motion";
 import React from "react";
 
 const DotLoading = ({
+    showLoading,
     text,
     color = "#fff",
     fontSize = "12px",
     dotSize = "4px",
 }: {
+    showLoading?: boolean;
     text?: string;
     color?: string;
     fontSize?: string;

@@ -18,11 +18,17 @@ const StatusProgress = ({
     useEffect(() => {
         let commitCount = 0;
 
-        if (myGameState === GameState.Commited) {
+        if (
+            myGameState === GameState.Commited ||
+            myGameState === GameState.Revealed
+        ) {
             commitCount++;
         }
 
-        if (opGameState === GameState.Commited) {
+        if (
+            opGameState === GameState.Commited ||
+            opGameState === GameState.Revealed
+        ) {
             commitCount++;
         }
 
