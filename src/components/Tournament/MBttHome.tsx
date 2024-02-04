@@ -28,6 +28,7 @@ import LeaderboardIcon from "./assets/leaderboard-icon.svg";
 import RulesIcon from "./assets/rules-icon.svg";
 import MGameLeaderboard from "./MGameLeaderboard";
 import DownArrow from "./assets/down-arrow.svg";
+import useSkyToast from "@/hooks/useSkyToast";
 
 const MileagePopover = ({ value }: { value: any }) => {
     const navigate = useNavigate();
@@ -231,7 +232,7 @@ const Mileage = ({
     value: number;
     onNextRound: (value: string) => void;
 }) => {
-    const navigate = useNavigate();
+    const toast = useSkyToast();
     const { address } = useAccount();
     const { activePilot } = usePilotInfo(address);
 
@@ -260,7 +261,13 @@ const Mileage = ({
                             showSupport={activePilot.owner !== address}
                             onClick={async () => {
                                 if (!address) {
-                                    show();
+                                    if (window.ethereum) {
+                                        show();
+                                    } else {
+                                        toast(
+                                            "Please open this page in wallet browser",
+                                        );
+                                    }
                                     return;
                                 }
 

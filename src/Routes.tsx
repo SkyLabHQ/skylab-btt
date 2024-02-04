@@ -46,7 +46,6 @@ const AppRoutes = (): ReactElement => {
                     path="/btt/lobbyLive"
                     element={<PrivateLiveGame />}
                 ></Route>
-                <Route path="/toHome" element={<AddToHome />}></Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

@@ -125,23 +125,26 @@ const Match = () => {
                     width: isPc ? "31.25vw" : "350px",
                 }}
             >
-                <motion.div
-                    style={{
-                        fontSize: isPc ? "30px" : "20px",
-                        textAlign: "center",
-                        marginBottom: "20px",
-                        fontWeight: "bold",
-                    }}
-                    animate={{
-                        opacity: [0, 1, 0],
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                    }}
-                >
-                    Matching
-                </motion.div>
+                {(!myInfo.address || !opInfo.address) && (
+                    <motion.div
+                        style={{
+                            fontSize: isPc ? "30px" : "20px",
+                            textAlign: "center",
+                            marginBottom: "20px",
+                            fontWeight: "bold",
+                        }}
+                        animate={{
+                            opacity: [0, 1, 0],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                        }}
+                    >
+                        Matching
+                    </motion.div>
+                )}
+
                 <Flex
                     align={"center"}
                     justify={"space-around"}

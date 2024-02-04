@@ -1,8 +1,7 @@
 import "swiper/css/bundle";
-
 import { Box, useMediaQuery } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useSkyToast from "./hooks/useSkyToast";
 import Service from "./pages/Service";
 import AddToHome from "./pages/AddToHome";
@@ -13,6 +12,7 @@ const App = (): ReactElement => {
     const toast = useSkyToast();
     const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleEnter = () => {
         if (checked) {
@@ -24,9 +24,12 @@ const App = (): ReactElement => {
         }
     };
 
+    const handleSkip = () => {
+        setType(0);
+    };
+
     useEffect(() => {
         const agree = localStorage.getItem("service");
-
         if (isPc) {
             setType(0);
             return;
@@ -34,7 +37,11 @@ const App = (): ReactElement => {
 
         // 手机浏览器模式
         if (!window.matchMedia("(display-mode: standalone)").matches && !isPc) {
-            setType(2);
+            if (location.pathname === "/") {
+                setType(2);
+            } else {
+                setType(0);
+            }
             return;
         }
 
@@ -62,15 +69,15 @@ const App = (): ReactElement => {
     return (
         // TO-DO: use color mode when implementing light/dark
         <Box minH="100%" color="white" height={"100%"}>
-            {<Outlet />}
-            {/* {type === 1 && (
+            {type === 0 && <Outlet />}
+            {type === 1 && (
                 <Service
                     checked={checked}
                     onChecked={setChecked}
                     onEnter={handleEnter}
                 ></Service>
             )}
-            {type === 2 && <AddToHome></AddToHome>} */}
+            {type === 2 && <AddToHome onSkip={handleSkip}></AddToHome>}
         </Box>
     );
 };
