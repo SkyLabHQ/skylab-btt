@@ -49,8 +49,6 @@ import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
 import StatusProgress from "../BttComponents/StatusProgress";
 
-const myNow = getNowSecondsTimestamp() + 80000; //test
-
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
     onChangeNewInfo: (info: MyNewInfo) => void;
@@ -376,6 +374,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     const handleRevealedBid = async () => {
         try {
             const localSalt = getGridCommited();
+
             if (!localSalt) return;
             const { salt, amount } = localSalt;
             setRevealing(true);
@@ -620,7 +619,13 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             return;
         }
         handleCommitWorker();
-    }, [myGameInfo.timeout, myGameInfo.gameState]);
+    }, [
+        myGameInfo.gameState,
+        myGameInfo.timeout,
+        myGameInfo.gameState,
+        currentGrid,
+        loading,
+    ]);
 
     useEffect(() => {
         if (
