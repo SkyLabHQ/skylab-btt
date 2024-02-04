@@ -41,7 +41,7 @@ const BttTimer = ({
                 <Box
                     sx={{
                         width: width,
-                        background: gray ? "#616161" : "#fff",
+                        background: gray ? "#616161" : "#fddc2d",
                     }}
                 ></Box>
             </Box>
@@ -57,7 +57,7 @@ const BttTimer = ({
                             direction === "right"
                                 ? "translateY(-50%)"
                                 : "translateX(-50%)",
-                        color: gray ? "#616161" : "#fff",
+                        color: gray ? "#616161" : "#fddc2d",
                     }}
                 >
                     {time}

@@ -41,6 +41,7 @@ const BottomInputBox = ({
                     height: "32px",
                     background: "#616161",
                     marginRight: "10px",
+                    width: "160px",
                 }}
                 justify={"space-between"}
             >
@@ -67,7 +68,7 @@ const BottomInputBox = ({
                         onInputAmountClick();
                     }}
                     sx={{
-                        width: "108px",
+                        flex: 1,
                         textAlign: "center",
                     }}
                 >
