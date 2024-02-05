@@ -258,7 +258,7 @@ const Test = () => {
                             </Text>
                         </Box>
                         <Box>
-                            <Text>02</Text>
+                            <Text>23</Text>
                             <Text
                                 sx={{
                                     fontSize: "60px",
@@ -268,7 +268,7 @@ const Test = () => {
                             </Text>
                         </Box>
                         <Box>
-                            <Text>02</Text>
+                            <Text>11</Text>
                             <Text
                                 sx={{
                                     fontSize: "60px",
@@ -278,7 +278,7 @@ const Test = () => {
                             </Text>
                         </Box>
                         <Box>
-                            <Text>02</Text>
+                            <Text>58</Text>
                             <Text
                                 sx={{
                                     fontSize: "60px",
