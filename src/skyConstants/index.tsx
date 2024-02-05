@@ -13,6 +13,12 @@ export const PolygonIcon = createIcon({
 });
 
 export const GlobalStyles = css`
+    @font-face {
+        font-family: "Neoneon";
+        src: url("/Neoneon.otf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+    }
     * {
         box-sizing: border-box;
     }
