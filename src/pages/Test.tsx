@@ -1,9 +1,93 @@
 import { Box, Flex, SimpleGrid, Text, Image } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import BlueX from "../assets/blue-x.svg";
 import YellowO from "../assets/yellow-o.svg";
 import LogoIcon from "../assets/logo.svg";
+import useCountDown from "react-countdown-hook";
+
+const handleDateNumber = (number: number) => {
+    if (number >= 10) {
+        return [Math.floor(number / 10), number % 10];
+    } else {
+        return [0, number];
+    }
+};
+
+const ScrollNum = ({
+    maxNumber = 9,
+    number = -1,
+    stop = false,
+}: {
+    maxNumber?: number;
+    number?: number;
+    stop?: boolean;
+}) => {
+    const [init, setInit] = React.useState(false);
+    const numAnimate = useAnimation();
+
+    useEffect(() => {
+        const handle = async () => {
+            if (init) {
+                await numAnimate.stop();
+                if (number === maxNumber) {
+                    await numAnimate.start({
+                        transform: [
+                            `translateY(-${(maxNumber + 1) * 9.09}%)`,
+                            `translateY(-${number * 9.09}%)`,
+                        ],
+
+                        transition: {
+                            duration: 0.5,
+                            ease: "linear",
+                        },
+                    });
+                } else {
+                    numAnimate.start({
+                        transform: `translateY(-${number * 9.09}%)`,
+                        transition: {
+                            duration: 0.5,
+                            ease: "linear",
+                        },
+                    });
+                }
+            } else {
+                numAnimate.start({
+                    transform: ["translateY(-90.9%)", "translateY(0%)"],
+                    transition: {
+                        duration: 1,
+                        repeat: Infinity,
+                        ease: "linear",
+                    },
+                });
+
+                setTimeout(() => {
+                    setInit(true);
+                }, 1000);
+            }
+        };
+        handle();
+    }, [number, init]);
+
+    return (
+        <Box sx={{}}>
+            <Box
+                sx={{
+                    height: "160px",
+                    overflow: "hidden",
+                    fontSize: "160px",
+                    lineHeight: "1",
+                }}
+            >
+                <motion.div animate={numAnimate}>
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item, index) => {
+                        return <Box key={index}>{item}</Box>;
+                    })}
+                </motion.div>
+            </Box>
+        </Box>
+    );
+};
 
 const Test = () => {
     const logoAnimate = useAnimation();
@@ -11,6 +95,41 @@ const Test = () => {
     const potAnimate = useAnimation();
     const dateAnimate = useAnimation();
     const timeAnimate = useAnimation();
+
+    const [timeLeft, { start }] = useCountDown(5000000, 1000);
+
+    const { d1, d2, h1, h2, m1, m2, s1, s2 } = useMemo(() => {
+        const seconds = Math.floor((timeLeft / 1000) % 60);
+        const mintues = Math.floor((timeLeft / 1000 / 60) % 60);
+        const hours = Math.floor((timeLeft / 1000 / 60 / 60) % 60);
+        const days = Math.floor((timeLeft / 1000 / 60 / 60 / 60) % 24);
+
+        let s1,
+            s2,
+            m1,
+            m2,
+            h1,
+            h2,
+            d1,
+            d2 = 0;
+        [s1, s2] = handleDateNumber(seconds);
+        [m1, m2] = handleDateNumber(mintues);
+        [h1, h2] = handleDateNumber(hours);
+        [d1, d2] = handleDateNumber(days);
+
+        console.log(seconds, s1, s2);
+
+        return {
+            s1,
+            s2,
+            m1,
+            m2,
+            h1,
+            h2,
+            d1,
+            d2,
+        };
+    }, [timeLeft]);
 
     const [isTime, setIsTime] = React.useState(true);
 
@@ -107,6 +226,12 @@ const Test = () => {
         handleInit();
     }, [isTime]);
 
+    useEffect(() => {
+        start();
+    }, []);
+
+    console.log(s1, s2);
+
     return (
         <Flex
             align={"center"}
@@ -123,7 +248,11 @@ const Test = () => {
             <Flex
                 flexDir={"column"}
                 align={"center"}
-                sx={{ position: "absolute", top: "0%", right: "100px" }}
+                sx={{
+                    position: "absolute",
+                    top: "0%",
+                    right: "100px",
+                }}
             >
                 <motion.div
                     style={{
@@ -248,7 +377,17 @@ const Test = () => {
                 >
                     <SimpleGrid columns={4} spacingX={"80px"}>
                         <Box>
-                            <Text>02</Text>
+                            {" "}
+                            <Flex align={"center"}>
+                                <ScrollNum
+                                    maxNumber={6}
+                                    number={d1}
+                                ></ScrollNum>
+                                <ScrollNum
+                                    maxNumber={9}
+                                    number={d2}
+                                ></ScrollNum>{" "}
+                            </Flex>
                             <Text
                                 sx={{
                                     fontSize: "60px",
@@ -258,7 +397,16 @@ const Test = () => {
                             </Text>
                         </Box>
                         <Box>
-                            <Text>23</Text>
+                            <Flex align={"center"}>
+                                <ScrollNum
+                                    maxNumber={6}
+                                    number={h1}
+                                ></ScrollNum>
+                                <ScrollNum
+                                    maxNumber={9}
+                                    number={h2}
+                                ></ScrollNum>
+                            </Flex>
                             <Text
                                 sx={{
                                     fontSize: "60px",
@@ -268,7 +416,16 @@ const Test = () => {
                             </Text>
                         </Box>
                         <Box>
-                            <Text>11</Text>
+                            <Flex align={"center"}>
+                                <ScrollNum
+                                    maxNumber={6}
+                                    number={m1}
+                                ></ScrollNum>
+                                <ScrollNum
+                                    maxNumber={9}
+                                    number={m2}
+                                ></ScrollNum>
+                            </Flex>
                             <Text
                                 sx={{
                                     fontSize: "60px",
@@ -278,7 +435,16 @@ const Test = () => {
                             </Text>
                         </Box>
                         <Box>
-                            <Text>58</Text>
+                            <Flex align={"center"}>
+                                <ScrollNum
+                                    maxNumber={6}
+                                    number={s1}
+                                ></ScrollNum>
+                                <ScrollNum
+                                    maxNumber={9}
+                                    number={s2}
+                                ></ScrollNum>
+                            </Flex>
                             <Text
                                 sx={{
                                     fontSize: "60px",
