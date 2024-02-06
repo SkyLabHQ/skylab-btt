@@ -40,7 +40,6 @@ const BottomInputBox = ({
                     border: "2px solid #fff",
                     height: "32px",
                     background: "#616161",
-                    marginRight: "10px",
                     width: "160px",
                 }}
                 justify={"space-between"}
@@ -112,11 +111,7 @@ const BottomInputBox = ({
                 </Flex>
             </Flex>
 
-            <Box
-                sx={{
-                    marginRight: "10px",
-                }}
-            >
+            <Box>
                 {loading ? (
                     <Text
                         sx={{
@@ -139,7 +134,7 @@ const BottomInputBox = ({
                                     ? "#FDDC2D"
                                     : "#414141",
                             fontSize: "18px",
-                            width: "104px",
+                            width: "114px",
                             textAlign: "center",
                             fontWeight: "bold",
                         }}
