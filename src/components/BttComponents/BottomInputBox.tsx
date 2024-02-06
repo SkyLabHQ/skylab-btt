@@ -84,7 +84,7 @@ const BottomInputBox = ({
                         <Text
                             sx={{
                                 color: "rgba(120, 120, 120, 1)",
-                                fontSize: "20px",
+                                fontSize: "14px",
                             }}
                         >
                             Input Bid
