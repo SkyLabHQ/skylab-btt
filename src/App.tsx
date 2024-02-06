@@ -74,13 +74,13 @@ const App = (): ReactElement => {
 
     useEffect(() => {
         const agree = localStorage.getItem("service");
-        if (isPc) {
+        if (isPc || window.ethereum) {
             setType(0);
             return;
         }
 
         // 手机浏览器模式
-        if (!window.matchMedia("(display-mode: standalone)").matches && !isPc) {
+        if (!window.matchMedia("(display-mode: standalone)").matches) {
             if (location.pathname === "/") {
                 setType(2);
             } else {

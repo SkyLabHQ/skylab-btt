@@ -286,7 +286,6 @@ const CurrentPilot = ({
             }
             setActiveLoading(true);
 
-            console.log(mercuryPilotsContract, "mercuryPilotsContract");
             const res = await mercuryPilotsContract.write.setActivePilot([
                 selectPilotInfo.address,
                 selectPilotInfo.pilotId,
