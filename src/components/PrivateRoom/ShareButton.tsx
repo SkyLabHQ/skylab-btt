@@ -147,6 +147,7 @@ const ShareButtons = ({
                             // width: isPc ? "200px" : "80px",
                             justifyContent: "flex-end",
                             alignItems: "center",
+                            cursor: "pointer",
                         }}
                     >
                         <Text

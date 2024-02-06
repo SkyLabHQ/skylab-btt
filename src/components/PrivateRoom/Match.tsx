@@ -150,7 +150,8 @@ const Match = () => {
                     justify={"space-around"}
                     w={"100%"}
                     sx={{
-                        height: isPc ? "10vw" : "120px",
+                        height: isPc ? "250px" : "120px",
+                        marginTop: "20px",
                     }}
                 >
                     <UserInfo detail={myInfo} status="my"></UserInfo>
