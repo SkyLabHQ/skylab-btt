@@ -17,11 +17,9 @@ const handleDateNumber = (number: number) => {
 const ScrollNum = ({
     maxNumber = 9,
     number = -1,
-    stop = false,
 }: {
     maxNumber?: number;
     number?: number;
-    stop?: boolean;
 }) => {
     const [init, setInit] = React.useState(false);
     const numAnimate = useAnimation();
@@ -372,6 +370,7 @@ const Test = () => {
                         transform: "translate(-50%, -50%)",
                         width: "100%",
                         lineHeight: "1",
+                        fontFamily: "neon",
                     }}
                     animate={timeAnimate}
                 >

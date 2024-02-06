@@ -19,6 +19,12 @@ export const GlobalStyles = css`
         font-weight: normal;
         font-style: normal;
     }
+    @font-face {
+        font-family: "neon";
+        src: url("/neon.otf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+    }
     * {
         box-sizing: border-box;
     }
