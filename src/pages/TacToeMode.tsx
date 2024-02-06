@@ -577,19 +577,6 @@ const TacToeMode = () => {
         handleGetLoobyName();
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
 
-    useEffect(() => {
-        const metaThemeColor = document.querySelector("meta[name=theme-color]");
-        console.log(metaThemeColor, "metaThemeColor");
-        // 动态修改meta标签的content属性
-        if (metaThemeColor) {
-            metaThemeColor.setAttribute("content", "red");
-        }
-        const metaThemeColor1 = document.querySelector(
-            "meta[name=theme-color]",
-        );
-        console.log(metaThemeColor1, "metaThemeColor1");
-    }, []);
-
     return (
         <Box
             sx={{
