@@ -141,14 +141,13 @@ const BottomInputBox = ({
                         <SliderThumb
                             sx={{
                                 width: "8px",
-                                height: "24px !important",
+                                height: "26px !important",
                                 borderRadius: "100px",
                                 border: "none",
                                 background:
-                                    " linear-gradient(90deg, rgba(253, 220, 45, 0) 0%, rgba(253, 220, 45, 1) 49.24%, rgba(253, 220, 45, 0) 100%)",
+                                    "linear-gradient(180deg, rgba(253, 220, 45, 0) 0%, rgba(253, 220, 45, 1) 49.24%, rgba(253, 220, 45, 0) 100%)",
                                 outline: "none",
                                 boxShadow: "none !important",
-
                                 "&:focus-visible": {
                                     boxShadow: "none",
                                 },
