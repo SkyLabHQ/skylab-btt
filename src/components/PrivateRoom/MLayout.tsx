@@ -146,7 +146,7 @@ const MLayout = ({
                                     width: "160px",
                                     position: "absolute",
                                     left: "12px",
-                                    bottom: "12px",
+                                    bbottom: "20px",
                                 }}
                             >
                                 <Timer
@@ -164,7 +164,7 @@ const MLayout = ({
                     <Flex
                         sx={{
                             position: "absolute",
-                            bottom: "12px",
+                            bottom: "16px",
                             right: 0,
                         }}
                         flexDir={"column"}

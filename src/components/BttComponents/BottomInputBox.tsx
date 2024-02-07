@@ -56,6 +56,7 @@ const BottomInputBox = ({
                 height: "55px",
                 background: "#787878",
                 padding: "0 12px",
+                position: "relative",
             }}
             justify={"space-between"}
             align={"center"}
@@ -63,27 +64,24 @@ const BottomInputBox = ({
             <Box>
                 <Flex
                     sx={{
-                        height: "20px",
-                        width: "160px",
+                        height: "24px",
+                        width: "184px",
+                        position: "absolute",
+                        top: "-10px",
+                        left: "0px",
+                        background: "#787878",
+                        borderRadius: "10px 10px 0 0",
+                        padding: "0px 12px",
                     }}
                     justify={"space-between"}
                 >
-                    <Flex
-                        sx={{
-                            width: "24px",
-                        }}
-                        align={"center"}
-                        justify={"center"}
-                        flexDir={"column"}
+                    <Image
                         onClick={onSubClick}
-                    >
-                        <Image
-                            src={SubIcon}
-                            sx={{
-                                width: "16px",
-                            }}
-                        ></Image>
-                    </Flex>
+                        src={SubIcon}
+                        sx={{
+                            width: "16px",
+                        }}
+                    ></Image>
                     <Box
                         onClick={(e) => {
                             onInputAmountClick();
@@ -102,24 +100,16 @@ const BottomInputBox = ({
                             {bidAmount}
                         </Text>
                     </Box>
-                    <Flex
-                        sx={{
-                            width: "24px",
-                        }}
-                        align={"center"}
-                        justify={"center"}
-                        flexDir={"column"}
+
+                    <Image
                         onClick={onAddClick}
-                    >
-                        <Image
-                            src={AddIcon}
-                            sx={{
-                                width: "16px",
-                            }}
-                        ></Image>
-                    </Flex>
+                        src={AddIcon}
+                        sx={{
+                            width: "16px",
+                        }}
+                    ></Image>
                 </Flex>
-                <Box sx={{}}>
+                <Box sx={{ width: "160px", marginTop: "16px" }}>
                     <Slider
                         value={Number(bidAmount)}
                         onChange={(e) => {
@@ -246,6 +236,7 @@ const BottomInputBox = ({
                                                 index + 1,
                                             );
                                             setSelectMessageIndex(index);
+                                            onClose();
                                         }}
                                         key={index + 1}
                                         sx={{
@@ -260,6 +251,7 @@ const BottomInputBox = ({
                                             background:
                                                 selectMessageIndex === index &&
                                                 "#00000059",
+                                            fontFamily: "Quantico",
                                         }}
                                         align={"center"}
                                     >

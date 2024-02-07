@@ -271,14 +271,7 @@ export const MMessage = ({
             messageLoading === MessageStatus.Sent ||
             emoteLoading === MessageStatus.Sent
         ) {
-            return (
-                <Image
-                    src={SentIcon}
-                    sx={{
-                        width: "18px",
-                    }}
-                ></Image>
-            );
+            return <></>;
         }
 
         return "";
