@@ -1,6 +1,6 @@
 import { Box, Flex, SimpleGrid, Text, Image } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import BlueX from "../assets/blue-x.svg";
 import YellowO from "../assets/yellow-o.svg";
 import LogoIcon from "../assets/logo.svg";
@@ -88,6 +88,8 @@ const ScrollNum = ({
 };
 
 const Test = () => {
+    const x = useRef(0);
+    const y = useRef(0);
     const logoAnimate = useAnimation();
     const beginAnimate = useAnimation();
     const potAnimate = useAnimation();
@@ -241,6 +243,9 @@ const Test = () => {
                 position: "relative",
                 background:
                     "radial-gradient(50% 50%, rgba(255, 105, 190, 100) 0%, rgba(166, 62, 153, 0.41) 62.1%, rgba(103, 31, 156, 0.01) 100%)",
+            }}
+            onMouseMove={(e) => {
+                console.log(e, "eeee");
             }}
         >
             <Flex
@@ -507,6 +512,33 @@ const Test = () => {
                     }}
                 ></Image>
             </Flex>
+
+            <Box
+                sx={{
+                    position: "relative",
+                }}
+            >
+                <Text
+                    sx={{
+                        zIndex: 1,
+                        height: "50px",
+                        width: "50px",
+                    }}
+                >
+                    1111
+                </Text>
+                <Box
+                    sx={{
+                        backgroundImage:
+                            " radial-gradient(transparent, #000 60px)",
+                        height: "100px",
+                        width: "100px",
+                        position: "absolute",
+                        left: "-50%",
+                        top: "-50%",
+                    }}
+                ></Box>
+            </Box>
         </Flex>
     );
 };

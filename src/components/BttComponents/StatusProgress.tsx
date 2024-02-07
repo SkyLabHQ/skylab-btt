@@ -114,15 +114,15 @@ const StatusProgress = ({
                         transform: "translateX(-50%)",
                         fontSize: "12px",
                         textAlign: "center",
-                        color: activeIndex > 1 ? "#F2d861" : "#fff",
+                        color: activeIndex >= 1 ? "#F2d861" : "#fff",
                     }}
                 >
                     <Text>2 Player</Text>
                     <DotLoading
                         text="commited"
                         dotSize="3px"
-                        color={activeIndex > 1 ? "#F2d861" : "#fff"}
-                        showLoading={activeIndex <= 1}
+                        color={activeIndex >= 1 ? "#F2d861" : "#fff"}
+                        showLoading={activeIndex === 1}
                     ></DotLoading>
                 </Box>
                 <Flex
@@ -141,6 +141,7 @@ const StatusProgress = ({
                         text="Revealing"
                         dotSize="3px"
                         color={activeIndex > 2 ? "#F2d861" : "#fff"}
+                        showLoading={activeIndex === 2}
                     ></DotLoading>
                 </Flex>
                 <motion.div

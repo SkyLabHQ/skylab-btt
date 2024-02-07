@@ -209,9 +209,14 @@ const MLayout = ({
                     </Flex>
                 </Box>
                 <BottomInputBox
+                    onSetMessage={onSetMessage}
+                    myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}
                     myGameState={myGameState}
                     loading={loading}
+                    onIuputAmount={(amount: number) => {
+                        onInputChange(amount);
+                    }}
                     onInputAmountClick={() => {
                         if (inputMode === "keyboard") {
                             keyBoardOnToggle();

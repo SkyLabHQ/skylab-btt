@@ -275,7 +275,7 @@ export const MUserProfile = ({
                         }}
                         flexDir={"column"}
                     >
-                        {avatar && (
+                        {avatar >= 0 && (
                             <Box
                                 sx={{
                                     borderRadius: "12px",
@@ -386,7 +386,7 @@ export const MUserProfileResult = ({
             }}
         >
             <Flex align={"flex-end"}>
-                {avatar && (
+                {avatar >= 0 && (
                     <Box
                         sx={{
                             borderRadius: "12px",

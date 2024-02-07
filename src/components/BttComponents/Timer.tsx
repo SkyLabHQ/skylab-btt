@@ -36,22 +36,24 @@ const BttTimer = ({
                     display: "flex",
                     justifyContent: "flex-end",
                     padding: isPc ? "0.1042vw" : "1px",
+                    borderRadius: "10px",
                 }}
             >
                 <Box
                     sx={{
                         width: width,
                         background: gray ? "#616161" : "#fddc2d",
+                        borderRadius: "10px",
                     }}
                 ></Box>
             </Box>
             {show && (
                 <Text
                     sx={{
-                        fontSize: isPc ? "1.25vw" : "12px",
+                        fontSize: isPc ? "1.25vw" : "20px",
                         position: "absolute",
                         right: direction === "right" && "-100px",
-                        top: direction === "right" ? "50%" : "-20px",
+                        top: direction === "right" ? "50%" : "-28px",
                         left: direction === "top" && "50%",
                         transform:
                             direction === "right"

@@ -48,7 +48,7 @@ const DotLoading = ({
         >
             <Text>{text}</Text>
 
-            {showLoading ? (
+            {showLoading && (
                 <motion.div
                     style={{
                         height: "10px",
@@ -84,33 +84,6 @@ const DotLoading = ({
                         );
                     })}
                 </motion.div>
-            ) : (
-                <Box
-                    sx={{
-                        height: "10px",
-                        position: "absolute",
-                        right: "-4px",
-                        bottom: "50%",
-                        transform: "translateY(50%)",
-                    }}
-                >
-                    {dotList.map((item, index) => {
-                        return (
-                            <Box
-                                key={index}
-                                sx={{
-                                    width: dotSize,
-                                    height: dotSize,
-                                    borderRadius: "50%",
-                                    backgroundColor: color,
-                                    position: "absolute",
-                                    left: item.left,
-                                    bottom: item.bottom,
-                                }}
-                            ></Box>
-                        );
-                    })}
-                </Box>
             )}
         </Box>
     );
