@@ -89,9 +89,9 @@ const ScrollNum = ({
         <Box sx={{}}>
             <Box
                 sx={{
-                    height: "124px",
+                    height: "95px",
                     overflow: "hidden",
-                    fontSize: "124px",
+                    fontSize: "95px",
                     lineHeight: "1",
                 }}
             >
@@ -225,19 +225,6 @@ const Test = () => {
         }
     };
 
-    const handleClickLogo = () => {
-        logoAnimate.start({
-            height: ["200px", "280px", "200px"],
-            width: "2px",
-            background: "#fff",
-            transition: {
-                duration: 0.3,
-            },
-        });
-
-        setIsTime(!isTime);
-    };
-
     useEffect(() => {
         handleInit();
     }, [isTime]);
@@ -273,7 +260,6 @@ const Test = () => {
         };
     }, []);
 
-    console.log(backgroundPosition, "backgroundPosition");
     return (
         <motion.div
             style={{
@@ -283,7 +269,7 @@ const Test = () => {
                 position: "relative",
                 // background: `url(${Bg})`,
                 backgroundRepeat: "no-repeat",
-                // backgroundSize: "cover",
+                backgroundSize: "cover",
                 backgroundColor: "#1b1b1b",
                 backgroundImage: `url(${Bg}) `,
                 backgroundPosition: `${backgroundPosition}`,
@@ -293,12 +279,11 @@ const Test = () => {
                 flexDirection: "column",
             }}
         >
-            {" "}
             <Box
                 className="card"
                 sx={{
-                    width: "794px",
-                    height: "794px",
+                    width: "600px",
+                    height: "600px",
                     borderRadius: "50%",
                     "&:hover .content": {
                         transform: "rotateY(180deg)",
@@ -314,7 +299,6 @@ const Test = () => {
                         transition: "transform 300ms",
                         boxShadow: "0px 0px 10px 1px #000000ee",
                         borderRadius: "50%",
-
                         // transform: "rotateY(180deg)",
                     }}
                 >
@@ -371,16 +355,22 @@ const Test = () => {
                                     height: "100%",
                                     fontFamily: "Neoneon",
                                     position: "relative",
+                                    paddingTop: "20px",
                                 }}
                             >
-                                <Image src={HourglassIcon}></Image>
+                                <Image
+                                    src={HourglassIcon}
+                                    sx={{
+                                        width: "100px",
+                                    }}
+                                ></Image>
                                 <Box>
                                     <motion.div
                                         style={{
                                             width: "100%",
                                             textShadow: "0px 0px 19px  #00CCFF",
                                             color: "rgba(255, 255, 255, 0.2)",
-                                            fontSize: "120px",
+                                            fontSize: "100px",
                                             textAlign: "center",
                                         }}
                                         animate={beginAnimate}
@@ -411,7 +401,7 @@ const Test = () => {
                                     <motion.div
                                         style={{
                                             color: "rgba(56, 248, 255, 1)",
-                                            fontSize: "124px",
+                                            fontSize: "95px",
                                             textAlign: "center",
                                             margin: "20px auto 0",
                                             width: "100%",
@@ -437,7 +427,7 @@ const Test = () => {
                                                 </Flex>
                                                 <Text
                                                     sx={{
-                                                        fontSize: "50px",
+                                                        fontSize: "30px",
                                                     }}
                                                 >
                                                     DAYS
@@ -460,7 +450,7 @@ const Test = () => {
                                                 </Flex>
                                                 <Text
                                                     sx={{
-                                                        fontSize: "50px",
+                                                        fontSize: "30px",
                                                     }}
                                                 >
                                                     HOURS
@@ -482,7 +472,7 @@ const Test = () => {
                                                 </Flex>
                                                 <Text
                                                     sx={{
-                                                        fontSize: "50px",
+                                                        fontSize: "30px",
                                                     }}
                                                 >
                                                     MINS
@@ -504,7 +494,7 @@ const Test = () => {
                                                 </Flex>
                                                 <Text
                                                     sx={{
-                                                        fontSize: "50px",
+                                                        fontSize: "30px",
                                                     }}
                                                 >
                                                     SECS
@@ -557,13 +547,13 @@ const Test = () => {
                                 left: "50%",
                                 top: "50%",
                                 transform: "translate(-50%, -50%)",
-                                padding: "0 60px",
+                                padding: "10px 100px",
                             }}
                         >
                             <Image
                                 src={HummerIcon}
                                 sx={{
-                                    width: "230px",
+                                    width: "180px",
                                 }}
                             ></Image>
                             <motion.div
@@ -571,10 +561,10 @@ const Test = () => {
                                     width: "100%",
                                     textShadow: "0px 0px 19px  #00CCFF",
                                     color: "rgba(255, 255, 255, 0.2)",
-                                    fontSize: "160px",
+                                    fontSize: "100px",
                                     textAlign: "center",
-                                    lineHeight: "170px",
-                                    margin: "-30px 0 20px",
+                                    lineHeight: "100px",
+                                    margin: "-20px 0 30px",
                                 }}
                                 animate={beginAnimate}
                                 transition={{
@@ -610,14 +600,19 @@ const Test = () => {
                                 <Flex align={"center"} justify={"center"}>
                                     <Text
                                         sx={{
-                                            fontSize: "230px",
-                                            lineHeight: "200px",
+                                            fontSize: "160px",
+                                            lineHeight: "160px",
                                             fontFamily: "neon",
                                         }}
                                     >
                                         9.09
                                     </Text>
-                                    <ETHIcon fill="currentColor"></ETHIcon>
+                                    <ETHIcon
+                                        fill="currentColor"
+                                        style={{
+                                            width: "64px",
+                                        }}
+                                    ></ETHIcon>
                                 </Flex>
                             </motion.div>
                         </Box>
@@ -646,7 +641,7 @@ const Test = () => {
                         boxShadow: "0px 0px 17px 3px #FFEB3B",
                         border: "4px solid #FFECC7",
                         borderRadius: "19px",
-                        margin: "0 50px",
+                        margin: "66px 50px 0",
                         fontSize: "50px",
                         background: "transparent",
                         fontFamily: "neon",
