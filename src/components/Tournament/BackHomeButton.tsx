@@ -25,7 +25,7 @@ const BackHomeButton = ({ onClick }: { onClick: () => void }) => {
             <Image
                 src={BackIcon}
                 sx={{
-                    width: isPc ? "2.0833vw" : "24px",
+                    width: isPc ? "2.0833vw" : "30px",
                 }}
             ></Image>
         </Box>
