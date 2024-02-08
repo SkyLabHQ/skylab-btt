@@ -333,6 +333,7 @@ const CurrentPilot = ({
                 <Box
                     sx={{
                         padding: "8vh 0 8.3333vh",
+                        height: "100%",
                     }}
                 >
                     <Box
@@ -340,9 +341,9 @@ const CurrentPilot = ({
                             width: "83.3333vw",
                             margin: "0 auto",
                             borderTop: "1px solid #fff",
-                            position: "relative",
                             paddingTop: "1.8519vh",
                             height: "100%",
+                            position: "relative",
                         }}
                     >
                         <Box>
