@@ -286,7 +286,6 @@ const Test = () => {
                 minHeight: "100%",
                 fontFamily: "Neoneon",
                 position: "relative",
-                // background: `url(${Bg})`,
                 backgroundImage: `url(${Bg})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
