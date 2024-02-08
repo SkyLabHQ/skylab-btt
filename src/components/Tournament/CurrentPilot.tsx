@@ -317,7 +317,7 @@ const CurrentPilot = ({
     };
 
     useEffect(() => {
-        // handleGetAllTotalSupply();
+        handleGetAllTotalSupply();
     }, [selectPilotInfo]);
 
     return (

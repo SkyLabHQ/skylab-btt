@@ -5,8 +5,8 @@ import {
     NumberInputField,
     Text,
     useDisclosure,
-    Grid,
-    GridItem,
+    SimpleGrid,
+    Flex,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -206,7 +206,7 @@ const SelectPilotCollections = ({
         if (!currentCollection.enumerable) {
             return;
         }
-        // handleGetAllNft();
+        handleGetAllNft();
     }, [currentCollection]);
 
     return (
@@ -215,7 +215,7 @@ const SelectPilotCollections = ({
                 border: "1px solid #fff",
                 borderRadius: "10px",
                 padding: "10px",
-                height: "210px",
+                minHeight: "210px",
             }}
         >
             <Box
@@ -342,71 +342,47 @@ const SelectPilotCollections = ({
                         </NumberInput>
                         {currentCollection.enumerable &&
                             currentMyNfts.length !== 0 && (
-                                <Box
+                                <SimpleGrid
+                                    columns={4}
+                                    spacingX={10}
                                     sx={{
-                                        border: "2px solid #fff",
-                                        background: "rgba(61, 61, 61, 0.10)",
                                         position: "relative",
-                                        marginTop: "10px",
-                                        width: "639.9994px",
-                                        height: "288px",
-                                        backdropFilter: "blur(5px)",
-                                        borderRadius: "0.8333vw",
-                                        padding: "39.9994px",
+                                        marginTop: "20px",
                                     }}
                                 >
-                                    <Grid
-                                        templateColumns="repeat(4, 1fr)"
-                                        templateRows={"repeat(3, 1fr)"}
-                                        sx={{
-                                            width: "100%",
-                                            height: "100%",
-                                            overflow: "auto",
-                                        }}
-                                    >
-                                        {currentMyNfts.map((item) => {
-                                            return (
-                                                <GridItem
-                                                    key={item.pilotId}
-                                                    onClick={() => {
-                                                        handleSelectPilotId({
-                                                            address:
-                                                                currentCollection.address,
-                                                            pilotId:
-                                                                item.pilotId,
-                                                            img: item.img,
-                                                            owner: item.owner,
-                                                        });
-                                                    }}
-                                                    w="100%"
+                                    {currentMyNfts.map((item) => {
+                                        return (
+                                            <Flex
+                                                key={item.pilotId}
+                                                onClick={() => {
+                                                    handleSelectPilotId({
+                                                        address:
+                                                            currentCollection.address,
+                                                        pilotId: item.pilotId,
+                                                        img: item.img,
+                                                        owner: item.owner,
+                                                    });
+                                                }}
+                                                sx={{
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    flexDirection: "column",
+                                                }}
+                                            >
+                                                <Image
+                                                    src={item.img}
                                                     sx={{
-                                                        display: "flex",
-                                                        justifyContent:
-                                                            "center",
-                                                        alignItems: "center",
-                                                        flexDirection: "column",
-                                                        cursor: "pointer",
+                                                        width: "40px",
+                                                        height: "40px",
+                                                        borderRadius: "10px",
+                                                        border: "1px solid #fff",
                                                     }}
-                                                >
-                                                    <Image
-                                                        src={item.img}
-                                                        sx={{
-                                                            width: "68px",
-                                                            height: "68px",
-                                                            borderRadius:
-                                                                "10px",
-                                                            border: "3px solid #fff",
-                                                        }}
-                                                    ></Image>
-                                                    <Text>
-                                                        {" "}
-                                                        #{item.pilotId}{" "}
-                                                    </Text>
-                                                </GridItem>
-                                            );
-                                        })}
-                                    </Grid>
-                                </Box>
+                                                ></Image>
+                                                <Text>#{item.pilotId} </Text>
+                                            </Flex>
+                                        );
+                                    })}
+                                </SimpleGrid>
                             )}
                     </Box>
                 )}

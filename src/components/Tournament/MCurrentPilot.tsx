@@ -104,7 +104,6 @@ const MCurrentPilot = ({
                                 display: "flex",
                                 alignItems: "center",
                                 marginRight: "10px",
-                                // width: "230px",
                             }}
                         >
                             <MyPilot
