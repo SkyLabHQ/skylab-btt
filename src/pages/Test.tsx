@@ -282,7 +282,7 @@ const Test = () => {
                         transition: "transform 300ms",
                         boxShadow: "0px 0px 10px 1px #000000ee",
                         borderRadius: "5px",
-                        transform: "rotateY(180deg)",
+                        // transform: "rotateY(180deg)",
                     }}
                 >
                     <Box
@@ -525,7 +525,7 @@ const Test = () => {
                             <Image
                                 src={HummerIcon}
                                 sx={{
-                                    width: "250px",
+                                    width: "230px",
                                 }}
                             ></Image>
                             <motion.div
@@ -535,7 +535,8 @@ const Test = () => {
                                     color: "rgba(255, 255, 255, 0.2)",
                                     fontSize: "160px",
                                     textAlign: "center",
-                                    lineHeight: "183px",
+                                    lineHeight: "170px",
+                                    margin: "-30px 0 20px",
                                 }}
                                 animate={beginAnimate}
                                 transition={{
@@ -559,8 +560,8 @@ const Test = () => {
                                     width: "100%",
                                     textShadow: "0px 0px 19px  #00CCFF",
                                     color: "rgba(255, 255, 255, 0.2)",
-                                    fontSize: "120px",
                                     textAlign: "center",
+                                    marginTop: "20px",
                                 }}
                                 animate={beginAnimate}
                                 transition={{
