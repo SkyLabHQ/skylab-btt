@@ -404,8 +404,8 @@ const MBttHome = ({
                 <motion.div
                     style={{
                         background: `url(${GrayPlanetBg}) no-repeat`,
-                        width: "350px",
-                        height: "350px",
+                        width: "335px",
+                        height: "335px",
                         backgroundSize: "100% 100%",
                         margin: "0 auto",
                         display: "flex",
@@ -425,7 +425,7 @@ const MBttHome = ({
                     <motion.img
                         src={GrayPlanet}
                         style={{
-                            width: "95%",
+                            width: "90%",
                             background: "transparent",
                             scale: 1,
                         }}
@@ -472,7 +472,7 @@ const MBttHome = ({
                 </motion.div>
                 <Box
                     sx={{
-                        width: "100%",
+                        width: "95%",
                         position: "absolute",
                         left: "50%",
                         top: "50%",
