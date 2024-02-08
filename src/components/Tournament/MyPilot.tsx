@@ -47,7 +47,7 @@ const MyPilot = ({
                         sx={{
                             width: "80%",
                             height: "80%",
-                            borderRadius: "0.8333vw",
+                            borderRadius: "10px",
                         }}
                     ></Image>
                     {showSupport && (
