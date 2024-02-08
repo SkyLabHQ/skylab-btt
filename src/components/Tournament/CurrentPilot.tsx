@@ -317,14 +317,13 @@ const CurrentPilot = ({
     };
 
     useEffect(() => {
-        handleGetAllTotalSupply();
+        // handleGetAllTotalSupply();
     }, [selectPilotInfo]);
 
     return (
         <Box
             sx={{
-                padding: "8vh 0 8.3333vh",
-                height: "100vh",
+                height: "100%",
             }}
         >
             <BackHomeButton onClick={() => onNextRound(2)}></BackHomeButton>
@@ -333,151 +332,179 @@ const CurrentPilot = ({
             {isPc ? (
                 <Box
                     sx={{
-                        width: "83.3333vw",
-                        margin: "0 auto",
-                        borderTop: "1px solid #fff",
-                        position: "relative",
-                        paddingTop: "1.8519vh",
-                        height: "100%",
+                        padding: "8vh 0 8.3333vh",
                     }}
                 >
-                    <Box>
-                        <Text
-                            sx={{
-                                fontSize: "1.25vw",
-                            }}
-                        >
-                            Current Pilot{" "}
-                        </Text>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginTop: "1.8519vh",
-                            }}
-                        >
+                    <Box
+                        sx={{
+                            width: "83.3333vw",
+                            margin: "0 auto",
+                            borderTop: "1px solid #fff",
+                            position: "relative",
+                            paddingTop: "1.8519vh",
+                            height: "100%",
+                        }}
+                    >
+                        <Box>
+                            <Text
+                                sx={{
+                                    fontSize: "1.25vw",
+                                }}
+                            >
+                                Current Pilot{" "}
+                            </Text>
                             <Box
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
-                                    marginRight: "2.6875vw",
-                                    width: "17.1875vw",
+                                    marginTop: "1.8519vh",
                                 }}
                             >
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        marginRight: "2.6875vw",
+                                        width: "17.1875vw",
+                                    }}
+                                >
+                                    <MyPilot
+                                        img={activePilot.img}
+                                        showSupport={
+                                            activePilot.owner !== address
+                                        }
+                                        sx={{
+                                            width: "4.8958vw !important",
+                                            height: "4.8958vw !important",
+                                            marginRight: "1.0417vw",
+                                        }}
+                                    ></MyPilot>
+
+                                    {activePilot.pilotId > 0 && (
+                                        <Box>
+                                            <Text
+                                                sx={{
+                                                    fontSize: "1.0417vw",
+                                                    lineHeight: "1.0417vw",
+                                                    height: "1.0417vw",
+                                                }}
+                                            >
+                                                {activePilot.name}{" "}
+                                                {activePilot.pilotId
+                                                    ? "#" + activePilot.pilotId
+                                                    : ""}
+                                            </Text>
+                                            <MyPilotXp
+                                                value={activePilot?.xp}
+                                            ></MyPilotXp>
+                                        </Box>
+                                    )}
+                                </Box>
+                                <Image
+                                    src={ExchangeIcon}
+                                    sx={{
+                                        height: "2.0313vw",
+                                        marginRight: "2.6875vw",
+                                        width: "2.0313vw",
+                                    }}
+                                ></Image>
+
                                 <MyPilot
-                                    img={activePilot.img}
-                                    showSupport={activePilot.owner !== address}
+                                    nonexistentImg={UnknownPilotIcon}
+                                    img={selectPilotInfo.img}
+                                    showSupport={
+                                        selectPilotInfo.owner !== address
+                                    }
                                     sx={{
                                         width: "4.8958vw !important",
                                         height: "4.8958vw !important",
-                                        marginRight: "1.0417vw",
+                                        marginRight: "0.5208vw",
                                     }}
                                 ></MyPilot>
-
-                                {activePilot.pilotId > 0 && (
-                                    <Box>
-                                        <Text
-                                            sx={{
-                                                fontSize: "1.0417vw",
-                                                lineHeight: "1.0417vw",
-                                                height: "1.0417vw",
-                                            }}
-                                        >
-                                            {activePilot.name}{" "}
-                                            {activePilot.pilotId
-                                                ? "#" + activePilot.pilotId
-                                                : ""}
-                                        </Text>
-                                        <MyPilotXp
-                                            value={activePilot?.xp}
-                                        ></MyPilotXp>
-                                    </Box>
-                                )}
                             </Box>
-                            <Image
-                                src={ExchangeIcon}
-                                sx={{
-                                    height: "2.0313vw",
-                                    marginRight: "2.6875vw",
-                                    width: "2.0313vw",
-                                }}
-                            ></Image>
 
-                            <MyPilot
-                                nonexistentImg={UnknownPilotIcon}
-                                img={selectPilotInfo.img}
-                                showSupport={selectPilotInfo.owner !== address}
-                                sx={{
-                                    width: "4.8958vw !important",
-                                    height: "4.8958vw !important",
-                                    marginRight: "0.5208vw",
-                                }}
-                            ></MyPilot>
-                        </Box>
-
-                        <Box sx={{ display: "flex", paddingTop: "2.3148vh" }}>
-                            <LeftContent
-                                value={currentTab}
-                                handleTabChange={handleTabChange}
-                            ></LeftContent>
                             <Box
-                                sx={{
-                                    flex: 1,
-                                }}
+                                sx={{ display: "flex", paddingTop: "2.3148vh" }}
                             >
-                                {currentTab === 0 && (
-                                    <SelectPilotCollections
-                                        totalSupplys={totalSupplys}
-                                        currentCollection={currentCollection}
-                                        inputPilotId={inputPilotId}
-                                        handleInputPilotId={handleInputPilotId}
-                                        handlePilotIndex={handlePilotIndex}
-                                        handleSelectPilotId={
-                                            handleSelectPilotId
-                                        }
-                                    ></SelectPilotCollections>
-                                )}
-                                {currentTab === 1 && (
-                                    <RegisteredPilot
-                                        selectPilotInfo={selectPilotInfo}
-                                        handleSelectPilotId={
-                                            handleSelectPilotId
-                                        }
-                                    ></RegisteredPilot>
-                                )}
+                                <LeftContent
+                                    value={currentTab}
+                                    handleTabChange={handleTabChange}
+                                ></LeftContent>
+                                <Box
+                                    sx={{
+                                        flex: 1,
+                                    }}
+                                >
+                                    {currentTab === 0 && (
+                                        <SelectPilotCollections
+                                            totalSupplys={totalSupplys}
+                                            currentCollection={
+                                                currentCollection
+                                            }
+                                            inputPilotId={inputPilotId}
+                                            handleInputPilotId={
+                                                handleInputPilotId
+                                            }
+                                            handlePilotIndex={handlePilotIndex}
+                                            handleSelectPilotId={
+                                                handleSelectPilotId
+                                            }
+                                        ></SelectPilotCollections>
+                                    )}
+                                    {currentTab === 1 && (
+                                        <RegisteredPilot
+                                            selectPilotInfo={selectPilotInfo}
+                                            handleSelectPilotId={
+                                                handleSelectPilotId
+                                            }
+                                        ></RegisteredPilot>
+                                    )}
+                                </Box>
                             </Box>
                         </Box>
-                    </Box>
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            bottom: "0",
-                            right: "0",
-                        }}
-                    >
-                        {currentTab === 0 && (
-                            <CustomButton
-                                isDisabled={inputPilotId.length === 0}
-                                variant="unstyled"
-                                onClick={handleSearchTokenId}
-                                sx={{
-                                    marginRight: "1.25vw",
-                                }}
-                            >
-                                Preview
-                            </CustomButton>
-                        )}
-                        <CustomButton
-                            isDisabled={selectPilotInfo.pilotId === 0}
-                            variant="unstyled"
-                            onClick={handleSetActive}
+                        <Box
+                            sx={{
+                                position: "absolute",
+                                bottom: "0",
+                                right: "0",
+                            }}
                         >
-                            Set Active
-                        </CustomButton>
+                            {currentTab === 0 && (
+                                <CustomButton
+                                    isDisabled={inputPilotId.length === 0}
+                                    variant="unstyled"
+                                    onClick={handleSearchTokenId}
+                                    sx={{
+                                        marginRight: "1.25vw",
+                                    }}
+                                >
+                                    Preview
+                                </CustomButton>
+                            )}
+                            <CustomButton
+                                isDisabled={selectPilotInfo.pilotId === 0}
+                                variant="unstyled"
+                                onClick={handleSetActive}
+                            >
+                                Set Active
+                            </CustomButton>
+                        </Box>
                     </Box>
                 </Box>
             ) : (
-                <MCurrentPilot onNextRound={onNextRound}></MCurrentPilot>
+                <MCurrentPilot
+                    totalSupplys={totalSupplys}
+                    inputPilotId={inputPilotId}
+                    currentCollection={currentCollection}
+                    selectPilotInfo={selectPilotInfo}
+                    activePilot={activePilot}
+                    onNextRound={onNextRound}
+                    handleSetActive={handleSetActive}
+                    handleSearchTokenId={handleSearchTokenId}
+                    handleInputPilotId={handleInputPilotId}
+                    handleSelectPilotId={handleSelectPilotId}
+                    handlePilotIndex={handlePilotIndex}
+                ></MCurrentPilot>
             )}
         </Box>
     );

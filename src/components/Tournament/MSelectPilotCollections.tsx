@@ -36,13 +36,13 @@ export const PilotItem = ({
             sx={{
                 display: "flex",
                 alignItems: "center",
-                borderRadius: "0.5208vw",
+                borderRadius: "10px",
                 border: "1px solid #FFF",
                 background: disabled ? "#B1B1B1" : "rgb(182, 200, 202)",
-                width: "20.8333vw",
-                height: "4.2708vw",
+                width: "100%",
+                height: "54px",
                 position: "relative",
-                paddingLeft: "0.5208vw",
+                paddingLeft: "10px",
                 cursor: disabled ? "no-drop" : "pointer",
             }}
             onClick={onClick}
@@ -57,8 +57,8 @@ export const PilotItem = ({
                 <Image
                     src={img}
                     sx={{
-                        width: "3.0208vw",
-                        height: "3.0208vw",
+                        width: "38px",
+                        height: "38px",
                         border: "2px solid #fff",
                         borderRadius: "5px",
                     }}
@@ -80,7 +80,7 @@ export const PilotItem = ({
                         <Image
                             src={PilotLock}
                             sx={{
-                                width: "2vw",
+                                width: "38px",
                             }}
                         ></Image>
                     </Box>
@@ -88,13 +88,13 @@ export const PilotItem = ({
             </Box>
             <Box
                 sx={{
-                    paddingLeft: "4vw",
+                    paddingLeft: "26px",
                 }}
             >
                 <Text
                     sx={{
                         textAlign: "left",
-                        fontSize: "1.0417vw",
+                        fontSize: "16px",
                         color: disabled ? "#D9D9D9" : "#4A4A4A",
                     }}
                 >
@@ -104,7 +104,7 @@ export const PilotItem = ({
                     <Text
                         sx={{
                             textAlign: "left",
-                            fontSize: "0.7292vw",
+                            fontSize: "14px",
                             color: "#D9D9D9",
                         }}
                     >
@@ -117,11 +117,11 @@ export const PilotItem = ({
                 <Image
                     sx={{
                         position: "absolute",
-                        right: "0.5208vw",
+                        right: "10px",
                         top: "50%",
                         transform: "translateY(-50%)",
                         borderRadius: "40px",
-                        width: "3.8542vw",
+                        width: "80px",
                     }}
                     src={OpenSeaLink}
                     onClick={(e) => {
@@ -206,11 +206,18 @@ const SelectPilotCollections = ({
         if (!currentCollection.enumerable) {
             return;
         }
-        handleGetAllNft();
+        // handleGetAllNft();
     }, [currentCollection]);
 
     return (
-        <Box>
+        <Box
+            sx={{
+                border: "1px solid #fff",
+                borderRadius: "10px",
+                padding: "10px",
+                height: "210px",
+            }}
+        >
             <Box
                 sx={{
                     display: "flex",
@@ -220,7 +227,7 @@ const SelectPilotCollections = ({
                 {isOpen ? (
                     <Text
                         sx={{
-                            fontSize: "1.0417vw",
+                            fontSize: "12px",
                         }}
                     >
                         Select Pilot from these colletions
@@ -229,7 +236,7 @@ const SelectPilotCollections = ({
                     <Image
                         src={BackIcon}
                         sx={{
-                            height: "1.5625vw",
+                            height: "16px",
                             cursor: "pointer",
                         }}
                         onClick={() => {
@@ -242,7 +249,7 @@ const SelectPilotCollections = ({
             <Box
                 sx={{
                     position: "relative",
-                    marginTop: "0.8333vw",
+                    marginTop: "16px",
                 }}
             >
                 {isOpen ? (
@@ -251,6 +258,7 @@ const SelectPilotCollections = ({
                             position: "absolute",
                             left: "0%",
                             top: "0%",
+                            width: "100%",
                         }}
                     >
                         {AllPilotList[chainId].map(
@@ -259,7 +267,7 @@ const SelectPilotCollections = ({
                                     <Box
                                         key={index}
                                         sx={{
-                                            marginBottom: "0.3125vw",
+                                            marginBottom: "6px",
                                         }}
                                     >
                                         <PilotItem
@@ -284,19 +292,19 @@ const SelectPilotCollections = ({
                 {!isOpen && (
                     <Box
                         sx={{
-                            marginTop: "0.8333vw",
+                            marginTop: "15.9994px",
                         }}
                     >
                         <Box
                             sx={{
                                 display: "flex",
                                 alignItems: "center",
-                                marginTop: "1vh",
+                                marginTop: "30px",
                             }}
                         >
                             <Text
                                 sx={{
-                                    fontSize: "1.0417vw",
+                                    fontSize: "12px",
                                 }}
                             >
                                 Input Token ID{" "}
@@ -315,15 +323,15 @@ const SelectPilotCollections = ({
                         <NumberInput
                             variant="unstyled"
                             sx={{
-                                borderRadius: "0.2604vw",
+                                borderRadius: "5px",
                                 background: "#D9D9D9",
                                 color: "#000",
-                                paddingLeft: "0.5208vw",
-                                width: "20.8333vw",
-                                height: "2.0833vw",
-                                marginTop: "0.5vh",
-                                lineHeight: "2.0833vw",
-                                fontSize: "1.0417vw",
+                                paddingLeft: "10px",
+                                width: "100%",
+                                height: "36px",
+                                marginTop: "4px",
+                                lineHeight: "40px",
+                                fontSize: "12px",
                             }}
                             value={inputPilotId}
                             onChange={(value) => {
@@ -339,12 +347,12 @@ const SelectPilotCollections = ({
                                         border: "2px solid #fff",
                                         background: "rgba(61, 61, 61, 0.10)",
                                         position: "relative",
-                                        marginTop: "1vh",
-                                        width: "33.3333vw",
-                                        height: "15vw",
+                                        marginTop: "10px",
+                                        width: "639.9994px",
+                                        height: "288px",
                                         backdropFilter: "blur(5px)",
                                         borderRadius: "0.8333vw",
-                                        padding: "2.0833vw",
+                                        padding: "39.9994px",
                                     }}
                                 >
                                     <Grid
