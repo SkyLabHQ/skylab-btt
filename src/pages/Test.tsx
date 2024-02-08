@@ -266,7 +266,6 @@ const Test = () => {
                     width: "794px",
                     height: "794px",
                     borderRadius: "50%",
-                    overflow: "hidden",
 
                     "&:hover .content": {
                         transform: "rotateY(180deg)",
@@ -281,7 +280,8 @@ const Test = () => {
                         transformStyle: "preserve-3d",
                         transition: "transform 300ms",
                         boxShadow: "0px 0px 10px 1px #000000ee",
-                        borderRadius: "5px",
+                        borderRadius: "50%",
+
                         // transform: "rotateY(180deg)",
                     }}
                 >
@@ -292,8 +292,9 @@ const Test = () => {
                             width: "100%",
                             height: "100%",
                             backfaceVisibility: "hidden",
-                            borderRadius: "5px",
                             overflow: "hidden",
+                            borderRadius: "50%",
+
                             "&::before": {
                                 position: "absolute",
                                 content: "''",
@@ -303,6 +304,7 @@ const Test = () => {
                                 background:
                                     "linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent)",
                                 animation: `${rotation} 5000ms infinite linear`,
+                                borderRadius: "50%",
                             },
                         }}
                     >
@@ -489,7 +491,7 @@ const Test = () => {
                             width: "100%",
                             height: "100%",
                             backfaceVisibility: "hidden",
-                            borderRadius: "5px",
+                            borderRadius: "50%",
                             overflow: "hidden",
                             "&::before": {
                                 position: "absolute",
@@ -500,6 +502,7 @@ const Test = () => {
                                 background:
                                     "linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent)",
                                 animation: `${rotation} 5000ms infinite linear`,
+                                borderRadius: "50%",
                             },
                         }}
                     >
