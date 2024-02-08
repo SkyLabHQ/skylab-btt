@@ -12,6 +12,7 @@ import useCountDown from "react-countdown-hook";
 import HourglassIcon from "../assets/hourglass.png";
 import HummerIcon from "../assets/hummer.png";
 import { ReactComponent as ETHIcon } from "../assets/ETH.svg";
+import Bg from "../assets/bg.png";
 
 const rotation = keyframes`
   0% {
@@ -246,14 +247,17 @@ const Test = () => {
     }, []);
 
     return (
-        <Box
-            sx={{
+        <motion.div
+            style={{
                 width: "100%",
                 minHeight: "100%",
                 fontFamily: "Neoneon",
                 position: "relative",
-                background:
-                    "radial-gradient(50% 64.89%, #FFDC69 0%, #4A3B09 56.35%, #000000 100%)",
+                background: `url(${Bg})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "50% 50%",
+                backgroundColor: "#1b1b1b",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -266,7 +270,6 @@ const Test = () => {
                     width: "794px",
                     height: "794px",
                     borderRadius: "50%",
-
                     "&:hover .content": {
                         transform: "rotateY(180deg)",
                     },
@@ -302,7 +305,9 @@ const Test = () => {
                                 width: "100%",
                                 height: "100%",
                                 background:
-                                    "linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent)",
+                                    // "linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent)",
+                                    "linear-gradient(90deg, rgba(255,85,85,0) 10%, #FF5555 50%, rgba(255,85,85,0) 91%)",
+
                                 animation: `${rotation} 5000ms infinite linear`,
                                 borderRadius: "50%",
                             },
@@ -620,7 +625,7 @@ const Test = () => {
                     Level Tower
                 </motion.div>
             </Flex>
-        </Box>
+        </motion.div>
     );
 };
 
