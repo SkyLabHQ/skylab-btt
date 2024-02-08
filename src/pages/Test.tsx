@@ -6,8 +6,13 @@ import {
     Image,
     keyframes,
 } from "@chakra-ui/react";
-import { motion, useAnimation } from "framer-motion";
-import React, { useEffect, useMemo, useRef } from "react";
+import {
+    motion,
+    useAnimation,
+    useMotionValue,
+    useTransform,
+} from "framer-motion";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import useCountDown from "react-countdown-hook";
 import HourglassIcon from "../assets/hourglass.png";
 import HummerIcon from "../assets/hummer.png";
@@ -246,6 +251,34 @@ const Test = () => {
         start();
     }, []);
 
+    const mouseX = useMotionValue(window.innerWidth / 2);
+    const mouseY = useMotionValue(window.innerHeight / 2);
+    const backgroundPositionX = useTransform(
+        mouseX,
+        [0, window.innerWidth],
+        ["25%", "75%"],
+    );
+    const backgroundPositionY = useTransform(
+        mouseY,
+        [0, window.innerHeight],
+        ["25%", "75%"],
+    );
+
+    const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
+
+    useEffect(() => {
+        const handleMouseMove = (e: any) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+        };
+    }, [mouseX, mouseY]);
+
     return (
         <motion.div
             style={{
@@ -253,10 +286,13 @@ const Test = () => {
                 minHeight: "100%",
                 fontFamily: "Neoneon",
                 position: "relative",
-                background: `url(${Bg})`,
+                // background: `url(${Bg})`,
+                backgroundImage: `url(${Bg})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
-                backgroundPosition: "50% 50%",
+                backgroundPositionX: backgroundPositionX,
+                backgroundPositionY: backgroundPositionY,
+                willChange: "background-position",
                 backgroundColor: "#1b1b1b",
                 display: "flex",
                 justifyContent: "center",
