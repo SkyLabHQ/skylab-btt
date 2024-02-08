@@ -427,10 +427,16 @@ const CurrentPilot = ({
                             <Box
                                 sx={{ display: "flex", paddingTop: "2.3148vh" }}
                             >
-                                <LeftContent
+                                <Box
+                                    sx={{
+                                        width: "17.1875vw",
+                                        marginRight: "7.5vw",
+                                    }}
+                                ></Box>
+                                {/* <LeftContent
                                     value={currentTab}
                                     handleTabChange={handleTabChange}
-                                ></LeftContent>
+                                ></LeftContent> */}
                                 <Box
                                     sx={{
                                         flex: 1,
