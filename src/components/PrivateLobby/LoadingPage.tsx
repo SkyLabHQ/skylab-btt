@@ -12,7 +12,7 @@ const LoadingPage = () => {
             }}
             align={"center"}
             justify={"center"}
-            direction={"column"}
+            flexDir={"column"}
         >
             <Image
                 src={BiddingIcon}
@@ -20,7 +20,6 @@ const LoadingPage = () => {
                     width: "60px",
                 }}
             ></Image>
-
             <LoadingText></LoadingText>
         </Flex>
     );

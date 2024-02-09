@@ -109,7 +109,7 @@ const BottomInputBox = ({
                 </Flex>
                 <Box sx={{ width: "160px", marginTop: "16px" }}>
                     <Slider
-                        key={bidAmount}
+                        key={myBalance}
                         value={Number(bidAmount)}
                         onChange={(e) => {
                             onIuputAmount(e);
