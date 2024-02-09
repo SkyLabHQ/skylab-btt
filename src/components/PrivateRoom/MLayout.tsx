@@ -146,7 +146,7 @@ const MLayout = ({
                                     width: "160px",
                                     position: "absolute",
                                     left: "12px",
-                                    bbottom: "20px",
+                                    bottom: "20px",
                                 }}
                             >
                                 <Timer

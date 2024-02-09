@@ -77,9 +77,11 @@ const ScrollNum = ({
                     },
                 });
 
+                // setInit(true);
+
                 setTimeout(() => {
                     setInit(true);
-                }, 1000);
+                }, 10000);
             }
         };
         handle();
@@ -106,9 +108,6 @@ const ScrollNum = ({
 };
 
 const Test = () => {
-    const x = useRef(0);
-    const y = useRef(0);
-    const logoAnimate = useAnimation();
     const beginAnimate = useAnimation();
     const potAnimate = useAnimation();
     const dateAnimate = useAnimation();
@@ -254,7 +253,6 @@ const Test = () => {
 
     useEffect(() => {
         window.addEventListener("mousemove", handleMouseMove);
-
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
         };
@@ -296,7 +294,7 @@ const Test = () => {
                         width: "100%",
                         height: "100%",
                         transformStyle: "preserve-3d",
-                        transition: "transform 300ms",
+                        transition: "transform 1000ms",
                         boxShadow: "0px 0px 10px 1px #000000ee",
                         borderRadius: "50%",
                         // transform: "rotateY(180deg)",
