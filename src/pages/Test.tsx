@@ -13,10 +13,21 @@ import HourglassIcon from "../assets/hourglass.png";
 import HummerIcon from "../assets/hummer.png";
 import { ReactComponent as ETHIcon } from "../assets/ETH.svg";
 import Bg from "../assets/bg.png";
-import PinkX from "../assets/pink-x.png";
-import BlueO from "../assets/blue-o.png";
 import BHummer from "../assets/b-hummer.png";
 import CHummer from "../assets/c-hummer.png";
+
+const animationObj = {
+    color: [
+        "rgba(56, 248, 255, 1)",
+        "rgba(255, 236, 199, 1)",
+        "rgba(255, 214, 214, 1)",
+    ],
+    textShadow: "0px 0px 19px  #00CCFF",
+    transition: {
+        duration: 2,
+        yoyo: Infinity,
+    },
+};
 
 const rotation = keyframes`
   0% {
@@ -178,19 +189,6 @@ const FirstContent = () => {
             </Flex>
         </Box>
     );
-};
-
-const animationObj = {
-    color: [
-        "rgba(56, 248, 255, 1)",
-        "rgba(255, 236, 199, 1)",
-        "rgba(255, 214, 214, 1)",
-    ],
-    textShadow: "0px 0px 19px  #00CCFF",
-    transition: {
-        duration: 2,
-        yoyo: Infinity,
-    },
 };
 
 const BackContent = () => {

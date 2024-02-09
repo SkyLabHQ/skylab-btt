@@ -7,7 +7,6 @@ import {
     MESSAGES,
     MessageStatus,
 } from "@/skyConstants/bttGameTypes";
-import SentIcon from "@/components/BttComponents/assets/sent.svg";
 import Loading from "../Loading";
 
 export const Message = ({
