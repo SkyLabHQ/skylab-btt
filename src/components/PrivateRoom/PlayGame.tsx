@@ -55,6 +55,7 @@ const PlayGame = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState<boolean>(false);
+    const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
     const toast = useSkyToast();
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [bufferTime, setBufferTime] = useState(-1);
@@ -405,11 +406,22 @@ const PlayGame = ({
     };
 
     const handleQuit = async () => {
-        const privateLobbySigner = getPrivateLobbySigner();
-        await tacToeGameRetryWrite("surrender", [], {
-            usePaymaster: true,
-            signer: privateLobbySigner,
-        });
+        if (surrenderLoading) {
+            return;
+        }
+        try {
+            setSurrenderLoading(true);
+            const privateLobbySigner = getPrivateLobbySigner();
+            await tacToeGameRetryWrite("surrender", [], {
+                usePaymaster: true,
+                signer: privateLobbySigner,
+            });
+            setSurrenderLoading(false);
+        } catch (e) {
+            setSurrenderLoading(false);
+            console.log(e);
+            toast(handleError(e, true));
+        }
     };
 
     const handleGameOver = async () => {

@@ -86,6 +86,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [bidAmount, setBidAmount] = useState<number>(0);
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
+    const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
     const [messageLoading, setMessageLoading] = useState<MessageStatus>(
         MessageStatus.Unknown,
     );
@@ -523,12 +524,18 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     };
 
     const handleQuit = async () => {
+        if (surrenderLoading) {
+            return;
+        }
         try {
+            setSurrenderLoading(true);
             await tacToeGameRetryWrite("surrender", [], {
                 gasLimit: 800000,
                 usePaymaster: istest,
             });
+            setSurrenderLoading(false);
         } catch (error) {
+            setSurrenderLoading(false);
             console.log(error);
             toast(handleError(error, istest));
         }
