@@ -240,40 +240,7 @@ const MLayout = ({
                         }
                     }}
                     onConfirm={onConfirm}
-                    onMessageClick={() => {
-                        {
-                            if (inputMode === "message") {
-                                keyBoardOnToggle();
-                            } else {
-                                setInputMode("message");
-                                if (!keyBoardIsOpen) {
-                                    keyBoardOnToggle();
-                                }
-                            }
-                        }
-                    }}
                 ></BottomInputBox>
-                <BottomKeyBoard
-                    open={keyBoardIsOpen}
-                    inputMode={inputMode}
-                    onSetMessage={onSetMessage}
-                    onNumberClick={(value: string) => {
-                        if (
-                            Number(value) + Number(bidAmount) >
-                            myGameInfo.balance
-                        ) {
-                            onInputChange(myGameInfo.balance);
-                            return;
-                        }
-                        onInputChange(Number(value) + Number(bidAmount));
-                    }}
-                    onDeleteClick={() => {
-                        const value = bidAmount.toString();
-                        const length = value.length;
-                        const newValue = value.slice(0, length - 1);
-                        onInputChange(newValue);
-                    }}
-                ></BottomKeyBoard>
             </Box>
         </Box>
     );

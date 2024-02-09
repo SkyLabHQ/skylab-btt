@@ -28,7 +28,6 @@ const BottomInputBox = ({
     onAddClick,
     onConfirm,
     onSetMessage,
-    onMessageClick,
     onInputAmountClick,
     onIuputAmount,
 }: {
@@ -39,7 +38,6 @@ const BottomInputBox = ({
     onSubClick: () => void;
     onAddClick: () => void;
     onConfirm: () => void;
-    onMessageClick: () => void;
     onInputAmountClick: () => void;
     onIuputAmount?: (amount: number) => void;
     onSetMessage?: (
@@ -197,7 +195,6 @@ const BottomInputBox = ({
                         tabIndex={0}
                         role="button"
                         src={MessageIcon1}
-                        // onClick={onMessageClick}
                         sx={{
                             width: "32px",
                         }}
