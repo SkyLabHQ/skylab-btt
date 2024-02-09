@@ -15,6 +15,8 @@ import { ReactComponent as ETHIcon } from "../assets/ETH.svg";
 import Bg from "../assets/bg.png";
 import PinkX from "../assets/pink-x.png";
 import BlueO from "../assets/blue-o.png";
+import BHummer from "../assets/b-hummer.png";
+import CHummer from "../assets/c-hummer.png";
 
 const rotation = keyframes`
   0% {
@@ -163,21 +165,16 @@ const FirstContent = () => {
                 }}
                 flexDir={"column"}
                 justify={"flex-end"}
+                align={"center"}
             >
-                <Flex justify={"center"}>
-                    <Image
-                        src={PinkX}
-                        sx={{
-                            width: "100px",
-                        }}
-                    ></Image>
-                    <Image
-                        src={BlueO}
-                        sx={{
-                            width: "100px",
-                        }}
-                    ></Image>
-                </Flex>
+                <Image
+                    src={CHummer}
+                    sx={{
+                        width: "450px",
+                        maxWidth: "200%",
+                        marginBottom: "-100px",
+                    }}
+                ></Image>
             </Flex>
         </Box>
     );
@@ -494,14 +491,22 @@ const ScrollNum = ({
 const YellowBg = () => {
     const clickAnimate = useAnimation();
     const handleClick = async () => {
+        const height = window.innerHeight;
+        console.log(height, "height");
         await clickAnimate.set({
             borderRadius: "50%",
             transition: { duration: 0.2 },
         });
-        clickAnimate.start({
-            width: "0",
-            height: "0",
-            transition: { duration: 0.8 },
+
+        await clickAnimate.start({
+            width: Math.floor(0.9 * height),
+            height: Math.floor(0.9 * height),
+            transition: { duration: 0.2 },
+        });
+
+        await clickAnimate.start({
+            scale: 0,
+            transition: { duration: 0.6 },
         });
     };
 
@@ -509,14 +514,25 @@ const YellowBg = () => {
         <motion.div
             style={{
                 position: "absolute",
-                width: "100vw",
-                height: "100vw",
+                width: "100%",
+                height: "100%",
                 background: "#fddc2d",
                 zIndex: 10,
             }}
             onClick={handleClick}
             animate={clickAnimate}
-        ></motion.div>
+        >
+            <Image
+                src={BHummer}
+                sx={{
+                    width: "600px",
+                    position: "absolute",
+                    bottom: "0px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                }}
+            ></Image>
+        </motion.div>
     );
 };
 
