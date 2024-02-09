@@ -7,12 +7,14 @@ import {
     keyframes,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useCountDown from "react-countdown-hook";
 import HourglassIcon from "../assets/hourglass.png";
 import HummerIcon from "../assets/hummer.png";
 import { ReactComponent as ETHIcon } from "../assets/ETH.svg";
 import Bg from "../assets/bg.png";
+import PinkX from "../assets/pink-x.png";
+import BlueO from "../assets/blue-o.png";
 
 const rotation = keyframes`
   0% {
@@ -32,90 +34,186 @@ const handleDateNumber = (number: number) => {
     }
 };
 
-const ScrollNum = ({
-    maxNumber = 9,
-    number = -1,
-}: {
-    maxNumber?: number;
-    number?: number;
-}) => {
-    const [init, setInit] = React.useState(false);
-    const numAnimate = useAnimation();
-
-    useEffect(() => {
-        const handle = async () => {
-            if (init) {
-                await numAnimate.stop();
-                if (number === maxNumber) {
-                    await numAnimate.start({
-                        transform: [
-                            `translateY(-${(maxNumber + 1) * 9.09}%)`,
-                            `translateY(-${number * 9.09}%)`,
-                        ],
-
-                        transition: {
-                            duration: 0.5,
-                            ease: "linear",
-                        },
-                    });
-                } else {
-                    numAnimate.start({
-                        transform: `translateY(-${number * 9.09}%)`,
-                        transition: {
-                            duration: 0.5,
-                            ease: "linear",
-                        },
-                    });
-                }
-            } else {
-                numAnimate.start({
-                    transform: ["translateY(-90.9%)", "translateY(0%)"],
-                    transition: {
-                        duration: 1,
-                        repeat: Infinity,
-                        ease: "linear",
-                    },
-                });
-
-                // setInit(true);
-
-                setTimeout(() => {
-                    setInit(true);
-                }, 10000);
-            }
-        };
-        handle();
-    }, [number, init]);
-
+const FrontContent = () => {
     return (
-        <Box sx={{}}>
-            <Box
+        <Box
+            className="front-content"
+            sx={{
+                position: "absolute",
+                width: "99%",
+                height: "99%",
+                background:
+                    "linear-gradient(126.1deg, #000000 0%, #000000 46.99%, #000000 100%)",
+                borderRadius: "50%",
+                color: "white",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                padding: "10px 100px",
+            }}
+        >
+            <Image
+                src={HummerIcon}
                 sx={{
-                    height: "95px",
-                    overflow: "hidden",
-                    fontSize: "95px",
-                    lineHeight: "1",
+                    width: "180px",
+                }}
+            ></Image>
+            <motion.div
+                style={{
+                    width: "100%",
+                    textShadow: "0px 0px 19px  #00CCFF",
+                    color: "rgba(255, 255, 255, 0.2)",
+                    fontSize: "100px",
+                    textAlign: "center",
+                    lineHeight: "100px",
+                    margin: "-20px 0 30px",
+                }}
+                animate={animationObj}
+                transition={{
+                    duration: 1,
+                    yoyo: Infinity,
                 }}
             >
-                <motion.div animate={numAnimate}>
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item, index) => {
-                        return <Box key={index}>{item}</Box>;
-                    })}
-                </motion.div>
-            </Box>
+                THE POT
+            </motion.div>
+            <motion.div
+                style={{
+                    width: "100%",
+                    height: "6px",
+                    background: "#FFE045",
+                    boxShadow: "0px 0px 29px 4px #FAE20F",
+                    margin: "0 auto ",
+                }}
+            ></motion.div>
+            <motion.div
+                style={{
+                    width: "100%",
+                    textShadow: "0px 0px 19px  #00CCFF",
+                    color: "rgba(255, 255, 255, 0.2)",
+                    textAlign: "center",
+                    marginTop: "20px",
+                }}
+                animate={{
+                    color: [
+                        "rgba(56, 248, 255, 1)",
+                        "rgba(255, 236, 199, 1)",
+                        "rgba(255, 214, 214, 1)",
+                    ],
+                    textShadow: "0px 0px 19px  #00CCFF",
+                    transition: {
+                        duration: 2,
+                        yoyo: Infinity,
+                    },
+                }}
+                transition={{
+                    duration: 1,
+                    yoyo: Infinity,
+                }}
+            >
+                <Flex align={"center"} justify={"center"}>
+                    <Text
+                        sx={{
+                            fontSize: "160px",
+                            lineHeight: "160px",
+                            fontFamily: "neon",
+                        }}
+                    >
+                        9.09
+                    </Text>
+                    <ETHIcon
+                        fill="currentColor"
+                        style={{
+                            width: "64px",
+                        }}
+                    ></ETHIcon>
+                </Flex>
+            </motion.div>
         </Box>
     );
 };
 
-const Test = () => {
-    const beginAnimate = useAnimation();
-    const potAnimate = useAnimation();
-    const dateAnimate = useAnimation();
-    const timeAnimate = useAnimation();
+const FirstContent = () => {
+    return (
+        <Box
+            className="front-content"
+            sx={{
+                position: "absolute",
+                width: "99%",
+                height: "99%",
+                background:
+                    "linear-gradient(126.1deg, #000000 0%, #000000 46.99%, #000000 100%)",
+                borderRadius: "50%",
+                color: "white",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                padding: "10px 100px",
+            }}
+        >
+            <Flex
+                sx={{
+                    width: "100%",
+                    height: "100%",
+                }}
+                flexDir={"column"}
+                justify={"flex-end"}
+            >
+                <Flex justify={"center"}>
+                    <Image
+                        src={PinkX}
+                        sx={{
+                            width: "100px",
+                        }}
+                    ></Image>
+                    <Image
+                        src={BlueO}
+                        sx={{
+                            width: "100px",
+                        }}
+                    ></Image>
+                </Flex>
+            </Flex>
+        </Box>
+    );
+};
+
+const animationObj = {
+    color: [
+        "rgba(56, 248, 255, 1)",
+        "rgba(255, 236, 199, 1)",
+        "rgba(255, 214, 214, 1)",
+    ],
+    textShadow: "0px 0px 19px  #00CCFF",
+    transition: {
+        duration: 2,
+        yoyo: Infinity,
+    },
+};
+
+const BackContent = () => {
+    const [init, setInit] = useState(false);
 
     const [timeLeft, { start }] = useCountDown(5000000, 1000);
 
     const { d1, d2, h1, h2, m1, m2, s1, s2 } = useMemo(() => {
+        if (!init) {
+            return {
+                d1: 3,
+                d2: 4,
+                h1: 5,
+                h2: 6,
+                m1: 7,
+                m2: 8,
+                s1: 9,
+                s2: 1,
+            };
+        }
         const seconds = Math.floor((timeLeft / 1000) % 60);
         const mintues = Math.floor((timeLeft / 1000 / 60) % 60);
         const hours = Math.floor((timeLeft / 1000 / 60 / 60) % 60);
@@ -144,94 +242,286 @@ const Test = () => {
             d1,
             d2,
         };
-    }, [timeLeft]);
-
-    const [isTime, setIsTime] = React.useState(true);
+    }, [timeLeft, init]);
 
     const handleInit = () => {
-        if (isTime) {
-            potAnimate.stop();
-            potAnimate.set({
-                color: "rgba(255, 255, 255, 0.2)",
-                textShadow: "",
-            });
-            dateAnimate.stop();
-            dateAnimate.set({
-                color: "rgba(255, 255, 255, 0.2)",
-                textShadow: "",
-            });
-            beginAnimate.start({
-                color: [
-                    "rgba(56, 248, 255, 1)",
-                    "rgba(255, 236, 199, 1)",
-                    "rgba(255, 214, 214, 1)",
-                ],
-                textShadow: "0px 0px 19px  #00CCFF",
-                transition: {
-                    duration: 2,
-                    yoyo: Infinity,
-                },
-            });
-            timeAnimate.start({
-                color: [
-                    "rgba(56, 248, 255, 1)",
-                    "rgba(255, 236, 199, 1)",
-                    "rgba(255, 214, 214, 1)",
-                ],
-                textShadow: "0px 0px 19px  #00CCFF",
-                transition: {
-                    duration: 2,
-                    yoyo: Infinity,
-                },
-            });
-        } else {
-            beginAnimate.stop();
-            beginAnimate.set({
-                color: "rgba(255, 255, 255, 0.2)",
-                textShadow: "",
-            });
-            timeAnimate.stop();
-            timeAnimate.set({
-                color: "rgba(255, 255, 255, 0.2)",
-                textShadow: "",
-            });
-            potAnimate.start({
-                color: [
-                    "rgba(56, 248, 255, 1)",
-                    "rgba(255, 236, 199, 1)",
-                    "rgba(255, 214, 214, 1)",
-                ],
-                textShadow: "0px 0px 19px  #00CCFF",
-
-                transition: {
-                    duration: 1,
-                    yoyo: Infinity,
-                },
-            });
-            dateAnimate.start({
-                color: [
-                    "rgba(56, 248, 255, 1)",
-                    "rgba(255, 236, 199, 1)",
-                    "rgba(255, 214, 214, 1)",
-                ],
-                textShadow: "0px 0px 19px  #00CCFF",
-
-                transition: {
-                    duration: 1,
-                    yoyo: Infinity,
-                },
-            });
-        }
+        setTimeout(() => {
+            start();
+            setInit(true);
+        }, 2000);
     };
 
     useEffect(() => {
         handleInit();
-    }, [isTime]);
+    }, []);
+    return (
+        <Box
+            sx={{
+                position: "absolute",
+                width: "99%",
+                height: "99%",
+                background:
+                    "linear-gradient(126.1deg, #000000 0%, #000000 46.99%, #000000 100%)",
+                borderRadius: "50%",
+                color: "white",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                padding: "0 60px",
+            }}
+        >
+            <Flex
+                align={"center"}
+                flexDirection={"column"}
+                sx={{
+                    width: "100%",
+                    height: "100%",
+                    fontFamily: "Neoneon",
+                    position: "relative",
+                    paddingTop: "20px",
+                }}
+            >
+                <Image
+                    src={HourglassIcon}
+                    sx={{
+                        width: "100px",
+                    }}
+                ></Image>
+                <Box>
+                    <motion.div
+                        style={{
+                            width: "100%",
+                            textShadow: "0px 0px 19px  #00CCFF",
+                            color: "rgba(255, 255, 255, 0.2)",
+                            fontSize: "100px",
+                            textAlign: "center",
+                        }}
+                        animate={animationObj}
+                        transition={{
+                            duration: 1,
+                            yoyo: Infinity,
+                        }}
+                    >
+                        BEGINS IN
+                    </motion.div>
+                </Box>
+
+                <motion.div
+                    style={{
+                        width: "100%",
+                        height: "6px",
+                        background: "#FFE045",
+                        boxShadow: "0px 0px 29px 4px #FAE20F",
+                        margin: "0 auto ",
+                    }}
+                ></motion.div>
+                <Box
+                    sx={{
+                        position: "relative",
+                        width: "100%",
+                    }}
+                >
+                    <motion.div
+                        style={{
+                            color: "rgba(56, 248, 255, 1)",
+                            fontSize: "95px",
+                            textAlign: "center",
+                            margin: "20px auto 0",
+                            width: "100%",
+                            lineHeight: "1",
+                            fontFamily: "neon",
+                        }}
+                        animate={animationObj}
+                    >
+                        <SimpleGrid columns={4} width={"100%"}>
+                            <Box>
+                                <Flex align={"center"} justify={"center"}>
+                                    <ScrollNum
+                                        maxNumber={6}
+                                        number={d1}
+                                    ></ScrollNum>
+                                    <ScrollNum
+                                        maxNumber={9}
+                                        number={d2}
+                                    ></ScrollNum>{" "}
+                                </Flex>
+                                <Text
+                                    sx={{
+                                        fontSize: "30px",
+                                    }}
+                                >
+                                    DAYS
+                                </Text>
+                            </Box>
+
+                            <Box>
+                                <Flex align={"center"} justify={"center"}>
+                                    <ScrollNum
+                                        maxNumber={6}
+                                        number={h1}
+                                    ></ScrollNum>
+                                    <ScrollNum
+                                        maxNumber={9}
+                                        number={h2}
+                                    ></ScrollNum>
+                                </Flex>
+                                <Text
+                                    sx={{
+                                        fontSize: "30px",
+                                    }}
+                                >
+                                    HOURS
+                                </Text>
+                            </Box>
+                            <Box>
+                                <Flex align={"center"} justify={"center"}>
+                                    <ScrollNum
+                                        maxNumber={6}
+                                        number={m1}
+                                    ></ScrollNum>
+                                    <ScrollNum
+                                        maxNumber={9}
+                                        number={m2}
+                                    ></ScrollNum>
+                                </Flex>
+                                <Text
+                                    sx={{
+                                        fontSize: "30px",
+                                    }}
+                                >
+                                    MINS
+                                </Text>
+                            </Box>
+                            <Box>
+                                <Flex align={"center"} justify={"center"}>
+                                    <ScrollNum
+                                        maxNumber={6}
+                                        number={s1}
+                                    ></ScrollNum>
+                                    <ScrollNum
+                                        maxNumber={9}
+                                        number={s2}
+                                    ></ScrollNum>
+                                </Flex>
+                                <Text
+                                    sx={{
+                                        fontSize: "30px",
+                                    }}
+                                >
+                                    SECS
+                                </Text>
+                            </Box>
+                        </SimpleGrid>
+                    </motion.div>
+                </Box>
+            </Flex>
+        </Box>
+    );
+};
+
+const ScrollNum = ({
+    maxNumber = 9,
+    number = -1,
+}: {
+    maxNumber?: number;
+    number?: number;
+}) => {
+    const [init, setInit] = React.useState(false);
+    const numAnimate = useAnimation();
 
     useEffect(() => {
-        start();
-    }, []);
+        const handle = async () => {
+            if (init) {
+                await numAnimate.stop();
+                if (number === maxNumber) {
+                    await numAnimate.start({
+                        transform: [
+                            `translateY(-${(maxNumber + 1) * 9.09}%)`,
+                            `translateY(-${number * 9.09}%)`,
+                        ],
 
+                        transition: {
+                            duration: init ? 0.5 : 0,
+                            ease: "linear",
+                        },
+                    });
+                } else {
+                    numAnimate.start({
+                        transform: `translateY(-${number * 9.09}%)`,
+                        transition: {
+                            duration: init ? 0.5 : 0,
+                            ease: "linear",
+                        },
+                    });
+                }
+            } else {
+                await numAnimate.set({
+                    transform: [
+                        `translateY(-${(maxNumber + 1) * 9.09}%)`,
+                        `translateY(-${number * 9.09}%)`,
+                    ],
+                });
+                setInit(true);
+            }
+        };
+        handle();
+    }, [number]);
+
+    return (
+        <Box sx={{}}>
+            <Box
+                sx={{
+                    height: "95px",
+                    overflow: "hidden",
+                    fontSize: "95px",
+                    lineHeight: "1",
+                }}
+            >
+                <motion.div animate={numAnimate}>
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item, index) => {
+                        return <Box key={index}>{item}</Box>;
+                    })}
+                </motion.div>
+            </Box>
+        </Box>
+    );
+};
+
+const YellowBg = () => {
+    const clickAnimate = useAnimation();
+    const handleClick = async () => {
+        await clickAnimate.set({
+            borderRadius: "50%",
+            transition: { duration: 0.2 },
+        });
+        clickAnimate.start({
+            width: "0",
+            height: "0",
+            transition: { duration: 0.8 },
+        });
+    };
+
+    return (
+        <motion.div
+            style={{
+                position: "absolute",
+                width: "100vw",
+                height: "100vw",
+                background: "#fddc2d",
+                zIndex: 10,
+            }}
+            onClick={handleClick}
+            animate={clickAnimate}
+        ></motion.div>
+    );
+};
+
+const Test = () => {
+    const [hoverInit, setHoverInit] = useState(false);
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
 
     // 处理鼠标移动
@@ -265,7 +555,6 @@ const Test = () => {
                 minHeight: "100%",
                 fontFamily: "Neoneon",
                 position: "relative",
-                // background: `url(${Bg})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundColor: "#1b1b1b",
@@ -275,8 +564,10 @@ const Test = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
+                overflow: "hidden",
             }}
         >
+            <YellowBg></YellowBg>
             <Box
                 className="card"
                 sx={{
@@ -287,6 +578,11 @@ const Test = () => {
                         transform: "rotateY(180deg)",
                     },
                 }}
+                onMouseMove={() => {
+                    setTimeout(() => {
+                        setHoverInit(true);
+                    }, 600);
+                }}
             >
                 <Box
                     className="content"
@@ -294,7 +590,7 @@ const Test = () => {
                         width: "100%",
                         height: "100%",
                         transformStyle: "preserve-3d",
-                        transition: "transform 1000ms",
+                        transition: "transform 600ms",
                         boxShadow: "0px 0px 10px 1px #000000ee",
                         borderRadius: "50%",
                         // transform: "rotateY(180deg)",
@@ -309,7 +605,6 @@ const Test = () => {
                             backfaceVisibility: "hidden",
                             overflow: "hidden",
                             borderRadius: "50%",
-
                             "&::before": {
                                 position: "absolute",
                                 content: "''",
@@ -317,192 +612,17 @@ const Test = () => {
                                 width: "100%",
                                 height: "100%",
                                 background:
-                                    // "linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent)",
                                     "linear-gradient(90deg, rgba(255,85,85,0) 10%, #FF5555 50%, rgba(255,85,85,0) 91%)",
-
                                 animation: `${rotation} 5000ms infinite linear`,
                                 borderRadius: "50%",
                             },
                         }}
                     >
-                        <Box
-                            className="back-content"
-                            sx={{
-                                position: "absolute",
-                                width: "99%",
-                                height: "99%",
-                                background:
-                                    "linear-gradient(126.1deg, #000000 0%, #000000 46.99%, #000000 100%)",
-                                borderRadius: "50%",
-                                color: "white",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                left: "50%",
-                                top: "50%",
-                                transform: "translate(-50%, -50%)",
-                                padding: "0 60px",
-                            }}
-                        >
-                            <Flex
-                                align={"center"}
-                                flexDirection={"column"}
-                                sx={{
-                                    width: "100%",
-                                    height: "100%",
-                                    fontFamily: "Neoneon",
-                                    position: "relative",
-                                    paddingTop: "20px",
-                                }}
-                            >
-                                <Image
-                                    src={HourglassIcon}
-                                    sx={{
-                                        width: "100px",
-                                    }}
-                                ></Image>
-                                <Box>
-                                    <motion.div
-                                        style={{
-                                            width: "100%",
-                                            textShadow: "0px 0px 19px  #00CCFF",
-                                            color: "rgba(255, 255, 255, 0.2)",
-                                            fontSize: "100px",
-                                            textAlign: "center",
-                                        }}
-                                        animate={beginAnimate}
-                                        transition={{
-                                            duration: 1,
-                                            yoyo: Infinity,
-                                        }}
-                                    >
-                                        BEGINS IN
-                                    </motion.div>
-                                </Box>
-
-                                <motion.div
-                                    style={{
-                                        width: "100%",
-                                        height: "6px",
-                                        background: "#FFE045",
-                                        boxShadow: "0px 0px 29px 4px #FAE20F",
-                                        margin: "0 auto ",
-                                    }}
-                                ></motion.div>
-                                <Box
-                                    sx={{
-                                        position: "relative",
-                                        width: "100%",
-                                    }}
-                                >
-                                    <motion.div
-                                        style={{
-                                            color: "rgba(56, 248, 255, 1)",
-                                            fontSize: "95px",
-                                            textAlign: "center",
-                                            margin: "20px auto 0",
-                                            width: "100%",
-                                            lineHeight: "1",
-                                            fontFamily: "neon",
-                                        }}
-                                        animate={timeAnimate}
-                                    >
-                                        <SimpleGrid columns={4} width={"100%"}>
-                                            <Box>
-                                                <Flex
-                                                    align={"center"}
-                                                    justify={"center"}
-                                                >
-                                                    <ScrollNum
-                                                        maxNumber={6}
-                                                        number={d1}
-                                                    ></ScrollNum>
-                                                    <ScrollNum
-                                                        maxNumber={9}
-                                                        number={d2}
-                                                    ></ScrollNum>{" "}
-                                                </Flex>
-                                                <Text
-                                                    sx={{
-                                                        fontSize: "30px",
-                                                    }}
-                                                >
-                                                    DAYS
-                                                </Text>
-                                            </Box>
-
-                                            <Box>
-                                                <Flex
-                                                    align={"center"}
-                                                    justify={"center"}
-                                                >
-                                                    <ScrollNum
-                                                        maxNumber={6}
-                                                        number={h1}
-                                                    ></ScrollNum>
-                                                    <ScrollNum
-                                                        maxNumber={9}
-                                                        number={h2}
-                                                    ></ScrollNum>
-                                                </Flex>
-                                                <Text
-                                                    sx={{
-                                                        fontSize: "30px",
-                                                    }}
-                                                >
-                                                    HOURS
-                                                </Text>
-                                            </Box>
-                                            <Box>
-                                                <Flex
-                                                    align={"center"}
-                                                    justify={"center"}
-                                                >
-                                                    <ScrollNum
-                                                        maxNumber={6}
-                                                        number={m1}
-                                                    ></ScrollNum>
-                                                    <ScrollNum
-                                                        maxNumber={9}
-                                                        number={m2}
-                                                    ></ScrollNum>
-                                                </Flex>
-                                                <Text
-                                                    sx={{
-                                                        fontSize: "30px",
-                                                    }}
-                                                >
-                                                    MINS
-                                                </Text>
-                                            </Box>
-                                            <Box>
-                                                <Flex
-                                                    align={"center"}
-                                                    justify={"center"}
-                                                >
-                                                    <ScrollNum
-                                                        maxNumber={6}
-                                                        number={s1}
-                                                    ></ScrollNum>
-                                                    <ScrollNum
-                                                        maxNumber={9}
-                                                        number={s2}
-                                                    ></ScrollNum>
-                                                </Flex>
-                                                <Text
-                                                    sx={{
-                                                        fontSize: "30px",
-                                                    }}
-                                                >
-                                                    SECS
-                                                </Text>
-                                            </Box>
-                                        </SimpleGrid>
-                                    </motion.div>
-                                </Box>
-                            </Flex>
-                        </Box>
+                        {hoverInit ? (
+                            <BackContent></BackContent>
+                        ) : (
+                            <FirstContent></FirstContent>
+                        )}
                     </Box>
                     <Box
                         className="front"
@@ -529,91 +649,7 @@ const Test = () => {
                             },
                         }}
                     >
-                        <Box
-                            className="front-content"
-                            sx={{
-                                position: "absolute",
-                                width: "99%",
-                                height: "99%",
-                                background:
-                                    "linear-gradient(126.1deg, #000000 0%, #000000 46.99%, #000000 100%)",
-                                borderRadius: "50%",
-                                color: "white",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                left: "50%",
-                                top: "50%",
-                                transform: "translate(-50%, -50%)",
-                                padding: "10px 100px",
-                            }}
-                        >
-                            <Image
-                                src={HummerIcon}
-                                sx={{
-                                    width: "180px",
-                                }}
-                            ></Image>
-                            <motion.div
-                                style={{
-                                    width: "100%",
-                                    textShadow: "0px 0px 19px  #00CCFF",
-                                    color: "rgba(255, 255, 255, 0.2)",
-                                    fontSize: "100px",
-                                    textAlign: "center",
-                                    lineHeight: "100px",
-                                    margin: "-20px 0 30px",
-                                }}
-                                animate={beginAnimate}
-                                transition={{
-                                    duration: 1,
-                                    yoyo: Infinity,
-                                }}
-                            >
-                                THE POT
-                            </motion.div>
-                            <motion.div
-                                style={{
-                                    width: "100%",
-                                    height: "6px",
-                                    background: "#FFE045",
-                                    boxShadow: "0px 0px 29px 4px #FAE20F",
-                                    margin: "0 auto ",
-                                }}
-                            ></motion.div>
-                            <motion.div
-                                style={{
-                                    width: "100%",
-                                    textShadow: "0px 0px 19px  #00CCFF",
-                                    color: "rgba(255, 255, 255, 0.2)",
-                                    textAlign: "center",
-                                    marginTop: "20px",
-                                }}
-                                animate={beginAnimate}
-                                transition={{
-                                    duration: 1,
-                                    yoyo: Infinity,
-                                }}
-                            >
-                                <Flex align={"center"} justify={"center"}>
-                                    <Text
-                                        sx={{
-                                            fontSize: "160px",
-                                            lineHeight: "160px",
-                                            fontFamily: "neon",
-                                        }}
-                                    >
-                                        9.09
-                                    </Text>
-                                    <ETHIcon
-                                        fill="currentColor"
-                                        style={{
-                                            width: "64px",
-                                        }}
-                                    ></ETHIcon>
-                                </Flex>
-                            </motion.div>
-                        </Box>
+                        <FrontContent></FrontContent>
                     </Box>
                 </Box>
             </Box>
