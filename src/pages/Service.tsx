@@ -1,8 +1,6 @@
 import { Box, Image, Text, Flex, Checkbox } from "@chakra-ui/react";
 import PwaLogo from "../assets/pwa-logo.svg";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import useSkyToast from "@/hooks/useSkyToast";
+import React from "react";
 
 const Service = ({
     onEnter,

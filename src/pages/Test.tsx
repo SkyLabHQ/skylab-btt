@@ -14,6 +14,8 @@ import HummerIcon from "../assets/hummer.png";
 import { ReactComponent as ETHIcon } from "../assets/ETH.svg";
 import Bg from "../assets/bg.png";
 import BHummer from "../assets/b-hummer.png";
+import OIcon from "../assets/o.png";
+import XIcon from "../assets/x.png";
 import CHummer from "../assets/c-hummer.png";
 
 const animationObj = {
@@ -519,16 +521,59 @@ const YellowBg = () => {
             onClick={handleClick}
             animate={clickAnimate}
         >
-            <Image
-                src={BHummer}
+            <Box
                 sx={{
-                    width: "600px",
                     position: "absolute",
                     bottom: "0px",
                     left: "50%",
                     transform: "translateX(-50%)",
                 }}
-            ></Image>
+            >
+                <Flex
+                    sx={{
+                        justifyContent: "space-around",
+                    }}
+                >
+                    <motion.img
+                        src={XIcon}
+                        style={{
+                            width: "180px",
+                        }}
+                        animate={{
+                            transform: [
+                                "translateY(-20px)",
+                                "translateY(20px)",
+                            ],
+                        }}
+                        transition={{
+                            duration: 1,
+                            yoyo: Infinity,
+                        }}
+                    ></motion.img>
+                    <motion.img
+                        src={OIcon}
+                        style={{
+                            width: "180px",
+                        }}
+                        animate={{
+                            transform: [
+                                "translateY(-20px)",
+                                "translateY(20px)",
+                            ],
+                        }}
+                        transition={{
+                            duration: 1,
+                            yoyo: Infinity,
+                        }}
+                    ></motion.img>
+                </Flex>
+                <Image
+                    src={BHummer}
+                    sx={{
+                        width: "600px",
+                    }}
+                ></Image>
+            </Box>
         </motion.div>
     );
 };

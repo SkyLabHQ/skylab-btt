@@ -7,7 +7,6 @@ import {
     ModalContent,
     Checkbox,
 } from "@chakra-ui/react";
-import PolygonIcon from "./assets/polygon.svg";
 import CloseIcon from "./assets/close-button.svg";
 
 interface FaucetModalProps {
