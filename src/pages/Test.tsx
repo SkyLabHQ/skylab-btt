@@ -492,7 +492,6 @@ const YellowBg = () => {
     const clickAnimate = useAnimation();
     const handleClick = async () => {
         const height = window.innerHeight;
-        console.log(height, "height");
         await clickAnimate.set({
             borderRadius: "50%",
             transition: { duration: 0.2 },
@@ -635,7 +634,7 @@ const Test = () => {
                         }}
                     >
                         {hoverInit ? (
-                            <BackContent></BackContent>
+                            <FrontContent></FrontContent>
                         ) : (
                             <FirstContent></FirstContent>
                         )}
@@ -665,7 +664,7 @@ const Test = () => {
                             },
                         }}
                     >
-                        <FrontContent></FrontContent>
+                        <BackContent></BackContent>
                     </Box>
                 </Box>
             </Box>
