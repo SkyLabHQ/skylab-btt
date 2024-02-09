@@ -4,7 +4,6 @@ import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
 import { MMessage } from "@/components/PrivateRoom/Message";
-import BottomKeyBoard from "../BttComponents/ChatMessage";
 import { useGameContext } from "@/pages/TacToe";
 import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
@@ -127,7 +126,7 @@ const MLayout = ({
             </Flex>
             <Box
                 sx={{
-                    position: "absolute",
+                    position: "fixed",
                     bottom: "0",
                     left: "0",
                     width: "100%",
