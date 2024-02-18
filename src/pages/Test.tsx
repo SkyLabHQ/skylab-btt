@@ -567,6 +567,7 @@ const YellowBg = () => {
                         }}
                     ></motion.img>
                 </Flex>
+
                 <Image
                     src={BHummer}
                     sx={{
@@ -581,7 +582,6 @@ const YellowBg = () => {
 const Test = () => {
     const [hoverInit, setHoverInit] = useState(false);
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
-
     // 处理鼠标移动
     const handleMouseMove = (event: any) => {
         const { clientX, clientY } = event;
@@ -590,10 +590,9 @@ const Test = () => {
 
         // 计算背景位置的百分比
         const backgroundPositionX =
-            50 + ((clientX - screenWidth / 2) / screenWidth) * 10; // 微调这个值来改变移动的幅度
+            50 + ((clientX - screenWidth / 2) / screenWidth) * 20; // 微调这个值来改变移动的幅度
         const backgroundPositionY =
-            50 + ((clientY - screenHeight / 2) / screenHeight) * 10; // 微调这个值来改变移动的幅度
-
+            50 + ((clientY - screenHeight / 2) / screenHeight) * 20; // 微调这个值来改变移动的幅度
         setBackgroundPosition(
             `${backgroundPositionX}% ${backgroundPositionY}%`,
         );
@@ -613,10 +612,10 @@ const Test = () => {
                 minHeight: "100%",
                 fontFamily: "Neoneon",
                 position: "relative",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                backgroundColor: "#1b1b1b",
                 backgroundImage: `url(${Bg}) `,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "auto 100%",
+                backgroundColor: "#1b1b1b",
                 backgroundPosition: `${backgroundPosition}`,
                 display: "flex",
                 justifyContent: "center",
@@ -636,11 +635,6 @@ const Test = () => {
                         transform: "rotateY(180deg)",
                     },
                 }}
-                onMouseMove={() => {
-                    setTimeout(() => {
-                        setHoverInit(true);
-                    }, 600);
-                }}
             >
                 <Box
                     className="content"
@@ -653,10 +647,16 @@ const Test = () => {
                         borderRadius: "50%",
                         // transform: "rotateY(180deg)",
                     }}
+                    onMouseEnter={() => {
+                        setTimeout(() => {
+                            setHoverInit(true);
+                        }, 600);
+                    }}
                 >
                     <Box
                         className="back"
                         sx={{
+                            transform: "rotateY(180deg)",
                             position: "absolute",
                             width: "100%",
                             height: "100%",
@@ -676,17 +676,12 @@ const Test = () => {
                             },
                         }}
                     >
-                        {hoverInit ? (
-                            <FrontContent></FrontContent>
-                        ) : (
-                            <FirstContent></FirstContent>
-                        )}
+                        <FrontContent></FrontContent>
                     </Box>
                     <Box
                         className="front"
                         sx={{
                             color: "#fff",
-                            transform: "rotateY(180deg)",
                             backgroundColor: "#151515",
                             position: "absolute",
                             width: "100%",
@@ -707,7 +702,11 @@ const Test = () => {
                             },
                         }}
                     >
-                        <BackContent></BackContent>
+                        {hoverInit ? (
+                            <BackContent></BackContent>
+                        ) : (
+                            <FirstContent></FirstContent>
+                        )}
                     </Box>
                 </Box>
             </Box>
