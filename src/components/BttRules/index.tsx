@@ -1,4 +1,4 @@
-import { Box, Text, Image, Button } from "@chakra-ui/react";
+import { Box, Text, Image, Button, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
 import GardenIcon from "@/components/TacToe/assets/garden-icon.png";
 import BackIcon from "@/components/TacToe/assets/back-arrow-home.svg";
@@ -20,6 +20,11 @@ import StructMileage from "./assets/struct-mileage.png";
 import StructUp from "./assets/struct-up.png";
 import StructCosmetic from "./assets/struct-cosmetic.png";
 import StructScore from "./assets/struct-score.png";
+import CircleBg from "./assets/circle-bg.png";
+import PlanetIcon from "./assets/planet.png";
+import PilotIcon from "./assets/pilot.png";
+import MileageIcon from "./assets/mileage-icon.png";
+import PlaneIcon from "./assets/plane.png";
 
 enum RuleTabEnum {
     OVERAll = 0,
@@ -30,9 +35,14 @@ enum RuleTabEnum {
     UPMERCSBREEDING = 5,
 }
 
-const OverallStructure = () => {
+const OverallStructure = ({ onBack }: { onBack: () => void }) => {
     const [activeIndex, setActiveIndex] = useState(-1);
     const list = [
+        {
+            label: "All",
+            img: StructAviation,
+            desc: "",
+        },
         {
             label: "Aviation Lvl-Pt",
             img: StructAviation,
@@ -60,84 +70,109 @@ const OverallStructure = () => {
         },
     ];
     return (
-        <Box sx={{}}>
-            <Image
-                src={activeIndex === -1 ? StructureImg : list[activeIndex].img}
-                sx={{}}
-            ></Image>
-            <Box
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                    marginTop: "20px",
-                }}
-            >
-                {list.map((item, index) => {
-                    return (
-                        <Box
-                            key={index}
-                            sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                            onClick={() => {
-                                if (activeIndex === index) {
-                                    setActiveIndex(-1);
-                                } else {
-                                    setActiveIndex(index);
-                                }
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    width: "1.3021vw",
-                                    height: "1.3021vw",
-                                    border:
-                                        activeIndex === index
-                                            ? "1px solid #fff"
-                                            : "1px solid transparent",
-                                    borderRadius: "50%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        width: "0.6771vw",
-                                        height: "0.6771vw",
-                                        background: "#d9d9d9",
-                                        borderRadius: "50%",
-                                    }}
-                                ></Box>
-                            </Box>
-
-                            <Text
-                                sx={{
-                                    fontSize: "16px",
-                                    color: "#D9D9D9",
-                                    marginTop: "8px",
-                                }}
-                            >
-                                {item.label}
-                            </Text>
-                        </Box>
-                    );
-                })}
-            </Box>
-            {activeIndex >= 0 && (
-                <Text
+        <Box
+            sx={{
+                maxWidth: "1500px",
+                width: "100%",
+                margin: "0 auto",
+                paddingTop: "80px",
+            }}
+        >
+            <Flex justify={"space-between"} align={"center"}>
+                <Box
                     sx={{
-                        fontSize: "1.0417vw",
-                        marginTop: "0.5208vw",
+                        display: "flex",
+                        alignItems: "center",
+                        width: "80%",
+                        justifyContent: "space-between",
+                        position: "relative",
                     }}
                 >
-                    {list[activeIndex].desc}
+                    {list.map((item, index) => {
+                        return (
+                            <Box
+                                key={index}
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                    if (activeIndex === index) {
+                                        setActiveIndex(-1);
+                                    } else {
+                                        setActiveIndex(index);
+                                    }
+                                }}
+                            >
+                                <Text
+                                    sx={{
+                                        fontSize: "20px",
+                                        color:
+                                            activeIndex === index
+                                                ? "#FDDC2D"
+                                                : "#D9D9D9",
+                                        marginTop: "8px",
+                                    }}
+                                >
+                                    {item.label}
+                                </Text>
+                            </Box>
+                        );
+                    })}
+                </Box>
+
+                <Box
+                    sx={{
+                        cursor: "pointer",
+                    }}
+                    onClick={onBack}
+                >
+                    Back
+                </Box>
+            </Flex>
+
+            <Box
+                sx={{
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    overflow: "hidden",
+                    marginTop: "10px",
+                }}
+            >
+                <Box
+                    sx={{
+                        borderBottom: "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        overflow: "hidden",
+                    }}
+                >
+                    <Image
+                        src={
+                            activeIndex === -1
+                                ? StructureImg
+                                : list[activeIndex].img
+                        }
+                        sx={{}}
+                    ></Image>
+                </Box>
+                <Text
+                    sx={{
+                        height: "100px",
+                    }}
+                >
+                    {activeIndex >= 0 && (
+                        <Text
+                            sx={{
+                                fontSize: "1.0417vw",
+                            }}
+                        >
+                            {list[activeIndex].desc}
+                        </Text>
+                    )}
                 </Text>
-            )}
+            </Box>
         </Box>
     );
 };
@@ -377,56 +412,52 @@ const UpMercsBreeding = () => {
 };
 
 const NavItem = ({
+    imgWidth,
     active,
     label,
     onClick,
+    img,
+    position,
 }: {
+    imgWidth: string;
     active: boolean;
     label: string;
+    img: string;
     onClick: () => void;
+    position: any;
 }) => {
     return (
         <Box
             sx={{
-                width: "16.25vw",
                 cursor: "pointer",
+                position: "absolute",
+                ...position,
             }}
             onClick={onClick}
         >
-            <Box
+            <Flex
                 sx={{
                     display: "flex",
                     alignItems: "center",
                 }}
+                flexDir={"column"}
             >
-                <Image
-                    src={active ? TriangleYellow : TriangleWhite}
-                    sx={{
-                        width: "0.8333vw",
-                        marginRight: "0.2083vw",
-                    }}
-                ></Image>
-
                 <Text
                     sx={{
-                        color: active ? "#f2d861" : "#fff",
-                        fontSize: "1.0417vw",
+                        color: "#fff",
+                        fontSize: "32px",
                     }}
                 >
                     {label}
                 </Text>
-            </Box>
-            {
-                <Box
+                <Image
+                    src={img}
                     sx={{
-                        width: "100%",
-                        height: "1px",
-                        background: active
-                            ? "linear-gradient(90deg, rgba(242, 216, 97, 0.00) 1.6%, #F2D861 24.15%, #F2D861 74.38%, rgba(242, 216, 97, 0.00) 100%)"
-                            : "transparent",
+                        width: imgWidth,
+                        marginTop: "10px",
                     }}
-                ></Box>
-            }
+                ></Image>
+            </Flex>
         </Box>
     );
 };
@@ -441,11 +472,7 @@ const AttributeTab = ({
     handleTabChange: (value: number) => void;
 }) => {
     return (
-        <Box
-            sx={{
-                marginRight: "5.2083vw",
-            }}
-        >
+        <Box>
             <Text
                 sx={{
                     fontSize: "1.25vw",
@@ -454,30 +481,38 @@ const AttributeTab = ({
             >
                 Detailed Rules
             </Text>
-            <Box
+            <Flex
+                justify={"center"}
                 sx={{
-                    marginTop: "4.4444vh",
-                    "& >div": {
-                        marginBottom: "1.3889vh",
-                    },
-                    "& >div:last-child": {
-                        marginBottom: "0",
-                    },
+                    marginTop: "120px",
                 }}
             >
-                {tabList.map((item: any) => {
-                    return (
-                        <NavItem
-                            onClick={() => {
-                                handleTabChange(item.value);
-                            }}
-                            key={item.value}
-                            active={item.value === value}
-                            label={item.label}
-                        ></NavItem>
-                    );
-                })}
-            </Box>
+                <Box
+                    sx={{
+                        width: "1080px",
+                        height: "432px",
+                        background: `url(${CircleBg}) no-repeat`,
+                        backgroundSize: "100% 100%",
+                        position: "relative",
+                    }}
+                >
+                    {tabList.map((item: any) => {
+                        return (
+                            <NavItem
+                                onClick={() => {
+                                    handleTabChange(item.value);
+                                }}
+                                key={item.value}
+                                active={item.value === value}
+                                label={item.label}
+                                img={item.icon}
+                                position={item.position}
+                                imgWidth={item.imgWidth}
+                            ></NavItem>
+                        );
+                    })}
+                </Box>
+            </Flex>
         </Box>
     );
 };
@@ -485,40 +520,63 @@ const AttributeTab = ({
 interface TabItem {
     value: RuleTabEnum;
     label: string;
+    icon: string;
+    position: any;
+    imgWidth: string;
 }
 
 const BttRules = () => {
+    const [showTab, setShowTab] = useState(true);
     const navigate = useNavigate();
     const tabList: TabItem[] = [
         {
             value: RuleTabEnum.OVERAll,
             label: "Overall Structure",
+            icon: PlanetIcon,
+            position: {
+                left: "140px",
+                bottom: "0px",
+            },
+            imgWidth: "160px",
         },
         {
             value: RuleTabEnum.AVIATIONSYSTEM,
             label: "Aviation Lvl-Pt System",
+            icon: PlaneIcon,
+            position: {
+                left: "30px",
+                top: "10px",
+            },
+            imgWidth: "160px",
         },
-        // {
-        //     value: RuleTabEnum.XPPILOT,
-        //     label: "Xp & Pilots",
-        // },
-        // {
-        //     value: RuleTabEnum.COSMETIC,
-        //     label: "Cosmetic Xp",
-        // },
+
         {
             value: RuleTabEnum.MILEAGEXP,
             label: "Mileage",
+            icon: MileageIcon,
+            position: {
+                right: "40px",
+                bottom: "80px",
+            },
+            imgWidth: "100px",
         },
         {
             value: RuleTabEnum.UPMERCSBREEDING,
             label: "Up & Mercs Breeding",
+            icon: PilotIcon,
+            position: {
+                right: "110px",
+                top: "30px",
+                transform: "translateY(-50%)",
+            },
+            imgWidth: "160px",
         },
     ];
     const [currentTab, setCurrentTab] = useState(0);
 
     const handleTabChange = (value: number) => {
         setCurrentTab(value);
+        setShowTab(false);
     };
 
     return (
@@ -526,7 +584,8 @@ const BttRules = () => {
             sx={{
                 position: "relative",
                 paddingTop: "10vh",
-                fontFamily: "Orbitron",
+                fontFamily: "Quantico",
+                height: "100%",
             }}
         >
             <Box
@@ -553,35 +612,26 @@ const BttRules = () => {
                     paddingTop: "1.8519vh",
                 }}
             >
-                <Box
-                    sx={{
-                        display: "flex",
-                    }}
-                >
+                {showTab && (
                     <AttributeTab
                         handleTabChange={handleTabChange}
                         tabList={tabList}
                         value={currentTab}
                     ></AttributeTab>
+                )}
+
+                <Box
+                    sx={{
+                        display: "flex",
+                    }}
+                >
                     <Box
                         sx={{
                             paddingTop: "4.5313vw",
                             width: "52.0833vw",
                         }}
                     >
-                        <Text
-                            sx={{
-                                fontSize: "24px",
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {
-                                tabList.find((item) => {
-                                    return item.value === currentTab;
-                                }).label
-                            }
-                        </Text>
-                        {currentTab === RuleTabEnum.OVERAll && (
+                        {/* {currentTab === RuleTabEnum.OVERAll && (
                             <OverallStructure></OverallStructure>
                         )}
 
@@ -600,10 +650,31 @@ const BttRules = () => {
                         )}
                         {currentTab === RuleTabEnum.UPMERCSBREEDING && (
                             <UpMercsBreeding></UpMercsBreeding>
-                        )}
+                        )} */}
                     </Box>
                 </Box>
             </Box>
+            {!showTab && (
+                <Box
+                    sx={{
+                        width: "100%",
+                        position: "absolute",
+                        left: "0",
+                        top: "0",
+                        height: "100%",
+                        background: "rgba(0, 0, 0, 0.5)",
+                        backdropFilter: "blur(13.2px)",
+                    }}
+                >
+                    {currentTab === RuleTabEnum.OVERAll && (
+                        <OverallStructure
+                            onBack={() => {
+                                setShowTab(true);
+                            }}
+                        ></OverallStructure>
+                    )}
+                </Box>
+            )}
         </Box>
     );
 };
