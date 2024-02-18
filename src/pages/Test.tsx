@@ -16,6 +16,7 @@ import Bg from "../assets/bg.png";
 import BHummer from "../assets/b-hummer.png";
 import OIcon from "../assets/o.png";
 import XIcon from "../assets/x.png";
+import BgLight from "../assets/bg-light.png";
 import CHummer from "../assets/c-hummer.png";
 
 const animationObj = {
@@ -564,6 +565,7 @@ const YellowBg = () => {
                         transition={{
                             duration: 1,
                             yoyo: Infinity,
+                            delay: 1,
                         }}
                     ></motion.img>
                 </Flex>
@@ -612,7 +614,7 @@ const Test = () => {
                 minHeight: "100%",
                 fontFamily: "Neoneon",
                 position: "relative",
-                backgroundImage: `url(${Bg}) `,
+                backgroundImage: `url(${Bg}),url(${BgLight})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "auto 100%",
                 backgroundColor: "#1b1b1b",
