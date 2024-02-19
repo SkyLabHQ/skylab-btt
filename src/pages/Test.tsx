@@ -5,9 +5,10 @@ import {
     Text,
     Image,
     keyframes,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import useCountDown from "react-countdown-hook";
 import HourglassIcon from "../assets/hourglass.png";
 import HummerIcon from "../assets/hummer.png";
@@ -583,11 +584,17 @@ const YellowBg = () => {
 };
 
 const Test = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [hoverInit, setHoverInit] = useState(false);
+    const mounseX = useRef(0);
+    const mounseY = useRef(0);
+
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
     // 处理鼠标移动
     const handleMouseMove = (event: any) => {
         const { clientX, clientY } = event;
+        mounseX.current = clientX;
+        mounseY.current = clientY;
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
@@ -625,16 +632,34 @@ const Test = () => {
                 alignItems: "center",
                 flexDirection: "column",
                 overflow: "hidden",
-                cursor: `url(${MouseImage}) 0 0, auto !important`,
+                cursor: `none`,
             }}
         >
+            {isPc && (
+                <Image
+                    src={MouseImage}
+                    sx={{
+                        position: "absolute",
+                        left: mounseX.current,
+                        top: mounseY.current,
+                        width: "100px",
+                        height: "100px",
+                        transform: "translate(-50%,-50%)",
+                        pointerEvents: "none",
+                        zIndex: 9999,
+                    }}
+                ></Image>
+            )}
             <YellowBg></YellowBg>
             <Box
                 className="card"
                 sx={{
-                    width: "600px",
-                    height: "600px",
+                    maxWidth: "600px",
+                    width: "100%",
+                    height: "auto",
                     borderRadius: "50%",
+                    aspectRatio: "1/1",
+
                     "&:hover .content": {
                         transform: "rotateY(180deg)",
                     },
@@ -721,29 +746,60 @@ const Test = () => {
                     marginTop: "20px",
                 }}
             >
-                <motion.div
-                    animate={{}}
-                    whileHover={{
-                        background: "rgb(151,229,255)",
-                    }}
-                    style={{
+                <Box
+                    sx={{
                         width: "334px",
                         height: "90px",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        cursor: "pointer",
-                        boxShadow: "0px 0px 17px 3px #FFEB3B",
-                        border: "4px solid #FFECC7",
                         borderRadius: "19px",
                         margin: "66px 50px 0",
                         fontSize: "50px",
                         background: "transparent",
                         fontFamily: "neon",
+                        //  --glow-color: #FFECC7;
+                        // --glow-spread-color: #FFECC7;
+                        // --enhanced-glow-color: #FFECC7;
+                        // --btn-color: #000000;
+                        border: "4px solid #FFECC7",
+                        color: "#FFECC7",
+                        fontWeight: "bold",
+                        backgroundColor: "transparent",
+                        outline: "none",
+                        boxShadow: `0 0 8px 2px #FFECC7,
+                               0 0 32px 8px #FFECC7,
+                               inset 0 0 6px 2px #FFECC7`,
+                        textShadow: `0 0 4px #FFECC7`,
+                        position: `relative`,
+                        transition: ` all 0.3s`,
+                        "&::after": {
+                            content: "''",
+                            position: "absolute",
+                            top: "120%",
+                            left: "0",
+                            height: "100%",
+                            width: "100%",
+                            backgroundColor: "#FFECC7",
+                            filter: "blur(2em)",
+                            opacity: ".7",
+                            transform:
+                                "perspective(1.5em) rotateX(35deg) scale(1, .6)",
+                        },
+                        "&:hover": {
+                            color: "#000",
+                            backgroundColor: "#FFECC7",
+                            boxShadow: `0 0 8px 2px #FFECC7, 0 0 32px 16px #FFECC7,inset 0 0 6px 2px #FFECC7`,
+                        },
+                        "&:active": {
+                            boxShadow: `0 0 5px 2px #FFECC7,
+        0 0 20px 16px #FFECC7,
+        inset 0 0 4px 2px #FFECC7`,
+                        },
                     }}
                 >
                     Level Tower
-                </motion.div>
+                </Box>
             </Flex>
         </motion.div>
     );
