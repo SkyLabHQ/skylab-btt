@@ -15,12 +15,12 @@ import {
     deepHexlify,
     PublicErc4337Client,
 } from "@alchemy/aa-core";
-import { baseGoerli } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { toHex } from "viem";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-const chain = baseGoerli;
+const chain = baseSepolia;
 export const withAlchemyGasEstimator = (
     provider: AlchemyProvider,
 ): AlchemyProvider => {

@@ -12,7 +12,7 @@ import theme from "./theme";
 import { HelmetProvider } from "react-helmet-async";
 
 import { BlockNumberProvider } from "./contexts/BlockNumber";
-import { base, baseGoerli } from "viem/chains";
+import { base, baseSepolia } from "viem/chains";
 import { SubmitRequestProvider } from "./contexts/SubmitRequest";
 
 import logoIcon from "./assets/tournament.jpg";
@@ -22,7 +22,7 @@ if (window && window.ethereum) {
 }
 
 const chains =
-    process.env.REACT_APP_ENV === "development" ? [baseGoerli] : [base];
+    process.env.REACT_APP_ENV === "development" ? [baseSepolia] : [base];
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,

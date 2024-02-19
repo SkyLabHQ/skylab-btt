@@ -1,3 +1,3 @@
-import { base, baseGoerli, baseSepolia } from "wagmi/chains";
+import { base, baseSepolia } from "wagmi/chains";
 
-export const CHAINS = [base, baseGoerli, baseSepolia];
+export const CHAINS = [base, baseSepolia];
