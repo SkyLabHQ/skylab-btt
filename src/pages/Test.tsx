@@ -20,6 +20,7 @@ import XIcon from "../assets/x.png";
 import BgLight from "../assets/bg-light.png";
 import CHummer from "../assets/c-hummer.png";
 import MouseImage from "../assets/mouse.png";
+import MouseAImage from "../assets/mouse-a.png";
 
 const animationObj = {
     color: [
@@ -197,6 +198,8 @@ const FirstContent = () => {
 };
 
 const BackContent = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     const [init, setInit] = useState(false);
 
     const [timeLeft, { start }] = useCountDown(5000000, 1000);
@@ -271,7 +274,7 @@ const BackContent = () => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                padding: "0 60px",
+                padding: isPc ? "0 60px" : "0 26px",
             }}
         >
             <Flex
@@ -288,7 +291,7 @@ const BackContent = () => {
                 <Image
                     src={HourglassIcon}
                     sx={{
-                        width: "100px",
+                        width: isPc ? "100px" : "50px",
                     }}
                 ></Image>
                 <Box>
@@ -297,8 +300,9 @@ const BackContent = () => {
                             width: "100%",
                             textShadow: "0px 0px 19px  #00CCFF",
                             color: "rgba(255, 255, 255, 0.2)",
-                            fontSize: "100px",
+                            fontSize: isPc ? "100px" : "44px",
                             textAlign: "center",
+                            letterSpacing: "0.1em",
                         }}
                         animate={animationObj}
                         transition={{
@@ -328,7 +332,7 @@ const BackContent = () => {
                     <motion.div
                         style={{
                             color: "rgba(56, 248, 255, 1)",
-                            fontSize: "95px",
+                            fontSize: isPc ? "95px" : "42px",
                             textAlign: "center",
                             margin: "20px auto 0",
                             width: "100%",
@@ -339,19 +343,34 @@ const BackContent = () => {
                     >
                         <SimpleGrid columns={4} width={"100%"}>
                             <Box>
-                                <Flex align={"center"} justify={"center"}>
+                                <Flex
+                                    align={"center"}
+                                    justify={"center"}
+                                    sx={{
+                                        position: "relative",
+                                        "&::after": {
+                                            content: "':'",
+                                            position: "absolute",
+                                            right: "0",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                        },
+                                    }}
+                                >
                                     <ScrollNum
                                         maxNumber={6}
                                         number={d1}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={d2}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>{" "}
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: "30px",
+                                        fontSize: isPc ? "30px" : "14px",
                                     }}
                                 >
                                     DAYS
@@ -359,38 +378,68 @@ const BackContent = () => {
                             </Box>
 
                             <Box>
-                                <Flex align={"center"} justify={"center"}>
+                                <Flex
+                                    align={"center"}
+                                    justify={"center"}
+                                    sx={{
+                                        position: "relative",
+                                        "&::after": {
+                                            content: "':'",
+                                            position: "absolute",
+                                            right: "0",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                        },
+                                    }}
+                                >
                                     <ScrollNum
                                         maxNumber={6}
                                         number={h1}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={h2}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: "30px",
+                                        fontSize: isPc ? "30px" : "14px",
                                     }}
                                 >
                                     HOURS
                                 </Text>
                             </Box>
                             <Box>
-                                <Flex align={"center"} justify={"center"}>
+                                <Flex
+                                    align={"center"}
+                                    justify={"center"}
+                                    sx={{
+                                        position: "relative",
+                                        "&::after": {
+                                            content: "':'",
+                                            position: "absolute",
+                                            right: "0",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                        },
+                                    }}
+                                >
                                     <ScrollNum
                                         maxNumber={6}
                                         number={m1}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={m2}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: "30px",
+                                        fontSize: isPc ? "30px" : "14px",
                                     }}
                                 >
                                     MINS
@@ -401,15 +450,17 @@ const BackContent = () => {
                                     <ScrollNum
                                         maxNumber={6}
                                         number={s1}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={s2}
+                                        fontSize={isPc ? "95px" : "42px"}
                                     ></ScrollNum>
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: "30px",
+                                        fontSize: isPc ? "30px" : "14px",
                                     }}
                                 >
                                     SECS
@@ -424,9 +475,11 @@ const BackContent = () => {
 };
 
 const ScrollNum = ({
+    fontSize = "95px",
     maxNumber = 9,
     number = -1,
 }: {
+    fontSize?: string;
     maxNumber?: number;
     number?: number;
 }) => {
@@ -475,9 +528,9 @@ const ScrollNum = ({
         <Box sx={{}}>
             <Box
                 sx={{
-                    height: "95px",
+                    height: fontSize,
                     overflow: "hidden",
-                    fontSize: "95px",
+                    fontSize: fontSize,
                     lineHeight: "1",
                 }}
             >
@@ -588,6 +641,7 @@ const Test = () => {
     const [hoverInit, setHoverInit] = useState(false);
     const mounseX = useRef(0);
     const mounseY = useRef(0);
+    const [mouseImg, setMouseImg] = useState(MouseImage);
 
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
     // 处理鼠标移动
@@ -608,12 +662,32 @@ const Test = () => {
         );
     };
 
+    // 处理鼠标移动
+    const handleMouseDown = (event: any) => {
+        console.log("down");
+        setMouseImg(MouseAImage);
+    };
+
+    // 处理鼠标移动
+    const handleMouseUp = (event: any) => {
+        console.log("up");
+
+        setMouseImg(MouseImage);
+    };
+
     useEffect(() => {
+        if (!isPc) {
+            return;
+        }
+        window.addEventListener("mousedown", handleMouseDown);
+        window.addEventListener("mouseup", handleMouseUp);
         window.addEventListener("mousemove", handleMouseMove);
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mousedown", handleMouseDown);
+            window.removeEventListener("mouseup", handleMouseUp);
         };
-    }, []);
+    }, [isPc]);
 
     return (
         <motion.div
@@ -633,11 +707,12 @@ const Test = () => {
                 flexDirection: "column",
                 overflow: "hidden",
                 cursor: `none`,
+                padding: "0 32px",
             }}
         >
             {isPc && (
                 <Image
-                    src={MouseImage}
+                    src={mouseImg}
                     sx={{
                         position: "absolute",
                         left: mounseX.current,
@@ -748,20 +823,16 @@ const Test = () => {
             >
                 <Box
                     sx={{
-                        width: "334px",
-                        height: "90px",
+                        width: isPc ? "334px" : "178px",
+                        height: isPc ? "90px" : "48px",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        borderRadius: "19px",
+                        borderRadius: isPc ? "16px" : "8px",
                         margin: "66px 50px 0",
-                        fontSize: "50px",
+                        fontSize: isPc ? "50px" : "24px",
                         background: "transparent",
                         fontFamily: "neon",
-                        //  --glow-color: #FFECC7;
-                        // --glow-spread-color: #FFECC7;
-                        // --enhanced-glow-color: #FFECC7;
-                        // --btn-color: #000000;
                         border: "4px solid #FFECC7",
                         color: "#FFECC7",
                         fontWeight: "bold",
