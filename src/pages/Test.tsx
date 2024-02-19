@@ -22,6 +22,21 @@ import CHummer from "../assets/c-hummer.png";
 import MouseImage from "../assets/mouse.png";
 import MouseAImage from "../assets/mouse-a.png";
 
+const LightBorder = ({ width }: { width: string }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+    return (
+        <motion.div
+            style={{
+                width: width,
+                height: isPc ? "6px" : "1px",
+                background: "#FFE045",
+                boxShadow: "0px 0px 29px 4px #FAE20F",
+                margin: "0 auto ",
+            }}
+        ></motion.div>
+    );
+};
+
 const animationObj = {
     color: [
         "rgba(56, 248, 255, 1)",
@@ -54,6 +69,7 @@ const handleDateNumber = (number: number) => {
 };
 
 const FrontContent = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             className="front-content"
@@ -71,13 +87,13 @@ const FrontContent = () => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                padding: "10px 100px",
+                padding: isPc ? "10px 100px" : "20px 26px 0",
             }}
         >
             <Image
                 src={HummerIcon}
                 sx={{
-                    width: "180px",
+                    width: isPc ? "180px" : "80px",
                 }}
             ></Image>
             <motion.div
@@ -85,10 +101,10 @@ const FrontContent = () => {
                     width: "100%",
                     textShadow: "0px 0px 19px  #00CCFF",
                     color: "rgba(255, 255, 255, 0.2)",
-                    fontSize: "100px",
+                    fontSize: isPc ? "100px" : "44px",
                     textAlign: "center",
-                    lineHeight: "100px",
-                    margin: "-20px 0 30px",
+                    lineHeight: "1",
+                    margin: isPc ? "-20px 0 30px" : "0px 0 20px",
                 }}
                 animate={animationObj}
                 transition={{
@@ -98,22 +114,15 @@ const FrontContent = () => {
             >
                 THE POT
             </motion.div>
-            <motion.div
-                style={{
-                    width: "100%",
-                    height: "6px",
-                    background: "#FFE045",
-                    boxShadow: "0px 0px 29px 4px #FAE20F",
-                    margin: "0 auto ",
-                }}
-            ></motion.div>
+
+            <LightBorder width={isPc ? "100%" : "180px"}></LightBorder>
             <motion.div
                 style={{
                     width: "100%",
                     textShadow: "0px 0px 19px  #00CCFF",
                     color: "rgba(255, 255, 255, 0.2)",
                     textAlign: "center",
-                    marginTop: "20px",
+                    marginTop: isPc ? "20px" : "10px",
                 }}
                 animate={{
                     color: [
@@ -135,8 +144,8 @@ const FrontContent = () => {
                 <Flex align={"center"} justify={"center"}>
                     <Text
                         sx={{
-                            fontSize: "160px",
-                            lineHeight: "160px",
+                            fontSize: isPc ? "160px" : "60px",
+                            lineHeight: 1,
                             fontFamily: "neon",
                         }}
                     >
@@ -145,7 +154,8 @@ const FrontContent = () => {
                     <ETHIcon
                         fill="currentColor"
                         style={{
-                            width: "64px",
+                            width: isPc ? "100px" : "40px",
+                            height: isPc ? "100px" : "40px",
                         }}
                     ></ETHIcon>
                 </Flex>
@@ -302,7 +312,7 @@ const BackContent = () => {
                             color: "rgba(255, 255, 255, 0.2)",
                             fontSize: isPc ? "100px" : "44px",
                             textAlign: "center",
-                            letterSpacing: "0.1em",
+                            letterSpacing: !isPc && "0.1em",
                         }}
                         animate={animationObj}
                         transition={{
@@ -313,16 +323,7 @@ const BackContent = () => {
                         BEGINS IN
                     </motion.div>
                 </Box>
-
-                <motion.div
-                    style={{
-                        width: "100%",
-                        height: "6px",
-                        background: "#FFE045",
-                        boxShadow: "0px 0px 29px 4px #FAE20F",
-                        margin: "0 auto ",
-                    }}
-                ></motion.div>
+                <LightBorder width="100%"></LightBorder>
                 <Box
                     sx={{
                         position: "relative",
@@ -638,6 +639,7 @@ const YellowBg = () => {
 
 const Test = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [mobileTurn, setMobileTurn] = useState(false);
     const [hoverInit, setHoverInit] = useState(false);
     const mounseX = useRef(0);
     const mounseY = useRef(0);
@@ -664,14 +666,11 @@ const Test = () => {
 
     // 处理鼠标移动
     const handleMouseDown = (event: any) => {
-        console.log("down");
         setMouseImg(MouseAImage);
     };
 
     // 处理鼠标移动
     const handleMouseUp = (event: any) => {
-        console.log("up");
-
         setMouseImg(MouseImage);
     };
 
@@ -736,7 +735,7 @@ const Test = () => {
                     aspectRatio: "1/1",
 
                     "&:hover .content": {
-                        transform: "rotateY(180deg)",
+                        transform: isPc ? "rotateY(180deg)" : "",
                     },
                 }}
             >
@@ -749,7 +748,14 @@ const Test = () => {
                         transition: "transform 600ms",
                         boxShadow: "0px 0px 10px 1px #000000ee",
                         borderRadius: "50%",
-                        // transform: "rotateY(180deg)",
+                        transform: isPc
+                            ? ""
+                            : mobileTurn
+                            ? "rotateY(180deg)"
+                            : "",
+                    }}
+                    onClick={() => {
+                        setMobileTurn(!mobileTurn);
                     }}
                     onMouseEnter={() => {
                         setTimeout(() => {
