@@ -8,6 +8,7 @@ export enum ChainId {
     MUMBAI = 80001,
     BASE = 8453,
     BASEGOERLI = 84531,
+    SEPOLIA = 84532,
 }
 
 export type ChainInfo = {

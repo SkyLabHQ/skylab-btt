@@ -46,22 +46,89 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
         {
             label: "Aviation Lvl-Pt",
             img: StructAviation,
-            desc: "Play games and win to earn points(Pt) for your aviation, accumulate Pt to upgrade the level of your aviation. Losing games will cost your Pt and your aviation is at risk to be downgraded.",
+            desc: (
+                <Box>
+                    Play games and win to{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        earn points(Pt)
+                    </span>{" "}
+                    for your aviation, accumulate Pt to{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        upgrade the level
+                    </span>{" "}
+                    of your aviation. Losing games will cost your Pt and your
+                    aviation is at risk to be downgraded.
+                </Box>
+            ),
         },
         {
             label: "Mileage",
             img: StructMileage,
-            desc: "Simply play games to earn mileage, no matter win or lose. Top players on mileage rank will be rewarded with Upgrade Point(UP) and cosmetics.",
+            desc: (
+                <Box>
+                    Simply play games to earn mileage, no matter win or lose.
+                    Top players on mileage rank will be rewarded with{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        Upgrade Point(UP)
+                    </span>{" "}
+                    and{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        cosmetics
+                    </span>
+                    .
+                </Box>
+            ),
         },
         {
             label: "UP&Merc",
             img: StructUp,
-            desc: "Upgrade Power(UP) could breed your Baby Mercs to Mercs. The Vault will buy back Mercs.",
+            desc: (
+                <Box>
+                    Upgrade Power(UP) could breed your{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        Baby Mercs to Mercs
+                    </span>
+                    . The Vault will buy back Mercs.
+                </Box>
+            ),
         },
         {
             label: "Cosmetic Score",
             img: StructCosmetic,
-            desc: "Estate Score is the sum of Cosmetic Score and Aviation Score. Project Mercury reward players with Sales Tax in proportion to Estate Score.",
+            desc: (
+                <Box>
+                    Estate Score is the sum of Cosmetic Score and Aviation
+                    Score. Project Mercury reward players with{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        Sales Tax
+                    </span>{" "}
+                    in proportion to Estate Score.
+                </Box>
+            ),
         },
         {
             label: "Estate Score",
@@ -157,21 +224,25 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
                         sx={{}}
                     ></Image>
                 </Box>
-                <Text
+                <Flex
                     sx={{
                         height: "100px",
                     }}
+                    align={"center"}
+                    justify={"center"}
                 >
                     {activeIndex >= 0 && (
                         <Text
                             sx={{
-                                fontSize: "1.0417vw",
+                                maxWidth: "80%",
+                                textAlign: "center",
+                                fontSize: "20px",
                             }}
                         >
                             {list[activeIndex].desc}
                         </Text>
                     )}
-                </Text>
+                </Flex>
             </Box>
         </Box>
     );

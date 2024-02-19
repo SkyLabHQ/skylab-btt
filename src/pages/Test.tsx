@@ -18,6 +18,7 @@ import OIcon from "../assets/o.png";
 import XIcon from "../assets/x.png";
 import BgLight from "../assets/bg-light.png";
 import CHummer from "../assets/c-hummer.png";
+import MouseImage from "../assets/mouse.png";
 
 const animationObj = {
     color: [
@@ -624,6 +625,7 @@ const Test = () => {
                 alignItems: "center",
                 flexDirection: "column",
                 overflow: "hidden",
+                cursor: `url(${MouseImage}) 0 0, auto !important`,
             }}
         >
             <YellowBg></YellowBg>

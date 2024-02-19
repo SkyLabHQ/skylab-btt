@@ -59,7 +59,7 @@ async function resolveProperties<T>(object: Deferrable<T>): Promise<T> {
 }
 
 const rpcUrl =
-    "https://base-goerli.g.alchemy.com/v2/vDX2uQbv3DcZEeQxXEnymi3dqUwRvXQd";
+    "https://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D";
 
 export const useSCWallet = (privateKey: string) => {
     const [sCWSigner, setSCWSigner] = useState<AlchemyProvider>(null);
