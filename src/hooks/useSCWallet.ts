@@ -1,7 +1,4 @@
-import {
-    LightSmartContractAccount,
-    getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { LightSmartContractAccount } from "@alchemy/aa-accounts";
 import {
     AlchemyProvider,
     withAlchemyGasFeeEstimator,
@@ -11,7 +8,6 @@ import {
     LocalAccountSigner,
     SmartAccountSigner,
     createPublicErc4337Client,
-    getDefaultEntryPointAddress,
     deepHexlify,
     PublicErc4337Client,
 } from "@alchemy/aa-core";
@@ -20,7 +16,18 @@ import { toHex } from "viem";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-const chain = baseSepolia;
+const chain = JSON.parse(JSON.stringify(baseSepolia));
+chain.rpcUrls = {
+    ...chain.rpcUrls,
+    alchemy: {
+        http: [
+            "https://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D",
+        ],
+        webSocket: [
+            "wss://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D",
+        ],
+    },
+};
 export const withAlchemyGasEstimator = (
     provider: AlchemyProvider,
 ): AlchemyProvider => {
@@ -96,8 +103,8 @@ export const getSCWallet = async (privateKey: string) => {
         return new LightSmartContractAccount({
             chain,
             owner: owner,
-            entryPointAddress: getDefaultEntryPointAddress(chain),
-            factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+            entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", //getDefaultEntryPointAddress(chain),
+            factoryAddress: "0x000000893A26168158fbeaDD9335Be5bC96592E2", // getDefaultLightAccountFactoryAddress(chain),
             rpcClient: provider,
         });
     });

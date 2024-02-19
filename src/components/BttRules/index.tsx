@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import GardenIcon from "@/components/TacToe/assets/garden-icon.png";
 import BackIcon from "@/components/TacToe/assets/back-arrow-home.svg";
 import { useNavigate } from "react-router-dom";
-import TriangleWhite from "./assets/triangle-white.svg";
-import TriangleYellow from "./assets/triangle-yellow.svg";
 import XpPilotsImg from "./assets/xp-pilots.png";
 import CosmeticImg from "./assets/cosmetic-xp.png";
 import MileageImg from "./assets/mileage.png";
@@ -16,6 +14,7 @@ import AllPlane from "./assets/all-plane.png";
 import LeftArrow from "@/components/Tournament/assets/left-arrow.svg";
 import RightArrow from "@/components/Tournament/assets/right-arrow.svg";
 import StructAviation from "./assets/struct-aviation.png";
+import All from "./assets/all.png";
 import StructMileage from "./assets/struct-mileage.png";
 import StructUp from "./assets/struct-up.png";
 import StructCosmetic from "./assets/struct-cosmetic.png";
@@ -36,11 +35,11 @@ enum RuleTabEnum {
 }
 
 const OverallStructure = ({ onBack }: { onBack: () => void }) => {
-    const [activeIndex, setActiveIndex] = useState(-1);
+    const [activeIndex, setActiveIndex] = useState(0);
     const list = [
         {
             label: "All",
-            img: StructAviation,
+            img: All,
             desc: "",
         },
         {
@@ -213,25 +212,25 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
                         borderBottom: "1px solid #FDDC2D",
                         borderRadius: "0 0 15px 15px",
                         overflow: "hidden",
+                        padding: "40px 200px",
                     }}
                 >
                     <Image
-                        src={
-                            activeIndex === -1
-                                ? StructureImg
-                                : list[activeIndex].img
-                        }
-                        sx={{}}
+                        src={list[activeIndex].img}
+                        sx={{
+                            width: "100%",
+                            margin: "0 auto",
+                        }}
                     ></Image>
                 </Box>
-                <Flex
-                    sx={{
-                        height: "100px",
-                    }}
-                    align={"center"}
-                    justify={"center"}
-                >
-                    {activeIndex >= 0 && (
+                {activeIndex >= 1 && (
+                    <Flex
+                        sx={{
+                            height: "100px",
+                        }}
+                        align={"center"}
+                        justify={"center"}
+                    >
                         <Text
                             sx={{
                                 maxWidth: "80%",
@@ -241,8 +240,8 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
                         >
                             {list[activeIndex].desc}
                         </Text>
-                    )}
-                </Flex>
+                    </Flex>
+                )}
             </Box>
         </Box>
     );
@@ -503,6 +502,12 @@ const NavItem = ({
                 cursor: "pointer",
                 position: "absolute",
                 ...position,
+                "&:hover": {
+                    img: {
+                        transform: "scale(1.2)",
+                        transition: "all 0.3s ease",
+                    },
+                },
             }}
             onClick={onClick}
         >
