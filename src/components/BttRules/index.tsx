@@ -8,7 +8,6 @@ import CosmeticImg from "./assets/cosmetic-xp.png";
 import MileageImg from "./assets/mileage.png";
 import Arrow from "./assets/arrow.svg";
 import Calculator from "./assets/calculator.svg";
-import StructureImg from "./assets/structure.png";
 import UpImg from "./assets/up.png";
 import AllPlane from "./assets/all-plane.png";
 import LeftArrow from "@/components/Tournament/assets/left-arrow.svg";
@@ -138,7 +137,7 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
     return (
         <Box
             sx={{
-                maxWidth: "1500px",
+                maxWidth: "1200px",
                 width: "100%",
                 margin: "0 auto",
                 paddingTop: "80px",
@@ -247,7 +246,7 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
-const AviationSystem = () => {
+const AviationSystem = ({ onBack }: { onBack: () => void }) => {
     const [test, setTest] = useState(0);
     const handleSub = () => {
         if (test <= 0) return;
@@ -260,60 +259,82 @@ const AviationSystem = () => {
     };
 
     return (
-        <Box>
-            <Box
-                sx={{
-                    height: "26.0417vw",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "0 3vw",
-                    overflow: "hidden",
-                    position: "relative",
-                    background:
-                        "radial-gradient(50% 50% at 50% 50%, rgba(142, 180, 189, 0.80) 0%, rgba(108, 174, 173, 0.80) 100%)",
-                }}
-            >
-                <Box
-                    sx={{
-                        background: `url(${AllPlane}) no-repeat `,
-                        backgroundSize: "104.1667vw 100%",
-                        backgroundPosition: `${test}% 0`,
-                        width: "104.1667vw",
-                        height: "15.3646vw",
-                        transition: "all 1s",
-                    }}
-                ></Box>
-                <Image
-                    src={LeftArrow}
-                    sx={{
-                        position: "absolute",
-                        left: "0.5208vw",
-                        cursor: "pointer",
-                        width: "1.25vw",
-                    }}
-                    onClick={handleSub}
-                ></Image>
-                <Image
-                    src={RightArrow}
-                    sx={{
-                        position: "absolute",
-                        right: "0.5208vw",
-                        cursor: "pointer",
-                        width: "1.25vw",
-                    }}
-                    onClick={handleAdd}
-                ></Image>
-            </Box>
+        <Box
+            sx={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "0 auto",
+                paddingTop: "80px",
+            }}
+        >
             <Text
                 sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                    marginTop: "2vw",
+                    fontSize: "32px",
                 }}
             >
-                Point is earned through winning game.
-            </Text>{" "}
+                Aviation Lvl-Pt System
+            </Text>
+            <Box
+                sx={{
+                    overflow: "hidden",
+                    position: "relative",
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    marginTop: "10px",
+                }}
+            >
+                <Flex
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        border: "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        padding: "0 60px",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            background: `url(${AllPlane}) no-repeat `,
+                            backgroundSize: "155.7vw 100%",
+                            backgroundPosition: `${test}% 0`,
+                            width: "155.7vw",
+                            height: "23vw",
+                            transition: "all 1s",
+                        }}
+                    ></Box>
+                    <Image
+                        src={LeftArrow}
+                        sx={{
+                            position: "absolute",
+                            left: "0.5208vw",
+                            cursor: "pointer",
+                            width: "1.25vw",
+                        }}
+                        onClick={handleSub}
+                    ></Image>
+                    <Image
+                        src={RightArrow}
+                        sx={{
+                            position: "absolute",
+                            right: "0.5208vw",
+                            cursor: "pointer",
+                            width: "1.25vw",
+                        }}
+                        onClick={handleAdd}
+                    ></Image>
+                </Flex>
+                <Text
+                    sx={{
+                        fontSize: "20px",
+                        lineHeight: "100px",
+                        height: "100px",
+                        textAlign: "center",
+                    }}
+                >
+                    Point is earned through winning game.
+                </Text>
+            </Box>
         </Box>
     );
 };
@@ -748,6 +769,13 @@ const BttRules = () => {
                                 setShowTab(true);
                             }}
                         ></OverallStructure>
+                    )}
+                    {currentTab === RuleTabEnum.AVIATIONSYSTEM && (
+                        <AviationSystem
+                            onBack={() => {
+                                setShowTab(true);
+                            }}
+                        ></AviationSystem>
                     )}
                 </Box>
             )}
