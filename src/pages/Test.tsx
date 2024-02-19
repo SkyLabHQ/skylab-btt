@@ -21,6 +21,7 @@ import BgLight from "../assets/bg-light.png";
 import CHummer from "../assets/c-hummer.png";
 import MouseImage from "../assets/mouse.png";
 import MouseAImage from "../assets/mouse-a.png";
+import MouseBImage from "../assets/mouse-b.png";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -546,6 +547,7 @@ const ScrollNum = ({
 };
 
 const YellowBg = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const clickAnimate = useAnimation();
     const handleClick = async () => {
         const height = window.innerHeight;
@@ -594,7 +596,8 @@ const YellowBg = () => {
                     <motion.img
                         src={XIcon}
                         style={{
-                            width: "180px",
+                            width: isPc ? "180px" : "90px",
+                            height: isPc ? "180px" : "90px",
                         }}
                         animate={{
                             transform: [
@@ -610,7 +613,8 @@ const YellowBg = () => {
                     <motion.img
                         src={OIcon}
                         style={{
-                            width: "180px",
+                            width: isPc ? "180px" : "90px",
+                            height: isPc ? "180px" : "90px",
                         }}
                         animate={{
                             transform: [
@@ -629,7 +633,9 @@ const YellowBg = () => {
                 <Image
                     src={BHummer}
                     sx={{
-                        width: "600px",
+                        width: isPc ? "600px" : "280px",
+                        maxWidth: "none",
+                        marginTop: "10px",
                     }}
                 ></Image>
             </Box>
@@ -643,7 +649,7 @@ const Test = () => {
     const [hoverInit, setHoverInit] = useState(false);
     const mounseX = useRef(0);
     const mounseY = useRef(0);
-    const [mouseImg, setMouseImg] = useState(MouseImage);
+    const [mouseImg, setMouseImg] = useState(MouseBImage);
 
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
     // 处理鼠标移动
@@ -760,6 +766,7 @@ const Test = () => {
                     onMouseEnter={() => {
                         setTimeout(() => {
                             setHoverInit(true);
+                            setMouseImg(MouseAImage);
                         }, 600);
                     }}
                 >
@@ -845,7 +852,7 @@ const Test = () => {
                         backgroundColor: "transparent",
                         outline: "none",
                         boxShadow: `0 0 8px 2px #FFECC7,
-                               0 0 32px 8px #FFECC7,
+                               0 0 32px 8px #FDDC2D,
                                inset 0 0 6px 2px #FFECC7`,
                         textShadow: `0 0 4px #FFECC7`,
                         position: `relative`,
@@ -857,7 +864,7 @@ const Test = () => {
                             left: "0",
                             height: "100%",
                             width: "100%",
-                            backgroundColor: "#FFECC7",
+                            backgroundColor: "#FDDC2D",
                             filter: "blur(2em)",
                             opacity: ".7",
                             transform:
@@ -866,11 +873,11 @@ const Test = () => {
                         "&:hover": {
                             color: "#000",
                             backgroundColor: "#FFECC7",
-                            boxShadow: `0 0 8px 2px #FFECC7, 0 0 32px 16px #FFECC7,inset 0 0 6px 2px #FFECC7`,
+                            boxShadow: `0 0 8px 2px #FFECC7, 0 0 32px 16px #FDDC2D,inset 0 0 6px 2px #FFECC7`,
                         },
                         "&:active": {
                             boxShadow: `0 0 5px 2px #FFECC7,
-        0 0 20px 16px #FFECC7,
+        0 0 20px 16px #FDDC2D,
         inset 0 0 4px 2px #FFECC7`,
                         },
                     }}
