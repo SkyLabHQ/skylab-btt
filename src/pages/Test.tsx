@@ -22,6 +22,9 @@ import CHummer from "../assets/c-hummer.png";
 import MouseImage from "../assets/mouse.png";
 import MouseAImage from "../assets/mouse-a.png";
 import MouseBImage from "../assets/mouse-b.png";
+import Turn1mp3 from "../components/Presale/assets/turn1.mp3";
+import Turn2mp3 from "../components/Presale/assets/turn2.mp3";
+import Numbermp3 from "../components/Presale/assets/number.mp3";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -209,6 +212,7 @@ const FirstContent = () => {
 };
 
 const BackContent = () => {
+    const [audio1] = useState(new Audio(Numbermp3));
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
     const [init, setInit] = useState(false);
@@ -260,9 +264,10 @@ const BackContent = () => {
 
     const handleInit = () => {
         setTimeout(() => {
+            audio1.play();
             start();
             setInit(true);
-        }, 2000);
+        }, 1000);
     };
 
     useEffect(() => {
@@ -644,9 +649,13 @@ const YellowBg = () => {
 };
 
 const Test = () => {
+    const [rotateY, setRotateY] = useState(0);
+
     const [_, setUpdate] = useState(0);
+    const [audio1] = useState(new Audio(Turn1mp3));
+    const [audio2] = useState(new Audio(Turn2mp3));
+
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const [mobileTurn, setMobileTurn] = useState(false);
     const [hoverInit, setHoverInit] = useState(false);
     const mounseX = useRef(0);
     const mounseY = useRef(0);
@@ -742,10 +751,30 @@ const Test = () => {
                     height: "auto",
                     borderRadius: "50%",
                     aspectRatio: "1/1",
-
-                    "&:hover .content": {
-                        transform: isPc ? "rotateY(180deg)" : "",
-                    },
+                }}
+                onMouseEnter={() => {
+                    if (hoverInit) {
+                        if (rotateY === 180) {
+                            return;
+                        }
+                        audio1.play();
+                        setRotateY(180);
+                        return;
+                    }
+                    setTimeout(() => {
+                        mouseImg.current = MouseAImage;
+                        setHoverInit(true);
+                    }, 600);
+                }}
+                onMouseLeave={() => {
+                    if (hoverInit) {
+                        if (rotateY === 0) {
+                            return;
+                        }
+                        audio2.play();
+                        setRotateY(0);
+                        return;
+                    }
                 }}
             >
                 <Box
@@ -757,20 +786,16 @@ const Test = () => {
                         transition: "transform 600ms",
                         boxShadow: "0px 0px 10px 1px #000000ee",
                         borderRadius: "50%",
-                        transform: isPc
-                            ? ""
-                            : mobileTurn
-                            ? "rotateY(180deg)"
-                            : "",
+                        transform: ` rotateY(${rotateY}deg)`,
                     }}
                     onClick={() => {
-                        setMobileTurn(!mobileTurn);
-                    }}
-                    onMouseEnter={() => {
-                        setTimeout(() => {
-                            mouseImg.current = MouseAImage;
-                            setHoverInit(true);
-                        }, 600);
+                        if (rotateY === 0) {
+                            audio1.play();
+                            setRotateY(180);
+                        } else {
+                            audio2.play();
+                            setRotateY(0);
+                        }
                     }}
                 >
                     <Box

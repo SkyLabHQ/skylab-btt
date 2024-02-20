@@ -22,6 +22,8 @@ declare module "*.wav";
 
 declare module "*.mp4";
 
+declare module "*.mp3";
+
 declare module "html2canvas";
 
 declare module "react-canvas-nest";
