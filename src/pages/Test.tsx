@@ -644,12 +644,13 @@ const YellowBg = () => {
 };
 
 const Test = () => {
+    const [_, setUpdate] = useState(0);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [mobileTurn, setMobileTurn] = useState(false);
     const [hoverInit, setHoverInit] = useState(false);
     const mounseX = useRef(0);
     const mounseY = useRef(0);
-    const [mouseImg, setMouseImg] = useState(MouseBImage);
+    const mouseImg = useRef(MouseBImage);
 
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
     // 处理鼠标移动
@@ -672,12 +673,14 @@ const Test = () => {
 
     // 处理鼠标移动
     const handleMouseDown = (event: any) => {
-        setMouseImg(MouseAImage);
+        mouseImg.current = MouseAImage;
+        setUpdate((prev) => prev + 1);
     };
 
     // 处理鼠标移动
     const handleMouseUp = (event: any) => {
-        setMouseImg(MouseImage);
+        mouseImg.current = MouseBImage;
+        setUpdate((prev) => prev + 1);
     };
 
     useEffect(() => {
@@ -717,7 +720,7 @@ const Test = () => {
         >
             {isPc && (
                 <Image
-                    src={mouseImg}
+                    src={mouseImg.current}
                     sx={{
                         position: "absolute",
                         left: mounseX.current,
@@ -726,7 +729,7 @@ const Test = () => {
                         height: "100px",
                         transform: "translate(-50%,-50%)",
                         pointerEvents: "none",
-                        zIndex: 9999,
+                        zIndex: 999999,
                     }}
                 ></Image>
             )}
@@ -765,8 +768,8 @@ const Test = () => {
                     }}
                     onMouseEnter={() => {
                         setTimeout(() => {
+                            mouseImg.current = MouseAImage;
                             setHoverInit(true);
-                            setMouseImg(MouseAImage);
                         }, 600);
                     }}
                 >

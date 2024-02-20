@@ -339,6 +339,97 @@ const AviationSystem = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
+const MileageXp = ({ onBack }: { onBack: () => void }) => {
+    const [test, setTest] = useState(0);
+    const handleSub = () => {
+        if (test <= 0) return;
+        setTest(test - 20);
+    };
+
+    const handleAdd = () => {
+        if (test >= 100) return;
+        setTest(test + 20);
+    };
+
+    return (
+        <Box
+            sx={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "0 auto",
+                paddingTop: "80px",
+            }}
+        >
+            <Text
+                sx={{
+                    fontSize: "32px",
+                }}
+            >
+                Aviation Lvl-Pt System
+            </Text>
+            <Box
+                sx={{
+                    overflow: "hidden",
+                    position: "relative",
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    marginTop: "10px",
+                }}
+            >
+                <Flex
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        border: "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        padding: "50px 60px",
+                    }}
+                >
+                    <Image src={MileageImg}></Image>
+                </Flex>
+                <Text
+                    sx={{
+                        fontSize: "1.0417vw",
+                        marginTop: "37px",
+                    }}
+                >
+                    Pilot earn mileage through playing games.
+                </Text>
+                <Text
+                    sx={{
+                        fontSize: "1.0417vw",
+                    }}
+                >
+                    For each game:{" "}
+                </Text>
+                <Text
+                    sx={{
+                        fontSize: "1.0417vw",
+                    }}
+                >
+                    Mileage gained ={" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        Level of aviation
+                    </span>{" "}
+                    x{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        point transferred
+                    </span>{" "}
+                </Text>
+            </Box>
+        </Box>
+    );
+};
+
 const XpPilot = () => {
     return (
         <Box sx={{}}>
@@ -455,35 +546,35 @@ const CosmeticXp = () => {
     );
 };
 
-const MileageXp = () => {
-    return (
-        <Box sx={{}}>
-            <Image src={MileageImg} sx={{}}></Image>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    marginTop: "37px",
-                }}
-            >
-                Pilot earn mileage through playing games.
-            </Text>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                }}
-            >
-                For each game:{" "}
-            </Text>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                }}
-            >
-                Mileage gained = Level of aviation x point transferred{" "}
-            </Text>
-        </Box>
-    );
-};
+// const MileageXp = () => {
+//     return (
+//         <Box sx={{}}>
+//             <Image src={MileageImg} sx={{}}></Image>
+//             <Text
+//                 sx={{
+//                     fontSize: "1.0417vw",
+//                     marginTop: "37px",
+//                 }}
+//             >
+//                 Pilot earn mileage through playing games.
+//             </Text>
+//             <Text
+//                 sx={{
+//                     fontSize: "1.0417vw",
+//                 }}
+//             >
+//                 For each game:{" "}
+//             </Text>
+//             <Text
+//                 sx={{
+//                     fontSize: "1.0417vw",
+//                 }}
+//             >
+//                 Mileage gained = Level of aviation x point transferred{" "}
+//             </Text>
+//         </Box>
+//     );
+// };
 
 const UpMercsBreeding = () => {
     return (
@@ -776,6 +867,13 @@ const BttRules = () => {
                                 setShowTab(true);
                             }}
                         ></AviationSystem>
+                    )}{" "}
+                    {currentTab === RuleTabEnum.MILEAGEXP && (
+                        <MileageXp
+                            onBack={() => {
+                                setShowTab(true);
+                            }}
+                        ></MileageXp>
                     )}
                 </Box>
             )}
