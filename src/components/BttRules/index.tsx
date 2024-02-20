@@ -1,13 +1,16 @@
-import { Box, Text, Image, Button, Flex } from "@chakra-ui/react";
+import {
+    Box,
+    Text,
+    Image,
+    Button,
+    Flex,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import GardenIcon from "@/components/TacToe/assets/garden-icon.png";
 import BackIcon from "@/components/TacToe/assets/back-arrow-home.svg";
 import { useNavigate } from "react-router-dom";
-import XpPilotsImg from "./assets/xp-pilots.png";
-import CosmeticImg from "./assets/cosmetic-xp.png";
 import MileageImg from "./assets/mileage.png";
-import Arrow from "./assets/arrow.svg";
-import Calculator from "./assets/calculator.svg";
 import UpImg from "./assets/up.png";
 import AllPlane from "./assets/all-plane.png";
 import LeftArrow from "@/components/Tournament/assets/left-arrow.svg";
@@ -23,6 +26,7 @@ import PlanetIcon from "./assets/planet.png";
 import PilotIcon from "./assets/pilot.png";
 import MileageIcon from "./assets/mileage-icon.png";
 import PlaneIcon from "./assets/plane.png";
+import Back from "../Back";
 
 enum RuleTabEnum {
     OVERAll = 0,
@@ -33,7 +37,7 @@ enum RuleTabEnum {
     UPMERCSBREEDING = 5,
 }
 
-const OverallStructure = ({ onBack }: { onBack: () => void }) => {
+const OverallStructure = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const list = [
         {
@@ -144,58 +148,39 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
             }}
         >
             <Flex justify={"space-between"} align={"center"}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "80%",
-                        justifyContent: "space-between",
-                        position: "relative",
-                    }}
-                >
-                    {list.map((item, index) => {
-                        return (
-                            <Box
-                                key={index}
+                {list.map((item, index) => {
+                    return (
+                        <Box
+                            key={index}
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                cursor: "pointer",
+                            }}
+                            onClick={() => {
+                                if (activeIndex === index) {
+                                    setActiveIndex(-1);
+                                } else {
+                                    setActiveIndex(index);
+                                }
+                            }}
+                        >
+                            <Text
                                 sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    cursor: "pointer",
-                                }}
-                                onClick={() => {
-                                    if (activeIndex === index) {
-                                        setActiveIndex(-1);
-                                    } else {
-                                        setActiveIndex(index);
-                                    }
+                                    fontSize: "20px",
+                                    color:
+                                        activeIndex === index
+                                            ? "#FDDC2D"
+                                            : "#D9D9D9",
+                                    marginTop: "8px",
                                 }}
                             >
-                                <Text
-                                    sx={{
-                                        fontSize: "20px",
-                                        color:
-                                            activeIndex === index
-                                                ? "#FDDC2D"
-                                                : "#D9D9D9",
-                                        marginTop: "8px",
-                                    }}
-                                >
-                                    {item.label}
-                                </Text>
-                            </Box>
-                        );
-                    })}
-                </Box>
-
-                <Box
-                    sx={{
-                        cursor: "pointer",
-                    }}
-                    onClick={onBack}
-                >
-                    Back
-                </Box>
+                                {item.label}
+                            </Text>
+                        </Box>
+                    );
+                })}
             </Flex>
 
             <Box
@@ -246,7 +231,7 @@ const OverallStructure = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
-const AviationSystem = ({ onBack }: { onBack: () => void }) => {
+const AviationSystem = () => {
     const [test, setTest] = useState(0);
     const handleSub = () => {
         if (test <= 0) return;
@@ -339,18 +324,7 @@ const AviationSystem = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
-const MileageXp = ({ onBack }: { onBack: () => void }) => {
-    const [test, setTest] = useState(0);
-    const handleSub = () => {
-        if (test <= 0) return;
-        setTest(test - 20);
-    };
-
-    const handleAdd = () => {
-        if (test >= 100) return;
-        setTest(test + 20);
-    };
-
+const MileageXp = () => {
     return (
         <Box
             sx={{
@@ -363,9 +337,10 @@ const MileageXp = ({ onBack }: { onBack: () => void }) => {
             <Text
                 sx={{
                     fontSize: "32px",
+                    fontWeight: "bold",
                 }}
             >
-                Aviation Lvl-Pt System
+                Mileage
             </Text>
             <Box
                 sx={{
@@ -381,233 +356,120 @@ const MileageXp = ({ onBack }: { onBack: () => void }) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        border: "1px solid #FDDC2D",
+                        borderBottom: "1px solid #FDDC2D",
                         borderRadius: "0 0 15px 15px",
                         padding: "50px 60px",
                     }}
                 >
                     <Image src={MileageImg}></Image>
                 </Flex>
-                <Text
+                <Flex
+                    flexDir={"column"}
                     sx={{
-                        fontSize: "1.0417vw",
-                        marginTop: "37px",
+                        padding: "20px 0 20px 100px",
+                        fontSize: "20px",
                     }}
                 >
-                    Pilot earn mileage through playing games.
-                </Text>
-                <Text
-                    sx={{
-                        fontSize: "1.0417vw",
-                    }}
-                >
-                    For each game:{" "}
-                </Text>
-                <Text
-                    sx={{
-                        fontSize: "1.0417vw",
-                    }}
-                >
-                    Mileage gained ={" "}
-                    <span
-                        style={{
-                            color: "#FDDC2D",
-                        }}
-                    >
-                        Level of aviation
-                    </span>{" "}
-                    x{" "}
-                    <span
-                        style={{
-                            color: "#FDDC2D",
-                        }}
-                    >
-                        point transferred
-                    </span>{" "}
-                </Text>
+                    <Text>Pilot earn mileage through playing games.</Text>
+
+                    <Text>For each game: </Text>
+                    <Text>
+                        Mileage gained =
+                        <span
+                            style={{
+                                color: "#FDDC2D",
+                            }}
+                        >
+                            Level of aviation
+                        </span>{" "}
+                        x{" "}
+                        <span
+                            style={{
+                                color: "#FDDC2D",
+                            }}
+                        >
+                            point transferred
+                        </span>{" "}
+                    </Text>
+                </Flex>
             </Box>
         </Box>
     );
 };
 
-const XpPilot = () => {
+const Up = () => {
     return (
-        <Box sx={{}}>
-            <Image src={XpPilotsImg} sx={{}}></Image>
+        <Box
+            sx={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "0 auto",
+                paddingTop: "80px",
+            }}
+        >
             <Text
                 sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                    textIndent: "3.125vw",
+                    fontSize: "32px",
+                    fontWeight: "bold",
                 }}
             >
-                xp(experience point) = n% x aircraft holding point+ m% x
-                cosmetic point + l% x mileage Players with top xp will split
-                transaction fee for every [time interval], with the following
-                ratio:
+                UP & Mercs breeding{" "}
             </Text>
             <Box
                 sx={{
-                    marginTop: "5.2083vw",
-                    "& table": { border: "1px solid #fff" },
-                    "& td": {
-                        border: "1px solid #fff",
-                        width: "11.0417vw",
-                        height: "3.4375vw",
-                        paddingLeft: "40px",
-                    },
-                    "& tr": {
-                        border: "1px solid #fff",
-                    },
-                }}
-            >
-                <table
-                    style={{
-                        borderCollapse: "collapse",
-                    }}
-                >
-                    <tr>
-                        <td>No.1</td>
-                        <td>第一行，第二列</td>
-                    </tr>
-                    <tr>
-                        <td>No.2</td>
-                        <td>第二行，第二列</td>
-                    </tr>
-                    <tr>
-                        <td>No.3</td>
-                        <td>第三行，第二列</td>
-                    </tr>
-                </table>
-            </Box>
-        </Box>
-    );
-};
-
-const CosmeticXp = () => {
-    return (
-        <Box sx={{}}>
-            <Image src={CosmeticImg} sx={{}}></Image>
-            <Box
-                sx={{
-                    width: "14.8958vw",
-                    height: "38px",
-                    borderRadius: "40px",
-                    display: "flex",
+                    overflow: "hidden",
                     position: "relative",
-                    alignItems: "center",
-                    paddingLeft: "45px",
-                    background:
-                        "linear-gradient(90deg, rgba(43, 43, 43, 0.50) -2.24%, rgba(255, 255, 255, 0.50) 112.59%)",
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    marginTop: "10px",
                 }}
             >
-                <Image
-                    src={Calculator}
+                <Flex
                     sx={{
-                        position: "absolute",
-                        left: "0px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                    }}
-                ></Image>
-                <Text
-                    sx={{
-                        marginRight: "0.2604vw",
-                        fontSize: "0.8333vw",
-                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderBottom: "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        padding: "50px 60px",
                     }}
                 >
-                    Cosmertic Pt Calculator
-                </Text>
-                <Image
-                    src={Arrow}
+                    <Image src={UpImg}></Image>
+                </Flex>
+                <Flex
+                    flexDir={"column"}
                     sx={{
-                        width: "0.9375vw",
+                        padding: "20px 0 20px 100px",
                     }}
-                ></Image>
+                >
+                    <Text
+                        sx={{
+                            fontSize: "20px",
+                        }}
+                    >
+                        Mercs have governance rights, can arbitrage, and would
+                        have a buff to estate score{" "}
+                    </Text>
+                </Flex>
             </Box>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                }}
-            >
-                Playing games could earn mileage xp.For each game:
-            </Text>{" "}
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                }}
-            >
-                Mileage xp gained = Level x point transferred
-            </Text>
-        </Box>
-    );
-};
-
-// const MileageXp = () => {
-//     return (
-//         <Box sx={{}}>
-//             <Image src={MileageImg} sx={{}}></Image>
-//             <Text
-//                 sx={{
-//                     fontSize: "1.0417vw",
-//                     marginTop: "37px",
-//                 }}
-//             >
-//                 Pilot earn mileage through playing games.
-//             </Text>
-//             <Text
-//                 sx={{
-//                     fontSize: "1.0417vw",
-//                 }}
-//             >
-//                 For each game:{" "}
-//             </Text>
-//             <Text
-//                 sx={{
-//                     fontSize: "1.0417vw",
-//                 }}
-//             >
-//                 Mileage gained = Level of aviation x point transferred{" "}
-//             </Text>
-//         </Box>
-//     );
-// };
-
-const UpMercsBreeding = () => {
-    return (
-        <Box>
-            <Image src={UpImg} sx={{}}></Image>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    marginTop: "60px",
-                }}
-            >
-                Mercs have governance rights, can arbitrage, and would have a
-                buff to estate score{" "}
-            </Text>{" "}
         </Box>
     );
 };
 
 const NavItem = ({
     imgWidth,
-    active,
     label,
     onClick,
     img,
     position,
 }: {
     imgWidth: string;
-    active: boolean;
     label: string;
     img: string;
     onClick: () => void;
     position: any;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
@@ -633,7 +495,7 @@ const NavItem = ({
                 <Text
                     sx={{
                         color: "#fff",
-                        fontSize: "32px",
+                        fontSize: isPc ? "32px" : "12px",
                     }}
                 >
                     {label}
@@ -642,7 +504,7 @@ const NavItem = ({
                     src={img}
                     sx={{
                         width: imgWidth,
-                        marginTop: "10px",
+                        marginTop: isPc ? "10px" : 0,
                     }}
                 ></Image>
             </Flex>
@@ -651,19 +513,18 @@ const NavItem = ({
 };
 
 const AttributeTab = ({
-    value,
     tabList,
     handleTabChange,
 }: {
-    value: number;
     tabList: any;
     handleTabChange: (value: number) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box>
             <Text
                 sx={{
-                    fontSize: "1.25vw",
+                    fontSize: isPc ? "1.25vw" : "16px",
                     fontWeight: "bold",
                 }}
             >
@@ -672,13 +533,13 @@ const AttributeTab = ({
             <Flex
                 justify={"center"}
                 sx={{
-                    marginTop: "120px",
+                    marginTop: isPc ? "120px" : "150px",
                 }}
             >
                 <Box
                     sx={{
-                        width: "1080px",
-                        height: "432px",
+                        width: isPc ? "1080px" : "330px",
+                        height: isPc ? "432px" : "132px",
                         background: `url(${CircleBg}) no-repeat`,
                         backgroundSize: "100% 100%",
                         position: "relative",
@@ -691,11 +552,10 @@ const AttributeTab = ({
                                     handleTabChange(item.value);
                                 }}
                                 key={item.value}
-                                active={item.value === value}
                                 label={item.label}
                                 img={item.icon}
                                 position={item.position}
-                                imgWidth={item.imgWidth}
+                                imgWidth={isPc ? item.imgWidth : item.mImgWidth}
                             ></NavItem>
                         );
                     })}
@@ -711,9 +571,11 @@ interface TabItem {
     icon: string;
     position: any;
     imgWidth: string;
+    mImgWidth: string;
 }
 
 const BttRules = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [showTab, setShowTab] = useState(true);
     const navigate = useNavigate();
     const tabList: TabItem[] = [
@@ -722,20 +584,22 @@ const BttRules = () => {
             label: "Overall Structure",
             icon: PlanetIcon,
             position: {
-                left: "140px",
-                bottom: "0px",
+                left: "12%",
+                bottom: "-10%",
             },
             imgWidth: "160px",
+            mImgWidth: "80px",
         },
         {
             value: RuleTabEnum.AVIATIONSYSTEM,
             label: "Aviation Lvl-Pt System",
             icon: PlaneIcon,
             position: {
-                left: "30px",
-                top: "10px",
+                left: "-4%",
+                top: "-10%",
             },
             imgWidth: "160px",
+            mImgWidth: "40px",
         },
 
         {
@@ -743,21 +607,22 @@ const BttRules = () => {
             label: "Mileage",
             icon: MileageIcon,
             position: {
-                right: "40px",
-                bottom: "80px",
+                right: "4%",
+                bottom: "16%",
             },
             imgWidth: "100px",
+            mImgWidth: "40px",
         },
         {
             value: RuleTabEnum.UPMERCSBREEDING,
             label: "Up & Mercs Breeding",
             icon: PilotIcon,
             position: {
-                right: "110px",
-                top: "30px",
-                transform: "translateY(-50%)",
+                right: "15%",
+                top: "-15%",
             },
             imgWidth: "160px",
+            mImgWidth: "50px",
         },
     ];
     const [currentTab, setCurrentTab] = useState(0);
@@ -785,9 +650,16 @@ const BttRules = () => {
                     cursor: "pointer",
                 }}
             >
-                <Image src={GardenIcon}></Image>
                 <Image
-                    sx={{}}
+                    src={GardenIcon}
+                    sx={{
+                        width: isPc ? "80px" : "48px",
+                    }}
+                ></Image>
+                <Image
+                    sx={{
+                        width: isPc ? "48px" : "32px",
+                    }}
                     src={BackIcon}
                     onClick={() => navigate("/home?step=2")}
                 ></Image>
@@ -804,43 +676,8 @@ const BttRules = () => {
                     <AttributeTab
                         handleTabChange={handleTabChange}
                         tabList={tabList}
-                        value={currentTab}
                     ></AttributeTab>
                 )}
-
-                <Box
-                    sx={{
-                        display: "flex",
-                    }}
-                >
-                    <Box
-                        sx={{
-                            paddingTop: "4.5313vw",
-                            width: "52.0833vw",
-                        }}
-                    >
-                        {/* {currentTab === RuleTabEnum.OVERAll && (
-                            <OverallStructure></OverallStructure>
-                        )}
-
-                        {currentTab === RuleTabEnum.AVIATIONSYSTEM && (
-                            <AviationSystem></AviationSystem>
-                        )}
-
-                        {currentTab === RuleTabEnum.XPPILOT && (
-                            <XpPilot></XpPilot>
-                        )}
-                        {currentTab === RuleTabEnum.COSMETIC && (
-                            <CosmeticXp></CosmeticXp>
-                        )}
-                        {currentTab === RuleTabEnum.MILEAGEXP && (
-                            <MileageXp></MileageXp>
-                        )}
-                        {currentTab === RuleTabEnum.UPMERCSBREEDING && (
-                            <UpMercsBreeding></UpMercsBreeding>
-                        )} */}
-                    </Box>
-                </Box>
             </Box>
             {!showTab && (
                 <Box
@@ -854,27 +691,29 @@ const BttRules = () => {
                         backdropFilter: "blur(13.2px)",
                     }}
                 >
-                    {currentTab === RuleTabEnum.OVERAll && (
-                        <OverallStructure
-                            onBack={() => {
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            left: "32px",
+                            top: "32px",
+                        }}
+                    >
+                        <Back
+                            onClick={() => {
                                 setShowTab(true);
                             }}
-                        ></OverallStructure>
+                        ></Back>
+                    </Box>
+                    {currentTab === RuleTabEnum.OVERAll && (
+                        <OverallStructure></OverallStructure>
                     )}
                     {currentTab === RuleTabEnum.AVIATIONSYSTEM && (
-                        <AviationSystem
-                            onBack={() => {
-                                setShowTab(true);
-                            }}
-                        ></AviationSystem>
+                        <AviationSystem></AviationSystem>
                     )}{" "}
                     {currentTab === RuleTabEnum.MILEAGEXP && (
-                        <MileageXp
-                            onBack={() => {
-                                setShowTab(true);
-                            }}
-                        ></MileageXp>
+                        <MileageXp></MileageXp>
                     )}
+                    {currentTab === RuleTabEnum.UPMERCSBREEDING && <Up></Up>}
                 </Box>
             )}
         </Box>

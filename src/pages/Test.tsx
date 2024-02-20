@@ -688,7 +688,7 @@ const Test = () => {
 
     // 处理鼠标移动
     const handleMouseUp = (event: any) => {
-        mouseImg.current = MouseBImage;
+        mouseImg.current = MouseImage;
         setUpdate((prev) => prev + 1);
     };
 

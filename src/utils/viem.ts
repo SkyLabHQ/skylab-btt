@@ -3,7 +3,6 @@ import { CHAINS } from "@/skyConstants/chains";
 import { PUBLIC_NODES } from "@/skyConstants/nodes";
 import { createPublicClient, http, fallback, PublicClient } from "viem";
 
-console.log(ChainId, "ChainId");
 export const viemClients = CHAINS.reduce((prev, cur) => {
     return {
         ...prev,
