@@ -10,7 +10,7 @@ import {
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import useCountDown from "react-countdown-hook";
-import HourglassIcon from "../assets/hourglass.png";
+import HourglassIcon from "../assets/hourglass.gif";
 import HummerIcon from "../assets/hummer.png";
 import { ReactComponent as ETHIcon } from "../assets/ETH.svg";
 import Bg from "../assets/bg.png";
