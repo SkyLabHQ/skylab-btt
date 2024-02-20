@@ -307,7 +307,7 @@ const BackContent = () => {
                 <Image
                     src={HourglassIcon}
                     sx={{
-                        width: isPc ? "100px" : "50px",
+                        width: isPc ? "120px" : "50px",
                     }}
                 ></Image>
                 <Box>

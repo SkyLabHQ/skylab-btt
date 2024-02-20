@@ -1,11 +1,4 @@
-import {
-    Box,
-    Text,
-    Image,
-    Button,
-    Flex,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Text, Image, Flex, useMediaQuery } from "@chakra-ui/react";
 import React, { useState } from "react";
 import GardenIcon from "@/components/TacToe/assets/garden-icon.png";
 import BackIcon from "@/components/TacToe/assets/back-arrow-home.svg";
@@ -27,6 +20,7 @@ import PilotIcon from "./assets/pilot.png";
 import MileageIcon from "./assets/mileage-icon.png";
 import PlaneIcon from "./assets/plane.png";
 import Back from "../Back";
+import BackArrow from "./assets/back-arrow.svg";
 
 enum RuleTabEnum {
     OVERAll = 0,
@@ -38,6 +32,7 @@ enum RuleTabEnum {
 }
 
 const OverallStructure = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [activeIndex, setActiveIndex] = useState(0);
     const list = [
         {
@@ -144,44 +139,55 @@ const OverallStructure = () => {
                 maxWidth: "1200px",
                 width: "100%",
                 margin: "0 auto",
-                paddingTop: "80px",
+                padding: "80px 20px  20px",
             }}
         >
-            <Flex justify={"space-between"} align={"center"}>
-                {list.map((item, index) => {
-                    return (
-                        <Box
-                            key={index}
-                            sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                            onClick={() => {
-                                if (activeIndex === index) {
-                                    setActiveIndex(-1);
-                                } else {
-                                    setActiveIndex(index);
-                                }
-                            }}
-                        >
-                            <Text
+            {isPc ? (
+                <Flex justify={"space-between"} align={"center"}>
+                    {list.map((item, index) => {
+                        return (
+                            <Box
+                                key={index}
                                 sx={{
-                                    fontSize: "20px",
-                                    color:
-                                        activeIndex === index
-                                            ? "#FDDC2D"
-                                            : "#D9D9D9",
-                                    marginTop: "8px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                    if (activeIndex === index) {
+                                        setActiveIndex(-1);
+                                    } else {
+                                        setActiveIndex(index);
+                                    }
                                 }}
                             >
-                                {item.label}
-                            </Text>
-                        </Box>
-                    );
-                })}
-            </Flex>
+                                <Text
+                                    sx={{
+                                        fontSize: "20px",
+                                        color:
+                                            activeIndex === index
+                                                ? "#FDDC2D"
+                                                : "#D9D9D9",
+                                        marginTop: "8px",
+                                    }}
+                                >
+                                    {item.label}
+                                </Text>
+                            </Box>
+                        );
+                    })}
+                </Flex>
+            ) : (
+                <Text
+                    sx={{
+                        color: "#FDDC2D",
+                        textAlign: "center",
+                    }}
+                >
+                    {list[activeIndex].label}
+                </Text>
+            )}
 
             <Box
                 sx={{
@@ -193,10 +199,10 @@ const OverallStructure = () => {
             >
                 <Box
                     sx={{
-                        borderBottom: "1px solid #FDDC2D",
+                        borderBottom: activeIndex !== 0 && "1px solid #FDDC2D",
                         borderRadius: "0 0 15px 15px",
                         overflow: "hidden",
-                        padding: "40px 200px",
+                        padding: isPc ? "40px 200px" : "20px 20px",
                     }}
                 >
                     <Image
@@ -219,7 +225,7 @@ const OverallStructure = () => {
                             sx={{
                                 maxWidth: "80%",
                                 textAlign: "center",
-                                fontSize: "20px",
+                                fontSize: isPc ? "20px" : "12px",
                             }}
                         >
                             {list[activeIndex].desc}
@@ -227,11 +233,54 @@ const OverallStructure = () => {
                     </Flex>
                 )}
             </Box>
+            <Flex
+                sx={{
+                    justifyContent: "center",
+                    marginTop: "20px",
+                }}
+            >
+                {list.slice(1, 6).map((item, index) => {
+                    return (
+                        <Flex
+                            onClick={() => {
+                                if (activeIndex === index + 1) {
+                                    setActiveIndex(0);
+                                } else {
+                                    setActiveIndex(index + 1);
+                                }
+                            }}
+                            key={index}
+                            sx={{
+                                width: "14px",
+                                height: "14px",
+                                borderRadius: "50%",
+                                border:
+                                    activeIndex - 1 === index
+                                        ? "1px solid #fff"
+                                        : "1px solid transparent",
+                                margin: "0 10px",
+                            }}
+                            align={"center"}
+                            justify={"center"}
+                        >
+                            <Box
+                                sx={{
+                                    width: "8px",
+                                    height: "8px",
+                                    background: "#fff",
+                                    borderRadius: "50%",
+                                }}
+                            ></Box>
+                        </Flex>
+                    );
+                })}
+            </Flex>
         </Box>
     );
 };
 
 const AviationSystem = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [test, setTest] = useState(0);
     const handleSub = () => {
         if (test <= 0) return;
@@ -249,16 +298,18 @@ const AviationSystem = () => {
                 maxWidth: "1200px",
                 width: "100%",
                 margin: "0 auto",
-                paddingTop: "80px",
+                padding: "80px 20px 0",
             }}
         >
-            <Text
-                sx={{
-                    fontSize: "32px",
-                }}
-            >
-                Aviation Lvl-Pt System
-            </Text>
+            {isPc && (
+                <Text
+                    sx={{
+                        fontSize: "32px",
+                    }}
+                >
+                    Aviation Lvl-Pt System
+                </Text>
+            )}
             <Box
                 sx={{
                     overflow: "hidden",
@@ -273,18 +324,18 @@ const AviationSystem = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        border: "1px solid #FDDC2D",
+                        borderBottom: "1px solid #FDDC2D",
                         borderRadius: "0 0 15px 15px",
-                        padding: "0 60px",
+                        padding: isPc ? "0 60px" : " 20px 30px",
                     }}
                 >
                     <Box
                         sx={{
                             background: `url(${AllPlane}) no-repeat `,
-                            backgroundSize: "155.7vw 100%",
+                            backgroundSize: "cover",
                             backgroundPosition: `${test}% 0`,
                             width: "155.7vw",
-                            height: "23vw",
+                            height: "43vw",
                             transition: "all 1s",
                         }}
                     ></Box>
@@ -294,7 +345,7 @@ const AviationSystem = () => {
                             position: "absolute",
                             left: "0.5208vw",
                             cursor: "pointer",
-                            width: "1.25vw",
+                            width: isPc ? "24px" : "12px",
                         }}
                         onClick={handleSub}
                     ></Image>
@@ -304,44 +355,52 @@ const AviationSystem = () => {
                             position: "absolute",
                             right: "0.5208vw",
                             cursor: "pointer",
-                            width: "1.25vw",
+                            width: isPc ? "24px" : "12px",
                         }}
                         onClick={handleAdd}
                     ></Image>
                 </Flex>
-                <Text
+                <Box
                     sx={{
-                        fontSize: "20px",
-                        lineHeight: "100px",
-                        height: "100px",
-                        textAlign: "center",
+                        padding: "20px",
                     }}
                 >
-                    Point is earned through winning game.
-                </Text>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "20px" : "12px",
+
+                            textAlign: "center",
+                        }}
+                    >
+                        Point is earned through winning game.
+                    </Text>
+                </Box>
             </Box>
         </Box>
     );
 };
 
 const MileageXp = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 maxWidth: "1200px",
                 width: "100%",
                 margin: "0 auto",
-                paddingTop: "80px",
+                padding: "80px 20px 0",
             }}
         >
-            <Text
-                sx={{
-                    fontSize: "32px",
-                    fontWeight: "bold",
-                }}
-            >
-                Mileage
-            </Text>
+            {isPc && (
+                <Text
+                    sx={{
+                        fontSize: "32px",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Mileage
+                </Text>
+            )}
             <Box
                 sx={{
                     overflow: "hidden",
@@ -366,8 +425,8 @@ const MileageXp = () => {
                 <Flex
                     flexDir={"column"}
                     sx={{
-                        padding: "20px 0 20px 100px",
-                        fontSize: "20px",
+                        padding: isPc ? "20px 0 20px 100px" : "20px",
+                        fontSize: isPc ? "20px" : "12px",
                     }}
                 >
                     <Text>Pilot earn mileage through playing games.</Text>
@@ -398,23 +457,26 @@ const MileageXp = () => {
 };
 
 const Up = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 maxWidth: "1200px",
                 width: "100%",
                 margin: "0 auto",
-                paddingTop: "80px",
+                padding: "80px 20px 0",
             }}
         >
-            <Text
-                sx={{
-                    fontSize: "32px",
-                    fontWeight: "bold",
-                }}
-            >
-                UP & Mercs breeding{" "}
-            </Text>
+            {isPc && (
+                <Text
+                    sx={{
+                        fontSize: "32px",
+                        fontWeight: "bold",
+                    }}
+                >
+                    UP & Mercs breeding{" "}
+                </Text>
+            )}
             <Box
                 sx={{
                     overflow: "hidden",
@@ -439,12 +501,12 @@ const Up = () => {
                 <Flex
                     flexDir={"column"}
                     sx={{
-                        padding: "20px 0 20px 100px",
+                        padding: isPc ? "20px 0 20px 100px" : "20px",
                     }}
                 >
                     <Text
                         sx={{
-                            fontSize: "20px",
+                            fontSize: isPc ? "20px" : "12px",
                         }}
                     >
                         Mercs have governance rights, can arbitrage, and would
@@ -522,14 +584,16 @@ const AttributeTab = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box>
-            <Text
-                sx={{
-                    fontSize: isPc ? "1.25vw" : "16px",
-                    fontWeight: "bold",
-                }}
-            >
-                Detailed Rules
-            </Text>
+            {isPc && (
+                <Text
+                    sx={{
+                        fontSize: isPc ? "1.25vw" : "16px",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Detailed Rules
+                </Text>
+            )}
             <Flex
                 justify={"center"}
                 sx={{
@@ -641,34 +705,64 @@ const BttRules = () => {
                 height: "100%",
             }}
         >
-            <Box
-                sx={{
-                    display: "flex",
-                    position: "absolute",
-                    left: "0",
-                    top: "0",
-                    cursor: "pointer",
-                }}
-            >
-                <Image
-                    src={GardenIcon}
+            {isPc ? (
+                <Box
                     sx={{
-                        width: isPc ? "80px" : "48px",
+                        display: "flex",
+                        position: "absolute",
+                        left: "0",
+                        top: "0",
+                        cursor: "pointer",
                     }}
-                ></Image>
-                <Image
-                    sx={{
-                        width: isPc ? "48px" : "32px",
-                    }}
-                    src={BackIcon}
                     onClick={() => navigate("/home?step=2")}
-                ></Image>
-            </Box>
+                >
+                    <Image
+                        src={GardenIcon}
+                        sx={{
+                            width: isPc ? "80px" : "48px",
+                        }}
+                    ></Image>
+                    <Image
+                        sx={{
+                            width: isPc ? "48px" : "32px",
+                        }}
+                        src={BackIcon}
+                    ></Image>
+                </Box>
+            ) : (
+                <Box
+                    sx={{
+                        display: "flex",
+                        position: "absolute",
+                        left: "12px",
+                        top: "12px",
+                        cursor: "pointer",
+                    }}
+                    onClick={() => navigate("/home?step=2")}
+                >
+                    <Image src={BackArrow}></Image>
+                </Box>
+            )}
+
+            {!isPc && (
+                <Text
+                    sx={{
+                        position: "absolute",
+                        top: "12px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: "12px",
+                    }}
+                >
+                    Detailed Rules
+                </Text>
+            )}
+
             <Box
                 sx={{
                     width: "83.3333vw",
                     margin: "0 auto",
-                    borderTop: "1px solid #fff",
+                    borderTop: isPc && "1px solid #fff",
                     paddingTop: "1.8519vh",
                 }}
             >
@@ -689,21 +783,46 @@ const BttRules = () => {
                         height: "100%",
                         background: "rgba(0, 0, 0, 0.5)",
                         backdropFilter: "blur(13.2px)",
+                        overflow: "auto",
                     }}
                 >
                     <Box
                         sx={{
                             position: "absolute",
-                            left: "32px",
-                            top: "32px",
+                            left: isPc ? "32px" : "12px",
+                            top: isPc ? "32px" : "12px",
                         }}
                     >
-                        <Back
+                        <Image
+                            src={BackArrow}
                             onClick={() => {
                                 setShowTab(true);
                             }}
-                        ></Back>
+                        ></Image>
                     </Box>
+                    {!isPc && (
+                        <Text
+                            sx={{
+                                fontSize: "12px",
+                                color: "#fff",
+                                position: "absolute",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                top: "12px",
+                            }}
+                        >
+                            {currentTab === RuleTabEnum.OVERAll &&
+                                "Overall Structure"}
+
+                            {currentTab === RuleTabEnum.AVIATIONSYSTEM &&
+                                "Aviation Lvl-Pt System"}
+
+                            {currentTab === RuleTabEnum.MILEAGEXP && "Mileage"}
+
+                            {currentTab === RuleTabEnum.UPMERCSBREEDING &&
+                                "Up & Mercs Breeding"}
+                        </Text>
+                    )}
                     {currentTab === RuleTabEnum.OVERAll && (
                         <OverallStructure></OverallStructure>
                     )}
