@@ -29,6 +29,7 @@ import RulesIcon from "./assets/rules-icon.svg";
 import MGameLeaderboard from "./MGameLeaderboard";
 import DownArrow from "./assets/down-arrow.svg";
 import useSkyToast from "@/hooks/useSkyToast";
+import BMileageIcon from "./assets/b-mileage.png";
 
 const MileagePopover = ({ value }: { value: any }) => {
     const navigate = useNavigate();
@@ -42,21 +43,20 @@ const MileagePopover = ({ value }: { value: any }) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        width: "220px",
-                        padding: "0 2.6042vw 0 4.1667vw",
+                        width: "180px",
+                        padding: "0 20px 0 70px",
                         position: "relative",
                         cursor: "pointer",
-                        height: "25px",
+                        height: "45px",
                         borderRadius: "48px",
-                        background:
-                            "linear-gradient(90deg, rgba(177, 177, 177, 0.80) 18.37%, rgba(255, 255, 255, 0.47) 58.15%, rgba(255, 255, 255, 0.00) 101.72%)",
+                        background: "rgba(255, 255, 255, 0.6)",
                     }}
                 >
                     <Image
-                        src={MileageIcon}
+                        src={BMileageIcon}
                         sx={{
-                            width: "25px",
-                            height: "25px",
+                            width: "58px",
+                            height: "58px",
                             position: "absolute",
                             left: "-10px",
                             top: "50%",
@@ -67,8 +67,7 @@ const MileagePopover = ({ value }: { value: any }) => {
                         sx={{
                             color: "#4A4A4A",
                             fontSize: "12px",
-                            fontWeight: 500,
-                            marginLeft: "25px",
+                            fontWeight: "bold",
                         }}
                     >
                         Mileage
@@ -77,7 +76,7 @@ const MileagePopover = ({ value }: { value: any }) => {
                         sx={{
                             color: "#2B2B2B",
                             fontSize: "12px",
-                            fontWeight: 500,
+                            fontWeight: "bold",
                         }}
                     >
                         {value}
@@ -243,8 +242,8 @@ const Mileage = ({
                 height: "66px",
                 display: "flex",
                 borderRadius: "20px",
-                justifyContent: "space-between",
                 padding: "4px",
+                alignItems: "center",
             }}
         >
             <ConnectKitButton.Custom>
@@ -254,6 +253,7 @@ const Mileage = ({
                             sx={{
                                 width: "58px !important",
                                 height: "58px !important",
+                                marginRight: "16px",
                             }}
                             className="pilot-avatar"
                             img={activePilot.img}
