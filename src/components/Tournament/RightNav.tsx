@@ -22,6 +22,7 @@ import MileageArrow from "./assets/mileage-arrow.svg";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 import { useEffect } from "react";
+import BMileageIcon from "./assets/b-mileage.png";
 
 const Mileage = ({
     value,
@@ -38,18 +39,22 @@ const Mileage = ({
         <Box
             sx={{
                 position: "relative",
-                height: "5.2083vw",
-                background: "rgba(177, 177, 177, 0.50)",
+                height: "4.6875vw",
                 display: "flex",
                 borderRadius: "1.4583vw",
                 justifyContent: "space-between",
                 padding: "0.2083vw",
+                alignItems: "center",
             }}
         >
             <ConnectKitButton.Custom>
                 {({ show }) => {
                     return (
                         <MyPilot
+                            sx={{
+                                width: "4.6875vw !important",
+                                height: "4.6875vw !important",
+                            }}
                             className="pilot-avatar"
                             img={activePilot.img}
                             showSupport={activePilot.owner !== address}
@@ -75,19 +80,19 @@ const Mileage = ({
                             alignItems: "center",
                             justifyContent: "space-between",
                             width: "15.625vw",
-                            height: "2.0833vw",
-                            padding: "0 2.6042vw 0 4.1667vw",
+                            height: "4.1667vw",
+                            padding: "0 2.6042vw 0 4.7667vw",
                             position: "relative",
                             cursor: "pointer",
-                            background:
-                                "linear-gradient(90deg, rgba(177, 177, 177, 0.80) 18.37%, rgba(255, 255, 255, 0.47) 58.15%, rgba(255, 255, 255, 0.00) 101.72%)",
+                            background: "rgba(255, 255, 255, 0.6)",
+                            borderRadius: "2.5vw",
                         }}
                     >
                         <Image
-                            src={MileageIcon}
+                            src={BMileageIcon}
                             sx={{
-                                width: "2.0833vw",
-                                height: "2.0833vw",
+                                width: "4.6875vw",
+                                height: "4.6875vw",
                                 position: "absolute",
                                 left: "-0.5208vw",
                                 top: "50%",
@@ -97,8 +102,9 @@ const Mileage = ({
                         <Text
                             sx={{
                                 color: "#4A4A4A",
-                                fontSize: "0.8333vw",
-                                fontWeight: 500,
+                                fontSize: "0.9375vw",
+                                fontWeight: "bold",
+                                textAlign: "center",
                             }}
                         >
                             Mileage
@@ -106,7 +112,7 @@ const Mileage = ({
                         <Text
                             sx={{
                                 color: "#2B2B2B",
-                                fontSize: "0.8333vw",
+                                fontSize: "1.0417vw",
                                 fontWeight: 500,
                             }}
                         >

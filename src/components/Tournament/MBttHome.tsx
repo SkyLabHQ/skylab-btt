@@ -241,7 +241,6 @@ const Mileage = ({
             sx={{
                 position: "relative",
                 height: "66px",
-                background: "rgba(177, 177, 177, 0.50)",
                 display: "flex",
                 borderRadius: "20px",
                 justifyContent: "space-between",

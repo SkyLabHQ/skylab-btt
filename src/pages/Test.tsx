@@ -312,7 +312,7 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                 <Image
                     src={HourglassIcon}
                     sx={{
-                        width: isPc ? "120px" : "50px",
+                        width: isPc ? "130px" : "50px",
                     }}
                 ></Image>
                 <Box>
@@ -324,6 +324,7 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                             fontSize: isPc ? "100px" : "44px",
                             textAlign: "center",
                             letterSpacing: !isPc && "0.1em",
+                            marginTop: isPc && "-10px",
                         }}
                         animate={animationObj}
                         transition={{
