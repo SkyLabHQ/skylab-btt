@@ -3,6 +3,7 @@ import { ConnectKitButton } from "connectkit";
 import { useEffect } from "react";
 import { SubmitButton } from "../Button/Index";
 import { useAccount } from "wagmi";
+import useSkyToast from "@/hooks/useSkyToast";
 
 interface ChildProps {
     onNextRound: (nextStep: number) => void;
@@ -10,6 +11,7 @@ interface ChildProps {
 
 const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const toast = useSkyToast();
     const { address } = useAccount();
 
     useEffect(() => {
@@ -43,7 +45,19 @@ const ConnectWalletRound = ({ onNextRound }: ChildProps) => {
                         return (
                             <SubmitButton
                                 width="100%"
-                                onClick={show}
+                                onClick={() => {
+                                    if (isPc) {
+                                        show();
+                                    } else {
+                                        if (window.ethereum) {
+                                            show();
+                                        } else {
+                                            toast(
+                                                "Please open this page in wallet browser",
+                                            );
+                                        }
+                                    }
+                                }}
                                 style={{
                                     width: isPc ? "25.2604vw" : "250px",
                                     height: isPc ? "3.8021vw" : "30px",

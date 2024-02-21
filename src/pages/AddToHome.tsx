@@ -2,7 +2,7 @@ import { Box, Image, Text, Flex } from "@chakra-ui/react";
 import PwaLogo from "../assets/pwa-logo.svg";
 import React from "react";
 
-const AddToHome = () => {
+const AddToHome = ({ onSkip }: { onSkip: () => void }) => {
     return (
         <Flex
             sx={{
@@ -11,8 +11,27 @@ const AddToHome = () => {
                 alignItems: "center",
                 padding: "140px 20px 0",
                 textAlign: "center",
+                position: "relative",
             }}
         >
+            <Flex
+                onClick={onSkip}
+                sx={{
+                    border: "1px solid rgba(242, 216, 97, 1)",
+                    position: "absolute",
+                    right: "20px",
+                    top: "20px",
+                    width: "77px",
+                    height: "35px",
+                    borderRadius: "12px",
+                    fontSize: "16px",
+                    color: " rgba(253, 220, 45, 1)",
+                }}
+                justify={"center"}
+                align={"center"}
+            >
+                Skip
+            </Flex>
             <Image
                 src={PwaLogo}
                 sx={{

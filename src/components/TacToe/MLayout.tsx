@@ -4,7 +4,6 @@ import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
 import { MMessage } from "@/components/PrivateRoom/Message";
-import BottomKeyBoard from "../BttComponents/ChatMessage";
 import { useGameContext } from "@/pages/TacToe";
 import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
@@ -107,7 +106,7 @@ const MLayout = ({
                 justify={"center"}
                 flexDir={"column"}
                 sx={{
-                    marginTop: "50px",
+                    marginTop: "36px",
                 }}
             >
                 <StatusProgress
@@ -127,7 +126,7 @@ const MLayout = ({
             </Flex>
             <Box
                 sx={{
-                    position: "absolute",
+                    position: "fixed",
                     bottom: "0",
                     left: "0",
                     width: "100%",
@@ -143,10 +142,10 @@ const MLayout = ({
                         {myGameInfo.gameState < GameState.Commited && (
                             <Box
                                 sx={{
-                                    width: "195px",
+                                    width: "160px",
                                     position: "absolute",
                                     left: "12px",
-                                    bottom: "12px",
+                                    bottom: "20px",
                                 }}
                             >
                                 <Timer
@@ -164,7 +163,7 @@ const MLayout = ({
                     <Flex
                         sx={{
                             position: "absolute",
-                            bottom: "12px",
+                            bottom: "16px",
                             right: 0,
                         }}
                         flexDir={"column"}
@@ -210,9 +209,14 @@ const MLayout = ({
                     </Flex>
                 </Box>
                 <BottomInputBox
+                    onSetMessage={onSetMessage}
+                    myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}
                     myGameState={myGameState}
                     loading={loading}
+                    onIuputAmount={(amount: number) => {
+                        onInputChange(amount);
+                    }}
                     onInputAmountClick={() => {
                         if (inputMode === "keyboard") {
                             keyBoardOnToggle();
@@ -229,45 +233,14 @@ const MLayout = ({
                     }}
                     onAddClick={() => {
                         if (
-                            Number(bidAmount) + 1 <
+                            Number(bidAmount) + 1 <=
                             Number(myGameInfo.balance)
                         ) {
                             onInputChange(Number(bidAmount) + 1);
                         }
                     }}
                     onConfirm={onConfirm}
-                    onMessageClick={() => {
-                        if (inputMode === "message") {
-                            keyBoardOnToggle();
-                        } else {
-                            setInputMode("message");
-                            if (!keyBoardIsOpen) {
-                                keyBoardOnToggle();
-                            }
-                        }
-                    }}
                 ></BottomInputBox>
-                <BottomKeyBoard
-                    open={keyBoardIsOpen}
-                    inputMode={inputMode}
-                    onSetMessage={onSetMessage}
-                    onNumberClick={(value: string) => {
-                        if (
-                            Number(value) + Number(bidAmount) >
-                            myGameInfo.balance
-                        ) {
-                            onInputChange(myGameInfo.balance);
-                            return;
-                        }
-                        onInputChange(Number(value) + Number(bidAmount));
-                    }}
-                    onDeleteClick={() => {
-                        const value = bidAmount.toString();
-                        const length = value.length;
-                        const newValue = value.slice(0, length - 1);
-                        onInputChange(newValue);
-                    }}
-                ></BottomKeyBoard>
             </Box>
         </Box>
     );

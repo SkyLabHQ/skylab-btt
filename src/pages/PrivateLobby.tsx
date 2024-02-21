@@ -12,7 +12,6 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import Loading from "@/components/Loading";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Back from "@/components/Back";
@@ -255,8 +254,9 @@ const PrivateLobby = () => {
             <Box
                 sx={{
                     background: "#303030",
-                    padding: "32px 12px 0",
-                    height: "100%",
+                    padding: "32px 12px 12px",
+                    minHeight: "100%",
+                    position: "relative",
                 }}
             >
                 {!init2 ? (

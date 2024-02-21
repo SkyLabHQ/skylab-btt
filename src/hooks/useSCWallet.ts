@@ -1,7 +1,4 @@
-import {
-    LightSmartContractAccount,
-    getDefaultLightAccountFactoryAddress,
-} from "@alchemy/aa-accounts";
+import { LightSmartContractAccount } from "@alchemy/aa-accounts";
 import {
     AlchemyProvider,
     withAlchemyGasFeeEstimator,
@@ -11,16 +8,26 @@ import {
     LocalAccountSigner,
     SmartAccountSigner,
     createPublicErc4337Client,
-    getDefaultEntryPointAddress,
     deepHexlify,
     PublicErc4337Client,
 } from "@alchemy/aa-core";
-import { baseGoerli } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { toHex } from "viem";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-const chain = baseGoerli;
+const chain = JSON.parse(JSON.stringify(baseSepolia));
+chain.rpcUrls = {
+    ...chain.rpcUrls,
+    alchemy: {
+        http: [
+            "https://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D",
+        ],
+        webSocket: [
+            "wss://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D",
+        ],
+    },
+};
 export const withAlchemyGasEstimator = (
     provider: AlchemyProvider,
 ): AlchemyProvider => {
@@ -59,7 +66,7 @@ async function resolveProperties<T>(object: Deferrable<T>): Promise<T> {
 }
 
 const rpcUrl =
-    "https://base-goerli.g.alchemy.com/v2/vDX2uQbv3DcZEeQxXEnymi3dqUwRvXQd";
+    "https://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D";
 
 export const useSCWallet = (privateKey: string) => {
     const [sCWSigner, setSCWSigner] = useState<AlchemyProvider>(null);
@@ -96,8 +103,8 @@ export const getSCWallet = async (privateKey: string) => {
         return new LightSmartContractAccount({
             chain,
             owner: owner,
-            entryPointAddress: getDefaultEntryPointAddress(chain),
-            factoryAddress: getDefaultLightAccountFactoryAddress(chain),
+            entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", //getDefaultEntryPointAddress(chain),
+            factoryAddress: "0x00004ec70002a32400f8ae005a26081065620d20", // getDefaultLightAccountFactoryAddress(chain),
             rpcClient: provider,
         });
     });

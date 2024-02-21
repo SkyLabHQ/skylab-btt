@@ -1,7 +1,6 @@
 import { Box, Text, Image } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAddNetworkToMetamask from "@/hooks/useAddNetworkToMetamask";
 import PlaneShadow from "./assets/plane-shadow.png";
 import InGame from "./assets/ingame.svg";
 import PlaneBg from "./assets/plane-bg.png";

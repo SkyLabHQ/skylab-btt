@@ -68,7 +68,6 @@ import ReactCanvasNest from "react-canvas-nest";
 import useCountDown from "react-countdown-hook";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import DotLoading from "@/components/Loading/DotLoading";
-import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import styled from "@emotion/styled";
 
 export interface PlaneInfo {

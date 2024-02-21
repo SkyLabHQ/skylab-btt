@@ -12,7 +12,7 @@ const BttRules = () => {
                 w="100vw"
                 h="100vh"
                 pos="relative"
-                backgroundImage={`url(${MercuryBg}), url(${BlueBg})`}
+                background={`url(${MercuryBg}), url(${BlueBg})`}
                 backgroundPosition="center center, 0 0"
                 backgroundSize={"cover, cover"}
                 backgroundRepeat={"no-repeat, no-repeat"}

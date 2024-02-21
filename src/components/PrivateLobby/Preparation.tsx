@@ -99,7 +99,7 @@ const Preparation = () => {
             sx={{
                 width: isPc && "71.1458vw",
                 margin: "0 auto",
-                paddingTop: "5.2083vw",
+                paddingTop: isPc ? "5.2083vw" : "16px",
                 height: "100%",
             }}
         >

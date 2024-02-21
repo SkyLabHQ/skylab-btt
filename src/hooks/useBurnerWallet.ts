@@ -35,7 +35,7 @@ const balanceInfo = {
         high: "0.2",
         need: "0.21",
     },
-    [ChainId.BASEGOERLI]: {
+    [ChainId.SEPOLIA]: {
         low: "0.018",
         high: "0.02",
         need: "0.021",

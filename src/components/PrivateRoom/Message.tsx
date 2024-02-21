@@ -7,6 +7,7 @@ import {
     MESSAGES,
     MessageStatus,
 } from "@/skyConstants/bttGameTypes";
+import Loading from "../Loading";
 
 export const Message = ({
     message = 0,
@@ -34,7 +35,7 @@ export const Message = ({
                     left: "-1.0417vw",
                 },
                 {
-                    borderRightColor: "#303030",
+                    borderRightColor: "#1B1B1B",
                     top: "0.5208vw",
                     left: "-0.9375vw",
                 },
@@ -47,7 +48,7 @@ export const Message = ({
                     right: "-1.0417vw",
                 },
                 {
-                    borderLeftColor: "#303030",
+                    borderLeftColor: "#1B1B1B",
                     top: "0.5208vw",
                     right: "-0.9375vw",
                 },
@@ -221,26 +222,26 @@ export const MMessage = ({
         if (status === "my") {
             return [
                 {
-                    borderLeftColor: "#fff",
-                    top: "3px",
+                    // borderRightColor: "#616161",
+                    top: "6px",
                     right: "-20px",
                 },
                 {
-                    borderLeftColor: "#303030",
-                    top: "3px",
+                    borderLeftColor: "#616161",
+                    top: "6px",
                     right: "-18px",
                 },
             ];
         } else {
             return [
                 {
-                    borderRightColor: "#fff",
-                    top: "3px",
+                    // borderRightColor: "#616161",
+                    top: "6px",
                     left: "-20px",
                 },
                 {
-                    borderRightColor: "#303030",
-                    top: "3px",
+                    borderRightColor: "#616161",
+                    top: "6px",
                     left: "-18px",
                 },
             ];
@@ -252,14 +253,24 @@ export const MMessage = ({
             messageLoading === MessageStatus.Sending ||
             emoteLoading === MessageStatus.Sending
         ) {
-            return "Sending";
+            return (
+                <Box
+                    sx={{
+                        width: "18px",
+                        height: "18px",
+                        position: "relative",
+                    }}
+                >
+                    <Loading size={18}></Loading>
+                </Box>
+            );
         }
 
         if (
             messageLoading === MessageStatus.Sent ||
             emoteLoading === MessageStatus.Sent
         ) {
-            return "Sent";
+            return <></>;
         }
 
         return "";
@@ -309,23 +320,22 @@ export const MMessage = ({
                     messageLoading == MessageStatus.Unknown
                         ? "none"
                         : "flex",
+                fontFamily: "Quantico",
             }}
             align={"center"}
         >
             {sendText && (
-                <Text
+                <Box
                     sx={{
-                        color: "#bcbbbe",
-                        fontSize: "12px",
-                        marginRight: "10px",
+                        marginRight: "4px",
                     }}
                 >
                     {sendText}
-                </Text>
+                </Box>
             )}
             <Box
                 sx={{
-                    border: "2px solid #fff",
+                    // border: "2px solid #fff",
                     height: "30px",
                     lineHeight: "30px",
                     borderRadius: "8px",
@@ -334,6 +344,7 @@ export const MMessage = ({
                     display: "flex",
                     alignItems: "center",
                     margin: status === "my" ? "0 10px 5px 0px" : "0 0 5px 10px",
+                    background: "#616161",
                 }}
             >
                 <Box

@@ -10,7 +10,6 @@ import DownIcon from "./assets/down-icon.svg";
 import Loading from "../Loading";
 import { aviationImg } from "@/utils/aviationImg";
 import { levelRanges } from "@/utils/level";
-import RequestNextButton from "../RequrestNextButton";
 import MyPilot from "../Tournament/MyPilot";
 import MileageIcon from "@/components/Tournament/assets/mileage-icon.svg";
 import PilotIcon from "@/components/Tournament/assets/pilot-icon.svg";
@@ -625,31 +624,6 @@ const SettlementPage = ({}) => {
                                     </Box>
                                 )}
                             </Box>
-                        )}
-                        {!win && myNewInfo.level == 0 && (
-                            <RequestNextButton
-                                sx={{
-                                    margin: "2.0833vw auto",
-                                    width: isPc
-                                        ? "26.0417vw !important"
-                                        : "240px !important",
-                                    height: isPc
-                                        ? "4.1146vw !important"
-                                        : "40px !important",
-                                    fontSize: isPc
-                                        ? "1.25vw !important"
-                                        : "12px !important",
-                                    lineHeight: isPc
-                                        ? "4.1146vw !important"
-                                        : "40px !important",
-                                }}
-                                onClick={() => {
-                                    window.open(
-                                        "https://docs.google.com/forms/d/1NUrQ8185o6lJlQzpgFlhGraHsnHbd7J4qJMN5HDcEiM/edit",
-                                        "_blank",
-                                    );
-                                }}
-                            ></RequestNextButton>
                         )}
 
                         <Box

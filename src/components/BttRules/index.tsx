@@ -1,25 +1,27 @@
-import { Box, Text, Image, Button } from "@chakra-ui/react";
+import { Box, Text, Image, Flex, useMediaQuery } from "@chakra-ui/react";
 import React, { useState } from "react";
 import GardenIcon from "@/components/TacToe/assets/garden-icon.png";
 import BackIcon from "@/components/TacToe/assets/back-arrow-home.svg";
 import { useNavigate } from "react-router-dom";
-import TriangleWhite from "./assets/triangle-white.svg";
-import TriangleYellow from "./assets/triangle-yellow.svg";
-import XpPilotsImg from "./assets/xp-pilots.png";
-import CosmeticImg from "./assets/cosmetic-xp.png";
 import MileageImg from "./assets/mileage.png";
-import Arrow from "./assets/arrow.svg";
-import Calculator from "./assets/calculator.svg";
-import StructureImg from "./assets/structure.png";
 import UpImg from "./assets/up.png";
 import AllPlane from "./assets/all-plane.png";
 import LeftArrow from "@/components/Tournament/assets/left-arrow.svg";
 import RightArrow from "@/components/Tournament/assets/right-arrow.svg";
 import StructAviation from "./assets/struct-aviation.png";
+import All from "./assets/all.png";
 import StructMileage from "./assets/struct-mileage.png";
 import StructUp from "./assets/struct-up.png";
 import StructCosmetic from "./assets/struct-cosmetic.png";
 import StructScore from "./assets/struct-score.png";
+import CircleBg from "./assets/circle-bg.png";
+import PlanetIcon from "./assets/planet.png";
+import PilotIcon from "./assets/pilot.png";
+import MileageIcon from "./assets/mileage-icon.png";
+import PlaneIcon from "./assets/plane.png";
+import Back from "../Back";
+import BackArrow from "./assets/back-arrow.svg";
+import { motion } from "framer-motion";
 
 enum RuleTabEnum {
     OVERAll = 0,
@@ -31,27 +33,100 @@ enum RuleTabEnum {
 }
 
 const OverallStructure = () => {
-    const [activeIndex, setActiveIndex] = useState(-1);
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [activeIndex, setActiveIndex] = useState(0);
     const list = [
+        {
+            label: "All",
+            img: All,
+            desc: "",
+        },
         {
             label: "Aviation Lvl-Pt",
             img: StructAviation,
-            desc: "Play games and win to earn points(Pt) for your aviation, accumulate Pt to upgrade the level of your aviation. Losing games will cost your Pt and your aviation is at risk to be downgraded.",
+            desc: (
+                <Box>
+                    Play games and win to{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        earn points(Pt)
+                    </span>{" "}
+                    for your aviation, accumulate Pt to{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        upgrade the level
+                    </span>{" "}
+                    of your aviation. Losing games will cost your Pt and your
+                    aviation is at risk to be downgraded.
+                </Box>
+            ),
         },
         {
             label: "Mileage",
             img: StructMileage,
-            desc: "Simply play games to earn mileage, no matter win or lose. Top players on mileage rank will be rewarded with Upgrade Point(UP) and cosmetics.",
+            desc: (
+                <Box>
+                    Simply play games to earn mileage, no matter win or lose.
+                    Top players on mileage rank will be rewarded with{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        Upgrade Point(UP)
+                    </span>{" "}
+                    and{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        cosmetics
+                    </span>
+                    .
+                </Box>
+            ),
         },
         {
             label: "UP&Merc",
             img: StructUp,
-            desc: "Upgrade Power(UP) could breed your Baby Mercs to Mercs. The Vault will buy back Mercs.",
+            desc: (
+                <Box>
+                    Upgrade Power(UP) could breed your{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        Baby Mercs to Mercs
+                    </span>
+                    . The Vault will buy back Mercs.
+                </Box>
+            ),
         },
         {
             label: "Cosmetic Score",
             img: StructCosmetic,
-            desc: "Estate Score is the sum of Cosmetic Score and Aviation Score. Project Mercury reward players with Sales Tax in proportion to Estate Score.",
+            desc: (
+                <Box>
+                    Estate Score is the sum of Cosmetic Score and Aviation
+                    Score. Project Mercury reward players with{" "}
+                    <span
+                        style={{
+                            color: "#FDDC2D",
+                        }}
+                    >
+                        Sales Tax
+                    </span>{" "}
+                    in proportion to Estate Score.
+                </Box>
+            ),
         },
         {
             label: "Estate Score",
@@ -60,89 +135,166 @@ const OverallStructure = () => {
         },
     ];
     return (
-        <Box sx={{}}>
-            <Image
-                src={activeIndex === -1 ? StructureImg : list[activeIndex].img}
-                sx={{}}
-            ></Image>
+        <Box
+            sx={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "0 auto",
+                padding: "80px 20px  20px",
+            }}
+        >
+            {isPc ? (
+                <Flex justify={"space-between"} align={"center"}>
+                    {list.map((item, index) => {
+                        return (
+                            <Box
+                                key={index}
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                    if (activeIndex === index) {
+                                        setActiveIndex(-1);
+                                    } else {
+                                        setActiveIndex(index);
+                                    }
+                                }}
+                            >
+                                <Text
+                                    sx={{
+                                        fontSize: "20px",
+                                        color:
+                                            activeIndex === index
+                                                ? "#FDDC2D"
+                                                : "#D9D9D9",
+                                        marginTop: "8px",
+                                    }}
+                                >
+                                    {item.label}
+                                </Text>
+                            </Box>
+                        );
+                    })}
+                </Flex>
+            ) : (
+                <Text
+                    sx={{
+                        color: "#FDDC2D",
+                        textAlign: "center",
+                    }}
+                >
+                    {list[activeIndex].label}
+                </Text>
+            )}
+
             <Box
                 sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                    marginTop: "20px",
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    overflow: "hidden",
+                    marginTop: "10px",
                 }}
             >
-                {list.map((item, index) => {
-                    return (
-                        <Box
-                            key={index}
+                <Box
+                    sx={{
+                        borderBottom: activeIndex !== 0 && "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        overflow: "hidden",
+                        padding: isPc ? "40px 200px" : "20px 20px",
+                    }}
+                >
+                    <motion.img
+                        key={activeIndex}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        initial={{
+                            opacity: 0,
+                        }}
+                        transition={{
+                            duration: 0.5,
+                        }}
+                        src={list[activeIndex].img}
+                        style={{
+                            width: "100%",
+                            margin: "0 auto",
+                            aspectRatio: "758/629",
+                        }}
+                    ></motion.img>
+                </Box>
+                {activeIndex >= 1 && (
+                    <Flex
+                        sx={{
+                            height: "100px",
+                        }}
+                        align={"center"}
+                        justify={"center"}
+                    >
+                        <Text
                             sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                            onClick={() => {
-                                if (activeIndex === index) {
-                                    setActiveIndex(-1);
-                                } else {
-                                    setActiveIndex(index);
-                                }
+                                maxWidth: "80%",
+                                textAlign: "center",
+                                fontSize: isPc ? "20px" : "12px",
                             }}
                         >
-                            <Box
+                            {list[activeIndex].desc}
+                        </Text>
+                    </Flex>
+                )}
+            </Box>
+            {!isPc && (
+                <Flex
+                    sx={{
+                        justifyContent: "center",
+                        marginTop: "20px",
+                    }}
+                >
+                    {list.slice(1, 6).map((item, index) => {
+                        return (
+                            <Flex
+                                onClick={() => {
+                                    if (activeIndex === index + 1) {
+                                        setActiveIndex(0);
+                                    } else {
+                                        setActiveIndex(index + 1);
+                                    }
+                                }}
+                                key={index}
                                 sx={{
-                                    width: "1.3021vw",
-                                    height: "1.3021vw",
+                                    width: "14px",
+                                    height: "14px",
+                                    borderRadius: "50%",
                                     border:
-                                        activeIndex === index
+                                        activeIndex - 1 === index
                                             ? "1px solid #fff"
                                             : "1px solid transparent",
-                                    borderRadius: "50%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
+                                    margin: "0 10px",
                                 }}
+                                align={"center"}
+                                justify={"center"}
                             >
                                 <Box
                                     sx={{
-                                        width: "0.6771vw",
-                                        height: "0.6771vw",
-                                        background: "#d9d9d9",
+                                        width: "8px",
+                                        height: "8px",
+                                        background: "#fff",
                                         borderRadius: "50%",
                                     }}
                                 ></Box>
-                            </Box>
-
-                            <Text
-                                sx={{
-                                    fontSize: "16px",
-                                    color: "#D9D9D9",
-                                    marginTop: "8px",
-                                }}
-                            >
-                                {item.label}
-                            </Text>
-                        </Box>
-                    );
-                })}
-            </Box>
-            {activeIndex >= 0 && (
-                <Text
-                    sx={{
-                        fontSize: "1.0417vw",
-                        marginTop: "0.5208vw",
-                    }}
-                >
-                    {list[activeIndex].desc}
-                </Text>
+                            </Flex>
+                        );
+                    })}
+                </Flex>
             )}
         </Box>
     );
 };
 
 const AviationSystem = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [test, setTest] = useState(0);
     const handleSub = () => {
         if (test <= 0) return;
@@ -155,329 +307,338 @@ const AviationSystem = () => {
     };
 
     return (
-        <Box>
-            <Box
-                sx={{
-                    height: "26.0417vw",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "0 3vw",
-                    overflow: "hidden",
-                    position: "relative",
-                    background:
-                        "radial-gradient(50% 50% at 50% 50%, rgba(142, 180, 189, 0.80) 0%, rgba(108, 174, 173, 0.80) 100%)",
-                }}
-            >
-                <Box
-                    sx={{
-                        background: `url(${AllPlane}) no-repeat `,
-                        backgroundSize: "104.1667vw 100%",
-                        backgroundPosition: `${test}% 0`,
-                        width: "104.1667vw",
-                        height: "15.3646vw",
-                        transition: "all 1s",
-                    }}
-                ></Box>
-                <Image
-                    src={LeftArrow}
-                    sx={{
-                        position: "absolute",
-                        left: "0.5208vw",
-                        cursor: "pointer",
-                        width: "1.25vw",
-                    }}
-                    onClick={handleSub}
-                ></Image>
-                <Image
-                    src={RightArrow}
-                    sx={{
-                        position: "absolute",
-                        right: "0.5208vw",
-                        cursor: "pointer",
-                        width: "1.25vw",
-                    }}
-                    onClick={handleAdd}
-                ></Image>
-            </Box>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                    marginTop: "2vw",
-                }}
-            >
-                Point is earned through winning game.
-            </Text>{" "}
-        </Box>
-    );
-};
-
-const XpPilot = () => {
-    return (
-        <Box sx={{}}>
-            <Image src={XpPilotsImg} sx={{}}></Image>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                    textIndent: "3.125vw",
-                }}
-            >
-                xp(experience point) = n% x aircraft holding point+ m% x
-                cosmetic point + l% x mileage Players with top xp will split
-                transaction fee for every [time interval], with the following
-                ratio:
-            </Text>
-            <Box
-                sx={{
-                    marginTop: "5.2083vw",
-                    "& table": { border: "1px solid #fff" },
-                    "& td": {
-                        border: "1px solid #fff",
-                        width: "11.0417vw",
-                        height: "3.4375vw",
-                        paddingLeft: "40px",
-                    },
-                    "& tr": {
-                        border: "1px solid #fff",
-                    },
-                }}
-            >
-                <table
-                    style={{
-                        borderCollapse: "collapse",
-                    }}
-                >
-                    <tr>
-                        <td>No.1</td>
-                        <td>第一行，第二列</td>
-                    </tr>
-                    <tr>
-                        <td>No.2</td>
-                        <td>第二行，第二列</td>
-                    </tr>
-                    <tr>
-                        <td>No.3</td>
-                        <td>第三行，第二列</td>
-                    </tr>
-                </table>
-            </Box>
-        </Box>
-    );
-};
-
-const CosmeticXp = () => {
-    return (
-        <Box sx={{}}>
-            <Image src={CosmeticImg} sx={{}}></Image>
-            <Box
-                sx={{
-                    width: "14.8958vw",
-                    height: "38px",
-                    borderRadius: "40px",
-                    display: "flex",
-                    position: "relative",
-                    alignItems: "center",
-                    paddingLeft: "45px",
-                    background:
-                        "linear-gradient(90deg, rgba(43, 43, 43, 0.50) -2.24%, rgba(255, 255, 255, 0.50) 112.59%)",
-                }}
-            >
-                <Image
-                    src={Calculator}
-                    sx={{
-                        position: "absolute",
-                        left: "0px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                    }}
-                ></Image>
+        <Box
+            sx={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "0 auto",
+                padding: "80px 20px 0",
+            }}
+        >
+            {isPc && (
                 <Text
                     sx={{
-                        marginRight: "0.2604vw",
-                        fontSize: "0.8333vw",
-                        fontWeight: "bold",
+                        fontSize: "32px",
                     }}
                 >
-                    Cosmertic Pt Calculator
+                    Aviation Lvl-Pt System
                 </Text>
-                <Image
-                    src={Arrow}
+            )}
+            <Box
+                sx={{
+                    overflow: "hidden",
+                    position: "relative",
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    marginTop: "10px",
+                }}
+            >
+                <Flex
                     sx={{
-                        width: "0.9375vw",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderBottom: "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        padding: isPc ? "0 60px" : " 20px 30px",
                     }}
-                ></Image>
+                >
+                    <Box
+                        sx={{
+                            background: `url(${AllPlane}) no-repeat `,
+                            backgroundSize: "cover",
+                            backgroundPosition: `${test}% 0`,
+                            width: "155.7vw",
+                            height: "43vw",
+                            transition: "all 1s",
+                        }}
+                    ></Box>
+                    <Image
+                        src={LeftArrow}
+                        sx={{
+                            position: "absolute",
+                            left: "0.5208vw",
+                            cursor: "pointer",
+                            width: isPc ? "24px" : "12px",
+                        }}
+                        onClick={handleSub}
+                    ></Image>
+                    <Image
+                        src={RightArrow}
+                        sx={{
+                            position: "absolute",
+                            right: "0.5208vw",
+                            cursor: "pointer",
+                            width: isPc ? "24px" : "12px",
+                        }}
+                        onClick={handleAdd}
+                    ></Image>
+                </Flex>
+                <Box
+                    sx={{
+                        padding: "20px",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "20px" : "12px",
+
+                            textAlign: "center",
+                        }}
+                    >
+                        Point is earned through winning game.
+                    </Text>
+                </Box>
             </Box>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                }}
-            >
-                Playing games could earn mileage xp.For each game:
-            </Text>{" "}
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                    lineHeight: "2.6042vw",
-                }}
-            >
-                Mileage xp gained = Level x point transferred
-            </Text>
         </Box>
     );
 };
 
 const MileageXp = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box sx={{}}>
-            <Image src={MileageImg} sx={{}}></Image>
-            <Text
+        <Box
+            sx={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "0 auto",
+                padding: "80px 20px 0",
+            }}
+        >
+            {isPc && (
+                <Text
+                    sx={{
+                        fontSize: "32px",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Mileage
+                </Text>
+            )}
+            <Box
                 sx={{
-                    fontSize: "1.0417vw",
-                    marginTop: "37px",
+                    overflow: "hidden",
+                    position: "relative",
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    marginTop: "10px",
                 }}
             >
-                Pilot earn mileage through playing games.
-            </Text>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                }}
-            >
-                For each game:{" "}
-            </Text>
-            <Text
-                sx={{
-                    fontSize: "1.0417vw",
-                }}
-            >
-                Mileage gained = Level of aviation x point transferred{" "}
-            </Text>
+                <Flex
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderBottom: "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        padding: "50px 60px",
+                    }}
+                >
+                    <Image src={MileageImg}></Image>
+                </Flex>
+                <Flex
+                    flexDir={"column"}
+                    sx={{
+                        padding: isPc ? "20px 0 20px 100px" : "20px",
+                        fontSize: isPc ? "20px" : "12px",
+                    }}
+                >
+                    <Text>Pilot earn mileage through playing games.</Text>
+
+                    <Text>For each game: </Text>
+                    <Text>
+                        Mileage gained =
+                        <span
+                            style={{
+                                color: "#FDDC2D",
+                            }}
+                        >
+                            Level of aviation
+                        </span>{" "}
+                        x{" "}
+                        <span
+                            style={{
+                                color: "#FDDC2D",
+                            }}
+                        >
+                            point transferred
+                        </span>{" "}
+                    </Text>
+                </Flex>
+            </Box>
         </Box>
     );
 };
 
-const UpMercsBreeding = () => {
+const Up = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box>
-            <Image src={UpImg} sx={{}}></Image>
-            <Text
+        <Box
+            sx={{
+                maxWidth: "1200px",
+                width: "100%",
+                margin: "0 auto",
+                padding: "80px 20px 0",
+            }}
+        >
+            {isPc && (
+                <Text
+                    sx={{
+                        fontSize: "32px",
+                        fontWeight: "bold",
+                    }}
+                >
+                    UP & Mercs breeding{" "}
+                </Text>
+            )}
+            <Box
                 sx={{
-                    fontSize: "1.0417vw",
-                    marginTop: "60px",
+                    overflow: "hidden",
+                    position: "relative",
+                    border: "1px solid #FDDC2D",
+                    borderRadius: "15px",
+                    marginTop: "10px",
                 }}
             >
-                Mercs have governance rights, can arbitrage, and would have a
-                buff to estate score{" "}
-            </Text>{" "}
+                <Flex
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderBottom: "1px solid #FDDC2D",
+                        borderRadius: "0 0 15px 15px",
+                        padding: "50px 60px",
+                    }}
+                >
+                    <Image src={UpImg}></Image>
+                </Flex>
+                <Flex
+                    flexDir={"column"}
+                    sx={{
+                        padding: isPc ? "20px 0 20px 100px" : "20px",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "20px" : "12px",
+                        }}
+                    >
+                        Mercs have governance rights, can arbitrage, and would
+                        have a buff to estate score{" "}
+                    </Text>
+                </Flex>
+            </Box>
         </Box>
     );
 };
 
 const NavItem = ({
-    active,
+    imgWidth,
     label,
     onClick,
+    img,
+    position,
 }: {
-    active: boolean;
+    imgWidth: string;
     label: string;
+    img: string;
     onClick: () => void;
+    position: any;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
-                width: "16.25vw",
                 cursor: "pointer",
+                position: "absolute",
+                ...position,
+                "&:hover": {
+                    img: {
+                        transform: "scale(1.2)",
+                        transition: "all 0.3s ease",
+                    },
+                },
             }}
             onClick={onClick}
         >
-            <Box
+            <Flex
                 sx={{
                     display: "flex",
                     alignItems: "center",
                 }}
+                flexDir={"column"}
             >
-                <Image
-                    src={active ? TriangleYellow : TriangleWhite}
-                    sx={{
-                        width: "0.8333vw",
-                        marginRight: "0.2083vw",
-                    }}
-                ></Image>
-
                 <Text
                     sx={{
-                        color: active ? "#f2d861" : "#fff",
-                        fontSize: "1.0417vw",
+                        color: "#fff",
+                        fontSize: isPc ? "32px" : "12px",
                     }}
                 >
                     {label}
                 </Text>
-            </Box>
-            {
-                <Box
+                <Image
+                    src={img}
                     sx={{
-                        width: "100%",
-                        height: "1px",
-                        background: active
-                            ? "linear-gradient(90deg, rgba(242, 216, 97, 0.00) 1.6%, #F2D861 24.15%, #F2D861 74.38%, rgba(242, 216, 97, 0.00) 100%)"
-                            : "transparent",
+                        width: imgWidth,
+                        marginTop: isPc ? "10px" : 0,
                     }}
-                ></Box>
-            }
+                ></Image>
+            </Flex>
         </Box>
     );
 };
 
 const AttributeTab = ({
-    value,
     tabList,
     handleTabChange,
 }: {
-    value: number;
     tabList: any;
     handleTabChange: (value: number) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box
-            sx={{
-                marginRight: "5.2083vw",
-            }}
-        >
-            <Text
+        <Box>
+            {isPc && (
+                <Text
+                    sx={{
+                        fontSize: isPc ? "1.25vw" : "16px",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Detailed Rules
+                </Text>
+            )}
+            <Flex
+                justify={"center"}
                 sx={{
-                    fontSize: "1.25vw",
-                    fontWeight: "bold",
+                    marginTop: isPc ? "120px" : "150px",
                 }}
             >
-                Detailed Rules
-            </Text>
-            <Box
-                sx={{
-                    marginTop: "4.4444vh",
-                    "& >div": {
-                        marginBottom: "1.3889vh",
-                    },
-                    "& >div:last-child": {
-                        marginBottom: "0",
-                    },
-                }}
-            >
-                {tabList.map((item: any) => {
-                    return (
-                        <NavItem
-                            onClick={() => {
-                                handleTabChange(item.value);
-                            }}
-                            key={item.value}
-                            active={item.value === value}
-                            label={item.label}
-                        ></NavItem>
-                    );
-                })}
-            </Box>
+                <Box
+                    sx={{
+                        width: isPc ? "1080px" : "330px",
+                        height: isPc ? "432px" : "132px",
+                        background: `url(${CircleBg}) no-repeat`,
+                        backgroundSize: "100% 100%",
+                        position: "relative",
+                    }}
+                >
+                    {tabList.map((item: any) => {
+                        return (
+                            <NavItem
+                                onClick={() => {
+                                    handleTabChange(item.value);
+                                }}
+                                key={item.value}
+                                label={item.label}
+                                img={item.icon}
+                                position={item.position}
+                                imgWidth={isPc ? item.imgWidth : item.mImgWidth}
+                            ></NavItem>
+                        );
+                    })}
+                </Box>
+            </Flex>
         </Box>
     );
 };
@@ -485,40 +646,68 @@ const AttributeTab = ({
 interface TabItem {
     value: RuleTabEnum;
     label: string;
+    icon: string;
+    position: any;
+    imgWidth: string;
+    mImgWidth: string;
 }
 
 const BttRules = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [showTab, setShowTab] = useState(true);
     const navigate = useNavigate();
     const tabList: TabItem[] = [
         {
             value: RuleTabEnum.OVERAll,
             label: "Overall Structure",
+            icon: PlanetIcon,
+            position: {
+                left: "12%",
+                bottom: "-10%",
+            },
+            imgWidth: "160px",
+            mImgWidth: "80px",
         },
         {
             value: RuleTabEnum.AVIATIONSYSTEM,
             label: "Aviation Lvl-Pt System",
+            icon: PlaneIcon,
+            position: {
+                left: "-4%",
+                top: "-10%",
+            },
+            imgWidth: "160px",
+            mImgWidth: "40px",
         },
-        // {
-        //     value: RuleTabEnum.XPPILOT,
-        //     label: "Xp & Pilots",
-        // },
-        // {
-        //     value: RuleTabEnum.COSMETIC,
-        //     label: "Cosmetic Xp",
-        // },
+
         {
             value: RuleTabEnum.MILEAGEXP,
             label: "Mileage",
+            icon: MileageIcon,
+            position: {
+                right: "4%",
+                bottom: "16%",
+            },
+            imgWidth: "100px",
+            mImgWidth: "40px",
         },
         {
             value: RuleTabEnum.UPMERCSBREEDING,
             label: "Up & Mercs Breeding",
+            icon: PilotIcon,
+            position: {
+                right: "15%",
+                top: "-15%",
+            },
+            imgWidth: "160px",
+            mImgWidth: "50px",
         },
     ];
     const [currentTab, setCurrentTab] = useState(0);
 
     const handleTabChange = (value: number) => {
         setCurrentTab(value);
+        setShowTab(false);
     };
 
     return (
@@ -526,84 +715,140 @@ const BttRules = () => {
             sx={{
                 position: "relative",
                 paddingTop: "10vh",
-                fontFamily: "Orbitron",
+                fontFamily: "Quantico",
+                height: "100%",
             }}
         >
-            <Box
-                sx={{
-                    display: "flex",
-                    position: "absolute",
-                    left: "0",
-                    top: "0",
-                    cursor: "pointer",
-                }}
-            >
-                <Image src={GardenIcon}></Image>
-                <Image
-                    sx={{}}
-                    src={BackIcon}
+            {isPc ? (
+                <Box
+                    sx={{
+                        display: "flex",
+                        position: "absolute",
+                        left: "0",
+                        top: "0",
+                        cursor: "pointer",
+                    }}
                     onClick={() => navigate("/home?step=2")}
-                ></Image>
-            </Box>
+                >
+                    <Image
+                        src={GardenIcon}
+                        sx={{
+                            width: isPc ? "80px" : "48px",
+                        }}
+                    ></Image>
+                    <Image
+                        sx={{
+                            width: isPc ? "48px" : "32px",
+                        }}
+                        src={BackIcon}
+                    ></Image>
+                </Box>
+            ) : (
+                <Box
+                    sx={{
+                        display: "flex",
+                        position: "absolute",
+                        left: "12px",
+                        top: "12px",
+                        cursor: "pointer",
+                    }}
+                    onClick={() => navigate("/home?step=2")}
+                >
+                    <Image src={BackArrow}></Image>
+                </Box>
+            )}
+
+            {!isPc && (
+                <Text
+                    sx={{
+                        position: "absolute",
+                        top: "12px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: "12px",
+                    }}
+                >
+                    Detailed Rules
+                </Text>
+            )}
+
             <Box
                 sx={{
                     width: "83.3333vw",
                     margin: "0 auto",
-                    borderTop: "1px solid #fff",
+                    borderTop: isPc && "1px solid #fff",
                     paddingTop: "1.8519vh",
                 }}
             >
-                <Box
-                    sx={{
-                        display: "flex",
-                    }}
-                >
+                {showTab && (
                     <AttributeTab
                         handleTabChange={handleTabChange}
                         tabList={tabList}
-                        value={currentTab}
                     ></AttributeTab>
+                )}
+            </Box>
+            {!showTab && (
+                <Box
+                    sx={{
+                        width: "100%",
+                        position: "absolute",
+                        left: "0",
+                        top: "0",
+                        height: "100%",
+                        background: "rgba(0, 0, 0, 0.5)",
+                        backdropFilter: "blur(13.2px)",
+                        overflow: "auto",
+                    }}
+                >
                     <Box
                         sx={{
-                            paddingTop: "4.5313vw",
-                            width: "52.0833vw",
+                            position: "absolute",
+                            left: isPc ? "32px" : "12px",
+                            top: isPc ? "32px" : "12px",
                         }}
                     >
+                        <Image
+                            src={BackArrow}
+                            onClick={() => {
+                                setShowTab(true);
+                            }}
+                        ></Image>
+                    </Box>
+                    {!isPc && (
                         <Text
                             sx={{
-                                fontSize: "24px",
-                                fontWeight: "bold",
+                                fontSize: "12px",
+                                color: "#fff",
+                                position: "absolute",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                top: "12px",
                             }}
                         >
-                            {
-                                tabList.find((item) => {
-                                    return item.value === currentTab;
-                                }).label
-                            }
+                            {currentTab === RuleTabEnum.OVERAll &&
+                                "Overall Structure"}
+
+                            {currentTab === RuleTabEnum.AVIATIONSYSTEM &&
+                                "Aviation Lvl-Pt System"}
+
+                            {currentTab === RuleTabEnum.MILEAGEXP && "Mileage"}
+
+                            {currentTab === RuleTabEnum.UPMERCSBREEDING &&
+                                "Up & Mercs Breeding"}
                         </Text>
-                        {currentTab === RuleTabEnum.OVERAll && (
-                            <OverallStructure></OverallStructure>
-                        )}
-
-                        {currentTab === RuleTabEnum.AVIATIONSYSTEM && (
-                            <AviationSystem></AviationSystem>
-                        )}
-
-                        {currentTab === RuleTabEnum.XPPILOT && (
-                            <XpPilot></XpPilot>
-                        )}
-                        {currentTab === RuleTabEnum.COSMETIC && (
-                            <CosmeticXp></CosmeticXp>
-                        )}
-                        {currentTab === RuleTabEnum.MILEAGEXP && (
-                            <MileageXp></MileageXp>
-                        )}
-                        {currentTab === RuleTabEnum.UPMERCSBREEDING && (
-                            <UpMercsBreeding></UpMercsBreeding>
-                        )}
-                    </Box>
+                    )}
+                    {currentTab === RuleTabEnum.OVERAll && (
+                        <OverallStructure></OverallStructure>
+                    )}
+                    {currentTab === RuleTabEnum.AVIATIONSYSTEM && (
+                        <AviationSystem></AviationSystem>
+                    )}{" "}
+                    {currentTab === RuleTabEnum.MILEAGEXP && (
+                        <MileageXp></MileageXp>
+                    )}
+                    {currentTab === RuleTabEnum.UPMERCSBREEDING && <Up></Up>}
                 </Box>
-            </Box>
+            )}
         </Box>
     );
 };

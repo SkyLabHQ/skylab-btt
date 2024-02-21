@@ -18,6 +18,7 @@ import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
 import QuitModal from "../BttComponents/QuitModal";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
+import { motion } from "framer-motion";
 
 const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
     const isMy = status === "my";
@@ -124,12 +125,33 @@ const Match = () => {
                     width: isPc ? "31.25vw" : "350px",
                 }}
             >
+                {(!myInfo.address || !opInfo.address) && (
+                    <motion.div
+                        style={{
+                            fontSize: isPc ? "30px" : "20px",
+                            textAlign: "center",
+                            marginBottom: "20px",
+                            fontWeight: "bold",
+                        }}
+                        animate={{
+                            opacity: [0, 1, 0],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                        }}
+                    >
+                        Matching
+                    </motion.div>
+                )}
+
                 <Flex
                     align={"center"}
                     justify={"space-around"}
                     w={"100%"}
                     sx={{
-                        height: isPc ? "10vw" : "120px",
+                        height: isPc ? "250px" : "120px",
+                        marginTop: "20px",
                     }}
                 >
                     <UserInfo detail={myInfo} status="my"></UserInfo>

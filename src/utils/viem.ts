@@ -1,7 +1,7 @@
+import { ChainId } from "./web3Utils";
 import { CHAINS } from "@/skyConstants/chains";
 import { PUBLIC_NODES } from "@/skyConstants/nodes";
 import { createPublicClient, http, fallback, PublicClient } from "viem";
-import { ChainId } from "./web3Utils";
 
 export const viemClients = CHAINS.reduce((prev, cur) => {
     return {

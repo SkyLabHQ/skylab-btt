@@ -34,7 +34,7 @@ import { useChainId } from "wagmi";
 setMulticallAddress(ChainId.BASE, "0xcA11bde05977b3631167028862bE2a173976CA11");
 
 setMulticallAddress(
-    ChainId.BASEGOERLI,
+    ChainId.SEPOLIA,
     "0xcA11bde05977b3631167028862bE2a173976CA11",
 );
 

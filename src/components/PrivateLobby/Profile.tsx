@@ -348,20 +348,22 @@ const Profile = ({
                 <LobbyInfo></LobbyInfo>
             </Flex>
             <Flex justify={"center"}>
-                <Button
+                <Flex
                     onClick={handleSetUserInfo}
-                    variant={"outline"}
                     sx={{
-                        border: "0.1563vw solid #FFF",
+                        cursor: "pointer",
+                        border: "3px solid #FFF",
                         width: isPc ? "14.0625vw" : "160px",
                         height: isPc ? "3.3854vw" : "40px",
                         fontSize: isPc ? "1.25vw" : "20px",
                         borderRadius: isPc ? "0.9375vw" : "8px",
                         marginTop: "3.9583vw",
                     }}
+                    justify={"center"}
+                    align={"center"}
                 >
                     Confirm
-                </Button>
+                </Flex>
             </Flex>
         </Flex>
     );

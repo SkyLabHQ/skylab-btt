@@ -43,6 +43,49 @@ export const MyPilotXp = ({ value, ...rest }: { value: number } & BoxProps) => {
     );
 };
 
+const MMyPilotXpStyle = styled(Box)`
+    background: rgba(255, 255, 255, 0.5);
+    width: 100px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    padding-left: 24px;
+    font-size: 1.0417vw;
+    color: #000;
+    font-weight: 500;
+    border-radius: 2.5vw;
+    position: relative;
+    margin: 0.5208vw 0;
+`;
+
+export const MMyPilotXp = ({
+    value,
+    ...rest
+}: { value: number } & BoxProps) => {
+    return (
+        <MMyPilotXpStyle {...rest}>
+            <Image
+                src={MileageIcon}
+                sx={{
+                    position: "absolute",
+                    left: "0%",
+                    top: "50%",
+                    width: "25px",
+                    height: "25px",
+                    transform: "translate(-20%, -50%)",
+                }}
+            ></Image>
+            <Text
+                sx={{
+                    fontSize: "12px",
+                }}
+            >
+                {value}
+            </Text>
+        </MMyPilotXpStyle>
+    );
+};
+
 interface PilotXpStyleProps {
     active: string;
 }

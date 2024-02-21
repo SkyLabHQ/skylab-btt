@@ -40,16 +40,16 @@ const BabyMerc = ({
     };
 
     const handleMint = async () => {
-        try {
-            setLoading(true);
-            const res = await babyMercsContract.publicMint(address, amount, {
-                value: ethers.utils.parseEther(String(amount * Price[chainId])),
-            });
-            await res.wait();
-            setLoading(false);
-        } catch (e) {
-            setLoading(false);
-        }
+        // try {
+        //     setLoading(true);
+        //     const res = await babyMercsContract.publicMint(address, amount, {
+        //         value: ethers.utils.parseEther(String(amount * Price[chainId])),
+        //     });
+        //     await res.wait();
+        //     setLoading(false);
+        // } catch (e) {
+        //     setLoading(false);
+        // }
     };
 
     return (

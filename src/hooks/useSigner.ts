@@ -6,7 +6,6 @@ import { useChainId } from "wagmi";
 import { privateKeyToAccount } from "viem/accounts";
 import { createWalletClient, http } from "viem";
 import { CHAINS } from "@/skyConstants/chains";
-import { baseGoerli } from "viem/chains";
 
 export const useTacToeSigner = (
     tokenId: number,

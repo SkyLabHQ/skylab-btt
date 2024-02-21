@@ -1,7 +1,6 @@
-import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import BttIcon from "@/assets/btt-icon.png";
+import { useLocation } from "react-router-dom";
 import qs from "query-string";
 
 import {
@@ -37,6 +36,8 @@ import { MMessage } from "../PrivateRoom/Message";
 import MBalance from "../BttComponents/MBalance";
 import StartJourney from "../BttComponents/StartJourney";
 import StatusProgress from "../BttComponents/StatusProgress";
+import { motion } from "framer-motion";
+import LoadingPage from "../PrivateLobby/LoadingPage";
 
 interface Info {
     burner?: string;
@@ -69,7 +70,7 @@ const MBttLiveGame = ({
                 height: "100%",
                 justifyContent: "center",
                 background: "#303030",
-                padding: "0px 18px 0",
+                padding: "0px 16px 0",
             }}
         >
             <Box
@@ -80,20 +81,27 @@ const MBttLiveGame = ({
                     width: "100%",
                     border: "2px solid #fff",
                     boxShadow: "5px 4px 8px 0px rgba(255, 255, 255, 0.50)",
-                    padding: "25px 0 100px",
+                    padding: "16px 0 80px",
                     position: "relative",
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: "10px",
                 }}
             >
-                <Box
-                    sx={{
+                <motion.div
+                    style={{
                         display: "flex",
                         alignItems: "center",
                         position: "absolute",
                         right: "20px",
                         top: "20px",
+                    }}
+                    animate={{
+                        opacity: [0, 1, 0],
+                    }}
+                    transition={{
+                        duration: 2,
+                        repeat: Infinity,
                     }}
                 >
                     <Box
@@ -125,7 +133,7 @@ const MBttLiveGame = ({
                     >
                         Live
                     </Text>
-                </Box>
+                </motion.div>
                 <Flex
                     sx={{
                         alignItems: "flex-start",
@@ -157,14 +165,14 @@ const MBttLiveGame = ({
                 <Box
                     sx={{
                         position: "absolute",
-                        bottom: "15px",
+                        bottom: "0px",
                         left: "0",
                         width: "100%",
                     }}
                 >
                     <Box
                         sx={{
-                            width: "180px",
+                            width: "160px",
                             position: "absolute",
                             left: "12px",
                             bottom: "12px",
@@ -216,16 +224,35 @@ const MBttLiveGame = ({
                         ></MBalance>
                     </Flex>
                 </Box>
-                <Box
+                <Flex
+                    align={"center"}
+                    justify={"center"}
+                    flexDir={"column"}
                     sx={{
-                        display: "flex",
-                        flex: 1,
-                        justifyContent: "center",
-                        marginTop: "20px",
+                        marginTop: "36px",
                     }}
                 >
-                    <Board list={list}></Board>
-                </Box>
+                    <Box
+                        sx={{
+                            height: "44px",
+                        }}
+                    >
+                        {!gameOver && (
+                            <StatusProgress
+                                myGameState={myGameInfo.gameState}
+                                opGameState={opGameInfo.gameState}
+                            ></StatusProgress>
+                        )}
+                    </Box>
+
+                    <Box
+                        sx={{
+                            marginTop: "12px",
+                        }}
+                    >
+                        <Board list={list}></Board>
+                    </Box>
+                </Flex>
             </Box>
             <Box
                 sx={{
@@ -593,19 +620,22 @@ const BttLiveGamePage = () => {
         <Box
             sx={{
                 height: "100%",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
             }}
         >
             {!init ? (
-                <Loading></Loading>
+                <LoadingPage></LoadingPage>
             ) : isPc ? (
                 <Box
                     sx={{
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        height: "100vh",
+                        height: "100%",
                         justifyContent: "center",
-                        background: "#303030",
                         padding: "0px 4.1667vw 0",
                     }}
                 >
@@ -631,13 +661,20 @@ const BttLiveGamePage = () => {
                                 position: "relative",
                             }}
                         >
-                            <Box
-                                sx={{
+                            <motion.div
+                                style={{
                                     display: "flex",
                                     alignItems: "center",
                                     position: "absolute",
                                     left: "0",
                                     top: 0,
+                                }}
+                                animate={{
+                                    opacity: [0, 1, 0],
+                                }}
+                                transition={{
+                                    duration: 4,
+                                    repeat: Infinity,
                                 }}
                             >
                                 <Box
@@ -669,7 +706,7 @@ const BttLiveGamePage = () => {
                                 >
                                     Live
                                 </Text>
-                            </Box>
+                            </motion.div>
                             <Flex flexDir={"column"} align={"center"}>
                                 <Box
                                     sx={{

@@ -15,7 +15,6 @@ import {
     useMultiProvider,
 } from "@/hooks/useMultiContract";
 import { getMetadataImg } from "@/utils/ipfsImg";
-import Loading from "../Loading";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import AllPilotList, { PilotBaseInfo } from "@/skyConstants/pilots";
 import OpenSeaLink from "./assets/opensea-link.svg";

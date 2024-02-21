@@ -27,6 +27,7 @@ import {
 import PlayBackButton from "./PlayBackButton";
 import ShareButtons from "../PrivateRoom/ShareButton";
 import StartJourney from "../BttComponents/StartJourney";
+import LoadingPage from "../PrivateLobby/LoadingPage";
 
 const BttPlayBackPage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -444,10 +445,13 @@ ${des}`;
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                minHeight: "100vh",
                 justifyContent: "center",
-                background: "#303030",
                 padding: "0px 4.1667vw 0",
+                height: "100%",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
             }}
         >
             <Image
@@ -461,7 +465,7 @@ ${des}`;
             ></Image>
 
             {loading ? (
-                <Loading></Loading>
+                <LoadingPage></LoadingPage>
             ) : (
                 <>
                     <BttPlayBackContent

@@ -49,8 +49,6 @@ import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
 import StatusProgress from "../BttComponents/StatusProgress";
 
-const myNow = getNowSecondsTimestamp() + 80000; //test
-
 interface TacToeProps {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
     onChangeNewInfo: (info: MyNewInfo) => void;
@@ -88,6 +86,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [bidAmount, setBidAmount] = useState<number>(0);
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
+    const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
     const [messageLoading, setMessageLoading] = useState<MessageStatus>(
         MessageStatus.Unknown,
     );
@@ -376,6 +375,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     const handleRevealedBid = async () => {
         try {
             const localSalt = getGridCommited();
+
             if (!localSalt) return;
             const { salt, amount } = localSalt;
             setRevealing(true);
@@ -524,12 +524,18 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     };
 
     const handleQuit = async () => {
+        if (surrenderLoading) {
+            return;
+        }
         try {
+            setSurrenderLoading(true);
             await tacToeGameRetryWrite("surrender", [], {
                 gasLimit: 800000,
                 usePaymaster: istest,
             });
+            setSurrenderLoading(false);
         } catch (error) {
+            setSurrenderLoading(false);
             console.log(error);
             toast(handleError(error, istest));
         }
@@ -620,7 +626,13 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             return;
         }
         handleCommitWorker();
-    }, [myGameInfo.timeout, myGameInfo.gameState]);
+    }, [
+        myGameInfo.gameState,
+        myGameInfo.timeout,
+        myGameInfo.gameState,
+        currentGrid,
+        loading,
+    ]);
 
     useEffect(() => {
         if (
