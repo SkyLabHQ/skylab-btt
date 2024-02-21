@@ -15,6 +15,7 @@ import PrivatePlayBack from "./pages/PrivatePlayBack";
 import PrivateLiveGame from "./pages/PrivateLiveGame";
 import AddToHome from "./pages/AddToHome";
 import Test from "./pages/Test";
+import Tower from "./pages/Tower";
 
 export const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -47,6 +48,7 @@ const AppRoutes = (): ReactElement => {
                     path="/btt/lobbyLive"
                     element={<PrivateLiveGame />}
                 ></Route>
+                <Route path="/tower" element={<Tower />}></Route>
                 <Route path="/test" element={<Test />}></Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
