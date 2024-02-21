@@ -11,7 +11,7 @@ import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import useCountDown from "react-countdown-hook";
 import HourglassIcon from "../assets/hourglass.gif";
-import HummerIcon from "../assets/hummer.png";
+import HummerIcon from "../assets/hummer.gif";
 import { ReactComponent as ETHIcon } from "../assets/ETH.svg";
 import Bg from "../assets/bg.png";
 import BHummer from "../assets/b-hummer.png";
@@ -211,7 +211,7 @@ const FirstContent = () => {
     );
 };
 
-const BackContent = () => {
+const BackContent = ({ rotateY }: { rotateY?: number }) => {
     const [audio1] = useState(new Audio(Numbermp3));
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
@@ -271,8 +271,13 @@ const BackContent = () => {
     };
 
     useEffect(() => {
-        handleInit();
-    }, []);
+        if (init) {
+            return;
+        }
+        if (rotateY === 0) {
+            handleInit();
+        }
+    }, [rotateY, init]);
     return (
         <Box
             sx={{
@@ -753,6 +758,7 @@ const Test = () => {
                     aspectRatio: "1/1",
                 }}
                 onMouseEnter={() => {
+                    console.log("进来", hoverInit);
                     if (hoverInit) {
                         if (rotateY === 180) {
                             return;
@@ -761,10 +767,12 @@ const Test = () => {
                         setRotateY(180);
                         return;
                     }
+                    audio1.play();
+                    setRotateY(180);
+
                     setTimeout(() => {
-                        mouseImg.current = MouseAImage;
                         setHoverInit(true);
-                    }, 600);
+                    }, 0);
                 }}
                 onMouseLeave={() => {
                     if (hoverInit) {
@@ -848,7 +856,7 @@ const Test = () => {
                         }}
                     >
                         {hoverInit ? (
-                            <BackContent></BackContent>
+                            <BackContent rotateY={rotateY}></BackContent>
                         ) : (
                             <FirstContent></FirstContent>
                         )}
