@@ -21,6 +21,7 @@ import MileageIcon from "./assets/mileage-icon.png";
 import PlaneIcon from "./assets/plane.png";
 import Back from "../Back";
 import BackArrow from "./assets/back-arrow.svg";
+import { motion } from "framer-motion";
 
 enum RuleTabEnum {
     OVERAll = 0,
@@ -205,13 +206,24 @@ const OverallStructure = () => {
                         padding: isPc ? "40px 200px" : "20px 20px",
                     }}
                 >
-                    <Image
+                    <motion.img
+                        key={activeIndex}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        initial={{
+                            opacity: 0,
+                        }}
+                        transition={{
+                            duration: 0.5,
+                        }}
                         src={list[activeIndex].img}
-                        sx={{
+                        style={{
                             width: "100%",
                             margin: "0 auto",
+                            aspectRatio: "758/629",
                         }}
-                    ></Image>
+                    ></motion.img>
                 </Box>
                 {activeIndex >= 1 && (
                     <Flex
@@ -233,48 +245,50 @@ const OverallStructure = () => {
                     </Flex>
                 )}
             </Box>
-            <Flex
-                sx={{
-                    justifyContent: "center",
-                    marginTop: "20px",
-                }}
-            >
-                {list.slice(1, 6).map((item, index) => {
-                    return (
-                        <Flex
-                            onClick={() => {
-                                if (activeIndex === index + 1) {
-                                    setActiveIndex(0);
-                                } else {
-                                    setActiveIndex(index + 1);
-                                }
-                            }}
-                            key={index}
-                            sx={{
-                                width: "14px",
-                                height: "14px",
-                                borderRadius: "50%",
-                                border:
-                                    activeIndex - 1 === index
-                                        ? "1px solid #fff"
-                                        : "1px solid transparent",
-                                margin: "0 10px",
-                            }}
-                            align={"center"}
-                            justify={"center"}
-                        >
-                            <Box
-                                sx={{
-                                    width: "8px",
-                                    height: "8px",
-                                    background: "#fff",
-                                    borderRadius: "50%",
+            {!isPc && (
+                <Flex
+                    sx={{
+                        justifyContent: "center",
+                        marginTop: "20px",
+                    }}
+                >
+                    {list.slice(1, 6).map((item, index) => {
+                        return (
+                            <Flex
+                                onClick={() => {
+                                    if (activeIndex === index + 1) {
+                                        setActiveIndex(0);
+                                    } else {
+                                        setActiveIndex(index + 1);
+                                    }
                                 }}
-                            ></Box>
-                        </Flex>
-                    );
-                })}
-            </Flex>
+                                key={index}
+                                sx={{
+                                    width: "14px",
+                                    height: "14px",
+                                    borderRadius: "50%",
+                                    border:
+                                        activeIndex - 1 === index
+                                            ? "1px solid #fff"
+                                            : "1px solid transparent",
+                                    margin: "0 10px",
+                                }}
+                                align={"center"}
+                                justify={"center"}
+                            >
+                                <Box
+                                    sx={{
+                                        width: "8px",
+                                        height: "8px",
+                                        background: "#fff",
+                                        borderRadius: "50%",
+                                    }}
+                                ></Box>
+                            </Flex>
+                        );
+                    })}
+                </Flex>
+            )}
         </Box>
     );
 };

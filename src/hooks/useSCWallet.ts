@@ -104,7 +104,7 @@ export const getSCWallet = async (privateKey: string) => {
             chain,
             owner: owner,
             entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", //getDefaultEntryPointAddress(chain),
-            factoryAddress: "0x000000893A26168158fbeaDD9335Be5bC96592E2", // getDefaultLightAccountFactoryAddress(chain),
+            factoryAddress: "0x00004ec70002a32400f8ae005a26081065620d20", // getDefaultLightAccountFactoryAddress(chain),
             rpcClient: provider,
         });
     });
