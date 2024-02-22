@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, Image, Text, Flex } from "@chakra-ui/react";
 import { aviationImg } from "@/utils/aviationImg";
 import LineBg from "./assets/line.png";
@@ -89,37 +89,146 @@ const ThePot = () => {
     );
 };
 
+const Level = () => {
+    const [scrollStatus, setScrollStatus] = useState(0);
+
+    const handleScroll = (id: number) => {
+        if (id === 0) {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+            return;
+        }
+        const targetNode = document.getElementById(`point-${id}`);
+
+        if (targetNode) {
+            window.scrollTo({
+                top: targetNode.offsetTop,
+                behavior: "smooth",
+            });
+        }
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const nodeA = document.getElementById("point-7");
+            if (nodeA) {
+                const rect = nodeA.offsetTop;
+                const distanceFromTop = nodeA.offsetTop;
+                console.log(distanceFromTop, "distanceFromTop");
+                console.log(window.scrollY, "window.scrollY");
+                // 当滚动距离大于节点 A 的距离时，设置状态为 1
+                if (window.scrollY > distanceFromTop) {
+                    setScrollStatus(1);
+                } else {
+                    setScrollStatus(0);
+                }
+            }
+        };
+
+        // 添加滚动事件监听器
+        window.addEventListener("scroll", handleScroll);
+
+        // 清除滚动事件监听器
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []); // 空数组表示只在组件挂载时运行一次
+
+    return (
+        <Box
+            sx={{
+                position: "fixed",
+                right: "100px",
+                top: "100px",
+                zIndex: 1,
+            }}
+        >
+            <Text
+                sx={{
+                    textShadow: "0px 7px 0px  #000",
+                    color: "#fff",
+                    fontSize: "38px",
+                }}
+            >
+                Level Tower
+            </Text>
+            <Text
+                onClick={() => {
+                    handleScroll(0);
+                }}
+                sx={{
+                    textShadow: "0px 7px 0px  rgba(0, 0, 0, 0.5)",
+                    color: scrollStatus === 0 ? "#F2D861" : "#909090",
+                    fontSize: scrollStatus === 0 ? "36px" : "30px",
+                    fowWeight: "bold",
+                    textAlign: "right",
+                    cursor: "pointer",
+                }}
+            >
+                Level 9-16
+            </Text>
+            <Text
+                onClick={() => {
+                    handleScroll(15);
+                }}
+                sx={{
+                    textShadow: "0px 7px 0px  #000",
+                    color: scrollStatus === 1 ? "#F2D861" : "#909090",
+                    fontSize: scrollStatus === 1 ? "36px" : "30px",
+                    fowWeight: "bold",
+                    textAlign: "right",
+                    cursor: "pointer",
+                }}
+            >
+                Level 1-8
+            </Text>
+        </Box>
+    );
+};
+
 const Tower = () => {
     const [dataPoints] = useState([
-        { x: 240, y: 30, level: 16 },
-        { x: 560, y: 120, level: 15 },
-        { x: 880, y: 190, level: 14 },
-        { x: 1170, y: 320, level: 13 },
-        { x: 900, y: 500, level: 12 },
-        { x: 660, y: 560, level: 11 },
-        { x: 330, y: 590, level: 10 },
-        { x: 20, y: 592, level: 9 },
-        { x: 250, y: 1200, level: 8 },
-        { x: 550, y: 1330, level: 7 },
-        { x: 840, y: 1400, level: 6 },
-        { x: 1170, y: 1530, level: 5 },
-        { x: 900, y: 1720, level: 4 },
-        { x: 660, y: 1780, level: 3 },
-        { x: 330, y: 1810, level: 2 },
-        { x: 20, y: 1812, level: 1 },
+        { x: 200, y: 20, level: 16 },
+        { x: 430, y: 110, level: 15 },
+        { x: 680, y: 170, level: 14 },
+        { x: 980, y: 280, level: 13 },
+        { x: 780, y: 420, level: 12 },
+        { x: 540, y: 480, level: 11 },
+        { x: 250, y: 490, level: 10 },
+        { x: 20, y: 490, level: 9 },
+        { x: 200, y: 1030, level: 8 },
+        { x: 460, y: 1130, level: 7 },
+        { x: 700, y: 1180, level: 6 },
+        { x: 980, y: 1280, level: 5 },
+        { x: 780, y: 1420, level: 4 },
+        { x: 540, y: 1480, level: 3 },
+        { x: 250, y: 1490, level: 2 },
+        { x: 20, y: 1490, level: 1 },
     ]);
 
     return (
         <Box
             position="relative"
             sx={{
-                backgroundImage: `url(${Bg})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "100% 100%",
-                backgroundColor: "#1b1b1b",
                 height: "100%",
             }}
         >
+            <Box
+                sx={{
+                    position: "fixed",
+                    backgroundImage: `url(${Bg})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "100% 100%",
+                    backgroundColor: "#1b1b1b",
+                    height: "100%",
+                    width: "100%",
+                    overflow: "auto",
+                }}
+            ></Box>
+            <ThePot></ThePot>
+            <Level></Level>
             <Box
                 sx={{
                     position: "absolute",
@@ -132,17 +241,14 @@ const Tower = () => {
             <Box
                 sx={{
                     height: "100%",
-                    overflow: "auto",
-                    padding: "100px 0 160px",
                 }}
             >
                 <Box
                     sx={{
                         position: "relative",
+                        padding: "200px 0",
                     }}
                 >
-                    <ThePot></ThePot>
-
                     <Box
                         sx={{
                             width: "1000px",
@@ -155,6 +261,7 @@ const Tower = () => {
                     >
                         {dataPoints.map((point, index) => (
                             <Flex
+                                id={`point-${index}`}
                                 key={index}
                                 position="absolute"
                                 left={`${point.x}px`}
@@ -178,6 +285,7 @@ const Tower = () => {
                                         fontSize: "24px",
                                         width: "100%",
                                         textAlign: "center",
+                                        zIndex: 1,
                                     }}
                                 >
                                     <span
