@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Box, Image, Text, Flex } from "@chakra-ui/react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Box, Image, Text, Flex, keyframes } from "@chakra-ui/react";
 import { aviationImg } from "@/utils/aviationImg";
 import LineBg from "./assets/line.png";
 import Bg from "@/assets/bg.png";
@@ -7,6 +7,150 @@ import HummerIcon from "./assets/hummer.png";
 import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
 import { motion } from "framer-motion";
 import Back from "../Back";
+import useCountDown from "react-countdown-hook";
+
+const animationObj = {
+    color: [
+        "rgba(56, 248, 255, 1)",
+        "rgba(255, 236, 199, 1)",
+        "rgba(255, 214, 214, 1)",
+    ],
+    textShadow: "0px 0px 19px  #00CCFF",
+    transition: {
+        duration: 2,
+        yoyo: Infinity,
+    },
+};
+const rotation = keyframes`
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
+`;
+
+const AviationItem = ({ item, id }: { item: any; id: string }) => {
+    const [timeLeft, { start }] = useCountDown(1000 * 100000, 1000);
+
+    const formattedTime = useMemo(() => {
+        if (timeLeft > 0) {
+            const hours = String(
+                Math.floor((timeLeft / (1000 * 60 * 60)) % 24),
+            ).padStart(2, "0");
+            const minutes = String(
+                Math.floor((timeLeft / 1000 / 60) % 60),
+            ).padStart(2, "0");
+            const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(
+                2,
+                "0",
+            );
+
+            return `${hours}:${minutes}:${seconds}`;
+        } else {
+            return "00:00:00";
+        }
+    }, [timeLeft]);
+
+    useEffect(() => {
+        start();
+    }, []);
+    return (
+        <Flex
+            id={id}
+            left={`${item.x}px`}
+            top={`${item.y}px`}
+            transform="translate(-50%, -50%)"
+            width="124px"
+            height="124px"
+            sx={{
+                background: "#000",
+                borderRadius: "50%",
+                position: "absolute",
+                "&::before": {
+                    position: "absolute",
+                    content: "''",
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    background:
+                        "linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent)",
+                    animation: `${rotation} 5000ms infinite linear`,
+                    borderRadius: "50%",
+                },
+            }}
+            flexDir={"column"}
+            align={"center"}
+        >
+            <Box
+                sx={{
+                    position: "relative",
+                    width: "99%",
+                    height: "99%",
+                    background: "#000",
+                    borderRadius: "50%",
+                    color: "white",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                }}
+            >
+                <Text
+                    sx={{
+                        position: "absolute",
+                        top: "-36px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: "24px",
+                        width: "100%",
+                        textAlign: "center",
+                        zIndex: 1,
+                    }}
+                >
+                    <span
+                        style={{
+                            fontSize: "20px",
+                        }}
+                    >
+                        Lv.
+                    </span>{" "}
+                    {item.level}
+                </Text>
+                <Image
+                    src={aviationImg(item.level)}
+                    width="124"
+                    height="124"
+                ></Image>
+                <Flex
+                    sx={{
+                        padding: "2px",
+                        borderRadius: "20px",
+                        border: "1px solid #F2D861",
+                        marginTop: "12px",
+                    }}
+                >
+                    <Flex
+                        sx={{
+                            border: "1px solid #F2D861",
+                            borderRadius: "20px",
+                            height: "36px",
+                            fontSize: "28px",
+                            width: "160px",
+                        }}
+                        align={"center"}
+                        justify={"center"}
+                    >
+                        {formattedTime}
+                    </Flex>
+                </Flex>
+            </Box>
+        </Flex>
+    );
+};
 
 const ThePot = () => {
     return (
@@ -20,34 +164,36 @@ const ThePot = () => {
             align={"center"}
         >
             <Flex align={"center"} sx={{}}>
-                <Text
-                    sx={{
+                <motion.div
+                    style={{
                         textShadow: "0px 0px 9px #FFEB3B",
                         color: "#FFEB3B",
                         fontSize: "74px",
                         textAlign: "center",
                         fontFamily: "Neoneon",
                     }}
+                    animate={animationObj}
                 >
                     THE
-                </Text>
+                </motion.div>
                 <Image
                     src={HummerIcon}
                     sx={{
                         margin: "0 -50px 0",
                     }}
                 ></Image>
-                <Text
-                    sx={{
+                <motion.div
+                    style={{
                         textShadow: "0px 0px 9px #FFEB3B",
                         color: "#FFEB3B",
                         fontSize: "74px",
                         textAlign: "center",
                         fontFamily: "Neoneon",
                     }}
+                    animate={animationObj}
                 >
                     POT
-                </Text>
+                </motion.div>
             </Flex>
             <Box
                 sx={{
@@ -65,6 +211,7 @@ const ThePot = () => {
                     color: "#FFEB3B",
                     marginTop: "10px",
                 }}
+                animate={animationObj}
             >
                 <Flex align={"center"} justify={"center"}>
                     <Text
@@ -260,72 +407,11 @@ const Tower = () => {
                         margin="auto"
                     >
                         {dataPoints.map((point, index) => (
-                            <Flex
-                                id={`point-${index}`}
-                                key={index}
-                                position="absolute"
-                                left={`${point.x}px`}
-                                top={`${point.y}px`}
-                                transform="translate(-50%, -50%)"
-                                width="124px"
-                                height="124px"
-                                sx={{
-                                    background: "#000",
-                                    borderRadius: "50%",
-                                }}
-                                flexDir={"column"}
-                                align={"center"}
-                            >
-                                <Text
-                                    sx={{
-                                        position: "absolute",
-                                        top: "-36px",
-                                        left: "50%",
-                                        transform: "translateX(-50%)",
-                                        fontSize: "24px",
-                                        width: "100%",
-                                        textAlign: "center",
-                                        zIndex: 1,
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            fontSize: "20px",
-                                        }}
-                                    >
-                                        Lv.
-                                    </span>{" "}
-                                    {point.level}
-                                </Text>
-                                <Image
-                                    src={aviationImg(point.level)}
-                                    alt={`Point ${index + 1}`}
-                                    width="124"
-                                    height="124"
-                                ></Image>
-                                <Flex
-                                    sx={{
-                                        padding: "2px",
-                                        borderRadius: "20px",
-                                        border: "1px solid #F2D861",
-                                        marginTop: "12px",
-                                    }}
-                                >
-                                    <Flex
-                                        sx={{
-                                            border: "1px solid #F2D861",
-                                            borderRadius: "20px",
-                                            height: "36px",
-                                            fontSize: "28px",
-                                            width: "160px",
-                                        }}
-                                        align={"center"}
-                                        justify={"center"}
-                                    >
-                                        00:45:59
-                                    </Flex>
-                                </Flex>
-                            </Flex>
+                            <AviationItem
+                                item={point}
+                                key={point.level + "-" + index}
+                                id={"point-" + index}
+                            ></AviationItem>
                         ))}
                     </Box>
                 </Box>
