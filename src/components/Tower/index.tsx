@@ -13,7 +13,7 @@ const ThePot = () => {
         <Flex
             sx={{
                 position: "absolute",
-                left: "-100px",
+                left: "100px",
                 top: "100px",
             }}
             flexDir={"column"}
@@ -138,82 +138,88 @@ const Tower = () => {
             >
                 <Box
                     sx={{
-                        width: "1200px",
-                        backgroundImage: `url(${LineBg})`,
-                        aspectRatio: "1133/1714",
-                        backgroundSize: "cover",
                         position: "relative",
                     }}
-                    margin="auto"
                 >
                     <ThePot></ThePot>
 
-                    {dataPoints.map((point, index) => (
-                        <Flex
-                            key={index}
-                            position="absolute"
-                            left={`${point.x}px`}
-                            top={`${point.y}px`}
-                            transform="translate(-50%, -50%)"
-                            width="124px"
-                            height="124px"
-                            sx={{
-                                background: "#000",
-                                borderRadius: "50%",
-                            }}
-                            flexDir={"column"}
-                            align={"center"}
-                        >
-                            <Text
+                    <Box
+                        sx={{
+                            width: "1000px",
+                            backgroundImage: `url(${LineBg})`,
+                            aspectRatio: "1133/1714",
+                            backgroundSize: "cover",
+                            position: "relative",
+                        }}
+                        margin="auto"
+                    >
+                        {dataPoints.map((point, index) => (
+                            <Flex
+                                key={index}
+                                position="absolute"
+                                left={`${point.x}px`}
+                                top={`${point.y}px`}
+                                transform="translate(-50%, -50%)"
+                                width="124px"
+                                height="124px"
                                 sx={{
-                                    position: "absolute",
-                                    top: "-36px",
-                                    left: "50%",
-                                    transform: "translateX(-50%)",
-                                    fontSize: "24px",
-                                    width: "100%",
-                                    textAlign: "center",
+                                    background: "#000",
+                                    borderRadius: "50%",
                                 }}
+                                flexDir={"column"}
+                                align={"center"}
                             >
-                                <span
-                                    style={{
-                                        fontSize: "20px",
+                                <Text
+                                    sx={{
+                                        position: "absolute",
+                                        top: "-36px",
+                                        left: "50%",
+                                        transform: "translateX(-50%)",
+                                        fontSize: "24px",
+                                        width: "100%",
+                                        textAlign: "center",
                                     }}
                                 >
-                                    Lv.
-                                </span>{" "}
-                                {point.level}
-                            </Text>
-                            <Image
-                                src={aviationImg(point.level)}
-                                alt={`Point ${index + 1}`}
-                                width="124"
-                                height="124"
-                            ></Image>
-                            <Flex
-                                sx={{
-                                    padding: "2px",
-                                    borderRadius: "20px",
-                                    border: "1px solid #F2D861",
-                                    marginTop: "12px",
-                                }}
-                            >
+                                    <span
+                                        style={{
+                                            fontSize: "20px",
+                                        }}
+                                    >
+                                        Lv.
+                                    </span>{" "}
+                                    {point.level}
+                                </Text>
+                                <Image
+                                    src={aviationImg(point.level)}
+                                    alt={`Point ${index + 1}`}
+                                    width="124"
+                                    height="124"
+                                ></Image>
                                 <Flex
                                     sx={{
-                                        border: "1px solid #F2D861",
+                                        padding: "2px",
                                         borderRadius: "20px",
-                                        height: "36px",
-                                        fontSize: "28px",
-                                        width: "160px",
+                                        border: "1px solid #F2D861",
+                                        marginTop: "12px",
                                     }}
-                                    align={"center"}
-                                    justify={"center"}
                                 >
-                                    00:45:59
+                                    <Flex
+                                        sx={{
+                                            border: "1px solid #F2D861",
+                                            borderRadius: "20px",
+                                            height: "36px",
+                                            fontSize: "28px",
+                                            width: "160px",
+                                        }}
+                                        align={"center"}
+                                        justify={"center"}
+                                    >
+                                        00:45:59
+                                    </Flex>
                                 </Flex>
                             </Flex>
-                        </Flex>
-                    ))}
+                        ))}
+                    </Box>
                 </Box>
             </Box>
         </Box>
