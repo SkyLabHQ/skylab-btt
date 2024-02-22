@@ -98,6 +98,7 @@ const FrontContent = () => {
                 src={HummerIcon}
                 sx={{
                     width: isPc ? "180px" : "80px",
+                    marginTop: "10px",
                 }}
             ></Image>
             <motion.div
