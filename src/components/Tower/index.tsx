@@ -10,14 +10,16 @@ import Back from "../Back";
 
 const ThePot = () => {
     return (
-        <Box
+        <Flex
             sx={{
                 position: "absolute",
-                left: "10%",
-                top: "10px",
+                left: "-100px",
+                top: "100px",
             }}
+            flexDir={"column"}
+            align={"center"}
         >
-            <Flex align={"center"}>
+            <Flex align={"center"} sx={{}}>
                 <Text
                     sx={{
                         textShadow: "0px 0px 9px #FFEB3B",
@@ -29,7 +31,12 @@ const ThePot = () => {
                 >
                     THE
                 </Text>
-                <Image src={HummerIcon}></Image>
+                <Image
+                    src={HummerIcon}
+                    sx={{
+                        margin: "0 -50px 0",
+                    }}
+                ></Image>
                 <Text
                     sx={{
                         textShadow: "0px 0px 9px #FFEB3B",
@@ -47,7 +54,8 @@ const ThePot = () => {
                     height: "2px",
                     background: "#FFE045",
                     boxShadow: "0px 0px 29px 4px #FAE20F",
-                    width: "300px",
+                    width: "100%",
+                    marginTop: "-50px",
                 }}
             ></Box>
             <motion.div
@@ -77,7 +85,7 @@ const ThePot = () => {
                     ></ETHIcon>
                 </Flex>
             </motion.div>
-        </Box>
+        </Flex>
     );
 };
 
@@ -109,8 +117,7 @@ const Tower = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "100% 100%",
                 backgroundColor: "#1b1b1b",
-                height: "auto",
-                padding: "100px 0 160px",
+                height: "100%",
             }}
         >
             <Box
@@ -122,83 +129,92 @@ const Tower = () => {
             >
                 <Back></Back>
             </Box>
-            <ThePot></ThePot>
             <Box
                 sx={{
-                    width: "1200px",
-                    backgroundImage: `url(${LineBg})`,
-                    aspectRatio: "1133/1714",
-                    backgroundSize: "cover",
-                    position: "relative",
+                    height: "100%",
+                    overflow: "auto",
+                    padding: "100px 0 160px",
                 }}
-                margin="auto"
             >
-                {dataPoints.map((point, index) => (
-                    <Flex
-                        key={index}
-                        position="absolute"
-                        left={`${point.x}px`}
-                        top={`${point.y}px`}
-                        transform="translate(-50%, -50%)"
-                        width="124px"
-                        height="124px"
-                        sx={{
-                            background: "#000",
-                            borderRadius: "50%",
-                        }}
-                        flexDir={"column"}
-                        align={"center"}
-                    >
-                        <Text
+                <Box
+                    sx={{
+                        width: "1200px",
+                        backgroundImage: `url(${LineBg})`,
+                        aspectRatio: "1133/1714",
+                        backgroundSize: "cover",
+                        position: "relative",
+                    }}
+                    margin="auto"
+                >
+                    <ThePot></ThePot>
+
+                    {dataPoints.map((point, index) => (
+                        <Flex
+                            key={index}
+                            position="absolute"
+                            left={`${point.x}px`}
+                            top={`${point.y}px`}
+                            transform="translate(-50%, -50%)"
+                            width="124px"
+                            height="124px"
                             sx={{
-                                position: "absolute",
-                                top: "-36px",
-                                left: "50%",
-                                transform: "translateX(-50%)",
-                                fontSize: "24px",
-                                width: "100%",
-                                textAlign: "center",
+                                background: "#000",
+                                borderRadius: "50%",
                             }}
+                            flexDir={"column"}
+                            align={"center"}
                         >
-                            <span
-                                style={{
-                                    fontSize: "20px",
+                            <Text
+                                sx={{
+                                    position: "absolute",
+                                    top: "-36px",
+                                    left: "50%",
+                                    transform: "translateX(-50%)",
+                                    fontSize: "24px",
+                                    width: "100%",
+                                    textAlign: "center",
                                 }}
                             >
-                                Lv.
-                            </span>{" "}
-                            {point.level}
-                        </Text>
-                        <Image
-                            src={aviationImg(point.level)}
-                            alt={`Point ${index + 1}`}
-                            width="124"
-                            height="124"
-                        ></Image>
-                        <Flex
-                            sx={{
-                                padding: "2px",
-                                borderRadius: "20px",
-                                border: "1px solid #F2D861",
-                                marginTop: "12px",
-                            }}
-                        >
+                                <span
+                                    style={{
+                                        fontSize: "20px",
+                                    }}
+                                >
+                                    Lv.
+                                </span>{" "}
+                                {point.level}
+                            </Text>
+                            <Image
+                                src={aviationImg(point.level)}
+                                alt={`Point ${index + 1}`}
+                                width="124"
+                                height="124"
+                            ></Image>
                             <Flex
                                 sx={{
-                                    border: "1px solid #F2D861",
+                                    padding: "2px",
                                     borderRadius: "20px",
-                                    height: "36px",
-                                    fontSize: "28px",
-                                    width: "160px",
+                                    border: "1px solid #F2D861",
+                                    marginTop: "12px",
                                 }}
-                                align={"center"}
-                                justify={"center"}
                             >
-                                00:45:59
+                                <Flex
+                                    sx={{
+                                        border: "1px solid #F2D861",
+                                        borderRadius: "20px",
+                                        height: "36px",
+                                        fontSize: "28px",
+                                        width: "160px",
+                                    }}
+                                    align={"center"}
+                                    justify={"center"}
+                                >
+                                    00:45:59
+                                </Flex>
                             </Flex>
                         </Flex>
-                    </Flex>
-                ))}
+                    ))}
+                </Box>
             </Box>
         </Box>
     );
