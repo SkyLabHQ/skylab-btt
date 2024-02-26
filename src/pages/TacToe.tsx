@@ -205,7 +205,7 @@ const TacToe = () => {
                 sx={{
                     background: "#36363680",
                     height: "100%",
-                    fontFamily: "Orbitron",
+                    fontFamily: "Quantico",
                     position: "absolute",
                     left: 0,
                     top: 0,

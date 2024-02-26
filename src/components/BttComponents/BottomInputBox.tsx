@@ -51,25 +51,126 @@ const BottomInputBox = ({
     return (
         <Flex
             sx={{
-                height: "55px",
+                height: "65px",
                 background: "#787878",
-                padding: "0 12px",
+                padding: "0 12px 12px 12px",
                 position: "relative",
             }}
             justify={"space-between"}
             align={"center"}
         >
-            <Box>
+            <Popover
+                gutter={38}
+                arrowSize={20}
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+            >
+                <PopoverTrigger>
+                    <Box
+                        sx={{
+                            flex: 1,
+                        }}
+                    >
+                        <Image
+                            tabIndex={0}
+                            role="button"
+                            src={MessageIcon1}
+                            sx={{
+                                width: "32px",
+                            }}
+                        ></Image>
+                    </Box>
+                </PopoverTrigger>
+                <PopoverContent
+                    width={"220px"}
+                    sx={{
+                        height: "75px",
+                        border: "none",
+                        borderRadius: "10px",
+                        background: "#ffffffe6 !important",
+                    }}
+                >
+                    <PopoverBody
+                        sx={{
+                            color: "#303030",
+                            padding: 0,
+                            border: "none",
+                            position: "relative",
+                            overflow: "hidden",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                overflowY: "auto",
+                                height: "100%",
+                            }}
+                        >
+                            {MESSAGES.map((message, index) => {
+                                return (
+                                    <Flex
+                                        onClick={() => {
+                                            onSetMessage(
+                                                "setMessage",
+                                                index + 1,
+                                            );
+                                            setSelectMessageIndex(index);
+                                            onClose();
+                                        }}
+                                        key={index + 1}
+                                        sx={{
+                                            paddingLeft: "20px",
+                                            fontSize: "12px",
+                                            width: "100%",
+                                            height: "28px",
+                                            color:
+                                                selectMessageIndex === index
+                                                    ? "#fff"
+                                                    : "#303030",
+                                            background:
+                                                selectMessageIndex === index &&
+                                                "#00000059",
+                                            fontFamily: "Quantico",
+                                        }}
+                                        align={"center"}
+                                    >
+                                        {message}
+                                    </Flex>
+                                );
+                            })}
+                        </Box>
+                    </PopoverBody>
+                    <Box
+                        sx={{
+                            height: "0",
+                            width: "0",
+                            borderTop: "10px solid #ffffffe6",
+                            borderRight: "10px solid transparent",
+                            borderBottom: "10px solid transparent",
+                            borderLeft: "10px solid transparent",
+                            position: "absolute",
+                            right: "20px",
+                            bottom: "-20px",
+                        }}
+                    ></Box>
+                </PopoverContent>
+            </Popover>
+            <Box
+                sx={{
+                    width: "160px",
+                }}
+            >
                 <Flex
                     sx={{
                         height: "24px",
                         width: "184px",
                         position: "absolute",
-                        top: "-10px",
-                        left: "0px",
+                        top: "-15px",
+                        left: "50%",
                         background: "#787878",
-                        borderRadius: "10px 10px 0 0",
+                        borderRadius: "16px 16px 0 0",
                         padding: "0px 12px",
+                        transform: "translateX(-50%)",
                     }}
                     justify={"space-between"}
                 >
@@ -148,8 +249,11 @@ const BottomInputBox = ({
                     </Slider>
                 </Box>
             </Box>
-
-            <Box>
+            <Box
+                sx={{
+                    flex: 1,
+                }}
+            >
                 {loading ? (
                     <Text
                         sx={{
@@ -164,6 +268,7 @@ const BottomInputBox = ({
                 ) : (
                     <Text
                         onClick={() => {
+                            console.log(111);
                             onConfirm();
                         }}
                         sx={{
@@ -171,9 +276,9 @@ const BottomInputBox = ({
                                 myGameState === GameState.WaitingForBid
                                     ? "#FDDC2D"
                                     : "#414141",
-                            fontSize: "18px",
-                            width: "114px",
-                            textAlign: "center",
+                            fontSize: "14px",
+                            // width: "114px",
+                            textAlign: "right",
                             fontWeight: "bold",
                         }}
                     >
@@ -184,96 +289,6 @@ const BottomInputBox = ({
                     </Text>
                 )}
             </Box>
-            <Popover
-                gutter={38}
-                arrowSize={20}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-            >
-                <PopoverTrigger>
-                    <Image
-                        tabIndex={0}
-                        role="button"
-                        src={MessageIcon1}
-                        sx={{
-                            width: "32px",
-                        }}
-                    ></Image>
-                </PopoverTrigger>
-                <PopoverContent
-                    width={"220px"}
-                    sx={{
-                        height: "75px",
-                        border: "none",
-                        borderRadius: "10px",
-                        background: "#ffffffe6 !important",
-                    }}
-                >
-                    <PopoverBody
-                        sx={{
-                            color: "#303030",
-                            padding: 0,
-                            border: "none",
-                            position: "relative",
-                            overflow: "hidden",
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                overflowY: "auto",
-                                height: "100%",
-                            }}
-                        >
-                            {MESSAGES.map((message, index) => {
-                                return (
-                                    <Flex
-                                        onClick={() => {
-                                            onSetMessage(
-                                                "setMessage",
-                                                index + 1,
-                                            );
-                                            setSelectMessageIndex(index);
-                                            onClose();
-                                        }}
-                                        key={index + 1}
-                                        sx={{
-                                            paddingLeft: "20px",
-                                            fontSize: "12px",
-                                            width: "100%",
-                                            height: "28px",
-                                            color:
-                                                selectMessageIndex === index
-                                                    ? "#fff"
-                                                    : "#303030",
-                                            background:
-                                                selectMessageIndex === index &&
-                                                "#00000059",
-                                            fontFamily: "Quantico",
-                                        }}
-                                        align={"center"}
-                                    >
-                                        {message}
-                                    </Flex>
-                                );
-                            })}
-                        </Box>
-                    </PopoverBody>
-                    <Box
-                        sx={{
-                            height: "0",
-                            width: "0",
-                            borderTop: "10px solid #ffffffe6",
-                            borderRight: "10px solid transparent",
-                            borderBottom: "10px solid transparent",
-                            borderLeft: "10px solid transparent",
-                            position: "absolute",
-                            right: "20px",
-                            bottom: "-20px",
-                        }}
-                    ></Box>
-                </PopoverContent>
-            </Popover>
         </Flex>
     );
 };
