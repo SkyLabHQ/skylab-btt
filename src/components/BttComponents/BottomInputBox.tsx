@@ -149,7 +149,7 @@ const BottomInputBox = ({
                             borderBottom: "10px solid transparent",
                             borderLeft: "10px solid transparent",
                             position: "absolute",
-                            right: "20px",
+                            left: "20px",
                             bottom: "-20px",
                         }}
                     ></Box>
