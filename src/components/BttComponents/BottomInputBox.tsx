@@ -252,15 +252,15 @@ const BottomInputBox = ({
             <Box
                 sx={{
                     flex: 1,
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    textAlign: "right",
                 }}
             >
                 {loading ? (
                     <Text
                         sx={{
                             color: "#fff",
-                            fontSize: "16px",
-                            width: "104px",
-                            textAlign: "center",
                         }}
                     >
                         Confirming
@@ -276,10 +276,7 @@ const BottomInputBox = ({
                                 myGameState === GameState.WaitingForBid
                                     ? "#FDDC2D"
                                     : "#414141",
-                            fontSize: "14px",
                             // width: "114px",
-                            textAlign: "right",
-                            fontWeight: "bold",
                         }}
                     >
                         {myGameState === GameState.Commited ||
