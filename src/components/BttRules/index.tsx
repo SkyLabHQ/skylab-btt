@@ -22,6 +22,8 @@ import PlaneIcon from "./assets/plane.png";
 import Back from "../Back";
 import BackArrow from "./assets/back-arrow.svg";
 import { motion } from "framer-motion";
+import LineAll from "./assets/line-all.png";
+import LineTab from "./LineTab";
 
 enum RuleTabEnum {
     OVERAll = 0,
@@ -715,8 +717,8 @@ const BttRules = () => {
             sx={{
                 position: "relative",
                 paddingTop: "10vh",
-                fontFamily: "Quantico",
                 height: "100%",
+                fontFamily: "Orbitron",
             }}
         >
             {isPc ? (
@@ -780,12 +782,7 @@ const BttRules = () => {
                     paddingTop: "1.8519vh",
                 }}
             >
-                {showTab && (
-                    <AttributeTab
-                        handleTabChange={handleTabChange}
-                        tabList={tabList}
-                    ></AttributeTab>
-                )}
+                {showTab && <LineTab></LineTab>}
             </Box>
             {!showTab && (
                 <Box
