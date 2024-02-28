@@ -1,18 +1,29 @@
 import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useState } from "react";
 import LineAll from "./assets/line-all.png";
+import LineAvi from "./assets/line-avi.png";
+import LineCosmetics from "./assets/line-cosmetics.png";
+import LineEstate from "./assets/line-estate.png";
+import LineMileage from "./assets/line-mileage.png";
+import LineUp from "./assets/line-up.png";
 import TaxIcon from "./assets/tax.png";
 import EstateScoreIcon from "./assets/estate-score.png";
 import PlaneIcon from "./assets/avi-pt.png";
-import AllPlane from "./assets/all-plane.png";
-import LeftArrow from "@/components/Tournament/assets/left-arrow.svg";
-import RightArrow from "@/components/Tournament/assets/right-arrow.svg";
 import { motion } from "framer-motion";
 import PilotIcon from "./assets/pilot-icon.png";
 import MileageS from "./assets/mileage-s.png";
-import MileageType from "./assets/mileage.png";
 import MercIcon from "./assets/merc.png";
-import Up from "./assets/up.png";
+import CosmeticsScoreIcon from "./assets/cosmetics-score.png";
+import VaultIcon from "./assets/vault.png";
+import UpgradeP from "./assets/upgrade-p.png";
+import BabyMercIcon from "./assets/baby-merc.png";
+import AviScore from "./assets/avi-score.png";
+import CosmeticsIcon from "./assets/cosmetics.png";
+import TournamentIcon from "./assets/tournament.png";
+import PlayIcon from "./assets/play.png";
+import AviationLvlPt from "./AviationLvlPt";
+import Mileage from "./Mileage";
+import Merc from "./Merc";
 
 enum IconType {
     Avaition = "Aviation",
@@ -20,224 +31,15 @@ enum IconType {
     Merc = "Merc",
 }
 
-const AviationLvlPt = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-    const [test, setTest] = useState(0);
-    const handleSub = () => {
-        if (test <= 0) return;
-        setTest(test - 20);
-    };
+enum LabelType {
+    Aviation = "Aviation",
+    Mileage = "Mileage",
+    Up = "Up",
+    Estate = "Estate",
+    Cosmetics = "Cosmetics",
+}
 
-    const handleAdd = () => {
-        if (test >= 100) return;
-        setTest(test + 20);
-    };
-
-    return (
-        <Box sx={{ width: "566px" }}>
-            <Text
-                sx={{
-                    fontSize: "32px",
-                    fontWeight: "bold",
-                }}
-            >
-                Aviation Lvl-Pt System
-            </Text>
-            <Box
-                sx={{
-                    border: "1px solid #FDDC2D",
-                    borderRadius: "15px",
-                    backdropFilter: "blur(15px)",
-                    background: "rgba(113,157,151,0.5)",
-                    marginTop: "10px",
-                }}
-            >
-                <Flex
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderBottom: "1px solid #FDDC2D",
-                        borderRadius: "0 0 15px 15px",
-                        padding: isPc ? "0 60px" : " 20px 30px",
-                        height: "566px",
-                        position: "relative",
-                    }}
-                >
-                    <Box
-                        sx={{
-                            background: `url(${AllPlane}) no-repeat `,
-                            backgroundSize: "cover",
-                            backgroundPosition: `${test}% 0`,
-                            width: "1200px",
-                            height: "300px",
-                            transition: "all 1s",
-                        }}
-                    ></Box>
-                    <Image
-                        src={LeftArrow}
-                        sx={{
-                            position: "absolute",
-                            left: "0.5208vw",
-                            cursor: "pointer",
-                            width: isPc ? "24px" : "12px",
-                        }}
-                        onClick={handleSub}
-                    ></Image>
-                    <Image
-                        src={RightArrow}
-                        sx={{
-                            position: "absolute",
-                            right: "0.5208vw",
-                            cursor: "pointer",
-                            width: isPc ? "24px" : "12px",
-                        }}
-                        onClick={handleAdd}
-                    ></Image>
-                </Flex>
-                <Box
-                    sx={{
-                        padding: "20px",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: isPc ? "20px" : "12px",
-
-                            textAlign: "center",
-                        }}
-                    >
-                        Point is earned through winning game.
-                    </Text>
-                </Box>{" "}
-            </Box>
-        </Box>
-    );
-};
-
-const Mileage = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-
-    return (
-        <Box sx={{ width: "566px" }}>
-            <Text
-                sx={{
-                    fontSize: "32px",
-                    fontWeight: "bold",
-                }}
-            >
-                Mileage
-            </Text>
-            <Box
-                sx={{
-                    border: "1px solid #FDDC2D",
-                    borderRadius: "15px",
-                    backdropFilter: "blur(15px)",
-                    background: "rgba(113,157,151,0.5)",
-                    marginTop: "10px",
-                }}
-            >
-                <Flex
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderBottom: "1px solid #FDDC2D",
-                        borderRadius: "0 0 15px 15px",
-                        height: "400px",
-                        position: "relative",
-                    }}
-                >
-                    <Image src={MileageType}></Image>
-                </Flex>
-                <Box
-                    sx={{
-                        padding: "20px",
-                        fontSize: isPc ? "20px" : "12px",
-                    }}
-                >
-                    <Text>Pilot earn mileage through playing games.</Text>
-                    <Text>For each game: </Text>
-                    <Text>
-                        Mileage gained ={" "}
-                        <span
-                            style={{
-                                color: "#FDDC2D",
-                            }}
-                        >
-                            Level of aviation
-                        </span>{" "}
-                        x{" "}
-                        <span
-                            style={{
-                                color: "#FDDC2D",
-                            }}
-                        >
-                            point transferred
-                        </span>{" "}
-                    </Text>
-                </Box>{" "}
-            </Box>
-        </Box>
-    );
-};
-
-const Merc = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-
-    return (
-        <Box sx={{ width: "566px" }}>
-            <Text
-                sx={{
-                    fontSize: "32px",
-                    fontWeight: "bold",
-                }}
-            >
-                UP & Mercs breeding
-            </Text>
-            <Box
-                sx={{
-                    border: "1px solid #FDDC2D",
-                    borderRadius: "15px",
-                    backdropFilter: "blur(15px)",
-                    background: "rgba(113,157,151,0.5)",
-                    marginTop: "10px",
-                }}
-            >
-                <Flex
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderBottom: "1px solid #FDDC2D",
-                        borderRadius: "0 0 15px 15px",
-                        height: "400px",
-                        position: "relative",
-                    }}
-                >
-                    <Image src={Up}></Image>
-                </Flex>
-                <Box
-                    sx={{
-                        padding: "20px",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: isPc ? "20px" : "12px",
-                            textAlign: "center",
-                        }}
-                    >
-                        Mercs have governance rights, can arbitrage, and would
-                        have a buff to estate score{" "}
-                    </Text>
-                </Box>{" "}
-            </Box>
-        </Box>
-    );
-};
-
-const list = [
+const list: any = [
     {
         icon: TaxIcon,
         text: "Tax Redistribution",
@@ -250,6 +52,7 @@ const list = [
             transform: "translate(-50%, 0)",
         },
         imgWidth: "84px",
+        show: [LabelType.Estate],
     },
     {
         icon: EstateScoreIcon,
@@ -263,6 +66,7 @@ const list = [
             transform: "translate(-50%, 0)",
         },
         imgWidth: "84px",
+        show: [LabelType.Estate, LabelType.Cosmetics],
     },
     {
         icon: PlaneIcon,
@@ -271,11 +75,12 @@ const list = [
             top: "-32px",
         },
         position: {
-            right: "174px",
-            top: "538px",
+            right: "182px",
+            top: "541px",
         },
-        imgWidth: "90px",
+        imgWidth: "79px",
         value: IconType.Avaition,
+        show: [LabelType.Aviation],
     },
     {
         icon: PilotIcon,
@@ -288,9 +93,9 @@ const list = [
             bottom: "72px",
             transform: "translate(-50%, 0)",
         },
-        imgWidth: "80px",
+        imgWidth: "79px",
+        show: [],
     },
-
     {
         icon: MileageS,
         text: "Mileage",
@@ -302,12 +107,13 @@ const list = [
             bottom: "218px",
             transform: "translate(-50%, 0)",
         },
-        imgWidth: "78px",
+        imgWidth: "79px",
         value: IconType.Mileage,
+        show: [LabelType.Mileage],
     },
     {
         icon: MercIcon,
-        text: "Mileage",
+        text: "Merc",
         textPosition: {
             top: "-32px",
         },
@@ -315,12 +121,398 @@ const list = [
             left: "194px",
             bottom: "286px",
         },
-        imgWidth: "78px",
+        imgWidth: "79px",
         value: IconType.Merc,
+        show: [LabelType.Up],
+    },
+    {
+        icon: CosmeticsScoreIcon,
+        text: "Cosmetics Score",
+        textPosition: {
+            top: "-32px",
+        },
+        position: {
+            left: "-6px",
+            top: "308px",
+        },
+        imgWidth: "79px",
+        show: [LabelType.Cosmetics],
+    },
+    {
+        icon: VaultIcon,
+        text: "Vault Rights",
+        textPosition: {
+            top: "-32px",
+        },
+        position: {
+            left: "194px",
+            top: "274px",
+        },
+        imgWidth: "79px",
+        show: [LabelType.Up],
+    },
+    {
+        icon: UpgradeP,
+        text: "Upgrade Power",
+        textPosition: {
+            top: "-32px",
+        },
+        position: {
+            left: "50%",
+            top: "338px",
+            transform: "translate(-50%, 0)",
+        },
+        imgWidth: "79px",
+        show: [LabelType.Mileage],
+    },
+    {
+        icon: BabyMercIcon,
+        text: "Baby Merc",
+        textPosition: {
+            top: "-32px",
+        },
+        position: {
+            right: "192px",
+            bottom: "286px",
+        },
+        imgWidth: "79px",
+        show: [LabelType.Up],
+    },
+    {
+        icon: CosmeticsIcon,
+        text: "Cosmetics",
+        textPosition: {
+            top: "-32px",
+        },
+        position: {
+            left: "193px",
+            top: "541px",
+        },
+        imgWidth: "79px",
+        show: [LabelType.Mileage, LabelType.Cosmetics],
+    },
+    {
+        icon: AviScore,
+        text: "Aviation Score ",
+        textPosition: {
+            top: "-32px",
+        },
+        position: {
+            right: "-6px",
+            top: "308px",
+        },
+        imgWidth: "79px",
+        show: [LabelType.Estate],
+    },
+
+    {
+        icon: TournamentIcon,
+        text: "Tournament",
+        textPosition: {
+            bottom: "-32px",
+        },
+        position: {
+            left: "295px",
+            bottom: "-6px",
+        },
+        imgWidth: "114px",
+        show: [LabelType.Aviation, LabelType.Mileage],
+    },
+    {
+        icon: PlayIcon,
+        text: "Play game",
+        textPosition: {
+            bottom: "-32px",
+        },
+        position: {
+            right: "284px",
+            bottom: "-6px",
+        },
+        imgWidth: "114px",
+        show: [LabelType.Mileage, LabelType.Aviation],
+    },
+];
+
+const AviationDes = () => {
+    return (
+        <Box>
+            <Text
+                sx={{
+                    fontSize: "24px",
+                }}
+            >
+                Aviation Lvl-Pt:
+            </Text>
+            <Text
+                sx={{
+                    fontSize: "18px",
+                }}
+            >
+                Win games to earn{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    {" "}
+                    Hit Points (HP)
+                </span>{" "}
+                for your aviation.{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Accumulate HP
+                </span>{" "}
+                to upgrade your aviation. Losing games would cost you HP.
+            </Text>
+        </Box>
+    );
+};
+
+const MileageDes = () => {
+    return (
+        <Box>
+            <Text
+                sx={{
+                    fontSize: "24px",
+                }}
+            >
+                Mileage:
+            </Text>
+            <Text
+                sx={{
+                    fontSize: "18px",
+                }}
+            >
+                {" "}
+                Play games to earn{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Mileage
+                </span>
+                , no matter win or lose. Top rankers on{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Mileage Leaderboard
+                </span>{" "}
+                will be rewarded with{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Upgrade Power
+                </span>{" "}
+                and{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Cosmetics
+                </span>
+                .
+            </Text>
+        </Box>
+    );
+};
+
+const UpDes = () => {
+    return (
+        <Box>
+            <Text
+                sx={{
+                    fontSize: "24px",
+                }}
+            >
+                UP & Merc:
+            </Text>
+            <Text
+                sx={{
+                    fontSize: "18px",
+                }}
+            >
+                {" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                ></span>
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Upgrade Power(UP)
+                </span>{" "}
+                breeds{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Baby Mercs into{" "}
+                </span>{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Mercs
+                </span>
+                . Only Mercs can sell Planes back to the Vault.
+            </Text>
+        </Box>
+    );
+};
+
+const CosmeticsDes = () => {
+    return (
+        <Box>
+            <Text
+                sx={{
+                    fontSize: "24px",
+                }}
+            >
+                Cosmetics Score:
+            </Text>
+            <Text
+                sx={{
+                    fontSize: "18px",
+                }}
+            >
+                Earn cosmetics through participating in{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Tournaments
+                </span>{" "}
+                and earning{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Mileage
+                </span>{" "}
+                through playing games.{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    {" "}
+                    Cosmetics Score
+                </span>{" "}
+                adds to{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Estate Score
+                </span>{" "}
+                .
+            </Text>
+        </Box>
+    );
+};
+
+const EstateDes = () => {
+    return (
+        <Box>
+            {" "}
+            <Text
+                sx={{
+                    fontSize: "24px",
+                }}
+            >
+                Estate Score:
+            </Text>
+            <Text
+                sx={{
+                    fontSize: "18px",
+                }}
+            >
+                A 2% transfer tax is imposed on every plane transaction. Project
+                Mercury redistribute the tax collected to high rankers on the
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Estate Score
+                </span>{" "}
+                leaderboard.{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Estate Score
+                </span>{" "}
+                consists of{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Cosmetics Score
+                </span>{" "}
+                and{" "}
+                <span
+                    style={{
+                        color: "#FFD700",
+                    }}
+                >
+                    Aviation Score
+                </span>
+                .
+            </Text>
+        </Box>
+    );
+};
+
+const list2 = [
+    {
+        label: "Aviation Lvl-Pt",
+        value: LabelType.Aviation,
+        backgroundImg: LineAvi,
+    },
+    {
+        label: "Mileage",
+        value: LabelType.Mileage,
+        backgroundImg: LineMileage,
+    },
+    {
+        label: "UP&Merc",
+        value: LabelType.Up,
+        backgroundImg: LineUp,
+    },
+    {
+        label: "Estate Score",
+        value: LabelType.Estate,
+        backgroundImg: LineEstate,
+    },
+    {
+        label: "Cosmetics Score",
+        value: LabelType.Cosmetics,
+        backgroundImg: LineCosmetics,
     },
 ];
 
 const LineTab = () => {
+    const [activeIndex, setActiveIndex] = useState(-1);
     const [currentIconType, setCurrentIconType] = useState<IconType>(null);
     return (
         <Flex
@@ -329,45 +521,86 @@ const LineTab = () => {
                 justifyContent: "center",
                 transition: "all 1s",
                 paddingTop: "80px",
+                position: "relative",
             }}
         >
+            {activeIndex >= 0 && (
+                <Box
+                    sx={{
+                        position: "absolute",
+                        left: "0",
+                        top: "100px",
+                        width: "480px",
+                    }}
+                >
+                    {list2[activeIndex].value === LabelType.Aviation && (
+                        <AviationDes></AviationDes>
+                    )}
+                    {list2[activeIndex].value === LabelType.Cosmetics && (
+                        <CosmeticsDes></CosmeticsDes>
+                    )}
+                    {list2[activeIndex].value === LabelType.Mileage && (
+                        <MileageDes></MileageDes>
+                    )}
+                    {list2[activeIndex].value === LabelType.Up && (
+                        <UpDes></UpDes>
+                    )}
+                    {list2[activeIndex].value === LabelType.Estate && (
+                        <EstateDes></EstateDes>
+                    )}
+                </Box>
+            )}
             <Box
                 sx={{
                     width: "988px",
-                    marginRight: "30px",
+                    marginRight: "50px",
                 }}
             >
                 <Box
                     sx={{
                         height: "782px",
-                        backgroundImage: `url(${LineAll})`,
+                        backgroundImage: `url(${
+                            activeIndex === -1
+                                ? LineAll
+                                : list2[activeIndex].backgroundImg
+                        })`,
                         backgroundSize: "cover",
                         backgroundRepeat: "no-repeat",
                         position: "relative",
                     }}
                 >
-                    {list.map((item) => {
+                    {list.map((item: any) => {
                         return (
                             <Box
                                 onClick={() => {
                                     const value = item.value;
-                                    if (value && value === currentIconType) {
+                                    if (!value) {
+                                        return;
+                                    }
+                                    setActiveIndex(-1);
+                                    if (value === currentIconType) {
                                         setCurrentIconType(null);
                                         return;
                                     }
-                                    if (value) {
-                                        setCurrentIconType(value);
-                                    }
+                                    setCurrentIconType(value);
                                 }}
                                 sx={{
                                     position: "absolute",
                                     ...item.position,
-                                    border: "2px solid #FFD700",
+                                    border: "2px solid #fff",
                                     borderRadius: "50%",
                                     padding: "4px",
+                                    opacity:
+                                        activeIndex === -1 ||
+                                        item.show.includes(
+                                            list2[activeIndex].value,
+                                        )
+                                            ? 1
+                                            : 0.5,
                                     "&:hover": {
-                                        border: "2px solid #FFD700",
-                                        borderRadius: "50%",
+                                        border:
+                                            item.value && "2px solid #FFD700",
+                                        cursor: item.value && "pointer",
                                     },
                                 }}
                             >
@@ -386,14 +619,6 @@ const LineTab = () => {
                                 >
                                     {item.text}
                                 </Text>
-                                {/* <Box
-                                    sx={{
-                                        width: item.imgWidth,
-                                        height: item.imgWidth,
-                                        background: "red",
-                                        borderRadius: "50%",
-                                    }}
-                                ></Box> */}
                                 <Image
                                     src={item.icon}
                                     sx={{
@@ -405,6 +630,67 @@ const LineTab = () => {
                         );
                     })}
                 </Box>
+                <Flex
+                    justify={"space-around"}
+                    sx={{
+                        marginTop: "100px",
+                    }}
+                >
+                    {list2.map((item, index) => {
+                        return (
+                            <Flex
+                                align={"center"}
+                                flexDir={"column"}
+                                onClick={() => {
+                                    setCurrentIconType(null);
+                                    if (index === activeIndex) {
+                                        setActiveIndex(-1);
+                                        return;
+                                    }
+                                    setActiveIndex(index);
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        width: "25px",
+                                        height: "25px",
+                                        borderRadius: "50%",
+                                        padding: "6px",
+                                        border:
+                                            index === activeIndex
+                                                ? "1px solid #FFD700"
+                                                : "1px solid transparent",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            width: "100%",
+                                            height: "100%",
+                                            background:
+                                                index === activeIndex
+                                                    ? "#FFD700"
+                                                    : "#fff",
+                                            borderRadius: "50%",
+                                        }}
+                                    ></Box>
+                                </Box>
+                                <Text
+                                    sx={{
+                                        fontSize: "16px",
+                                        color:
+                                            index === activeIndex
+                                                ? "#FFD700"
+                                                : "#fff",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {item.label}
+                                </Text>
+                            </Flex>
+                        );
+                    })}
+                </Flex>
             </Box>
 
             <motion.div
@@ -417,7 +703,6 @@ const LineTab = () => {
                     <AviationLvlPt></AviationLvlPt>
                 )}
                 {currentIconType === IconType.Mileage && <Mileage></Mileage>}
-
                 {currentIconType === IconType.Merc && <Merc></Merc>}
             </motion.div>
         </Flex>

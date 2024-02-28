@@ -718,7 +718,7 @@ const BttRules = () => {
                 position: "relative",
                 paddingTop: "10vh",
                 height: "100%",
-                fontFamily: "Orbitron",
+                fontFamily: "Quantico",
             }}
         >
             {isPc ? (
@@ -779,9 +779,16 @@ const BttRules = () => {
                     width: "83.3333vw",
                     margin: "0 auto",
                     borderTop: isPc && "1px solid #fff",
-                    paddingTop: "1.8519vh",
+                    paddingTop: "22px",
                 }}
             >
+                <Text
+                    sx={{
+                        fontSize: "24px",
+                    }}
+                >
+                    Detailed Rules
+                </Text>
                 {showTab && <LineTab></LineTab>}
             </Box>
             {!showTab && (
