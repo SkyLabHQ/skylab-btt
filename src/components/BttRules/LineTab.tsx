@@ -216,7 +216,7 @@ const list: any = [
             bottom: "-0.3125vw",
         },
         imgWidth: "5.9375vw",
-        show: [LabelType.Aviation, LabelType.Mileage],
+        show: [LabelType.Aviation, LabelType.Mileage, LabelType.Cosmetics],
     },
     {
         icon: PlayIcon,
@@ -697,7 +697,7 @@ const LineTab = () => {
             <motion.div
                 style={{ transition: "all 0.3s" }}
                 animate={{
-                    width: currentIconType ? "29.4792vw" : "0",
+                    width: currentIconType ? "29.1667vw" : "0",
                 }}
             >
                 {currentIconType === IconType.Avaition && (

@@ -9,7 +9,7 @@ const BttRules = () => {
         <>
             <TournamentHelmet></TournamentHelmet>
             <Box
-                w="100vw"
+                w="100%"
                 minH="100vh"
                 pos="relative"
                 background={`url(${MercuryBg}), url(${BlueBg})`}
