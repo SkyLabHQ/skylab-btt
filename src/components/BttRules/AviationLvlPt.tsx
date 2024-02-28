@@ -18,7 +18,7 @@ const AviationLvlPt = () => {
     };
 
     return (
-        <Box>
+        <Box sx={{}}>
             <Text
                 sx={{
                     fontSize: "1.6667vw",

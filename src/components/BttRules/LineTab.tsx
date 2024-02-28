@@ -523,6 +523,7 @@ const LineTab = () => {
                 transition: "all 1s",
                 paddingTop: "4.1667vw",
                 position: "relative",
+                overflow: "hidden",
             }}
         >
             {activeIndex >= 0 && (
@@ -695,16 +696,25 @@ const LineTab = () => {
             </Box>
 
             <motion.div
-                style={{ transition: "all 0.3s" }}
+                style={{ transition: "all 0.1s" }}
                 animate={{
                     width: currentIconType ? "29.1667vw" : "0",
+                    overflow: "hidden",
                 }}
             >
-                {currentIconType === IconType.Avaition && (
-                    <AviationLvlPt></AviationLvlPt>
-                )}
-                {currentIconType === IconType.Mileage && <Mileage></Mileage>}
-                {currentIconType === IconType.Merc && <Merc></Merc>}
+                <motion.div
+                    style={{
+                        width: "29.1667vw",
+                    }}
+                >
+                    {currentIconType === IconType.Avaition && (
+                        <AviationLvlPt></AviationLvlPt>
+                    )}
+                    {currentIconType === IconType.Mileage && (
+                        <Mileage></Mileage>
+                    )}
+                    {currentIconType === IconType.Merc && <Merc></Merc>}
+                </motion.div>
             </motion.div>
         </Flex>
     );

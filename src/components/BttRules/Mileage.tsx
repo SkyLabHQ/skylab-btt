@@ -41,6 +41,8 @@ const Mileage = () => {
                     sx={{
                         padding: "1.0417vw",
                         fontSize: isPc ? "1.0417vw" : "0.625vw",
+                        height: "6.7708vw",
+                        overflowY: "hidden",
                     }}
                 >
                     <Text>Pilot earn mileage through playing games.</Text>
