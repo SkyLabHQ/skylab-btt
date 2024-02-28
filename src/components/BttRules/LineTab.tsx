@@ -44,41 +44,41 @@ const list: any = [
         icon: TaxIcon,
         text: "Tax Redistribution",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
             left: "50%",
             top: "-2",
             transform: "translate(-50%, 0)",
         },
-        imgWidth: "84px",
+        imgWidth: "4.375vw",
         show: [LabelType.Estate],
     },
     {
         icon: EstateScoreIcon,
         text: "Estate Score",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
             left: "50%",
-            top: "136px",
+            top: "7.0833vw",
             transform: "translate(-50%, 0)",
         },
-        imgWidth: "84px",
+        imgWidth: "4.375vw",
         show: [LabelType.Estate, LabelType.Cosmetics],
     },
     {
         icon: PlaneIcon,
         text: "Aviation Lvl-Pt",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
-            right: "182px",
-            top: "541px",
+            right: "9.4792vw",
+            top: "28.1771vw",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         value: IconType.Avaition,
         show: [LabelType.Aviation],
     },
@@ -86,28 +86,28 @@ const list: any = [
         icon: PilotIcon,
         text: "Pilot",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
             left: "50%",
-            bottom: "72px",
+            bottom: "3.75vw",
             transform: "translate(-50%, 0)",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         show: [],
     },
     {
         icon: MileageS,
         text: "Mileage",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
             left: "50%",
-            bottom: "218px",
+            bottom: "11.3542vw",
             transform: "translate(-50%, 0)",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         value: IconType.Mileage,
         show: [LabelType.Mileage],
     },
@@ -115,13 +115,13 @@ const list: any = [
         icon: MercIcon,
         text: "Merc",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
-            left: "194px",
-            bottom: "286px",
+            left: "10.1042vw",
+            bottom: "14.8958vw",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         value: IconType.Merc,
         show: [LabelType.Up],
     },
@@ -129,79 +129,79 @@ const list: any = [
         icon: CosmeticsScoreIcon,
         text: "Cosmetics Score",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
-            left: "-6px",
-            top: "308px",
+            left: "-0.3125vw",
+            top: "16.0417vw",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         show: [LabelType.Cosmetics],
     },
     {
         icon: VaultIcon,
         text: "Vault Rights",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
-            left: "194px",
-            top: "274px",
+            left: "10.1042vw",
+            top: "14.2708vw",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         show: [LabelType.Up],
     },
     {
         icon: UpgradeP,
         text: "Upgrade Power",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
             left: "50%",
-            top: "338px",
+            top: "17.6042vw",
             transform: "translate(-50%, 0)",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         show: [LabelType.Mileage],
     },
     {
         icon: BabyMercIcon,
         text: "Baby Merc",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
-            right: "192px",
-            bottom: "286px",
+            right: "10vw",
+            bottom: "14.8958vw",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         show: [LabelType.Up],
     },
     {
         icon: CosmeticsIcon,
         text: "Cosmetics",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
-            left: "193px",
-            top: "541px",
+            left: "10.0521vw",
+            top: "28.1771vw",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         show: [LabelType.Mileage, LabelType.Cosmetics],
     },
     {
         icon: AviScore,
         text: "Aviation Score ",
         textPosition: {
-            top: "-32px",
+            top: "-1.6667vw",
         },
         position: {
-            right: "-6px",
-            top: "308px",
+            right: "-0.3125vw",
+            top: "16.0417vw",
         },
-        imgWidth: "79px",
+        imgWidth: "4.1146vw",
         show: [LabelType.Estate],
     },
 
@@ -209,26 +209,26 @@ const list: any = [
         icon: TournamentIcon,
         text: "Tournament",
         textPosition: {
-            bottom: "-32px",
+            bottom: "-1.6667vw",
         },
         position: {
-            left: "295px",
-            bottom: "-6px",
+            left: "15.3646vw",
+            bottom: "-0.3125vw",
         },
-        imgWidth: "114px",
+        imgWidth: "5.9375vw",
         show: [LabelType.Aviation, LabelType.Mileage],
     },
     {
         icon: PlayIcon,
         text: "Play game",
         textPosition: {
-            bottom: "-32px",
+            bottom: "-1.6667vw",
         },
         position: {
-            right: "284px",
-            bottom: "-6px",
+            right: "14.7917vw",
+            bottom: "-0.3125vw",
         },
-        imgWidth: "114px",
+        imgWidth: "5.9375vw",
         show: [LabelType.Mileage, LabelType.Aviation],
     },
 ];
@@ -238,14 +238,14 @@ const AviationDes = () => {
         <Box>
             <Text
                 sx={{
-                    fontSize: "24px",
+                    fontSize: "1.25vw",
                 }}
             >
                 Aviation Lvl-Pt:
             </Text>
             <Text
                 sx={{
-                    fontSize: "18px",
+                    fontSize: "0.9375vw",
                 }}
             >
                 Win games to earn{" "}
@@ -276,14 +276,14 @@ const MileageDes = () => {
         <Box>
             <Text
                 sx={{
-                    fontSize: "24px",
+                    fontSize: "1.25vw",
                 }}
             >
                 Mileage:
             </Text>
             <Text
                 sx={{
-                    fontSize: "18px",
+                    fontSize: "0.9375vw",
                 }}
             >
                 {" "}
@@ -330,14 +330,14 @@ const UpDes = () => {
         <Box>
             <Text
                 sx={{
-                    fontSize: "24px",
+                    fontSize: "1.25vw",
                 }}
             >
                 UP & Merc:
             </Text>
             <Text
                 sx={{
-                    fontSize: "18px",
+                    fontSize: "0.9375vw",
                 }}
             >
                 {" "}
@@ -379,14 +379,14 @@ const CosmeticsDes = () => {
         <Box>
             <Text
                 sx={{
-                    fontSize: "24px",
+                    fontSize: "1.25vw",
                 }}
             >
                 Cosmetics Score:
             </Text>
             <Text
                 sx={{
-                    fontSize: "18px",
+                    fontSize: "0.9375vw",
                 }}
             >
                 Earn cosmetics through participating in{" "}
@@ -434,14 +434,14 @@ const EstateDes = () => {
             {" "}
             <Text
                 sx={{
-                    fontSize: "24px",
+                    fontSize: "1.25vw",
                 }}
             >
                 Estate Score:
             </Text>
             <Text
                 sx={{
-                    fontSize: "18px",
+                    fontSize: "0.9375vw",
                 }}
             >
                 A 2% transfer tax is imposed on every plane transaction. Project
@@ -518,9 +518,10 @@ const LineTab = () => {
         <Flex
             sx={{
                 width: "100%",
+                height: "100%",
                 justifyContent: "center",
                 transition: "all 1s",
-                paddingTop: "80px",
+                paddingTop: "4.1667vw",
                 position: "relative",
             }}
         >
@@ -529,8 +530,8 @@ const LineTab = () => {
                     sx={{
                         position: "absolute",
                         left: "0",
-                        top: "100px",
-                        width: "480px",
+                        top: "5.2083vw",
+                        width: "25vw",
                     }}
                 >
                     {list2[activeIndex].value === LabelType.Aviation && (
@@ -552,13 +553,13 @@ const LineTab = () => {
             )}
             <Box
                 sx={{
-                    width: "988px",
-                    marginRight: "50px",
+                    width: "51.4583vw",
+                    marginRight: currentIconType && "2.6042vw",
                 }}
             >
                 <Box
                     sx={{
-                        height: "782px",
+                        height: "40.7292vw",
                         backgroundImage: `url(${
                             activeIndex === -1
                                 ? LineAll
@@ -589,7 +590,7 @@ const LineTab = () => {
                                     ...item.position,
                                     border: "2px solid #fff",
                                     borderRadius: "50%",
-                                    padding: "4px",
+                                    padding: "0.2083vw",
                                     opacity:
                                         activeIndex === -1 ||
                                         item.show.includes(
@@ -606,11 +607,11 @@ const LineTab = () => {
                             >
                                 <Text
                                     sx={{
-                                        fontSize: "20px",
+                                        fontSize: "1.0417vw",
                                         position: "absolute",
                                         left: "50%",
                                         transform: "translate(-50%, 0)",
-                                        width: "240px",
+                                        width: "12.5vw",
                                         textAlign: "center",
                                         wordBreak: "break-word",
                                         fontWeight: "bold",
@@ -633,7 +634,7 @@ const LineTab = () => {
                 <Flex
                     justify={"space-around"}
                     sx={{
-                        marginTop: "100px",
+                        marginTop: "5.2083vw",
                     }}
                 >
                     {list2.map((item, index) => {
@@ -652,10 +653,10 @@ const LineTab = () => {
                             >
                                 <Box
                                     sx={{
-                                        width: "25px",
-                                        height: "25px",
+                                        width: "1.3021vw",
+                                        height: "1.3021vw",
                                         borderRadius: "50%",
-                                        padding: "6px",
+                                        padding: "0.3125vw",
                                         border:
                                             index === activeIndex
                                                 ? "1px solid #FFD700"
@@ -677,7 +678,7 @@ const LineTab = () => {
                                 </Box>
                                 <Text
                                     sx={{
-                                        fontSize: "16px",
+                                        fontSize: "0.8333vw",
                                         color:
                                             index === activeIndex
                                                 ? "#FFD700"
@@ -696,7 +697,7 @@ const LineTab = () => {
             <motion.div
                 style={{ transition: "all 0.3s" }}
                 animate={{
-                    width: currentIconType ? "566px" : "0",
+                    width: currentIconType ? "29.4792vw" : "0",
                 }}
             >
                 {currentIconType === IconType.Avaition && (

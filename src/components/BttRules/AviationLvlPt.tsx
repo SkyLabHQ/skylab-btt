@@ -18,10 +18,10 @@ const AviationLvlPt = () => {
     };
 
     return (
-        <Box sx={{ width: "566px" }}>
+        <Box>
             <Text
                 sx={{
-                    fontSize: "32px",
+                    fontSize: "1.6667vw",
                     fontWeight: "bold",
                 }}
             >
@@ -30,10 +30,10 @@ const AviationLvlPt = () => {
             <Box
                 sx={{
                     border: "1px solid #FDDC2D",
-                    borderRadius: "15px",
-                    backdropFilter: "blur(15px)",
+                    borderRadius: "0.7813vw",
+                    backdropFilter: "blur(0.7813vw)",
                     background: "rgba(113,157,151,0.5)",
-                    marginTop: "10px",
+                    marginTop: "0.5208vw",
                 }}
             >
                 <Flex
@@ -42,9 +42,9 @@ const AviationLvlPt = () => {
                         alignItems: "center",
                         justifyContent: "center",
                         borderBottom: "1px solid #FDDC2D",
-                        borderRadius: "0 0 15px 15px",
-                        padding: isPc ? "0 60px" : " 20px 30px",
-                        height: "566px",
+                        borderRadius: "0 0 0.7813vw 0.7813vw",
+                        padding: isPc ? "0 3.125vw" : " 1.0417vw 1.5625vw",
+                        height: "29.4792vw",
                         position: "relative",
                     }}
                 >
@@ -64,7 +64,7 @@ const AviationLvlPt = () => {
                             position: "absolute",
                             left: "0.5208vw",
                             cursor: "pointer",
-                            width: isPc ? "24px" : "12px",
+                            width: isPc ? "1.25vw" : "0.625vw",
                         }}
                         onClick={handleSub}
                     ></Image>
@@ -74,19 +74,19 @@ const AviationLvlPt = () => {
                             position: "absolute",
                             right: "0.5208vw",
                             cursor: "pointer",
-                            width: isPc ? "24px" : "12px",
+                            width: isPc ? "1.25vw" : "0.625vw",
                         }}
                         onClick={handleAdd}
                     ></Image>
                 </Flex>
                 <Box
                     sx={{
-                        padding: "20px",
+                        padding: "1.0417vw",
                     }}
                 >
                     <Text
                         sx={{
-                            fontSize: isPc ? "20px" : "12px",
+                            fontSize: isPc ? "1.0417vw" : "0.625vw",
 
                             textAlign: "center",
                         }}

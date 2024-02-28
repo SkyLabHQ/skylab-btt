@@ -6,10 +6,10 @@ const Merc = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
     return (
-        <Box sx={{ width: "566px" }}>
+        <Box>
             <Text
                 sx={{
-                    fontSize: "32px",
+                    fontSize: "1.6667vw",
                     fontWeight: "bold",
                 }}
             >
@@ -18,10 +18,10 @@ const Merc = () => {
             <Box
                 sx={{
                     border: "1px solid #FDDC2D",
-                    borderRadius: "15px",
-                    backdropFilter: "blur(15px)",
+                    borderRadius: "0.7813vw",
+                    backdropFilter: "blur(0.7813vw)",
                     background: "rgba(113,157,151,0.5)",
-                    marginTop: "10px",
+                    marginTop: "0.5208vw",
                 }}
             >
                 <Flex
@@ -30,8 +30,8 @@ const Merc = () => {
                         alignItems: "center",
                         justifyContent: "center",
                         borderBottom: "1px solid #FDDC2D",
-                        borderRadius: "0 0 15px 15px",
-                        height: "400px",
+                        borderRadius: "0 0 0.7813vw 0.7813vw",
+                        height: "20.8333vw",
                         position: "relative",
                     }}
                 >
@@ -39,12 +39,12 @@ const Merc = () => {
                 </Flex>
                 <Box
                     sx={{
-                        padding: "20px",
+                        padding: "1.0417vw",
                     }}
                 >
                     <Text
                         sx={{
-                            fontSize: isPc ? "20px" : "12px",
+                            fontSize: isPc ? "1.0417vw" : "0.625vw",
                             textAlign: "center",
                         }}
                     >
