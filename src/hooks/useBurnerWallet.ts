@@ -3,10 +3,10 @@ import { useCallback } from "react";
 import { useSkylabBidTacToeContract } from "./useContract";
 import { ChainId, SUPPORTED_NETWORKS } from "@/utils/web3Utils";
 import useSkyToast from "./useSkyToast";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
 import { useEthersProvider } from "./useWagmiToEthers";
-import { waitForTransaction } from "@/utils/web3Network";
 import { getViemClients } from "@/utils/viem";
+import usePrivyAccounts from "./usePrivyAccount";
 
 export enum BalanceState {
     ACCOUNT_LACK,
@@ -44,7 +44,7 @@ const balanceInfo = {
 
 export const useCheckBurnerBalanceAndApprove = () => {
     const toast = useSkyToast();
-    const { address } = useAccount();
+    const { address } = usePrivyAccounts();
     const library = useEthersProvider();
     const chainId = useChainId();
     const skylabBidTacToeContract = useSkylabBidTacToeContract();

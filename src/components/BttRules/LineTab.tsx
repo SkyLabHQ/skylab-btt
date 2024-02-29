@@ -571,9 +571,10 @@ const LineTab = () => {
                         position: "relative",
                     }}
                 >
-                    {list.map((item: any) => {
+                    {list.map((item: any, index: number) => {
                         return (
                             <Box
+                                key={index}
                                 onClick={() => {
                                     const value = item.value;
                                     if (!value) {

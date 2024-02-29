@@ -20,7 +20,8 @@ import AllPilotList, { PilotBaseInfo } from "@/skyConstants/pilots";
 import OpenSeaLink from "./assets/opensea-link.svg";
 import PilotLock from "./assets/pilot-lock.svg";
 import BackIcon from "./assets/simple-back.svg";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 export const PilotItem = ({
     onClick,
@@ -154,7 +155,7 @@ const SelectPilotCollections = ({
     const { isOpen, onOpen, onClose } = useDisclosure({
         defaultIsOpen: true,
     });
-    const { address } = useAccount();
+    const { signer, address } = usePrivyAccounts();
     const chainId = useChainId();
     const [currentMyNfts, setCurrentMyNfts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -176,7 +177,7 @@ const SelectPilotCollections = ({
         const [balance] = await multiProvider.all([
             multiERC721Contract.balanceOf(address),
         ]);
-
+        console.log(balance, "balancebalancebalancebalancebalancebalance");
         const pilotIds = await multiProvider.all(
             new Array(balance.toNumber()).fill("").map((item, index) => {
                 return multiERC721Contract.tokenOfOwnerByIndex(address, index);
@@ -203,11 +204,17 @@ const SelectPilotCollections = ({
     };
 
     useEffect(() => {
-        if (!currentCollection.enumerable) {
+        if (
+            !currentCollection.enumerable ||
+            !multiERC721Contract ||
+            !multiProvider ||
+            !address
+        ) {
             return;
         }
+
         handleGetAllNft();
-    }, [currentCollection]);
+    }, [currentCollection, multiProvider, multiERC721Contract, address]);
 
     return (
         <Box>

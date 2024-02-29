@@ -19,10 +19,9 @@ import { usePilotInfo } from "@/hooks/usePilotInfo";
 import GameLeaderboard from "./GameLeaderboard";
 import MyPilot from "./MyPilot";
 import MileageArrow from "./assets/mileage-arrow.svg";
-import { useAccount } from "wagmi";
-import { ConnectKitButton } from "connectkit";
 import { useEffect } from "react";
 import BMileageIcon from "./assets/b-mileage.png";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const Mileage = ({
     value,
@@ -32,7 +31,7 @@ const Mileage = ({
     onNextRound: (value: string) => void;
 }) => {
     const navigate = useNavigate();
-    const { address } = useAccount();
+    const { signer, address } = usePrivyAccounts();
     const { activePilot } = usePilotInfo(address);
 
     return (
@@ -47,29 +46,23 @@ const Mileage = ({
                 alignItems: "center",
             }}
         >
-            <ConnectKitButton.Custom>
-                {({ show }) => {
-                    return (
-                        <MyPilot
-                            sx={{
-                                width: "4.6875vw !important",
-                                height: "4.6875vw !important",
-                            }}
-                            className="pilot-avatar"
-                            img={activePilot.img}
-                            showSupport={activePilot.owner !== address}
-                            onClick={async () => {
-                                if (!address) {
-                                    show();
-                                    return;
-                                }
-
-                                onNextRound("currentPilot");
-                            }}
-                        ></MyPilot>
-                    );
+            <MyPilot
+                sx={{
+                    width: "4.6875vw !important",
+                    height: "4.6875vw !important",
                 }}
-            </ConnectKitButton.Custom>
+                className="pilot-avatar"
+                img={activePilot.img}
+                showSupport={activePilot.owner !== address}
+                onClick={async () => {
+                    if (!address) {
+                        // show();
+                        return;
+                    }
+
+                    onNextRound("currentPilot");
+                }}
+            ></MyPilot>
 
             <Popover>
                 <PopoverTrigger>
@@ -268,7 +261,7 @@ const RightNav = ({
     showLeaderboard: boolean;
     onNextRound: (step: number | string) => void;
 }) => {
-    const { address } = useAccount();
+    const { signer, address } = usePrivyAccounts();
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
     const { activePilot } = usePilotInfo(address);

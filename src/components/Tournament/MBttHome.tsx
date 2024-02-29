@@ -14,8 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { usePilotInfo } from "@/hooks/usePilotInfo";
 import MyPilot from "./MyPilot";
 import MileageArrow from "./assets/mileage-arrow.svg";
-import { useAccount } from "wagmi";
-import { ConnectKitButton } from "connectkit";
 import TopMenu from "./TopMenu";
 import Tutorialcon from "./Tutorialcon";
 import GrayPlanet from "@/components/Tournament/assets/gray-planet.png";
@@ -30,6 +28,7 @@ import MGameLeaderboard from "./MGameLeaderboard";
 import DownArrow from "./assets/down-arrow.svg";
 import useSkyToast from "@/hooks/useSkyToast";
 import BMileageIcon from "./assets/b-mileage.png";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const MileagePopover = ({ value }: { value: any }) => {
     const navigate = useNavigate();
@@ -232,7 +231,7 @@ const Mileage = ({
     onNextRound: (value: string) => void;
 }) => {
     const toast = useSkyToast();
-    const { address } = useAccount();
+    const { signer, address } = usePrivyAccounts();
     const { activePilot } = usePilotInfo(address);
 
     return (
@@ -246,36 +245,28 @@ const Mileage = ({
                 alignItems: "center",
             }}
         >
-            <ConnectKitButton.Custom>
-                {({ show }) => {
-                    return (
-                        <MyPilot
-                            sx={{
-                                width: "58px !important",
-                                height: "58px !important",
-                                marginRight: "16px",
-                            }}
-                            className="pilot-avatar"
-                            img={activePilot.img}
-                            showSupport={activePilot.owner !== address}
-                            onClick={async () => {
-                                if (!address) {
-                                    if (window.ethereum) {
-                                        show();
-                                    } else {
-                                        toast(
-                                            "Please open this page in wallet browser",
-                                        );
-                                    }
-                                    return;
-                                }
-
-                                onNextRound("currentPilot");
-                            }}
-                        ></MyPilot>
-                    );
+            <MyPilot
+                sx={{
+                    width: "58px !important",
+                    height: "58px !important",
+                    marginRight: "16px",
                 }}
-            </ConnectKitButton.Custom>
+                className="pilot-avatar"
+                img={activePilot.img}
+                showSupport={activePilot.owner !== address}
+                onClick={async () => {
+                    if (!address) {
+                        if (window.ethereum) {
+                            // show();
+                        } else {
+                            toast("Please open this page in wallet browser");
+                        }
+                        return;
+                    }
+
+                    onNextRound("currentPilot");
+                }}
+            ></MyPilot>
 
             <MileagePopover value={address ? value : "?"}></MileagePopover>
         </Box>
@@ -291,7 +282,7 @@ const MBttHome = ({
 }) => {
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
-    const { address } = useAccount();
+    const { signer, address } = usePrivyAccounts();
     const { activePilot } = usePilotInfo(address);
     const imgAnimation = useAnimation();
 

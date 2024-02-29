@@ -10,6 +10,7 @@ import Discord from "./assets/discord.svg";
 import Tw from "./assets/tw.svg";
 import Telegram from "./assets/telegram.svg";
 import SkylabIcon from "./assets/skylab-icon.svg";
+
 export const arrowPosition = ["left", "left", "left", "top", "right"];
 export const mArrowPosition = ["left", "left", "left", "left", "right"];
 
@@ -533,6 +534,7 @@ const MissionRound = ({ onNextRound }: ChildProps) => {
     const [active, setActive] = useState(1);
     const [showAllActivities, setShowAllActivities] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
+
     return (
         <TourProvider
             onClickMask={() => {}}

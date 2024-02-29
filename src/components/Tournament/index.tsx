@@ -32,7 +32,7 @@ import { RankBackground, RankMedal } from "@/skyConstants/rank";
 import { ActivePilotRes, handlePilotsInfo } from "@/skyConstants/pilots";
 import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import WinBg from "./assets/galaxy-bg.svg";
-import { useAccount, useWalletClient } from "wagmi";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const Empty = () => {
     return (
@@ -644,7 +644,7 @@ export const Leaderboard = ({
 }: ChildProps): ReactElement => {
     const [controlledSwiper, setControlledSwiper] = useState(null);
     const [childLoading] = useState(false);
-    const { address } = useAccount();
+    const { signer, address } = usePrivyAccounts();
     const [selectRound, setSelectRound] = useState(currentRound);
 
     const [tokenIdList, setTokenIdList] = useState<any[]>([]);

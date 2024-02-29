@@ -12,7 +12,7 @@ import LevelInfo from "@/components/TacToe/LevelInfo";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
 import {
     skylabTestFlightAddress,
@@ -27,6 +27,7 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/TacToe/GameOver";
 import ReactCanvasNest from "react-canvas-nest";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 export interface Info {
     burner: string;
@@ -82,7 +83,7 @@ export const useGameContext = () => useContext(GameContext);
 
 const TacToe = () => {
     const chainId = useChainId();
-    const { address: account } = useAccount();
+    const { address: account } = usePrivyAccounts();
 
     const [gameType, setGameType] = useState<GameType>(GameType.Unkown);
     const [mileages, setMileages] = useState<{

@@ -11,7 +11,8 @@ import { PilotInfo } from "@/hooks/usePilotInfo";
 import { PilotXp } from "./PilotXp";
 import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import { getPilotInfo, handlePilotsInfo } from "@/skyConstants/pilots";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const RegisteredPilot = ({
     selectPilotInfo,
@@ -20,7 +21,7 @@ const RegisteredPilot = ({
     selectPilotInfo: PilotInfo;
     handleSelectPilotId: (value: PilotInfo) => void;
 }) => {
-    const { address } = useAccount();
+    const { address } = usePrivyAccounts();
     const chainId = useChainId();
     const defaultMultiProvider = useMultiProvider(chainId);
 

@@ -5,21 +5,16 @@ import { Box, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 import { BrowserRouter } from "react-router-dom";
 import { WagmiConfig, createConfig } from "wagmi";
-import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+import { getDefaultConfig } from "connectkit";
 import { GlobalStyles } from "./skyConstants";
-import AppRoutes, { ScrollToTop } from "./Routes";
+import AppRoutes from "./Routes";
 import theme from "./theme";
 import { HelmetProvider } from "react-helmet-async";
-
 import { BlockNumberProvider } from "./contexts/BlockNumber";
 import { base, baseSepolia } from "viem/chains";
 import { SubmitRequestProvider } from "./contexts/SubmitRequest";
-
+import { PrivyProvider } from "@privy-io/react-auth";
 import logoIcon from "./assets/tournament.jpg";
-
-if (window && window.ethereum) {
-    window.ethereum.autoRefreshOnNetworkChange = false;
-}
 
 const chains =
     process.env.REACT_APP_ENV === "development" ? [baseSepolia] : [base];
@@ -41,25 +36,42 @@ const config = createConfig(
 root.render(
     <Box sx={{ height: "100%" }}>
         <ColorModeScript />
-        <ChakraProvider theme={theme}>
-            <Global styles={GlobalStyles} />
-            <BrowserRouter>
-                <WagmiConfig config={config}>
-                    <ConnectKitProvider>
+        <PrivyProvider
+            appId="clt24409l0clp3488rr6vgpwh"
+            config={{
+                defaultChain: baseSepolia,
+
+                appearance: {
+                    accentColor: "#6A6FF5",
+                    theme: "#FFFFFF",
+                    showWalletLoginFirst: false,
+                    logo: "https://pub-dc971f65d0aa41d18c1839f8ab426dcb.r2.dev/privy.png",
+                },
+                loginMethods: ["wallet", "discord", "twitter"],
+                embeddedWallets: {
+                    createOnLogin: "users-without-wallets",
+                    requireUserPasswordOnCreate: false,
+                },
+                mfa: { noPromptOnMfaRequired: false },
+            }}
+        >
+            <ChakraProvider theme={theme}>
+                <Global styles={GlobalStyles} />
+                <BrowserRouter>
+                    <WagmiConfig config={config}>
                         <BlockNumberProvider>
                             <SubmitRequestProvider>
                                 <Fragment>
-                                    <ScrollToTop />
                                     <HelmetProvider>
                                         <AppRoutes />
                                     </HelmetProvider>
                                 </Fragment>
                             </SubmitRequestProvider>
                         </BlockNumberProvider>
-                    </ConnectKitProvider>
-                </WagmiConfig>
-            </BrowserRouter>
-        </ChakraProvider>
+                    </WagmiConfig>
+                </BrowserRouter>
+            </ChakraProvider>
+        </PrivyProvider>
     </Box>,
 );
 

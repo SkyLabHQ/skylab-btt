@@ -57,8 +57,7 @@ import {
     topic0PrivateLobbyCreated,
     topic0Transfer,
 } from "@/skyConstants/iface";
-import { ConnectKitButton } from "connectkit";
-import { useAccount, useChainId, useWalletClient } from "wagmi";
+import { useChainId, useWalletClient } from "wagmi";
 import { decodeEventLog } from "viem";
 import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
 import Back from "@/components/Back";
@@ -69,6 +68,7 @@ import useCountDown from "react-countdown-hook";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import DotLoading from "@/components/Loading/DotLoading";
 import styled from "@emotion/styled";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -131,8 +131,7 @@ const TacToeMode = () => {
         onClose: onPreviousLobbyModalClose,
     } = useDisclosure();
     const navigate = useNavigate();
-    const { address } = useAccount();
-
+    const { address } = usePrivyAccounts();
     const chainId = useChainId();
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
     const multiProvider = useMultiProvider(DEAFAULT_CHAINID);
@@ -771,31 +770,25 @@ const TacToeMode = () => {
                                 }}
                             ></RequestNextButton>
                         ) : (
-                            <ConnectKitButton.Custom>
-                                {({ show }) => {
-                                    return (
-                                        <Box
-                                            onClick={() => {
-                                                show();
-                                            }}
-                                            sx={{
-                                                background: `url(${ConnectWalletBg}) no-repeat center`,
-                                                backgroundSize: "100% 100%",
-                                                height: "2.6042vw !important",
-
-                                                width: "25vw !important",
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                fontSize: "1.0417vw",
-                                                paddingTop: "2px",
-                                                cursor: "pointer",
-                                            }}
-                                        >
-                                            Connect Wallet
-                                        </Box>
-                                    );
+                            <Box
+                                onClick={() => {
+                                    // show();
                                 }}
-                            </ConnectKitButton.Custom>
+                                sx={{
+                                    background: `url(${ConnectWalletBg}) no-repeat center`,
+                                    backgroundSize: "100% 100%",
+                                    height: "2.6042vw !important",
+
+                                    width: "25vw !important",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    fontSize: "1.0417vw",
+                                    paddingTop: "2px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Connect Wallet
+                            </Box>
                         )}
                     </Box>
                 )}

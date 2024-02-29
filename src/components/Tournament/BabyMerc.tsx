@@ -11,7 +11,8 @@ import { useBabyMercsContract } from "@/hooks/useContract";
 import { ethers } from "ethers";
 import Loading from "../Loading";
 import { ChainId } from "@/utils/web3Utils";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const Price = {
     [ChainId.POLYGON]: 1,
@@ -23,7 +24,7 @@ const BabyMerc = ({
 }: {
     onNextRound: (step: number | string) => void;
 }) => {
-    const { address } = useAccount();
+    const { address } = usePrivyAccounts();
     const chainId = useChainId();
     const [loading, setLoading] = useState(false);
     const babyMercsContract = useBabyMercsContract();

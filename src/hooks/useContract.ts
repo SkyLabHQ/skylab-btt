@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import { useEthersProvider, useEthersSigner } from "./useWagmiToEthers";
 import { useChainId, useWalletClient } from "wagmi";
 import { getContract } from "@/utils/contractHelpers";
+import usePrivyAccounts from "./usePrivyAccount";
 
 type ChainIdToAddressMap = { [chainId in ChainId]?: string };
 
@@ -87,8 +88,7 @@ export const botAddress: ChainIdToAddressMap = {
 
 function useContract(address: any, abi: any) {
     const chainId = useChainId();
-    const signer = useEthersSigner();
-    const { data: walletClient } = useWalletClient();
+    const { signer } = usePrivyAccounts();
 
     return useMemo(() => {
         if (!address || !abi) return null;
@@ -97,7 +97,7 @@ function useContract(address: any, abi: any) {
                 abi,
                 address,
                 chainId,
-                signer: walletClient ?? undefined,
+                signer: signer ?? undefined,
             });
         } catch (error) {
             console.error("Failed to get contract", error);
@@ -119,25 +119,6 @@ export function getSigner(
     account: string,
 ): JsonRpcSigner {
     return library.getSigner(account).connectUnchecked();
-}
-
-// 获取本地私钥账户
-export function useLocalSigner(): ethers.Wallet {
-    const library = useEthersProvider();
-
-    const owner = useMemo(() => {
-        if (!library) return null;
-        let privateKey = localStorage.getItem("privateKey");
-        if (!privateKey) {
-            // 随机创建一个私钥账户
-            const randomAccount = ethers.Wallet.createRandom();
-            localStorage.setItem("privateKey", randomAccount.privateKey);
-            privateKey = randomAccount.privateKey;
-        }
-        const owner = new ethers.Wallet(privateKey, library);
-        return owner;
-    }, [library]);
-    return owner;
 }
 
 export const useTestflightContract = () => {

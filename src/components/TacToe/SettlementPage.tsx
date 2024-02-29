@@ -15,12 +15,12 @@ import MileageIcon from "@/components/Tournament/assets/mileage-icon.svg";
 import PilotIcon from "@/components/Tournament/assets/pilot-icon.svg";
 import RightArrowBlack from "@/components/Tournament/assets/right-arrow-black.svg";
 import { PrimaryButton } from "../Button/Index";
-import { useAccount } from "wagmi";
 import { GameState } from "@/skyConstants/bttGameTypes";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const PilotInfo = ({ mileage }: { mileage: number }) => {
     const { myActivePilot } = useGameContext();
-    const { address } = useAccount();
+    const { address } = usePrivyAccounts();
     const navigate = useNavigate();
 
     const pilotImg = myActivePilot?.img;

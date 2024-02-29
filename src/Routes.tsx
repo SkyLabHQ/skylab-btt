@@ -1,5 +1,5 @@
-import React, { ReactElement, useEffect } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import React, { ReactElement } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import Activities from "./pages/Activities";
 import TacToe from "./pages/TacToe";
@@ -13,19 +13,9 @@ import PrivateLobby from "./pages/PrivateLobby";
 import PrivateRoom from "./pages/PrivateRoom";
 import PrivatePlayBack from "./pages/PrivatePlayBack";
 import PrivateLiveGame from "./pages/PrivateLiveGame";
-import AddToHome from "./pages/AddToHome";
 import Test from "./pages/Test";
 import Tower from "./pages/Tower";
 
-export const ScrollToTop = () => {
-    const { pathname } = useLocation();
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [pathname]);
-
-    return <></>;
-};
 const AppRoutes = (): ReactElement => {
     return (
         <Routes>

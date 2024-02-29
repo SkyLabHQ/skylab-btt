@@ -11,8 +11,9 @@ import { MMyPilotXp, MyPilotXp } from "./PilotXp";
 import ExchangeIcon from "./assets/exchange.svg";
 import MyPilot from "./MyPilot";
 import UnknownPilotIcon from "./assets/unknow-pilot2.svg";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
 import MSelectPilotCollections from "./MSelectPilotCollections";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const CustomButton = styled(Button)`
     width: 10.4167vw;
@@ -66,7 +67,7 @@ const MCurrentPilot = ({
     handleSelectPilotId: (value: PilotInfo) => void;
     handlePilotIndex: (value: number) => void;
 }) => {
-    const { address, isConnected } = useAccount();
+    const { signer, address } = usePrivyAccounts();
     const chainId = useChainId();
 
     return (
