@@ -522,6 +522,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
             !opInfo.address ||
             !multiSkylabBidTacToeGameContract ||
             !multiProvider ||
+            revealing ||
             !blockNumber
         ) {
             return;

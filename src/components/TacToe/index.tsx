@@ -397,6 +397,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             !multiSkylabBidTacToeGameContract ||
             !blockNumber ||
             !ethcallProvider ||
+            revealing ||
             myGameInfo.gameState > GameState.Revealed
         )
             return;
