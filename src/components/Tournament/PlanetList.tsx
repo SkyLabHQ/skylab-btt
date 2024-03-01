@@ -4,6 +4,9 @@ import SectionActivities from "@/components/Tournament/assets/ring.svg";
 import BluePlanet from "@/components/Tournament/assets/blue-planet.png";
 import GrayPlanet from "@/components/Tournament/assets/gray-planet.png";
 import BttTitle from "@/components/Tournament/assets/btt-title.png";
+import BttTitle1 from "@/components/Tournament/assets/btt-title1.png";
+import BttTitle2 from "@/components/Tournament/assets/btt-title2.png";
+
 import EnterBt from "@/components/Tournament/assets/enter-bt.png";
 import { useNavigate } from "react-router-dom";
 import GrayPlanetBg from "./assets/gray-planet-bg.svg";
@@ -229,18 +232,34 @@ const PlanetList = ({
                                         ></Image>
                                     )}
                                     {isCurrent && (
-                                        <Box
-                                            sx={{
-                                                width: "140%",
-                                                position: "absolute",
-                                                left: "50%",
-                                                top: "50%",
-                                                transform:
-                                                    "translate(-49%, -50%)",
-                                            }}
-                                        >
-                                            <Image src={BttTitle}></Image>
-                                        </Box>
+                                        <>
+                                            {" "}
+                                            <Box
+                                                sx={{
+                                                    width: "140%",
+                                                    position: "absolute",
+                                                    left: "50%",
+                                                    top: "50%",
+                                                    transform:
+                                                        "translate(-44%, -50%)",
+                                                }}
+                                            >
+                                                <Image src={BttTitle1}></Image>
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    width: "140%",
+                                                    position: "absolute",
+                                                    left: "50%",
+                                                    top: "50%",
+                                                    transform:
+                                                        "translate(-44%, -50%)",
+                                                    zIndex: -1,
+                                                }}
+                                            >
+                                                <Image src={BttTitle2}></Image>
+                                            </Box>
+                                        </>
                                     )}
                                     {isCurrent && !showAllActivities && (
                                         <motion.div

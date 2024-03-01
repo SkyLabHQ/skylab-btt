@@ -17,7 +17,9 @@ import MileageArrow from "./assets/mileage-arrow.svg";
 import TopMenu from "./TopMenu";
 import Tutorialcon from "./Tutorialcon";
 import GrayPlanet from "@/components/Tournament/assets/gray-planet.png";
-import BttTitle from "@/components/Tournament/assets/btt-title.png";
+import BttTitle1 from "@/components/Tournament/assets/btt-title1.png";
+import BttTitle2 from "@/components/Tournament/assets/btt-title2.png";
+
 import EnterBt from "@/components/Tournament/assets/enter-bt.png";
 import GrayPlanetBg from "./assets/gray-planet-bg.svg";
 import { motion, useAnimation } from "framer-motion";
@@ -391,6 +393,30 @@ const MBttHome = ({
                     marginTop: "50px",
                 }}
             >
+                <Box
+                    sx={{
+                        width: "95%",
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-49%, -50%)",
+                        zIndex: 2,
+                    }}
+                >
+                    <Image src={BttTitle1}></Image>
+                </Box>
+                <Box
+                    sx={{
+                        width: "95%",
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-49%, -50%)",
+                        // zIndex: 1,
+                    }}
+                >
+                    <Image src={BttTitle2}></Image>
+                </Box>
                 <motion.div
                     style={{
                         background: `url(${GrayPlanetBg}) no-repeat`,
@@ -460,17 +486,7 @@ const MBttHome = ({
                         animate={imgAnimation}
                     ></motion.img>
                 </motion.div>
-                <Box
-                    sx={{
-                        width: "95%",
-                        position: "absolute",
-                        left: "50%",
-                        top: "50%",
-                        transform: "translate(-49%, -50%)",
-                    }}
-                >
-                    <Image src={BttTitle}></Image>
-                </Box>
+
                 <Flex
                     className="bid-tac-toe"
                     sx={{
