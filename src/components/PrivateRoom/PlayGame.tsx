@@ -340,6 +340,7 @@ const PlayGame = ({
             toast(handleError(e, true));
         }
     }, [
+        currentGrid,
         loading,
         myGameInfo,
         addGridCommited,
