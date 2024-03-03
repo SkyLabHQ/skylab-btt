@@ -1,5 +1,5 @@
 import { Box, Image, Text, useMediaQuery } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Bg from "./assets/settlement-bg.png";
 import GardenIcon from "./assets/garden-icon.png";
 import BackIcon from "./assets/back-arrow-home.svg";
@@ -17,6 +17,82 @@ import RightArrowBlack from "@/components/Tournament/assets/right-arrow-black.sv
 import { PrimaryButton } from "../Button/Index";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import { motion, useAnimation } from "framer-motion";
+
+function generateProgressLevels(startPoints: number, endPoints: number) {
+    const levelRanges = [
+        { level: 1, minPoints: 1, maxPoints: 2 },
+        { level: 2, minPoints: 2, maxPoints: 4 },
+        { level: 3, minPoints: 4, maxPoints: 8 },
+        { level: 4, minPoints: 8, maxPoints: 16 },
+        { level: 5, minPoints: 16, maxPoints: 32 },
+        { level: 6, minPoints: 32, maxPoints: 64 },
+        { level: 7, minPoints: 64, maxPoints: 128 },
+        { level: 8, minPoints: 128, maxPoints: 256 },
+        { level: 9, minPoints: 256, maxPoints: 512 },
+        { level: 10, minPoints: 512, maxPoints: 1024 },
+        { level: 11, minPoints: 1024, maxPoints: 2048 },
+        { level: 12, minPoints: 2048, maxPoints: 4096 },
+        { level: 13, minPoints: 4096, maxPoints: 8192 },
+        { level: 14, minPoints: 8192, maxPoints: 16384 },
+        { level: 15, minPoints: 16384, maxPoints: 32768 },
+        { level: 16, minPoints: 32768, maxPoints: 1000000 },
+    ];
+
+    const startLevelItem = levelRanges.find((item, index) => {
+        return startPoints >= item.minPoints && startPoints < item.maxPoints;
+    });
+
+    const endLevelItem = levelRanges.find((item, index) => {
+        return endPoints >= item.minPoints && endPoints < item.maxPoints;
+    });
+
+    const startRange =
+        (startPoints - startLevelItem.minPoints) /
+        (startLevelItem.maxPoints - startLevelItem.minPoints);
+
+    const endRange =
+        (endPoints - endLevelItem.minPoints) /
+        (endLevelItem.maxPoints - endLevelItem.minPoints);
+    console.log(endRange, "endRange");
+    // 如果是升级的
+    if (endPoints > startPoints) {
+        if (endLevelItem.level === startLevelItem.level) {
+            return [[startRange, endRange]];
+        } else {
+            const progressArray = [[startRange, 1]];
+
+            for (
+                let i = startLevelItem.level + 1;
+                i < endLevelItem.level;
+                i++
+            ) {
+                progressArray.push([0, 1]);
+            }
+
+            progressArray.push([0, endRange]);
+
+            return progressArray;
+        }
+    } else {
+        if (endLevelItem.level === startLevelItem.level) {
+            return [[endRange, startRange]];
+        } else {
+            const progressArray = [[startRange, 0]];
+
+            for (
+                let i = startLevelItem.level - 1;
+                i > endLevelItem.level;
+                i--
+            ) {
+                progressArray.push([1, 0]);
+            }
+
+            progressArray.push([1, endRange]);
+            return progressArray;
+        }
+    }
+}
 
 const PilotInfo = ({ mileage }: { mileage: number }) => {
     const { myActivePilot } = useGameContext();
@@ -213,44 +289,14 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
     );
 };
 
-// calculate level and upgrade progress
-function calculateLevelAndProgress(currentPoint: number, win: boolean = true) {
-    if (currentPoint === 0) {
-        return 0;
-    }
-
-    let nextPoint = 0;
-    let prePoint = 0;
-
-    if (win) {
-        for (let i = 0; i < levelRanges.length; i++) {
-            if (currentPoint <= levelRanges[i]) {
-                nextPoint = levelRanges[i];
-                prePoint = levelRanges[i - 1];
-                break;
-            }
-        }
-    } else {
-        for (let i = levelRanges.length - 1; i >= 0; i--) {
-            if (currentPoint >= levelRanges[i]) {
-                nextPoint = levelRanges[i + 1];
-                prePoint = levelRanges[i];
-                break;
-            }
-        }
-    }
-
-    const progress = ((currentPoint - prePoint) / (nextPoint - prePoint)) * 100;
-
-    return progress.toFixed(0);
-}
-
 const WinResult = ({
     myInfo,
     myNewInfo,
+    progressArray,
 }: {
     myInfo: Info;
     myNewInfo: MyNewInfo;
+    progressArray: number[][];
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
@@ -265,6 +311,25 @@ const WinResult = ({
             ];
         }
     }, [myNewInfo.level, myInfo.level]);
+
+    const clickAnimate = useAnimation();
+
+    useEffect(() => {
+        const handleUp = async () => {
+            for (let i = 0; i < progressArray.length; i++) {
+                await clickAnimate.set({
+                    width: progressArray[i][0] * 100 + "%",
+                });
+                await clickAnimate.start({
+                    width: progressArray[i][1] * 100 + "%",
+                    transition: {
+                        duration: 1,
+                    },
+                });
+            }
+        };
+        handleUp();
+    }, []);
 
     return (
         <Box>
@@ -356,16 +421,15 @@ const WinResult = ({
                         padding: isPc ? "0.3125vw" : "2px",
                     }}
                 >
-                    <Box
-                        sx={{
-                            width:
-                                calculateLevelAndProgress(myNewInfo.point) +
-                                "%",
+                    <motion.div
+                        style={{
                             height: "100%",
                             background: "#fff",
                             borderRadius: isPc ? "1.0417vw" : "10px",
                         }}
-                    ></Box>
+                        initial={{ width: "0%" }}
+                        animate={clickAnimate}
+                    ></motion.div>
                 </Box>
             </Box>
         </Box>
@@ -375,11 +439,31 @@ const WinResult = ({
 const LoseResult = ({
     myInfo,
     myNewInfo,
+    progressArray,
 }: {
     myInfo: Info;
     myNewInfo: MyNewInfo;
+    progressArray: number[][];
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const clickAnimate = useAnimation();
+
+    useEffect(() => {
+        const handleUp = async () => {
+            for (let i = 0; i < progressArray.length; i++) {
+                await clickAnimate.set({
+                    width: progressArray[i][0] * 100 + "%",
+                });
+                await clickAnimate.start({
+                    width: progressArray[i][1] * 100 + "%",
+                    transition: {
+                        duration: 1,
+                    },
+                });
+            }
+        };
+        handleUp();
+    }, []);
     return (
         <Box>
             <Text
@@ -471,18 +555,14 @@ const LoseResult = ({
                         padding: isPc ? "0.3125vw" : "2px",
                     }}
                 >
-                    <Box
-                        sx={{
-                            width:
-                                calculateLevelAndProgress(
-                                    myNewInfo.point,
-                                    false,
-                                ) + "%",
+                    <motion.div
+                        style={{
                             height: "100%",
                             background: "#fff",
                             borderRadius: isPc ? "1.0417vw" : "10px",
                         }}
-                    ></Box>
+                        animate={clickAnimate}
+                    ></motion.div>
                 </Box>
             </Box>
         </Box>
@@ -492,19 +572,22 @@ const LoseResult = ({
 const SettlementPage = ({}) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const {
-        myGameInfo,
-        myInfo,
-        // myNewInfo,
-        mileages,
-        istest,
-    } = useGameContext();
+    const { myGameInfo, myInfo, myNewInfo, mileages, istest } =
+        useGameContext();
 
-    const myNewInfo = {
-        level: 0,
-        point: 0,
-        img: "",
-    };
+    // const myInfo: any = {
+    //     level: 1,
+    //     point: 1,
+    //     img: "",
+    //     burner: "",
+    // };
+
+    // const myNewInfo = {
+    //     level: 2,
+    //     point: 3,
+    //     img: "",
+    //     burner: "",
+    // };
 
     const win = useMemo(() => {
         return [
@@ -514,6 +597,14 @@ const SettlementPage = ({}) => {
             GameState.WinByGridCount,
         ].includes(myGameInfo.gameState);
     }, [myGameInfo.gameState]);
+
+    const progressArray = useMemo(() => {
+        if (!myInfo || !myNewInfo) {
+            return [];
+        }
+
+        return generateProgressLevels(myInfo.point, myNewInfo.point);
+    }, [myInfo, myNewInfo]);
 
     return (
         <Box
@@ -576,11 +667,13 @@ const SettlementPage = ({}) => {
                             <WinResult
                                 myInfo={myInfo}
                                 myNewInfo={myNewInfo}
+                                progressArray={progressArray}
                             ></WinResult>
                         ) : (
                             <LoseResult
                                 myInfo={myInfo}
                                 myNewInfo={myNewInfo}
+                                progressArray={progressArray}
                             ></LoseResult>
                         )}
 
