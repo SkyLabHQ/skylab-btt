@@ -13,8 +13,8 @@ import PrivateLobby from "./pages/PrivateLobby";
 import PrivateRoom from "./pages/PrivateRoom";
 import PrivatePlayBack from "./pages/PrivatePlayBack";
 import PrivateLiveGame from "./pages/PrivateLiveGame";
-import Test from "./pages/Test";
 import Tower from "./pages/Tower";
+import SellPaperPage from "./pages/SellPaper";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -39,7 +39,7 @@ const AppRoutes = (): ReactElement => {
                     element={<PrivateLiveGame />}
                 ></Route>
                 <Route path="/tower" element={<Tower />}></Route>
-                <Route path="/test" element={<Test />}></Route>
+                <Route path="/sellPaper" element={<SellPaperPage />}></Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

@@ -40,9 +40,9 @@ const Vacant = ({ list }: { list: any }) => {
                         >
                             <Box
                                 sx={{
-                                    width: isPc ? "80px" : "38px",
-                                    height: isPc ? "80px" : "38px",
-                                    borderRadius: isPc ? "16px" : "10px",
+                                    width: isPc ? "4.1667vw" : "38px",
+                                    height: isPc ? "4.1667vw" : "38px",
+                                    borderRadius: isPc ? "0.8333vw" : "10px",
                                     border: "1px solid #FFF",
                                     background: avatars[item.avatar],
                                     position: "relative",
@@ -51,7 +51,7 @@ const Vacant = ({ list }: { list: any }) => {
                                 <Text
                                     sx={{
                                         color: "#BCBBBE",
-                                        fontSize: isPc ? "16px" : "12px",
+                                        fontSize: isPc ? "0.8333vw" : "12px",
                                         position: "absolute",
                                         bottom: "-20px",
                                         left: "50%",

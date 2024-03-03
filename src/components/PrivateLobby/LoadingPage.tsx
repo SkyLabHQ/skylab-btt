@@ -1,9 +1,10 @@
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex, Image, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import BiddingIcon from "./assets/bidding.gif";
 import LoadingText from "../BttComponents/LoadingText";
 
 const LoadingPage = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
             sx={{
@@ -20,7 +21,7 @@ const LoadingPage = () => {
             <Image
                 src={BiddingIcon}
                 sx={{
-                    width: "60px",
+                    width: isPc ? "120px" : "60px",
                 }}
             ></Image>
             <LoadingText></LoadingText>

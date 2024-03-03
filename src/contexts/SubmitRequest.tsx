@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
 import React, { createContext, useContext, useState } from "react";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import LoadingText from "@/components/BttComponents/LoadingText";
@@ -13,6 +13,7 @@ export const SubmitRequestProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [isLoading, setIsLoading] = useState(false);
 
     const openLoading = () => {
@@ -55,7 +56,7 @@ export const SubmitRequestProvider = ({
                         <Image
                             src={EnterLoadingIcon}
                             sx={{
-                                width: "60px",
+                                width: isPc ? "120px" : "60px",
                             }}
                         ></Image>
                         <LoadingText></LoadingText>

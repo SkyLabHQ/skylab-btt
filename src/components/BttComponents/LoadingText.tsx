@@ -1,6 +1,5 @@
-import { Flex, Image, Text } from "@chakra-ui/react";
+import { Flex, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
-import BiddingIcon from "./assets/bidding.gif";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import DotLoading from "../Loading/DotLoading";
@@ -59,12 +58,12 @@ function shuffleArray(array: string[]) {
 const randomText = shuffleArray(text);
 
 const LoadingText = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Swiper
             style={{
                 width: "100%",
                 position: "relative",
-                fontSize: "16px",
                 marginTop: "16px",
             }}
             modules={[Autoplay]}
@@ -84,7 +83,10 @@ const LoadingText = () => {
                         }}
                     >
                         <Flex justify={"center"} align={"center"}>
-                            <DotLoading text={item}></DotLoading>
+                            <DotLoading
+                                text={item}
+                                fontSize={isPc ? "16px" : "12px"}
+                            ></DotLoading>
                         </Flex>
                     </SwiperSlide>
                 );
