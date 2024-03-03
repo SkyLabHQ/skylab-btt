@@ -9,7 +9,6 @@ import UpIcon from "./assets/up-icon.svg";
 import DownIcon from "./assets/down-icon.svg";
 import Loading from "../Loading";
 import { aviationImg } from "@/utils/aviationImg";
-import { levelRanges } from "@/utils/level";
 import MyPilot from "../Tournament/MyPilot";
 import MileageIcon from "@/components/Tournament/assets/mileage-icon.svg";
 import PilotIcon from "@/components/Tournament/assets/pilot-icon.svg";
@@ -54,7 +53,6 @@ function generateProgressLevels(startPoints: number, endPoints: number) {
     const endRange =
         (endPoints - endLevelItem.minPoints) /
         (endLevelItem.maxPoints - endLevelItem.minPoints);
-    console.log(endRange, "endRange");
     // 如果是升级的
     if (endPoints > startPoints) {
         if (endLevelItem.level === startLevelItem.level) {
