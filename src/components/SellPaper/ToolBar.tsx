@@ -10,12 +10,10 @@ import { shortenAddress } from "@/utils";
 
 const ToolBar = () => {
     const toast = useSkyToast();
-    const { isUserInfoOpen, onUserInfoOpen, onUserInfoClose } =
-        useUserInfoRequest();
-
+    const { onUserInfoOpen } = useUserInfoRequest();
     const { ready, authenticated, login } = usePrivy();
-    const { signer, address } = usePrivyAccounts();
-    console.log(address, "address");
+    const { address } = usePrivyAccounts();
+
     const handleLogin = () => {
         if (!ready) {
             toast("Please wait for the wallet to be ready");

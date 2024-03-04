@@ -27,6 +27,7 @@ import Turn2mp3 from "@/components/Presale/assets/turn2.mp3";
 import Numbermp3 from "@/components/Presale/assets/number.mp3";
 import EnterArena from "./EnterArena";
 import ToolBar from "./ToolBar";
+import BuyPaper from "./BuyPaper";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -309,33 +310,83 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                     height: "100%",
                     fontFamily: "Neoneon",
                     position: "relative",
-                    paddingTop: "20px",
+                    paddingTop: "50px",
                 }}
             >
-                <Image
-                    src={HourglassIcon}
-                    sx={{
-                        width: isPc ? "130px" : "50px",
-                    }}
-                ></Image>
                 <Box>
+                    <Flex
+                        sx={{
+                            margin: isPc ? "-20px 0 0px" : "0px 0 20px",
+                        }}
+                        align={"center"}
+                    >
+                        <motion.div
+                            style={{
+                                width: "100%",
+                                textShadow: "0px 0px 19px  #00CCFF",
+                                color: "rgba(255, 255, 255, 0.2)",
+                                fontSize: isPc ? "100px" : "44px",
+                                textAlign: "center",
+                            }}
+                            animate={animationObj}
+                            transition={{
+                                duration: 1,
+                                yoyo: Infinity,
+                            }}
+                        >
+                            POT
+                        </motion.div>
+                        <Image
+                            src={HummerIcon}
+                            sx={{
+                                width: isPc ? "100px" : "80px",
+                            }}
+                        ></Image>
+                    </Flex>
+
                     <motion.div
                         style={{
                             width: "100%",
                             textShadow: "0px 0px 19px  #00CCFF",
                             color: "rgba(255, 255, 255, 0.2)",
-                            fontSize: isPc ? "100px" : "44px",
                             textAlign: "center",
-                            letterSpacing: !isPc && "0.1em",
-                            marginTop: isPc && "-10px",
+                            marginTop: isPc ? "0px" : "10px",
                         }}
-                        animate={animationObj}
+                        animate={{
+                            color: [
+                                "rgba(56, 248, 255, 1)",
+                                "rgba(255, 236, 199, 1)",
+                                "rgba(255, 214, 214, 1)",
+                            ],
+                            textShadow: "0px 0px 19px  #00CCFF",
+                            transition: {
+                                duration: 2,
+                                yoyo: Infinity,
+                            },
+                        }}
                         transition={{
                             duration: 1,
                             yoyo: Infinity,
                         }}
                     >
-                        BEGINS IN
+                        <Flex align={"center"} justify={"center"}>
+                            <Text
+                                sx={{
+                                    fontSize: isPc ? "120px" : "60px",
+                                    lineHeight: 1,
+                                    fontFamily: "neon",
+                                }}
+                            >
+                                99
+                            </Text>
+                            <ETHIcon
+                                fill="currentColor"
+                                style={{
+                                    width: isPc ? "70px" : "40px",
+                                    height: isPc ? "70px" : "40px",
+                                }}
+                            ></ETHIcon>
+                        </Flex>
                     </motion.div>
                 </Box>
                 <LightBorder width="100%"></LightBorder>
@@ -348,7 +399,7 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                     <motion.div
                         style={{
                             color: "rgba(56, 248, 255, 1)",
-                            fontSize: isPc ? "95px" : "42px",
+                            fontSize: isPc ? "70px" : "42px",
                             textAlign: "center",
                             margin: "20px auto 0",
                             width: "100%",
@@ -376,17 +427,17 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                                     <ScrollNum
                                         maxNumber={6}
                                         number={d1}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={d2}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>{" "}
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: isPc ? "30px" : "14px",
+                                        fontSize: isPc ? "18px" : "14px",
                                     }}
                                 >
                                     DAYS
@@ -411,17 +462,17 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                                     <ScrollNum
                                         maxNumber={6}
                                         number={h1}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={h2}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: isPc ? "30px" : "14px",
+                                        fontSize: isPc ? "18px" : "14px",
                                     }}
                                 >
                                     HOURS
@@ -445,17 +496,17 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                                     <ScrollNum
                                         maxNumber={6}
                                         number={m1}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={m2}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: isPc ? "30px" : "14px",
+                                        fontSize: isPc ? "18px" : "14px",
                                     }}
                                 >
                                     MINS
@@ -466,17 +517,17 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                                     <ScrollNum
                                         maxNumber={6}
                                         number={s1}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>
                                     <ScrollNum
                                         maxNumber={9}
                                         number={s2}
-                                        fontSize={isPc ? "95px" : "42px"}
+                                        fontSize={isPc ? "70px" : "42px"}
                                     ></ScrollNum>
                                 </Flex>
                                 <Text
                                     sx={{
-                                        fontSize: isPc ? "30px" : "14px",
+                                        fontSize: isPc ? "18px" : "14px",
                                     }}
                                 >
                                     SECS
@@ -647,7 +698,7 @@ const YellowBg = () => {
                 <Image
                     src={BHummer}
                     sx={{
-                        width: isPc ? "600px" : "280px",
+                        width: isPc ? "530px" : "280px",
                         maxWidth: "none",
                         marginTop: "10px",
                     }}
@@ -750,12 +801,12 @@ const SellPaper = () => {
                     }}
                 ></Image>
             )}
-            <YellowBg></YellowBg>
+            {/* <YellowBg></YellowBg> */}
             <ToolBar></ToolBar>
             <Box
                 className="card"
                 sx={{
-                    maxWidth: "600px",
+                    maxWidth: "530px",
                     width: "100%",
                     height: "auto",
                     borderRadius: "50%",
@@ -866,64 +917,8 @@ const SellPaper = () => {
                     </Box>
                 </Box>
             </Box>
-            <Flex
-                sx={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "20px",
-                }}
-            >
-                <Box
-                    sx={{
-                        width: isPc ? "334px" : "178px",
-                        height: isPc ? "90px" : "48px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: isPc ? "16px" : "8px",
-                        margin: "66px 50px 0",
-                        fontSize: isPc ? "50px" : "24px",
-                        background: "transparent",
-                        fontFamily: "neon",
-                        border: "4px solid #FFECC7",
-                        color: "#FFECC7",
-                        fontWeight: "bold",
-                        backgroundColor: "transparent",
-                        outline: "none",
-                        boxShadow: `0 0 8px 2px #FFECC7,
-                               0 0 32px 8px #FDDC2D,
-                               inset 0 0 6px 2px #FFECC7`,
-                        textShadow: `0 0 4px #FFECC7`,
-                        position: `relative`,
-                        transition: ` all 0.3s`,
-                        "&::after": {
-                            content: "''",
-                            position: "absolute",
-                            top: "120%",
-                            left: "0",
-                            height: "100%",
-                            width: "100%",
-                            backgroundColor: "#FDDC2D",
-                            filter: "blur(2em)",
-                            opacity: ".7",
-                            transform:
-                                "perspective(1.5em) rotateX(35deg) scale(1, .6)",
-                        },
-                        "&:hover": {
-                            color: "#000",
-                            backgroundColor: "#FFECC7",
-                            boxShadow: `0 0 8px 2px #FFECC7, 0 0 32px 16px #FDDC2D,inset 0 0 6px 2px #FFECC7`,
-                        },
-                        "&:active": {
-                            boxShadow: `0 0 5px 2px #FFECC7,
-        0 0 20px 16px #FDDC2D,
-        inset 0 0 4px 2px #FFECC7`,
-                        },
-                    }}
-                >
-                    Level Tower
-                </Box>
-            </Flex>
+
+            <BuyPaper></BuyPaper>
             <EnterArena></EnterArena>
         </motion.div>
     );

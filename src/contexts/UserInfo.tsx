@@ -1,13 +1,6 @@
-import {
-    Box,
-    Drawer,
-    DrawerBody,
-    DrawerContent,
-    DrawerHeader,
-    DrawerOverlay,
-    useDisclosure,
-} from "@chakra-ui/react";
-import React, { createContext, useContext, useState } from "react";
+import { Box, useDisclosure } from "@chakra-ui/react";
+import React, { createContext, useContext, useEffect } from "react";
+import UserInfoDrawer from "@/components/UserInfoDrawer";
 
 const UserInfoContext = createContext<{
     isUserInfoOpen: boolean;
@@ -23,6 +16,10 @@ export const UserInfoProvider = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [placement, setPlacement] = React.useState("right");
 
+    useEffect(() => {
+        onOpen();
+    }, []);
+
     return (
         <UserInfoContext.Provider
             value={{
@@ -37,20 +34,10 @@ export const UserInfoProvider = ({
                 }}
             >
                 {children}
-
-                <Drawer placement={"right"} onClose={onClose} isOpen={isOpen}>
-                    <DrawerOverlay />
-                    <DrawerContent>
-                        <DrawerHeader borderBottomWidth="1px">
-                            Basic Drawer
-                        </DrawerHeader>
-                        <DrawerBody>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                        </DrawerBody>
-                    </DrawerContent>
-                </Drawer>
+                <UserInfoDrawer
+                    isOpen={isOpen}
+                    onClose={onClose}
+                ></UserInfoDrawer>
             </Box>
         </UserInfoContext.Provider>
     );

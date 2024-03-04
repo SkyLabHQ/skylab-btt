@@ -723,7 +723,7 @@ const TacToeMode = () => {
                         )}
                     </Box>
                 </Box>
-                {false && !isPrivateLobbyMode && (
+                {!isPrivateLobbyMode && (
                     <Box
                         sx={{
                             display: "flex",
