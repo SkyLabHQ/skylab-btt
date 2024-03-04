@@ -26,6 +26,7 @@ import NoPlane from "./assets/no-plane.png";
 import DiscordIcon from "./assets/discord.png";
 import TwIcon from "./assets/twitter.png";
 import EditNickname from "./EditNickname";
+import SetPilot from "./SetPilot";
 
 const UserInfo = ({
     onChangeMode,
@@ -254,7 +255,7 @@ const UserInfoDrawer = ({
     const { user, logout } = usePrivy();
 
     const [placement, setPlacement] = React.useState("right");
-    const [currentMode, setCurrentMode] = useState(1); // 0展示用户信息 1设置昵称 2设置pilot
+    const [currentMode, setCurrentMode] = useState(2); // 0展示用户信息 1设置昵称 2设置pilot
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);
@@ -331,6 +332,13 @@ const UserInfoDrawer = ({
                                 handleChangeMode(mode);
                             }}
                         ></EditNickname>
+                    )}
+                    {currentMode === 2 && (
+                        <SetPilot
+                            onChangeMode={(mode: number) => {
+                                handleChangeMode(mode);
+                            }}
+                        ></SetPilot>
                     )}
                 </DrawerBody>
             </DrawerContent>
