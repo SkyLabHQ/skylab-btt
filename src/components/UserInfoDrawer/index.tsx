@@ -27,6 +27,8 @@ import DiscordIcon from "./assets/discord.png";
 import TwIcon from "./assets/twitter.png";
 import EditNickname from "./EditNickname";
 import SetPilot from "./SetPilot";
+import { PilotInfo } from "@/hooks/usePilotInfo";
+import { useUserInfoRequest } from "@/contexts/UserInfo";
 
 const UserInfo = ({
     onChangeMode,
@@ -35,6 +37,7 @@ const UserInfo = ({
 }) => {
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
+    const { activePilot } = useUserInfoRequest();
     console.log(user, "user");
 
     return (
@@ -43,9 +46,10 @@ const UserInfo = ({
                 onClick={() => {
                     onChangeMode(2);
                 }}
-                src={DeafaultIcon}
+                src={activePilot?.img ? activePilot.img : DeafaultIcon}
                 sx={{
                     width: "78px",
+                    borderRadius: "50%",
                 }}
             ></Image>
             <Flex
@@ -246,14 +250,15 @@ const MyPlane = () => {
 };
 
 const UserInfoDrawer = ({
+    activePilot,
     onClose,
     isOpen,
 }: {
+    activePilot: PilotInfo;
     isOpen: boolean;
     onClose: () => void;
 }) => {
     const { user, logout } = usePrivy();
-
     const [placement, setPlacement] = React.useState("right");
     const [currentMode, setCurrentMode] = useState(2); // 0展示用户信息 1设置昵称 2设置pilot
 
@@ -264,6 +269,7 @@ const UserInfoDrawer = ({
     return (
         <Drawer placement={"right"} onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
+
             <DrawerContent
                 sx={{
                     borderRadius: "20px",

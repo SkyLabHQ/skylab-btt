@@ -1,5 +1,5 @@
 import { Box, Image, Flex, Text, Input } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import LeftArrow from "./assets/left-arrow.png";
 import { shortenAddress } from "@/utils";
 import CopyIcon from "@/assets/copy-icon.svg";
@@ -8,23 +8,176 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import DeafaultIcon from "./assets/default-icon.png";
 import UnkonwPilot from "./assets/unknow-pilot.png";
 import ExchangeIcon from "./assets/exchange.png";
-import { useChainId } from "wagmi";
-import AllPilotList from "@/skyConstants/pilots";
+import { useChainId, usePublicClient } from "wagmi";
+import AllPilotList, {
+    getIsSpecialPilot,
+    getSpecialPilotImg,
+} from "@/skyConstants/pilots";
 import OpenSeaLink from "./assets/opensea-link.svg";
+import BackIcon from "./assets/pilot-back.png";
+import {
+    getMultiDelegateERC721Contract,
+    getMultiERC721Contract,
+    getMultiProvider,
+} from "@/hooks/useMultiContract";
+import useSkyToast from "@/hooks/useSkyToast";
+import { ZERO_DATA } from "@/skyConstants";
+import { getPilotImgFromUrl } from "@/utils/ipfsImg";
+import { useMercuryPilotsContract } from "@/hooks/useContract";
+import { handleError } from "@/utils/error";
+import { usePilotInfo } from "@/hooks/usePilotInfo";
 
 const SetPilot = ({
     onChangeMode,
 }: {
     onChangeMode: (mode: number) => void;
 }) => {
+    const { address } = usePrivyAccounts();
+    const publicClient = usePublicClient();
+    const [totalSupplys, setTotalSupplys] = useState({});
+
+    const toast = useSkyToast();
+    const mercuryPilotsContract = useMercuryPilotsContract();
+    console.log(address, "address");
+    const { activePilot, handleGetActivePilot } = usePilotInfo(address);
+
+    const [previewPilot, setPreviewPilot] = React.useState<any>(null);
+    const [inputPilotId, setInputPilotId] = React.useState("");
+    const [currentIndex, setCurrentIndex] = React.useState(-1);
     const chainId = useChainId();
+
     const pilotList = useMemo(() => {
         if (!chainId) {
             return [];
         }
         return AllPilotList[chainId];
     }, [chainId]);
+    const currentCollection = useMemo(() => {
+        if (currentIndex === -1 || pilotList.length === 0) {
+            return null;
+        }
+        return pilotList[currentIndex];
+    }, [currentIndex, pilotList]);
 
+    const handleSearchTokenId = async () => {
+        try {
+            const currentCollection = pilotList[currentIndex];
+            let tokenURI, owner;
+            const collectionAddress = currentCollection.address;
+            const isSpecialPilot = getIsSpecialPilot(currentCollection.address);
+            const multiDelegateERC721Contract = getMultiDelegateERC721Contract(
+                currentCollection.chainId,
+            );
+            const multiProvider = getMultiProvider(currentCollection.chainId);
+            if (isSpecialPilot) {
+                tokenURI = getSpecialPilotImg(collectionAddress, inputPilotId);
+                [owner] = await multiProvider.all([
+                    multiDelegateERC721Contract.ownerOf(
+                        collectionAddress,
+                        inputPilotId,
+                    ),
+                ]);
+            } else {
+                [tokenURI, owner] = await multiProvider.all([
+                    multiDelegateERC721Contract.tokenURI(
+                        collectionAddress,
+                        inputPilotId,
+                    ),
+                    multiDelegateERC721Contract.ownerOf(
+                        currentCollection.address,
+                        inputPilotId,
+                    ),
+                ]);
+            }
+
+            if (owner === ZERO_DATA) {
+                toast("Token ID does not exist");
+                return;
+            }
+            const img = isSpecialPilot
+                ? tokenURI
+                : await getPilotImgFromUrl(tokenURI);
+
+            const pilotInfo = {
+                ...currentCollection,
+                pilotId: Number(inputPilotId),
+                img,
+                owner,
+            };
+            setPreviewPilot(pilotInfo);
+            console.log(pilotInfo, "pilotInfo");
+        } catch (e) {
+            console.log(e, "e");
+            toast("Token ID does not exist");
+        }
+    };
+
+    const handleSetActive = async () => {
+        try {
+            // setActiveLoading(true);
+            console.log(mercuryPilotsContract, "mercuryPilotsContract");
+            const res = await mercuryPilotsContract.write.setActivePilot([
+                previewPilot.address,
+                previewPilot.pilotId,
+                address,
+            ]);
+
+            // @ts-ignore
+            const receipt = await publicClient.waitForTransactionReceipt({
+                hash: res,
+            });
+
+            if (receipt.status != "success") {
+                toast("Transaction failed");
+                return;
+            }
+            // setActiveLoading(false);
+            setPreviewPilot(null);
+            setTimeout(() => {
+                handleGetActivePilot();
+            }, 1000);
+        } catch (e) {
+            toast(handleError(e));
+            // setActiveLoading(false);
+        }
+    };
+
+    const handleGetAllTotalSupply = async () => {
+        if (currentCollection.address === "") {
+            return;
+        }
+
+        if (totalSupplys[currentCollection.address]) {
+            return;
+        }
+
+        const multiProvider = getMultiProvider(currentCollection.chainId);
+        const multiDelegateERC721Contract = getMultiERC721Contract(
+            currentCollection.address,
+        );
+
+        const [totalSupply] = await multiProvider.all([
+            multiDelegateERC721Contract.totalSupply(),
+        ]);
+
+        const temTotalSupplys = {
+            ...totalSupplys,
+            [currentCollection.address]: totalSupply.toNumber(),
+        };
+
+        setTotalSupplys(temTotalSupplys);
+    };
+
+    useEffect(() => {
+        if (!currentCollection) {
+            return;
+        }
+        handleGetAllTotalSupply();
+    }, [currentCollection]);
+
+    console.log(totalSupplys, "totalSupplys");
+    console.log(previewPilot, "previewPilot");
+    console.log(activePilot, "activePilot");
     return (
         <Flex
             sx={{
@@ -52,9 +205,14 @@ const SetPilot = ({
                 <Flex flexDir={"column"} align={"center"}>
                     <Flex align={"center"}>
                         <Image
-                            src={DeafaultIcon}
+                            src={
+                                activePilot?.img
+                                    ? activePilot?.img
+                                    : DeafaultIcon
+                            }
                             sx={{
                                 width: "78px",
+                                borderRadius: "50%",
                             }}
                         ></Image>
                         <Image
@@ -65,22 +223,44 @@ const SetPilot = ({
                             }}
                         ></Image>
                         <Image
-                            src={UnkonwPilot}
+                            src={previewPilot ? previewPilot?.img : UnkonwPilot}
                             sx={{
                                 width: "78px",
+                                borderRadius: "50%",
                             }}
                         ></Image>
                     </Flex>
 
-                    <Text
+                    <Box
                         sx={{
-                            fontSize: "16px",
                             marginTop: "20px",
-                            fontFamily: "Orbitron",
+                            height: "24px",
+                            width: "100%",
                         }}
                     >
-                        Select Pilot from these collections
-                    </Text>
+                        {currentIndex >= 0 ? (
+                            <Image
+                                onClick={() => {
+                                    setCurrentIndex(-1);
+                                    setInputPilotId("");
+                                }}
+                                src={BackIcon}
+                                sx={{
+                                    height: "24px",
+                                    cursor: "pointer",
+                                }}
+                            ></Image>
+                        ) : (
+                            <Text
+                                sx={{
+                                    fontSize: "16px",
+                                    fontFamily: "Orbitron",
+                                }}
+                            >
+                                Select Pilot from these collections
+                            </Text>
+                        )}
+                    </Box>
                 </Flex>
                 <Box
                     sx={{
@@ -88,91 +268,133 @@ const SetPilot = ({
                     }}
                 >
                     {pilotList.length > 0 &&
-                        pilotList.map((item: any) => {
+                        pilotList.map((item: any, index: number) => {
                             return (
-                                <Flex
-                                    align={"center"}
-                                    justify={"space-between"}
-                                    sx={{
-                                        border: "2px solid #fff",
-                                        marginBottom: "15px",
-                                        borderRadius: "10px",
-                                        padding: "6px 12px",
-                                        background: "rgba(0, 0, 0, 0.50)",
-                                    }}
-                                >
-                                    <Flex align={"center"}>
-                                        <Image
-                                            src={item.img}
-                                            sx={{
-                                                width: "54px",
-                                                height: "54px",
-                                                borderRadius: "10px",
-                                                border: "2px solid #fff",
-                                                marginRight: "22px",
-                                            }}
-                                        ></Image>
-                                        <Text
-                                            sx={{
-                                                fontSize: "20px",
-                                            }}
-                                        >
-                                            {item.name}
-                                        </Text>
-                                    </Flex>
-
-                                    <Image
+                                (currentIndex === -1 ||
+                                    currentIndex === index) && (
+                                    <Flex
+                                        onClick={() => {
+                                            setCurrentIndex(index);
+                                        }}
+                                        align={"center"}
+                                        justify={"space-between"}
                                         sx={{
-                                            borderRadius: "40px",
-                                            width: "76px",
+                                            border: "2px solid #fff",
+                                            marginBottom: "15px",
+                                            borderRadius: "10px",
+                                            padding: "6px 12px",
+                                            background: "rgba(0, 0, 0, 0.50)",
                                         }}
-                                        src={OpenSeaLink}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
+                                    >
+                                        <Flex align={"center"}>
+                                            <Image
+                                                src={item.img}
+                                                sx={{
+                                                    width: "54px",
+                                                    height: "54px",
+                                                    borderRadius: "10px",
+                                                    border: "2px solid #fff",
+                                                    marginRight: "22px",
+                                                }}
+                                            ></Image>
+                                            <Text
+                                                sx={{
+                                                    fontSize: "20px",
+                                                }}
+                                            >
+                                                {item.name}
+                                            </Text>
+                                        </Flex>
 
-                                            // window.open(openSeaUrl, "_blank");
-                                        }}
-                                    ></Image>
-                                </Flex>
+                                        {item.openSeaUrl && (
+                                            <Image
+                                                sx={{
+                                                    borderRadius: "40px",
+                                                    width: "76px",
+                                                }}
+                                                src={OpenSeaLink}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    window.open(
+                                                        item.openSeaUrl,
+                                                        "_blank",
+                                                    );
+                                                }}
+                                            ></Image>
+                                        )}
+                                    </Flex>
+                                )
                             );
                         })}
                 </Box>
+                {currentIndex >= 0 && (
+                    <Box>
+                        <Text>
+                            In-put Token Id{" "}
+                            {totalSupplys[currentCollection.address]
+                                ? `(${currentCollection.start} - ${
+                                      totalSupplys[currentCollection.address] -
+                                      (currentCollection.start === 0 ? 1 : 0)
+                                  })`
+                                : ""}
+                        </Text>
+                        <Input
+                            variant={"unstyled"}
+                            sx={{
+                                width: "100%",
+                                height: "40px",
+                                background: "#D9D9D9",
+                                marginTop: "15px",
+                                fontSize: "20px",
+                                color: "#000",
+                                paddingLeft: "10px",
+                            }}
+                            value={inputPilotId}
+                            onChange={(e) => setInputPilotId(e.target.value)}
+                        ></Input>
+                    </Box>
+                )}
             </Box>
 
             <Box>
                 <Flex
+                    onClick={handleSearchTokenId}
                     align={"center"}
                     justify={"center"}
                     sx={{
-                        background: "#F2D861",
+                        background: inputPilotId ? "#F2D861" : "#777",
                         height: "64px",
                         width: "280px",
                         borderRadius: "24px",
                         fontSize: "28px",
                         fontWeight: 700,
-                        color: "#1b1b1b",
+                        color: inputPilotId ? "#1b1b1b" : "#999",
+
                         margin: "0 auto",
                         backdropFilter: "blur(6.795704364776611px)",
                         fontFamily: "Orbitron",
+                        cursor: inputPilotId ? "pointer" : "not-allowed",
                     }}
                 >
                     Preview
                 </Flex>
                 <Flex
+                    onClick={handleSetActive}
                     align={"center"}
                     justify={"center"}
                     sx={{
-                        background: "#F2D861",
+                        background: previewPilot ? "#F2D861" : "#777",
                         height: "64px",
                         width: "280px",
                         borderRadius: "24px",
                         fontSize: "28px",
                         fontWeight: 700,
-                        color: "#1b1b1b",
+                        color: previewPilot ? "#1b1b1b" : "#999",
                         margin: "28px auto 0",
                         backdropFilter: "blur(6.795704364776611px)",
                         fontFamily: "Orbitron",
+                        cursor: previewPilot ? "pointer" : "not-allowed",
                     }}
                 >
                     Set Active

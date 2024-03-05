@@ -765,6 +765,15 @@ const SellPaper = () => {
         };
     }, [isPc]);
 
+    useEffect(() => {
+        const drawer = document.getElementsByClassName(
+            "chakra-modal__content-container",
+        );
+        if (drawer.length) {
+            drawer[0].setAttribute("style", "cursor: none");
+        }
+    }, []);
+
     return (
         <motion.div
             style={{
