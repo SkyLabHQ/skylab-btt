@@ -134,7 +134,7 @@ const ShareButtons = ({
                                 textAlign: "center",
                             }}
                         >
-                            Share Replay{" "}
+                            Share{" "}
                         </Text>
                     )}
                 </Button>

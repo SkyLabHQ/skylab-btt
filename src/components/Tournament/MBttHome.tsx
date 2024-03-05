@@ -495,6 +495,7 @@ const MBttHome = ({
                         left: "50%",
                         top: "60%",
                         transform: "translate(-49%, -50%)",
+                        zIndex: 9,
                     }}
                     onClick={() => {
                         handleToBtt();

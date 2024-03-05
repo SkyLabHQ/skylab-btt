@@ -28,6 +28,7 @@ import Numbermp3 from "@/components/Presale/assets/number.mp3";
 import EnterArena from "./EnterArena";
 import ToolBar from "./ToolBar";
 import BuyPaper from "./BuyPaper";
+import RulesModal from "./RulesModal";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -766,6 +767,7 @@ const SellPaper = () => {
     }, [isPc]);
 
     useEffect(() => {
+        return;
         const drawer = document.getElementsByClassName(
             "chakra-modal__content-container",
         );
@@ -791,7 +793,7 @@ const SellPaper = () => {
                 alignItems: "center",
                 flexDirection: "column",
                 overflow: "hidden",
-                cursor: `none`,
+                // cursor: `none`,
                 padding: "0 32px",
             }}
         >

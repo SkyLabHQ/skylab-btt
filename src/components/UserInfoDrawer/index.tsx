@@ -38,7 +38,6 @@ const UserInfo = ({
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
     const { activePilot } = useUserInfoRequest();
-    console.log(user, "user");
 
     return (
         <Flex flexDir={"column"} align={"center"}>
@@ -260,7 +259,7 @@ const UserInfoDrawer = ({
 }) => {
     const { user, logout } = usePrivy();
     const [placement, setPlacement] = React.useState("right");
-    const [currentMode, setCurrentMode] = useState(2); // 0展示用户信息 1设置昵称 2设置pilot
+    const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);
@@ -269,8 +268,12 @@ const UserInfoDrawer = ({
     return (
         <Drawer placement={"right"} onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
-
             <DrawerContent
+                containerProps={{
+                    sx: {
+                        cursor: "none",
+                    },
+                }}
                 sx={{
                     borderRadius: "20px",
                     border: "1px solid #F2D861",

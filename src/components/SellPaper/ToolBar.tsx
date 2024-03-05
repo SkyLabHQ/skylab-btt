@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import TipIcon from "./assets/tip-icon.png";
 import WalletIcon from "./assets/wallet-icon.png";
@@ -7,8 +7,14 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { usePrivy } from "@privy-io/react-auth";
 import useSkyToast from "@/hooks/useSkyToast";
 import { shortenAddress } from "@/utils";
+import RulesModal from "./RulesModal";
 
 const ToolBar = () => {
+    const {
+        isOpen: isRulesModalOpen,
+        onOpen: onRulesModalOpen,
+        onClose: onRulesModalClose,
+    } = useDisclosure();
     const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfoRequest();
     const { ready, authenticated, login } = usePrivy();
@@ -36,6 +42,7 @@ const ToolBar = () => {
             align={"center"}
         >
             <Image
+                onClick={onRulesModalOpen}
                 src={TipIcon}
                 sx={{
                     width: "60px",
@@ -89,6 +96,10 @@ const ToolBar = () => {
                     ></Image>
                 )}
             </Box>
+            <RulesModal
+                isOpen={isRulesModalOpen}
+                onClose={onRulesModalClose}
+            ></RulesModal>
         </Flex>
     );
 };

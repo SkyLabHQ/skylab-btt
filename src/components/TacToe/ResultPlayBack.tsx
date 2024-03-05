@@ -283,13 +283,9 @@ const ResultPage = () => {
             getWinState(myGameInfo.gameState),
         );
 
-        const url = `${
-            window.location.origin
-        }/btt/playback?gameAddress=${bidTacToeGameAddress}&show=true&round=${currentRound}&chainId=${realChainId}&burner=${shortenAddressWithout0x(
-            myInfo.address,
-        )}`;
+        const url = `${window.location.origin}`;
 
-        const des = `Btt is a fully on-chain cryptoeconomic game`;
+        const des = `Btt is a fully on-chain cryptoeconomic game of deduction and psychology`;
 
         const value = `${text}
 
