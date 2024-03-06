@@ -766,16 +766,6 @@ const SellPaper = () => {
         };
     }, [isPc]);
 
-    useEffect(() => {
-        return;
-        const drawer = document.getElementsByClassName(
-            "chakra-modal__content-container",
-        );
-        if (drawer.length) {
-            drawer[0].setAttribute("style", "cursor: none");
-        }
-    }, []);
-
     return (
         <motion.div
             style={{
@@ -793,7 +783,7 @@ const SellPaper = () => {
                 alignItems: "center",
                 flexDirection: "column",
                 overflow: "hidden",
-                // cursor: `none`,
+                cursor: `none`,
                 padding: "0 32px",
             }}
         >
@@ -802,10 +792,10 @@ const SellPaper = () => {
                     src={mouseImg.current}
                     sx={{
                         position: "absolute",
-                        left: "-50px",
-                        top: "-50px",
-                        width: "100px",
-                        height: "100px",
+                        left: "-30px",
+                        top: "-30px",
+                        width: "60px",
+                        height: "60px",
                         transform: `translate3d(${mounseX.current}px, ${mounseY.current}px, 0)`,
                         pointerEvents: "none",
                         zIndex: 999999,

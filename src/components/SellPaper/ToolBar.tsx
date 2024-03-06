@@ -16,7 +16,7 @@ const ToolBar = () => {
         onClose: onRulesModalClose,
     } = useDisclosure();
     const toast = useSkyToast();
-    const { onUserInfoOpen } = useUserInfoRequest();
+    const { onUserInfoOpen, activePilot } = useUserInfoRequest();
     const { ready, authenticated, login } = usePrivy();
     const { address } = usePrivyAccounts();
 
