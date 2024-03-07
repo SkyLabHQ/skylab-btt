@@ -1,9 +1,6 @@
 import { Box, Image, Flex, Text, Input } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import LeftArrow from "./assets/left-arrow.png";
-import { shortenAddress } from "@/utils";
-import CopyIcon from "@/assets/copy-icon.svg";
-import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import DeafaultIcon from "./assets/default-icon.png";
 import UnkonwPilot from "./assets/unknow-pilot.png";
@@ -38,7 +35,6 @@ const SetPilot = ({
 
     const toast = useSkyToast();
     const mercuryPilotsContract = useMercuryPilotsContract();
-    console.log(address, "address");
     const { activePilot, handleGetActivePilot } = usePilotInfo(address);
 
     const [previewPilot, setPreviewPilot] = React.useState<any>(null);
@@ -105,7 +101,6 @@ const SetPilot = ({
                 owner,
             };
             setPreviewPilot(pilotInfo);
-            console.log(pilotInfo, "pilotInfo");
         } catch (e) {
             console.log(e, "e");
             toast("Token ID does not exist");
@@ -115,7 +110,6 @@ const SetPilot = ({
     const handleSetActive = async () => {
         try {
             // setActiveLoading(true);
-            console.log(mercuryPilotsContract, "mercuryPilotsContract");
             const res = await mercuryPilotsContract.write.setActivePilot([
                 previewPilot.address,
                 previewPilot.pilotId,
@@ -175,9 +169,6 @@ const SetPilot = ({
         handleGetAllTotalSupply();
     }, [currentCollection]);
 
-    console.log(totalSupplys, "totalSupplys");
-    console.log(previewPilot, "previewPilot");
-    console.log(activePilot, "activePilot");
     return (
         <Flex
             sx={{

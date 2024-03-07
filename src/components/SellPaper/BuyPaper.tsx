@@ -167,7 +167,7 @@ const BuyPaper = () => {
     const toast = useSkyToast();
     const { ready, authenticated, login } = usePrivy();
     const { signer, address } = usePrivyAccounts();
-    const [inputAmount, setInputAmount] = React.useState(0);
+    const [inputAmount, setInputAmount] = React.useState(1);
 
     const handleBuy = async () => {
         try {
@@ -226,22 +226,20 @@ const BuyPaper = () => {
                     sx={{
                         width: "50px",
                         height: "50px",
-                        background: "#777",
+                        background: inputAmount > 1 ? "#F2D861" : "#777",
                         borderRadius: "50%",
                         color: "#1B1B1B",
                         fontSize: "60px",
                     }}
                     justify={"center"}
                     align={"center"}
+                    onClick={() => {
+                        if (inputAmount > 1) {
+                            setInputAmount(inputAmount - 1);
+                        }
+                    }}
                 >
-                    <Image
-                        src={SubIcon}
-                        onClick={() => {
-                            if (inputAmount > 0) {
-                                setInputAmount(inputAmount - 1);
-                            }
-                        }}
-                    ></Image>
+                    <Image src={SubIcon}></Image>
                 </Flex>
                 <Input
                     variant={"unstyled"}
@@ -261,20 +259,18 @@ const BuyPaper = () => {
                     sx={{
                         width: "50px",
                         height: "50px",
-                        background: "#777",
+                        background: "#F2D861",
                         borderRadius: "50%",
                         color: "#1B1B1B",
                         fontSize: "60px",
                     }}
                     justify={"center"}
                     align={"center"}
+                    onClick={() => {
+                        setInputAmount(inputAmount + 1);
+                    }}
                 >
-                    <Image
-                        src={AddIcon}
-                        onClick={() => {
-                            setInputAmount(inputAmount + 1);
-                        }}
-                    ></Image>
+                    <Image src={AddIcon}></Image>
                 </Flex>
             </Flex>
             {address ? (

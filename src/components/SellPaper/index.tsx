@@ -26,9 +26,8 @@ import Turn1mp3 from "@/components/Presale/assets/turn1.mp3";
 import Turn2mp3 from "@/components/Presale/assets/turn2.mp3";
 import Numbermp3 from "@/components/Presale/assets/number.mp3";
 import EnterArena from "./EnterArena";
-import ToolBar from "./ToolBar";
+import ToolBar from "@/components/HomeToolbar/ToolBar";
 import BuyPaper from "./BuyPaper";
-import RulesModal from "./RulesModal";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");

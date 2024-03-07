@@ -1,15 +1,10 @@
 import React from "react";
 import ArenaIcon from "./assets/arena-icon.png";
 import { Box, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 
 const EnterArena = () => {
-    const navigate = useNavigate();
     return (
         <Box
-            onClick={() => {
-                navigate("/tower");
-            }}
             sx={{
                 width: "313px",
                 height: "269px",
@@ -35,7 +30,7 @@ const EnterArena = () => {
                     fontWeight: 700,
                 }}
             >
-                Enter Arena
+                Play
             </Text>
         </Box>
     );
