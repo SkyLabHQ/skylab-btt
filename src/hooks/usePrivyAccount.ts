@@ -4,8 +4,8 @@ import { baseSepolia } from "viem/chains";
 import { createWalletClient, custom } from "viem";
 
 const usePrivyAccounts = () => {
-    const { wallets, ready } = useWallets();
-    const { user } = usePrivy();
+    const { wallets } = useWallets();
+    const { user, ready } = usePrivy();
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
 
@@ -31,6 +31,7 @@ const usePrivyAccounts = () => {
             setSigner(walletClient);
         };
 
+        console.log(wallets, user, ready);
         if (wallets.length === 0 || !user || !ready) {
             setAddress("");
             setSigner(null);

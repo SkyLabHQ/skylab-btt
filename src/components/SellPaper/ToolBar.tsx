@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Image, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import TipIcon from "./assets/tip-icon.png";
 import WalletIcon from "./assets/wallet-icon.png";
@@ -8,6 +8,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import useSkyToast from "@/hooks/useSkyToast";
 import { shortenAddress } from "@/utils";
 import RulesModal from "./RulesModal";
+import MyPilot from "../MyPilot";
 
 const ToolBar = () => {
     const {
@@ -16,11 +17,12 @@ const ToolBar = () => {
         onClose: onRulesModalClose,
     } = useDisclosure();
     const toast = useSkyToast();
-    const { onUserInfoOpen, activePilot } = useUserInfoRequest();
-    const { ready, authenticated, login } = usePrivy();
+    const { onUserInfoOpen } = useUserInfoRequest();
+    const { ready, authenticated, login, user } = usePrivy();
     const { address } = usePrivyAccounts();
 
     const handleLogin = () => {
+        console.log(ready, "ready");
         if (!ready) {
             toast("Please wait for the wallet to be ready");
             return;
@@ -54,40 +56,42 @@ const ToolBar = () => {
                 {address ? (
                     <Flex
                         sx={{
-                            width: "204px",
-                            height: "48px",
-                            border: "1px solid #f2d861",
-                            borderLeft: "none",
                             position: "relative",
-                            background: "rgb(61,61,61)",
-                            borderEndRadius: "24px",
-                            paddingRight: "20px",
+                            paddingLeft: "20px",
                         }}
                         justify={"flex-end"}
                         align={"center"}
                     >
-                        <Image
-                            src={WalletIcon}
+                        <MyPilot
+                            width="60px"
                             sx={{
-                                width: "60px",
-                                height: "60px",
                                 position: "absolute",
                                 top: "50%",
-                                left: "-20px",
+                                left: "0px",
                                 transform: "translate(0%, -50%)",
+                                zIndex: 999,
                             }}
-                        ></Image>
-                        <Text
+                        ></MyPilot>
+
+                        <Box
                             sx={{
+                                width: "184px",
+                                height: "48px",
+                                border: "1px solid #f2d861",
+                                borderLeft: "none",
+                                position: "relative",
+                                background: "rgb(61,61,61)",
+                                borderEndRadius: "24px",
                                 fontFamily: "Quantico",
+                                paddingLeft: "50px",
+                                lineHeight: "48px",
                             }}
                         >
                             {shortenAddress(address, 5, 4)}
-                        </Text>
+                        </Box>
                     </Flex>
                 ) : (
                     <Image
-                        onClick={handleLogin}
                         src={WalletIcon}
                         sx={{
                             width: "60px",

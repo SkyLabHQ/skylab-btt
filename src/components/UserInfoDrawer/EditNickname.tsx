@@ -3,14 +3,11 @@ import React from "react";
 import LeftArrow from "./assets/left-arrow.png";
 import { shortenAddress } from "@/utils";
 import CopyIcon from "@/assets/copy-icon.svg";
-import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import DeafaultIcon from "./assets/default-icon.png";
+import MyPilot from "../MyPilot";
 
 const UserInfo = () => {
-    const { user } = usePrivy();
     const { address } = usePrivyAccounts();
-    console.log(user, "user");
 
     return (
         <Flex
@@ -21,12 +18,8 @@ const UserInfo = () => {
                 paddingBottom: "20px",
             }}
         >
-            <Image
-                src={DeafaultIcon}
-                sx={{
-                    width: "78px",
-                }}
-            ></Image>
+            <MyPilot width={"80px"}></MyPilot>
+
             <Flex
                 sx={{
                     marginTop: "8px",
@@ -69,10 +62,15 @@ const UserInfo = () => {
 };
 
 const EditNickname = ({
+    userName,
+    onSetUserName,
     onChangeMode,
 }: {
+    userName: string;
     onChangeMode: (mode: number) => void;
+    onSetUserName: (userName: string) => void;
 }) => {
+    const { address } = usePrivyAccounts();
     const [nickname, setNickname] = React.useState("");
     return (
         <Flex
@@ -114,10 +112,20 @@ const EditNickname = ({
                     <Box
                         sx={{
                             height: "30px",
+                            marginTop: "15px",
+                            fontSize: "24px",
                         }}
-                    ></Box>
+                    >
+                        {userName
+                            ? userName
+                            : `User-${shortenAddress(address, 4, 4)}`}{" "}
+                    </Box>
 
-                    <Box>
+                    <Box
+                        sx={{
+                            marginTop: "20px",
+                        }}
+                    >
                         <Text sx={{ fontSize: "20px" }}>
                             In-put New Nickname
                         </Text>
@@ -140,19 +148,23 @@ const EditNickname = ({
             </Box>
 
             <Flex
+                onClick={() => {
+                    onSetUserName(nickname);
+                }}
                 align={"center"}
                 justify={"center"}
                 sx={{
-                    background: "#F2D861",
+                    background: nickname ? "#F2D861" : "#777",
                     height: "64px",
                     width: "280px",
                     borderRadius: "24px",
                     fontSize: "28px",
                     fontWeight: 700,
-                    color: "#1b1b1b",
-                    margin: "0 auto",
+                    color: nickname ? "#1b1b1b" : "#999",
+                    margin: "28px auto 0",
                     backdropFilter: "blur(6.795704364776611px)",
                     fontFamily: "Orbitron",
+                    cursor: nickname ? "pointer" : "not-allowed",
                 }}
             >
                 Confirm

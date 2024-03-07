@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import { useMemo } from "react";
 import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import SKYLABTESSTFLIGHT_ABI from "@/skyConstants/abis/SkylabTestFlight.json";
@@ -8,11 +7,10 @@ import MERCURYPILOTS_ABI from "@/skyConstants/abis/MercuryPilots.json";
 import BABYMERCS_ABI from "@/skyConstants/abis/BabyMercs.json";
 import qs from "query-string";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
-
+import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
 import { ChainId, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
-import { useEthersProvider, useEthersSigner } from "./useWagmiToEthers";
-import { useChainId, useWalletClient } from "wagmi";
+import { useChainId } from "wagmi";
 import { getContract } from "@/utils/contractHelpers";
 import usePrivyAccounts from "./usePrivyAccount";
 
@@ -84,6 +82,10 @@ export const botAddress: ChainIdToAddressMap = {
     [ChainId.MUMBAI]: "0x3BEe8B4854CeDc91dc5315f9ae8bC57f403E8eBb",
     [ChainId.BASE]: "0x4De2F93dc9ff51E2177faB92C5dE9d19C2b79359",
     [ChainId.SEPOLIA]: "0x51Cd3F6801C19cCdfaF850ff5C5178Fc06A91316",
+};
+
+export const mercuryJarTournamentAddress: ChainIdToAddressMap = {
+    [ChainId.SEPOLIA]: "0x9E57885cF92Aadf85dEd31dA4b77e922F2747715",
 };
 
 function useContract(address: any, abi: any) {
@@ -163,4 +165,12 @@ export const useBabyMercsContract = () => {
 
 export const useSkylabBidTacToeGameContract = (address: string) => {
     return useContract(address, SKYLABBIDTACTOEGAME_ABI);
+};
+
+export const useMercuryJarTournamentContract = () => {
+    const chainId = useChainId();
+    return useContract(
+        mercuryJarTournamentAddress[chainId],
+        MERCURYJARTOURNAMENT_ABI,
+    );
 };

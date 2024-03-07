@@ -29,28 +29,29 @@ import EditNickname from "./EditNickname";
 import SetPilot from "./SetPilot";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
+import MyPilot from "../MyPilot";
+import {
+    useMultiMercuryJarTournamentContract,
+    useMultiProvider,
+} from "@/hooks/useMultiContract";
+import { useChainId, usePublicClient } from "wagmi";
+import useSkyToast from "@/hooks/useSkyToast";
+import { handleError } from "@/utils/error";
+import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 
 const UserInfo = ({
+    userName,
     onChangeMode,
 }: {
+    userName: string;
     onChangeMode: (mode: number) => void;
 }) => {
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfoRequest();
 
     return (
         <Flex flexDir={"column"} align={"center"}>
-            <Image
-                onClick={() => {
-                    onChangeMode(2);
-                }}
-                src={activePilot?.img ? activePilot.img : DeafaultIcon}
-                sx={{
-                    width: "78px",
-                    borderRadius: "50%",
-                }}
-            ></Image>
+            <MyPilot width={"80px"}></MyPilot>
             <Flex
                 sx={{
                     marginTop: "8px",
@@ -82,7 +83,9 @@ const UserInfo = ({
                         marginRight: "6px",
                     }}
                 >
-                    昵称
+                    {userName
+                        ? userName
+                        : `User-${shortenAddress(address, 4, 4)}`}
                 </Text>
                 <Image
                     onClick={() => {
@@ -119,7 +122,7 @@ const UserInfo = ({
     );
 };
 
-const MyPaper = () => {
+const MyPaper = ({ balance }: { balance: string }) => {
     return (
         <Box
             sx={{
@@ -142,13 +145,59 @@ const MyPaper = () => {
                 </Text>
             </Box>
             <Flex flexDir={"column"} align={"center"}>
-                <Image
-                    src={PaperIcon}
+                <Box
                     sx={{
                         width: "110px",
+                        height: "110px",
                         marginTop: "24px",
+                        background: `url(${PaperIcon}) no-repeat`,
+                        backgroundSize: "100% 100%",
+                        position: "relative",
                     }}
-                ></Image>
+                >
+                    <Flex
+                        align={"center"}
+                        justify={"center"}
+                        sx={{
+                            width: "100px",
+                            height: "50px",
+                            position: "absolute",
+                            background: "rgba(0, 0, 0, 0.50)",
+                            bottom: "10px",
+                            left: "50%",
+                            transform: "translate(-50%,0)",
+                            borderRadius: "0 0 50px 50px",
+                            fontSize: "24px",
+                            verticalAlign: "bottom",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: "inline-block",
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontSize: "14px",
+                                    verticalAlign: "bottom",
+                                    display: "inline-block",
+                                    lineHeight: "30px",
+                                }}
+                            >
+                                X
+                            </span>{" "}
+                            <span
+                                style={{
+                                    fontWeight: "bold",
+                                    display: "inline-block",
+                                    lineHeight: "30px",
+                                }}
+                            >
+                                {balance}
+                            </span>
+                        </Box>
+                    </Flex>
+                </Box>
                 <Flex
                     sx={{
                         borderRadius: "12px",
@@ -257,13 +306,63 @@ const UserInfoDrawer = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const toast = useSkyToast();
+    const mercuryJarTournamentContract = useMercuryJarTournamentContract();
+    const publicClient = usePublicClient();
+    const chainId = useChainId();
+    const { address } = usePrivyAccounts();
+    const multiProvider = useMultiProvider(chainId);
+    const multiMercuryJarTournamentContract =
+        useMultiMercuryJarTournamentContract();
     const { user, logout } = usePrivy();
+    const [paperBalance, setPaperBalance] = useState("0");
+    const [userName, setUserName] = useState("");
     const [placement, setPlacement] = React.useState("right");
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);
     };
+
+    const handleGetUserPaper = async () => {
+        const [balance, userName] = await multiProvider.all([
+            multiMercuryJarTournamentContract.balanceOf(address),
+            multiMercuryJarTournamentContract.userName(address),
+        ]);
+        setUserName(userName);
+        setPaperBalance(balance.toString());
+    };
+
+    const handleSetUserName = async (name: string) => {
+        try {
+            console.log(
+                multiMercuryJarTournamentContract,
+                "multiMercuryJarTournamentContract",
+            );
+            const res =
+                await mercuryJarTournamentContract.write.registerUserName([
+                    name,
+                ]);
+
+            // @ts-ignore
+            await publicClient.waitForTransactionReceipt(res.hash);
+            setUserName(name);
+        } catch (e) {
+            toast(handleError(e));
+        }
+    };
+
+    useEffect(() => {
+        if (
+            !isOpen ||
+            !multiMercuryJarTournamentContract ||
+            !multiProvider ||
+            !address
+        ) {
+            return;
+        }
+        handleGetUserPaper();
+    }, [isOpen, multiMercuryJarTournamentContract, multiProvider]);
 
     return (
         <Drawer placement={"right"} onClose={onClose} isOpen={isOpen}>
@@ -309,13 +408,6 @@ const UserInfoDrawer = ({
                                 }}
                             >
                                 <Image
-                                    src={SettingIcon}
-                                    sx={{
-                                        marginRight: "22px",
-                                        width: "24px",
-                                    }}
-                                ></Image>
-                                <Image
                                     onClick={async () => {
                                         await logout();
                                         onClose();
@@ -327,16 +419,21 @@ const UserInfoDrawer = ({
                                 ></Image>
                             </Flex>
                             <UserInfo
+                                userName={userName}
                                 onChangeMode={(mode: number) => {
                                     handleChangeMode(mode);
                                 }}
                             ></UserInfo>
-                            <MyPaper></MyPaper>
+                            <MyPaper balance={paperBalance}></MyPaper>
                             <MyPlane></MyPlane>
                         </Box>
                     )}
                     {currentMode === 1 && (
                         <EditNickname
+                            userName={userName}
+                            onSetUserName={(userName: string) => {
+                                handleSetUserName(userName);
+                            }}
                             onChangeMode={(mode: number) => {
                                 handleChangeMode(mode);
                             }}

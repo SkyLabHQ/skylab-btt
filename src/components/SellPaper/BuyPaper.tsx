@@ -14,7 +14,10 @@ import BuyIcon from "./assets/buy-icon.svg";
 import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
 import YETHIcon from "./assets/y-ETH.png";
 import BETHIcon from "./assets/b-ETH.png";
-import { accMul } from "@/utils/formatBalance";
+import { accMul, parseAmount } from "@/utils/formatBalance";
+import { useMercuryJarTournamentContract } from "@/hooks/useContract";
+import { useChainId, usePublicClient } from "wagmi";
+import { handleError } from "@/utils/error";
 
 const ConnectWalletBt = () => {
     const toast = useSkyToast();
@@ -155,14 +158,31 @@ const BuyBt = ({
 };
 
 const BuyPaper = () => {
+    const chainId = useChainId();
+    const publicClient = usePublicClient();
+    console.log(chainId, "chainId");
+    const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const { isUserInfoOpen, onUserInfoOpen, onUserInfoClose } =
         useUserInfoRequest();
-
+    const toast = useSkyToast();
     const { ready, authenticated, login } = usePrivy();
     const { signer, address } = usePrivyAccounts();
     const [inputAmount, setInputAmount] = React.useState(0);
 
-    const handleBuy = async () => {};
+    const handleBuy = async () => {
+        try {
+            console.log(publicClient, "publicClient");
+            const res = await mercuryJarTournamentContract.write.mint([], {
+                value: parseAmount("0.01"),
+            });
+
+            // @ts-ignore
+            await publicClient.waitForTransactionReceipt(res.hash);
+            setInputAmount(0);
+        } catch (e) {
+            toast(handleError(e));
+        }
+    };
 
     return (
         <Box

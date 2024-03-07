@@ -9,7 +9,7 @@ import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.jso
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import DELEGATEERC721_ABI from "@/skyConstants/abis/DelegateERC721.json";
 import ERC721_ABI from "@/skyConstants/abis/ERC721.json";
-
+import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
 import PILOTMILEAGE_ABI from "@/skyConstants/abis/PilotMileage.json";
 import PILOTNETPOINTS_ABI from "@/skyConstants/abis/PilotNetPoints.json";
 import PILOTWINSTREAK_ABI from "@/skyConstants/abis/PilotWinStreak.json";
@@ -26,6 +26,7 @@ import {
     pilotMileageAddress,
     pilotNetPointsAddress,
     pilotWinStreakAddress,
+    mercuryJarTournamentAddress,
 } from "./useContract";
 import { ethers } from "ethers";
 import { isAddress } from "@/utils/isAddress";
@@ -143,6 +144,14 @@ export const useMultiPilotWinStreakContract = (chainId: number) => {
 
 export const useMultiMercuryBTTPrivateLobby = (address: string) => {
     return useContract(address, MERCURYBTTPRIVATELOBBY_ABI);
+};
+
+export const useMultiMercuryJarTournamentContract = () => {
+    const chainId = useChainId();
+    return useContract(
+        mercuryJarTournamentAddress[chainId],
+        MERCURYJARTOURNAMENT_ABI,
+    );
 };
 
 export const getMultiMercuryBTTPrivateLobby = (address: string) => {
