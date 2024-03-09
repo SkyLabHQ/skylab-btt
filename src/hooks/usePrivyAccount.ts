@@ -31,7 +31,6 @@ const usePrivyAccounts = () => {
             setSigner(walletClient);
         };
 
-        console.log(wallets, user, ready);
         if (wallets.length === 0 || !user || !ready) {
             setAddress("");
             setSigner(null);

@@ -85,7 +85,7 @@ export const botAddress: ChainIdToAddressMap = {
 };
 
 export const mercuryJarTournamentAddress: ChainIdToAddressMap = {
-    [ChainId.SEPOLIA]: "0x49982bb7245b2406782a30b3d3E81d189F806d79",
+    [ChainId.SEPOLIA]: "0xF8015A4fC5932D3b4d216E652FDF1d633b2c6B29",
 };
 
 function useContract(address: any, abi: any) {

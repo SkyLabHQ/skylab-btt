@@ -160,24 +160,28 @@ const BuyBt = ({
 const BuyPaper = () => {
     const chainId = useChainId();
     const publicClient = usePublicClient();
-    console.log(chainId, "chainId");
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const { isUserInfoOpen, onUserInfoOpen, onUserInfoClose } =
-        useUserInfoRequest();
     const toast = useSkyToast();
-    const { ready, authenticated, login } = usePrivy();
     const { signer, address } = usePrivyAccounts();
     const [inputAmount, setInputAmount] = React.useState(1);
 
     const handleBuy = async () => {
         try {
-            console.log(publicClient, "publicClient");
-            const res = await mercuryJarTournamentContract.write.mint([], {
-                value: parseAmount("0.01"),
-            });
+            const hash = await mercuryJarTournamentContract.write.mintPaper(
+                [inputAmount],
+                {
+                    value: parseAmount(accMul(String(inputAmount), "0.01")),
+                },
+            );
 
             // @ts-ignore
-            await publicClient.waitForTransactionReceipt(res.hash);
+            const receipt = await publicClient.waitForTransactionReceipt({
+                hash,
+            });
+            if (receipt.status !== "success") {
+                toast("Transaction failed");
+                return;
+            }
             setInputAmount(0);
         } catch (e) {
             toast(handleError(e));

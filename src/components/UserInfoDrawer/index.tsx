@@ -8,6 +8,7 @@ import {
     DrawerOverlay,
     useDisclosure,
     Flex,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import CopyIcon from "@/assets/copy-icon.svg";
@@ -21,6 +22,7 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { shortenAddress } from "@/utils";
 import PaperIcon from "./assets/paper.png";
 import GrayArrow from "./assets/gray-arrow.svg";
+import Blackrrow from "./assets/black-arrow.svg";
 import { aviationImg } from "@/utils/aviationImg";
 import NoPlane from "./assets/no-plane.png";
 import DiscordIcon from "./assets/discord.png";
@@ -28,7 +30,6 @@ import TwIcon from "./assets/twitter.png";
 import EditNickname from "./EditNickname";
 import SetPilot from "./SetPilot";
 import { PilotInfo } from "@/hooks/usePilotInfo";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
 import MyPilot from "../MyPilot";
 import {
     useMultiMercuryJarTournamentContract,
@@ -38,6 +39,8 @@ import { useChainId, usePublicClient } from "wagmi";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
+import { getLevel, levelRanges } from "@/utils/level";
+import PlaneBg from "./assets/plane-bg.png";
 
 const UserInfo = ({
     userName,
@@ -122,7 +125,16 @@ const UserInfo = ({
     );
 };
 
-const MyPaper = ({ balance }: { balance: string }) => {
+const MyPaper = ({
+    balance,
+    handleMintPlane,
+}: {
+    balance: string;
+    handleMintPlane: () => void;
+}) => {
+    const toast = useSkyToast();
+    const mercuryJarTournamentContract = useMercuryJarTournamentContract();
+
     return (
         <Box
             sx={{
@@ -198,27 +210,31 @@ const MyPaper = ({ balance }: { balance: string }) => {
                         </Box>
                     </Flex>
                 </Box>
+
                 <Flex
                     sx={{
                         borderRadius: "12px",
-                        background: "#777",
+                        background: Number(balance) > 0 ? "#F2D861" : "#777",
                         height: "40px",
                         width: "180px",
                         paddingLeft: "8px",
                         marginTop: "15px",
                     }}
+                    onClick={handleMintPlane}
                     align={"center"}
                 >
                     <Text
                         sx={{
                             fontSize: "12px",
-                            color: "#999",
+                            color: Number(balance) > 0 ? "#1b1b1b" : "#999",
                             marginRight: "5px",
                         }}
                     >
                         Fold A Paper Plane
                     </Text>
-                    <Image src={GrayArrow}></Image>
+                    <Image
+                        src={Number(balance) > 0 ? Blackrrow : GrayArrow}
+                    ></Image>
                     <Box
                         sx={{
                             position: "relative",
@@ -236,8 +252,8 @@ const MyPaper = ({ balance }: { balance: string }) => {
                             }}
                         ></Image>
                     </Box>
-                </Flex>{" "}
-                <Flex
+                </Flex>
+                {/* <Flex
                     sx={{
                         borderRadius: "12px",
                         background: "rgba(255, 255, 255, 0.82)",
@@ -256,13 +272,100 @@ const MyPaper = ({ balance }: { balance: string }) => {
                     >
                         You can only fold paper plane after Tournament Begins!
                     </Text>
-                </Flex>
+                </Flex> */}
             </Flex>
         </Box>
     );
 };
 
-const MyPlane = () => {
+const PlaneItem = ({ detail }: { detail: any }) => {
+    return (
+        <Flex flexDir={"column"} align={"center"}>
+            <Box
+                sx={{
+                    width: "50px",
+                    height: "50px",
+                    background: `url(${PlaneBg}) no-repeat`,
+                    backgroundSize: "100% 100%",
+                    position: "relative",
+                }}
+            >
+                <Image
+                    src={detail.img}
+                    sx={{
+                        width: "180%",
+                        maxWidth: "180%",
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%,-50%)",
+                    }}
+                ></Image>
+            </Box>
+            <Text
+                sx={{
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                }}
+            >
+                Lvl.{" "}
+                <span
+                    style={{
+                        fontSize: "16px",
+                    }}
+                >
+                    {detail.level}
+                </span>
+            </Text>
+            <Box
+                sx={{
+                    width: "70px",
+                    height: "7px",
+                    padding: "1px",
+                    border: "1px solid #FFF",
+                    borderRadius: "5px",
+                }}
+            >
+                <Box
+                    sx={{
+                        width: "100%",
+                        height: "100%",
+                        background: "#fff",
+                    }}
+                ></Box>
+            </Box>
+            <Text
+                sx={{
+                    fontSize: "12px",
+                }}
+            >
+                Next Lvl:
+            </Text>
+            <Text
+                sx={{
+                    fontSize: "12px",
+                }}
+            >
+                {detail.points}/
+                <span
+                    style={{
+                        color: "#CCC",
+                    }}
+                >
+                    {detail.nextPoints}pt
+                </span>
+            </Text>
+        </Flex>
+    );
+};
+
+const MyPlane = ({
+    balance,
+    planeList,
+}: {
+    balance: string;
+    planeList: any[];
+}) => {
     return (
         <Box
             sx={{
@@ -284,15 +387,33 @@ const MyPlane = () => {
                     Plane
                 </Text>
             </Box>
-            <Flex flexDir={"column"} align={"center"}>
-                <Image
-                    src={NoPlane}
-                    sx={{
-                        width: "140px",
-                        marginTop: "58px",
-                    }}
-                ></Image>
-            </Flex>
+            <Box
+                sx={{
+                    paddingTop: "48px",
+                }}
+            >
+                {planeList.length > 0 ? (
+                    <SimpleGrid columns={3}>
+                        {planeList.map((item, index) => {
+                            return (
+                                <PlaneItem
+                                    detail={item}
+                                    key={index}
+                                ></PlaneItem>
+                            );
+                        })}
+                    </SimpleGrid>
+                ) : (
+                    <Flex flexDir={"column"} align={"center"}>
+                        <Image
+                            src={NoPlane}
+                            sx={{
+                                width: "140px",
+                            }}
+                        ></Image>
+                    </Flex>
+                )}
+            </Box>
         </Box>
     );
 };
@@ -316,7 +437,9 @@ const UserInfoDrawer = ({
         useMultiMercuryJarTournamentContract();
     const { user, logout } = usePrivy();
     const [paperBalance, setPaperBalance] = useState("0");
+    const [planeBalance, setPlaneBalance] = useState("0");
     const [userName, setUserName] = useState("");
+    const [planeList, setPlaneList] = useState([] as any[]);
     const [placement, setPlacement] = React.useState("right");
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
 
@@ -325,28 +448,99 @@ const UserInfoDrawer = ({
     };
 
     const handleGetUserPaper = async () => {
-        const [balance, userName] = await multiProvider.all([
+        const [planeBalance, paperBalance, userName] = await multiProvider.all([
             multiMercuryJarTournamentContract.balanceOf(address),
+            multiMercuryJarTournamentContract.paperBalance(address),
             multiMercuryJarTournamentContract.userName(address),
         ]);
         setUserName(userName);
-        setPaperBalance(balance.toString());
+        setPaperBalance(paperBalance.toString());
+        setPlaneBalance(planeBalance.toString());
+
+        const p = [];
+        for (let i = 0; i < Number(planeBalance.toString()); i++) {
+            p.push(
+                multiMercuryJarTournamentContract.tokenOfOwnerByIndex(
+                    address,
+                    i,
+                ),
+            );
+        }
+
+        const tokenIds = await multiProvider.all(p);
+
+        const levelP = tokenIds.map((item) => {
+            return multiMercuryJarTournamentContract.aviationPoints(item);
+        });
+
+        const levels = await multiProvider.all(levelP);
+
+        const planeList = tokenIds.map((item, index) => {
+            console.log(
+                levels[index].toString(),
+                "levels[index].toString()levels[index].toString()",
+            );
+
+            const points = Number(levels[index].toString());
+            const levelItem = levelRanges.find((item) => {
+                return points < item.maxPoints && points >= item.minPoints;
+            });
+            const level = levelItem.level;
+            const nextPoints = levelItem.maxPoints;
+            console.log(level, "level");
+            return {
+                tokenId: item.toString(),
+                points,
+                level: level,
+                img: aviationImg(level),
+                nextPoints,
+            };
+        });
+
+        setPlaneList(planeList);
+        console.log(levels, "levels");
+        console.log(tokenIds, "tokenIds");
     };
 
+    console.log(planeList, "planeList");
     const handleSetUserName = async (name: string) => {
         try {
             console.log(
                 multiMercuryJarTournamentContract,
                 "multiMercuryJarTournamentContract",
             );
-            const res =
+            const hash =
                 await mercuryJarTournamentContract.write.registerUserName([
                     name,
                 ]);
 
             // @ts-ignore
-            await publicClient.waitForTransactionReceipt(res.hash);
+            await publicClient.waitForTransactionReceipt({ hash });
             setUserName(name);
+        } catch (e) {
+            toast(handleError(e));
+        }
+    };
+
+    const handleMintPlane = async () => {
+        if (Number(paperBalance) === 0) {
+            return;
+        }
+        try {
+            const hash = await mercuryJarTournamentContract.write.mintWithPaper(
+                [1],
+                {},
+            );
+            console.log(hash, "hash");
+            // @ts-ignore
+            const receipt = await publicClient.waitForTransactionReceipt({
+                hash,
+            });
+            if (receipt.status !== "success") {
+                toast("Transaction failed");
+                return;
+            }
+            handleGetUserPaper();
         } catch (e) {
             toast(handleError(e));
         }
@@ -424,8 +618,14 @@ const UserInfoDrawer = ({
                                     handleChangeMode(mode);
                                 }}
                             ></UserInfo>
-                            <MyPaper balance={paperBalance}></MyPaper>
-                            <MyPlane></MyPlane>
+                            <MyPaper
+                                balance={paperBalance}
+                                handleMintPlane={handleMintPlane}
+                            ></MyPaper>
+                            <MyPlane
+                                balance={planeBalance}
+                                planeList={planeList}
+                            ></MyPlane>
                         </Box>
                     )}
                     {currentMode === 1 && (

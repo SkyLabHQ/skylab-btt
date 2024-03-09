@@ -755,13 +755,26 @@ const SellPaper = () => {
         if (!isPc) {
             return;
         }
+        let animationFrameId: any = null;
+        const throttledHandleMouseMove = (event: any) => {
+            if (animationFrameId !== null) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
+
+            animationFrameId = window.requestAnimationFrame(() =>
+                handleMouseMove(event),
+            );
+        };
         window.addEventListener("mousedown", handleMouseDown);
         window.addEventListener("mouseup", handleMouseUp);
-        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mousemove", throttledHandleMouseMove);
         return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("mousedown", handleMouseDown);
             window.removeEventListener("mouseup", handleMouseUp);
+            window.removeEventListener("mousemove", throttledHandleMouseMove);
+            if (animationFrameId !== null) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
         };
     }, [isPc]);
 
