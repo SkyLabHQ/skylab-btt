@@ -1,5 +1,5 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Box, Flex, Image, Text, useTimeout } from "@chakra-ui/react";
+import React, { useEffect, useMemo, useState } from "react";
 import SYellowIcon from "./assets/s-yellow.png";
 import SGreenIcon from "./assets/s-green.png";
 import RYellowIcon from "./assets/x-yellow-r.png";
@@ -16,7 +16,50 @@ import {
 import { useChainId } from "wagmi";
 import NewComerBg from "./assets/newcomer-bg.png";
 import { ZERO_DATA } from "@/skyConstants";
-const Timer = () => {
+import useCountDown from "react-countdown-hook";
+
+const handleDateNumber = (number: number) => {
+    if (number >= 10) {
+        return [Math.floor(number / 10), number % 10];
+    } else {
+        return [0, number];
+    }
+};
+const Timer = ({ time }: { time: number }) => {
+    const [timeLeft, { start }] = useCountDown(5000, 1000);
+
+    useEffect(() => {
+        if (time === 0) {
+            start(0);
+            return;
+        }
+        const currentTime = new Date().getTime();
+        if (time * 1000 > currentTime) {
+            start(time * 1000 - currentTime);
+            return;
+        }
+        start(0);
+    }, [time]);
+
+    const { minutes, second, hour } = useMemo(() => {
+        let minutes: string | number = Math.floor((timeLeft / 60000) % 60);
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+
+        let second: string | number = Math.floor((timeLeft / 1000) % 60);
+        if (second < 10) {
+            second = `0${second}`;
+        }
+
+        let hour: string | number = Math.floor((timeLeft / 3600000) % 24);
+        if (hour < 10) {
+            hour = `0${hour}`;
+        }
+
+        return { minutes, second, hour };
+    }, [timeLeft]);
+
     return (
         <Flex
             sx={{
@@ -42,7 +85,7 @@ const Timer = () => {
                     zIndex: 999,
                 }}
             >
-                00:14:14
+                {hour}:{minutes}:{second}
             </Box>
         </Flex>
     );

@@ -1,12 +1,10 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import SYellowIcon from "./assets/s-yellow.png";
 import SGreenIcon from "./assets/s-green.png";
 import RYellowIcon from "./assets/x-yellow-r.png";
 import LYellowIcon from "./assets/x-yellow-l.png";
 import AmountBg from "./assets/amount-bg.png";
-import HourglassIcon from "./assets/hourglass.png";
-
 import LevelBg from "./assets/level-bg.png";
 import { aviationImg } from "@/utils/aviationImg";
 import {
@@ -17,6 +15,8 @@ import { useChainId } from "wagmi";
 import NewComerBg from "./assets/newcomer-bg.png";
 import { ZERO_DATA } from "@/skyConstants";
 import Timer from "./Timer";
+import { shortenAddress } from "@/utils";
+import LevelLeaderboardModal from "./LevelLeaderboardModal";
 
 const list = [
     {
@@ -268,12 +268,27 @@ const list = [
     },
 ];
 
+const levelInfoInit = new Array(16).fill({
+    name: [],
+    tokenId: "0",
+    claimTime: "0",
+    owner: "",
+    userName: "",
+});
+
 const AviationLevel = () => {
+    const {
+        isOpen: isLeaderboardModalOpen,
+        onOpen: openLeaderboardModal,
+        onClose: closeLeaderboardModal,
+    } = useDisclosure();
+
+    const [currentLevelLeaderboard, setCurrentLevelLeaderboard] = useState([]);
     const chainId = useChainId();
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
     const multiProvider = useMultiProvider(chainId);
-    const [levelInfo, setLevelInfo] = useState([]);
+    const [levelInfo, setLevelInfo] = useState(levelInfoInit);
 
     const handleLevelInfo = async () => {
         const p = [];
@@ -286,9 +301,9 @@ const AviationLevel = () => {
         const levelTokenInfo = [];
         for (let i = 0; i < 16; i++) {
             levelTokenInfo.push({
-                name: res[i * 3],
-                tokenId: res[i * 3 + 1].toString(),
-                claimTime: res[i * 3 + 2].toString(),
+                name: res[i * 3], // 该等级的名称列表
+                tokenId: res[i * 3 + 1].toString(), //new comer 的 tokenId
+                claimTime: res[i * 3 + 2].toString(), //new comer 的 截止时间
             });
         }
 
@@ -315,58 +330,78 @@ const AviationLevel = () => {
         const list = levelTokenInfo.map((item, index) => {
             return {
                 ...item,
-                owner: item.tokenId === "0" ? ZERO_DATA : owners[index],
-                userName: item.tokenId === "0" ? userNames[index] : "",
+                owner: item.tokenId === "0" ? ZERO_DATA : owners[index], //new comer 的 owner
+                userName: item.tokenId === "0" ? userNames[index] : "", //new comer 的 名称
             };
         });
 
         setLevelInfo(list.reverse());
     };
 
+    const handleLeaderboard = (list: any[]) => {
+        setCurrentLevelLeaderboard(list);
+        openLeaderboardModal();
+    };
+
     useEffect(() => {
         if (!multiProvider || !multiMercuryJarTournamentContract) return;
-        handleLevelInfo();
+
+        const timer = setInterval(() => {
+            handleLevelInfo();
+        }, 10000);
+        return () => {
+            clearInterval(timer);
+        };
     }, [multiProvider, multiMercuryJarTournamentContract]);
 
     return (
         <Box
             sx={{
                 height: "100%",
-                width: "900px",
+                width: "100%",
                 overflow: "auto",
                 position: "absolute",
                 top: "20px",
-                left: "50%",
-                transform: "translateX(-50%)",
+                left: "0%",
+                // transform: "translateX(-50%)",
                 "::-webkit-scrollbar": {
                     display: "none",
                 },
             }}
         >
-            {list.map((item, index) => {
-                return (
-                    <Box key={index}>
-                        <Box
-                            sx={{
-                                position: "absolute",
-                                zIndex: 999,
-                                ...item.position,
-                            }}
-                        >
-                            <Flex
+            <Box
+                sx={{
+                    width: "1000px",
+                    margin: "0 auto",
+                    position: "relative",
+                }}
+            >
+                {list.map((item, index) => {
+                    return (
+                        <Box key={index}>
+                            <Box
                                 sx={{
-                                    width: "160px",
-                                    height: "160px",
-                                    backgroundImage: `url(${LevelBg})`,
-                                    backgroundSize: "100% 100%",
+                                    position: "absolute",
+                                    zIndex: 999,
+                                    ...item.position,
                                 }}
-                                flexDir={"column"}
-                                align={"center"}
-                                position={"relative"}
+                                onClick={() => {
+                                    handleLeaderboard(levelInfo[index].name);
+                                }}
                             >
-                                {/* new commer 展示 */}
-                                {levelInfo.length > 0 &&
-                                    levelInfo?.[index]?.tokenId !== "0" && (
+                                <Flex
+                                    sx={{
+                                        width: "160px",
+                                        height: "160px",
+                                        backgroundImage: `url(${LevelBg})`,
+                                        backgroundSize: "100% 100%",
+                                    }}
+                                    flexDir={"column"}
+                                    align={"center"}
+                                    position={"relative"}
+                                >
+                                    {/* new commer 展示 */}
+                                    {levelInfo?.[index]?.tokenId !== "0" && (
                                         <Flex
                                             align={"center"}
                                             justify={"center"}
@@ -416,80 +451,114 @@ const AviationLevel = () => {
                                                     fontSize: "14px",
                                                 }}
                                             >
-                                                <Text>昵称</Text>
-                                                <Text>0x1234567</Text>
+                                                <Text
+                                                    sx={{
+                                                        width: "120px",
+                                                        textAlign: "center",
+                                                    }}
+                                                >
+                                                    {levelInfo[index].userName
+                                                        ? levelInfo[index]
+                                                              .userName
+                                                        : `User-${shortenAddress(
+                                                              levelInfo[index]
+                                                                  .owner,
+                                                              4,
+                                                              3,
+                                                          )}`}
+                                                </Text>
+                                                <Text
+                                                    sx={{
+                                                        width: "120px",
+                                                        textAlign: "center",
+                                                    }}
+                                                >
+                                                    {shortenAddress(
+                                                        levelInfo[index].owner,
+                                                    )}
+                                                </Text>
                                             </Box>
                                         </Flex>
                                     )}
 
-                                <Image
-                                    src={aviationImg(item.level)}
-                                    sx={{
-                                        width: "80%",
-                                    }}
-                                ></Image>
-                                <Text
-                                    sx={{
-                                        position: "absolute",
-                                        bottom: "30px",
-                                        left: "50%",
-                                        transform: "translateX(-50%)",
-                                        fontSize: "30px",
-                                        width: "100%",
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    Lvl. {item.level}
-                                </Text>
-                                <Flex
-                                    sx={{
-                                        background: `url(${AmountBg})`,
-                                        backgroundSize: "100% 100%",
-                                        width: "48px",
-                                        height: "48px",
-                                        position: "absolute",
-                                        bottom: "0",
-                                        left: "50%",
-                                        transform: "translate(-50%,40%)",
-                                    }}
-                                    justify={"center"}
-                                    align={"center"}
-                                >
-                                    <Box
+                                    <Image
+                                        src={aviationImg(item.level)}
                                         sx={{
-                                            verticalAlign: "bottom",
+                                            width: "80%",
+                                        }}
+                                    ></Image>
+                                    <Text
+                                        sx={{
+                                            position: "absolute",
+                                            bottom: "30px",
+                                            left: "50%",
+                                            transform: "translateX(-50%)",
+                                            fontSize: "30px",
+                                            width: "100%",
+                                            textAlign: "center",
                                         }}
                                     >
-                                        <span
-                                            style={{
-                                                fontSize: "12px",
+                                        Lvl. {item.level}
+                                    </Text>
+                                    <Flex
+                                        sx={{
+                                            background: `url(${AmountBg})`,
+                                            backgroundSize: "100% 100%",
+                                            width: "48px",
+                                            height: "48px",
+                                            position: "absolute",
+                                            bottom: "0",
+                                            left: "50%",
+                                            transform: "translate(-50%,40%)",
+                                        }}
+                                        justify={"center"}
+                                        align={"center"}
+                                    >
+                                        <Box
+                                            sx={{
+                                                verticalAlign: "bottom",
                                             }}
                                         >
-                                            x
-                                        </span>
-                                        <span
-                                            style={{
-                                                fontSize: "16px",
-                                            }}
-                                        >
-                                            10
-                                        </span>
-                                    </Box>
+                                            <span
+                                                style={{
+                                                    fontSize: "12px",
+                                                }}
+                                            >
+                                                x
+                                            </span>
+                                            <span
+                                                style={{
+                                                    fontSize: "16px",
+                                                }}
+                                            >
+                                                {
+                                                    levelInfo?.[index]?.name
+                                                        .length
+                                                }
+                                            </span>
+                                        </Box>
+                                    </Flex>
                                 </Flex>
-                            </Flex>
-
-                            <Timer></Timer>
+                                <Timer
+                                    time={levelInfo?.[index]?.claimTime}
+                                ></Timer>
+                            </Box>
+                            <Image
+                                src={item.arrowImg}
+                                sx={{
+                                    position: "absolute",
+                                    ...item.imgPosition,
+                                }}
+                            ></Image>
                         </Box>
-                        <Image
-                            src={item.arrowImg}
-                            sx={{
-                                position: "absolute",
-                                ...item.imgPosition,
-                            }}
-                        ></Image>
-                    </Box>
-                );
-            })}
+                    );
+                })}
+            </Box>
+            <LevelLeaderboardModal
+                isOpen={isLeaderboardModalOpen}
+                onClose={closeLeaderboardModal}
+                list={currentLevelLeaderboard}
+            ></LevelLeaderboardModal>
         </Box>
     );
 };

@@ -9,6 +9,7 @@ import {
     useDisclosure,
     Flex,
     SimpleGrid,
+    useClipboard,
 } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import CopyIcon from "@/assets/copy-icon.svg";
@@ -51,6 +52,13 @@ const UserInfo = ({
 }) => {
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
+    const toast = useSkyToast();
+    const { onCopy } = useClipboard(address);
+
+    const handleCopyAddress = () => {
+        onCopy();
+        toast("Address copied");
+    };
 
     return (
         <Flex flexDir={"column"} align={"center"}>
@@ -115,6 +123,7 @@ const UserInfo = ({
                     {shortenAddress(address, 5, 4)}
                 </Text>
                 <Image
+                    onClick={handleCopyAddress}
                     src={CopyIcon}
                     sx={{
                         width: "14px",
@@ -476,18 +485,12 @@ const UserInfoDrawer = ({
         const levels = await multiProvider.all(levelP);
 
         const planeList = tokenIds.map((item, index) => {
-            console.log(
-                levels[index].toString(),
-                "levels[index].toString()levels[index].toString()",
-            );
-
             const points = Number(levels[index].toString());
             const levelItem = levelRanges.find((item) => {
                 return points < item.maxPoints && points >= item.minPoints;
             });
             const level = levelItem.level;
             const nextPoints = levelItem.maxPoints;
-            console.log(level, "level");
             return {
                 tokenId: item.toString(),
                 points,
@@ -498,17 +501,10 @@ const UserInfoDrawer = ({
         });
 
         setPlaneList(planeList);
-        console.log(levels, "levels");
-        console.log(tokenIds, "tokenIds");
     };
 
-    console.log(planeList, "planeList");
     const handleSetUserName = async (name: string) => {
         try {
-            console.log(
-                multiMercuryJarTournamentContract,
-                "multiMercuryJarTournamentContract",
-            );
             const hash =
                 await mercuryJarTournamentContract.write.registerUserName([
                     name,

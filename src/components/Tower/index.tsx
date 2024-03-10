@@ -6,6 +6,7 @@ import {
     Image,
     keyframes,
     useMediaQuery,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -17,9 +18,6 @@ import CHummer from "@/assets/c-hummer.png";
 import MouseImage from "@/assets/mouse.png";
 import MouseAImage from "@/assets/mouse-a.png";
 import MouseBImage from "@/assets/mouse-b.png";
-import Turn1mp3 from "@/components/Presale/assets/turn1.mp3";
-import Turn2mp3 from "@/components/Presale/assets/turn2.mp3";
-import Numbermp3 from "@/components/Presale/assets/number.mp3";
 import EnterArena from "./EnterArena";
 import ToolBar from "@/components/HomeToolbar/ToolBar";
 import BuyBt from "./BuyBt";
