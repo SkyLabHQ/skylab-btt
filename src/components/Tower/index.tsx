@@ -29,7 +29,6 @@ const TowerPage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const mounseX = useRef(0);
     const mounseY = useRef(0);
-    const mouseImg = useRef(MouseBImage);
 
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
     // 处理鼠标移动
@@ -50,29 +49,14 @@ const TowerPage = () => {
         );
     };
 
-    // 处理鼠标移动
-    const handleMouseDown = (event: any) => {
-        mouseImg.current = MouseAImage;
-        setUpdate((prev) => prev + 1);
-    };
-
-    // 处理鼠标移动
-    const handleMouseUp = (event: any) => {
-        mouseImg.current = MouseImage;
-        setUpdate((prev) => prev + 1);
-    };
-
     useEffect(() => {
         if (!isPc) {
             return;
         }
-        window.addEventListener("mousedown", handleMouseDown);
-        window.addEventListener("mouseup", handleMouseUp);
+
         window.addEventListener("mousemove", handleMouseMove);
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mousedown", handleMouseDown);
-            window.removeEventListener("mouseup", handleMouseUp);
         };
     }, [isPc]);
 
@@ -92,26 +76,10 @@ const TowerPage = () => {
                 alignItems: "center",
                 flexDirection: "column",
                 overflow: "hidden",
-                cursor: `none`,
                 padding: "0 32px",
                 height: "100%",
             }}
         >
-            {isPc && (
-                <Image
-                    src={mouseImg.current}
-                    sx={{
-                        position: "absolute",
-                        left: "-30px",
-                        top: "-30px",
-                        width: "60px",
-                        height: "60px",
-                        transform: `translate3d(${mounseX.current}px, ${mounseY.current}px, 0)`,
-                        pointerEvents: "none",
-                        zIndex: 999999,
-                    }}
-                ></Image>
-            )}
             <AviationLevel></AviationLevel>
             <PotInfo></PotInfo>
             <ToolBar></ToolBar>

@@ -86,7 +86,6 @@ const BuyBt = () => {
             >
                 <PopoverBody sx={{}}>
                     <Flex flexDir={"column"} align={"center"}>
-                        {" "}
                         <Image
                             src={PlanetIcon}
                             sx={{

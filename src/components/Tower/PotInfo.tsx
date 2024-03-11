@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import React from "react";
-import HummerIcon from "@/assets/hummer.gif";
+import HummerIcon from "./assets/m-hummer.png";
 import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
 
 const animationObj = {
@@ -46,7 +46,7 @@ const PotInfo = () => {
                 <Image
                     src={HummerIcon}
                     sx={{
-                        width: "100px",
+                        width: "80px",
                     }}
                 ></Image>
             </Flex>
