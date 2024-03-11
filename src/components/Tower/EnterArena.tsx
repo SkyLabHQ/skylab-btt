@@ -1,10 +1,17 @@
 import React from "react";
 import ArenaIcon from "./assets/arena-icon.png";
 import { Box, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const EnterArena = () => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/");
+    };
     return (
         <Box
+            onClick={handleClick}
             sx={{
                 width: "313px",
                 height: "269px",

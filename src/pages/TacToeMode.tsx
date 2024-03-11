@@ -69,6 +69,7 @@ import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import DotLoading from "@/components/Loading/DotLoading";
 import styled from "@emotion/styled";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -123,6 +124,11 @@ export const GrayButton = (props: BoxProps) => {
 const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(30000, 1000);
+    const {
+        isOpen: isMyAviationOpen,
+        onOpen: onMyAviationOpen,
+        onClose: onMyAviationClose,
+    } = useDisclosure();
 
     const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
     const {
@@ -386,6 +392,9 @@ const TacToeMode = () => {
     };
 
     const handleCreateOrJoinDefault = async () => {
+        onMyAviationOpen();
+        return;
+
         if (!address) {
             toast("Connect wallet to enter tournament");
             return;
@@ -647,7 +656,7 @@ const TacToeMode = () => {
                                 ></PrivateLobbyButtons>
                             ) : (
                                 <PlayButtonGroup
-                                    tournamentDisabled={planeList.length === 0}
+                                    tournamentDisabled={false}
                                     onPlayTournament={handleCreateOrJoinDefault}
                                     onPlayTestLobby={async () => {
                                         if (activeLobbyAddress === "") {
@@ -798,6 +807,10 @@ const TacToeMode = () => {
                     onConfirm={handlePreviousLobbyConfirm}
                     onClose={handlePreviousLobbyClose}
                 ></PreviousLobbyModal>
+                <AvaitionDrawer
+                    isOpen={isMyAviationOpen}
+                    onClose={onMyAviationClose}
+                ></AvaitionDrawer>
             </Box>
             <ReactCanvasNest
                 className="canvasNest"
