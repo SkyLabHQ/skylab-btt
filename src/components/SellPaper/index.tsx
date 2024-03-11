@@ -814,7 +814,7 @@ const SellPaper = () => {
                     }}
                 ></Image>
             )}
-            {/* <YellowBg></YellowBg> */}
+            <YellowBg></YellowBg>
             <ToolBar></ToolBar>
             <Box
                 className="card"
