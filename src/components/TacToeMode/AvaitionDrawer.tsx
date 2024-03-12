@@ -27,17 +27,26 @@ import { aviationImg } from "@/utils/aviationImg";
 import { levelRanges } from "@/utils/level";
 
 const MyPlane = ({
-    balance,
+    selectPlane,
     planeList,
+    onPlay,
+    onSelectPlane,
 }: {
-    balance: string;
+    selectPlane: any;
     planeList: any[];
+    onPlay: () => void;
+    onSelectPlane: (plane: any) => void;
 }) => {
     return (
-        <Box>
+        <Flex
+            sx={{
+                height: "100%",
+            }}
+            flexDir={"column"}
+        >
             <Box
                 sx={{
-                    paddingTop: "48px",
+                    flex: 1,
                 }}
             >
                 {planeList.length > 0 ? (
@@ -47,6 +56,9 @@ const MyPlane = ({
                                 <PlaneItem
                                     detail={item}
                                     key={index}
+                                    onSelectPlane={() => {
+                                        onSelectPlane(item);
+                                    }}
                                 ></PlaneItem>
                             );
                         })}
@@ -62,13 +74,46 @@ const MyPlane = ({
                     </Flex>
                 )}
             </Box>
-        </Box>
+            <Flex
+                onClick={onPlay}
+                align={"center"}
+                justify={"center"}
+                sx={{
+                    background: selectPlane?.tokenId ? "#F2D861" : "#777",
+                    height: "64px",
+                    width: "280px",
+                    borderRadius: "24px",
+                    fontSize: "28px",
+                    fontWeight: 700,
+                    color: selectPlane?.tokenId ? "#1b1b1b" : "#999",
+                    margin: "28px auto 0",
+                    backdropFilter: "blur(6.795704364776611px)",
+                    fontFamily: "Orbitron",
+                    cursor: selectPlane?.tokenId ? "pointer" : "not-allowed",
+                }}
+            >
+                Play
+            </Flex>
+        </Flex>
     );
 };
 
-const PlaneItem = ({ detail }: { detail: any }) => {
+const PlaneItem = ({
+    detail,
+    onSelectPlane,
+}: {
+    detail: any;
+    onSelectPlane: () => void;
+}) => {
     return (
-        <Flex flexDir={"column"} align={"center"}>
+        <Flex flexDir={"column"} align={"center"} onClick={onSelectPlane}>
+            <Text
+                sx={{
+                    fontSize: "16px",
+                }}
+            >
+                #{detail.tokenId}
+            </Text>
             <Box
                 sx={{
                     width: "100px",
@@ -149,11 +194,17 @@ const PlaneItem = ({ detail }: { detail: any }) => {
 };
 
 const AvaitionDrawer = ({
+    selectPlane,
     onClose,
     isOpen,
+    onSelectPlane,
+    onPlay,
 }: {
+    selectPlane: any;
     isOpen: boolean;
     onClose: () => void;
+    onSelectPlane: (plane: any) => void;
+    onPlay: () => void;
 }) => {
     const [planeList, setPlaneList] = useState([] as any[]);
 
@@ -258,7 +309,14 @@ const AvaitionDrawer = ({
                             position: "absolute",
                         }}
                     ></Image>
-                    <MyPlane planeList={planeList} balance={"0"}></MyPlane>
+                    <MyPlane
+                        planeList={planeList}
+                        selectPlane={selectPlane}
+                        onPlay={onPlay}
+                        onSelectPlane={(plane) => {
+                            onSelectPlane(plane);
+                        }}
+                    ></MyPlane>
                 </DrawerBody>
             </DrawerContent>
         </Drawer>

@@ -1,10 +1,11 @@
-import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
+import { Box, Text, Image, useMediaQuery, Flex } from "@chakra-ui/react";
 import React from "react";
 import HumanPlane from "./assets/human-plane.png";
 import RobotIcon from "./assets/robot.png";
 import GrayHumanPlane from "./assets/gray-human-plane.png";
 import PrivateLobbyIcon from "./assets/private-lobby.svg";
 import { GrayButton } from "@/pages/TacToeMode";
+import LineBg from "./assets/line.png";
 
 export const PlayButtonGroup = ({
     tournamentDisabled,
@@ -25,7 +26,7 @@ export const PlayButtonGroup = ({
                 display: "flex",
                 flexDirection: "column",
                 fontFamily: "Quantico",
-                "&>div": {
+                "& .bt": {
                     width: "100% !important",
                     height: `${isPc ? "4.7917vw" : "70px"} !important`,
                     justifyContent: "flex-end",
@@ -44,11 +45,47 @@ export const PlayButtonGroup = ({
                 },
             }}
         >
+            <Flex
+                sx={{
+                    width: "100%",
+                }}
+                align={"center"}
+            >
+                <Box
+                    sx={{
+                        flex: 1,
+                        height: "3px",
+                        background: `url(${LineBg})`,
+                    }}
+                ></Box>
+                <Text
+                    sx={{
+                        fontSize: "30px",
+                        fontWeight: 700,
+                        WebkitTextStrokeWidth: 1,
+                        WebkitTextStrokeColor: "#FDDC2D",
+                        textAlign: "center",
+                        margin: "0 10px",
+                        fontFamily: "Orbitron",
+                    }}
+                >
+                    TOURNAMENT
+                </Text>
+                <Box
+                    sx={{
+                        flex: 1,
+                        height: "3px",
+                        background: `url(${LineBg})`,
+                    }}
+                ></Box>
+            </Flex>
             <GrayButton
+                className="bt"
                 onClick={onPlayTournament}
                 sx={{
                     paddingLeft: "5.2083vw !important",
                     opacity: tournamentDisabled ? 0.5 : 1,
+                    marginTop: "36px",
                 }}
             >
                 <Image
@@ -88,10 +125,66 @@ export const PlayButtonGroup = ({
                     </Text>
                 </Box>
             </GrayButton>
+            <Flex
+                sx={{
+                    width: "100%",
+                    marginTop: "60px",
+                }}
+                align={"center"}
+            >
+                <Box
+                    sx={{
+                        flex: 1,
+                        height: "3px",
+                        background: `url(${LineBg})`,
+                    }}
+                ></Box>
+                <Box
+                    sx={{
+                        position: "relative ",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            fontSize: "30px",
+                            fontWeight: 700,
+                            WebkitTextStrokeWidth: 1,
+                            WebkitTextStrokeColor: "#FDDC2D",
+                            textAlign: "center",
+                            margin: "0 10px",
+                            fontFamily: "Orbitron",
+                        }}
+                    >
+                        CUSTOM
+                    </Text>
+                    <Text
+                        sx={{
+                            color: "#D7C878",
+                            position: "absolute",
+                            left: "50%",
+                            top: "40px",
+                            transform: "translateX(-50%)",
+                            width: "100%",
+                            textAlign: "center",
+                        }}
+                    >
+                        Without Plane
+                    </Text>
+                </Box>
+
+                <Box
+                    sx={{
+                        flex: 1,
+                        height: "3px",
+                        background: `url(${LineBg})`,
+                    }}
+                ></Box>
+            </Flex>
             <GrayButton
+                className="bt"
                 onClick={onPlayWithBot}
                 sx={{
-                    marginTop: "1.0417vw",
+                    marginTop: "2.6042vw",
                 }}
                 position={"relative"}
             >
@@ -117,6 +210,7 @@ export const PlayButtonGroup = ({
                 </Box>
             </GrayButton>
             <GrayButton
+                className="bt"
                 onClick={onPlayTestLobby}
                 sx={{
                     marginTop: "1.0417vw",

@@ -71,6 +71,7 @@ export const useCheckBurnerBalanceAndApprove = () => {
                     : "start approveForGame",
             );
 
+            console.log(burnerAddress, tokenId, aviationAddress, "----");
             const approveResult =
                 await skylabBidTacToeContract.write.approveForGame(
                     [burnerAddress, tokenId, aviationAddress],
@@ -79,6 +80,7 @@ export const useCheckBurnerBalanceAndApprove = () => {
                             ? ethers.utils.parseEther(balanceInfo[chainId].high)
                             : 0,
                         gasLimit: 1000000,
+                        gas: 1000000,
                     },
                 );
 

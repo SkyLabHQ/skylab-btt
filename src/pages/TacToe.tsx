@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
@@ -15,8 +15,8 @@ import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
 import {
+    mercuryJarTournamentAddress,
     skylabTestFlightAddress,
-    skylabTournamentAddress,
 } from "@/hooks/useContract";
 import {
     BoardItem,
@@ -110,7 +110,7 @@ const TacToe = () => {
     const realChainId = istest ? TESTFLIGHT_CHAINID : chainId;
     const avaitionAddress = istest
         ? skylabTestFlightAddress[TESTFLIGHT_CHAINID]
-        : skylabTournamentAddress[realChainId];
+        : mercuryJarTournamentAddress[realChainId];
     const [myConfirmTimeout, setMyConfirmTimeout] = useState(-1);
     const [opConfirmTimeout, setOpConfirmTimeout] = useState(-1);
     const [myInfo, setMyInfo] = useState<Info>({

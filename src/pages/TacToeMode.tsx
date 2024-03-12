@@ -21,6 +21,7 @@ import {
 import { handleError } from "@/utils/error";
 import {
     botAddress,
+    mercuryJarTournamentAddress,
     skylabTestFlightAddress,
     skylabTournamentAddress,
     useMercuryBaseContract,
@@ -70,6 +71,7 @@ import DotLoading from "@/components/Loading/DotLoading";
 import styled from "@emotion/styled";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
+import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -142,6 +144,7 @@ const TacToeMode = () => {
     const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
     const multiProvider = useMultiProvider(DEAFAULT_CHAINID);
     const multiMercuryBaseContract = useMultiMercuryBaseContract();
+    const [selectPlane, setSelectPlane] = useState<any>({});
 
     const checkBurnerBalanceAndApprove = useCheckBurnerBalanceAndApprove();
     const [planeList, setPlaneList] = useState<PlaneInfo[]>([]);
@@ -441,6 +444,56 @@ const TacToeMode = () => {
         }
     };
 
+    const handleTournament = async () => {
+        if (!address) {
+            toast("Connect wallet to enter tournament");
+            return;
+        }
+
+        if (!selectPlane?.tokenId) {
+            return;
+        }
+
+        try {
+            onMyAviationClose();
+            // if (planeList[currentPlaneIndex].state) {
+            //     navigate(
+            //         `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
+            //     );
+            //     return;
+            // }
+
+            const tokenId = selectPlane?.tokenId;
+            if (loading) return;
+
+            const defaultSinger = getDefaultWithProvider(tokenId, chainId);
+
+            setLoading(true);
+            setEnterText("Entering tournament");
+            start(30000);
+            await checkBurnerBalanceAndApprove(
+                mercuryJarTournamentAddress[chainId],
+                tokenId,
+                defaultSinger.account.address,
+            );
+
+            await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
+                gasLimit: 1000000,
+                signer: defaultSinger,
+            });
+
+            setTimeout(() => {
+                setLoading(false);
+                const url = `/btt/game?tokenId=${tokenId}`;
+                navigate(url);
+            }, 1000);
+        } catch (e) {
+            console.log(e);
+            setLoading(false);
+            toast(handleError(e));
+        }
+    };
+
     const handleCreatePrivateLobby = async () => {
         try {
             setLoading(true);
@@ -585,6 +638,7 @@ const TacToeMode = () => {
         handleGetLoobyName();
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
 
+    console.log(selectPlane, "selectPlane");
     return (
         <Box
             sx={{
@@ -755,6 +809,8 @@ const TacToeMode = () => {
                                 ></PlaneList>
                             ))}
 
+                        <CurrentPlane selectPlane={selectPlane}></CurrentPlane>
+
                         {address ? (
                             <RequestNextButton
                                 sx={{
@@ -808,8 +864,11 @@ const TacToeMode = () => {
                     onClose={handlePreviousLobbyClose}
                 ></PreviousLobbyModal>
                 <AvaitionDrawer
+                    selectPlane={selectPlane}
                     isOpen={isMyAviationOpen}
                     onClose={onMyAviationClose}
+                    onSelectPlane={setSelectPlane}
+                    onPlay={handleTournament}
                 ></AvaitionDrawer>
             </Box>
             <ReactCanvasNest
