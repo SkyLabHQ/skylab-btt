@@ -640,7 +640,7 @@ const YellowBg = () => {
                 width: "100%",
                 height: "100%",
                 background: "#fddc2d",
-                zIndex: 10,
+                zIndex: 1000,
             }}
             onClick={handleClick}
             animate={clickAnimate}

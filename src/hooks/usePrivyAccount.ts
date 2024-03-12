@@ -8,8 +8,6 @@ const usePrivyAccounts = () => {
     const { user, ready } = usePrivy();
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
-    console.log(wallets, "wallets");
-    console.log(user, "user");
 
     useEffect(() => {
         const handleGetSigner = async () => {
