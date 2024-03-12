@@ -381,7 +381,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             const { salt, amount } = localSalt;
             setRevealing(true);
             await tacToeGameRetryWrite("revealBid", [amount, Number(salt)], {
-                gasLimit: 1000000,
+                gasLimit: 1500000,
                 usePaymaster: istest,
             });
             setRevealing(false);

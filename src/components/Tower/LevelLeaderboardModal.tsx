@@ -21,6 +21,7 @@ import CopyIcon from "@/assets/copy-icon.svg";
 import { aviationImg } from "@/utils/aviationImg";
 import LevelDetailBg from "./assets/level-detail.png";
 import Winner from "./assets/winner.png";
+import CloseIcon from "@/assets/close.png";
 
 const NewComer = () => {
     const toast = useSkyToast();
@@ -231,7 +232,12 @@ const LevelLeaderboardModal = ({
     useEffect(() => {}, [isOpen, list]);
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            isCentered
+            closeOnOverlayClick={false}
+        >
             <ModalOverlay />
             <ModalContent
                 width={"800px"}
@@ -365,6 +371,20 @@ const LevelLeaderboardModal = ({
                         </SimpleGrid>
                     </Box>
                 </ModalBody>
+                <Image
+                    onClick={() => {
+                        onClose();
+                    }}
+                    src={CloseIcon}
+                    sx={{
+                        width: "30px",
+                        height: "30px",
+                        position: "absolute",
+                        right: "0",
+                        top: "-48px",
+                        cursor: "pointer",
+                    }}
+                ></Image>
             </ModalContent>
         </Modal>
     );

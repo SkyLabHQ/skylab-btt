@@ -180,6 +180,7 @@ const BuyBt = () => {
                                 fontSize: "16px",
                                 padding: "0 12px",
                                 color: "#000",
+                                cursor: "pointer",
                             }}
                             align={"center"}
                             justify={"space-between"}

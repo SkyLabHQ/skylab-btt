@@ -740,13 +740,13 @@ const SellPaper = () => {
     };
 
     // 处理鼠标移动
-    const handleMouseDown = (event: any) => {
+    const handleMouseDown = () => {
         mouseImg.current = MouseAImage;
         setUpdate((prev) => prev + 1);
     };
 
     // 处理鼠标移动
-    const handleMouseUp = (event: any) => {
+    const handleMouseUp = () => {
         mouseImg.current = MouseImage;
         setUpdate((prev) => prev + 1);
     };

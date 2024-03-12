@@ -558,11 +558,13 @@ const UserInfoDrawer = ({
         <Drawer placement={"right"} onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
             <DrawerContent
-                containerProps={{
-                    sx: {
-                        cursor: "none",
-                    },
-                }}
+                containerProps={
+                    {
+                        // sx: {
+                        //     cursor: "none",
+                        // },
+                    }
+                }
                 sx={{
                     borderRadius: "20px",
                     border: "1px solid #F2D861",

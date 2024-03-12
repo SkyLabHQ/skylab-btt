@@ -20,9 +20,10 @@ const ToolBar = () => {
     const { onUserInfoOpen } = useUserInfoRequest();
     const { ready, authenticated, login, user } = usePrivy();
     const { address } = usePrivyAccounts();
+    console.log(address, "address");
 
     const handleLogin = () => {
-        console.log(ready, "ready");
+        console.log(ready, user, "ready");
         if (!ready) {
             toast("Please wait for the wallet to be ready");
             return;

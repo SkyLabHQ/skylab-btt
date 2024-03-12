@@ -106,7 +106,14 @@ const PlaneItem = ({
     onSelectPlane: () => void;
 }) => {
     return (
-        <Flex flexDir={"column"} align={"center"} onClick={onSelectPlane}>
+        <Flex
+            flexDir={"column"}
+            align={"center"}
+            onClick={onSelectPlane}
+            sx={{
+                cursor: "pointer",
+            }}
+        >
             <Text
                 sx={{
                     fontSize: "16px",
@@ -161,7 +168,11 @@ const PlaneItem = ({
             >
                 <Box
                     sx={{
-                        width: "100%",
+                        width:
+                            ((detail.points - detail.prePoints) /
+                                (detail.nextPoints - detail.points)) *
+                                100 +
+                            "%",
                         height: "100%",
                         background: "#fff",
                         borderRadius: "12px",
@@ -257,12 +268,14 @@ const AvaitionDrawer = ({
             });
             const level = levelItem.level;
             const nextPoints = levelItem.maxPoints;
+            const prePoints = levelItem.minPoints;
             return {
                 tokenId: item.toString(),
                 points,
                 level: level,
                 img: aviationImg(level),
                 nextPoints,
+                prePoints,
             };
         });
 

@@ -199,7 +199,12 @@ const RulesModal = ({
         setCurrentIndex(index);
     };
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            isCentered
+            closeOnOverlayClick={false}
+        >
             <ModalOverlay
                 sx={{
                     backdropFilter: "blur(13.591408729553223px)",
@@ -255,6 +260,7 @@ const RulesModal = ({
                         position: "absolute",
                         right: "0",
                         top: "-48px",
+                        cursor: "pointer",
                     }}
                 ></Image>
                 <Indicator

@@ -23,24 +23,17 @@ import {
     botAddress,
     mercuryJarTournamentAddress,
     skylabTestFlightAddress,
-    skylabTournamentAddress,
     useMercuryBaseContract,
     useSkylabBidTacToeContract,
 } from "@/hooks/useContract";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
-    getMultiSkylabBidTacToeGameContract,
     useMultiMercuryBTTPrivateLobby,
     useMultiMercuryBaseContract,
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { DEAFAULT_CHAINID, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import RequestNextButton from "@/components/RequrestNextButton";
-import { Contract } from "ethers-multicall";
-import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
-import { getMetadataImg } from "@/utils/ipfsImg";
-import PlaneList, { NoPlaneContent } from "@/components/TacToeMode/PlaneList";
 import { LiveGame } from "@/components/TacToeMode/LiveGameList";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
@@ -52,7 +45,6 @@ import {
     getTestflightSigner,
 } from "@/hooks/useSigner";
 import { getSCWallet, useSCWallet } from "@/hooks/useSCWallet";
-import ConnectWalletBg from "@/components/TacToeMode/assets/connect-wallet.svg";
 import {
     erc721iface,
     topic0PrivateLobbyCreated,
@@ -206,124 +198,6 @@ const TacToeMode = () => {
         return { minutes, second };
     }, [timeLeft]);
 
-    const handleGetLobbyOnGoingGames = async () => {
-        const avaitionAddress = skylabTournamentAddress[DEAFAULT_CHAINID];
-
-        const [onGoingGames] = await multiProvider.all([
-            multiSkylabBidTacToeFactoryContract.getLobbyOnGoingGames(
-                avaitionAddress,
-            ),
-        ]);
-
-        const p: any = [];
-
-        onGoingGames.forEach((gameAddress: string) => {
-            const multiSkylabBidTacToeGameContract =
-                getMultiSkylabBidTacToeGameContract(gameAddress);
-            p.push(
-                multiSkylabBidTacToeGameContract.player1(),
-                multiSkylabBidTacToeGameContract.player2(),
-            );
-        });
-
-        const players = await multiProvider.all(p);
-
-        const p1: any = [];
-
-        onGoingGames.forEach((gameAddress: string, index: number) => {
-            p1.push(
-                multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                    players[index * 2],
-                ),
-                multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                    players[index * 2 + 1],
-                ),
-            );
-        });
-        const tokenIds = await multiProvider.all(p1);
-
-        const p2: any = [];
-
-        onGoingGames.forEach((gameAddress: string, index: number) => {
-            p2.push(
-                multiMercuryBaseContract.aviationPoints(tokenIds[index * 2]),
-                multiMercuryBaseContract.aviationPoints(
-                    tokenIds[index * 2 + 1],
-                ),
-            );
-        });
-
-        const levels = await multiProvider.all(p2);
-
-        setOnGoingGames(
-            onGoingGames.map((gameAddress: string, index: number) => {
-                return {
-                    gameAddress,
-                    player1: players[index * 2],
-                    player2: players[index * 2 + 1],
-                    tokenId1: tokenIds[index * 2].toNumber(),
-                    tokenId2: tokenIds[index * 2 + 1].toNumber(),
-                    level1: levels[index * 2].toNumber(),
-                    level2: levels[index * 2 + 1].toNumber(),
-                };
-            }),
-        );
-    };
-
-    const handleGetPlaneBalance = async () => {
-        const tournamentContract = new Contract(
-            skylabTournamentAddress[DEAFAULT_CHAINID],
-            SKYLABTOURNAMENT_ABI,
-        );
-
-        const [balance, round] = await ethcallProvider.all([
-            tournamentContract.balanceOf(address),
-            tournamentContract._currentRound(),
-        ]);
-
-        const p = new Array(balance.toNumber()).fill("").map((item, index) => {
-            return tournamentContract.tokenOfOwnerByIndex(address, index);
-        });
-        const planeTokenIds = await ethcallProvider.all(p);
-        const p1: any = [];
-        planeTokenIds.forEach((tokenId: any) => {
-            p1.push(tournamentContract.aviationLevels(tokenId));
-            p1.push(tournamentContract.tokenURI(tokenId));
-            p1.push(tournamentContract.aviationRounds(tokenId));
-            p1.push(tournamentContract.isAviationLocked(tokenId));
-        });
-
-        const levels: any = await ethcallProvider.all(p1);
-
-        const list = planeTokenIds.map((item: any, index: number) => {
-            const level = levels[index * 4].toNumber();
-            const metadata = levels[index * 4 + 1];
-            const round = levels[index * 4 + 2];
-            const state = levels[index * 4 + 3];
-            return {
-                tokenId: item.toNumber(),
-                level: level,
-                img: getMetadataImg(metadata),
-                round:
-                    round.toNumber() >= 3
-                        ? round.toNumber() - 1
-                        : round.toNumber(),
-                state,
-            };
-        });
-
-        const _list = list
-            .filter((item: any) => {
-                return item.round === round.toNumber();
-            })
-            .sort((item1: any, item2: any) => {
-                return item2.level - item1.level; //  大的 level 排在前面
-            })
-            .reverse();
-
-        setPlaneList(_list);
-    };
-
     const handleMintPlayTest = async (type: string) => {
         try {
             const testflightSinger = getTestflightSigner(
@@ -468,15 +342,14 @@ const TacToeMode = () => {
 
             const defaultSinger = getDefaultWithProvider(tokenId, chainId);
 
-            setLoading(true);
-            setEnterText("Entering tournament");
-            start(30000);
             await checkBurnerBalanceAndApprove(
                 mercuryJarTournamentAddress[chainId],
                 tokenId,
                 defaultSinger.account.address,
             );
-
+            setLoading(true);
+            setEnterText("Entering tournament");
+            start(30000);
             await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
                 gasLimit: 1000000,
                 signer: defaultSinger,
@@ -596,19 +469,6 @@ const TacToeMode = () => {
     const handlePreviousLobbyConfirm = async () => {
         navigate(`/btt/lobby?lobbyAddress=${activeLobbyAddress}`);
     };
-
-    useEffect(() => {
-        if (!multiProvider || !multiSkylabBidTacToeFactoryContract) return;
-        // handleGetLobbyOnGoingGames();
-    }, [multiProvider, multiSkylabBidTacToeFactoryContract]);
-
-    useEffect(() => {
-        if (!address) {
-            setPlaneList([]);
-            return;
-        }
-        handleGetPlaneBalance();
-    }, [address]);
 
     useEffect(() => {
         if (
@@ -793,11 +653,11 @@ const TacToeMode = () => {
                             flexDirection: "column",
                             alignItems: "center",
                             position: "absolute",
-                            bottom: "2.6042vw",
+                            bottom: "6.6042vw",
                             left: "6.25vw",
                         }}
                     >
-                        {address &&
+                        {/* {address &&
                             (planeList.length === 0 ? (
                                 <NoPlaneContent></NoPlaneContent>
                             ) : (
@@ -807,54 +667,9 @@ const TacToeMode = () => {
                                         setCurrentPlaneIndex(index);
                                     }}
                                 ></PlaneList>
-                            ))}
+                            ))} */}
 
                         <CurrentPlane selectPlane={selectPlane}></CurrentPlane>
-
-                        {address ? (
-                            <RequestNextButton
-                                sx={{
-                                    background: "transparent !important",
-                                    borderRadius: "0.9375vw",
-                                    border: "1px solid #616161",
-                                    height: "2.6042vw !important",
-                                    lineHeight: "2.6042vw !important",
-                                    color: "#D9D9D9 !important",
-                                    width: "25vw !important",
-                                    fontSize: "1.25vw !important",
-                                    "&:hover": {
-                                        boxShadow:
-                                            "0px 4px 4px #fbc53e !important",
-                                    },
-                                }}
-                                onClick={() => {
-                                    window.open(
-                                        "https://docs.google.com/forms/d/1NUrQ8185o6lJlQzpgFlhGraHsnHbd7J4qJMN5HDcEiM/edit",
-                                        "_blank",
-                                    );
-                                }}
-                            ></RequestNextButton>
-                        ) : (
-                            <Box
-                                onClick={() => {
-                                    // show();
-                                }}
-                                sx={{
-                                    background: `url(${ConnectWalletBg}) no-repeat center`,
-                                    backgroundSize: "100% 100%",
-                                    height: "2.6042vw !important",
-
-                                    width: "25vw !important",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    fontSize: "1.0417vw",
-                                    paddingTop: "2px",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                Connect Wallet
-                            </Box>
-                        )}
                     </Box>
                 )}
                 <PreviousLobbyModal
@@ -867,7 +682,13 @@ const TacToeMode = () => {
                     selectPlane={selectPlane}
                     isOpen={isMyAviationOpen}
                     onClose={onMyAviationClose}
-                    onSelectPlane={setSelectPlane}
+                    onSelectPlane={(plane: any) => {
+                        if (plane.tokenId === selectPlane.tokenId) {
+                            setSelectPlane({});
+                            return;
+                        }
+                        setSelectPlane(plane);
+                    }}
                     onPlay={handleTournament}
                 ></AvaitionDrawer>
             </Box>

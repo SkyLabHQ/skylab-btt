@@ -20,7 +20,6 @@ import { useLocation } from "react-router-dom";
 import {
     skylabBidTacToeAddress,
     skylabTestFlightAddress,
-    skylabTournamentAddress,
     mercuryPilotsAddress,
     delegateERC721Address,
     pilotMileageAddress,
@@ -79,7 +78,10 @@ export const useMultiMercuryTouramentContract = (propChainId?: number) => {
     const activeChainId = useChainId();
     const chainId = propChainId || activeChainId;
 
-    return useContract(skylabTournamentAddress[chainId], SKYLABTOURNAMENT_ABI);
+    return useContract(
+        mercuryJarTournamentAddress[chainId],
+        SKYLABTOURNAMENT_ABI,
+    );
 };
 
 export const useMultiMercuryBaseContract = (propChainId?: number) => {
@@ -92,7 +94,7 @@ export const useMultiMercuryBaseContract = (propChainId?: number) => {
         chainId &&
             (istest
                 ? skylabTestFlightAddress[chainId]
-                : skylabTournamentAddress[chainId]),
+                : mercuryJarTournamentAddress[chainId]),
         istest ? SKYLABTESSTFLIGHT_ABI : SKYLABTOURNAMENT_ABI,
     );
 };
