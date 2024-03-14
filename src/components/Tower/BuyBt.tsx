@@ -21,6 +21,7 @@ import {
     PopoverBody,
     useDisclosure,
     Input,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import { accMul, parseAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -28,6 +29,7 @@ import { handleError } from "@/utils/error";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { usePublicClient } from "wagmi";
 const BuyBt = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const publicClient = usePublicClient();
     const { onOpen, onClose, isOpen } = useDisclosure();
@@ -69,7 +71,8 @@ const BuyBt = () => {
                     role="button"
                     src={Buycon}
                     sx={{
-                        width: "313px",
+                        width: isPc ? "313px" : "110px",
+
                         position: "absolute",
                         left: "0",
                         bottom: "0",

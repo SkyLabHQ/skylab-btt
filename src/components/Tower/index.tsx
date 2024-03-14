@@ -82,7 +82,7 @@ const TowerPage = () => {
         >
             <AviationLevel></AviationLevel>
             <PotInfo></PotInfo>
-            <ToolBar></ToolBar>
+            <ToolBar showOpensea={true}></ToolBar>
             <BuyBt></BuyBt>
             <EnterArena></EnterArena>
         </motion.div>

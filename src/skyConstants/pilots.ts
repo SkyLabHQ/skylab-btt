@@ -322,4 +322,117 @@ export const handlePilotsInfo = async ({
     return _list;
 };
 
+export const handlePilotsInfo1 = async ({
+    allPilot,
+    chainId,
+}: {
+    allPilot: ActivePilotRes[];
+    chainId: number;
+}) => {
+    const chainIdIndex: any = [];
+
+    const pilots = allPilot.map((item) => {
+        const isSpecialPilot = getIsSpecialPilot(item.collectionAddress);
+        const pilotItem = getPilotInfo(chainId, item.collectionAddress);
+
+        return {
+            ...item,
+            isSpecialPilot,
+            pilotChainId: pilotItem?.chainId,
+        };
+    });
+
+    const allRequests = {};
+    for (const item of pilots) {
+        const pilotChainId = item.pilotChainId;
+        if (!pilotChainId) {
+            chainIdIndex.push(pilotChainId);
+            continue;
+        }
+        const collectionAddress = item.collectionAddress;
+        const pilotId = item.pilotId;
+
+        const multiDelegateERC721Contract =
+            getMultiDelegateERC721Contract(pilotChainId);
+
+        if (!allRequests[pilotChainId]) {
+            allRequests[pilotChainId] = [];
+        }
+
+        if (!item.isSpecialPilot) {
+            allRequests[pilotChainId].push(
+                multiDelegateERC721Contract.tokenURI(
+                    collectionAddress,
+                    pilotId,
+                ),
+            );
+        }
+        allRequests[pilotChainId].push(
+            multiDelegateERC721Contract.ownerOf(collectionAddress, pilotId),
+        );
+
+        chainIdIndex.push(pilotChainId);
+    }
+
+    const expandRequests = Object.entries(allRequests);
+
+    const allIndex = {};
+
+    const requests = expandRequests.map(([chainId, chainRequests]) => {
+        const multiProvider = getMultiProvider(Number(chainId));
+        allIndex[chainId] = 0;
+        return multiProvider.all(chainRequests as any);
+    });
+
+    const allResult = await Promise.all(requests);
+
+    const list = pilots.map((item, index) => {
+        let imgUrl = "";
+
+        if (!item.pilotChainId) {
+            return {
+                address: item.collectionAddress,
+                pilotId: item.pilotId,
+                pilotImg: imgUrl,
+            };
+        }
+
+        const currentChainId = chainIdIndex[index];
+
+        const resIndex = expandRequests.findIndex(
+            ([chainId, chainRequests]) => {
+                return chainId == currentChainId;
+            },
+        );
+
+        if (item.isSpecialPilot) {
+            imgUrl = getSpecialPilotImg(item.collectionAddress, item.pilotId);
+        } else {
+            imgUrl = allResult[resIndex][allIndex[currentChainId]++];
+        }
+
+        const imgPromise = item.isSpecialPilot
+            ? imgUrl
+            : getPilotImgFromUrl(imgUrl);
+
+        return {
+            address: item.collectionAddress,
+            pilotId: item.pilotId,
+            pilotImg: imgPromise,
+        };
+    });
+
+    const imgRes = await Promise.all(
+        list.map((item) => {
+            return item.pilotImg;
+        }),
+    );
+
+    const _list = list.map((item, index) => {
+        return { ...item, pilotImg: imgRes[index] };
+    });
+
+    return _list;
+};
+
 export default AllPilotList;

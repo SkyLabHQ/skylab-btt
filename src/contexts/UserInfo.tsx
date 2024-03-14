@@ -18,13 +18,8 @@ export const UserInfoProvider = ({
     children: React.ReactNode;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [placement, setPlacement] = React.useState("right");
     const { address } = usePrivyAccounts();
     const { activePilot, handleGetActivePilot } = usePilotInfo(address);
-
-    useEffect(() => {
-        // onOpen();
-    }, []);
 
     return (
         <UserInfoContext.Provider

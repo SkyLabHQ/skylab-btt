@@ -5,10 +5,13 @@ import SGreenIcon from "./assets/s-green.png";
 import RYellowIcon from "./assets/x-yellow-r.png";
 import LYellowIcon from "./assets/x-yellow-l.png";
 import AmountBg from "./assets/amount-bg.png";
+import AmountBg1 from "./assets/amount-bg1.png";
+
 import LevelBg from "./assets/level-bg.png";
 import { aviationImg } from "@/utils/aviationImg";
 import {
     useMultiMercuryJarTournamentContract,
+    useMultiMercuryPilotsContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
 import { useChainId } from "wagmi";
@@ -17,6 +20,10 @@ import { ZERO_DATA } from "@/skyConstants";
 import Timer from "./Timer";
 import { shortenAddress } from "@/utils";
 import LevelLeaderboardModal from "./LevelLeaderboardModal";
+import PaperIcon from "./assets/paper.png";
+import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
+import DefaultAvatar from "./assets/default-avatar.png";
+import LockIcon from "./assets/lock.png";
 
 const list = [
     {
@@ -41,7 +48,6 @@ const list = [
             right: "150px",
         },
         comerPosition: "right",
-
         arrowImg: SYellowIcon,
         imgPosition: {
             top: "360px",
@@ -268,13 +274,14 @@ const list = [
     },
 ];
 
-const levelInfoInit = new Array(16).fill({
-    name: [],
+const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
+    levelTokenIds: [],
     tokenId: "0",
-    claimTime: "0",
+    claimTime: 0,
     owner: "",
     userName: "",
-});
+    pilotImg: "",
+}));
 
 const AviationLevel = () => {
     const {
@@ -283,8 +290,10 @@ const AviationLevel = () => {
         onClose: closeLeaderboardModal,
     } = useDisclosure();
 
-    const [currentLevelLeaderboard, setCurrentLevelLeaderboard] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(1);
     const chainId = useChainId();
+
+    const multiMercuryPilotsContract = useMultiMercuryPilotsContract(chainId);
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
     const multiProvider = useMultiProvider(chainId);
@@ -293,7 +302,7 @@ const AviationLevel = () => {
     const handleLevelInfo = async () => {
         const p = [];
         for (let i = 1; i <= 16; i++) {
-            p.push(multiMercuryJarTournamentContract.getUserNamePerLevel(i));
+            p.push(multiMercuryJarTournamentContract.getTokenIdPerLevel(i));
             p.push(multiMercuryJarTournamentContract.levelToNewComerId(i));
             p.push(multiMercuryJarTournamentContract.levelToClaimTime(i));
         }
@@ -301,57 +310,85 @@ const AviationLevel = () => {
         const levelTokenInfo = [];
         for (let i = 0; i < 16; i++) {
             levelTokenInfo.push({
-                name: res[i * 3], // 该等级的名称列表
+                levelTokenIds: res[i * 3], // 该等级的名称列表
                 tokenId: res[i * 3 + 1].toString(), //new comer 的 tokenId
-                claimTime: res[i * 3 + 2].toString(), //new comer 的 截止时间
+                claimTime: res[i * 3 + 2].toNumber(), //new comer 的 截止时间
             });
         }
 
         // 获取tokenId的owner
-        const pOwenrs = [];
+        const p1 = [];
         for (let i = 0; i < levelTokenInfo.length; i++) {
             if (levelTokenInfo[i].tokenId === "0") continue;
-            pOwenrs.push(
-                multiMercuryJarTournamentContract.ownerOf(
-                    levelTokenInfo[i].tokenId,
-                ),
+            const tokenId = levelTokenInfo[i].tokenId;
+            p1.push(multiMercuryJarTournamentContract.ownerOf(tokenId));
+            p1.push(multiMercuryJarTournamentContract.aviationPoints(tokenId));
+        }
+
+        const p1R = await multiProvider.all(p1);
+        const p2 = [];
+
+        for (let i = 0; i < p1.length / 2; i++) {
+            p2.push(
+                multiMercuryJarTournamentContract.userName(p1R[i * 2]),
+                multiMercuryPilotsContract.getActivePilot(p1R[i * 2]),
             );
         }
 
-        const owners = await multiProvider.all(pOwenrs);
-        const pUserNames = [];
-        for (let i = 0; i < pOwenrs.length; i++) {
-            pUserNames.push(
-                multiMercuryJarTournamentContract.userName(owners[i]),
-            );
-        }
-        const userNames = await multiProvider.all(pUserNames);
-
-        const list = levelTokenInfo.map((item, index) => {
-            return {
+        const p2R = await multiProvider.all(p2);
+        const allPilot: ActivePilotRes[] = [];
+        for (let i = 0; i < p1.length / 2; i++) {
+            const item = p2R[i * 2 + 1];
+            allPilot.push({
                 ...item,
-                owner: item.tokenId === "0" ? ZERO_DATA : owners[index], //new comer 的 owner
-                userName: item.tokenId === "0" ? userNames[index] : "", //new comer 的 名称
-            };
+                pilotId: item.pilotId.toNumber(),
+            });
+        }
+
+        const pilotList = await handlePilotsInfo1({
+            chainId: chainId,
+            allPilot,
         });
 
+        let jIndex = -1;
+        const list = levelTokenInfo.map((item, index) => {
+            if (item.tokenId === "0") {
+                return {
+                    ...item,
+                    level: index + 1,
+                    owner: "",
+                    userName: "",
+                    pilotImg: "",
+                };
+            }
+            jIndex++;
+            return {
+                ...item,
+                level: index + 1,
+                owner: item.tokenId === "0" ? ZERO_DATA : p1R[jIndex * 2], //new comer 的 owner
+                userName: item.tokenId === "0" ? p2R[jIndex] : "", //new comer 的 名称
+                pilotImg:
+                    item.tokenId === "0" ? "" : pilotList[jIndex].pilotImg,
+                points: p1R[jIndex * 2 + 1].toString(),
+            };
+        });
         setLevelInfo(list.reverse());
     };
 
-    const handleLeaderboard = (list: any[]) => {
-        setCurrentLevelLeaderboard(list);
+    const handleLeaderboard = (index: number) => {
+        setCurrentIndex(index);
         openLeaderboardModal();
     };
 
     useEffect(() => {
         if (!multiProvider || !multiMercuryJarTournamentContract) return;
-
-        const timer = setInterval(() => {
-            handleLevelInfo();
-        }, 10000);
-        return () => {
-            clearInterval(timer);
-        };
+        handleLevelInfo();
+        // const timer = setInterval(() => {
+        //     handleLevelInfo();
+        // }, 10000);
+        // return () => {
+        //     clearInterval(timer);
+        // };
     }, [multiProvider, multiMercuryJarTournamentContract]);
 
     return (
@@ -367,6 +404,7 @@ const AviationLevel = () => {
                 "::-webkit-scrollbar": {
                     display: "none",
                 },
+                paddingBottom: "200px",
             }}
         >
             <Box
@@ -381,12 +419,16 @@ const AviationLevel = () => {
                         <Box key={index}>
                             <Box
                                 sx={{
+                                    cursor:
+                                        levelInfo[index].levelTokenIds.length >
+                                            0 && "pointer",
                                     position: "absolute",
                                     zIndex: 999,
                                     ...item.position,
                                 }}
                                 onClick={() => {
-                                    handleLeaderboard(levelInfo[index].name);
+                                    levelInfo[index].levelTokenIds.length > 0 &&
+                                        handleLeaderboard(index);
                                 }}
                             >
                                 <Flex
@@ -435,10 +477,16 @@ const AviationLevel = () => {
                                                 New Comer
                                             </Text>
                                             <Image
-                                                src={aviationImg(item.level)}
+                                                src={
+                                                    levelInfo[index].pilotImg
+                                                        ? levelInfo[index]
+                                                              .pilotImg
+                                                        : DefaultAvatar
+                                                }
                                                 sx={{
                                                     width: "72px",
                                                     height: "72px",
+                                                    borderRadius: "50%",
                                                 }}
                                             ></Image>
                                             <Box
@@ -487,6 +535,32 @@ const AviationLevel = () => {
                                             width: "80%",
                                         }}
                                     ></Image>
+                                    {levelInfo[index].levelTokenIds.length ===
+                                        0 && (
+                                        <Flex
+                                            sx={{
+                                                position: "absolute",
+                                                left: 0,
+                                                top: 0,
+                                                width: "100%",
+                                                height: "100%",
+                                                background:
+                                                    "rgba(0, 0, 0, 0.80)",
+                                                borderRadius: "50%",
+                                                zIndex: 9,
+                                            }}
+                                            align={"center"}
+                                            justify={"center"}
+                                        >
+                                            <Image
+                                                src={LockIcon}
+                                                sx={{
+                                                    width: "34px",
+                                                }}
+                                            ></Image>
+                                        </Flex>
+                                    )}
+
                                     <Text
                                         sx={{
                                             position: "absolute",
@@ -510,6 +584,7 @@ const AviationLevel = () => {
                                             bottom: "0",
                                             left: "50%",
                                             transform: "translate(-50%,40%)",
+                                            zIndex: "10",
                                         }}
                                         justify={"center"}
                                         align={"center"}
@@ -532,8 +607,8 @@ const AviationLevel = () => {
                                                 }}
                                             >
                                                 {
-                                                    levelInfo?.[index]?.name
-                                                        .length
+                                                    levelInfo?.[index]
+                                                        ?.levelTokenIds.length
                                                 }
                                             </span>
                                         </Box>
@@ -553,11 +628,94 @@ const AviationLevel = () => {
                         </Box>
                     );
                 })}
+                <Box>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            zIndex: 999,
+                            top: "4680px",
+                            left: "150px",
+                        }}
+                    >
+                        <Flex
+                            sx={{
+                                width: "160px",
+                                height: "160px",
+                                backgroundImage: `url(${LevelBg})`,
+                                backgroundSize: "100% 100%",
+                            }}
+                            flexDir={"column"}
+                            align={"center"}
+                            position={"relative"}
+                        >
+                            <Image
+                                src={PaperIcon}
+                                sx={{
+                                    width: "80%",
+                                }}
+                            ></Image>
+
+                            <Flex
+                                sx={{
+                                    background: `url(${AmountBg1})`,
+                                    backgroundSize: "100% 100%",
+                                    width: "80px",
+                                    height: "44px",
+                                    position: "absolute",
+                                    bottom: "0",
+                                    left: "50%",
+                                    transform: "translate(-50%,40%)",
+                                }}
+                                justify={"center"}
+                                align={"center"}
+                                flexDir={"column"}
+                            >
+                                <Text
+                                    sx={{
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    Total
+                                </Text>
+                                <Box
+                                    sx={{
+                                        verticalAlign: "bottom",
+                                    }}
+                                >
+                                    <span
+                                        style={{
+                                            fontSize: "12px",
+                                        }}
+                                    >
+                                        x
+                                    </span>
+                                    <span
+                                        style={{
+                                            fontSize: "16px",
+                                        }}
+                                    >
+                                        1234
+                                    </span>
+                                </Box>
+                            </Flex>
+                        </Flex>
+                    </Box>
+                </Box>
+                <Box
+                    sx={{
+                        position: "absolute",
+                        zIndex: 999,
+                        top: "5000px",
+                        left: "50%",
+                        width: "1px",
+                        height: "1px",
+                    }}
+                ></Box>
             </Box>
             <LevelLeaderboardModal
                 isOpen={isLeaderboardModalOpen}
                 onClose={closeLeaderboardModal}
-                list={currentLevelLeaderboard}
+                levelInfoDetail={levelInfo[currentIndex]}
             ></LevelLeaderboardModal>
         </Box>
     );

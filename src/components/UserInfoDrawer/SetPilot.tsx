@@ -1,4 +1,4 @@
-import { Box, Image, Flex, Text, Input } from "@chakra-ui/react";
+import { Box, Image, Flex, Text, Input, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import LeftArrow from "./assets/left-arrow.png";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
@@ -29,6 +29,7 @@ const SetPilot = ({
 }: {
     onChangeMode: (mode: number) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { address } = usePrivyAccounts();
     const publicClient = usePublicClient();
     const [totalSupplys, setTotalSupplys] = useState({});
@@ -281,8 +282,12 @@ const SetPilot = ({
                                             <Image
                                                 src={item.img}
                                                 sx={{
-                                                    width: "54px",
-                                                    height: "54px",
+                                                    width: isPc
+                                                        ? "54px"
+                                                        : "46px",
+                                                    height: isPc
+                                                        ? "54px"
+                                                        : "46px",
                                                     borderRadius: "10px",
                                                     border: "2px solid #fff",
                                                     marginRight: "22px",
@@ -290,7 +295,9 @@ const SetPilot = ({
                                             ></Image>
                                             <Text
                                                 sx={{
-                                                    fontSize: "20px",
+                                                    fontSize: isPc
+                                                        ? "20px"
+                                                        : "14px",
                                                 }}
                                             >
                                                 {item.name}
@@ -348,23 +355,28 @@ const SetPilot = ({
                 )}
             </Box>
 
-            <Box>
+            <Box
+                sx={{
+                    "&>div": {
+                        height: isPc ? "64px" : "40px",
+                        width: isPc ? "280px" : "180px",
+                        borderRadius: isPc ? "24px" : "12px",
+                        fontSize: isPc ? "28px" : "14px",
+                        fontWeight: 700,
+                        fontFamily: "Orbitron",
+                    },
+                }}
+            >
                 <Flex
                     onClick={handleSearchTokenId}
                     align={"center"}
                     justify={"center"}
                     sx={{
                         background: inputPilotId ? "#F2D861" : "#777",
-                        height: "64px",
-                        width: "280px",
-                        borderRadius: "24px",
-                        fontSize: "28px",
                         fontWeight: 700,
                         color: inputPilotId ? "#1b1b1b" : "#999",
-
                         margin: "0 auto",
                         backdropFilter: "blur(6.795704364776611px)",
-                        fontFamily: "Orbitron",
                         cursor: inputPilotId ? "pointer" : "not-allowed",
                     }}
                 >
@@ -376,15 +388,10 @@ const SetPilot = ({
                     justify={"center"}
                     sx={{
                         background: previewPilot ? "#F2D861" : "#777",
-                        height: "64px",
-                        width: "280px",
-                        borderRadius: "24px",
-                        fontSize: "28px",
-                        fontWeight: 700,
+
                         color: previewPilot ? "#1b1b1b" : "#999",
-                        margin: "28px auto 0",
+                        margin: isPc ? "28px auto 0" : "20px auto 0",
                         backdropFilter: "blur(6.795704364776611px)",
-                        fontFamily: "Orbitron",
                         cursor: previewPilot ? "pointer" : "not-allowed",
                     }}
                 >

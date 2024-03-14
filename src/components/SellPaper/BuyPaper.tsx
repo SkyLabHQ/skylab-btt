@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Input, Text, useMediaQuery } from "@chakra-ui/react";
 import PaperIcon from "./assets/paper.png";
 import RightArrowIcon from "./assets/right-arrow.svg";
 import PlanetIcon from "./assets/planet.png";
@@ -21,6 +21,7 @@ import { handleError } from "@/utils/error";
 
 const ConnectWalletBt = () => {
     const toast = useSkyToast();
+    const [isPc] = useMediaQuery("(min-width: 800px)");
 
     const { ready, login } = usePrivy();
     const handleLogin = () => {
@@ -36,8 +37,8 @@ const ConnectWalletBt = () => {
             align={"center"}
             justify={"center"}
             sx={{
-                width: "300px",
-                height: "68px",
+                width: isPc ? "300px" : "182px",
+                height: isPc ? "68px" : "40px",
                 filter: "drop-shadow(0px 0px 17px rgba(255, 235, 59, 0.38))",
                 border: "4px solid #ffecc7",
                 borderRadius: "16px",
@@ -55,7 +56,7 @@ const ConnectWalletBt = () => {
             <Text
                 sx={{
                     fontFamily: "Neon",
-                    fontSize: "34px",
+                    fontSize: isPc ? "34px" : "18px",
                     color: "#FFECC7",
                 }}
             >
@@ -72,16 +73,17 @@ const BuyBt = ({
     onBuy: () => void;
     inputAmount: number;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
             onClick={onBuy}
             align={"center"}
             justify={"center"}
             sx={{
-                width: "300px",
-                height: "68px",
+                width: isPc ? "300px" : "182px",
+                height: isPc ? "68px" : "40px",
                 filter: "drop-shadow(0px 0px 17px rgba(255, 235, 59, 0.38))",
-                border: "4px solid #ffecc7",
+                border: isPc ? "4px solid #ffecc7" : "2px solid #ffecc7",
                 borderRadius: "16px",
                 marginTop: "20px",
                 color: "#FFECC7",
@@ -103,13 +105,18 @@ const BuyBt = ({
             <Flex className="unHover" align={"center"}>
                 <Text
                     sx={{
-                        fontSize: "30px",
+                        fontSize: isPc ? "30px" : "18px",
                         marginRight: "3px",
                     }}
                 >
                     {accMul("0.01", inputAmount.toString())}
                 </Text>
-                <Image src={YETHIcon}></Image>
+                <Image
+                    src={YETHIcon}
+                    sx={{
+                        width: isPc ? "13px" : "12px",
+                    }}
+                ></Image>
             </Flex>
 
             <Flex
@@ -123,41 +130,47 @@ const BuyBt = ({
                 <Image
                     src={BuyIcon}
                     sx={{
-                        width: "24px",
+                        width: isPc ? "24px" : "12px",
                         marginRight: "8px",
                     }}
                 ></Image>
                 <Text
                     sx={{
                         fontFamily: "Neon",
-                        fontSize: "34px",
+                        fontSize: isPc ? "34px" : "18px",
                     }}
                 >
                     BUY
                 </Text>
                 <Box
                     sx={{
-                        width: "2px",
-                        height: "40px",
+                        width: isPc ? "2px" : "1px",
+                        height: isPc ? "40px" : "24px",
                         background: "#1b1b1b",
-                        margin: "0 40px",
+                        margin: isPc ? "0 40px" : "0 20px",
                     }}
                 ></Box>
                 <Text
                     sx={{
-                        fontSize: "30px",
+                        fontSize: isPc ? "30px" : "16px",
                         marginRight: "3px",
                     }}
                 >
                     {accMul("0.01", inputAmount.toString())}
                 </Text>
-                <Image src={BETHIcon}></Image>
+                <Image
+                    src={BETHIcon}
+                    sx={{
+                        width: isPc ? "13px" : "12px",
+                    }}
+                ></Image>
             </Flex>
         </Flex>
     );
 };
 
 const BuyPaper = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const chainId = useChainId();
     const publicClient = usePublicClient();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
@@ -189,17 +202,19 @@ const BuyPaper = () => {
     };
 
     return (
-        <Box
+        <Flex
             sx={{
                 marginTop: "20px",
                 fontFamily: "Quantico",
             }}
+            flexDir={"column"}
+            align={"center"}
         >
             <Flex align={"center"}>
                 <Image
                     src={PaperIcon}
                     sx={{
-                        width: "154px",
+                        width: isPc ? "154px" : "78px",
                     }}
                 ></Image>
                 <Image
@@ -212,14 +227,14 @@ const BuyPaper = () => {
                 <Image
                     src={PlanetIcon}
                     sx={{
-                        width: "88px",
+                        width: isPc ? "88px" : "44px",
                     }}
                 ></Image>
             </Flex>
             <Flex
                 justify={"space-between"}
                 sx={{
-                    width: "260px",
+                    width: isPc ? "260px" : "130px",
                     borderRadius: "30px",
                     background: "rgba(0, 0, 0, 0.60)",
                     padding: "4px",
@@ -228,8 +243,8 @@ const BuyPaper = () => {
             >
                 <Flex
                     sx={{
-                        width: "50px",
-                        height: "50px",
+                        width: isPc ? "50px" : "30px",
+                        height: isPc ? "50px" : "30px",
                         background: inputAmount > 1 ? "#F2D861" : "#777",
                         borderRadius: "50%",
                         color: "#1B1B1B",
@@ -251,7 +266,7 @@ const BuyPaper = () => {
                         flex: 1,
                         textAlign: "center",
                         color: "#999",
-                        fontSize: "30px",
+                        fontSize: isPc ? "30px" : "16px",
                     }}
                     value={inputAmount}
                     onChange={(e) => {
@@ -261,8 +276,8 @@ const BuyPaper = () => {
                 ></Input>
                 <Flex
                     sx={{
-                        width: "50px",
-                        height: "50px",
+                        width: isPc ? "50px" : "30px",
+                        height: isPc ? "50px" : "30px",
                         background: "#F2D861",
                         borderRadius: "50%",
                         color: "#1B1B1B",
@@ -282,7 +297,7 @@ const BuyPaper = () => {
             ) : (
                 <ConnectWalletBt></ConnectWalletBt>
             )}
-        </Box>
+        </Flex>
     );
 };
 

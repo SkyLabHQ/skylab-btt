@@ -10,12 +10,15 @@ const PilotStyle = styled(Box)`
     background-size: contain;
     padding: 10px;
 `;
-const MyPilot = ({ width = "40px", ...props }: BoxProps) => {
-    const { activePilot } = useUserInfoRequest();
+const MyPilot = ({
+    width = "40px",
+    imgUrl,
+    ...props
+}: BoxProps & { imgUrl: string }) => {
     return (
         <PilotStyle {...props} width={width} height={width}>
             <Image
-                src={activePilot?.img ? activePilot.img : UserIcon}
+                src={imgUrl ? imgUrl : UserIcon}
                 sx={{
                     borderRadius: "50%",
                 }}

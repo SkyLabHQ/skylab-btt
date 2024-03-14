@@ -10,6 +10,7 @@ import {
     Flex,
     SimpleGrid,
     useClipboard,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import CopyIcon from "@/assets/copy-icon.svg";
@@ -42,18 +43,16 @@ import { handleError } from "@/utils/error";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { getLevel, levelRanges } from "@/utils/level";
 import PlaneBg from "./assets/plane-bg.png";
+import SetPilotIcon from "./assets/setPilot.png";
+import SetNameIcon from "./assets/setName.png";
+import { useUserInfoRequest } from "@/contexts/UserInfo";
 
-const UserInfo = ({
-    userName,
-    onChangeMode,
-}: {
-    userName: string;
-    onChangeMode: (mode: number) => void;
-}) => {
+const UserInfo = ({ userName }: { userName: string }) => {
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
     const toast = useSkyToast();
     const { onCopy } = useClipboard(address);
+    const { activePilot } = useUserInfoRequest();
 
     const handleCopyAddress = () => {
         onCopy();
@@ -62,7 +61,7 @@ const UserInfo = ({
 
     return (
         <Flex flexDir={"column"} align={"center"}>
-            <MyPilot width={"80px"}></MyPilot>
+            <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
             <Flex
                 sx={{
                     marginTop: "8px",
@@ -98,15 +97,6 @@ const UserInfo = ({
                         ? userName
                         : `User-${shortenAddress(address, 4, 4)}`}
                 </Text>
-                <Image
-                    onClick={() => {
-                        onChangeMode(1);
-                    }}
-                    src={EditIcon}
-                    sx={{
-                        width: "14px",
-                    }}
-                ></Image>
             </Flex>
             <Flex
                 sx={{
@@ -368,13 +358,7 @@ const PlaneItem = ({ detail }: { detail: any }) => {
     );
 };
 
-const MyPlane = ({
-    balance,
-    planeList,
-}: {
-    balance: string;
-    planeList: any[];
-}) => {
+const MyPlane = ({ planeList }: { planeList: any[] }) => {
     return (
         <Box
             sx={{
@@ -402,7 +386,7 @@ const MyPlane = ({
                 }}
             >
                 {planeList.length > 0 ? (
-                    <SimpleGrid columns={3}>
+                    <SimpleGrid columns={3} spacingY={"20px"}>
                         {planeList.map((item, index) => {
                             return (
                                 <PlaneItem
@@ -436,6 +420,7 @@ const UserInfoDrawer = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const publicClient = usePublicClient();
@@ -446,10 +431,8 @@ const UserInfoDrawer = ({
         useMultiMercuryJarTournamentContract();
     const { user, logout } = usePrivy();
     const [paperBalance, setPaperBalance] = useState("0");
-    const [planeBalance, setPlaneBalance] = useState("0");
     const [userName, setUserName] = useState("");
     const [planeList, setPlaneList] = useState([] as any[]);
-    const [placement, setPlacement] = React.useState("right");
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
 
     const handleChangeMode = (mode: number) => {
@@ -464,7 +447,6 @@ const UserInfoDrawer = ({
         ]);
         setUserName(userName);
         setPaperBalance(paperBalance.toString());
-        setPlaneBalance(planeBalance.toString());
 
         const p = [];
         for (let i = 0; i < Number(planeBalance.toString()); i++) {
@@ -555,16 +537,13 @@ const UserInfoDrawer = ({
     }, [isOpen, multiMercuryJarTournamentContract, multiProvider]);
 
     return (
-        <Drawer placement={"right"} onClose={onClose} isOpen={isOpen}>
+        <Drawer
+            placement={isPc ? "right" : "bottom"}
+            onClose={onClose}
+            isOpen={isOpen}
+        >
             <DrawerOverlay />
             <DrawerContent
-                containerProps={
-                    {
-                        // sx: {
-                        //     cursor: "none",
-                        // },
-                    }
-                }
                 sx={{
                     borderRadius: "20px",
                     border: "1px solid #F2D861",
@@ -580,15 +559,17 @@ const UserInfoDrawer = ({
                         width: "375px !important",
                     }}
                 >
-                    <Image
-                        src={RightArrowIcon}
-                        sx={{
-                            width: "24px",
-                            top: "40px",
-                            left: "-36px",
-                            position: "absolute",
-                        }}
-                    ></Image>
+                    {isPc && (
+                        <Image
+                            src={RightArrowIcon}
+                            sx={{
+                                width: "24px",
+                                top: "40px",
+                                left: "-36px",
+                                position: "absolute",
+                            }}
+                        ></Image>
+                    )}
 
                     {currentMode === 0 && (
                         <Box>
@@ -600,6 +581,26 @@ const UserInfoDrawer = ({
                                 }}
                             >
                                 <Image
+                                    src={SetPilotIcon}
+                                    sx={{
+                                        width: "24px",
+                                        marginRight: "12px",
+                                    }}
+                                    onClick={() => {
+                                        handleChangeMode(2);
+                                    }}
+                                ></Image>
+                                <Image
+                                    src={SetNameIcon}
+                                    sx={{
+                                        width: "24px",
+                                        marginRight: "12px",
+                                    }}
+                                    onClick={() => {
+                                        handleChangeMode(1);
+                                    }}
+                                ></Image>
+                                <Image
                                     onClick={async () => {
                                         await logout();
                                         onClose();
@@ -610,20 +611,12 @@ const UserInfoDrawer = ({
                                     }}
                                 ></Image>
                             </Flex>
-                            <UserInfo
-                                userName={userName}
-                                onChangeMode={(mode: number) => {
-                                    handleChangeMode(mode);
-                                }}
-                            ></UserInfo>
+                            <UserInfo userName={userName}></UserInfo>
                             <MyPaper
                                 balance={paperBalance}
                                 handleMintPlane={handleMintPlane}
                             ></MyPaper>
-                            <MyPlane
-                                balance={planeBalance}
-                                planeList={planeList}
-                            ></MyPlane>
+                            <MyPlane planeList={planeList}></MyPlane>
                         </Box>
                     )}
                     {currentMode === 1 && (

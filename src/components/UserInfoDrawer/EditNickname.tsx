@@ -5,9 +5,11 @@ import { shortenAddress } from "@/utils";
 import CopyIcon from "@/assets/copy-icon.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import MyPilot from "../MyPilot";
+import { useUserInfoRequest } from "@/contexts/UserInfo";
 
 const UserInfo = () => {
     const { address } = usePrivyAccounts();
+    const { activePilot } = useUserInfoRequest();
 
     return (
         <Flex
@@ -18,7 +20,7 @@ const UserInfo = () => {
                 paddingBottom: "20px",
             }}
         >
-            <MyPilot width={"80px"}></MyPilot>
+            <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
 
             <Flex
                 sx={{

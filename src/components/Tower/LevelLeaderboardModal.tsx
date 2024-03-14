@@ -22,8 +22,17 @@ import { aviationImg } from "@/utils/aviationImg";
 import LevelDetailBg from "./assets/level-detail.png";
 import Winner from "./assets/winner.png";
 import CloseIcon from "@/assets/close.png";
+import {
+    useMultiMercuryJarTournamentContract,
+    useMultiMercuryPilotsContract,
+    useMultiProvider,
+} from "@/hooks/useMultiContract";
+import { useChainId } from "wagmi";
+import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
+import { shortenAddress } from "@/utils";
+import { getLevel } from "@/utils/level";
 
-const NewComer = () => {
+const NewComer = ({ detail }: { detail: any }) => {
     const toast = useSkyToast();
     const { onCopy } = useClipboard("12345");
 
@@ -38,8 +47,8 @@ const NewComer = () => {
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    width: "241px",
-                    height: "132px",
+                    width: "230px",
+                    height: "124px",
                     background: `url(${Winner})`,
                     backgroundSize: "100% 100%",
                     // borderRadius: "50%",
@@ -47,9 +56,10 @@ const NewComer = () => {
                 }}
             >
                 <Image
-                    src={DefaultAvatar}
+                    src={detail?.pilotImg ? detail.pilotImg : DefaultAvatar}
                     sx={{
                         width: "50px",
+                        borderRadius: "50%",
                     }}
                 ></Image>
             </Flex>
@@ -69,7 +79,7 @@ const NewComer = () => {
                     zIndex: -1,
                 }}
             >
-                0x12345
+                {`User-${shortenAddress(detail.owner, 4, 2)}`}
             </Box>
             <Flex
                 onClick={handleCopy}
@@ -83,7 +93,7 @@ const NewComer = () => {
                         fontSize: "12px",
                     }}
                 >
-                    0x123...456
+                    {shortenAddress(detail.owner, 4, 4)}
                 </Text>
                 <Image
                     src={CopyIcon}
@@ -123,9 +133,10 @@ const InfoItem = ({ detail }: { detail: any }) => {
                 }}
             >
                 <Image
-                    src={DefaultAvatar}
+                    src={detail.pilotImg ? detail.pilotImg : DefaultAvatar}
                     sx={{
                         width: "50%",
+                        borderRadius: "50%",
                     }}
                 ></Image>
                 <Flex
@@ -158,7 +169,7 @@ const InfoItem = ({ detail }: { detail: any }) => {
                                 fontSize: "16px",
                             }}
                         >
-                            123
+                            {detail.count}
                         </span>
                     </Box>
                 </Flex>
@@ -168,7 +179,7 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     color: "#FFF",
                     textAlign: "center",
                     fontFamily: "Quantico",
-                    fontSize: "14px",
+                    fontSize: "12px",
                     border: "1px solid #FFF",
                     width: "112px",
                     borderRadius: "16px",
@@ -179,7 +190,9 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     zIndex: -1,
                 }}
             >
-                0x12345
+                {detail.userName
+                    ? detail.userName
+                    : `User-${shortenAddress(detail.owner, 4, 2)}`}
             </Box>
             <Flex
                 onClick={handleCopy}
@@ -193,7 +206,7 @@ const InfoItem = ({ detail }: { detail: any }) => {
                         fontSize: "12px",
                     }}
                 >
-                    0x123...456
+                    {shortenAddress(detail.owner, 4, 4)}
                 </Text>
                 <Image
                     src={CopyIcon}
@@ -209,27 +222,132 @@ const InfoItem = ({ detail }: { detail: any }) => {
 };
 
 const LevelLeaderboardModal = ({
-    list,
+    levelInfoDetail,
     isOpen,
     onClose,
 }: {
-    list: any[];
+    levelInfoDetail: any;
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const chainId = useChainId();
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
+    const multiMercuryPilotsContract = useMultiMercuryPilotsContract(chainId);
+    const [leaderBoardList, setLeaderBoardList] = React.useState<any[]>([]);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = React.useState(false);
     const toast = useSkyToast();
+    const multiProvider = useMultiProvider(chainId);
+    const multiMercuryJarTournamentContract =
+        useMultiMercuryJarTournamentContract();
 
     const handleGetList = async () => {
-        if (list.length === 0) {
-            setLoading(false);
-            return;
-        }
+        setLoading(true);
+        const tokenIds = levelInfoDetail?.levelTokenIds;
+        const tokenIdCounts = {};
+        console.log("先进来");
+        tokenIds.forEach((tokenId: string) => {
+            tokenIdCounts[tokenId] = (tokenIdCounts[tokenId] || 0) + 1;
+        });
+
+        let currentList = Object.entries(tokenIdCounts).map(
+            ([tokenId, count]) => {
+                return {
+                    tokenId,
+                    count,
+                    owner: "",
+                    points: "0",
+                    userName: "",
+                    pilotImg: "",
+                };
+            },
+        );
+
+        const p1: any = [];
+
+        currentList.forEach((item) => {
+            p1.push(
+                multiMercuryJarTournamentContract.ownerOf(item.tokenId),
+                multiMercuryJarTournamentContract.aviationPoints(item.tokenId),
+            );
+        });
+
+        const p1R = await multiProvider.all(p1);
+        console.log("第一个mul");
+        currentList = currentList.map((item, index) => {
+            return {
+                ...item,
+                owner: p1R[index * 2],
+                points: p1R[index * 2 + 1].toString(),
+            };
+        });
+
+        const p2: any = [];
+
+        currentList.forEach((item) => {
+            p2.push(
+                multiMercuryJarTournamentContract.userName(item.owner),
+                multiMercuryPilotsContract.getActivePilot(item.owner),
+            );
+        });
+
+        const p2R = await multiProvider.all(p2);
+
+        const activePilotRes: any = [];
+
+        const allWallet: string[] = [];
+
+        currentList.forEach((item, index) => {
+            item.userName = p2R[index * 2];
+            allWallet.push(item.owner);
+            activePilotRes.push(p2R[index * 2 + 1]);
+        });
+
+        const allPilot: ActivePilotRes[] = activePilotRes.map((item: any) => {
+            return {
+                ...item,
+                pilotId: item.pilotId.toNumber(),
+            };
+        });
+
+        const pilotList = await handlePilotsInfo1({
+            chainId: chainId,
+            allPilot,
+        });
+
+        currentList.forEach((item, index) => {
+            item.pilotImg = pilotList[index].pilotImg;
+        });
+
+        currentList = currentList.filter((item) => {
+            return item.owner !== levelInfoDetail?.owner;
+        });
+
+        setLeaderBoardList(currentList);
     };
 
-    useEffect(() => {}, [isOpen, list]);
+    useEffect(() => {
+        if (
+            !isOpen ||
+            !multiProvider ||
+            !multiMercuryJarTournamentContract ||
+            !multiMercuryPilotsContract ||
+            !levelInfoDetail ||
+            levelInfoDetail?.levelTokenIds?.length === 0
+        ) {
+            return;
+        }
+
+        handleGetList();
+    }, [
+        isOpen,
+        levelInfoDetail,
+        multiProvider,
+        multiMercuryJarTournamentContract,
+        multiMercuryPilotsContract,
+    ]);
+
+    console.log(levelInfoDetail, "levelInfoDetail");
 
     return (
         <Modal
@@ -265,7 +383,7 @@ const LevelLeaderboardModal = ({
                     }}
                 >
                     <Image
-                        src={aviationImg(4)}
+                        src={aviationImg(levelInfoDetail?.level)}
                         sx={{
                             position: "absolute",
                             top: "0px",
@@ -280,7 +398,7 @@ const LevelLeaderboardModal = ({
                             fontSize: "20px",
                         }}
                     >
-                        Total {list.length}
+                        Total {levelInfoDetail?.levelTokenIds?.length}
                     </Text>
                     <Text
                         sx={{
@@ -299,51 +417,51 @@ const LevelLeaderboardModal = ({
                                 fontSize: "50px",
                             }}
                         >
-                            4
+                            {getLevel(levelInfoDetail?.points)}
                         </span>
                     </Text>
+
                     <Box
                         sx={{
                             overflow: "auto",
                             height: "600px",
                         }}
                     >
-                        <Box
-                            sx={{
-                                background: `url(${LevelDetailBg}) no-repeat`,
-                                backgroundPosition: "bottom",
-                                width: "100%",
-                                height: "300px",
-                                position: "relative",
-                            }}
-                        >
+                        {levelInfoDetail.tokenId !== "0" && (
                             <Box
                                 sx={{
-                                    position: "absolute",
-                                    bottom: "100px",
-                                    right: "100px",
-                                    // transform: "translateX()",
+                                    background: `url(${LevelDetailBg}) no-repeat`,
+                                    backgroundPosition: "bottom",
+                                    backgroundSize: "contain",
+                                    width: "360px",
+                                    height: "280px",
+                                    position: "relative",
+                                    margin: "0 auto",
                                 }}
                             >
-                                <NewComer></NewComer>
+                                <NewComer detail={levelInfoDetail}></NewComer>
+                                <Text
+                                    sx={{
+                                        position: "absolute",
+                                        bottom: "50px",
+                                        fontWeight: "bold",
+                                        left: "50%",
+                                        transform: "translate(-50%,0)",
+                                        color: "#F2D861",
+                                        fontSize: "20px",
+                                    }}
+                                >
+                                    NEW COMER
+                                </Text>
                             </Box>
-                            <Box
-                                sx={{
-                                    position: "absolute",
-                                    bottom: "60px",
-                                    left: "20%",
-                                }}
-                            >
-                                <InfoItem detail={{}}></InfoItem>{" "}
-                            </Box>
-                        </Box>
+                        )}
                         <SimpleGrid
                             columns={5}
                             sx={{
                                 marginTop: "40px",
                             }}
                         >
-                            {[1, 2, 3].map((item, index) => {
+                            {leaderBoardList.map((item, index) => {
                                 return (
                                     <InfoItem
                                         detail={item}
@@ -351,23 +469,6 @@ const LevelLeaderboardModal = ({
                                     ></InfoItem>
                                 );
                             })}
-                            {/* {list.map((item, index) => {
-                            return (
-                                <Flex>
-                                    <Box
-                                        sx={{
-                                            width: "102px",
-                                            height: "102px",
-                                            background: `url(${AvatarBg})`,
-                                            backgroundSize: "cover",
-                                            borderRadius: "50%",
-                                        }}
-                                    >
-                                        头像
-                                    </Box>
-                                </Flex>
-                            );
-                        })} */}
                         </SimpleGrid>
                     </Box>
                 </ModalBody>

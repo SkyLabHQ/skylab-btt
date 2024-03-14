@@ -10,7 +10,6 @@ import {
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import useCountDown from "react-countdown-hook";
-import HourglassIcon from "@/assets/hourglass.gif";
 import HummerIcon from "@/assets/hummer.gif";
 import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
 import Bg from "@/assets/bg.png";
@@ -819,8 +818,7 @@ const SellPaper = () => {
             <Box
                 className="card"
                 sx={{
-                    maxWidth: "530px",
-                    width: "100%",
+                    width: isPc ? "520px" : "330px",
                     height: "auto",
                     borderRadius: "50%",
                     aspectRatio: "1/1",
