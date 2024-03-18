@@ -1,4 +1,11 @@
-import { Box, Flex, Image, Text, useDisclosure } from "@chakra-ui/react";
+import {
+    Box,
+    Flex,
+    Image,
+    Text,
+    useDisclosure,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import SYellowIcon from "./assets/s-yellow.png";
 import SGreenIcon from "./assets/s-green.png";
@@ -29,7 +36,7 @@ const list = [
     {
         level: 16,
         position: {
-            top: "0%",
+            top: "0",
             left: "150px",
         },
         comerPosition: "left",
@@ -40,6 +47,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "right",
     },
     {
         level: 15,
@@ -54,6 +62,7 @@ const list = [
             right: "220px",
             width: "25px",
         },
+        avatarDirection: "left",
     },
     {
         level: 14,
@@ -70,6 +79,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "left",
     },
     {
         level: 13,
@@ -85,7 +95,9 @@ const list = [
             width: "25px",
             left: "220px",
         },
+        avatarDirection: "right",
     },
+
     {
         level: 12,
         position: {
@@ -101,6 +113,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "right",
     },
     {
         level: 11,
@@ -116,6 +129,7 @@ const list = [
             right: "220px",
             width: "25px",
         },
+        avatarDirection: "left",
     },
     {
         level: 10,
@@ -132,6 +146,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "left",
     },
     {
         level: 9,
@@ -147,6 +162,7 @@ const list = [
             left: "220px",
             width: "25px",
         },
+        avatarDirection: "right",
     },
     {
         level: 8,
@@ -163,6 +179,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "right",
     },
     {
         level: 7,
@@ -178,6 +195,7 @@ const list = [
             width: "25px",
             right: "220px",
         },
+        avatarDirection: "left",
     },
     {
         level: 6,
@@ -194,6 +212,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "left",
     },
     {
         level: 5,
@@ -209,6 +228,7 @@ const list = [
             width: "25px",
             left: "220px",
         },
+        avatarDirection: "right",
     },
     {
         level: 4,
@@ -225,6 +245,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "right",
     },
     {
         level: 3,
@@ -240,6 +261,7 @@ const list = [
             width: "25px",
             right: "220px",
         },
+        avatarDirection: "left",
     },
     {
         level: 2,
@@ -256,6 +278,7 @@ const list = [
             left: "50%",
             transform: "translateX(-50%)",
         },
+        avatarDirection: "left",
     },
     {
         level: 1,
@@ -271,10 +294,264 @@ const list = [
             width: "25px",
             left: "220px",
         },
+        avatarDirection: "right",
+    },
+];
+
+const mlist = [
+    {
+        level: 16,
+        position: {
+            top: "0",
+            left: "20px",
+        },
+        comerPosition: "left",
+        arrowImg: LYellowIcon,
+        imgPosition: {
+            width: "86px",
+            top: "40px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "right",
+    },
+    {
+        level: 15,
+        position: {
+            top: "45px",
+            right: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: SYellowIcon,
+        imgPosition: {
+            top: "150px",
+            right: "58px",
+            width: "8px",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 14,
+        position: {
+            top: "240px",
+            right: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: RYellowIcon,
+        imgPosition: {
+            top: "280px",
+            width: "86px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 13,
+        position: {
+            top: "280px",
+            left: "20px",
+        },
+        comerPosition: "left",
+        arrowImg: SYellowIcon,
+        imgPosition: {
+            top: "390px",
+            width: "8px",
+            left: "58px",
+        },
+        avatarDirection: "right",
+    },
+    {
+        level: 12,
+        position: {
+            top: "480px",
+            left: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: LYellowIcon,
+        imgPosition: {
+            top: "520px",
+            width: "86px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "right",
+    },
+    {
+        level: 11,
+        position: {
+            top: "520px",
+            right: "20px",
+        },
+        comerPosition: "left",
+        arrowImg: SYellowIcon,
+        imgPosition: {
+            top: "630px",
+            right: "58px",
+            width: "8px",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 10,
+        position: {
+            top: "720px",
+            right: "20px",
+        },
+        comerPosition: "left",
+        arrowImg: RYellowIcon,
+        imgPosition: {
+            top: "760px",
+            width: "86px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 9,
+        position: {
+            top: "760px",
+            left: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: SYellowIcon,
+        imgPosition: {
+            top: "870px",
+            left: "58px",
+            width: "8px",
+        },
+        avatarDirection: "right",
+    },
+    {
+        level: 8,
+        position: {
+            top: "960px",
+            left: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: LYellowIcon,
+        imgPosition: {
+            top: "1000px",
+            width: "86px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "right",
+    },
+    {
+        level: 7,
+        position: {
+            top: "1000px",
+            right: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: SYellowIcon,
+        imgPosition: {
+            top: "1110px",
+            right: "58px",
+            width: "8px",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 6,
+        position: {
+            top: "1200px",
+            right: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: RYellowIcon,
+        imgPosition: {
+            top: "1240px",
+            width: "86px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 5,
+        position: {
+            top: "1240px",
+            left: "20px",
+        },
+        comerPosition: "left",
+        arrowImg: SYellowIcon,
+        imgPosition: {
+            top: "1350px",
+            left: "58px",
+            width: "8px",
+        },
+        avatarDirection: "right",
+    },
+    {
+        level: 4,
+        position: {
+            top: "1440px",
+            left: "20px",
+        },
+        comerPosition: "left",
+        arrowImg: LYellowIcon,
+
+        imgPosition: {
+            top: "1480px",
+            width: "86px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "right",
+    },
+    {
+        level: 3,
+        position: {
+            top: "1480px",
+            right: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: SYellowIcon,
+        imgPosition: {
+            top: "1590px",
+            right: "58px",
+            width: "8px",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 2,
+        position: {
+            top: "1680px",
+            right: "20px",
+        },
+        comerPosition: "right",
+        arrowImg: RYellowIcon,
+        imgPosition: {
+            top: "1720px",
+            width: "86px",
+            left: "50%",
+            transform: "translateX(-50%)",
+        },
+        avatarDirection: "left",
+    },
+    {
+        level: 1,
+        position: {
+            top: "1720px",
+            left: "20px",
+        },
+        comerPosition: "left",
+        arrowImg: SGreenIcon,
+        imgPosition: {
+            top: "1830px",
+            left: "58px",
+            width: "8px",
+        },
+        avatarDirection: "right",
     },
 ];
 
 const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
+    level: index + 1,
     levelTokenIds: [],
     tokenId: "0",
     claimTime: 0,
@@ -284,6 +561,7 @@ const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
 }));
 
 const AviationLevel = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const {
         isOpen: isLeaderboardModalOpen,
         onOpen: openLeaderboardModal,
@@ -298,15 +576,21 @@ const AviationLevel = () => {
         useMultiMercuryJarTournamentContract();
     const multiProvider = useMultiProvider(chainId);
     const [levelInfo, setLevelInfo] = useState(levelInfoInit);
+    const [totalPaper, setTotalPaper] = useState("0");
 
     const handleLevelInfo = async () => {
         const p = [];
+        console.time("a");
         for (let i = 1; i <= 16; i++) {
             p.push(multiMercuryJarTournamentContract.getTokenIdPerLevel(i));
             p.push(multiMercuryJarTournamentContract.levelToNewComerId(i));
             p.push(multiMercuryJarTournamentContract.levelToClaimTime(i));
         }
+        p.push(multiMercuryJarTournamentContract.paperTotalAmount());
         const res = await multiProvider.all(p);
+        console.timeEnd("a");
+        const paperTotalAmount = res.pop();
+        setTotalPaper(paperTotalAmount.toString());
         const levelTokenInfo = [];
         for (let i = 0; i < 16; i++) {
             levelTokenInfo.push({
@@ -325,7 +609,9 @@ const AviationLevel = () => {
             p1.push(multiMercuryJarTournamentContract.aviationPoints(tokenId));
         }
 
+        console.time("b");
         const p1R = await multiProvider.all(p1);
+        console.timeEnd("b");
         const p2 = [];
 
         for (let i = 0; i < p1.length / 2; i++) {
@@ -335,7 +621,9 @@ const AviationLevel = () => {
             );
         }
 
+        console.time("c");
         const p2R = await multiProvider.all(p2);
+        console.timeEnd("c");
         const allPilot: ActivePilotRes[] = [];
         for (let i = 0; i < p1.length / 2; i++) {
             const item = p2R[i * 2 + 1];
@@ -345,10 +633,12 @@ const AviationLevel = () => {
             });
         }
 
+        console.time("d");
         const pilotList = await handlePilotsInfo1({
             chainId: chainId,
             allPilot,
         });
+        console.timeEnd("d");
 
         let jIndex = -1;
         const list = levelTokenInfo.map((item, index) => {
@@ -394,7 +684,7 @@ const AviationLevel = () => {
     return (
         <Box
             sx={{
-                height: "100%",
+                height: isPc ? "100%" : "80%",
                 width: "100%",
                 overflow: "auto",
                 position: "absolute",
@@ -409,12 +699,12 @@ const AviationLevel = () => {
         >
             <Box
                 sx={{
-                    width: "960px",
+                    width: isPc ? "960px" : "300px",
                     margin: "0 auto",
                     position: "relative",
                 }}
             >
-                {list.map((item, index) => {
+                {(isPc ? list : mlist).map((item, index) => {
                     return (
                         <Box key={index}>
                             <Box
@@ -433,8 +723,8 @@ const AviationLevel = () => {
                             >
                                 <Flex
                                     sx={{
-                                        width: "160px",
-                                        height: "160px",
+                                        width: isPc ? "160px" : "84px",
+                                        height: isPc ? "160px" : "84px",
                                         backgroundImage: `url(${LevelBg})`,
                                         backgroundSize: "100% 100%",
                                     }}
@@ -443,91 +733,110 @@ const AviationLevel = () => {
                                     position={"relative"}
                                 >
                                     {/* new commer 展示 */}
-                                    {levelInfo?.[index]?.tokenId !== "0" && (
-                                        <Flex
-                                            align={"center"}
-                                            justify={"center"}
-                                            flexDir={"column"}
-                                            sx={{
-                                                background: `url(${NewComerBg})`,
-                                                width: "107px",
-                                                height: "98px",
-                                                position: "absolute",
-                                                backgroundSize: "100% 100%",
-                                                top: "50%",
-                                                left:
-                                                    item.comerPosition ===
-                                                    "right"
-                                                        ? "168px"
-                                                        : "-114px",
-                                                transform: `translate(0%,-50%) }`,
-                                            }}
-                                        >
-                                            <Text
+                                    {isPc &&
+                                        levelInfo?.[index]?.tokenId !== "0" && (
+                                            <Flex
+                                                align={"center"}
+                                                justify={"center"}
+                                                flexDir={"column"}
                                                 sx={{
                                                     position: "absolute",
-                                                    top: "-24px",
-                                                    width: "100%",
-                                                    textAlign: "center",
-                                                    fontFamily: "Quantico",
-                                                    fontSize: "14px",
-                                                    fontStyle: "normal",
-                                                }}
-                                            >
-                                                New Comer
-                                            </Text>
-                                            <Image
-                                                src={
-                                                    levelInfo[index].pilotImg
-                                                        ? levelInfo[index]
-                                                              .pilotImg
-                                                        : DefaultAvatar
-                                                }
-                                                sx={{
-                                                    width: "72px",
-                                                    height: "72px",
-                                                    borderRadius: "50%",
-                                                }}
-                                            ></Image>
-                                            <Box
-                                                sx={{
-                                                    position: "absolute",
-                                                    bottom: "-54px",
-                                                    width: "100%",
-                                                    textAlign: "center",
-                                                    fontFamily: "Quantico",
-                                                    fontSize: "14px",
+                                                    backgroundSize: "100% 100%",
+                                                    top: "50%",
+                                                    left:
+                                                        item.comerPosition ===
+                                                        "right"
+                                                            ? "168px"
+                                                            : "-114px",
+                                                    transform: `translate(0%,-50%)`,
                                                 }}
                                             >
                                                 <Text
                                                     sx={{
-                                                        width: "120px",
+                                                        position: "absolute",
+                                                        top: "-24px",
+                                                        width: "100%",
                                                         textAlign: "center",
+                                                        fontFamily: "Quantico",
+                                                        fontSize: "14px",
+                                                        fontStyle: "normal",
                                                     }}
                                                 >
-                                                    {levelInfo[index].userName
-                                                        ? levelInfo[index]
-                                                              .userName
-                                                        : `User-${shortenAddress(
-                                                              levelInfo[index]
-                                                                  .owner,
-                                                              4,
-                                                              3,
-                                                          )}`}
+                                                    New Comer
                                                 </Text>
-                                                <Text
+                                                <Flex
                                                     sx={{
-                                                        width: "120px",
+                                                        background: `url(${NewComerBg})`,
+                                                        width: "107px",
+                                                        height: "98px",
+                                                        transform:
+                                                            item.avatarDirection ===
+                                                            "left"
+                                                                ? "scaleX(-1)"
+                                                                : "",
+                                                    }}
+                                                    justify={"center"}
+                                                    align={"center"}
+                                                >
+                                                    <Image
+                                                        src={
+                                                            levelInfo[index]
+                                                                .pilotImg
+                                                                ? levelInfo[
+                                                                      index
+                                                                  ].pilotImg
+                                                                : DefaultAvatar
+                                                        }
+                                                        sx={{
+                                                            width: "72px",
+                                                            height: "72px",
+                                                            borderRadius: "50%",
+                                                        }}
+                                                    ></Image>
+                                                </Flex>
+
+                                                <Box
+                                                    sx={{
+                                                        position: "absolute",
+                                                        bottom: "-54px",
+                                                        width: "100%",
                                                         textAlign: "center",
+                                                        fontFamily: "Quantico",
+                                                        fontSize: "14px",
                                                     }}
                                                 >
-                                                    {shortenAddress(
-                                                        levelInfo[index].owner,
-                                                    )}
-                                                </Text>
-                                            </Box>
-                                        </Flex>
-                                    )}
+                                                    <Text
+                                                        sx={{
+                                                            width: "120px",
+                                                            textAlign: "center",
+                                                        }}
+                                                    >
+                                                        {levelInfo[index]
+                                                            .userName
+                                                            ? levelInfo[index]
+                                                                  .userName
+                                                            : `User-${shortenAddress(
+                                                                  levelInfo[
+                                                                      index
+                                                                  ].owner,
+                                                                  4,
+                                                                  3,
+                                                              )}`}
+                                                    </Text>
+                                                    <Text
+                                                        sx={{
+                                                            width: "120px",
+                                                            textAlign: "center",
+                                                        }}
+                                                    >
+                                                        {shortenAddress(
+                                                            levelInfo[index]
+                                                                .owner,
+                                                        )}
+                                                    </Text>
+                                                </Box>
+                                            </Flex>
+                                        )}
 
                                     <Image
                                         src={aviationImg(item.level)}
@@ -564,10 +873,10 @@ const AviationLevel = () => {
                                     <Text
                                         sx={{
                                             position: "absolute",
-                                            bottom: "30px",
+                                            bottom: isPc ? "30px" : "15px",
                                             left: "50%",
                                             transform: "translateX(-50%)",
-                                            fontSize: "30px",
+                                            fontSize: isPc ? "30px" : "14px",
                                             width: "100%",
                                             textAlign: "center",
                                         }}
@@ -578,8 +887,8 @@ const AviationLevel = () => {
                                         sx={{
                                             background: `url(${AmountBg})`,
                                             backgroundSize: "100% 100%",
-                                            width: "48px",
-                                            height: "48px",
+                                            width: isPc ? "48px" : "32px",
+                                            height: isPc ? "48px" : "32px",
                                             position: "absolute",
                                             bottom: "0",
                                             left: "50%",
@@ -633,14 +942,14 @@ const AviationLevel = () => {
                         sx={{
                             position: "absolute",
                             zIndex: 999,
-                            top: "4680px",
-                            left: "150px",
+                            top: isPc ? "4680px" : "1930px",
+                            left: isPc ? "150px" : "20px",
                         }}
                     >
                         <Flex
                             sx={{
-                                width: "160px",
-                                height: "160px",
+                                width: isPc ? "160px" : "84px",
+                                height: isPc ? "160px" : "84px",
                                 backgroundImage: `url(${LevelBg})`,
                                 backgroundSize: "100% 100%",
                             }}
@@ -659,8 +968,8 @@ const AviationLevel = () => {
                                 sx={{
                                     background: `url(${AmountBg1})`,
                                     backgroundSize: "100% 100%",
-                                    width: "80px",
-                                    height: "44px",
+                                    width: isPc ? "80px" : "60px",
+                                    height: isPc ? "44px" : "32px",
                                     position: "absolute",
                                     bottom: "0",
                                     left: "50%",
@@ -672,7 +981,7 @@ const AviationLevel = () => {
                             >
                                 <Text
                                     sx={{
-                                        fontSize: "14px",
+                                        fontSize: isPc ? "14px" : "12px",
                                     }}
                                 >
                                     Total
@@ -680,21 +989,22 @@ const AviationLevel = () => {
                                 <Box
                                     sx={{
                                         verticalAlign: "bottom",
+                                        lineHeight: isPc ? "20px" : "16px",
                                     }}
                                 >
                                     <span
                                         style={{
-                                            fontSize: "12px",
+                                            fontSize: isPc ? "12px" : "10px",
                                         }}
                                     >
                                         x
                                     </span>
                                     <span
                                         style={{
-                                            fontSize: "16px",
+                                            fontSize: isPc ? "16px" : "12px",
                                         }}
                                     >
-                                        1234
+                                        {totalPaper}
                                     </span>
                                 </Box>
                             </Flex>
@@ -705,7 +1015,7 @@ const AviationLevel = () => {
                     sx={{
                         position: "absolute",
                         zIndex: 999,
-                        top: "5000px",
+                        top: isPc ? "5000px" : "2000px",
                         left: "50%",
                         width: "1px",
                         height: "1px",

@@ -1,4 +1,11 @@
-import { Box, Flex, Image, Text, useTimeout } from "@chakra-ui/react";
+import {
+    Box,
+    Flex,
+    Image,
+    Text,
+    useMediaQuery,
+    useTimeout,
+} from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import SYellowIcon from "./assets/s-yellow.png";
 import SGreenIcon from "./assets/s-green.png";
@@ -18,14 +25,8 @@ import NewComerBg from "./assets/newcomer-bg.png";
 import { ZERO_DATA } from "@/skyConstants";
 import useCountDown from "react-countdown-hook";
 
-const handleDateNumber = (number: number) => {
-    if (number >= 10) {
-        return [Math.floor(number / 10), number % 10];
-    } else {
-        return [0, number];
-    }
-};
 const Timer = ({ time }: { time: number }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(5000, 1000);
 
     useEffect(() => {
@@ -63,8 +64,8 @@ const Timer = ({ time }: { time: number }) => {
     return (
         <Flex
             sx={{
-                width: "136px",
-                height: "32px",
+                width: isPc ? "136px" : "80px",
+                height: isPc ? "32px" : "16px",
                 border: "1px solid #f2d861",
                 margin: "28px auto 0",
                 borderRadius: "16px",
@@ -72,17 +73,21 @@ const Timer = ({ time }: { time: number }) => {
             }}
             align={"center"}
         >
-            <Image
-                src={HourglassIcon}
-                sx={{
-                    width: "12px",
-                    margin: "0 12px",
-                }}
-            ></Image>
+            {isPc && (
+                <Image
+                    src={HourglassIcon}
+                    sx={{
+                        width: "12px",
+                        margin: "0 12px",
+                    }}
+                ></Image>
+            )}
             <Box
                 sx={{
-                    fontSize: "16px",
+                    fontSize: isPc ? "16px" : "12px",
                     zIndex: 999,
+                    textAlign: "center",
+                    flex: 1,
                 }}
             >
                 {hour}:{minutes}:{second}

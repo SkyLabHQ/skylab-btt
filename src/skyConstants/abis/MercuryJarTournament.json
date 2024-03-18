@@ -536,6 +536,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "isTournamentBegin",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -666,6 +679,19 @@
       }
     ],
     "name": "paperBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paperTotalAmount",
     "outputs": [
       {
         "internalType": "uint256",

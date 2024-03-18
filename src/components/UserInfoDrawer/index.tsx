@@ -18,6 +18,8 @@ import SettingIcon from "./assets/setting.png";
 import QuitIcon from "./assets/quit.png";
 import DeafaultIcon from "./assets/default-icon.png";
 import RightArrowIcon from "./assets/right-arrow.svg";
+import DownArrowIcon from "./assets/down-arrow.png";
+
 import { usePrivy } from "@privy-io/react-auth";
 import EditIcon from "./assets/edit.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
@@ -551,15 +553,17 @@ const UserInfoDrawer = ({
                     backdropFilter: "blur(25px)",
                     position: "relative",
                     maxWidth: "375px",
+                    height: "100%",
                 }}
             >
                 <DrawerBody
                     sx={{
                         padding: "30px",
-                        width: "375px !important",
+                        width: "100% !important",
+                        height: "100%",
                     }}
                 >
-                    {isPc && (
+                    {isPc ? (
                         <Image
                             src={RightArrowIcon}
                             sx={{
@@ -568,7 +572,15 @@ const UserInfoDrawer = ({
                                 left: "-36px",
                                 position: "absolute",
                             }}
+                            onClick={onClose}
                         ></Image>
+                    ) : (
+                        <Flex justify={"center"}>
+                            <Image
+                                onClick={onClose}
+                                src={DownArrowIcon}
+                            ></Image>
+                        </Flex>
                     )}
 
                     {currentMode === 0 && (

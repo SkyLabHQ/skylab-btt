@@ -119,7 +119,7 @@ const FrontContent = () => {
                     yoyo: Infinity,
                 }}
             >
-                THE POT
+                THE POOL
             </motion.div>
 
             <LightBorder width={isPc ? "100%" : "180px"}></LightBorder>
@@ -333,7 +333,7 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                                 yoyo: Infinity,
                             }}
                         >
-                            POT
+                            POOL
                         </motion.div>
                         <Image
                             src={HummerIcon}

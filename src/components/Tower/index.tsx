@@ -10,14 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import useCountDown from "react-countdown-hook";
-import HummerIcon from "@/assets/hummer.gif";
-import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
 import Bg from "@/assets/bg.png";
-import CHummer from "@/assets/c-hummer.png";
-import MouseImage from "@/assets/mouse.png";
-import MouseAImage from "@/assets/mouse-a.png";
-import MouseBImage from "@/assets/mouse-b.png";
 import EnterArena from "./EnterArena";
 import ToolBar from "@/components/HomeToolbar/ToolBar";
 import BuyBt from "./BuyBt";
@@ -53,10 +46,22 @@ const TowerPage = () => {
         if (!isPc) {
             return;
         }
+        let animationFrameId: any = null;
+        const throttledHandleMouseMove = (event: any) => {
+            if (animationFrameId !== null) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
 
-        window.addEventListener("mousemove", handleMouseMove);
+            animationFrameId = window.requestAnimationFrame(() =>
+                handleMouseMove(event),
+            );
+        };
+        window.addEventListener("mousemove", throttledHandleMouseMove);
         return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mousemove", throttledHandleMouseMove);
+            if (animationFrameId !== null) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
         };
     }, [isPc]);
 

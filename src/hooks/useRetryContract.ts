@@ -223,19 +223,18 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                         address,
                                     );
 
+                                    const gas1 =
+                                        gasLimit && gasLimit > Number(gas)
+                                            ? gasLimit
+                                            : calculateGasMargin(Number(gas));
                                     const hash = await newSigner.writeContract({
                                         address: contract.address,
                                         abi: contract.abi,
                                         functionName: method,
                                         args: args,
                                         nonce: nonce,
-
-                                        gas:
-                                            gasLimit && gasLimit > Number(gas)
-                                                ? gasLimit
-                                                : calculateGasMargin(
-                                                      Number(gas),
-                                                  ),
+                                        gas: gas1,
+                                        gasLimit: gas1,
                                     });
 
                                     const receipt = // @ts-ignore

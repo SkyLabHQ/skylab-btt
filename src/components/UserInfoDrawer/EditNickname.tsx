@@ -1,4 +1,4 @@
-import { Box, Image, Flex, Text, Input } from "@chakra-ui/react";
+import { Box, Image, Flex, Text, Input, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import LeftArrow from "./assets/left-arrow.png";
 import { shortenAddress } from "@/utils";
@@ -72,12 +72,12 @@ const EditNickname = ({
     onChangeMode: (mode: number) => void;
     onSetUserName: (userName: string) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { address } = usePrivyAccounts();
     const [nickname, setNickname] = React.useState("");
     return (
         <Flex
             sx={{
-                height: "100%",
                 paddingBottom: "110px",
             }}
             flexDir={"column"}
@@ -87,7 +87,7 @@ const EditNickname = ({
                 <Flex
                     align={"center"}
                     sx={{
-                        height: "30px",
+                        height: isPc ? "30px" : "16px",
                     }}
                 >
                     <Image
@@ -101,21 +101,21 @@ const EditNickname = ({
                 <UserInfo></UserInfo>
                 <Box
                     sx={{
-                        paddingTop: "30px",
+                        paddingTop: isPc ? "30px" : "15px",
                     }}
                 >
                     <Text
                         sx={{
-                            fontSize: "20px",
+                            fontSize: isPc ? "20px" : "16px",
                         }}
                     >
                         Current Nickname
                     </Text>
                     <Box
                         sx={{
-                            height: "30px",
+                            height: isPc ? "30px" : "15px",
                             marginTop: "15px",
-                            fontSize: "24px",
+                            fontSize: isPc ? "24px" : "18px",
                         }}
                     >
                         {userName
@@ -128,7 +128,7 @@ const EditNickname = ({
                             marginTop: "20px",
                         }}
                     >
-                        <Text sx={{ fontSize: "20px" }}>
+                        <Text sx={{ fontSize: isPc ? "20px" : "16px" }}>
                             In-put New Nickname
                         </Text>
                         <Input
@@ -157,10 +157,10 @@ const EditNickname = ({
                 justify={"center"}
                 sx={{
                     background: nickname ? "#F2D861" : "#777",
-                    height: "64px",
-                    width: "280px",
-                    borderRadius: "24px",
-                    fontSize: "28px",
+                    height: isPc ? "64px" : "40px",
+                    width: isPc ? "280px" : "180px",
+                    borderRadius: isPc ? "24px" : "12px",
+                    fontSize: isPc ? "28px" : "14px",
                     fontWeight: 700,
                     color: nickname ? "#1b1b1b" : "#999",
                     margin: "28px auto 0",

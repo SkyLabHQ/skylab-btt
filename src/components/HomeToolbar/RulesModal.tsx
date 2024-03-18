@@ -161,7 +161,7 @@ const Indicator = ({
             >
                 {(currentIndex === 0 || currentIndex === 3) && (
                     <Text>
-                        *Disclaimer: 99 eth pot is for{" "}
+                        *Disclaimer: 99 eth pool is for{" "}
                         <span
                             style={{
                                 color: "#F2D861",
@@ -169,7 +169,7 @@ const Indicator = ({
                         >
                             demonstration purpose only
                         </span>{" "}
-                        . The real pot size is displayed on the main page and
+                        . The real pool size is displayed on the main page and
                         changes based on market{" "}
                         <span
                             style={{

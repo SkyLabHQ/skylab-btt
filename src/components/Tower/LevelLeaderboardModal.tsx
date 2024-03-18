@@ -33,6 +33,7 @@ import { shortenAddress } from "@/utils";
 import { getLevel } from "@/utils/level";
 
 const NewComer = ({ detail }: { detail: any }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const { onCopy } = useClipboard("12345");
 
@@ -47,8 +48,8 @@ const NewComer = ({ detail }: { detail: any }) => {
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    width: "230px",
-                    height: "124px",
+                    width: isPc ? "230px" : "100px",
+                    height: isPc ? "124px" : "56px",
                     background: `url(${Winner})`,
                     backgroundSize: "100% 100%",
                     // borderRadius: "50%",
@@ -65,18 +66,16 @@ const NewComer = ({ detail }: { detail: any }) => {
             </Flex>
             <Box
                 sx={{
-                    color: "#FFF",
+                    color: "#181818",
                     textAlign: "center",
                     fontFamily: "Quantico",
                     fontSize: "14px",
-                    border: "1px solid #FFF",
+                    border: "1px solid #f2d861",
                     width: "112px",
                     borderRadius: "16px",
-                    height: "28px",
-                    lineHeight: "28px",
-                    background: "rgba(0,0,0,0.5)",
-                    marginTop: "-5px",
-                    zIndex: -1,
+                    height: isPc ? "28px" : "14px",
+                    lineHeight: isPc ? "28px" : "14px",
+                    background: "#f2d861",
                 }}
             >
                 {`User-${shortenAddress(detail.owner, 4, 2)}`}
@@ -84,7 +83,7 @@ const NewComer = ({ detail }: { detail: any }) => {
             <Flex
                 onClick={handleCopy}
                 sx={{
-                    marginTop: "10px",
+                    marginTop: isPc ? "10px" : "2px",
                     cursor: "pointer",
                 }}
             >
@@ -110,6 +109,7 @@ const NewComer = ({ detail }: { detail: any }) => {
 
 const InfoItem = ({ detail }: { detail: any }) => {
     const toast = useSkyToast();
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { onCopy } = useClipboard("12345");
 
     const handleCopy = () => {
@@ -123,8 +123,8 @@ const InfoItem = ({ detail }: { detail: any }) => {
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    width: "102px",
-                    height: "102px",
+                    width: isPc ? "102px" : "48px",
+                    height: isPc ? "102px" : "48px",
                     background: `url(${AvatarBg})`,
                     backgroundSize: "cover",
                     borderRadius: "50%",
@@ -143,10 +143,10 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     sx={{
                         background: `url(${AmountBg})`,
                         backgroundSize: "100% 100%",
-                        width: "28px",
-                        height: "28px",
+                        width: isPc ? "28px" : "14px",
+                        height: isPc ? "28px" : "14px",
                         position: "absolute",
-                        top: "10px",
+                        top: isPc ? "10px" : "5px",
                         right: "0%",
                     }}
                     justify={"center"}
@@ -159,14 +159,14 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     >
                         <span
                             style={{
-                                fontSize: "12px",
+                                fontSize: isPc ? "12px" : "10px",
                             }}
                         >
                             x
                         </span>
                         <span
                             style={{
-                                fontSize: "16px",
+                                fontSize: isPc ? "16px" : "12px",
                             }}
                         >
                             {detail.count}
@@ -179,14 +179,14 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     color: "#FFF",
                     textAlign: "center",
                     fontFamily: "Quantico",
-                    fontSize: "12px",
+                    fontSize: isPc ? "12px" : "8px",
                     border: "1px solid #FFF",
-                    width: "112px",
-                    borderRadius: "16px",
-                    height: "28px",
-                    lineHeight: "28px",
+                    width: isPc ? "112px" : "76px",
+                    borderRadius: isPc ? "16px" : "8px",
+                    height: isPc ? "28px" : "20px",
+                    lineHeight: isPc ? "28px" : "20px",
                     background: "rgba(0,0,0,0.5)",
-                    marginTop: "-5px",
+                    marginTop: "-2px",
                     zIndex: -1,
                 }}
             >
@@ -197,9 +197,10 @@ const InfoItem = ({ detail }: { detail: any }) => {
             <Flex
                 onClick={handleCopy}
                 sx={{
-                    marginTop: "10px",
+                    marginTop: isPc ? "10px" : "2px",
                     cursor: "pointer",
                 }}
+                align={"center"}
             >
                 <Text
                     sx={{
@@ -211,8 +212,8 @@ const InfoItem = ({ detail }: { detail: any }) => {
                 <Image
                     src={CopyIcon}
                     sx={{
-                        width: "16px",
-                        height: "16px",
+                        width: isPc ? "16px" : "12px",
+                        height: isPc ? "16px" : "12px",
                         marginLeft: "4px",
                     }}
                 ></Image>
@@ -245,7 +246,6 @@ const LevelLeaderboardModal = ({
         setLoading(true);
         const tokenIds = levelInfoDetail?.levelTokenIds;
         const tokenIdCounts = {};
-        console.log("先进来");
         tokenIds.forEach((tokenId: string) => {
             tokenIdCounts[tokenId] = (tokenIdCounts[tokenId] || 0) + 1;
         });
@@ -273,7 +273,6 @@ const LevelLeaderboardModal = ({
         });
 
         const p1R = await multiProvider.all(p1);
-        console.log("第一个mul");
         currentList = currentList.map((item, index) => {
             return {
                 ...item,
@@ -347,8 +346,6 @@ const LevelLeaderboardModal = ({
         multiMercuryPilotsContract,
     ]);
 
-    console.log(levelInfoDetail, "levelInfoDetail");
-
     return (
         <Modal
             isOpen={isOpen}
@@ -358,10 +355,11 @@ const LevelLeaderboardModal = ({
         >
             <ModalOverlay />
             <ModalContent
-                width={"800px"}
+                width={"100%"}
                 maxWidth={"800px"}
                 containerProps={{
                     sx: {
+                        padding: "30px",
                         "&:focus-visible": {
                             outline: "none",
                         },
@@ -376,10 +374,9 @@ const LevelLeaderboardModal = ({
                 }}
             >
                 <ModalBody
-                    pb="0"
-                    pt={"20px"}
                     sx={{
                         position: "relative",
+                        padding: "10px",
                     }}
                 >
                     <Image
@@ -387,7 +384,7 @@ const LevelLeaderboardModal = ({
                         sx={{
                             position: "absolute",
                             top: "0px",
-                            width: "240px",
+                            width: isPc ? "240px" : "140px",
                             left: "50%",
                             transform: "translate(-50%,-50%)",
                         }}
@@ -395,7 +392,7 @@ const LevelLeaderboardModal = ({
                     <Text
                         sx={{
                             textAlign: "right",
-                            fontSize: "20px",
+                            fontSize: isPc ? "20px" : "12px",
                         }}
                     >
                         Total {levelInfoDetail?.levelTokenIds?.length}
@@ -407,14 +404,14 @@ const LevelLeaderboardModal = ({
                     >
                         <span
                             style={{
-                                fontSize: "30px",
+                                fontSize: isPc ? "30px" : "16px",
                             }}
                         >
                             Lvl.
                         </span>{" "}
                         <span
                             style={{
-                                fontSize: "50px",
+                                fontSize: isPc ? "50px" : "24px",
                             }}
                         >
                             {getLevel(levelInfoDetail?.points)}
@@ -424,7 +421,7 @@ const LevelLeaderboardModal = ({
                     <Box
                         sx={{
                             overflow: "auto",
-                            height: "600px",
+                            height: isPc ? "600px" : "300px",
                         }}
                     >
                         {levelInfoDetail.tokenId !== "0" && (
@@ -433,8 +430,8 @@ const LevelLeaderboardModal = ({
                                     background: `url(${LevelDetailBg}) no-repeat`,
                                     backgroundPosition: "bottom",
                                     backgroundSize: "contain",
-                                    width: "360px",
-                                    height: "280px",
+                                    width: isPc ? "360px" : "160px",
+                                    height: isPc ? "280px" : "130px",
                                     position: "relative",
                                     margin: "0 auto",
                                 }}
@@ -443,12 +440,14 @@ const LevelLeaderboardModal = ({
                                 <Text
                                     sx={{
                                         position: "absolute",
-                                        bottom: "50px",
+                                        bottom: isPc ? "50px" : "10px",
                                         fontWeight: "bold",
                                         left: "50%",
                                         transform: "translate(-50%,0)",
                                         color: "#F2D861",
-                                        fontSize: "20px",
+                                        fontSize: isPc ? "20px" : "16px",
+                                        width: "100%",
+                                        textAlign: "center",
                                     }}
                                 >
                                     NEW COMER
@@ -456,19 +455,24 @@ const LevelLeaderboardModal = ({
                             </Box>
                         )}
                         <SimpleGrid
-                            columns={5}
+                            columns={isPc ? 5 : 3}
                             sx={{
                                 marginTop: "40px",
                             }}
+                            spacingY={"10px"}
                         >
-                            {leaderBoardList.map((item, index) => {
-                                return (
-                                    <InfoItem
-                                        detail={item}
-                                        key={index}
-                                    ></InfoItem>
-                                );
-                            })}
+                            {leaderBoardList
+                                .concat(leaderBoardList)
+                                .concat(leaderBoardList)
+                                .concat(leaderBoardList)
+                                .map((item, index) => {
+                                    return (
+                                        <InfoItem
+                                            detail={item}
+                                            key={index}
+                                        ></InfoItem>
+                                    );
+                                })}
                         </SimpleGrid>
                     </Box>
                 </ModalBody>
@@ -478,11 +482,11 @@ const LevelLeaderboardModal = ({
                     }}
                     src={CloseIcon}
                     sx={{
-                        width: "30px",
-                        height: "30px",
+                        width: isPc ? "30px" : "18px",
+                        height: isPc ? "30px" : "18px",
                         position: "absolute",
                         right: "0",
-                        top: "-48px",
+                        top: isPc ? "-48px" : "-24px",
                         cursor: "pointer",
                     }}
                 ></Image>

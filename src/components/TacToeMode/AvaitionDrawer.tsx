@@ -22,6 +22,8 @@ import { useChainId, usePublicClient } from "wagmi";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import PlaneBg from "@/assets/plane-bg.png";
+import PlaneBgSelect from "./assets/plane-bg-select.png";
+
 import NoPlane from "@/assets/no-plane.png";
 import { aviationImg } from "@/utils/aviationImg";
 import { levelRanges } from "@/utils/level";
@@ -54,6 +56,9 @@ const MyPlane = ({
                         {planeList.map((item, index) => {
                             return (
                                 <PlaneItem
+                                    isSelected={
+                                        selectPlane?.tokenId === item.tokenId
+                                    }
                                     detail={item}
                                     key={index}
                                     onSelectPlane={() => {
@@ -99,9 +104,11 @@ const MyPlane = ({
 };
 
 const PlaneItem = ({
+    isSelected,
     detail,
     onSelectPlane,
 }: {
+    isSelected: boolean;
     detail: any;
     onSelectPlane: () => void;
 }) => {
@@ -125,7 +132,9 @@ const PlaneItem = ({
                 sx={{
                     width: "100px",
                     height: "100px",
-                    background: `url(${PlaneBg}) no-repeat`,
+                    background: `url(${
+                        isSelected ? PlaneBgSelect : PlaneBg
+                    }) no-repeat`,
                     backgroundSize: "100% 100%",
                     position: "relative",
                 }}
@@ -217,6 +226,7 @@ const AvaitionDrawer = ({
     onSelectPlane: (plane: any) => void;
     onPlay: () => void;
 }) => {
+    console.log(selectPlane, "selectPlane");
     const [planeList, setPlaneList] = useState([] as any[]);
 
     const toast = useSkyToast();

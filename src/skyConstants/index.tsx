@@ -15,6 +15,8 @@ export const GlobalStyles = css`
     }
     * {
         box-sizing: border-box;
+        padding: 0;
+        margin: 0;
     }
     html {
         height: 100%;
