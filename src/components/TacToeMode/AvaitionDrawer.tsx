@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import RightArrowIcon from "@/assets/right-arrow.svg";
-import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import DownArrowIcon from "@/assets/down-arrow.png";
 
@@ -20,9 +19,7 @@ import {
     useMultiMercuryJarTournamentContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
-import { useChainId, usePublicClient } from "wagmi";
-import useSkyToast from "@/hooks/useSkyToast";
-import { useMercuryJarTournamentContract } from "@/hooks/useContract";
+import { useChainId } from "wagmi";
 import PlaneBg from "@/assets/plane-bg.png";
 import PlaneBgSelect from "./assets/plane-bg-select.png";
 
@@ -41,56 +38,75 @@ const MyPlane = ({
     onPlay: () => void;
     onSelectPlane: (plane: any) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
+            flexDir={"column"}
             sx={{
                 height: "100%",
             }}
-            flexDir={"column"}
         >
             <Box
                 sx={{
                     flex: 1,
                 }}
             >
-                {planeList.length > 0 ? (
-                    <SimpleGrid columns={2} spacingY={"40px"}>
-                        {planeList.map((item, index) => {
-                            return (
-                                <PlaneItem
-                                    isSelected={
-                                        selectPlane?.tokenId === item.tokenId
-                                    }
-                                    detail={item}
-                                    key={index}
-                                    onSelectPlane={() => {
-                                        onSelectPlane(item);
-                                    }}
-                                ></PlaneItem>
-                            );
-                        })}
-                    </SimpleGrid>
-                ) : (
-                    <Flex flexDir={"column"} align={"center"}>
-                        <Image
-                            src={NoPlane}
-                            sx={{
-                                width: "140px",
-                            }}
-                        ></Image>
-                    </Flex>
+                {!isPc && (
+                    <Text
+                        sx={{
+                            fontSize: "20px",
+                            textAlign: "center",
+                            marginTop: "20px",
+                        }}
+                    >
+                        Select Planes
+                    </Text>
                 )}
+                <Box>
+                    {planeList.length > 0 ? (
+                        <SimpleGrid
+                            columns={isPc ? 2 : 3}
+                            spacingY={isPc ? "40px" : "30px"}
+                        >
+                            {planeList.map((item, index) => {
+                                return (
+                                    <PlaneItem
+                                        isSelected={
+                                            selectPlane?.tokenId ===
+                                            item.tokenId
+                                        }
+                                        detail={item}
+                                        key={index}
+                                        onSelectPlane={() => {
+                                            onSelectPlane(item);
+                                        }}
+                                    ></PlaneItem>
+                                );
+                            })}
+                        </SimpleGrid>
+                    ) : (
+                        <Flex flexDir={"column"} align={"center"}>
+                            <Image
+                                src={NoPlane}
+                                sx={{
+                                    width: "140px",
+                                }}
+                            ></Image>
+                        </Flex>
+                    )}
+                </Box>
             </Box>
+
             <Flex
                 onClick={onPlay}
                 align={"center"}
                 justify={"center"}
                 sx={{
                     background: selectPlane?.tokenId ? "#F2D861" : "#777",
-                    height: "64px",
-                    width: "280px",
-                    borderRadius: "24px",
-                    fontSize: "28px",
+                    height: isPc ? "64px" : "40px",
+                    width: isPc ? "280px" : "180px",
+                    borderRadius: isPc ? "24px" : "12px",
+                    fontSize: isPc ? "28px" : "16px",
                     fontWeight: 700,
                     color: selectPlane?.tokenId ? "#1b1b1b" : "#999",
                     margin: "28px auto 0",
@@ -114,6 +130,7 @@ const PlaneItem = ({
     detail: any;
     onSelectPlane: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
             flexDir={"column"}
@@ -132,8 +149,8 @@ const PlaneItem = ({
             </Text>
             <Box
                 sx={{
-                    width: "100px",
-                    height: "100px",
+                    width: isPc ? "100px" : "60px",
+                    height: isPc ? "100px" : "60px",
                     background: `url(${
                         isSelected ? PlaneBgSelect : PlaneBg
                     }) no-repeat`,
@@ -170,8 +187,8 @@ const PlaneItem = ({
             </Text>
             <Box
                 sx={{
-                    width: "130px",
-                    height: "13px",
+                    width: isPc ? "130px" : "90px",
+                    height: isPc ? "13px" : "10px",
                     padding: "2px",
                     border: "1px solid #FFF",
                     borderRadius: "12px",
@@ -192,14 +209,14 @@ const PlaneItem = ({
             </Box>
             <Text
                 sx={{
-                    fontSize: "16px",
+                    fontSize: isPc ? "16px" : "12px",
                 }}
             >
                 Next Lvl:
             </Text>
             <Text
                 sx={{
-                    fontSize: "16px",
+                    fontSize: isPc ? "16px" : "12px",
                 }}
             >
                 {detail.points}/
@@ -230,30 +247,16 @@ const AvaitionDrawer = ({
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [planeList, setPlaneList] = useState([] as any[]);
-
-    const toast = useSkyToast();
-    const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const publicClient = usePublicClient();
     const chainId = useChainId();
     const { address } = usePrivyAccounts();
     const multiProvider = useMultiProvider(chainId);
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
-    const { user, logout } = usePrivy();
-    const [paperBalance, setPaperBalance] = useState("0");
-    const [planeBalance, setPlaneBalance] = useState("0");
-    const [userName, setUserName] = useState("");
-    const [placement, setPlacement] = React.useState("right");
 
     const handleGetUserPaper = async () => {
-        const [planeBalance, paperBalance, userName] = await multiProvider.all([
+        const [planeBalance] = await multiProvider.all([
             multiMercuryJarTournamentContract.balanceOf(address),
-            multiMercuryJarTournamentContract.paperBalance(address),
-            multiMercuryJarTournamentContract.userName(address),
         ]);
-        setUserName(userName);
-        setPaperBalance(paperBalance.toString());
-        setPlaneBalance(planeBalance.toString());
 
         const p = [];
         for (let i = 0; i < Number(planeBalance.toString()); i++) {
@@ -316,13 +319,13 @@ const AvaitionDrawer = ({
                     background: "rgba(255, 255, 255, 0.15)",
                     backdropFilter: "blur(25px)",
                     position: "relative",
-                    maxWidth: "375px",
+                    maxWidth: isPc ? "375px" : "800px",
                 }}
             >
                 <DrawerBody
                     sx={{
-                        padding: "30px",
-                        width: "375px !important",
+                        padding: isPc ? "30px" : "14px",
+                        width: "100% !important",
                     }}
                 >
                     {isPc ? (
@@ -339,11 +342,19 @@ const AvaitionDrawer = ({
                     ) : (
                         <Flex justify={"center"}>
                             <Image
+                                sx={{
+                                    width: "16px",
+                                    top: "10px",
+                                    left: "50%",
+                                    position: "absolute",
+                                    transform: "translate(-50%, 0)",
+                                }}
                                 onClick={onClose}
                                 src={DownArrowIcon}
                             ></Image>
                         </Flex>
                     )}
+
                     <MyPlane
                         planeList={planeList}
                         selectPlane={selectPlane}
