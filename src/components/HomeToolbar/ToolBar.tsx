@@ -20,8 +20,10 @@ import { useState } from "react";
 
 const MToolBar = ({
     onWalletClick,
+    onRulesModalOpen,
     showOpensea,
 }: {
+    onRulesModalOpen: () => void;
     onWalletClick: () => void;
     showOpensea?: boolean;
 }) => {
@@ -78,7 +80,7 @@ const MToolBar = ({
                 align={"center"}
             >
                 <Image
-                    // onClick={onRulesModalOpen}
+                    onClick={onRulesModalOpen}
                     src={TipIcon}
                     sx={{
                         width: "36px",
@@ -217,6 +219,7 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
                 </Flex>
             ) : (
                 <MToolBar
+                    onRulesModalOpen={onRulesModalOpen}
                     showOpensea={showOpensea}
                     onWalletClick={handleLogin}
                 ></MToolBar>

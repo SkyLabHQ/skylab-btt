@@ -8,11 +8,13 @@ import {
     DrawerOverlay,
     SimpleGrid,
     Flex,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import RightArrowIcon from "@/assets/right-arrow.svg";
 import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import DownArrowIcon from "@/assets/down-arrow.png";
 
 import {
     useMultiMercuryJarTournamentContract,
@@ -226,7 +228,7 @@ const AvaitionDrawer = ({
     onSelectPlane: (plane: any) => void;
     onPlay: () => void;
 }) => {
-    console.log(selectPlane, "selectPlane");
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [planeList, setPlaneList] = useState([] as any[]);
 
     const toast = useSkyToast();
@@ -323,15 +325,25 @@ const AvaitionDrawer = ({
                         width: "375px !important",
                     }}
                 >
-                    <Image
-                        src={RightArrowIcon}
-                        sx={{
-                            width: "24px",
-                            top: "40px",
-                            left: "-36px",
-                            position: "absolute",
-                        }}
-                    ></Image>
+                    {isPc ? (
+                        <Image
+                            src={RightArrowIcon}
+                            sx={{
+                                width: "24px",
+                                top: "40px",
+                                left: "-36px",
+                                position: "absolute",
+                            }}
+                            onClick={onClose}
+                        ></Image>
+                    ) : (
+                        <Flex justify={"center"}>
+                            <Image
+                                onClick={onClose}
+                                src={DownArrowIcon}
+                            ></Image>
+                        </Flex>
+                    )}
                     <MyPlane
                         planeList={planeList}
                         selectPlane={selectPlane}

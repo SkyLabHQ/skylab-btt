@@ -64,6 +64,7 @@ import styled from "@emotion/styled";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
 import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
+import MCurrentPlane from "@/components/TacToeMode/MCurrentPlane";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -539,9 +540,10 @@ const TacToeMode = () => {
                         flexDirection: "column",
                         alignItems: "center",
                         width: isPc ? "19.6875vw" : "250px",
+                        justifyContent: "center",
+                        height: "100%",
                     }}
                 >
-                    <LiveGame list={onGoingGames}></LiveGame>
                     <Box
                         sx={{
                             paddingTop: "1.8229vw",
@@ -596,6 +598,11 @@ const TacToeMode = () => {
                                     }}
                                 ></PlayButtonGroup>
                             )}
+                            {!isPrivateLobbyMode && !isPc && (
+                                <MCurrentPlane
+                                    selectPlane={selectPlane}
+                                ></MCurrentPlane>
+                            )}
                         </motion.div>
                     </Box>
                     <Box
@@ -646,7 +653,7 @@ const TacToeMode = () => {
                         )}
                     </Box>
                 </Box>
-                {!isPrivateLobbyMode && (
+                {!isPrivateLobbyMode && isPc && (
                     <Box
                         sx={{
                             display: "flex",
@@ -657,21 +664,10 @@ const TacToeMode = () => {
                             left: "6.25vw",
                         }}
                     >
-                        {/* {address &&
-                            (planeList.length === 0 ? (
-                                <NoPlaneContent></NoPlaneContent>
-                            ) : (
-                                <PlaneList
-                                    planeList={planeList}
-                                    onPlaneChange={(index) => {
-                                        setCurrentPlaneIndex(index);
-                                    }}
-                                ></PlaneList>
-                            ))} */}
-
                         <CurrentPlane selectPlane={selectPlane}></CurrentPlane>
                     </Box>
                 )}
+
                 <PreviousLobbyModal
                     lobbyName={lobbyName}
                     isOpen={isPreviousLobbyModalOpen}

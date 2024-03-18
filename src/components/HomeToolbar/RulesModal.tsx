@@ -7,17 +7,15 @@ import {
     ModalOverlay,
     Text,
     Image,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
-
 import ArrowIcon from "./assets/arrow.png";
 import GrayArrowIcon from "./assets/gray-arrow.png";
-
 import Rule1Img from "./assets/rule1.png";
 import Rule2Img from "./assets/rule2.png";
 import Rule3Img from "./assets/rule3.png";
 import Rule4Img from "./assets/rule4.png";
-
 import CloseIcon from "./assets/close.png";
 
 const Rule1 = () => {
@@ -78,11 +76,12 @@ const Indicator = ({
     currentIndex: number;
     onIndexChange: (index: number) => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
                 position: "absolute",
-                bottom: "-120px",
+                bottom: isPc ? "-120px" : "-160px",
                 left: "50%",
                 transform: "translate(-50%, 0)",
                 width: "100%",
@@ -160,7 +159,11 @@ const Indicator = ({
                 }}
             >
                 {(currentIndex === 0 || currentIndex === 3) && (
-                    <Text>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "16px" : "12px",
+                        }}
+                    >
                         *Disclaimer: 99 eth pool is for{" "}
                         <span
                             style={{
@@ -193,6 +196,7 @@ const RulesModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const [currentIndex, setCurrentIndex] = React.useState(0);
 
     const handleChangeIndex = (index: number) => {
@@ -214,6 +218,7 @@ const RulesModal = ({
             <ModalContent
                 containerProps={{
                     sx: {
+                        padding: "20px",
                         "&:focus-visible": {
                             outline: "none",
                         },
@@ -228,7 +233,7 @@ const RulesModal = ({
                     maxWidth: "800px",
                 }}
             >
-                <ModalBody sx={{ width: "800px" }}>
+                <ModalBody sx={{ maxWidth: "800px", width: "100%" }}>
                     {currentIndex === 0 && <Rule1></Rule1>}
                     {currentIndex === 1 && <Rule2></Rule2>}{" "}
                     {currentIndex === 2 && <Rule3></Rule3>}
@@ -237,13 +242,13 @@ const RulesModal = ({
                 <Text
                     sx={{
                         position: "absolute",
-                        top: "-60px",
+                        top: isPc ? "-60px" : "-40px",
                         left: "50%",
                         transform: "translate(-50%, 0)",
                         color: "#F2D861",
                         textAlign: "center",
                         fontFamily: "Orbitron",
-                        fontSize: "34px",
+                        fontSize: isPc ? "34px" : "18px",
                         width: "100%",
                     }}
                 >
@@ -255,11 +260,11 @@ const RulesModal = ({
                     }}
                     src={CloseIcon}
                     sx={{
-                        width: "30px",
-                        height: "30px",
+                        width: isPc ? "30px" : "18px",
+                        height: isPc ? "30px" : "18px",
                         position: "absolute",
                         right: "0",
-                        top: "-48px",
+                        top: isPc ? "-48px" : "-32px",
                         cursor: "pointer",
                     }}
                 ></Image>
