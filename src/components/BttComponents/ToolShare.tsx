@@ -91,12 +91,12 @@ export const ToolShare = ({
                                 src={LinkIcon}
                                 sx={{
                                     marginRight: "4px",
-                                    width: "12px",
+                                    width: isPc ? "0.8333vw" : "12px",
                                 }}
                             ></Image>
                             <Text
                                 sx={{
-                                    fontSize: "12px",
+                                    fontSize: isPc ? "0.8333vw" : "12px",
                                     fontWeight: "bold",
                                 }}
                             >
@@ -114,12 +114,12 @@ export const ToolShare = ({
                                 src={TwIcon}
                                 sx={{
                                     marginRight: "4px",
-                                    width: "12px",
+                                    width: isPc ? "0.8333vw" : "12px",
                                 }}
                             ></Image>
                             <Text
                                 sx={{
-                                    fontSize: "12px",
+                                    fontSize: isPc ? "0.8333vw" : "12px",
                                     fontWeight: "bold",
                                 }}
                             >
