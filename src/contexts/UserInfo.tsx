@@ -10,6 +10,7 @@ const UserInfoContext = createContext<{
     onUserInfoClose: () => void;
     activePilot: PilotInfo;
     handleGetActivePilot: () => void;
+    pilotIsInit: boolean;
 }>(null);
 
 export const UserInfoProvider = ({
@@ -19,7 +20,7 @@ export const UserInfoProvider = ({
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { address } = usePrivyAccounts();
-    const { activePilot, handleGetActivePilot } = usePilotInfo(address);
+    const { activePilot, handleGetActivePilot, init } = usePilotInfo(address);
 
     return (
         <UserInfoContext.Provider
@@ -29,6 +30,7 @@ export const UserInfoProvider = ({
                 onUserInfoClose: onClose,
                 activePilot,
                 handleGetActivePilot,
+                pilotIsInit: init,
             }}
         >
             <Box

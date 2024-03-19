@@ -547,6 +547,12 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         if (commitWorkerRef.current) {
             commitWorkerRef.current.terminate();
         }
+        if (
+            myGameInfo.gameState !== GameState.WaitingForBid ||
+            !bidTacToeGameAddress
+        ) {
+            return;
+        }
         commitWorkerRef.current = new Worker(
             new URL("../../utils/timerWorker.ts", import.meta.url),
         );
@@ -590,6 +596,13 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         if (callTimeoutWorkerRef.current) {
             callTimeoutWorkerRef.current.terminate();
         }
+        if (
+            !opGameInfo.timeout ||
+            !opGameInfo.gameState ||
+            !myGameInfo.gameState
+        ) {
+            return;
+        }
         const now = getNowSecondsTimestamp();
         const autoCallTimeoutTime =
             opGameInfo.timeout * 1000 - now > 0
@@ -621,12 +634,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     }, [myGameInfo.gameState, deleteTokenIdCommited, addBttTransaction]);
 
     useEffect(() => {
-        if (
-            myGameInfo.gameState !== GameState.WaitingForBid ||
-            !bidTacToeGameAddress
-        ) {
-            return;
-        }
         handleCommitWorker();
     }, [
         myGameInfo.gameState,
@@ -637,12 +644,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     ]);
 
     useEffect(() => {
-        if (
-            !opGameInfo.timeout ||
-            !opGameInfo.gameState ||
-            !myGameInfo.gameState
-        )
-            return;
         handleCallTimeoutWorkerRef();
     }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
 

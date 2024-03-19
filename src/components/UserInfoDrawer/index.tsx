@@ -6,22 +6,20 @@ import {
     Text,
     Image,
     DrawerOverlay,
-    useDisclosure,
     Flex,
     SimpleGrid,
     useClipboard,
     useMediaQuery,
+    SkeletonCircle,
+    SkeletonText,
+    Skeleton,
 } from "@chakra-ui/react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CopyIcon from "@/assets/copy-icon.svg";
-import SettingIcon from "./assets/setting.png";
 import QuitIcon from "./assets/quit.png";
-import DeafaultIcon from "./assets/default-icon.png";
 import RightArrowIcon from "./assets/right-arrow.svg";
 import DownArrowIcon from "./assets/down-arrow.png";
-
 import { usePrivy } from "@privy-io/react-auth";
-import EditIcon from "./assets/edit.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { shortenAddress } from "@/utils";
 import PaperIcon from "./assets/paper.png";
@@ -43,62 +41,102 @@ import { useChainId, usePublicClient } from "wagmi";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
-import { getLevel, levelRanges } from "@/utils/level";
+import { levelRanges } from "@/utils/level";
 import PlaneBg from "./assets/plane-bg.png";
 import SetPilotIcon from "./assets/setPilot.png";
 import SetNameIcon from "./assets/setName.png";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
 
-const UserInfo = ({ userName }: { userName: string }) => {
+const UserInfo = ({
+    userName,
+    userNameInit,
+}: {
+    userName: string;
+    userNameInit: boolean;
+}) => {
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
     const toast = useSkyToast();
     const { onCopy } = useClipboard(address);
-    const { activePilot } = useUserInfoRequest();
-
-    const handleCopyAddress = () => {
-        onCopy();
-        toast("Address copied");
-    };
+    const { activePilot, pilotIsInit } = useUserInfoRequest();
 
     return (
         <Flex flexDir={"column"} align={"center"}>
-            <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
-            <Flex
-                sx={{
-                    marginTop: "8px",
-                }}
-                align={"center"}
-            >
-                {user?.discord && (
-                    <Image
-                        src={DiscordIcon}
-                        sx={{
-                            width: "16px",
-                            marginRight: "4px",
-                        }}
-                    ></Image>
-                )}
-                {user?.twitter && (
-                    <Image
-                        src={TwIcon}
-                        sx={{
-                            width: "16px",
-                            marginRight: "4px",
-                        }}
-                    ></Image>
-                )}
-
-                <Text
+            {" "}
+            {pilotIsInit ? (
+                <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
+            ) : (
+                <SkeletonCircle
+                    startColor="#FDDC2D"
+                    endColor="#fff"
+                    size="80px"
+                />
+            )}
+            {userNameInit ? (
+                <Flex
                     sx={{
-                        color: "#F2D861",
-                        marginRight: "6px",
+                        marginTop: "8px",
                     }}
-                    onClick={handleCopyAddress}
+                    align={"center"}
                 >
-                    {userName ? userName : `${shortenAddress(address)}`}
-                </Text>
-            </Flex>
+                    {user?.discord && (
+                        <Image
+                            src={DiscordIcon}
+                            sx={{
+                                width: "16px",
+                                marginRight: "4px",
+                            }}
+                        ></Image>
+                    )}
+                    {user?.twitter && (
+                        <Image
+                            src={TwIcon}
+                            sx={{
+                                width: "16px",
+                                marginRight: "4px",
+                            }}
+                        ></Image>
+                    )}
+
+                    <Flex
+                        sx={{
+                            fontSize: "14px",
+                            color: "#F2D861",
+                        }}
+                        onClick={() => {
+                            onCopy();
+                            toast("Address copied");
+                        }}
+                    >
+                        <Text
+                            sx={{
+                                fontSize: "14px",
+                                marginRight: "11px",
+                            }}
+                        >
+                            {userName
+                                ? userName
+                                : `${shortenAddress(address, 4, 4)}`}
+                        </Text>
+                        <Image
+                            src={CopyIcon}
+                            sx={{
+                                width: "14px",
+                            }}
+                        ></Image>
+                    </Flex>
+                </Flex>
+            ) : (
+                <Skeleton
+                    startColor="#FDDC2D"
+                    endColor="#fff"
+                    height="20px"
+                    width={"140px"}
+                    sx={{
+                        marginTop: "8px",
+                    }}
+                />
+            )}
         </Flex>
     );
 };
@@ -110,9 +148,6 @@ const MyPaper = ({
     balance: string;
     handleMintPlane: () => void;
 }) => {
-    const toast = useSkyToast();
-    const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-
     return (
         <Box
             sx={{
@@ -337,7 +372,13 @@ const PlaneItem = ({ detail }: { detail: any }) => {
     );
 };
 
-const MyPlane = ({ planeList }: { planeList: any[] }) => {
+const MyPlane = ({
+    planeList,
+    planeInit,
+}: {
+    planeList: any[];
+    planeInit: boolean;
+}) => {
     return (
         <Box
             sx={{
@@ -359,31 +400,53 @@ const MyPlane = ({ planeList }: { planeList: any[] }) => {
                     Plane
                 </Text>
             </Box>
+
             <Box
                 sx={{
                     paddingTop: "48px",
                 }}
             >
-                {planeList.length > 0 ? (
-                    <SimpleGrid columns={3} spacingY={"20px"}>
-                        {planeList.map((item, index) => {
+                {planeInit ? (
+                    <Box>
+                        {planeList.length > 0 ? (
+                            <SimpleGrid
+                                columns={3}
+                                spacingY={"20px"}
+                                spacingX={"10px"}
+                            >
+                                {planeList.map((item, index) => {
+                                    return (
+                                        <PlaneItem
+                                            detail={item}
+                                            key={index}
+                                        ></PlaneItem>
+                                    );
+                                })}
+                            </SimpleGrid>
+                        ) : (
+                            <Flex flexDir={"column"} align={"center"}>
+                                <Image
+                                    src={NoPlane}
+                                    sx={{
+                                        width: "140px",
+                                    }}
+                                ></Image>
+                            </Flex>
+                        )}
+                    </Box>
+                ) : (
+                    <SimpleGrid columns={3} spacingY={"20px"} spacingX={"20px"}>
+                        {[1, 2, 3, 4, 5, 6].map((_, index) => {
                             return (
-                                <PlaneItem
-                                    detail={item}
+                                <Skeleton
                                     key={index}
-                                ></PlaneItem>
+                                    startColor="#FDDC2D"
+                                    endColor="#fff"
+                                    height="80px"
+                                />
                             );
                         })}
                     </SimpleGrid>
-                ) : (
-                    <Flex flexDir={"column"} align={"center"}>
-                        <Image
-                            src={NoPlane}
-                            sx={{
-                                width: "140px",
-                            }}
-                        ></Image>
-                    </Flex>
                 )}
             </Box>
         </Box>
@@ -408,10 +471,12 @@ const UserInfoDrawer = ({
     const multiProvider = useMultiProvider(chainId);
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
-    const { user, logout } = usePrivy();
+    const { logout } = usePrivy();
     const [paperBalance, setPaperBalance] = useState("0");
     const [userName, setUserName] = useState("");
+    const [userNameInit, setUserNameInit] = useState(false);
     const [planeList, setPlaneList] = useState([] as any[]);
+    const [planeInit, setPlaneInit] = useState(false);
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
 
     const handleChangeMode = (mode: number) => {
@@ -425,8 +490,8 @@ const UserInfoDrawer = ({
             multiMercuryJarTournamentContract.userName(address),
         ]);
         setUserName(userName);
+        setUserNameInit(true);
         setPaperBalance(paperBalance.toString());
-
         const p = [];
         for (let i = 0; i < Number(planeBalance.toString()); i++) {
             p.push(
@@ -461,6 +526,7 @@ const UserInfoDrawer = ({
             };
         });
 
+        setPlaneInit(true);
         setPlaneList(planeList);
     };
 
@@ -600,12 +666,18 @@ const UserInfoDrawer = ({
                                     }}
                                 ></Image>
                             </Flex>
-                            <UserInfo userName={userName}></UserInfo>
+                            <UserInfo
+                                userName={userName}
+                                userNameInit={userNameInit}
+                            ></UserInfo>
                             <MyPaper
                                 balance={paperBalance}
                                 handleMintPlane={handleMintPlane}
                             ></MyPaper>
-                            <MyPlane planeList={planeList}></MyPlane>
+                            <MyPlane
+                                planeList={planeList}
+                                planeInit={planeInit}
+                            ></MyPlane>
                         </Box>
                     )}
                     {currentMode === 1 && (
