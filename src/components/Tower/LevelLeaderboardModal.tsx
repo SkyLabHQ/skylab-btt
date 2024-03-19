@@ -416,7 +416,7 @@ const LevelLeaderboardModal = ({
                         <SimpleGrid
                             columns={isPc ? 5 : 3}
                             sx={{
-                                marginTop: "40px",
+                                marginTop: isPc ? "40px" : "20px",
                             }}
                             spacingY={"10px"}
                         >

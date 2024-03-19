@@ -58,206 +58,221 @@ const BuyBt = () => {
         }
     };
     return (
-        <Popover
-            gutter={38}
-            arrowSize={20}
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
+        <Box
+            sx={{
+                zIndex: 999,
+            }}
         >
-            <PopoverTrigger>
-                <Image
-                    tabIndex={0}
-                    role="button"
-                    src={Buycon}
-                    sx={{
-                        width: isPc ? "313px" : "110px",
-
-                        position: "absolute",
-                        left: "0",
-                        bottom: "0",
-                    }}
-                ></Image>
-            </PopoverTrigger>
-            <PopoverContent
-                width={"240px"}
-                sx={{
-                    border: "2px solid #F2D861",
-                    borderRadius: "10px",
-                    background: "rgb(61,61,61)",
-                }}
+            <Popover
+                gutter={38}
+                arrowSize={20}
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
             >
-                <PopoverBody sx={{}}>
-                    <Flex flexDir={"column"} align={"center"}>
-                        <Image
-                            src={PlanetIcon}
-                            sx={{
-                                width: "90px",
-                                height: "90px",
-                            }}
-                        ></Image>
-                        <Flex
-                            justify={"space-between"}
-                            sx={{
-                                width: "170px",
-                                borderRadius: "30px",
-                                background: "rgba(0, 0, 0, 0.60)",
-                                padding: "2px",
-                                margin: "0 auto",
-                                height: "38px",
-                                marginTop: "9px",
-                                border: "1px solid #F2D861",
-                            }}
-                        >
-                            <Flex
+                <PopoverTrigger>
+                    <Image
+                        tabIndex={0}
+                        role="button"
+                        src={Buycon}
+                        sx={{
+                            width: isPc ? "313px" : "110px",
+                            position: "absolute",
+                            left: "0",
+                            bottom: "0",
+                        }}
+                    ></Image>
+                </PopoverTrigger>
+                <PopoverContent
+                    width={isPc ? "240px" : "200px"}
+                    sx={{
+                        border: "2px solid #F2D861",
+                        borderRadius: "10px",
+                        background: "rgb(61,61,61)",
+                    }}
+                >
+                    <PopoverBody sx={{}}>
+                        <Flex flexDir={"column"} align={"center"}>
+                            <Image
+                                src={PlanetIcon}
                                 sx={{
-                                    width: "32px",
-                                    height: "32px",
-                                    background:
-                                        inputAmount > 1 ? "#F2D861" : "#777",
-                                    borderRadius: "50%",
-                                    color: "#1B1B1B",
+                                    width: isPc ? "90px" : "60px",
+                                    height: isPc ? "90px" : "60px",
                                 }}
-                                justify={"center"}
-                                align={"center"}
-                                onClick={() => {
-                                    if (inputAmount > 1) {
-                                        setInputAmount(inputAmount - 1);
-                                    }
+                            ></Image>
+                            <Flex
+                                justify={"space-between"}
+                                sx={{
+                                    width: isPc ? "170px" : "120px",
+                                    borderRadius: isPc ? "30px" : "20px",
+                                    background: "rgba(0, 0, 0, 0.60)",
+                                    padding: "2px",
+                                    margin: "0 auto",
+                                    height: isPc ? "38px" : "30px",
+                                    marginTop: "9px",
+                                    border: "1px solid #F2D861",
                                 }}
                             >
-                                <Image
-                                    src={SubIcon}
+                                <Flex
                                     sx={{
-                                        width: "16px",
+                                        width: isPc ? "32px" : "24px",
+                                        height: isPc ? "32px" : "24px",
+                                        background:
+                                            inputAmount > 1
+                                                ? "#F2D861"
+                                                : "#777",
+                                        borderRadius: "50%",
+                                        color: "#1B1B1B",
                                     }}
-                                ></Image>
-                            </Flex>
-                            <Input
-                                variant={"unstyled"}
-                                sx={{
-                                    flex: 1,
-                                    textAlign: "center",
-                                    color: "#fff",
-                                    fontSize: "20px",
-                                }}
-                                value={inputAmount}
-                                onChange={(e) => {
-                                    const value = e.target.value.replace(
-                                        /[^0-9]/g,
-                                        "",
-                                    );
-                                    setInputAmount(Number(value));
-                                }}
-                            ></Input>
-                            <Flex
-                                sx={{
-                                    width: "32px",
-                                    height: "32px",
-                                    background: "#F2D861",
-                                    borderRadius: "50%",
-                                    color: "#1B1B1B",
-                                }}
-                                justify={"center"}
-                                align={"center"}
-                                onClick={() => {
-                                    setInputAmount(inputAmount + 1);
-                                }}
-                            >
-                                <Image
-                                    src={AddIcon}
-                                    sx={{
-                                        width: "16px",
-                                    }}
-                                ></Image>
-                            </Flex>
-                        </Flex>
-                        <Flex
-                            onClick={handleMintPlane}
-                            sx={{
-                                width: "180px",
-                                height: "40px",
-                                borderRadius: "12px",
-                                background: "#f2d861",
-                                margin: "8px 0 24px",
-                                fontSize: "16px",
-                                padding: "0 12px",
-                                color: "#000",
-                                cursor: "pointer",
-                            }}
-                            align={"center"}
-                            justify={"space-between"}
-                        >
-                            <Flex align={"center"} justify={"center"} flex={1}>
-                                <Image
-                                    src={BuyIcon}
-                                    sx={{
-                                        width: "12px",
-                                        marginRight: "5px",
-                                    }}
-                                ></Image>
-                                <Text
-                                    sx={{
-                                        fontFamily: "Quantico",
+                                    justify={"center"}
+                                    align={"center"}
+                                    onClick={() => {
+                                        if (inputAmount > 1) {
+                                            setInputAmount(inputAmount - 1);
+                                        }
                                     }}
                                 >
-                                    BUY
-                                </Text>
+                                    <Image
+                                        src={SubIcon}
+                                        sx={{
+                                            width: "16px",
+                                        }}
+                                    ></Image>
+                                </Flex>
+                                <Input
+                                    variant={"unstyled"}
+                                    sx={{
+                                        flex: 1,
+                                        textAlign: "center",
+                                        color: "#fff",
+                                        fontSize: isPc ? "20px" : "16px",
+                                    }}
+                                    value={inputAmount}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(
+                                            /[^0-9]/g,
+                                            "",
+                                        );
+                                        setInputAmount(Number(value));
+                                    }}
+                                ></Input>
+                                <Flex
+                                    sx={{
+                                        width: isPc ? "32px" : "24px",
+                                        height: isPc ? "32px" : "24px",
+                                        background: "#F2D861",
+                                        borderRadius: "50%",
+                                        color: "#1B1B1B",
+                                    }}
+                                    justify={"center"}
+                                    align={"center"}
+                                    onClick={() => {
+                                        setInputAmount(inputAmount + 1);
+                                    }}
+                                >
+                                    <Image
+                                        src={AddIcon}
+                                        sx={{
+                                            width: "16px",
+                                        }}
+                                    ></Image>
+                                </Flex>
                             </Flex>
+                            <Flex
+                                onClick={handleMintPlane}
+                                sx={{
+                                    width: isPc ? "180px" : "120px",
+                                    height: isPc ? "40px" : "30px",
+                                    borderRadius: "12px",
+                                    background: "#f2d861",
+                                    margin: "8px 0 24px",
+                                    fontSize: isPc ? "16px" : "12px",
+                                    padding: "0 12px",
+                                    color: "#000",
+                                    cursor: "pointer",
+                                }}
+                                align={"center"}
+                                justify={"space-between"}
+                            >
+                                <Flex
+                                    align={"center"}
+                                    justify={"center"}
+                                    flex={1}
+                                >
+                                    <Image
+                                        src={BuyIcon}
+                                        sx={{
+                                            width: "12px",
+                                            marginRight: "5px",
+                                        }}
+                                    ></Image>
+                                    <Text
+                                        sx={{
+                                            fontFamily: "Quantico",
+                                        }}
+                                    >
+                                        BUY
+                                    </Text>
+                                </Flex>
 
-                            <Box
-                                sx={{
-                                    width: "1px",
-                                    height: "16px",
-                                    background: "#1b1b1b",
-                                }}
-                            ></Box>
-                            <Flex align={"center"} justify={"center"} flex={1}>
-                                <Text
+                                <Box
                                     sx={{
-                                        marginRight: "3px",
+                                        width: "1px",
+                                        height: "16px",
+                                        background: "#1b1b1b",
                                     }}
+                                ></Box>
+                                <Flex
+                                    align={"center"}
+                                    justify={"center"}
+                                    flex={1}
                                 >
-                                    {accMul("0.02", inputAmount.toString())}
-                                </Text>
-                                <Image
-                                    src={BETHIcon}
-                                    sx={{
-                                        width: "8px",
-                                    }}
-                                ></Image>
+                                    <Text
+                                        sx={{
+                                            marginRight: "3px",
+                                        }}
+                                    >
+                                        {accMul("0.02", inputAmount.toString())}
+                                    </Text>
+                                    <Image
+                                        src={BETHIcon}
+                                        sx={{
+                                            width: "8px",
+                                        }}
+                                    ></Image>
+                                </Flex>
                             </Flex>
                         </Flex>
-                    </Flex>
-                </PopoverBody>
-                <Box
-                    sx={{
-                        height: "0",
-                        width: "0",
-                        borderTop: "12px solid #F2D861",
-                        borderRight: "12px solid transparent",
-                        borderBottom: "12px solid transparent",
-                        borderLeft: "12px solid transparent",
-                        position: "absolute",
-                        left: "18px",
-                        bottom: "-24px",
-                    }}
-                ></Box>
-                <Box
-                    sx={{
-                        height: "0",
-                        width: "0",
-                        borderTop: "10px solid rgb(61,61,61)",
-                        borderRight: "10px solid transparent",
-                        borderBottom: "10px solid transparent",
-                        borderLeft: "10px solid transparent",
-                        position: "absolute",
-                        left: "20px",
-                        bottom: "-20px",
-                    }}
-                ></Box>
-            </PopoverContent>
-        </Popover>
+                    </PopoverBody>
+                    <Box
+                        sx={{
+                            height: "0",
+                            width: "0",
+                            borderTop: "12px solid #F2D861",
+                            borderRight: "12px solid transparent",
+                            borderBottom: "12px solid transparent",
+                            borderLeft: "12px solid transparent",
+                            position: "absolute",
+                            left: "18px",
+                            bottom: "-24px",
+                        }}
+                    ></Box>
+                    <Box
+                        sx={{
+                            height: "0",
+                            width: "0",
+                            borderTop: "10px solid rgb(61,61,61)",
+                            borderRight: "10px solid transparent",
+                            borderBottom: "10px solid transparent",
+                            borderLeft: "10px solid transparent",
+                            position: "absolute",
+                            left: "20px",
+                            bottom: "-20px",
+                        }}
+                    ></Box>
+                </PopoverContent>
+            </Popover>
+        </Box>
     );
 };
 
