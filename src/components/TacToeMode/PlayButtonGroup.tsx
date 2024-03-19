@@ -166,6 +166,7 @@ export const PlayButtonGroup = ({
                             transform: "translateX(-50%)",
                             width: "200%",
                             textAlign: "center",
+                            fontSize: isPc ? "1.0417vw" : "12px",
                         }}
                     >
                         Without Plane

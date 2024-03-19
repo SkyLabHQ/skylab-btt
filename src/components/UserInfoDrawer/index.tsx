@@ -94,33 +94,10 @@ const UserInfo = ({ userName }: { userName: string }) => {
                         color: "#F2D861",
                         marginRight: "6px",
                     }}
-                >
-                    {userName
-                        ? userName
-                        : `User-${shortenAddress(address, 4, 4)}`}
-                </Text>
-            </Flex>
-            <Flex
-                sx={{
-                    marginTop: "11px",
-                    fontSize: "14px",
-                }}
-            >
-                <Text
-                    sx={{
-                        fontSize: "14px",
-                        marginRight: "11px",
-                    }}
-                >
-                    {shortenAddress(address, 5, 4)}
-                </Text>
-                <Image
                     onClick={handleCopyAddress}
-                    src={CopyIcon}
-                    sx={{
-                        width: "14px",
-                    }}
-                ></Image>
+                >
+                    {userName ? userName : `${shortenAddress(address)}`}
+                </Text>
             </Flex>
         </Flex>
     );

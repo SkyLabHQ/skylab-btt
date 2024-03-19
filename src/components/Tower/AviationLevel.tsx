@@ -580,6 +580,18 @@ const AviationLevel = () => {
 
     const handleLevelInfo = async () => {
         const p = [];
+
+        // const pp = [];
+
+        // for (let i = 1; i <= 16; i++) {
+        //     pp.push(multiMercuryJarTournamentContract.getNewCommerInfo(i));
+        // }
+        // console.time("aaa");
+
+        // const resrrr = await multiProvider.all(pp);
+        // console.log(resrrr, "resrrr");
+        // console.timeEnd("aaa");
+
         console.time("a");
         for (let i = 1; i <= 16; i++) {
             p.push(multiMercuryJarTournamentContract.getTokenIdPerLevel(i));
@@ -588,6 +600,7 @@ const AviationLevel = () => {
         }
         p.push(multiMercuryJarTournamentContract.paperTotalAmount());
         const res = await multiProvider.all(p);
+        console.log(res, "dnwkldnklwndekl");
         console.timeEnd("a");
         const paperTotalAmount = res.pop();
         setTotalPaper(paperTotalAmount.toString());
@@ -815,24 +828,11 @@ const AviationLevel = () => {
                                                             .userName
                                                             ? levelInfo[index]
                                                                   .userName
-                                                            : `User-${shortenAddress(
+                                                            : `${shortenAddress(
                                                                   levelInfo[
                                                                       index
                                                                   ].owner,
-                                                                  4,
-                                                                  3,
                                                               )}`}
-                                                    </Text>
-                                                    <Text
-                                                        sx={{
-                                                            width: "120px",
-                                                            textAlign: "center",
-                                                        }}
-                                                    >
-                                                        {shortenAddress(
-                                                            levelInfo[index]
-                                                                .owner,
-                                                        )}
                                                     </Text>
                                                 </Box>
                                             </Flex>

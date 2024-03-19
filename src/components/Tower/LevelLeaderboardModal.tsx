@@ -77,32 +77,12 @@ const NewComer = ({ detail }: { detail: any }) => {
                     lineHeight: isPc ? "28px" : "14px",
                     background: "#f2d861",
                 }}
-            >
-                {`User-${shortenAddress(detail.owner, 4, 2)}`}
-            </Box>
-            <Flex
                 onClick={handleCopy}
-                sx={{
-                    marginTop: isPc ? "10px" : "2px",
-                    cursor: "pointer",
-                }}
             >
-                <Text
-                    sx={{
-                        fontSize: "12px",
-                    }}
-                >
-                    {shortenAddress(detail.owner, 4, 4)}
-                </Text>
-                <Image
-                    src={CopyIcon}
-                    sx={{
-                        width: "16px",
-                        height: "16px",
-                        marginLeft: "4px",
-                    }}
-                ></Image>
-            </Flex>
+                {detail.userName
+                    ? detail.userName
+                    : `${shortenAddress(detail.owner)}`}
+            </Box>
         </Flex>
     );
 };
@@ -189,35 +169,12 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     marginTop: "-2px",
                     zIndex: -1,
                 }}
+                onClick={handleCopy}
             >
                 {detail.userName
                     ? detail.userName
-                    : `User-${shortenAddress(detail.owner, 4, 2)}`}
+                    : `${shortenAddress(detail.owner)}`}
             </Box>
-            <Flex
-                onClick={handleCopy}
-                sx={{
-                    marginTop: isPc ? "10px" : "2px",
-                    cursor: "pointer",
-                }}
-                align={"center"}
-            >
-                <Text
-                    sx={{
-                        fontSize: "12px",
-                    }}
-                >
-                    {shortenAddress(detail.owner, 4, 4)}
-                </Text>
-                <Image
-                    src={CopyIcon}
-                    sx={{
-                        width: isPc ? "16px" : "12px",
-                        height: isPc ? "16px" : "12px",
-                        marginLeft: "4px",
-                    }}
-                ></Image>
-            </Flex>
         </Flex>
     );
 };
@@ -245,6 +202,7 @@ const LevelLeaderboardModal = ({
     const handleGetList = async () => {
         setLoading(true);
         const tokenIds = levelInfoDetail?.levelTokenIds;
+        console.log(tokenIds, "tokenIdstokenIdstokenIds");
         const tokenIdCounts = {};
         tokenIds.forEach((tokenId: string) => {
             tokenIdCounts[tokenId] = (tokenIdCounts[tokenId] || 0) + 1;
@@ -265,6 +223,7 @@ const LevelLeaderboardModal = ({
 
         const p1: any = [];
 
+        console.log(currentList, "currentList");
         currentList.forEach((item) => {
             p1.push(
                 multiMercuryJarTournamentContract.ownerOf(item.tokenId),

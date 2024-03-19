@@ -120,7 +120,7 @@ const EditNickname = ({
                     >
                         {userName
                             ? userName
-                            : `User-${shortenAddress(address, 4, 4)}`}{" "}
+                            : `${shortenAddress(address, 4, 4)}`}{" "}
                     </Box>
 
                     <Box

@@ -335,12 +335,6 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                         >
                             POOL
                         </motion.div>
-                        <Image
-                            src={HummerIcon}
-                            sx={{
-                                width: isPc ? "100px" : "80px",
-                            }}
-                        ></Image>
                     </Flex>
 
                     <motion.div

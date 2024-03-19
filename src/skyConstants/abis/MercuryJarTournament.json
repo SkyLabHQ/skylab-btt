@@ -439,6 +439,62 @@
         "type": "uint256"
       }
     ],
+    "name": "getNewCommerInfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "claimTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newComerId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "userName_",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "point",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "collectionAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pilotId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct LibPilots.Pilot",
+        "name": "pilot",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "level",
+        "type": "uint256"
+      }
+    ],
     "name": "getTokenIdPerLevel",
     "outputs": [
       {

@@ -29,7 +29,6 @@ import {
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
     useMultiMercuryBTTPrivateLobby,
-    useMultiMercuryBaseContract,
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
@@ -63,7 +62,6 @@ import styled from "@emotion/styled";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
 import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
-import MCurrentPlane from "@/components/TacToeMode/MCurrentPlane";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -472,7 +470,7 @@ const TacToeMode = () => {
                         top: "1.0417vw",
                     }}
                 >
-                    <Back onClick={() => navigate("/home")}></Back>
+                    <Back onClick={() => navigate("/tower")}></Back>
                 </Box>
 
                 <Toolbar></Toolbar>
@@ -539,11 +537,6 @@ const TacToeMode = () => {
                                         handleMintPlayTest("bot");
                                     }}
                                 ></PlayButtonGroup>
-                            )}
-                            {!isPrivateLobbyMode && !isPc && (
-                                <MCurrentPlane
-                                    selectPlane={selectPlane}
-                                ></MCurrentPlane>
                             )}
                         </motion.div>
                     </Box>
