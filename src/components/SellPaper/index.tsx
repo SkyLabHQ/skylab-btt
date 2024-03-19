@@ -888,7 +888,7 @@ const SellPaper = () => {
                             },
                         }}
                     >
-                        <FrontContent></FrontContent>
+                        <FirstContent></FirstContent>
                     </Box>
                     <Box
                         className="front"
@@ -914,11 +914,12 @@ const SellPaper = () => {
                             },
                         }}
                     >
-                        {hoverInit ? (
+                        {/* {hoverInit ? (
                             <BackContent rotateY={rotateY}></BackContent>
                         ) : (
                             <FirstContent></FirstContent>
-                        )}
+                        )} */}
+                        <BackContent rotateY={rotateY}></BackContent>
                     </Box>
                 </Box>
             </Box>

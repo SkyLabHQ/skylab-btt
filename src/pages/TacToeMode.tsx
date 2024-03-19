@@ -62,6 +62,7 @@ import styled from "@emotion/styled";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
 import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -116,6 +117,7 @@ export const GrayButton = (props: BoxProps) => {
 const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(30000, 1000);
+    const { openLoading, closeLoading, isLoading } = useSubmitRequest();
     const {
         isOpen: isMyAviationOpen,
         onOpen: onMyAviationOpen,
@@ -281,23 +283,23 @@ const TacToeMode = () => {
             const tokenId = selectPlane?.tokenId;
             if (loading) return;
 
+            openLoading();
             const defaultSinger = getDefaultWithProvider(tokenId, chainId);
 
-            onMyAviationClose();
             await checkBurnerBalanceAndApprove(
                 mercuryJarTournamentAddress[chainId],
                 tokenId,
                 defaultSinger.account.address,
             );
             setLoading(true);
-            setEnterText("Entering tournament");
-            start(30000);
+
             await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
                 gasLimit: 1000000,
                 signer: defaultSinger,
             });
 
             setTimeout(() => {
+                closeLoading();
                 setLoading(false);
                 const url = `/btt/game?tokenId=${tokenId}`;
                 navigate(url);

@@ -341,7 +341,11 @@ const PlaneItem = ({ detail }: { detail: any }) => {
             >
                 <Box
                     sx={{
-                        width: "100%",
+                        width:
+                            ((detail.points - detail.prePoints) /
+                                (detail.nextPoints - detail.points)) *
+                                100 +
+                            "%",
                         height: "100%",
                         background: "#fff",
                     }}
@@ -517,12 +521,14 @@ const UserInfoDrawer = ({
             });
             const level = levelItem.level;
             const nextPoints = levelItem.maxPoints;
+            const prePoints = levelItem.minPoints;
             return {
                 tokenId: item.toString(),
                 points,
                 level: level,
                 img: aviationImg(level),
                 nextPoints,
+                prePoints,
             };
         });
 
