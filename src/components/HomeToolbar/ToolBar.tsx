@@ -9,7 +9,7 @@ import TipIcon from "./assets/tip-icon.png";
 import WalletIcon from "./assets/wallet-icon.png";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import useSkyToast from "@/hooks/useSkyToast";
 import { shortenAddress } from "@/utils";
 import RulesModal from "./RulesModal";
@@ -131,17 +131,20 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
     } = useDisclosure();
     const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfoRequest();
-    const { ready, authenticated, login, user } = usePrivy();
+    const { wallets } = useWallets();
+    const { ready, authenticated, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
     const { activePilot } = useUserInfoRequest();
 
+    console.log(address, "address");
     const handleLogin = () => {
         if (!ready) {
             toast("Please wait for the wallet to be ready");
             return;
         }
-        if (authenticated) {
-            onUserInfoOpen();
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
             return;
         }
         login();
@@ -167,9 +170,12 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
                             marginRight: "24px",
                         }}
                     ></Image>
-                    <Box onClick={handleLogin}>
+                    <Box>
                         {address ? (
                             <Flex
+                                onClick={() => {
+                                    onUserInfoOpen();
+                                }}
                                 sx={{
                                     position: "relative",
                                     paddingLeft: "20px",
@@ -208,6 +214,7 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
                             </Flex>
                         ) : (
                             <Image
+                                onClick={handleLogin}
                                 src={WalletIcon}
                                 sx={{
                                     width: "60px",

@@ -34,7 +34,6 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { DEAFAULT_CHAINID, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { LiveGame } from "@/components/TacToeMode/LiveGameList";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -134,22 +133,16 @@ const TacToeMode = () => {
     const navigate = useNavigate();
     const { address } = usePrivyAccounts();
     const chainId = useChainId();
-    const [currentPlaneIndex, setCurrentPlaneIndex] = useState(0); // 当前选中的飞机
-    const multiProvider = useMultiProvider(DEAFAULT_CHAINID);
-    const multiMercuryBaseContract = useMultiMercuryBaseContract();
     const [selectPlane, setSelectPlane] = useState<any>({});
 
     const checkBurnerBalanceAndApprove = useCheckBurnerBalanceAndApprove();
-    const [planeList, setPlaneList] = useState<PlaneInfo[]>([]);
     const contract = useSkylabBidTacToeContract();
 
     const toast = useSkyToast();
 
     const [enterText, setEnterText] = useState("");
-    const deafaultMercuryBaseContract = useMercuryBaseContract();
     const mercuryBaseContract = useMercuryBaseContract(true);
     const [loading, setLoading] = useState(false);
-    const ethcallProvider = useMultiProvider(DEAFAULT_CHAINID);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
 
@@ -160,11 +153,7 @@ const TacToeMode = () => {
     const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
         localSinger.privateKey,
     );
-
     const { data: signer } = useWalletClient();
-
-    const [onGoingGames, setOnGoingGames] = useState<any>([]);
-
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
     const burnerRetryContract = useBurnerRetryContract(contract);
     const testflightContract = useTestflightRetryContract();
@@ -271,52 +260,6 @@ const TacToeMode = () => {
 
     const handleCreateOrJoinDefault = async () => {
         onMyAviationOpen();
-        return;
-
-        if (!address) {
-            toast("Connect wallet to enter tournament");
-            return;
-        }
-
-        if (!planeList?.[currentPlaneIndex]?.tokenId) {
-            return;
-        }
-
-        try {
-            if (planeList[currentPlaneIndex].state) {
-                navigate(
-                    `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
-                );
-                return;
-            }
-
-            const tokenId = planeList[currentPlaneIndex].tokenId;
-            if (loading) return;
-            setLoading(true);
-            setEnterText("Entering tournament");
-
-            const defaultSinger = getDefaultWithProvider(tokenId, chainId);
-            await checkBurnerBalanceAndApprove(
-                deafaultMercuryBaseContract.address,
-                tokenId,
-                defaultSinger.account.address,
-            );
-
-            await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
-                gasLimit: 1000000,
-                signer: defaultSinger,
-            });
-
-            setTimeout(() => {
-                setLoading(false);
-                const url = `/btt/game?tokenId=${tokenId}`;
-                navigate(url);
-            }, 1000);
-        } catch (e) {
-            console.log(e);
-            setLoading(false);
-            toast(handleError(e));
-        }
     };
 
     const handleTournament = async () => {
@@ -330,7 +273,6 @@ const TacToeMode = () => {
         }
 
         try {
-            onMyAviationClose();
             // if (planeList[currentPlaneIndex].state) {
             //     navigate(
             //         `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
@@ -343,6 +285,7 @@ const TacToeMode = () => {
 
             const defaultSinger = getDefaultWithProvider(tokenId, chainId);
 
+            onMyAviationClose();
             await checkBurnerBalanceAndApprove(
                 mercuryJarTournamentAddress[chainId],
                 tokenId,
@@ -499,7 +442,6 @@ const TacToeMode = () => {
         handleGetLoobyName();
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
 
-    console.log(selectPlane, "selectPlane");
     return (
         <Box
             sx={{

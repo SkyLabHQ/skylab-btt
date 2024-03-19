@@ -23,13 +23,17 @@ const ConnectWalletBt = () => {
     const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
-    const { ready, login } = usePrivy();
+    const { ready, login, connectWallet, user } = usePrivy();
     const handleLogin = () => {
         if (!ready) {
             toast("Please wait for the wallet to be ready");
             return;
         }
 
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
         login();
     };
     return (
