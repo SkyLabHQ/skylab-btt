@@ -106,7 +106,7 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                 ></MyPilot>
                 <Box
                     sx={{
-                        paddingTop: isPc ? "2.0833vw" : "20px",
+                        paddingTop: isPc ? "2.0833vw" : "10px",
                     }}
                 >
                     <Box
@@ -170,7 +170,7 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                             <Box
                                 sx={{
                                     position: "absolute",
-                                    right: "-2.6042vw",
+                                    right: isPc ? "-2.6042vw" : "-25px",
                                     top: "0",
                                     "&::before": {
                                         content: "''",
@@ -182,8 +182,9 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                         height: "100%",
                                         background:
                                             "linear-gradient(45deg, transparent 47%, rgba(217, 217, 217, 1) 47%, rgba(217, 217, 217, 1) 53%, transparent 53%)",
-                                        backgroundSize:
-                                            "100% 1.5625vw" /* 调整斜线的密度 */,
+                                        backgroundSize: isPc
+                                            ? "100% 1.5625vw"
+                                            : "100% 15px" /* 调整斜线的密度 */,
                                         backgroundRepeat: "no-repeat",
                                     },
                                 }}
@@ -211,9 +212,9 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                         <Box>
                             <Text
                                 sx={{
-                                    fontSize: "0.8333vw",
-                                    width: "26.0417vw",
-                                    margin: "20px 0 30px",
+                                    fontSize: isPc ? "0.8333vw" : "8px",
+                                    width: isPc ? "26.0417vw" : "100%",
+                                    margin: isPc ? "20px 0 30px" : "10px 0 0",
                                     color: "#6CAEAD",
                                 }}
                             >
@@ -224,9 +225,9 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                     display: "flex",
                                     alignItems: "center",
                                     background: "rgba(255, 255, 255, 0.50)",
-                                    borderRadius: "0.5208vw",
-                                    height: "1.7708vw",
-                                    padding: "0 0.4167vw",
+                                    borderRadius: isPc ? "0.5208vw" : "5px",
+                                    height: isPc ? "1.7708vw" : "20px",
+                                    padding: isPc ? "0 0.4167vw" : "0 5px",
                                     justifyContent: "space-between",
                                     marginTop: isPc ? "5px" : "10px",
                                 }}
@@ -239,14 +240,14 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                 <Image
                                     src={PilotIcon}
                                     sx={{
-                                        width: "1.0417vw",
+                                        width: isPc ? "1.0417vw" : "10px",
                                     }}
                                 ></Image>
                                 <Text
                                     sx={{
-                                        fontSize: "0.8333vw",
+                                        fontSize: isPc ? "0.8333vw" : "8px",
                                         color: "#4A4A4A",
-                                        margin: "0 0.5208vw",
+                                        margin: isPc ? "0 0.5208vw" : "0 5px",
                                     }}
                                 >
                                     Set Pilot
@@ -255,13 +256,13 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                     sx={{
                                         borderLeft:
                                             "1px solid rgba(96, 96, 96, 0.30)",
-                                        padding: "0 10px",
+                                        padding: isPc ? "0 10px" : "0 5px",
                                     }}
                                 >
                                     <Image
                                         src={RightArrowBlack}
                                         sx={{
-                                            width: "0.8333vw",
+                                            width: isPc ? "0.8333vw" : "   8px",
                                         }}
                                     ></Image>
                                 </Box>
@@ -617,7 +618,7 @@ const SettlementPage = ({}) => {
             >
                 <Box
                     onClick={() =>
-                        navigate("/home?step=2", {
+                        navigate("/", {
                             replace: true,
                         })
                     }
