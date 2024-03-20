@@ -51,18 +51,21 @@ const MyPlane = ({
                     flex: 1,
                 }}
             >
-                {!isPc && (
-                    <Text
-                        sx={{
-                            fontSize: "20px",
-                            textAlign: "center",
-                            marginTop: "20px",
-                        }}
-                    >
-                        Select Planes
-                    </Text>
-                )}
-                <Box>
+                <Text
+                    sx={{
+                        fontSize: "20px",
+                        textAlign: "center",
+                        marginTop: isPc ? "0" : "20px",
+                    }}
+                >
+                    Select Planes
+                </Text>
+
+                <Box
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
                     {planeList.length > 0 ? (
                         <SimpleGrid
                             columns={isPc ? 2 : 3}
@@ -130,6 +133,7 @@ const PlaneItem = ({
     detail: any;
     onSelectPlane: () => void;
 }) => {
+    console.log(detail, "detail");
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
@@ -156,8 +160,30 @@ const PlaneItem = ({
                     }) no-repeat`,
                     backgroundSize: "100% 100%",
                     position: "relative",
+                    marginTop: isPc ? "6px" : "3px",
                 }}
             >
+                {detail.state && (
+                    <Box
+                        sx={{
+                            width: isPc ? "80px" : "60px",
+                            height: isPc ? "20px" : "16px",
+                            borderRadius: isPc ? "100px" : "6px",
+                            border: "1px solid #000",
+                            color: "#F2D861",
+                            textAlign: "center",
+                            fontFamily: "Quantico",
+                            fontSize: isPc ? "14px" : "10px",
+                            background: "#000",
+                            position: "absolute",
+                            top: "0px",
+                            left: "50%",
+                            transform: "translate(-50%, 0)",
+                        }}
+                    >
+                        In-Game
+                    </Box>
+                )}
                 <Image
                     src={detail.img}
                     sx={{
@@ -270,14 +296,21 @@ const AvaitionDrawer = ({
 
         const tokenIds = await multiProvider.all(p);
 
+        const p2: any = [];
+        tokenIds.forEach((item) => {
+            p2.push(multiMercuryJarTournamentContract.aviationPoints(item));
+            p2.push(multiMercuryJarTournamentContract.isAviationLocked(item));
+        });
+
         const levelP = tokenIds.map((item) => {
             return multiMercuryJarTournamentContract.aviationPoints(item);
         });
 
-        const levels = await multiProvider.all(levelP);
+        const levels = await multiProvider.all(p2);
 
         const planeList = tokenIds.map((item, index) => {
-            const points = Number(levels[index].toString());
+            const points = Number(levels[index * 2].toString());
+            const state = levels[index * 2 + 1];
             const levelItem = levelRanges.find((item) => {
                 return points < item.maxPoints && points >= item.minPoints;
             });
@@ -291,6 +324,7 @@ const AvaitionDrawer = ({
                 img: aviationImg(level),
                 nextPoints,
                 prePoints,
+                state,
             };
         });
 
@@ -310,7 +344,11 @@ const AvaitionDrawer = ({
     }, [isOpen, multiMercuryJarTournamentContract, multiProvider]);
 
     return (
-        <Drawer placement={"right"} onClose={onClose} isOpen={isOpen}>
+        <Drawer
+            placement={isPc ? "right" : "bottom"}
+            onClose={onClose}
+            isOpen={isOpen}
+        >
             <DrawerOverlay />
             <DrawerContent
                 sx={{
@@ -320,12 +358,14 @@ const AvaitionDrawer = ({
                     backdropFilter: "blur(25px)",
                     position: "relative",
                     maxWidth: isPc ? "375px" : "800px",
+                    height: "100%",
                 }}
             >
                 <DrawerBody
                     sx={{
                         padding: isPc ? "30px" : "14px",
                         width: "100% !important",
+                        height: "100%",
                     }}
                 >
                     {isPc ? (

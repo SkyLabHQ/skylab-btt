@@ -58,20 +58,11 @@ const UserInfo = ({
     const { address } = usePrivyAccounts();
     const toast = useSkyToast();
     const { onCopy } = useClipboard(address);
-    const { activePilot, pilotIsInit } = useUserInfoRequest();
+    const { activePilot } = useUserInfoRequest();
 
     return (
         <Flex flexDir={"column"} align={"center"}>
-            {" "}
-            {pilotIsInit ? (
-                <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
-            ) : (
-                <SkeletonCircle
-                    startColor="#FDDC2D"
-                    endColor="#fff"
-                    size="80px"
-                />
-            )}
+            <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
             {userNameInit ? (
                 <Flex
                     sx={{
@@ -127,15 +118,37 @@ const UserInfo = ({
                     </Flex>
                 </Flex>
             ) : (
-                <Skeleton
-                    startColor="#FDDC2D"
-                    endColor="#fff"
-                    height="20px"
-                    width={"140px"}
+                <Box
                     sx={{
                         marginTop: "8px",
                     }}
-                />
+                >
+                    <Flex align={"center"}>
+                        <SkeletonCircle
+                            size="5"
+                            startColor="#FDDC2D"
+                            endColor="#fff"
+                            sx={{
+                                marginRight: "10px",
+                            }}
+                        />
+                        <Skeleton
+                            startColor="#FDDC2D"
+                            endColor="#fff"
+                            height="10px"
+                            width={"100px"}
+                        />
+                    </Flex>
+                    <Skeleton
+                        startColor="#FDDC2D"
+                        endColor="#fff"
+                        height="10px"
+                        width={"100%"}
+                        sx={{
+                            marginTop: "8px",
+                        }}
+                    />
+                </Box>
             )}
         </Flex>
     );
@@ -439,18 +452,44 @@ const MyPlane = ({
                         )}
                     </Box>
                 ) : (
-                    <SimpleGrid columns={3} spacingY={"20px"} spacingX={"20px"}>
-                        {[1, 2, 3, 4, 5, 6].map((_, index) => {
-                            return (
-                                <Skeleton
-                                    key={index}
-                                    startColor="#FDDC2D"
-                                    endColor="#fff"
-                                    height="80px"
-                                />
-                            );
-                        })}
-                    </SimpleGrid>
+                    <Box>
+                        <Flex align={"center"}>
+                            <SkeletonCircle
+                                size="5"
+                                startColor="#FDDC2D"
+                                endColor="#fff"
+                                sx={{
+                                    marginRight: "10px",
+                                }}
+                            />
+                            <Skeleton
+                                startColor="#FDDC2D"
+                                endColor="#fff"
+                                height="10px"
+                                sx={{
+                                    flex: 1,
+                                }}
+                            />
+                        </Flex>
+                        <Skeleton
+                            startColor="#FDDC2D"
+                            endColor="#fff"
+                            height="10px"
+                            width={"100%"}
+                            sx={{
+                                marginTop: "8px",
+                            }}
+                        />
+                        <Skeleton
+                            startColor="#FDDC2D"
+                            endColor="#fff"
+                            height="10px"
+                            width={"100%"}
+                            sx={{
+                                marginTop: "12px",
+                            }}
+                        />
+                    </Box>
                 )}
             </Box>
         </Box>

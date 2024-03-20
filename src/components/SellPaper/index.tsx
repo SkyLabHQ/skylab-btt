@@ -204,8 +204,7 @@ const FirstContent = () => {
                 <Image
                     src={CHummer}
                     sx={{
-                        width: "450px",
-                        maxWidth: "200%",
+                        maxWidth: "100%",
                         marginBottom: "-100px",
                     }}
                 ></Image>
@@ -914,11 +913,6 @@ const SellPaper = () => {
                             },
                         }}
                     >
-                        {/* {hoverInit ? (
-                            <BackContent rotateY={rotateY}></BackContent>
-                        ) : (
-                            <FirstContent></FirstContent>
-                        )} */}
                         <BackContent rotateY={rotateY}></BackContent>
                     </Box>
                 </Box>

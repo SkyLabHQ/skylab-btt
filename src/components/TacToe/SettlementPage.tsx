@@ -76,6 +76,7 @@ function generateProgressLevels(startPoints: number, endPoints: number) {
 
 const PilotInfo = ({ mileage }: { mileage: number }) => {
     const { myActivePilot } = useGameContext();
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { address } = usePrivyAccounts();
     const navigate = useNavigate();
 
@@ -84,7 +85,7 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
     return (
         <Box
             sx={{
-                marginTop: "1.0417vw",
+                marginTop: isPc ? "1.0417vw" : "10px",
             }}
         >
             <Box
@@ -96,14 +97,16 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                     img={pilotImg}
                     showSupport={myActivePilot.owner !== address}
                     sx={{
-                        width: "5.7292vw !important",
-                        height: "5.7292vw !important",
-                        marginRight: "1.0417vw",
+                        width: isPc ? "5.7292vw !important" : "50px !important",
+                        height: isPc
+                            ? "5.7292vw !important"
+                            : "50px !important",
+                        marginRight: isPc ? "1.0417vw" : "10px",
                     }}
                 ></MyPilot>
                 <Box
                     sx={{
-                        paddingTop: "2.0833vw",
+                        paddingTop: isPc ? "2.0833vw" : "20px",
                     }}
                 >
                     <Box
@@ -115,26 +118,26 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                             sx={{
                                 position: "relative",
                                 width: "fit-content",
-                                paddingLeft: "0.5208vw",
+                                paddingLeft: isPc ? "0.5208vw" : "5px",
                             }}
                         >
                             <Box
                                 sx={{
-                                    width: "6.875vw",
-                                    height: "1.5625vw",
-                                    borderRadius: "1.3542vw",
+                                    width: isPc ? "6.875vw" : "60px",
+                                    height: isPc ? "1.5625vw" : "15px",
+                                    borderRadius: isPc ? "1.3542vw" : "10px",
                                     background: "rgba(188, 187, 190, 0.50)",
                                     color: "#FFF",
                                     textAlign: "center",
-                                    fontSize: "1.6667vw",
-                                    lineHeight: "1.5625vw",
+                                    fontSize: isPc ? "1.6667vw" : "15px",
+                                    lineHeight: isPc ? "1.5625vw" : "15px",
                                 }}
                             >
                                 <Image
                                     src={MileageIcon}
                                     sx={{
-                                        width: "2.5vw",
-                                        height: "2.5vw",
+                                        width: isPc ? "2.5vw" : "25px",
+                                        height: isPc ? "2.5vw" : "25px",
                                         position: "absolute",
                                         left: "0",
                                         top: "50%",
@@ -146,9 +149,11 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                         sx={{
                                             position: "absolute",
                                             left: 0,
-                                            bottom: "-1.5625vw",
+                                            bottom: isPc
+                                                ? "-1.5625vw"
+                                                : "-15px",
                                             color: "#FDDC2D",
-                                            fontSize: "0.7292vw",
+                                            fontSize: isPc ? "0.7292vw" : "8px",
                                         }}
                                     >
                                         Mileage
@@ -156,7 +161,7 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                 )}
                                 <Text
                                     sx={{
-                                        paddingLeft: "1.5625vw",
+                                        paddingLeft: isPc ? "1.5625vw" : "15px",
                                     }}
                                 >
                                     {myActivePilot.xp}
@@ -191,10 +196,10 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                         textShadow:
                                             "0vw 0.2083vw 0.2083vw rgba(0, 0, 0, 0.25)",
                                         fontFamily: "Orbitron",
-                                        fontSize: "1.6667vw",
+                                        fontSize: isPc ? "1.6667vw" : "15px",
                                         fontWeight: 700,
-                                        marginLeft: "0.5208vw",
-                                        lineHeight: "1.5625vw",
+                                        marginLeft: isPc ? "0.5208vw" : "5px",
+                                        lineHeight: isPc ? "1.5625vw" : "15px",
                                     }}
                                 >
                                     +{mileage}
@@ -223,7 +228,7 @@ const PilotInfo = ({ mileage }: { mileage: number }) => {
                                     height: "1.7708vw",
                                     padding: "0 0.4167vw",
                                     justifyContent: "space-between",
-                                    marginTop: "5px",
+                                    marginTop: isPc ? "5px" : "10px",
                                 }}
                                 onClick={() => {
                                     navigate("/home?step=currentPilot", {
@@ -712,7 +717,7 @@ const SettlementPage = ({}) => {
                                 alignItems: "center",
                                 justifyContent: "center",
                                 fontWeight: "bold",
-                                margin: "1vh auto 0",
+                                margin: isPc ? "1vh auto 0" : "20px auto 0",
                             }}
                             onClick={() => {
                                 navigate("/");

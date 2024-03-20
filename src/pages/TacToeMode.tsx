@@ -281,7 +281,6 @@ const TacToeMode = () => {
             // }
 
             const tokenId = selectPlane?.tokenId;
-            if (loading) return;
 
             openLoading();
             const defaultSinger = getDefaultWithProvider(tokenId, chainId);
@@ -291,7 +290,6 @@ const TacToeMode = () => {
                 tokenId,
                 defaultSinger.account.address,
             );
-            setLoading(true);
 
             await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
                 gasLimit: 1000000,
@@ -300,13 +298,12 @@ const TacToeMode = () => {
 
             setTimeout(() => {
                 closeLoading();
-                setLoading(false);
                 const url = `/btt/game?tokenId=${tokenId}`;
                 navigate(url);
             }, 1000);
         } catch (e) {
+            closeLoading();
             console.log(e);
-            setLoading(false);
             toast(handleError(e));
         }
     };

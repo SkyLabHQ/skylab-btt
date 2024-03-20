@@ -28,6 +28,7 @@ const SkyToast = ({
                 WebkitBoxOrient: "vertical",
                 breakword: "break-all",
                 position: "relative",
+                zIndex: 10001,
             }}
         >
             {message}

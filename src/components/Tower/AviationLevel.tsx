@@ -811,7 +811,7 @@ const AviationLevel = () => {
                                                 <Box
                                                     sx={{
                                                         position: "absolute",
-                                                        bottom: "-54px",
+                                                        bottom: "-24px",
                                                         width: "100%",
                                                         textAlign: "center",
                                                         fontFamily: "Quantico",
