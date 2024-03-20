@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import React from "react";
 import HummerIcon from "./assets/m-hummer.png";
 import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
+import { useCountUp } from "react-countup";
 
 const animationObj = {
     color: [
@@ -18,6 +19,12 @@ const animationObj = {
 };
 
 const MPotInfo = () => {
+    const countUpRef = React.useRef(null);
+    const { update } = useCountUp({
+        ref: countUpRef,
+        end: 99,
+        duration: 1,
+    });
     return (
         <Box
             sx={{
@@ -69,13 +76,12 @@ const MPotInfo = () => {
             >
                 <Flex align={"center"} justify={"center"}>
                     <Text
+                        ref={countUpRef}
                         sx={{
                             fontSize: "40px",
                             fontFamily: "neon",
                         }}
-                    >
-                        9.09
-                    </Text>
+                    ></Text>
                     <ETHIcon
                         fill="currentColor"
                         style={{
@@ -90,6 +96,12 @@ const MPotInfo = () => {
 };
 
 const PotInfo = () => {
+    const countUpRef = React.useRef(null);
+    const { update } = useCountUp({
+        ref: countUpRef,
+        end: 99,
+        duration: 1,
+    });
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return isPc ? (
         <Box
@@ -159,14 +171,13 @@ const PotInfo = () => {
             >
                 <Flex align={"center"} justify={"center"}>
                     <Text
+                        ref={countUpRef}
                         sx={{
                             fontSize: "100px",
                             lineHeight: 1,
                             fontFamily: "neon",
                         }}
-                    >
-                        9.09
-                    </Text>
+                    ></Text>
                     <ETHIcon
                         fill="currentColor"
                         style={{

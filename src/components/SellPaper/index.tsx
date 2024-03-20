@@ -27,6 +27,7 @@ import Numbermp3 from "@/components/Presale/assets/number.mp3";
 import EnterArena from "./EnterArena";
 import ToolBar from "@/components/HomeToolbar/ToolBar";
 import BuyPaper from "./BuyPaper";
+import { useCountUp } from "react-countup";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -216,7 +217,12 @@ const FirstContent = () => {
 const BackContent = ({ rotateY }: { rotateY?: number }) => {
     const [audio1] = useState(new Audio(Numbermp3));
     const [isPc] = useMediaQuery("(min-width: 800px)");
-
+    const countUpRef = React.useRef(null);
+    const { update } = useCountUp({
+        ref: countUpRef,
+        end: 99,
+        duration: 1,
+    });
     const [init, setInit] = useState(false);
 
     const [timeLeft, { start }] = useCountDown(5000000, 1000);
@@ -363,14 +369,13 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                     >
                         <Flex align={"center"} justify={"center"}>
                             <Text
+                                ref={countUpRef}
                                 sx={{
                                     fontSize: isPc ? "120px" : "60px",
                                     lineHeight: 1,
                                     fontFamily: "neon",
                                 }}
-                            >
-                                99
-                            </Text>
+                            ></Text>
                             <ETHIcon
                                 fill="currentColor"
                                 style={{

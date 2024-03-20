@@ -164,7 +164,6 @@ const PlaneItem = ({
     detail: any;
     onSelectPlane: () => void;
 }) => {
-    console.log(detail, "detail");
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
