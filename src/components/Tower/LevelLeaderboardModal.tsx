@@ -17,7 +17,6 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import AvatarBg from "./assets/avatar-bg.png";
 import DefaultAvatar from "./assets/default-avatar.png";
-import CopyIcon from "@/assets/copy-icon.svg";
 import { aviationImg } from "@/utils/aviationImg";
 import LevelDetailBg from "./assets/level-detail.png";
 import Winner from "./assets/winner.png";
@@ -59,7 +58,7 @@ const NewComer = ({ detail }: { detail: any }) => {
                 <Image
                     src={detail?.pilotImg ? detail.pilotImg : DefaultAvatar}
                     sx={{
-                        width: "50px",
+                        width: "40%",
                         borderRadius: "50%",
                     }}
                 ></Image>
@@ -201,40 +200,19 @@ const LevelLeaderboardModal = ({
 
     const handleGetList = async () => {
         setLoading(true);
-        const tokenIds = levelInfoDetail?.levelTokenIds;
-        console.log(tokenIds, "tokenIdstokenIdstokenIds");
-        const tokenIdCounts = {};
-        tokenIds.forEach((tokenId: string) => {
-            tokenIdCounts[tokenId] = (tokenIdCounts[tokenId] || 0) + 1;
-        });
-
-        let currentList = Object.entries(tokenIdCounts).map(
-            ([tokenId, count]) => {
-                return {
-                    tokenId,
-                    count,
-                    owner: "",
-                    points: "0",
-                    userName: "",
-                    pilotImg: "",
-                };
-            },
-        );
-
+        const tokenIds: string[] = levelInfoDetail?.levelTokenIds;
         const p1: any = [];
-
-        console.log(currentList, "currentList");
-        currentList.forEach((item) => {
+        tokenIds.forEach((item: string) => {
             p1.push(
-                multiMercuryJarTournamentContract.ownerOf(item.tokenId),
-                multiMercuryJarTournamentContract.aviationPoints(item.tokenId),
+                multiMercuryJarTournamentContract.ownerOf(item),
+                multiMercuryJarTournamentContract.aviationPoints(item),
             );
         });
 
         const p1R = await multiProvider.all(p1);
-        currentList = currentList.map((item, index) => {
+        let currentList = tokenIds.map((tokenId, index) => {
             return {
-                ...item,
+                tokenId: tokenId.toString(),
                 owner: p1R[index * 2],
                 points: p1R[index * 2 + 1].toString(),
             };
@@ -255,10 +233,14 @@ const LevelLeaderboardModal = ({
 
         const allWallet: string[] = [];
 
-        currentList.forEach((item, index) => {
-            item.userName = p2R[index * 2];
+        currentList = currentList.map((item, index) => {
             allWallet.push(item.owner);
             activePilotRes.push(p2R[index * 2 + 1]);
+            return {
+                ...item,
+                userName: p2R[index * 2],
+                pilotImg: "",
+            };
         });
 
         const allPilot: ActivePilotRes[] = activePilotRes.map((item: any) => {
@@ -273,15 +255,30 @@ const LevelLeaderboardModal = ({
             allPilot,
         });
 
-        currentList.forEach((item, index) => {
-            item.pilotImg = pilotList[index].pilotImg;
+        currentList = currentList.map((item, index) => {
+            return {
+                ...item,
+                pilotImg: pilotList[index].pilotImg,
+            };
         });
 
         currentList = currentList.filter((item) => {
             return item.owner !== levelInfoDetail?.owner;
         });
 
-        setLeaderBoardList(currentList);
+        const newArray = Object.values(
+            currentList.reduce((acc, curr) => {
+                const { owner, ...rest } = curr;
+                if (acc[owner]) {
+                    acc[owner].count += 1;
+                } else {
+                    acc[owner] = { owner, count: 1, ...rest };
+                }
+                return acc;
+            }, {}),
+        );
+
+        setLeaderBoardList(newArray);
     };
 
     useEffect(() => {
@@ -354,7 +351,10 @@ const LevelLeaderboardModal = ({
                             fontSize: isPc ? "20px" : "12px",
                         }}
                     >
-                        Total {levelInfoDetail?.levelTokenIds?.length}
+                        Total{" "}
+                        {levelInfoDetail?.tokenId !== "0"
+                            ? leaderBoardList.length + 1
+                            : 0}
                     </Text>
                     <Text
                         sx={{
@@ -420,18 +420,14 @@ const LevelLeaderboardModal = ({
                             }}
                             spacingY={"10px"}
                         >
-                            {leaderBoardList
-                                .concat(leaderBoardList)
-                                .concat(leaderBoardList)
-                                .concat(leaderBoardList)
-                                .map((item, index) => {
-                                    return (
-                                        <InfoItem
-                                            detail={item}
-                                            key={index}
-                                        ></InfoItem>
-                                    );
-                                })}
+                            {leaderBoardList.map((item, index) => {
+                                return (
+                                    <InfoItem
+                                        detail={item}
+                                        key={index}
+                                    ></InfoItem>
+                                );
+                            })}
                         </SimpleGrid>
                     </Box>
                 </ModalBody>

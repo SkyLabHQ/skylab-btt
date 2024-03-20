@@ -388,7 +388,7 @@ export const handlePilotsInfo1 = async ({
 
     const list = pilots.map((item, index) => {
         let imgUrl = "";
-
+        let owner = "";
         if (!item.pilotChainId) {
             return {
                 address: item.collectionAddress,
@@ -410,6 +410,7 @@ export const handlePilotsInfo1 = async ({
         } else {
             imgUrl = allResult[resIndex][allIndex[currentChainId]++];
         }
+        owner = allResult[resIndex][allIndex[currentChainId]++];
 
         const imgPromise = item.isSpecialPilot
             ? imgUrl
