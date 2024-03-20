@@ -46,6 +46,7 @@ import PlaneBg from "./assets/plane-bg.png";
 import SetPilotIcon from "./assets/setPilot.png";
 import SetNameIcon from "./assets/setName.png";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
+import Loading from "../Loading";
 
 const UserInfo = ({
     userName,
@@ -452,44 +453,29 @@ const MyPlane = ({
                         )}
                     </Box>
                 ) : (
-                    <Box>
-                        <Flex align={"center"}>
-                            <SkeletonCircle
-                                size="5"
-                                startColor="#FDDC2D"
-                                endColor="#fff"
-                                sx={{
-                                    marginRight: "10px",
-                                }}
-                            />
-                            <Skeleton
-                                startColor="#FDDC2D"
-                                endColor="#fff"
-                                height="10px"
-                                sx={{
-                                    flex: 1,
-                                }}
-                            />
-                        </Flex>
-                        <Skeleton
-                            startColor="#FDDC2D"
-                            endColor="#fff"
-                            height="10px"
-                            width={"100%"}
+                    <SimpleGrid columns={3} spacingY={"10px"}>
+                        <Box
                             sx={{
-                                marginTop: "8px",
+                                position: "relative",
                             }}
-                        />
-                        <Skeleton
-                            startColor="#FDDC2D"
-                            endColor="#fff"
-                            height="10px"
-                            width={"100%"}
+                        >
+                            <Loading size={60}></Loading>
+                        </Box>
+                        <Box
                             sx={{
-                                marginTop: "12px",
+                                position: "relative",
                             }}
-                        />
-                    </Box>
+                        >
+                            <Loading size={60}></Loading>
+                        </Box>
+                        <Box
+                            sx={{
+                                position: "relative",
+                            }}
+                        >
+                            <Loading size={60}></Loading>
+                        </Box>
+                    </SimpleGrid>
                 )}
             </Box>
         </Box>

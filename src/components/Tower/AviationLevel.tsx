@@ -797,7 +797,7 @@ const AviationLevel = () => {
                                             width: "80%",
                                         }}
                                     ></Image>
-                                    {/* {levelInfo[index].levelTokenIds.length ===
+                                    {levelInfo[index].levelTokenIds.length ===
                                         0 && (
                                         <Flex
                                             sx={{
@@ -823,7 +823,7 @@ const AviationLevel = () => {
                                                 }}
                                             ></Image>
                                         </Flex>
-                                    )} */}
+                                    )}
 
                                     <Text
                                         sx={{

@@ -1,28 +1,6 @@
-import {
-    Box,
-    Flex,
-    Image,
-    Text,
-    useMediaQuery,
-    useTimeout,
-} from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
-import SYellowIcon from "./assets/s-yellow.png";
-import SGreenIcon from "./assets/s-green.png";
-import RYellowIcon from "./assets/x-yellow-r.png";
-import LYellowIcon from "./assets/x-yellow-l.png";
-import AmountBg from "./assets/amount-bg.png";
+import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
+import React, { useEffect, useMemo } from "react";
 import HourglassIcon from "./assets/hourglass.png";
-
-import LevelBg from "./assets/level-bg.png";
-import { aviationImg } from "@/utils/aviationImg";
-import {
-    useMultiMercuryJarTournamentContract,
-    useMultiProvider,
-} from "@/hooks/useMultiContract";
-import { useChainId } from "wagmi";
-import NewComerBg from "./assets/newcomer-bg.png";
-import { ZERO_DATA } from "@/skyConstants";
 import useCountDown from "react-countdown-hook";
 
 const Timer = ({ time }: { time: number }) => {
@@ -69,7 +47,7 @@ const Timer = ({ time }: { time: number }) => {
                 border: "1px solid #f2d861",
                 margin: "28px auto 0",
                 borderRadius: "16px",
-                background: "rgba(0, 0, 0, 0.30)",
+                background: "rgba(0, 0, 0, 0.80)",
             }}
             align={"center"}
         >
