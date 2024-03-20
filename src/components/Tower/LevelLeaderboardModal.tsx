@@ -114,7 +114,7 @@ const InfoItem = ({ detail }: { detail: any }) => {
                 <Image
                     src={detail.pilotImg ? detail.pilotImg : DefaultAvatar}
                     sx={{
-                        width: "50%",
+                        width: detail.pilotImg ? "85%" : "50%",
                         borderRadius: "50%",
                     }}
                 ></Image>

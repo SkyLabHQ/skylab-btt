@@ -18,12 +18,10 @@ import LevelBg from "./assets/level-bg.png";
 import { aviationImg } from "@/utils/aviationImg";
 import {
     useMultiMercuryJarTournamentContract,
-    useMultiMercuryPilotsContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
 import { useChainId } from "wagmi";
 import NewComerBg from "./assets/newcomer-bg.png";
-import { ZERO_DATA } from "@/skyConstants";
 import Timer from "./Timer";
 import { shortenAddress } from "@/utils";
 import LevelLeaderboardModal from "./LevelLeaderboardModal";
@@ -570,8 +568,6 @@ const AviationLevel = () => {
 
     const [currentIndex, setCurrentIndex] = useState(1);
     const chainId = useChainId();
-
-    const multiMercuryPilotsContract = useMultiMercuryPilotsContract(chainId);
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
     const multiProvider = useMultiProvider(chainId);
@@ -581,77 +577,36 @@ const AviationLevel = () => {
     const handleLevelInfo = async () => {
         const p = [];
 
-        // const pp = [];
-
-        // for (let i = 1; i <= 16; i++) {
-        //     pp.push(multiMercuryJarTournamentContract.getNewCommerInfo(i));
-        // }
-        // console.time("aaa");
-
-        // const resrrr = await multiProvider.all(pp);
-        // console.log(resrrr, "resrrr");
-        // console.timeEnd("aaa");
-
-        console.time("a");
         for (let i = 1; i <= 16; i++) {
             p.push(multiMercuryJarTournamentContract.getTokenIdPerLevel(i));
-            p.push(multiMercuryJarTournamentContract.levelToNewComerId(i));
-            p.push(multiMercuryJarTournamentContract.levelToClaimTime(i));
+            p.push(multiMercuryJarTournamentContract.getNewCommerInfo(i));
         }
         p.push(multiMercuryJarTournamentContract.paperTotalAmount());
         const res = await multiProvider.all(p);
-        console.log(res, "dnwkldnklwndekl");
-        console.timeEnd("a");
         const paperTotalAmount = res.pop();
         setTotalPaper(paperTotalAmount.toString());
         const levelTokenInfo = [];
-        for (let i = 0; i < 16; i++) {
-            levelTokenInfo.push({
-                levelTokenIds: res[i * 3], // 该等级的名称列表
-                tokenId: res[i * 3 + 1].toString(), //new comer 的 tokenId
-                claimTime: res[i * 3 + 2].toNumber(), //new comer 的 截止时间
-            });
-        }
-
-        // 获取tokenId的owner
-        const p1 = [];
-        for (let i = 0; i < levelTokenInfo.length; i++) {
-            if (levelTokenInfo[i].tokenId === "0") continue;
-            const tokenId = levelTokenInfo[i].tokenId;
-            p1.push(multiMercuryJarTournamentContract.ownerOf(tokenId));
-            p1.push(multiMercuryJarTournamentContract.aviationPoints(tokenId));
-        }
-
-        console.time("b");
-        const p1R = await multiProvider.all(p1);
-        console.timeEnd("b");
-        const p2 = [];
-
-        for (let i = 0; i < p1.length / 2; i++) {
-            p2.push(
-                multiMercuryJarTournamentContract.userName(p1R[i * 2]),
-                multiMercuryPilotsContract.getActivePilot(p1R[i * 2]),
-            );
-        }
-
-        console.time("c");
-        const p2R = await multiProvider.all(p2);
-        console.timeEnd("c");
         const allPilot: ActivePilotRes[] = [];
-        for (let i = 0; i < p1.length / 2; i++) {
-            const item = p2R[i * 2 + 1];
+        for (let i = 0; i < 16; i++) {
+            const newComerInfo = res[i * 2 + 1];
             allPilot.push({
-                ...item,
-                pilotId: item.pilotId.toNumber(),
+                collectionAddress: newComerInfo.pilot.collectionAddress,
+                pilotId: newComerInfo.pilot.pilotId.toString(),
+            });
+            levelTokenInfo.push({
+                levelTokenIds: res[i * 2], // 该等级的名称列表
+                tokenId: newComerInfo.newComerId.toString(), // newComerInfo.tokenId.toString(),
+                claimTime: newComerInfo.claimTime.toNumber(),
+                owner: newComerInfo.owner,
+                point: newComerInfo.point.toString(),
+                userName: newComerInfo.userName,
             });
         }
 
-        console.time("d");
         const pilotList = await handlePilotsInfo1({
             chainId: chainId,
             allPilot,
         });
-        console.timeEnd("d");
 
         let jIndex = -1;
         const list = levelTokenInfo.map((item, index) => {
@@ -668,13 +623,11 @@ const AviationLevel = () => {
             return {
                 ...item,
                 level: index + 1,
-                owner: item.tokenId === "0" ? ZERO_DATA : p1R[jIndex * 2], //new comer 的 owner
-                userName: item.tokenId === "0" ? p2R[jIndex] : "", //new comer 的 名称
                 pilotImg:
                     item.tokenId === "0" ? "" : pilotList[jIndex].pilotImg,
-                points: p1R[jIndex * 2 + 1].toString(),
             };
         });
+        console.log(list, "listlist");
         setLevelInfo(list.reverse());
     };
 
@@ -844,7 +797,7 @@ const AviationLevel = () => {
                                             width: "80%",
                                         }}
                                     ></Image>
-                                    {levelInfo[index].levelTokenIds.length ===
+                                    {/* {levelInfo[index].levelTokenIds.length ===
                                         0 && (
                                         <Flex
                                             sx={{
@@ -864,11 +817,13 @@ const AviationLevel = () => {
                                             <Image
                                                 src={LockIcon}
                                                 sx={{
-                                                    width: "34px",
+                                                    width: isPc
+                                                        ? "34px"
+                                                        : "24px",
                                                 }}
                                             ></Image>
                                         </Flex>
-                                    )}
+                                    )} */}
 
                                     <Text
                                         sx={{
