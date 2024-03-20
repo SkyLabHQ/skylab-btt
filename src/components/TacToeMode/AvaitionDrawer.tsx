@@ -26,13 +26,16 @@ import PlaneBgSelect from "./assets/plane-bg-select.png";
 import NoPlane from "@/assets/no-plane.png";
 import { aviationImg } from "@/utils/aviationImg";
 import { levelRanges } from "@/utils/level";
+import Loading from "../Loading";
 
 const MyPlane = ({
+    init,
     selectPlane,
     planeList,
     onPlay,
     onSelectPlane,
 }: {
+    init: boolean;
     selectPlane: any;
     planeList: any[];
     onPlay: () => void;
@@ -66,36 +69,64 @@ const MyPlane = ({
                         marginTop: "20px",
                     }}
                 >
-                    {planeList.length > 0 ? (
+                    {init ? (
+                        planeList.length > 0 ? (
+                            <SimpleGrid
+                                columns={isPc ? 2 : 3}
+                                spacingY={isPc ? "40px" : "30px"}
+                            >
+                                {planeList.map((item, index) => {
+                                    return (
+                                        <PlaneItem
+                                            isSelected={
+                                                selectPlane?.tokenId ===
+                                                item.tokenId
+                                            }
+                                            detail={item}
+                                            key={index}
+                                            onSelectPlane={() => {
+                                                onSelectPlane(item);
+                                            }}
+                                        ></PlaneItem>
+                                    );
+                                })}
+                            </SimpleGrid>
+                        ) : (
+                            <Flex flexDir={"column"} align={"center"}>
+                                <Image
+                                    src={NoPlane}
+                                    sx={{
+                                        width: "140px",
+                                    }}
+                                ></Image>
+                            </Flex>
+                        )
+                    ) : (
                         <SimpleGrid
                             columns={isPc ? 2 : 3}
+                            sx={{
+                                position: "relative",
+                            }}
                             spacingY={isPc ? "40px" : "30px"}
                         >
-                            {planeList.map((item, index) => {
-                                return (
-                                    <PlaneItem
-                                        isSelected={
-                                            selectPlane?.tokenId ===
-                                            item.tokenId
-                                        }
-                                        detail={item}
-                                        key={index}
-                                        onSelectPlane={() => {
-                                            onSelectPlane(item);
-                                        }}
-                                    ></PlaneItem>
-                                );
-                            })}
+                            {new Array(isPc ? 2 : 3)
+                                .fill(0)
+                                .map((item, index) => {
+                                    return (
+                                        <Box
+                                            sx={{
+                                                position: "relative",
+                                                width: "100%",
+                                                height: isPc ? "100px" : "60px",
+                                            }}
+                                        >
+                                            <Loading
+                                                size={isPc ? 100 : 50}
+                                            ></Loading>
+                                        </Box>
+                                    );
+                                })}
                         </SimpleGrid>
-                    ) : (
-                        <Flex flexDir={"column"} align={"center"}>
-                            <Image
-                                src={NoPlane}
-                                sx={{
-                                    width: "140px",
-                                }}
-                            ></Image>
-                        </Flex>
                     )}
                 </Box>
             </Box>
@@ -275,6 +306,7 @@ const AvaitionDrawer = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const chainId = useChainId();
     const { address } = usePrivyAccounts();
+    const [planeListInit, setPlaneListInit] = useState(false);
     const multiProvider = useMultiProvider(chainId);
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
@@ -328,6 +360,7 @@ const AvaitionDrawer = ({
             };
         });
 
+        setPlaneListInit(true);
         setPlaneList(planeList);
     };
 
@@ -396,6 +429,7 @@ const AvaitionDrawer = ({
                     )}
 
                     <MyPlane
+                        init={planeListInit}
                         planeList={planeList}
                         selectPlane={selectPlane}
                         onPlay={onPlay}
