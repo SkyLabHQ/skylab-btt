@@ -80,6 +80,7 @@ const BuyBt = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
+            id="bt1"
             onClick={onBuy}
             align={"center"}
             justify={"center"}
@@ -179,7 +180,7 @@ const BuyPaper = () => {
     const publicClient = usePublicClient();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const toast = useSkyToast();
-    const { signer, address } = usePrivyAccounts();
+    const { address } = usePrivyAccounts();
     const [inputAmount, setInputAmount] = React.useState(1);
 
     const handleBuy = async () => {
@@ -200,6 +201,40 @@ const BuyPaper = () => {
                 return;
             }
             setInputAmount(0);
+            const root = document.getElementById("root");
+            const bt1 = document.getElementById("bt1");
+            const myWallet = document.getElementById("my-wallet");
+            const buttonRect = bt1.getBoundingClientRect();
+            const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+            const buttonCenterY = buttonRect.top;
+            const circle = document.createElement("img");
+            circle.src = PaperIcon;
+            circle.style.width = "80px";
+            circle.style.height = "80px";
+            circle.style.borderRadius = "50%";
+            circle.style.position = "absolute";
+            circle.style.top = buttonCenterY + "px";
+            circle.style.left = buttonCenterX + "px";
+            circle.style.transition = "all 0.8s ease-in-out";
+            root.appendChild(circle);
+            setTimeout(() => {
+                const myWalletRect = myWallet.getBoundingClientRect();
+                const myWalletCenterX =
+                    myWalletRect.left + myWalletRect.width / 2;
+                const myWalletCenterY =
+                    myWalletRect.top + myWalletRect.height / 2;
+                circle.style.top = myWalletCenterY + "px";
+                circle.style.left = myWalletCenterX + "px";
+                circle.style.opacity = "0";
+            }, 0);
+
+            // 监听动画结束事件
+            circle.addEventListener("transitionend", () => {
+                if (circle.parentNode === root) {
+                    // 删除节点
+                    root.removeChild(circle);
+                }
+            });
         } catch (e) {
             toast(handleError(e));
         }

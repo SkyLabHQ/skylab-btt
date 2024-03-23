@@ -577,7 +577,7 @@ const AviationLevel = ({
                     display: "none",
                 },
                 paddingBottom: "200px",
-                paddingTop: "160px",
+                paddingTop: isPc ? "160px" : "80px",
             }}
         >
             <Box

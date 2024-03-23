@@ -82,6 +82,7 @@ const handleDateNumber = (number: number) => {
 };
 
 const FirstContent = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             className="front-content"
@@ -114,8 +115,8 @@ const FirstContent = () => {
                 <Image
                     src={CHummer}
                     sx={{
-                        maxWidth: "100%",
-                        marginBottom: "-100px",
+                        maxWidth: isPc ? "100%" : "150%",
+                        marginBottom: isPc ? "-100px" : "-60px",
                     }}
                 ></Image>
             </Flex>

@@ -173,7 +173,7 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
                             marginRight: "24px",
                         }}
                     ></Image>
-                    <Box>
+                    <Box id="my-wallet">
                         {address ? (
                             <Flex
                                 onClick={() => {
