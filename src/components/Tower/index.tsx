@@ -41,6 +41,7 @@ const TowerPage = () => {
     // 处理鼠标移动
     const handleMouseMove = (event: any) => {
         const { clientX, clientY } = event;
+        console.log(clientX, "clientX");
         mounseX.current = clientX;
         mounseY.current = clientY;
         const screenWidth = window.innerWidth;
@@ -123,9 +124,6 @@ const TowerPage = () => {
     }, [multiProvider, multiMercuryJarTournamentContract]);
 
     useEffect(() => {
-        if (!isPc) {
-            return;
-        }
         let animationFrameId: any = null;
         const throttledHandleMouseMove = (event: any) => {
             if (animationFrameId !== null) {
@@ -143,7 +141,7 @@ const TowerPage = () => {
                 window.cancelAnimationFrame(animationFrameId);
             }
         };
-    }, [isPc]);
+    }, []);
 
     return (
         <motion.div

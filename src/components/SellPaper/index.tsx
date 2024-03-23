@@ -690,9 +690,6 @@ const SellPaper = () => {
     };
 
     useEffect(() => {
-        if (!isPc) {
-            return;
-        }
         let animationFrameId: any = null;
         const throttledHandleMouseMove = (event: any) => {
             if (animationFrameId !== null) {
@@ -714,7 +711,7 @@ const SellPaper = () => {
                 window.cancelAnimationFrame(animationFrameId);
             }
         };
-    }, [isPc]);
+    }, []);
 
     useEffect(() => {
         if (!multiProvider || !multiMercuryJarTournamentContract) return;
