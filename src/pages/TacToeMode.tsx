@@ -51,7 +51,7 @@ import {
 import { useChainId, useWalletClient } from "wagmi";
 import { decodeEventLog } from "viem";
 import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
-import Back from "@/components/Back";
+import Back, { BackWithText } from "@/components/Back";
 import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
 import ReactCanvasNest from "react-canvas-nest";
@@ -469,7 +469,22 @@ const TacToeMode = () => {
                         top: "1.0417vw",
                     }}
                 >
-                    <Back onClick={() => navigate("/tower")}></Back>
+                    <BackWithText
+                        onClick={() => navigate("/tower")}
+                        textContent={
+                            <Box
+                                sx={{
+                                    fontSize: "16px",
+                                    textAlign: "center",
+                                    lineHeight: "1",
+                                    marginTop: "8px",
+                                }}
+                            >
+                                <Text>Back</Text>
+                                <Text>ToArena</Text>
+                            </Box>
+                        }
+                    ></BackWithText>
                 </Box>
 
                 <Toolbar></Toolbar>
