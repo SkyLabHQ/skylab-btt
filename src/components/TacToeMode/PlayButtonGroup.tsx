@@ -128,7 +128,7 @@ export const PlayButtonGroup = ({
             <Flex
                 sx={{
                     width: "100%",
-                    marginTop: "60px",
+                    marginTop: isPc ? "60px" : "20px",
                 }}
                 align={"center"}
             >

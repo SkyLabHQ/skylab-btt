@@ -1,12 +1,13 @@
 import {
     Box,
+    Flex,
     Grid,
     GridItem,
     Image,
     keyframes,
+    Text,
     useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
 import BaseGrid from "./assets/base-grid.svg";
 import BlackXIcon from "./assets/black-x.svg";
 import BlackCircle from "./assets/black-circle.svg";
@@ -27,6 +28,15 @@ const move = keyframes`
         height: 70%;
     }
 `;
+
+const move2 = keyframes`
+    from {
+    }
+    to {
+    background-position: 0 -12px, 100% 12px, 12px 0, -12px 100%;
+    }
+`;
+
 export const BoardGrid = ({
     mark,
     myValue,
@@ -123,14 +133,30 @@ export const BoardGrid = ({
                         </Box>
                     )}
                 {mark === UserMarkType.Square && (
-                    <Box
+                    <Flex
                         width={"70%"}
                         height={"70%"}
                         sx={{
-                            border: "0.2083vw dashed #fff",
-                            borderRadius: "0.5208vw",
+                            borderRadius: isPc ? "12px" : "6px",
+                            background: `linear-gradient(0deg, transparent 6px, #FFF 6px) repeat-y,
+                                        linear-gradient(0deg, transparent 50%, #FFF  0) repeat-y,
+                                        linear-gradient(90deg, transparent 50%, #FFF  0) repeat-x,
+                                        linear-gradient(90deg, transparent 50%, #FFF  0) repeat-x`,
+                            backgroundSize:
+                                "2px 12px, 2px 12px, 12px 2px, 12px 2px",
+                            backgroundPosition: "0 0, 100% 0, 0 0, 0 100%",
+                            color: "#FDDC2D",
+                            fontSize: isPc ? "16px" : "10px",
+                            fontWeight: 700,
                         }}
-                    ></Box>
+                        animation={`${move2} 1s infinite linear`}
+                        align={"center"}
+                        justify={"center"}
+                        flexDirection={"column"}
+                    >
+                        <Text>Up For Bid</Text>
+                        <Text>Now</Text>
+                    </Flex>
                 )}
                 {mark === UserMarkType.Circle && (
                     <Image

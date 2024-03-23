@@ -474,7 +474,7 @@ const TacToeMode = () => {
                         textContent={
                             <Box
                                 sx={{
-                                    fontSize: "16px",
+                                    fontSize: isPc ? "16px" : "12px",
                                     textAlign: "center",
                                     lineHeight: "1",
                                     marginTop: "8px",
