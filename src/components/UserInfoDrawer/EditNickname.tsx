@@ -104,25 +104,6 @@ const EditNickname = ({
                         paddingTop: isPc ? "30px" : "15px",
                     }}
                 >
-                    <Text
-                        sx={{
-                            fontSize: isPc ? "20px" : "16px",
-                        }}
-                    >
-                        Current Nickname
-                    </Text>
-                    <Box
-                        sx={{
-                            height: isPc ? "30px" : "15px",
-                            marginTop: "15px",
-                            fontSize: isPc ? "24px" : "18px",
-                        }}
-                    >
-                        {userName
-                            ? userName
-                            : `${shortenAddress(address, 4, 4)}`}{" "}
-                    </Box>
-
                     <Box
                         sx={{
                             marginTop: "20px",

@@ -39,7 +39,7 @@ const AppRoutes = (): ReactElement => {
                     element={<PrivateLiveGame />}
                 ></Route>
                 <Route path="/tower" element={<Tower />}></Route>
-                <Route path="/sellPaper" element={<SellPaperPage />}></Route>
+                <Route path="/buypaper" element={<SellPaperPage />}></Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

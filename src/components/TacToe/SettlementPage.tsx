@@ -663,7 +663,7 @@ const SettlementPage = ({}) => {
                             ></LoseResult>
                         )}
 
-                        {!istest && (
+                        {false && (
                             <PilotInfo
                                 mileage={
                                     win
@@ -724,7 +724,7 @@ const SettlementPage = ({}) => {
                                 navigate("/");
                             }}
                         >
-                            Play Again
+                            Continue
                         </Box>
                     </>
                 ) : (

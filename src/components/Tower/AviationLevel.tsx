@@ -548,17 +548,13 @@ const mlist = [
     },
 ];
 
-const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
-    level: index + 1,
-    levelTokenIds: [],
-    tokenId: "0",
-    claimTime: 0,
-    owner: "",
-    userName: "",
-    pilotImg: "",
-}));
-
-const AviationLevel = () => {
+const AviationLevel = ({
+    levelInfo,
+    totalPaper,
+}: {
+    levelInfo: any[];
+    totalPaper: any;
+}) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const {
         isOpen: isLeaderboardModalOpen,
@@ -566,87 +562,11 @@ const AviationLevel = () => {
         onClose: closeLeaderboardModal,
     } = useDisclosure();
 
-    const [currentIndex, setCurrentIndex] = useState(1);
-    const chainId = useChainId();
-    const multiMercuryJarTournamentContract =
-        useMultiMercuryJarTournamentContract();
-    const multiProvider = useMultiProvider(chainId);
-    const [levelInfo, setLevelInfo] = useState(levelInfoInit);
-    const [totalPaper, setTotalPaper] = useState("0");
-
-    const handleLevelInfo = async () => {
-        const p = [];
-
-        for (let i = 1; i <= 16; i++) {
-            p.push(multiMercuryJarTournamentContract.getTokenIdPerLevel(i));
-            p.push(multiMercuryJarTournamentContract.getNewCommerInfo(i));
-        }
-        p.push(multiMercuryJarTournamentContract.paperTotalAmount());
-        const res = await multiProvider.all(p);
-        const paperTotalAmount = res.pop();
-        setTotalPaper(paperTotalAmount.toString());
-        const levelTokenInfo = [];
-        const allPilot: ActivePilotRes[] = [];
-        for (let i = 0; i < 16; i++) {
-            const newComerInfo = res[i * 2 + 1];
-            allPilot.push({
-                collectionAddress: newComerInfo.pilot.collectionAddress,
-                pilotId: newComerInfo.pilot.pilotId.toString(),
-            });
-            levelTokenInfo.push({
-                levelTokenIds: res[i * 2], // 该等级的名称列表
-                tokenId: newComerInfo.newComerId.toString(), // newComerInfo.tokenId.toString(),
-                claimTime: newComerInfo.claimTime.toNumber(),
-                owner: newComerInfo.owner,
-                point: newComerInfo.point.toString(),
-                userName: newComerInfo.userName,
-            });
-        }
-
-        const pilotList = await handlePilotsInfo1({
-            chainId: chainId,
-            allPilot,
-        });
-
-        let jIndex = -1;
-        const list = levelTokenInfo.map((item, index) => {
-            if (item.tokenId === "0") {
-                return {
-                    ...item,
-                    level: index + 1,
-                    owner: "",
-                    userName: "",
-                    pilotImg: "",
-                };
-            }
-            jIndex++;
-            return {
-                ...item,
-                level: index + 1,
-                pilotImg:
-                    item.tokenId === "0" ? "" : pilotList[jIndex].pilotImg,
-            };
-        });
-        console.log(list, "listlist");
-        setLevelInfo(list.reverse());
-    };
-
+    const [currentIndex, setCurrentIndex] = useState(0);
     const handleLeaderboard = (index: number) => {
         setCurrentIndex(index);
         openLeaderboardModal();
     };
-
-    useEffect(() => {
-        if (!multiProvider || !multiMercuryJarTournamentContract) return;
-        handleLevelInfo();
-        // const timer = setInterval(() => {
-        //     handleLevelInfo();
-        // }, 10000);
-        // return () => {
-        //     clearInterval(timer);
-        // };
-    }, [multiProvider, multiMercuryJarTournamentContract]);
-
     return (
         <Box
             sx={{
@@ -728,7 +648,7 @@ const AviationLevel = () => {
                                                         fontStyle: "normal",
                                                     }}
                                                 >
-                                                    New Comer
+                                                    NEWCOMER
                                                 </Text>
                                                 <Flex
                                                     sx={{

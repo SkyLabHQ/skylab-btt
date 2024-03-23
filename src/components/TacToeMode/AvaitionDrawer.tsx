@@ -14,7 +14,6 @@ import React, { useEffect, useState } from "react";
 import RightArrowIcon from "@/assets/right-arrow.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import DownArrowIcon from "@/assets/down-arrow.png";
-
 import {
     useMultiMercuryJarTournamentContract,
     useMultiProvider,
@@ -52,6 +51,7 @@ const MyPlane = ({
             <Box
                 sx={{
                     flex: 1,
+                    overflow: "auto",
                 }}
             >
                 <Text

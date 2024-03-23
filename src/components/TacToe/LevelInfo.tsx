@@ -279,25 +279,26 @@ const LevelInfo = ({
         }, [winPoint, losePoint, myInfo, opInfo]);
 
     useEffect(() => {
+        let timer: any = null;
+
         if (myConfirmTimeout <= 0 && opConfirmTimeout <= 0) {
             return;
         }
         const now = Date.now();
-
         if (myConfirmTimeout > now) {
             start(Math.floor((myConfirmTimeout - now) / 1000) * 1000);
         } else if (opConfirmTimeout > now) {
             start(Math.floor((opConfirmTimeout - now) / 1000) * 1000);
         }
 
-        let timer: any = null;
         if (opConfirmTimeout < now && myConfirmTimeout < now) {
             handleActiveQueueTimeout();
         } else {
-            const delOp = opConfirmTimeout - now + 1000;
-            const delMy = myConfirmTimeout - now + 1000;
+            const delOp = opConfirmTimeout - now + 3000;
+            const delMy = myConfirmTimeout - now + 3000;
             timer = setTimeout(
                 () => {
+                    const now = Date.now();
                     handleActiveQueueTimeout();
                 },
                 delOp > delMy ? delOp : delMy,

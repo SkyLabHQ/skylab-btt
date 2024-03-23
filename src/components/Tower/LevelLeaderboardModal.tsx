@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import AmountBg from "./assets/amount-bg.png";
 import useSkyToast from "@/hooks/useSkyToast";
-import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import AvatarBg from "./assets/avatar-bg.png";
 import DefaultAvatar from "./assets/default-avatar.png";
 import { aviationImg } from "@/utils/aviationImg";
@@ -42,23 +41,30 @@ const NewComer = ({ detail }: { detail: any }) => {
     };
 
     return (
-        <Flex flexDir={"column"} align={"center"}>
+        <Flex
+            flexDir={"column"}
+            align={"center"}
+            sx={{
+                paddingTop: "16px",
+            }}
+        >
             <Flex
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    width: isPc ? "230px" : "100px",
-                    height: isPc ? "124px" : "56px",
-                    background: `url(${Winner})`,
-                    backgroundSize: "100% 100%",
-                    // borderRadius: "50%",
+                    width: isPc ? "128px" : "48px",
+                    height: isPc ? "128px" : "48px",
+                    background: `url(${AvatarBg})`,
+                    backgroundSize: "cover",
+                    borderRadius: "50%",
+                    backgroundColor: "rgb(38,38,38)",
                     position: "relative",
                 }}
             >
                 <Image
-                    src={detail?.pilotImg ? detail.pilotImg : DefaultAvatar}
+                    src={detail.pilotImg ? detail.pilotImg : DefaultAvatar}
                     sx={{
-                        width: "40%",
+                        width: detail.pilotImg ? "85%" : "50%",
                         borderRadius: "50%",
                     }}
                 ></Image>
@@ -68,9 +74,9 @@ const NewComer = ({ detail }: { detail: any }) => {
                     color: "#181818",
                     textAlign: "center",
                     fontFamily: "Quantico",
-                    fontSize: "14px",
+                    fontSize: isPc ? "14px" : "10px",
                     border: "1px solid #f2d861",
-                    width: "112px",
+                    width: isPc ? "112px" : "76px",
                     borderRadius: "16px",
                     height: isPc ? "28px" : "14px",
                     lineHeight: isPc ? "28px" : "14px",
@@ -188,12 +194,10 @@ const LevelLeaderboardModal = ({
     onClose: () => void;
 }) => {
     const chainId = useChainId();
-    const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const multiMercuryPilotsContract = useMultiMercuryPilotsContract(chainId);
     const [leaderBoardList, setLeaderBoardList] = React.useState<any[]>([]);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = React.useState(false);
-    const toast = useSkyToast();
     const multiProvider = useMultiProvider(chainId);
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
@@ -262,10 +266,6 @@ const LevelLeaderboardModal = ({
             };
         });
 
-        currentList = currentList.filter((item) => {
-            return item.owner !== levelInfoDetail?.owner;
-        });
-
         const newArray = Object.values(
             currentList.reduce((acc, curr) => {
                 const { owner, ...rest } = curr;
@@ -290,6 +290,7 @@ const LevelLeaderboardModal = ({
             !levelInfoDetail ||
             levelInfoDetail?.levelTokenIds?.length === 0
         ) {
+            setLeaderBoardList([]);
             return;
         }
 
@@ -351,10 +352,7 @@ const LevelLeaderboardModal = ({
                             fontSize: isPc ? "20px" : "12px",
                         }}
                     >
-                        Total{" "}
-                        {levelInfoDetail?.tokenId !== "0"
-                            ? leaderBoardList.length + 1
-                            : 0}
+                        Total {levelInfoDetail?.levelTokenIds?.length}
                     </Text>
                     <Text
                         sx={{
@@ -386,11 +384,11 @@ const LevelLeaderboardModal = ({
                         {levelInfoDetail.tokenId !== "0" && (
                             <Box
                                 sx={{
-                                    background: `url(${LevelDetailBg}) no-repeat`,
+                                    background: `url(${Winner}) no-repeat`,
                                     backgroundPosition: "bottom",
                                     backgroundSize: "contain",
-                                    width: isPc ? "360px" : "160px",
-                                    height: isPc ? "280px" : "130px",
+                                    width: isPc ? "322px" : "161px",
+                                    height: isPc ? "285px" : "142px",
                                     position: "relative",
                                     margin: "0 auto",
                                 }}
@@ -399,17 +397,17 @@ const LevelLeaderboardModal = ({
                                 <Text
                                     sx={{
                                         position: "absolute",
-                                        bottom: isPc ? "50px" : "10px",
+                                        bottom: isPc ? "60px" : "28px",
                                         fontWeight: "bold",
                                         left: "50%",
                                         transform: "translate(-50%,0)",
-                                        color: "#F2D861",
-                                        fontSize: isPc ? "20px" : "16px",
+                                        color: "#000",
+                                        fontSize: isPc ? "20px" : "14px",
                                         width: "100%",
                                         textAlign: "center",
                                     }}
                                 >
-                                    NEW COMER
+                                    NEWCOMER
                                 </Text>
                             </Box>
                         )}

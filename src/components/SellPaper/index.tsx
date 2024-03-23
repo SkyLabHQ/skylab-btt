@@ -28,6 +28,12 @@ import EnterArena from "./EnterArena";
 import ToolBar from "@/components/HomeToolbar/ToolBar";
 import BuyPaper from "./BuyPaper";
 import { useCountUp } from "react-countup";
+import {
+    useMultiMercuryJarTournamentContract,
+    useMultiProvider,
+} from "@/hooks/useMultiContract";
+import { useChainId } from "wagmi";
+import { formatAmount } from "@/utils/formatBalance";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -75,103 +81,6 @@ const handleDateNumber = (number: number) => {
     }
 };
 
-const FrontContent = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-    return (
-        <Box
-            className="front-content"
-            sx={{
-                position: "absolute",
-                width: "99%",
-                height: "99%",
-                background:
-                    "linear-gradient(126.1deg, #000000 0%, #000000 46.99%, #000000 100%)",
-                borderRadius: "50%",
-                color: "white",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-                padding: isPc ? "10px 100px" : "20px 26px 0",
-            }}
-        >
-            <Image
-                src={HummerIcon}
-                sx={{
-                    width: isPc ? "180px" : "80px",
-                    marginTop: "10px",
-                }}
-            ></Image>
-            <motion.div
-                style={{
-                    width: "100%",
-                    textShadow: "0px 0px 19px  #00CCFF",
-                    color: "rgba(255, 255, 255, 0.2)",
-                    fontSize: isPc ? "100px" : "44px",
-                    textAlign: "center",
-                    lineHeight: "1",
-                    margin: isPc ? "-20px 0 30px" : "0px 0 20px",
-                }}
-                animate={animationObj}
-                transition={{
-                    duration: 1,
-                    yoyo: Infinity,
-                }}
-            >
-                THE POOL
-            </motion.div>
-
-            <LightBorder width={isPc ? "100%" : "180px"}></LightBorder>
-            <motion.div
-                style={{
-                    width: "100%",
-                    textShadow: "0px 0px 19px  #00CCFF",
-                    color: "rgba(255, 255, 255, 0.2)",
-                    textAlign: "center",
-                    marginTop: isPc ? "20px" : "10px",
-                }}
-                animate={{
-                    color: [
-                        "rgba(56, 248, 255, 1)",
-                        "rgba(255, 236, 199, 1)",
-                        "rgba(255, 214, 214, 1)",
-                    ],
-                    textShadow: "0px 0px 19px  #00CCFF",
-                    transition: {
-                        duration: 2,
-                        yoyo: Infinity,
-                    },
-                }}
-                transition={{
-                    duration: 1,
-                    yoyo: Infinity,
-                }}
-            >
-                <Flex align={"center"} justify={"center"}>
-                    <Text
-                        sx={{
-                            fontSize: isPc ? "160px" : "60px",
-                            lineHeight: 1,
-                            fontFamily: "neon",
-                        }}
-                    >
-                        9.09
-                    </Text>
-                    <ETHIcon
-                        fill="currentColor"
-                        style={{
-                            width: isPc ? "100px" : "40px",
-                            height: isPc ? "100px" : "40px",
-                        }}
-                    ></ETHIcon>
-                </Flex>
-            </motion.div>
-        </Box>
-    );
-};
-
 const FirstContent = () => {
     return (
         <Box
@@ -214,15 +123,25 @@ const FirstContent = () => {
     );
 };
 
-const BackContent = ({ rotateY }: { rotateY?: number }) => {
+const BackContent = ({
+    rotateY,
+    potAmount,
+}: {
+    rotateY?: number;
+    potAmount: string;
+}) => {
     const [audio1] = useState(new Audio(Numbermp3));
     const [isPc] = useMediaQuery("(min-width: 800px)");
+
     const countUpRef = React.useRef(null);
     const { update } = useCountUp({
         ref: countUpRef,
-        end: 99,
+        start: 0,
+        end: 0,
         duration: 1,
+        decimals: 2,
     });
+
     const [init, setInit] = useState(false);
 
     const [timeLeft, { start }] = useCountDown(5000000, 1000);
@@ -286,6 +205,12 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
             handleInit();
         }
     }, [rotateY, init]);
+
+    useEffect(() => {
+        if (Number(potAmount) > 0) {
+            update(Number(potAmount));
+        }
+    }, [potAmount]);
     return (
         <Box
             sx={{
@@ -374,15 +299,18 @@ const BackContent = ({ rotateY }: { rotateY?: number }) => {
                                     fontSize: isPc ? "120px" : "60px",
                                     lineHeight: 1,
                                     fontFamily: "neon",
+                                    width: isPc ? "200px" : "100px",
+                                    textAlign: "right",
+                                    marginRight: "20px",
                                 }}
                             ></Text>
-                            <ETHIcon
-                                fill="currentColor"
-                                style={{
-                                    width: isPc ? "70px" : "40px",
-                                    height: isPc ? "70px" : "40px",
+                            <Text
+                                sx={{
+                                    fontSize: isPc ? "60px" : "30px",
                                 }}
-                            ></ETHIcon>
+                            >
+                                ETH
+                            </Text>
                         </Flex>
                     </motion.div>
                 </Box>
@@ -716,8 +644,21 @@ const SellPaper = () => {
     const mounseX = useRef(0);
     const mounseY = useRef(0);
     const mouseImg = useRef(MouseBImage);
-
+    const chainId = useChainId();
+    const [potAmount, setPotAmount] = useState("0");
+    const multiMercuryJarTournamentContract =
+        useMultiMercuryJarTournamentContract();
+    const multiProvider = useMultiProvider(chainId);
     const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
+
+    const handleLevelInfo = async () => {
+        const [potAmount] = await multiProvider.all([
+            multiMercuryJarTournamentContract.pot(),
+        ]);
+
+        setPotAmount(formatAmount(potAmount.toString()));
+    };
+
     // 处理鼠标移动
     const handleMouseMove = (event: any) => {
         const { clientX, clientY } = event;
@@ -775,6 +716,11 @@ const SellPaper = () => {
         };
     }, [isPc]);
 
+    useEffect(() => {
+        if (!multiProvider || !multiMercuryJarTournamentContract) return;
+        handleLevelInfo();
+    }, [multiProvider, multiMercuryJarTournamentContract]);
+
     return (
         <motion.div
             style={{
@@ -792,7 +738,7 @@ const SellPaper = () => {
                 alignItems: "center",
                 flexDirection: "column",
                 overflow: "hidden",
-                cursor: `none`,
+                // cursor: `none`,
                 padding: "0 32px",
             }}
         >
@@ -918,7 +864,10 @@ const SellPaper = () => {
                             },
                         }}
                     >
-                        <BackContent rotateY={rotateY}></BackContent>
+                        <BackContent
+                            rotateY={rotateY}
+                            potAmount={potAmount}
+                        ></BackContent>
                     </Box>
                 </Box>
             </Box>

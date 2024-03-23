@@ -19,10 +19,12 @@ import OpenSeaIcon from "./assets/opensea.png";
 import { useState } from "react";
 
 const MToolBar = ({
+    onUserInfoOpen,
     onWalletClick,
     onRulesModalOpen,
     showOpensea,
 }: {
+    onUserInfoOpen: () => void;
     onRulesModalOpen: () => void;
     onWalletClick: () => void;
     showOpensea?: boolean;
@@ -88,19 +90,20 @@ const MToolBar = ({
                     }}
                 ></Image>
                 <Box
-                    onClick={onWalletClick}
                     sx={{
                         marginTop: "20px",
                     }}
                 >
                     {address ? (
                         <MyPilot
+                            onClick={onUserInfoOpen}
                             width="36px"
                             imgUrl={activePilot.img}
                             sx={{}}
                         ></MyPilot>
                     ) : (
                         <Image
+                            onClick={onWalletClick}
                             src={WalletIcon}
                             sx={{
                                 width: "36px",
@@ -226,6 +229,7 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
                 </Flex>
             ) : (
                 <MToolBar
+                    onUserInfoOpen={onUserInfoOpen}
                     onRulesModalOpen={onRulesModalOpen}
                     showOpensea={showOpensea}
                     onWalletClick={handleLogin}
