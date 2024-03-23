@@ -20,7 +20,6 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "../PrivateRoom/ShareButton";
-import { shortenAddressWithout0x } from "@/utils";
 
 const ResultPage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -338,7 +337,7 @@ ${des}`;
                 align={"center"}
                 sx={{
                     position: "relative",
-                    width: isPc ? "50vw" : "100%",
+                    width: "100%",
                 }}
             >
                 <PlayBackButton

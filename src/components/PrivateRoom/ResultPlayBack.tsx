@@ -345,7 +345,7 @@ ${des}`;
                 align={"center"}
                 sx={{
                     position: "relative",
-                    width: isPc ? "50vw" : "100%",
+                    width: "100%",
                 }}
             >
                 <PlayBackButton
