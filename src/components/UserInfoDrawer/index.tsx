@@ -43,7 +43,7 @@ import { handleError } from "@/utils/error";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { levelRanges } from "@/utils/level";
 import PlaneBg from "./assets/plane-bg.png";
-import SetPilotIcon from "./assets/setPilot.png";
+import SetPilotIcon from "./assets/setPilot.svg";
 import SetNameIcon from "./assets/setName.png";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
 import Loading from "../Loading";
@@ -51,9 +51,11 @@ import Loading from "../Loading";
 const UserInfo = ({
     userName,
     userNameInit,
+    handleChangeMode,
 }: {
     userName: string;
     userNameInit: boolean;
+    handleChangeMode: (mode: number) => void;
 }) => {
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
@@ -63,7 +65,27 @@ const UserInfo = ({
 
     return (
         <Flex flexDir={"column"} align={"center"}>
-            <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
+            <Box
+                sx={{
+                    position: "relative",
+                }}
+            >
+                <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
+                <Image
+                    src={SetPilotIcon}
+                    sx={{
+                        width: "24px",
+                        marginRight: "12px",
+                        position: "absolute",
+                        bottom: "-6px",
+                        left: "50%",
+                        transform: "translate(-50%,0)",
+                    }}
+                    onClick={() => {
+                        handleChangeMode(2);
+                    }}
+                ></Image>
+            </Box>
             {userNameInit ? (
                 <Flex
                     sx={{
@@ -667,16 +689,6 @@ const UserInfoDrawer = ({
                                 }}
                             >
                                 <Image
-                                    src={SetPilotIcon}
-                                    sx={{
-                                        width: "24px",
-                                        marginRight: "12px",
-                                    }}
-                                    onClick={() => {
-                                        handleChangeMode(2);
-                                    }}
-                                ></Image>
-                                <Image
                                     src={SetNameIcon}
                                     sx={{
                                         width: "24px",
@@ -700,6 +712,7 @@ const UserInfoDrawer = ({
                             <UserInfo
                                 userName={userName}
                                 userNameInit={userNameInit}
+                                handleChangeMode={handleChangeMode}
                             ></UserInfo>
                             <MyPaper
                                 balance={paperBalance}

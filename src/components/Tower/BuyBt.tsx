@@ -5,16 +5,13 @@ import SubIcon from "./assets/sub.svg";
 import AddIcon from "./assets/add.svg";
 import BETHIcon from "./assets/b-ETH.png";
 import BuyIcon from "./assets/buy-icon.svg";
+import YETHIcon from "./assets/y-ETH.png";
 
 import {
     Box,
     Image,
     Flex,
     Text,
-    Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
     Popover,
     PopoverTrigger,
     PopoverContent,
@@ -28,7 +25,153 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { usePublicClient } from "wagmi";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import WalletIcon from "./assets/wallet-icon.svg";
+import { usePrivy } from "@privy-io/react-auth";
+
+const ConnectWalletBt = () => {
+    const toast = useSkyToast();
+    const { ready, login, connectWallet, user } = usePrivy();
+    const handleLogin = () => {
+        if (!ready) {
+            toast("Please wait for the wallet to be ready");
+            return;
+        }
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
+        login();
+    };
+    return (
+        <Flex
+            onClick={handleLogin}
+            sx={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "12px",
+                background: "#f2d861",
+                cursor: "pointer",
+            }}
+            align={"center"}
+            justify={"center"}
+        >
+            <Image
+                src={WalletIcon}
+                sx={{
+                    width: "16px",
+                    marginRight: "5px",
+                }}
+            ></Image>
+            <Text
+                sx={{
+                    color: "#000",
+                    fontSize: "16px",
+                }}
+            >
+                Connect Wallet
+            </Text>
+        </Flex>
+    );
+};
+
+const BuyButton = ({
+    inputAmount,
+    onBuy,
+}: {
+    inputAmount: number;
+    onBuy: () => void;
+}) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+    return (
+        <Flex
+            onClick={onBuy}
+            sx={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "12px",
+                background: "#f2d861",
+                fontSize: isPc ? "16px" : "12px",
+                padding: "0 12px",
+                color: "#000",
+                cursor: "pointer",
+
+                "&:hover .unHover": {
+                    display: "none",
+                },
+                "&:hover .activeHover": {
+                    display: "flex",
+                },
+            }}
+            align={"center"}
+        >
+            <Flex
+                className="unHover"
+                align={"center"}
+                justify={"center"}
+                sx={{
+                    width: "100%",
+                }}
+            >
+                <Text
+                    sx={{
+                        fontSize: isPc ? "18px" : "12px",
+                        marginRight: "3px",
+                        textAlign: "center",
+                    }}
+                >
+                    {accMul("0.02", inputAmount.toString())} ETH
+                </Text>
+            </Flex>
+            <Flex
+                className="activeHover"
+                align={"center"}
+                justify={"center"}
+                sx={{
+                    width: "100%",
+                    display: "none",
+                }}
+            >
+                <Flex>
+                    <Image
+                        src={BuyIcon}
+                        sx={{
+                            width: "12px",
+                            marginRight: "5px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontFamily: "Quantico",
+                        }}
+                    >
+                        BUY
+                    </Text>
+                </Flex>
+
+                <Box
+                    sx={{
+                        width: "1px",
+                        height: "16px",
+                        background: "#1b1b1b",
+                        margin: "0 10px",
+                    }}
+                ></Box>
+                <Text
+                    sx={{
+                        marginRight: "3px",
+                    }}
+                >
+                    {accMul("0.02", inputAmount.toString())} ETH
+                </Text>
+            </Flex>
+        </Flex>
+    );
+};
+
 const BuyBt = () => {
+    const { address } = usePrivyAccounts();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const publicClient = usePublicClient();
@@ -178,70 +321,22 @@ const BuyBt = () => {
                                     ></Image>
                                 </Flex>
                             </Flex>
-                            <Flex
-                                onClick={handleMintPlane}
+                            <Box
                                 sx={{
                                     width: isPc ? "180px" : "120px",
                                     height: isPc ? "40px" : "30px",
-                                    borderRadius: "12px",
-                                    background: "#f2d861",
                                     margin: "8px 0 24px",
-                                    fontSize: isPc ? "16px" : "12px",
-                                    padding: "0 12px",
-                                    color: "#000",
-                                    cursor: "pointer",
                                 }}
-                                align={"center"}
-                                justify={"space-between"}
                             >
-                                <Flex
-                                    align={"center"}
-                                    justify={"center"}
-                                    flex={1}
-                                >
-                                    <Image
-                                        src={BuyIcon}
-                                        sx={{
-                                            width: "12px",
-                                            marginRight: "5px",
-                                        }}
-                                    ></Image>
-                                    <Text
-                                        sx={{
-                                            fontFamily: "Quantico",
-                                        }}
-                                    >
-                                        BUY
-                                    </Text>
-                                </Flex>
-
-                                <Box
-                                    sx={{
-                                        width: "1px",
-                                        height: "16px",
-                                        background: "#1b1b1b",
-                                    }}
-                                ></Box>
-                                <Flex
-                                    align={"center"}
-                                    justify={"center"}
-                                    flex={1}
-                                >
-                                    <Text
-                                        sx={{
-                                            marginRight: "3px",
-                                        }}
-                                    >
-                                        {accMul("0.02", inputAmount.toString())}
-                                    </Text>
-                                    <Image
-                                        src={BETHIcon}
-                                        sx={{
-                                            width: "8px",
-                                        }}
-                                    ></Image>
-                                </Flex>
-                            </Flex>
+                                {address ? (
+                                    <BuyButton
+                                        onBuy={handleMintPlane}
+                                        inputAmount={inputAmount}
+                                    ></BuyButton>
+                                ) : (
+                                    <ConnectWalletBt></ConnectWalletBt>
+                                )}
+                            </Box>
                         </Flex>
                     </PopoverBody>
                     <Box

@@ -265,6 +265,7 @@ const SetPilot = ({
                                 (currentIndex === -1 ||
                                     currentIndex === index) && (
                                     <Flex
+                                        key={index}
                                         onClick={() => {
                                             setCurrentIndex(index);
                                         }}
