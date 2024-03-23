@@ -13,20 +13,13 @@ import RYellowIcon from "./assets/x-yellow-r.png";
 import LYellowIcon from "./assets/x-yellow-l.png";
 import AmountBg from "./assets/amount-bg.png";
 import AmountBg1 from "./assets/amount-bg1.png";
-
 import LevelBg from "./assets/level-bg.png";
 import { aviationImg } from "@/utils/aviationImg";
-import {
-    useMultiMercuryJarTournamentContract,
-    useMultiProvider,
-} from "@/hooks/useMultiContract";
-import { useChainId } from "wagmi";
 import NewComerBg from "./assets/newcomer-bg.png";
 import Timer from "./Timer";
 import { shortenAddress } from "@/utils";
 import LevelLeaderboardModal from "./LevelLeaderboardModal";
 import PaperIcon from "./assets/paper.png";
-import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
 import DefaultAvatar from "./assets/default-avatar.png";
 import LockIcon from "./assets/lock.png";
 
@@ -102,8 +95,7 @@ const list = [
             top: "1200px",
             left: "150px",
         },
-        comerPosition: "right",
-
+        comerPosition: "left",
         arrowImg: LYellowIcon,
         imgPosition: {
             top: "1270px",
@@ -119,8 +111,7 @@ const list = [
             top: "1320",
             right: "150px",
         },
-        comerPosition: "left",
-
+        comerPosition: "right",
         arrowImg: SYellowIcon,
         imgPosition: {
             top: "1500",
@@ -135,7 +126,7 @@ const list = [
             top: "1770px",
             right: "150px",
         },
-        comerPosition: "left",
+        comerPosition: "right",
 
         arrowImg: RYellowIcon,
         imgPosition: {
@@ -152,8 +143,7 @@ const list = [
             top: "1920px",
             left: "150px",
         },
-        comerPosition: "right",
-
+        comerPosition: "left",
         arrowImg: SYellowIcon,
         imgPosition: {
             top: "2070px",
@@ -168,7 +158,7 @@ const list = [
             top: "2350px",
             left: "150px",
         },
-        comerPosition: "right",
+        comerPosition: "left",
 
         arrowImg: LYellowIcon,
         imgPosition: {
@@ -567,6 +557,12 @@ const AviationLevel = ({
         setCurrentIndex(index);
         openLeaderboardModal();
     };
+
+    useEffect(() => {
+        const blank = document.getElementById("blank");
+        blank.scrollIntoView(true);
+    }, [isPc]);
+
     return (
         <Box
             sx={{
@@ -581,6 +577,7 @@ const AviationLevel = ({
                     display: "none",
                 },
                 paddingBottom: "200px",
+                paddingTop: "160px",
             }}
         >
             <Box
@@ -895,6 +892,7 @@ const AviationLevel = ({
                         width: "1px",
                         height: "1px",
                     }}
+                    id="blank"
                 ></Box>
             </Box>
             <LevelLeaderboardModal

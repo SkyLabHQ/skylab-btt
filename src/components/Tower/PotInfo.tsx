@@ -192,6 +192,7 @@ const MPotInfo = ({ potAmount }: { potAmount: string }) => {
                     <Text
                         sx={{
                             fontSize: "24px",
+                            fontFamily: "Neon",
                         }}
                     >
                         ETH
