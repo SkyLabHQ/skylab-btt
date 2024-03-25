@@ -10,8 +10,6 @@ import {
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import useCountDown from "react-countdown-hook";
-import HummerIcon from "@/assets/hummer.gif";
-import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
 import Bg from "@/assets/bg.png";
 import BHummer from "@/assets/b-hummer.png";
 import OIcon from "@/assets/o.png";

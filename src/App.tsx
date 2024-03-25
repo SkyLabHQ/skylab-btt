@@ -5,6 +5,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useSkyToast from "./hooks/useSkyToast";
 import Service from "./pages/Service";
 import AddToHome from "./pages/AddToHome";
+import TermPage from "./components/TermPage";
 
 const themeColorList = [
     {
@@ -55,6 +56,7 @@ const App = (): ReactElement => {
     const [type, setType] = useState(-1);
     const toast = useSkyToast();
     const [checked, setChecked] = useState(false);
+    const [showTerm, setShowTerm] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -70,6 +72,17 @@ const App = (): ReactElement => {
 
     const handleSkip = () => {
         setType(0);
+    };
+
+    const handleAgreeTerm = () => {
+        localStorage.setItem("term", "true");
+    };
+
+    const handleContinue = () => {
+        const agree = localStorage.getItem("term");
+        if (agree === "true") {
+            setShowTerm(false);
+        }
     };
 
     useEffect(() => {
@@ -121,18 +134,32 @@ const App = (): ReactElement => {
         }
     }, [location.pathname]);
 
+    useEffect(() => {
+        const localStorageTerm = localStorage.getItem("term");
+        if (localStorageTerm === "true") {
+            setShowTerm(false);
+        } else {
+            setShowTerm(true);
+        }
+    }, [showTerm]);
+
     return (
         // TO-DO: use color mode when implementing light/dark
         <Box minH="100%" color="white" height={"100%"}>
-            {type === 0 && <Outlet />}
-            {type === 1 && (
-                <Service
-                    checked={checked}
-                    onChecked={setChecked}
-                    onEnter={handleEnter}
-                ></Service>
+            {showTerm && <TermPage onContinue={handleContinue}></TermPage>}
+            {!showTerm && (
+                <>
+                    {type === 0 && <Outlet />}
+                    {type === 1 && (
+                        <Service
+                            checked={checked}
+                            onChecked={setChecked}
+                            onEnter={handleEnter}
+                        ></Service>
+                    )}
+                    {type === 2 && <AddToHome onSkip={handleSkip}></AddToHome>}
+                </>
             )}
-            {type === 2 && <AddToHome onSkip={handleSkip}></AddToHome>}
         </Box>
     );
 };
