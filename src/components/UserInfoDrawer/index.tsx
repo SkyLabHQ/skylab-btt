@@ -11,7 +11,6 @@ import {
     useClipboard,
     useMediaQuery,
     SkeletonCircle,
-    SkeletonText,
     Skeleton,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -46,7 +45,7 @@ import PlaneBg from "./assets/plane-bg.png";
 import SetPilotIcon from "./assets/setPilot.svg";
 import SetNameIcon from "./assets/setName.png";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
-import Loading from "../Loading";
+import BiddingGif from "@/assets/bidding.gif";
 
 const UserInfo = ({
     userName,
@@ -476,27 +475,18 @@ const MyPlane = ({
                     </Box>
                 ) : (
                     <SimpleGrid columns={3} spacingY={"10px"}>
-                        <Box
-                            sx={{
-                                position: "relative",
-                            }}
-                        >
-                            <Loading size={60}></Loading>
-                        </Box>
-                        <Box
-                            sx={{
-                                position: "relative",
-                            }}
-                        >
-                            <Loading size={60}></Loading>
-                        </Box>
-                        <Box
-                            sx={{
-                                position: "relative",
-                            }}
-                        >
-                            <Loading size={60}></Loading>
-                        </Box>
+                        {new Array(3).fill("").map((item, index) => {
+                            return (
+                                <Box
+                                    sx={{
+                                        position: "relative",
+                                    }}
+                                    key={index}
+                                >
+                                    <Image src={BiddingGif}></Image>
+                                </Box>
+                            );
+                        })}
                     </SimpleGrid>
                 )}
             </Box>

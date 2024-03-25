@@ -273,12 +273,10 @@ const TacToeMode = () => {
         }
 
         try {
-            // if (planeList[currentPlaneIndex].state) {
-            //     navigate(
-            //         `/btt/game?tokenId=${planeList[currentPlaneIndex].tokenId}`,
-            //     );
-            //     return;
-            // }
+            if (selectPlane.state) {
+                navigate(`/btt/game?tokenId=${selectPlane.tokenId}`);
+                return;
+            }
 
             const tokenId = selectPlane?.tokenId;
 

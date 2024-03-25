@@ -25,7 +25,7 @@ import PlaneBgSelect from "./assets/plane-bg-select.png";
 import NoPlane from "@/assets/no-plane.png";
 import { aviationImg } from "@/utils/aviationImg";
 import { levelRanges } from "@/utils/level";
-import Loading from "../Loading";
+import BiddingGif from "@/assets/bidding.gif";
 
 const MyPlane = ({
     init,
@@ -110,19 +110,16 @@ const MyPlane = ({
                             spacingY={isPc ? "40px" : "30px"}
                         >
                             {new Array(isPc ? 2 : 3)
-                                .fill(0)
+                                .fill("")
                                 .map((item, index) => {
                                     return (
                                         <Box
                                             sx={{
                                                 position: "relative",
-                                                width: "100%",
-                                                height: isPc ? "100px" : "60px",
                                             }}
+                                            key={index}
                                         >
-                                            <Loading
-                                                size={isPc ? 100 : 50}
-                                            ></Loading>
+                                            <Image src={BiddingGif}></Image>
                                         </Box>
                                     );
                                 })}
