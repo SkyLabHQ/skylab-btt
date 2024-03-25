@@ -19,53 +19,17 @@ import Rule4Img from "./assets/rule4.png";
 import CloseIcon from "./assets/close.png";
 
 const Rule1 = () => {
-    return (
-        <Flex
-            align={"center"}
-            sx={{
-                padding: "54px 0 30px",
-            }}
-        >
-            <Image src={Rule1Img}></Image>
-        </Flex>
-    );
+    return <Image src={Rule1Img}></Image>;
 };
 
 const Rule2 = () => {
-    return (
-        <Flex
-            align={"center"}
-            sx={{
-                padding: "54px 0 30px",
-            }}
-        >
-            <Image src={Rule2Img}></Image>
-        </Flex>
-    );
+    return <Image src={Rule2Img}></Image>;
 };
 const Rule3 = () => {
-    return (
-        <Flex
-            align={"center"}
-            sx={{
-                padding: "54px 0 30px",
-            }}
-        >
-            <Image src={Rule3Img}></Image>
-        </Flex>
-    );
+    return <Image src={Rule3Img}></Image>;
 };
 const Rule4 = () => {
-    return (
-        <Flex
-            align={"center"}
-            sx={{
-                padding: "54px 0 30px",
-            }}
-        >
-            <Image src={Rule4Img}></Image>
-        </Flex>
-    );
+    return <Image src={Rule4Img}></Image>;
 };
 
 const length = 4;
@@ -81,7 +45,7 @@ const Indicator = ({
         <Box
             sx={{
                 position: "absolute",
-                bottom: isPc ? "-120px" : "-160px",
+                bottom: isPc ? "-120px" : "-120px",
                 left: "50%",
                 transform: "translate(-50%, 0)",
                 width: "100%",
@@ -255,7 +219,21 @@ const RulesModal = ({
                         }}
                     ></Image>
                 )}
-                <ModalBody sx={{ maxWidth: "800px", width: "100%" }}>
+                <ModalBody
+                    sx={{
+                        maxWidth: "800px",
+                        width: "100%",
+                        aspectRatio: "13/12",
+                        padding: isPc ? "54px 20px 30px" : "20px 4px 30px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        "&:img": {
+                            width: "100%",
+                            height: "100%",
+                        },
+                    }}
+                >
                     {currentIndex === 0 && <Rule1></Rule1>}
                     {currentIndex === 1 && <Rule2></Rule2>}
                     {currentIndex === 2 && <Rule3></Rule3>}
