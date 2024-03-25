@@ -231,14 +231,62 @@ const RulesModal = ({
                     borderRadius: "24px",
                     width: "800px",
                     maxWidth: "800px",
+                    position: "relative",
                 }}
             >
+                {isPc && (
+                    <Image
+                        src={currentIndex === 0 ? GrayArrowIcon : ArrowIcon}
+                        sx={{
+                            width: "48px",
+                            transform: `${
+                                currentIndex !== 0 ? "rotate(180deg)" : ""
+                            }`,
+                            position: "absolute",
+                            left: "-80px",
+                            top: "50%",
+                            cursor:
+                                currentIndex === 0 ? "not-allowed" : "pointer",
+                        }}
+                        onClick={() => {
+                            if (currentIndex > 0) {
+                                handleChangeIndex(currentIndex - 1);
+                            }
+                        }}
+                    ></Image>
+                )}
                 <ModalBody sx={{ maxWidth: "800px", width: "100%" }}>
                     {currentIndex === 0 && <Rule1></Rule1>}
-                    {currentIndex === 1 && <Rule2></Rule2>}{" "}
+                    {currentIndex === 1 && <Rule2></Rule2>}
                     {currentIndex === 2 && <Rule3></Rule3>}
                     {currentIndex === 3 && <Rule4></Rule4>}
-                </ModalBody>{" "}
+                </ModalBody>
+                {isPc && (
+                    <Image
+                        src={
+                            currentIndex === length - 1
+                                ? GrayArrowIcon
+                                : ArrowIcon
+                        }
+                        sx={{
+                            width: "48px",
+                            transform:
+                                currentIndex === length - 1 && "rotate(180deg)",
+                            position: "absolute",
+                            right: "-80px",
+                            top: "50%",
+                            cursor:
+                                currentIndex === length - 1
+                                    ? "not-allowed"
+                                    : "pointer",
+                        }}
+                        onClick={() => {
+                            if (currentIndex < length - 1) {
+                                handleChangeIndex(currentIndex + 1);
+                            }
+                        }}
+                    ></Image>
+                )}
                 <Text
                     sx={{
                         position: "absolute",
@@ -268,6 +316,7 @@ const RulesModal = ({
                         cursor: "pointer",
                     }}
                 ></Image>
+
                 <Indicator
                     currentIndex={currentIndex}
                     onIndexChange={handleChangeIndex}
