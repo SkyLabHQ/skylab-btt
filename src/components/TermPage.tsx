@@ -15,6 +15,10 @@ const TermPage = ({ onContinue }: { onContinue: () => void }) => {
     const mounseY = useRef(0);
     const mouseImg = useRef(MouseBImage);
 
+    const handleOpenPdf = () => {
+        window.open("/BidTacToe Terms of Service.pdf", "_blank");
+    };
+
     // 处理鼠标移动
     const handleMouseMove = (event: any) => {
         const { clientX, clientY } = event;
@@ -139,9 +143,21 @@ const TermPage = ({ onContinue }: { onContinue: () => void }) => {
                     }}
                 >
                     By checking this box, you indicate your acceptance and
-                    agreement to be bound by our terms of service, including any
-                    updates or revisions thereto, and acknowledge that you have
-                    read and understand our privacy policy.
+                    agreement to be bound by our{" "}
+                    <span
+                        style={{
+                            fontWeight: "bold",
+                            color: "#FDDC2D",
+                            textDecorationLine: "underline",
+                            cursor: "pointer",
+                        }}
+                        onClick={handleOpenPdf}
+                    >
+                        terms of service
+                    </span>{" "}
+                    , including any updates or revisions thereto, and
+                    acknowledge that you have read and understand our privacy
+                    policy.
                 </Text>
             </Flex>
             <Text
