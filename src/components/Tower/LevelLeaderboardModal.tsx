@@ -176,6 +176,16 @@ const InfoItem = ({ detail }: { detail: any }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { onCopy } = useClipboard(detail.owner);
 
+    const isMe = useMemo(() => {
+        if (!address) {
+            return false;
+        }
+
+        if (address.toLocaleLowerCase() === detail.owner) {
+            return true;
+        }
+    }, [address, detail.owner]);
+
     const handleCopy = () => {
         onCopy();
         toast("Address copied");
@@ -240,15 +250,12 @@ const InfoItem = ({ detail }: { detail: any }) => {
             </Flex>
             <Box
                 sx={{
-                    color: "#FFF",
+                    color: isMe ? "#F2D861" : "#FFF",
                     textAlign: "center",
                     fontFamily: "Quantico",
                     fontSize: isPc ? "12px" : "8px",
-                    border: address
-                        ? address.toLocaleLowerCase === detail.owner
-                            ? "1px solid #F2D861"
-                            : "1px solid #FFF"
-                        : "1px solid #FFF",
+                    fontWeight: isMe ? "bold" : "normal",
+                    border: isMe ? "1px solid #F2D861" : "1px solid #FFF",
                     width: isPc ? "112px" : "76px",
                     borderRadius: isPc ? "16px" : "8px",
                     height: isPc ? "28px" : "20px",
