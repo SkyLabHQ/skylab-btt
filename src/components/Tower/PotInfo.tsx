@@ -250,7 +250,6 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
 
     useEffect(() => {
         if (Number(potAmount) > 0) {
-            console.log("gengxin a ");
             update(Number(potAmount));
         }
     }, [potAmount]);

@@ -16,6 +16,8 @@ const TermPage = ({ onContinue }: { onContinue: () => void }) => {
     const mouseImg = useRef(MouseBImage);
 
     const handleOpenPdf = () => {
+        localStorage.setItem("term", "true");
+        setConfirm(true);
         window.open("/BidTacToe Terms of Service.pdf", "_blank");
     };
 
@@ -111,7 +113,13 @@ const TermPage = ({ onContinue }: { onContinue: () => void }) => {
                     }}
                 ></Image>
             )}
-            <Flex align={"center"}>
+            <Flex
+                align={"center"}
+                sx={{
+                    position: "relative",
+                    marginTop: "-50px",
+                }}
+            >
                 <Flex
                     sx={{
                         width: "31px",
@@ -159,15 +167,21 @@ const TermPage = ({ onContinue }: { onContinue: () => void }) => {
                     acknowledge that you have read and understand our privacy
                     policy.
                 </Text>
+                {confirm && (
+                    <Text
+                        sx={{
+                            fontSize: "20px",
+                            marginTop: "90px",
+                            position: "absolute",
+                            bottom: "-100px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                        }}
+                    >
+                        Press any key to continue
+                    </Text>
+                )}
             </Flex>
-            <Text
-                sx={{
-                    fontSize: "20px",
-                    marginTop: "90px",
-                }}
-            >
-                Press any key to continue
-            </Text>
         </Flex>
     );
 };

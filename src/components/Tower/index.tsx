@@ -41,7 +41,6 @@ const TowerPage = () => {
     // 处理鼠标移动
     const handleMouseMove = (event: any) => {
         const { clientX, clientY } = event;
-        console.log(clientX, "clientX");
         mounseX.current = clientX;
         mounseY.current = clientY;
         const screenWidth = window.innerWidth;
