@@ -128,7 +128,7 @@ const MPotInfo = ({ potAmount }: { potAmount: string }) => {
                 left: "50%",
                 transform: "translateX(-50%)",
                 lineHeight: 1,
-                fontFamily: "Neoneon",
+                fontFamily: "Neon Sans",
             }}
         >
             <motion.div

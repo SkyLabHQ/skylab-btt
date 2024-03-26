@@ -186,7 +186,7 @@ const RulesModal = ({
             <ModalContent
                 containerProps={{
                     sx: {
-                        padding: "20px",
+                        padding: "12px",
                         "&:focus-visible": {
                             outline: "none",
                         },

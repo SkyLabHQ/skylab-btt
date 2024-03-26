@@ -244,7 +244,7 @@ const BackContent = ({
                 <Box>
                     <Flex
                         sx={{
-                            margin: isPc ? "-20px 0 0px" : "0px 0 20px",
+                            margin: isPc ? "-20px 0 0px" : "0px",
                         }}
                         align={"center"}
                     >
@@ -272,7 +272,7 @@ const BackContent = ({
                             textShadow: "0px 0px 19px  #00CCFF",
                             color: "rgba(255, 255, 255, 0.2)",
                             textAlign: "center",
-                            marginTop: isPc ? "0px" : "10px",
+                            marginTop: isPc ? "0px" : "0px",
                         }}
                         animate={{
                             color: [
@@ -306,6 +306,7 @@ const BackContent = ({
                             <Text
                                 sx={{
                                     fontSize: isPc ? "60px" : "30px",
+                                    fontFamily: "Neon",
                                 }}
                             >
                                 ETH

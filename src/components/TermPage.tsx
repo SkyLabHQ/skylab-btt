@@ -18,7 +18,10 @@ const TermPage = ({ onContinue }: { onContinue: () => void }) => {
     const handleOpenPdf = () => {
         localStorage.setItem("term", "true");
         setConfirm(true);
-        window.open("/BidTacToe Terms of Service.pdf", "_blank");
+        window.open(
+            "https://docs.google.com/document/d/1Tq04jfFTmyVzwto8BYtlBh9U9iZ7_Lsp4muaKudnQAA/edit#heading=h.dbtsmhujsl04",
+            "_blank",
+        );
     };
 
     // 处理鼠标移动
