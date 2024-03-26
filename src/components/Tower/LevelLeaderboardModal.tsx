@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
     Text,
     Modal,
@@ -17,7 +17,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import AvatarBg from "./assets/avatar-bg.png";
 import DefaultAvatar from "./assets/default-avatar.png";
 import { aviationImg } from "@/utils/aviationImg";
-import LevelDetailBg from "./assets/level-detail.png";
+import BiddingGif from "@/assets/bidding.gif";
 import Winner from "./assets/winner.png";
 import CloseIcon from "@/assets/close.png";
 import {
@@ -28,12 +28,90 @@ import {
 import { useChainId } from "wagmi";
 import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
 import { shortenAddress } from "@/utils";
-import { getLevel } from "@/utils/level";
+import { getLevel, levelRanges } from "@/utils/level";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import useCountDown from "react-countdown-hook";
+import HourglassIcon from "./assets/hourglass.png";
+
+const Timer = ({ time }: { time: number }) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [timeLeft, { start }] = useCountDown(5000, 1000);
+
+    useEffect(() => {
+        if (time === 0) {
+            start(0);
+            return;
+        }
+        const currentTime = new Date().getTime();
+        if (time * 1000 > currentTime) {
+            start(time * 1000 - currentTime);
+            return;
+        }
+        start(0);
+    }, [time]);
+
+    const { minutes, second, hour } = useMemo(() => {
+        let minutes: string | number = Math.floor((timeLeft / 60000) % 60);
+        if (minutes < 10) {
+            minutes = `0${minutes}`;
+        }
+
+        let second: string | number = Math.floor((timeLeft / 1000) % 60);
+        if (second < 10) {
+            second = `0${second}`;
+        }
+
+        let hour: string | number = Math.floor((timeLeft / 3600000) % 24);
+        if (hour < 10) {
+            hour = `0${hour}`;
+        }
+
+        return { minutes, second, hour };
+    }, [timeLeft]);
+    return (
+        <Flex
+            sx={{
+                position: "absolute",
+                top: isPc ? "-56px" : "-32px",
+                width: isPc ? "290px" : "100px",
+                left: "0%",
+                backdropFilter: "blur(6.795704364776611px)",
+                background: "rgba(0,0,0,0.15)",
+                border: "1px solid #fff",
+                borderRadius: "12px 12px 0 0",
+                height: isPc ? "56px" : "32px",
+                borderBottom: "none",
+            }}
+            align={"center"}
+            justify={"center"}
+        >
+            {isPc && (
+                <Image
+                    src={HourglassIcon}
+                    sx={{
+                        width: "24px",
+                        margin: "0 12px",
+                    }}
+                ></Image>
+            )}
+            <Box
+                sx={{
+                    fontSize: isPc ? "24px" : "12px",
+                    zIndex: 999,
+                    textAlign: "center",
+                    lineHeight: isPc ? "48px" : "32px",
+                }}
+            >
+                {hour}:{minutes}:{second}
+            </Box>
+        </Flex>
+    );
+};
 
 const NewComer = ({ detail }: { detail: any }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
-    const { onCopy } = useClipboard("12345");
+    const { onCopy } = useClipboard(detail.owner);
 
     const handleCopy = () => {
         onCopy();
@@ -93,9 +171,10 @@ const NewComer = ({ detail }: { detail: any }) => {
 };
 
 const InfoItem = ({ detail }: { detail: any }) => {
+    const { address } = usePrivyAccounts();
     const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { onCopy } = useClipboard("12345");
+    const { onCopy } = useClipboard(detail.owner);
 
     const handleCopy = () => {
         onCopy();
@@ -165,7 +244,11 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     textAlign: "center",
                     fontFamily: "Quantico",
                     fontSize: isPc ? "12px" : "8px",
-                    border: "1px solid #FFF",
+                    border: address
+                        ? address.toLocaleLowerCase === detail.owner
+                            ? "1px solid #F2D861"
+                            : "1px solid #FFF"
+                        : "1px solid #FFF",
                     width: isPc ? "112px" : "76px",
                     borderRadius: isPc ? "16px" : "8px",
                     height: isPc ? "28px" : "20px",
@@ -180,6 +263,27 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     ? detail.userName
                     : `${shortenAddress(detail.owner)}`}
             </Box>
+            <Text
+                sx={{
+                    fontSize: isPc ? "16px" : "12px",
+                }}
+            >
+                Highest Pt:
+            </Text>
+            <Text
+                sx={{
+                    fontSize: isPc ? "16px" : "12px",
+                }}
+            >
+                {detail.points}/
+                <span
+                    style={{
+                        fontSize: isPc ? "12px" : "8px",
+                    }}
+                >
+                    {detail.nextPoints}pt
+                </span>
+            </Text>
         </Flex>
     );
 };
@@ -203,82 +307,100 @@ const LevelLeaderboardModal = ({
         useMultiMercuryJarTournamentContract();
 
     const handleGetList = async () => {
-        setLoading(true);
-        const tokenIds: string[] = levelInfoDetail?.levelTokenIds;
-        const p1: any = [];
-        tokenIds.forEach((item: string) => {
-            p1.push(
-                multiMercuryJarTournamentContract.ownerOf(item),
-                multiMercuryJarTournamentContract.aviationPoints(item),
+        try {
+            setLoading(true);
+            const tokenIds: string[] = levelInfoDetail?.levelTokenIds;
+            const p1: any = [];
+            tokenIds.forEach((item: string) => {
+                p1.push(
+                    multiMercuryJarTournamentContract.ownerOf(item),
+                    multiMercuryJarTournamentContract.aviationPoints(item),
+                );
+            });
+
+            const p1R = await multiProvider.all(p1);
+            let currentList = tokenIds.map((tokenId, index) => {
+                const points = Number(p1R[index * 2 + 1].toString());
+                const levelItem = levelRanges.find((item) => {
+                    return points < item.maxPoints && points >= item.minPoints;
+                });
+                const level = levelItem.level;
+                const nextPoints = levelItem.maxPoints;
+                const prePoints = levelItem.minPoints;
+                return {
+                    tokenId: tokenId.toString(),
+                    owner: p1R[index * 2],
+                    points: p1R[index * 2 + 1].toString(),
+                    level: level,
+                    nextPoints: nextPoints,
+                    prePoints: prePoints,
+                };
+            });
+
+            const p2: any = [];
+
+            currentList.forEach((item) => {
+                p2.push(
+                    multiMercuryJarTournamentContract.userName(item.owner),
+                    multiMercuryPilotsContract.getActivePilot(item.owner),
+                );
+            });
+
+            const p2R = await multiProvider.all(p2);
+
+            const activePilotRes: any = [];
+
+            const allWallet: string[] = [];
+
+            currentList = currentList.map((item, index) => {
+                allWallet.push(item.owner);
+                activePilotRes.push(p2R[index * 2 + 1]);
+                return {
+                    ...item,
+                    userName: p2R[index * 2],
+                    pilotImg: "",
+                };
+            });
+
+            const allPilot: ActivePilotRes[] = activePilotRes.map(
+                (item: any) => {
+                    return {
+                        ...item,
+                        pilotId: item.pilotId.toNumber(),
+                    };
+                },
             );
-        });
 
-        const p1R = await multiProvider.all(p1);
-        let currentList = tokenIds.map((tokenId, index) => {
-            return {
-                tokenId: tokenId.toString(),
-                owner: p1R[index * 2],
-                points: p1R[index * 2 + 1].toString(),
-            };
-        });
+            const pilotList = await handlePilotsInfo1({
+                chainId: chainId,
+                allPilot,
+            });
 
-        const p2: any = [];
+            currentList = currentList.map((item, index) => {
+                return {
+                    ...item,
+                    pilotImg: pilotList[index].pilotImg,
+                };
+            });
 
-        currentList.forEach((item) => {
-            p2.push(
-                multiMercuryJarTournamentContract.userName(item.owner),
-                multiMercuryPilotsContract.getActivePilot(item.owner),
+            const newArray = Object.values(
+                currentList.reduce((acc, curr) => {
+                    const { owner, ...rest } = curr;
+                    if (acc[owner]) {
+                        acc[owner].count += 1;
+                    } else {
+                        acc[owner] = { owner, count: 1, ...rest };
+                    }
+                    return acc;
+                }, {}),
             );
-        });
 
-        const p2R = await multiProvider.all(p2);
-
-        const activePilotRes: any = [];
-
-        const allWallet: string[] = [];
-
-        currentList = currentList.map((item, index) => {
-            allWallet.push(item.owner);
-            activePilotRes.push(p2R[index * 2 + 1]);
-            return {
-                ...item,
-                userName: p2R[index * 2],
-                pilotImg: "",
-            };
-        });
-
-        const allPilot: ActivePilotRes[] = activePilotRes.map((item: any) => {
-            return {
-                ...item,
-                pilotId: item.pilotId.toNumber(),
-            };
-        });
-
-        const pilotList = await handlePilotsInfo1({
-            chainId: chainId,
-            allPilot,
-        });
-
-        currentList = currentList.map((item, index) => {
-            return {
-                ...item,
-                pilotImg: pilotList[index].pilotImg,
-            };
-        });
-
-        const newArray = Object.values(
-            currentList.reduce((acc, curr) => {
-                const { owner, ...rest } = curr;
-                if (acc[owner]) {
-                    acc[owner].count += 1;
-                } else {
-                    acc[owner] = { owner, count: 1, ...rest };
-                }
-                return acc;
-            }, {}),
-        );
-
-        setLeaderBoardList(newArray);
+            setLoading(false);
+            setLeaderBoardList(newArray);
+        } catch (e) {
+            console.log(e);
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -336,6 +458,7 @@ const LevelLeaderboardModal = ({
                         padding: "10px",
                     }}
                 >
+                    <Timer time={111}></Timer>
                     <Image
                         src={aviationImg(levelInfoDetail?.level)}
                         sx={{
@@ -411,22 +534,40 @@ const LevelLeaderboardModal = ({
                                 </Text>
                             </Box>
                         )}
-                        <SimpleGrid
-                            columns={isPc ? 5 : 3}
-                            sx={{
-                                marginTop: isPc ? "40px" : "20px",
-                            }}
-                            spacingY={"10px"}
-                        >
-                            {leaderBoardList.map((item, index) => {
-                                return (
-                                    <InfoItem
-                                        detail={item}
-                                        key={index}
-                                    ></InfoItem>
-                                );
-                            })}
-                        </SimpleGrid>
+                        {loading ? (
+                            <Flex
+                                flexDir={"column"}
+                                align={"center"}
+                                justify={"center"}
+                                sx={{
+                                    marginTop: isPc ? "40px" : "20px",
+                                }}
+                            >
+                                <Image
+                                    src={BiddingGif}
+                                    sx={{
+                                        width: isPc ? "160px" : "50px",
+                                    }}
+                                ></Image>
+                            </Flex>
+                        ) : (
+                            <SimpleGrid
+                                columns={isPc ? 5 : 3}
+                                sx={{
+                                    marginTop: isPc ? "40px" : "20px",
+                                }}
+                                spacingY={"10px"}
+                            >
+                                {leaderBoardList.map((item, index) => {
+                                    return (
+                                        <InfoItem
+                                            detail={item}
+                                            key={index}
+                                        ></InfoItem>
+                                    );
+                                })}
+                            </SimpleGrid>
+                        )}
                     </Box>
                 </ModalBody>
                 <Image

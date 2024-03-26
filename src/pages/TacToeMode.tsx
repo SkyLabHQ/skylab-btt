@@ -479,7 +479,7 @@ const TacToeMode = () => {
                                 }}
                             >
                                 <Text>Back</Text>
-                                <Text>ToArena</Text>
+                                <Text>To Arena</Text>
                             </Box>
                         }
                     ></BackWithText>
