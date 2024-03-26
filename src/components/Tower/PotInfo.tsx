@@ -8,11 +8,10 @@ import {
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo } from "react";
-import HummerIcon from "./assets/m-hummer.png";
-import { ReactComponent as ETHIcon } from "@/assets/ETH.svg";
-import CountUp, { useCountUp } from "react-countup";
+import { useCountUp } from "react-countup";
 import OpenSeaIcon from "@/assets/opensea.png";
 import useCountDown from "react-countdown-hook";
+import RightArrow from "./assets/right-arrow.svg";
 
 const ScrollNum = ({
     fontSize = "95px",
@@ -514,13 +513,7 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                         margin: "0 8px",
                     }}
                 ></Box>
-                <Box
-                    sx={{
-                        width: "16px",
-                        height: "4px",
-                        background: "#606060",
-                    }}
-                ></Box>
+                <Image src={RightArrow}></Image>
             </Flex>
         </Box>
     );

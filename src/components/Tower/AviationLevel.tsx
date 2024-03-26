@@ -22,6 +22,7 @@ import LevelLeaderboardModal from "./LevelLeaderboardModal";
 import PaperIcon from "./assets/paper.png";
 import DefaultAvatar from "./assets/default-avatar.png";
 import LockIcon from "./assets/lock.png";
+import { useUserInfoRequest } from "@/contexts/UserInfo";
 
 const list = [
     {
@@ -545,6 +546,8 @@ const AviationLevel = ({
     levelInfo: any[];
     totalPaper: any;
 }) => {
+    const { onUserInfoOpen } = useUserInfoRequest();
+
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const {
         isOpen: isLeaderboardModalOpen,
@@ -817,6 +820,7 @@ const AviationLevel = ({
                             top: isPc ? "4680px" : "1930px",
                             left: isPc ? "150px" : "20px",
                         }}
+                        onClick={onUserInfoOpen}
                     >
                         <Flex
                             sx={{
