@@ -134,12 +134,10 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
     } = useDisclosure();
     const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfoRequest();
-    const { wallets } = useWallets();
     const { ready, authenticated, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
     const { activePilot } = useUserInfoRequest();
 
-    console.log(address, "address");
     const handleLogin = () => {
         if (!ready) {
             toast("Please wait for the wallet to be ready");

@@ -92,7 +92,7 @@ const BuyButton = ({
                 height: "100%",
                 borderRadius: "12px",
                 background: "#f2d861",
-                fontSize: isPc ? "16px" : "12px",
+                fontSize: isPc ? "16px" : "10px",
                 padding: "0 12px",
                 color: "#000",
                 cursor: "pointer",
@@ -116,7 +116,6 @@ const BuyButton = ({
             >
                 <Text
                     sx={{
-                        fontSize: isPc ? "18px" : "12px",
                         marginRight: "3px",
                         textAlign: "center",
                     }}
@@ -137,7 +136,7 @@ const BuyButton = ({
                     <Image
                         src={BuyIcon}
                         sx={{
-                            width: "12px",
+                            width: isPc ? "12px" : "8px",
                             marginRight: "5px",
                         }}
                     ></Image>
@@ -323,9 +322,9 @@ const BuyBt = () => {
                             </Flex>
                             <Box
                                 sx={{
-                                    width: isPc ? "180px" : "120px",
+                                    width: isPc ? "180px" : "140px",
                                     height: isPc ? "40px" : "30px",
-                                    margin: "8px 0 24px",
+                                    margin: isPc ? "8px 0 24px" : "8px 0 16px",
                                 }}
                             >
                                 {address ? (
