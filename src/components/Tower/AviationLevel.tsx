@@ -819,6 +819,7 @@ const AviationLevel = ({
                             zIndex: 999,
                             top: isPc ? "4680px" : "1930px",
                             left: isPc ? "150px" : "20px",
+                            cursor: "pointer",
                         }}
                         onClick={onUserInfoOpen}
                     >

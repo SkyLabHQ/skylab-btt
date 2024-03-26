@@ -11,7 +11,11 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import ArrowIcon from "./assets/arrow.png";
+import ArrowIcon1 from "./assets/arrow1.png";
+
 import GrayArrowIcon from "./assets/gray-arrow.png";
+import GrayArrowIcon1 from "./assets/gray-arrow1.png";
+
 import Rule1Img from "./assets/rule1.png";
 import Rule2Img from "./assets/rule2.png";
 import Rule3Img from "./assets/rule3.png";
@@ -200,7 +204,7 @@ const RulesModal = ({
             >
                 {isPc && (
                     <Image
-                        src={currentIndex === 0 ? GrayArrowIcon : ArrowIcon}
+                        src={currentIndex === 0 ? GrayArrowIcon1 : ArrowIcon1}
                         sx={{
                             width: "48px",
                             transform: `${
@@ -243,8 +247,8 @@ const RulesModal = ({
                     <Image
                         src={
                             currentIndex === length - 1
-                                ? GrayArrowIcon
-                                : ArrowIcon
+                                ? GrayArrowIcon1
+                                : ArrowIcon1
                         }
                         sx={{
                             width: "48px",
