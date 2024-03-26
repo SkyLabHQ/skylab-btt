@@ -12,12 +12,34 @@ import {
     PopoverContent,
     PopoverBody,
     useDisclosure,
+    keyframes,
 } from "@chakra-ui/react";
 import React from "react";
 import { GameState, MESSAGES } from "@/skyConstants/bttGameTypes";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
 import SubIcon from "@/components/BttComponents/assets/sub.svg";
 import MessageIcon1 from "./assets/message-dot.svg";
+
+const move = keyframes`
+    0% {
+        border-color: #FDDC2D;
+    }
+    
+    100% {
+        border-color: transparent;
+    }
+`;
+
+const bt = keyframes`
+    0% {
+        color: #FDDC2D;
+    }
+    
+    100% {
+        color: transparent;
+    }
+
+`;
 
 const BottomInputBox = ({
     myBalance,
@@ -30,6 +52,7 @@ const BottomInputBox = ({
     onSetMessage,
     onInputAmountClick,
     onIuputAmount,
+    showAnimate,
 }: {
     myBalance?: number;
     bidAmount: string;
@@ -44,6 +67,7 @@ const BottomInputBox = ({
         type: "setMessage" | "setEmote",
         emoteIndex?: number,
     ) => void;
+    showAnimate?: boolean;
 }) => {
     const [selectMessageIndex, setSelectMessageIndex] = React.useState(-1);
     const { onOpen, onClose, isOpen } = useDisclosure();
@@ -224,7 +248,11 @@ const BottomInputBox = ({
                             borderRadius={"10px"}
                             sx={{
                                 padding: "0 20px",
+                                border: "1px solid transparent",
                             }}
+                            animation={`${
+                                showAnimate ? move : ""
+                            } 0.5s linear infinite alternate`}
                         >
                             <SliderFilledTrack bg="#545454" />
                         </SliderTrack>
@@ -234,6 +262,7 @@ const BottomInputBox = ({
                                 height: "26px !important",
                                 borderRadius: "100px",
                                 border: "none",
+
                                 background:
                                     "linear-gradient(180deg, rgba(253, 220, 45, 0) 0%, rgba(253, 220, 45, 1) 49.24%, rgba(253, 220, 45, 0) 100%)",
                                 outline: "none",
@@ -268,7 +297,6 @@ const BottomInputBox = ({
                 ) : (
                     <Text
                         onClick={() => {
-                            console.log(111);
                             onConfirm();
                         }}
                         sx={{
@@ -278,6 +306,9 @@ const BottomInputBox = ({
                                     : "#414141",
                             // width: "114px",
                         }}
+                        animation={`${
+                            showAnimate ? bt : ""
+                        } 0.5s linear infinite alternate`}
                     >
                         {myGameState === GameState.Commited ||
                         myGameState === GameState.Revealed

@@ -44,6 +44,11 @@ const MLayout = ({
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } = useGameContext();
     const myGameState = myGameInfo.gameState;
 
+    const showAnimate =
+        list.every((item) => {
+            return item.mark === -1 || item.mark === 0;
+        }) && myGameState === GameState.WaitingForBid;
+
     useEffect(() => {
         if (messageLoading || emoteLoading) {
             onClose();
@@ -209,6 +214,7 @@ const MLayout = ({
                     </Flex>
                 </Box>
                 <BottomInputBox
+                    showAnimate={showAnimate}
                     onSetMessage={onSetMessage}
                     myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}
