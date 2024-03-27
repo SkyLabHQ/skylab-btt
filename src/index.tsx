@@ -48,7 +48,7 @@ root.render(
                     showWalletLoginFirst: false,
                     logo: "https://pub-dc971f65d0aa41d18c1839f8ab426dcb.r2.dev/privy.png",
                 },
-                loginMethods: ["wallet", "discord", "twitter"],
+                loginMethods: ["wallet", "discord", "twitter", "google"],
                 embeddedWallets: {
                     createOnLogin: "users-without-wallets",
                     requireUserPasswordOnCreate: false,
