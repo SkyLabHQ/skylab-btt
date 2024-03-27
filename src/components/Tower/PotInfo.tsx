@@ -124,11 +124,15 @@ const MPotInfo = ({ potAmount }: { potAmount: string }) => {
         <Box
             sx={{
                 position: "absolute",
-                bottom: "0px",
+                bottom: "20px",
                 left: "50%",
                 transform: "translateX(-50%)",
                 lineHeight: 1,
                 fontFamily: "Neon Sans",
+                marginBottom: [
+                    "constant(safe-area-inset-bottom)",
+                    "env(safe-area-inset-bottom)",
+                ],
             }}
         >
             <motion.div
