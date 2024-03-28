@@ -40,7 +40,6 @@ export const UserInfoProvider = ({
             >
                 {children}
                 <UserInfoDrawer
-                    activePilot={activePilot}
                     isOpen={isOpen}
                     onClose={onClose}
                 ></UserInfoDrawer>

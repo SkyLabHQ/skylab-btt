@@ -477,14 +477,19 @@ const MyPlane = ({
                     <SimpleGrid columns={3} spacingY={"10px"}>
                         {new Array(3).fill("").map((item, index) => {
                             return (
-                                <Box
+                                <Flex
                                     sx={{
                                         position: "relative",
                                     }}
+                                    align={"center"}
+                                    justify={"center"}
                                     key={index}
                                 >
-                                    <Image src={BiddingGif}></Image>
-                                </Box>
+                                    <Image
+                                        src={BiddingGif}
+                                        sx={{ width: "50px", height: "50px" }}
+                                    ></Image>
+                                </Flex>
                             );
                         })}
                     </SimpleGrid>
@@ -495,11 +500,9 @@ const MyPlane = ({
 };
 
 const UserInfoDrawer = ({
-    activePilot,
     onClose,
     isOpen,
 }: {
-    activePilot: PilotInfo;
     isOpen: boolean;
     onClose: () => void;
 }) => {
