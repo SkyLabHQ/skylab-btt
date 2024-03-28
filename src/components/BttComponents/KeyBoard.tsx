@@ -170,11 +170,7 @@ const KeyBoard = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
     return (
-        <Box
-            sx={{
-                marginRight: isPc ? "0.7292vw" : "5px",
-            }}
-        >
+        <Box>
             <Popover
                 onClose={() => {
                     onClose();
@@ -191,8 +187,8 @@ const KeyBoard = ({
                             alignItems: "center",
                             justifyContent: "center",
                             cursor: "pointer",
-                            height: isPc ? "2.3958vw" : "32px",
-                            width: isPc ? "2.3958vw" : "32px",
+                            height: isPc ? "48px" : "32px",
+                            width: isPc ? "48px" : "32px",
                             "&:focus": {
                                 boxShadow: "none",
                             },
@@ -202,8 +198,8 @@ const KeyBoard = ({
                         <Image
                             src={KeyboardIcon}
                             sx={{
-                                height: isPc ? "2.3958vw" : "32px",
-                                width: isPc ? "2.3958vw" : "32px",
+                                height: isPc ? "48px" : "32px",
+                                width: isPc ? "48px" : "32px",
                             }}
                         ></Image>
                     </Button>

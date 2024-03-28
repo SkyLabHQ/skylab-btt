@@ -51,9 +51,8 @@ export const ToolShare = ({
                     }}
                     src={ShareIcon}
                     sx={{
-                        height: isPc ? "2.3958vw" : "32px",
-                        width: isPc ? "2.3958vw" : "32px",
-                        marginRight: isPc ? "0.7292vw" : "5px",
+                        height: isPc ? "48px" : "32px",
+                        width: isPc ? "48px" : "32px",
                         cursor: "pointer",
                     }}
                 ></Image>

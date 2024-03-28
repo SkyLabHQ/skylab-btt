@@ -44,6 +44,7 @@ const ToolBar = ({
                     cursor: "pointer",
                 },
                 zIndex: 100,
+                gap: isPc ? "16px" : "0.7292vw",
             }}
         >
             <KeyBoard
@@ -70,9 +71,8 @@ const ToolBar = ({
                 <Image
                     src={TutorialIcon}
                     sx={{
-                        height: isPc ? "2.3958vw" : "32px",
-                        width: isPc ? "2.3958vw" : "32px",
-                        marginRight: isPc ? "0.7292vw" : "5px",
+                        height: isPc ? "48px" : "32px",
+                        width: isPc ? "48px" : "32px",
                     }}
                 ></Image>
             </BidTacToeTutorial>
@@ -80,8 +80,8 @@ const ToolBar = ({
                 onClick={onQuitClick}
                 src={QuitIcon}
                 sx={{
-                    height: isPc ? "2.3958vw" : "32px",
-                    width: isPc ? "2.3958vw" : "32px",
+                    height: isPc ? "48px" : "32px",
+                    width: isPc ? "48px" : "32px",
                     cursor: "pointer",
                 }}
             ></Image>

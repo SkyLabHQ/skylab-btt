@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Modal, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { TourProvider } from "@reactour/tour";
 import "@reactour/popover/dist/index.css"; // arrow css
-import { doArrow, mTourConfig, tourConfig } from "@/components/TacToe/config";
+import { mTourConfig, tourConfig } from "@/components/TacToe/config";
 import ContentComponent from "@/components/TacToe/TourComponent";
 import TacToeTutorial from "@/components/TacToe/TacTocTutorial";
 import MTacToeTutorial from "./MTacTocTutorial";
@@ -12,11 +12,7 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
     return (
-        <Box
-            sx={{
-                height: isPc ? "2.3958vw" : "32px",
-            }}
-        >
+        <Box>
             <Box
                 onClick={() => {
                     onOpen();

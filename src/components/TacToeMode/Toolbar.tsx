@@ -1,5 +1,4 @@
 import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
-import React from "react";
 import BidTacToeTutorial from "@/components/TacToe/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
 import PlayBackIcon from "./assets/playback-icon.svg";
@@ -17,7 +16,7 @@ export const Toolbar = () => {
     const navigate = useNavigate();
     const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfoRequest();
-    const { ready, authenticated, login, user, connectWallet } = usePrivy();
+    const { ready, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
     const { activePilot } = useUserInfoRequest();
     const handleLogin = () => {
@@ -40,27 +39,75 @@ export const Toolbar = () => {
                 right: "3.125vw",
                 top: "1.4063vw",
                 display: "flex",
-                rowGap: isPc ? "12px" : "0.7292vw",
+                gap: isPc ? "24px" : "0.7292vw",
+                alignItems: "center",
             }}
         >
-            <Box>
+            <Box
+                sx={{
+                    cursor: "pointer",
+                }}
+            >
                 {address ? (
-                    <MyPilot
-                        onClick={onUserInfoOpen}
-                        imgUrl={activePilot.img}
-                        sx={{
-                            width: isPc ? "2.3958vw" : "32px",
-                            height: isPc ? "2.3958vw" : "32px",
-                            cursor: "pointer",
-                        }}
-                    ></MyPilot>
+                    isPc ? (
+                        <Flex
+                            onClick={() => {
+                                onUserInfoOpen();
+                            }}
+                            sx={{
+                                position: "relative",
+                                paddingLeft: "20px",
+                            }}
+                            justify={"flex-end"}
+                            align={"center"}
+                        >
+                            <MyPilot
+                                imgUrl={activePilot.img}
+                                width="60px"
+                                sx={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "0px",
+                                    transform: "translate(0%, -50%)",
+                                    zIndex: 999,
+                                }}
+                            ></MyPilot>
+
+                            <Box
+                                sx={{
+                                    width: "184px",
+                                    height: "48px",
+                                    border: "1px solid #f2d861",
+                                    borderLeft: "none",
+                                    position: "relative",
+                                    background: "rgb(61,61,61)",
+                                    borderEndRadius: "24px",
+                                    fontFamily: "Quantico",
+                                    paddingLeft: "50px",
+                                    lineHeight: "48px",
+                                }}
+                            >
+                                {shortenAddress(address, 5, 4)}
+                            </Box>
+                        </Flex>
+                    ) : (
+                        <MyPilot
+                            onClick={onUserInfoOpen}
+                            imgUrl={activePilot.img}
+                            sx={{
+                                width: "32px",
+                                height: "32px",
+                                cursor: "pointer",
+                            }}
+                        ></MyPilot>
+                    )
                 ) : (
                     <Image
                         onClick={handleLogin}
                         src={WalletIcon}
                         sx={{
-                            width: isPc ? "2.3958vw" : "32px",
-                            height: isPc ? "2.3958vw" : "32px",
+                            width: isPc ? "48px" : "32px",
+                            height: isPc ? "48px" : "32px",
                             cursor: "pointer",
                         }}
                     ></Image>
@@ -69,8 +116,8 @@ export const Toolbar = () => {
             <Image
                 src={PlayBackIcon}
                 sx={{
-                    width: isPc ? "2.3958vw" : "32px",
-                    height: isPc ? "2.3958vw" : "32px",
+                    width: isPc ? "48px" : "32px",
+                    height: isPc ? "48px" : "32px",
                     cursor: "pointer",
                 }}
                 onClick={() => {
@@ -80,8 +127,8 @@ export const Toolbar = () => {
             <BidTacToeTutorial>
                 <Image
                     sx={{
-                        width: isPc ? "2.3958vw" : "32px",
-                        height: isPc ? "2.3958vw" : "32px",
+                        width: isPc ? "48px" : "32px",
+                        height: isPc ? "48px" : "32px",
                     }}
                     src={BulbIcon}
                 ></Image>
