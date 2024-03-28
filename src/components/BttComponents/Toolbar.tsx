@@ -1,8 +1,7 @@
 import { Box, Image, useDisclosure, useMediaQuery } from "@chakra-ui/react";
-import React from "react";
 import TutorialIcon from "@/components/BttComponents/assets/tutorial-icon.svg";
 import KeyBoard from "../BttComponents/KeyBoard";
-import QuitIcon from "@/components/BttComponents/assets/quit.svg";
+import QuitIcon from "@/components/BttComponents/assets/quit.png";
 import { ToolShare } from "../BttComponents/ToolShare";
 import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
 

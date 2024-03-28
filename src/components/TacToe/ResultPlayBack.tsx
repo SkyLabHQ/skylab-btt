@@ -20,10 +20,10 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "../PrivateRoom/ShareButton";
+import { useNavigate } from "react-router-dom";
 
 const ResultPage = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-
+    const navigate = useNavigate();
     const {
         realChainId,
         bidTacToeGameAddress,
@@ -32,6 +32,7 @@ const ResultPage = () => {
         opInfo,
         opGameInfo,
         onStep,
+        istest,
     } = useGameContext();
 
     const [init, setInit] = useState(false);
@@ -300,6 +301,10 @@ ${des}`;
     };
 
     const handleNext = async () => {
+        if (istest) {
+            navigate("/btt");
+            return;
+        }
         onStep();
     };
 

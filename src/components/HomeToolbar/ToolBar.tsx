@@ -9,7 +9,7 @@ import TipIcon from "./assets/tip-icon.png";
 import WalletIcon from "./assets/wallet-icon.png";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
 import useSkyToast from "@/hooks/useSkyToast";
 import { shortenAddress } from "@/utils";
 import RulesModal from "./RulesModal";
@@ -99,7 +99,6 @@ const MToolBar = ({
                             onClick={onUserInfoOpen}
                             width="36px"
                             imgUrl={activePilot.img}
-                            sx={{}}
                         ></MyPilot>
                     ) : (
                         <Image

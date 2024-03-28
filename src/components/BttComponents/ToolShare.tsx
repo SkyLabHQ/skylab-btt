@@ -11,7 +11,7 @@ import {
     useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
-import ShareIcon from "./assets/share.svg";
+import ShareIcon from "./assets/share.png";
 import LinkIcon from "./assets/link.svg";
 import TwIcon from "./assets/tw.svg";
 import useSkyToast from "@/hooks/useSkyToast";
