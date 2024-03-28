@@ -69,7 +69,7 @@ export const Toolbar = () => {
                                     top: "50%",
                                     left: "0px",
                                     transform: "translate(0%, -50%)",
-                                    zIndex: 999,
+                                    zIndex: 99,
                                 }}
                             ></MyPilot>
 
