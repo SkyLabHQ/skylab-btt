@@ -1,14 +1,37 @@
-import { Box, Image, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import BidTacToeTutorial from "@/components/TacToe/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
 import PlayBackIcon from "./assets/playback-icon.svg";
-
+import WalletIcon from "./assets/wallet-icon.png";
 import { useNavigate } from "react-router-dom";
+import { shortenAddress } from "@/utils";
+import MyPilot from "../MyPilot";
+import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { usePrivy } from "@privy-io/react-auth";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import useSkyToast from "@/hooks/useSkyToast";
 
 export const Toolbar = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
+    const toast = useSkyToast();
+    const { onUserInfoOpen } = useUserInfoRequest();
+    const { ready, authenticated, login, user, connectWallet } = usePrivy();
+    const { address } = usePrivyAccounts();
+    const { activePilot } = useUserInfoRequest();
+    const handleLogin = () => {
+        if (!ready) {
+            toast("Please wait for the wallet to be ready");
+            return;
+        }
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
+        login();
+    };
 
     return (
         <Box
@@ -17,14 +40,37 @@ export const Toolbar = () => {
                 right: "3.125vw",
                 top: "1.4063vw",
                 display: "flex",
+                rowGap: isPc ? "12px" : "0.7292vw",
             }}
         >
+            <Box>
+                {address ? (
+                    <MyPilot
+                        onClick={onUserInfoOpen}
+                        imgUrl={activePilot.img}
+                        sx={{
+                            width: isPc ? "2.3958vw" : "32px",
+                            height: isPc ? "2.3958vw" : "32px",
+                            cursor: "pointer",
+                        }}
+                    ></MyPilot>
+                ) : (
+                    <Image
+                        onClick={handleLogin}
+                        src={WalletIcon}
+                        sx={{
+                            width: isPc ? "2.3958vw" : "32px",
+                            height: isPc ? "2.3958vw" : "32px",
+                            cursor: "pointer",
+                        }}
+                    ></Image>
+                )}
+            </Box>
             <Image
                 src={PlayBackIcon}
                 sx={{
                     width: isPc ? "2.3958vw" : "32px",
                     height: isPc ? "2.3958vw" : "32px",
-                    marginRight: "0.7292vw",
                     cursor: "pointer",
                 }}
                 onClick={() => {
@@ -32,63 +78,13 @@ export const Toolbar = () => {
                 }}
             ></Image>
             <BidTacToeTutorial>
-                <Box
+                <Image
                     sx={{
                         width: isPc ? "2.3958vw" : "32px",
                         height: isPc ? "2.3958vw" : "32px",
-                        boxShadow: "0px 0px 8px 4px rgba(255, 255, 255, 0.50)",
-                        borderRadius: isPc ? "0.5208vw" : "6px",
-                        border: "2px solid #FFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        position: "relative",
                     }}
-                >
-                    <Image
-                        sx={{
-                            width: isPc ? "1.6667vw" : "24px",
-                            height: isPc ? "1.6667vw" : "24px",
-                        }}
-                        src={BulbIcon}
-                    ></Image>
-
-                    {/* {isPc && (
-                        <Box
-                            sx={{
-                                position: "absolute",
-                                bottom: "-4.6875vw",
-                                right: "0%",
-                                // transform: "translateX(-50%)",
-                                width: "10.4167vw",
-                                display: "flex",
-                                alignItems: "flex-end",
-                                flexDirection: "column",
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    width: 0,
-                                    height: 0,
-                                    borderLeft: "0.4427vw solid transparent",
-                                    borderRight: "0.4427vw solid transparent",
-                                    borderBottom: "0.7668vw solid #fff",
-                                }}
-                            ></Box>
-                            <Text
-                                sx={{
-                                    textAlign: "center",
-                                    fontSize: "0.8333vw",
-                                    marginTop: "0.2083vw",
-                                    fontFamily: "Quantico",
-                                }}
-                            >
-                                You can always revisit tutorial here
-                            </Text>
-                        </Box>
-                    )} */}
-                </Box>
+                    src={BulbIcon}
+                ></Image>
             </BidTacToeTutorial>
         </Box>
     );

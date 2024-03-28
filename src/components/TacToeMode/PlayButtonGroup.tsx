@@ -111,7 +111,7 @@ export const PlayButtonGroup = ({
                             color: tournamentDisabled ? "#bcbbbe" : "#fff",
                         }}
                     >
-                        Play
+                        Start Game
                     </Text>
                     <Text
                         sx={{
@@ -121,7 +121,7 @@ export const PlayButtonGroup = ({
                         }}
                         className="play-button-text2"
                     >
-                        Tournament
+                        With Plane
                     </Text>
                 </Box>
             </GrayButton>

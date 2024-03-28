@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import React from "react";
 import PilotBorder from "@/assets/pilot-border.png";
 import UserIcon from "@/assets/user-icon.png";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
 
 const PilotStyle = styled(Box)`
     background: url(${PilotBorder}) no-repeat;
