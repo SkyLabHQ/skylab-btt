@@ -13,6 +13,12 @@ export const GlobalStyles = css`
         font-weight: normal;
         font-style: normal;
     }
+    @font-face {
+        font-family: "neonsans";
+        src: url("/neonsans-gogrg.ttf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+    }
     * {
         box-sizing: border-box;
         padding: 0;

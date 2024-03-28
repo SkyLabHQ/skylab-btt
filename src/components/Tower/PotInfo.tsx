@@ -142,6 +142,7 @@ const MPotInfo = ({ potAmount }: { potAmount: string }) => {
                     color: "rgba(255, 255, 255, 0.2)",
                     fontSize: "24px",
                     textAlign: "center",
+                    fontFamily: "neonsans",
                 }}
                 animate={animationObj}
                 transition={{
@@ -280,6 +281,7 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                         color: "rgba(255, 255, 255, 0.2)",
                         fontSize: "74px",
                         textAlign: "center",
+                        fontFamily: "neonsans",
                     }}
                     animate={animationObj}
                     transition={{

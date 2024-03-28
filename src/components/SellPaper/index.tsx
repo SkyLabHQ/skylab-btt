@@ -255,6 +255,7 @@ const BackContent = ({
                                 color: "rgba(255, 255, 255, 0.2)",
                                 fontSize: isPc ? "100px" : "44px",
                                 textAlign: "center",
+                                fontFamily: "neonsans",
                             }}
                             animate={animationObj}
                             transition={{
