@@ -113,7 +113,7 @@ const FirstContent = () => {
                 <Image
                     src={CHummer}
                     sx={{
-                        maxWidth: isPc ? "100%" : "150%",
+                        maxWidth: isPc ? "100%" : "350%",
                         marginBottom: isPc ? "-100px" : "-60px",
                     }}
                 ></Image>
@@ -238,7 +238,7 @@ const BackContent = ({
                     height: "100%",
                     fontFamily: "Neoneon",
                     position: "relative",
-                    paddingTop: "50px",
+                    paddingTop: isPc ? "50px" : "10px",
                 }}
             >
                 <Box>
@@ -253,7 +253,7 @@ const BackContent = ({
                                 width: "100%",
                                 textShadow: "0px 0px 19px  #00CCFF",
                                 color: "rgba(255, 255, 255, 0.2)",
-                                fontSize: isPc ? "100px" : "44px",
+                                fontSize: isPc ? "100px" : "38px",
                                 textAlign: "center",
                                 fontFamily: "neonsans",
                             }}
@@ -296,7 +296,7 @@ const BackContent = ({
                             <Text
                                 ref={countUpRef}
                                 sx={{
-                                    fontSize: isPc ? "120px" : "60px",
+                                    fontSize: isPc ? "120px" : "50px",
                                     lineHeight: 1,
                                     fontFamily: "neon",
                                     width: isPc ? "200px" : "100px",
@@ -760,7 +760,7 @@ const SellPaper = () => {
             <Box
                 className="card"
                 sx={{
-                    width: isPc ? "520px" : "330px",
+                    width: isPc ? "520px" : "250px",
                     height: "auto",
                     borderRadius: "50%",
                     aspectRatio: "1/1",
