@@ -821,6 +821,8 @@ const SellPaper = () => {
                             width: "100%",
                             height: "100%",
                             backfaceVisibility: "hidden",
+                            webkitBackfaceVisibility: "hidden !important",
+                            WebkitPerspective: 0,
                             overflow: "hidden",
                             borderRadius: "50%",
                             "&::before": {
@@ -847,6 +849,8 @@ const SellPaper = () => {
                             width: "100%",
                             height: "100%",
                             backfaceVisibility: "hidden",
+                            webkitBackfaceVisibility: "hidden !important",
+                            WebkitPerspective: 0,
                             borderRadius: "50%",
                             overflow: "hidden",
                             "&::before": {
