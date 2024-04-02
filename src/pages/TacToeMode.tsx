@@ -63,6 +63,7 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
 import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
+import { usePrivy } from "@privy-io/react-auth";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -118,6 +119,7 @@ const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(30000, 1000);
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
+    const { ready, login, user, connectWallet } = usePrivy();
     const {
         isOpen: isMyAviationOpen,
         onOpen: onMyAviationOpen,
@@ -260,7 +262,7 @@ const TacToeMode = () => {
 
     const handleCreateOrJoinDefault = async () => {
         if (!address) {
-            toast("Please Connect wallet to enter tournament");
+            handleLogin();
             return;
         }
         onMyAviationOpen();
@@ -268,7 +270,7 @@ const TacToeMode = () => {
 
     const handleTournament = async () => {
         if (!address) {
-            toast("Please Connect wallet to enter tournament");
+            handleLogin();
             return;
         }
 
@@ -411,6 +413,19 @@ const TacToeMode = () => {
 
     const handlePreviousLobbyConfirm = async () => {
         navigate(`/btt/lobby?lobbyAddress=${activeLobbyAddress}`);
+    };
+
+    const handleLogin = () => {
+        if (!ready) {
+            toast("Please wait for the wallet to be ready");
+            return;
+        }
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
+        login();
     };
 
     useEffect(() => {
