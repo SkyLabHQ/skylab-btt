@@ -28,6 +28,7 @@ import { usePublicClient } from "wagmi";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import WalletIcon from "./assets/wallet-icon.svg";
 import { usePrivy } from "@privy-io/react-auth";
+import { useNavigate } from "react-router-dom";
 
 const ConnectWalletBt = () => {
     const toast = useSkyToast();
@@ -178,6 +179,7 @@ const BuyBt = () => {
     const [inputAmount, setInputAmount] = React.useState(1);
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const { ready, authenticated, login, user, connectWallet } = usePrivy();
+    const navigate = useNavigate();
 
     const handleMintPlane = async () => {
         try {
@@ -227,6 +229,9 @@ const BuyBt = () => {
                 onOpen={() => {
                     if (!address) {
                         handleLogin();
+                        return;
+                    } else {
+                        navigate("/buyPaper");
                         return;
                     }
                     onOpen();

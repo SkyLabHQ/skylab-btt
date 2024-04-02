@@ -813,7 +813,9 @@ const AviationLevel = ({
                                             </span>
                                             <span
                                                 style={{
-                                                    fontSize: "16px",
+                                                    fontSize: isPc
+                                                        ? "16px"
+                                                        : "12px",
                                                 }}
                                             >
                                                 {

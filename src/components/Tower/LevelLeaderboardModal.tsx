@@ -217,11 +217,11 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     sx={{
                         background: `url(${AmountBg})`,
                         backgroundSize: "100% 100%",
-                        width: isPc ? "28px" : "14px",
-                        height: isPc ? "28px" : "14px",
+                        width: isPc ? "28px" : "24px",
+                        height: isPc ? "28px" : "24px",
                         position: "absolute",
-                        top: isPc ? "10px" : "5px",
-                        right: "0%",
+                        top: isPc ? "10px" : "-4px",
+                        right: "-4px",
                     }}
                     justify={"center"}
                     align={"center"}
@@ -233,14 +233,14 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     >
                         <span
                             style={{
-                                fontSize: isPc ? "12px" : "10px",
+                                fontSize: isPc ? "12px" : "8px",
                             }}
                         >
                             x
                         </span>
                         <span
                             style={{
-                                fontSize: isPc ? "16px" : "12px",
+                                fontSize: isPc ? "16px" : "9px",
                             }}
                         >
                             {detail.count}
