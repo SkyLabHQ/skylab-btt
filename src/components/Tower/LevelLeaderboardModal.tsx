@@ -465,7 +465,7 @@ const LevelLeaderboardModal = ({
                         padding: "10px",
                     }}
                 >
-                    <Timer time={111}></Timer>
+                    <Timer time={levelInfoDetail?.claimTime}></Timer>
                     <Image
                         src={aviationImg(levelInfoDetail?.level)}
                         sx={{
@@ -501,7 +501,7 @@ const LevelLeaderboardModal = ({
                                 fontSize: isPc ? "50px" : "24px",
                             }}
                         >
-                            {getLevel(levelInfoDetail?.points)}
+                            {levelInfoDetail?.level}
                         </span>
                     </Text>
 
