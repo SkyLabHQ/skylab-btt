@@ -259,12 +259,16 @@ const TacToeMode = () => {
     };
 
     const handleCreateOrJoinDefault = async () => {
+        if (!address) {
+            toast("Please Connect wallet to enter tournament");
+            return;
+        }
         onMyAviationOpen();
     };
 
     const handleTournament = async () => {
         if (!address) {
-            toast("Connect wallet to enter tournament");
+            toast("Please Connect wallet to enter tournament");
             return;
         }
 
