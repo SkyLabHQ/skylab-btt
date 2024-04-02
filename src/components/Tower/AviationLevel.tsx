@@ -23,6 +23,9 @@ import PaperIcon from "./assets/paper.png";
 import DefaultAvatar from "./assets/default-avatar.png";
 import LockIcon from "./assets/lock.png";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { usePrivy } from "@privy-io/react-auth";
+import useSkyToast from "@/hooks/useSkyToast";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const list = [
     {
@@ -546,8 +549,10 @@ const AviationLevel = ({
     levelInfo: any[];
     totalPaper: any;
 }) => {
+    const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfoRequest();
-
+    const { ready, authenticated, login, user, connectWallet } = usePrivy();
+    const { address } = usePrivyAccounts();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const {
         isOpen: isLeaderboardModalOpen,
@@ -559,6 +564,27 @@ const AviationLevel = ({
     const handleLeaderboard = (index: number) => {
         setCurrentIndex(index);
         openLeaderboardModal();
+    };
+
+    const handleLogin = () => {
+        if (!ready) {
+            toast("Please wait for the wallet to be ready");
+            return;
+        }
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
+        login();
+    };
+
+    const handleClickPaper = () => {
+        if (!address) {
+            handleLogin();
+            return;
+        }
+        onUserInfoOpen();
     };
 
     useEffect(() => {
@@ -821,7 +847,7 @@ const AviationLevel = ({
                             left: isPc ? "150px" : "20px",
                             cursor: "pointer",
                         }}
-                        onClick={onUserInfoOpen}
+                        onClick={handleClickPaper}
                     >
                         <Flex
                             sx={{
