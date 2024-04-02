@@ -269,11 +269,6 @@ const TacToeMode = () => {
     };
 
     const handleTournament = async () => {
-        if (!address) {
-            handleLogin();
-            return;
-        }
-
         if (!selectPlane?.tokenId) {
             return;
         }
