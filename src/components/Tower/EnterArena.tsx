@@ -16,7 +16,7 @@ const EnterArena = () => {
             onClick={handleClick}
             sx={{
                 width: isPc ? "313px" : "110px",
-                position: "absolute",
+                position: "fixed",
                 right: "0",
                 bottom: "0",
                 cursor: "pointer",

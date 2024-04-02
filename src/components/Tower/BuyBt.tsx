@@ -241,7 +241,7 @@ const BuyBt = () => {
                         src={Buycon}
                         sx={{
                             width: isPc ? "313px" : "110px",
-                            position: "absolute",
+                            position: "fixed",
                             left: "0",
                             bottom: "0",
                         }}
