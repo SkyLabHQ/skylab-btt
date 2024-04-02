@@ -177,6 +177,7 @@ const BuyBt = () => {
     const { onOpen, onClose, isOpen } = useDisclosure();
     const [inputAmount, setInputAmount] = React.useState(1);
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
+    const { ready, authenticated, login, user, connectWallet } = usePrivy();
 
     const handleMintPlane = async () => {
         try {
@@ -199,6 +200,20 @@ const BuyBt = () => {
             toast(handleError(e));
         }
     };
+
+    const handleLogin = () => {
+        if (!ready) {
+            toast("Please wait for the wallet to be ready");
+            return;
+        }
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
+        login();
+    };
+
     return (
         <Box
             sx={{
@@ -209,11 +224,18 @@ const BuyBt = () => {
                 gutter={38}
                 arrowSize={20}
                 isOpen={isOpen}
-                onOpen={onOpen}
+                onOpen={() => {
+                    if (!address) {
+                        handleLogin();
+                        return;
+                    }
+                    onOpen();
+                }}
                 onClose={onClose}
             >
                 <PopoverTrigger>
                     <Image
+                        onClick={() => {}}
                         tabIndex={0}
                         role="button"
                         src={Buycon}
