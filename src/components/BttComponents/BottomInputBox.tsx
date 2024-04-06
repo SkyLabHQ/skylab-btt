@@ -22,11 +22,11 @@ import MessageIcon1 from "./assets/message-dot.svg";
 
 const move = keyframes`
     0% {
-        border-color: #FDDC2D;
+        background: #FDDC2D;
     }
     
     100% {
-        border-color: transparent;
+        background: transparent;
     }
 `;
 
@@ -232,7 +232,7 @@ const BottomInputBox = ({
                         }}
                     ></Image>
                 </Flex>
-                <Box sx={{ width: "160px", marginTop: "16px" }}>
+                <Box sx={{ width: "160px", marginTop: "10px" }}>
                     <Slider
                         key={myBalance}
                         value={Number(bidAmount)}
@@ -248,13 +248,12 @@ const BottomInputBox = ({
                             borderRadius={"10px"}
                             sx={{
                                 padding: "0 20px",
-                                border: "1px solid transparent",
                             }}
                             animation={`${
                                 showAnimate ? move : ""
                             } 0.5s linear infinite alternate`}
                         >
-                            <SliderFilledTrack bg="#545454" />
+                            <SliderFilledTrack bg="transparent" />
                         </SliderTrack>
                         <SliderThumb
                             sx={{

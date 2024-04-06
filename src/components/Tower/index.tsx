@@ -14,6 +14,7 @@ import {
 } from "@/hooks/useMultiContract";
 import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
 import { formatAmount } from "@/utils/formatBalance";
+
 const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
     level: index + 1,
     levelTokenIds: [],
@@ -167,7 +168,7 @@ const TowerPage = () => {
                 totalPaper={totalPaper}
             ></AviationLevel>
             <PotInfo potAmount={potAmount}></PotInfo>
-            <ToolBar showOpensea={true}></ToolBar>
+            <ToolBar showOpensea={true} showTw={true}></ToolBar>
             <BuyBt></BuyBt>
             <EnterArena></EnterArena>
         </motion.div>

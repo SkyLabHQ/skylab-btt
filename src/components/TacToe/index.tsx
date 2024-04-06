@@ -348,7 +348,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             );
 
             await tacToeGameRetryWrite("commitBid", [hash], {
-                gasLimit: 500000,
+                gasLimit: 1000000,
                 usePaymaster: istest,
             });
             onChangeGame("my", {
@@ -532,8 +532,9 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         try {
             setSurrenderLoading(true);
             await tacToeGameRetryWrite("surrender", [], {
-                gasLimit: 1500000,
+                gasLimit: 4000000,
                 usePaymaster: istest,
+                clearQueue: true,
             });
             setSurrenderLoading(false);
         } catch (error) {

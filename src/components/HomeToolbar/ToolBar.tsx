@@ -16,6 +16,7 @@ import RulesModal from "./RulesModal";
 import MyPilot from "../MyPilot";
 import MenuIcon from "./assets/menu.png";
 import OpenSeaIcon from "./assets/opensea.png";
+import TwIcon from "./assets/tw.png";
 import { useState } from "react";
 
 const MToolBar = ({
@@ -23,11 +24,13 @@ const MToolBar = ({
     onWalletClick,
     onRulesModalOpen,
     showOpensea,
+    showTw,
 }: {
     onUserInfoOpen: () => void;
     onRulesModalOpen: () => void;
     onWalletClick: () => void;
     showOpensea?: boolean;
+    showTw?: boolean;
 }) => {
     const [active, setActive] = useState(false);
     const { address } = usePrivyAccounts();
@@ -119,12 +122,26 @@ const MToolBar = ({
                         src={OpenSeaIcon}
                     ></Image>
                 )}
+                {showTw && (
+                    <Image
+                        sx={{
+                            marginTop: "20px",
+                        }}
+                        src={TwIcon}
+                    ></Image>
+                )}
             </Flex>
         </Flex>
     );
 };
 
-const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
+const ToolBar = ({
+    showOpensea,
+    showTw,
+}: {
+    showOpensea?: boolean;
+    showTw?: boolean;
+}) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const {
         isOpen: isRulesModalOpen,
@@ -229,6 +246,7 @@ const ToolBar = ({ showOpensea }: { showOpensea?: boolean }) => {
                     onUserInfoOpen={onUserInfoOpen}
                     onRulesModalOpen={onRulesModalOpen}
                     showOpensea={showOpensea}
+                    showTw={showTw}
                     onWalletClick={handleLogin}
                 ></MToolBar>
             )}

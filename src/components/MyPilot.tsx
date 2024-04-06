@@ -7,7 +7,7 @@ import UserIcon from "@/assets/user-icon.png";
 const PilotStyle = styled(Box)`
     background: url(${PilotBorder}) no-repeat;
     background-size: contain;
-    padding: 10px;
+    padding: 6px;
 `;
 const MyPilot = ({
     width = "40px",

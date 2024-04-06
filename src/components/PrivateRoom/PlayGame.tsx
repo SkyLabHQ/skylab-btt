@@ -416,6 +416,7 @@ const PlayGame = ({
             await tacToeGameRetryWrite("surrender", [], {
                 usePaymaster: true,
                 signer: privateLobbySigner,
+                clearQueue: true,
             });
             setSurrenderLoading(false);
         } catch (e) {

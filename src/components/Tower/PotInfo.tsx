@@ -12,6 +12,7 @@ import { useCountUp } from "react-countup";
 import OpenSeaIcon from "@/assets/opensea.png";
 import useCountDown from "react-countdown-hook";
 import RightArrow from "./assets/right-arrow.svg";
+import Tw from "./assets/tw.png";
 
 const ScrollNum = ({
     fontSize = "95px",
@@ -490,9 +491,10 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                     background: "#B1B1B1",
                     margin: "12px auto",
                     borderRadius: "16px",
+                    padding: "0 6px",
+                    cursor: "pointer",
                 }}
                 align={"center"}
-                justify={"center"}
             >
                 <Image
                     src={OpenSeaIcon}
@@ -506,9 +508,54 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                         fontSize: "16px",
                         fontFamily: "Quantico",
                         color: "#000",
+                        flex: 1,
+                        textAlign: "center",
                     }}
                 >
                     OpenSea
+                </Text>
+                <Box
+                    sx={{
+                        width: "2px",
+                        background: "rgba(96, 96, 96, 0.30)",
+                        height: "30px",
+                        margin: "0 8px",
+                    }}
+                ></Box>
+                <Image src={RightArrow}></Image>
+            </Flex>
+            <Flex
+                sx={{
+                    width: "156px",
+                    height: "34px",
+                    background: "#B1B1B1",
+                    margin: "12px auto",
+                    borderRadius: "16px",
+                    padding: "0 6px",
+                    cursor: "pointer",
+                }}
+                onClick={() => {
+                    window.open("https://twitter.com/skylabHQ", "_blank");
+                }}
+                align={"center"}
+            >
+                <Image
+                    src={Tw}
+                    sx={{
+                        width: "28px",
+                    }}
+                ></Image>
+                <Text
+                    sx={{
+                        fontWeight: "bold",
+                        fontSize: "16px",
+                        fontFamily: "Quantico",
+                        color: "#000",
+                        flex: 1,
+                        textAlign: "center",
+                    }}
+                >
+                    Twitter
                 </Text>
                 <Box
                     sx={{

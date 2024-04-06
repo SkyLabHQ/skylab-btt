@@ -15,13 +15,18 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
     useMultiMercuryBaseContract,
+    useMultiMercuryJarTournamentContract,
 } from "@/hooks/useMultiContract";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import { botAddress } from "@/hooks/useContract";
 import { GrayButton } from "../Button/Index";
 import QuitModal from "@/components/BttComponents/QuitModal";
-import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
+import {
+    getDefaultWithProvider,
+    getTestflightSigner,
+    useTacToeSigner,
+} from "@/hooks/useSigner";
 import { getSCWallet } from "@/hooks/useSCWallet";
 import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +35,9 @@ import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
 import { RobotImg, UserMarkType } from "@/skyConstants/bttGameTypes";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
+import DotLoading from "../Loading/DotLoading";
+import PlayWithBot from "./assets/playbot.png";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 export const PlaneImg = ({
     detail,
@@ -52,8 +60,12 @@ export const PlaneImg = ({
                     <Image
                         src={detail?.img}
                         sx={{
-                            width: isPc ? "14.5833vw" : "136px",
-                            height: isPc ? "14.5833vw" : "136px",
+                            width: isPc
+                                ? detail?.isBot
+                                    ? "9vw"
+                                    : "14.5833vw"
+                                : "136px",
+                            // height: isPc ? "14.5833vw" : "136px",
                             transform: flip ? "scaleX(-1)" : "",
                             /*兼容IE*/
                             filter: "FlipH",
@@ -142,9 +154,10 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
                         flex: 1,
                     }}
                 >
-                    Stop Matching
+                    Quit Matching
                 </Text>
             </GrayButton>
+
             {show && (
                 <>
                     <Box
@@ -213,8 +226,11 @@ export const MatchPage = ({
         opConfirmTimeout: number,
     ) => void;
 }) => {
+    const { isLoading, openLoading, closeLoading } = useSubmitRequest();
+
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [showPlayWithBot, setShowPlayWithBot] = useState(false);
     const navigate = useNavigate();
     const toast = useSkyToast();
     const { blockNumber } = useBlockNumber();
@@ -234,7 +250,6 @@ export const MatchPage = ({
     } = useGameContext();
 
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
-
     const multiProvider = useMultiProvider(realChainId);
     const [tacToeBurner] = useTacToeSigner(tokenId);
 
@@ -268,6 +283,7 @@ export const MatchPage = ({
             multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId1),
             multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
         ]);
+
         const player1Info = {
             burner: playerAddress1,
             address: account1,
@@ -333,6 +349,7 @@ export const MatchPage = ({
             multiMercuryBaseContract.estimateMileageToGain(tokenId, tokenId2),
             multiMercuryBaseContract.estimateMileageToGain(tokenId2, tokenId1),
         ]);
+
         const player1Info = {
             burner: playerAddress1,
             address: account1,
@@ -422,13 +439,34 @@ export const MatchPage = ({
                 }
 
                 if (opPlayer === ZERO_DATA) {
-                    const [account, level, mtadata, point] =
-                        await multiProvider.all([
-                            multiMercuryBaseContract.ownerOf(tokenId),
-                            multiMercuryBaseContract.aviationLevels(tokenId),
-                            multiMercuryBaseContract.tokenURI(tokenId),
-                            multiMercuryBaseContract.aviationPoints(tokenId),
-                        ]);
+                    const [
+                        account,
+                        level,
+                        mtadata,
+                        point,
+                        joinDefaultQueueTime,
+                    ] = await multiProvider.all([
+                        multiMercuryBaseContract.ownerOf(tokenId),
+                        multiMercuryBaseContract.aviationLevels(tokenId),
+                        multiMercuryBaseContract.tokenURI(tokenId),
+                        multiMercuryBaseContract.aviationPoints(tokenId),
+                        multiSkylabBidTacToeFactoryContract.joinDefaultQueueTime(
+                            avaitionAddress,
+                            operateAddress,
+                        ),
+                    ]);
+
+                    const current = Math.floor(new Date().getTime() / 1000);
+
+                    if (
+                        Number(joinDefaultQueueTime.toString()) + 45 <=
+                        current
+                    ) {
+                        setShowPlayWithBot(true);
+                    } else {
+                        setShowPlayWithBot(false);
+                    }
+
                     onChangeInfo("my", {
                         burner: operateAddress,
                         address: account,
@@ -523,11 +561,33 @@ export const MatchPage = ({
                     onStep(1);
                 }
             } else {
+                setShowPlayWithBot(false);
+
                 setBidTacToeGameAddress(bidTacToeGameAddress);
             }
         } catch (e: any) {
             console.log(e);
             navigate("/");
+        }
+    };
+
+    const handlePlayWithBot = async () => {
+        const defaultSinger = getDefaultWithProvider(tokenId, realChainId);
+        try {
+            openLoading();
+            await tacToeFactoryRetryWrite(
+                "playWithBotAfterDefaultQueueTimer",
+                [avaitionAddress, botAddress[realChainId]],
+                {
+                    gasLimit: 1550000,
+                    signer: defaultSinger,
+                },
+            );
+            closeLoading();
+        } catch (error) {
+            console.log(error);
+            closeLoading();
+            toast(handleError(error, istest));
         }
     };
 
@@ -617,6 +677,11 @@ export const MatchPage = ({
                     }}
                 ></ToolBar>
             </Box>
+
+            <DotLoading
+                text={"Matching"}
+                fontSize={isPc ? "16px" : "12px"}
+            ></DotLoading>
             <Box
                 sx={{
                     display: "flex",
@@ -644,6 +709,19 @@ export const MatchPage = ({
                     onOpen();
                 }}
             ></StopMatch>
+            {showPlayWithBot && (
+                <Image
+                    onClick={handlePlayWithBot}
+                    src={PlayWithBot}
+                    sx={{
+                        position: "absolute",
+                        right: 0,
+                        bottom: 0,
+                        cursor: "pointer",
+                        width: isPc ? "300px" : "120px",
+                    }}
+                ></Image>
+            )}
             <QuitModal
                 onConfirm={handleQuit}
                 isOpen={isOpen}

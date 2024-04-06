@@ -47,7 +47,9 @@ const MLayout = ({
     const showAnimate =
         list.every((item) => {
             return item.mark === -1 || item.mark === 0;
-        }) && myGameState === GameState.WaitingForBid;
+        }) &&
+        myGameState === GameState.WaitingForBid &&
+        !loading;
 
     useEffect(() => {
         if (messageLoading || emoteLoading) {

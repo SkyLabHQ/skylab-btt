@@ -63,13 +63,19 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                 gasLimit?: number;
                 signer?: any;
                 usePaymaster?: boolean;
+                clearQueue?: boolean;
             } = {},
         ) => {
             const {
                 gasLimit,
                 signer: overridsSigner,
                 usePaymaster,
+                clearQueue,
             } = overrides;
+
+            if (clearQueue) {
+                queue.clear();
+            }
 
             const result = await queue.add(
                 () => {
@@ -227,6 +233,7 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                         gasLimit && gasLimit > Number(gas)
                                             ? gasLimit
                                             : calculateGasMargin(Number(gas));
+
                                     const hash = await newSigner.writeContract({
                                         address: contract.address,
                                         abi: contract.abi,

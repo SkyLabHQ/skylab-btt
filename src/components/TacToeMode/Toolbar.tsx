@@ -39,7 +39,7 @@ export const Toolbar = () => {
                 right: "3.125vw",
                 top: "1.4063vw",
                 display: "flex",
-                gap: isPc ? "24px" : "0.7292vw",
+                gap: isPc ? "24px" : "12px",
                 alignItems: "center",
             }}
         >
@@ -95,8 +95,8 @@ export const Toolbar = () => {
                             onClick={onUserInfoOpen}
                             imgUrl={activePilot.img}
                             sx={{
-                                width: "32px",
-                                height: "32px",
+                                width: "40px",
+                                height: "40px",
                                 cursor: "pointer",
                             }}
                         ></MyPilot>
@@ -106,8 +106,8 @@ export const Toolbar = () => {
                         onClick={handleLogin}
                         src={WalletIcon}
                         sx={{
-                            width: isPc ? "48px" : "32px",
-                            height: isPc ? "48px" : "32px",
+                            width: isPc ? "48px" : "40px",
+                            height: isPc ? "48px" : "40px",
                             cursor: "pointer",
                         }}
                     ></Image>
@@ -116,8 +116,8 @@ export const Toolbar = () => {
             <Image
                 src={PlayBackIcon}
                 sx={{
-                    width: isPc ? "48px" : "32px",
-                    height: isPc ? "48px" : "32px",
+                    width: isPc ? "48px" : "40px",
+                    height: isPc ? "48px" : "40px",
                     cursor: "pointer",
                 }}
                 onClick={() => {
@@ -127,8 +127,8 @@ export const Toolbar = () => {
             <BidTacToeTutorial>
                 <Image
                     sx={{
-                        width: isPc ? "48px" : "32px",
-                        height: isPc ? "48px" : "32px",
+                        width: isPc ? "48px" : "40px",
+                        height: isPc ? "48px" : "40px",
                     }}
                     src={BulbIcon}
                 ></Image>

@@ -187,8 +187,8 @@ const KeyBoard = ({
                             alignItems: "center",
                             justifyContent: "center",
                             cursor: "pointer",
-                            height: isPc ? "48px" : "32px",
-                            width: isPc ? "48px" : "32px",
+                            height: isPc ? "48px" : "40px",
+                            width: isPc ? "48px" : "40px",
                             "&:focus": {
                                 boxShadow: "none",
                             },
@@ -198,8 +198,8 @@ const KeyBoard = ({
                         <Image
                             src={KeyboardIcon}
                             sx={{
-                                height: isPc ? "48px" : "32px",
-                                width: isPc ? "48px" : "32px",
+                                height: isPc ? "48px" : "40px",
+                                width: isPc ? "48px" : "40px",
                             }}
                         ></Image>
                     </Button>
