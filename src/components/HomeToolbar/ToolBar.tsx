@@ -16,7 +16,6 @@ import RulesModal from "./RulesModal";
 import MyPilot from "../MyPilot";
 import MenuIcon from "./assets/menu.png";
 import OpenSeaIcon from "./assets/opensea.png";
-import TwIcon from "./assets/tw.png";
 import MTwIcon from "./assets/m-tw.png";
 
 import { useState } from "react";

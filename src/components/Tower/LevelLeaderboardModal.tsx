@@ -217,8 +217,8 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     sx={{
                         background: `url(${AmountBg})`,
                         backgroundSize: "100% 100%",
-                        width: isPc ? "28px" : "24px",
-                        height: isPc ? "28px" : "24px",
+                        width: isPc ? "28px" : "28px",
+                        height: isPc ? "28px" : "28px",
                         position: "absolute",
                         top: isPc ? "10px" : "-4px",
                         right: "-4px",
@@ -240,7 +240,7 @@ const InfoItem = ({ detail }: { detail: any }) => {
                         </span>
                         <span
                             style={{
-                                fontSize: isPc ? "16px" : "9px",
+                                fontSize: isPc ? "16px" : "12px",
                             }}
                         >
                             {detail.count}
@@ -431,6 +431,8 @@ const LevelLeaderboardModal = ({
         multiMercuryJarTournamentContract,
         multiMercuryPilotsContract,
     ]);
+
+    console.log(levelInfoDetail, "levelInfoDetail");
 
     return (
         <Modal
