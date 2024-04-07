@@ -1,4 +1,4 @@
-import { useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { Box, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import Bg from "@/assets/bg.png";
@@ -14,6 +14,7 @@ import {
 } from "@/hooks/useMultiContract";
 import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
 import { formatAmount } from "@/utils/formatBalance";
+import ReactCanvasNest from "react-canvas-nest";
 
 const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
     level: index + 1,
@@ -144,34 +145,51 @@ const TowerPage = () => {
     }, []);
 
     return (
-        <motion.div
-            style={{
-                width: "100%",
-                fontFamily: "Quantico",
-                position: "relative",
-                backgroundImage: `url(${Bg})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "auto 100%",
-                backgroundColor: "#1b1b1b",
-                backgroundPosition: `${backgroundPosition}`,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                overflow: "hidden",
-                padding: "0 32px",
+        <Box
+            sx={{
                 height: "100%",
             }}
         >
-            <AviationLevel
-                levelInfo={levelInfo}
-                totalPaper={totalPaper}
-            ></AviationLevel>
-            <PotInfo potAmount={potAmount}></PotInfo>
-            <ToolBar showOpensea={true} showTw={true}></ToolBar>
-            <BuyBt></BuyBt>
-            <EnterArena></EnterArena>
-        </motion.div>
+            <motion.div
+                style={{
+                    width: "100%",
+                    fontFamily: "Quantico",
+                    position: "absolute",
+                    backgroundImage: `url(${Bg})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "auto 100%",
+                    backgroundPosition: `${backgroundPosition}`,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    overflow: "hidden",
+                    padding: "0 32px",
+                    height: "100%",
+                }}
+            >
+                <AviationLevel
+                    levelInfo={levelInfo}
+                    totalPaper={totalPaper}
+                ></AviationLevel>
+                <PotInfo potAmount={potAmount}></PotInfo>
+                <ToolBar showOpensea={true} showTw={true}></ToolBar>
+                <BuyBt></BuyBt>
+                <EnterArena></EnterArena>
+            </motion.div>
+            <ReactCanvasNest
+                className="canvasNest"
+                style={{
+                    backgroundColor: "#1b1b1b",
+                }}
+                config={{
+                    count: 66,
+                    pointColor: " 255, 255, 255 ",
+                    lineColor: "255,255,255",
+                    dist: 1500,
+                }}
+            />
+        </Box>
     );
 };
 

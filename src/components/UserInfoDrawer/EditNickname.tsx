@@ -10,7 +10,6 @@ import { useUserInfoRequest } from "@/contexts/UserInfo";
 const UserInfo = () => {
     const { address } = usePrivyAccounts();
     const { activePilot } = useUserInfoRequest();
-
     return (
         <Flex
             flexDir={"column"}
@@ -49,31 +48,18 @@ const UserInfo = () => {
                     }}
                 ></Image>
             </Flex>
-            <Text
-                sx={{
-                    fontSize: "24px",
-                    fontWeight: 700,
-                    marginTop: "20px",
-                    fontFamily: "Orbitron",
-                }}
-            >
-                Edit Nickname
-            </Text>
         </Flex>
     );
 };
 
 const EditNickname = ({
-    userName,
     onSetUserName,
     onChangeMode,
 }: {
-    userName: string;
     onChangeMode: (mode: number) => void;
     onSetUserName: (userName: string) => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { address } = usePrivyAccounts();
     const [nickname, setNickname] = React.useState("");
     return (
         <Flex
@@ -155,4 +141,5 @@ const EditNickname = ({
         </Flex>
     );
 };
+
 export default EditNickname;

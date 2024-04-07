@@ -719,7 +719,6 @@ const UserInfoDrawer = ({
                     )}
                     {currentMode === 1 && (
                         <EditNickname
-                            userName={userName}
                             onSetUserName={(userName: string) => {
                                 handleSetUserName(userName);
                             }}

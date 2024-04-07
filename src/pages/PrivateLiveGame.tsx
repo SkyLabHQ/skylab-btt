@@ -18,6 +18,7 @@ const PrivateLiveGame = () => {
                     count: 66,
                     pointColor: " 255, 255, 255 ",
                     lineColor: "255,255,255",
+                    dist: 1500,
                 }}
             />
         </Box>

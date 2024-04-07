@@ -498,7 +498,6 @@ const TacToeMode = () => {
                         }
                     ></BackWithText>
                 </Box>
-
                 <Toolbar></Toolbar>
                 <Box
                     sx={{
@@ -651,10 +650,12 @@ const TacToeMode = () => {
             </Box>
             <ReactCanvasNest
                 className="canvasNest"
+                style={{}}
                 config={{
                     count: 66,
                     pointColor: " 255, 255, 255 ",
                     lineColor: "255,255,255",
+                    dist: 1500,
                 }}
             />
         </Box>

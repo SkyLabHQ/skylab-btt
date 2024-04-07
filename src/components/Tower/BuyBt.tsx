@@ -176,7 +176,7 @@ const BuyBt = () => {
     const { onOpen, onClose, isOpen } = useDisclosure();
     const [inputAmount, setInputAmount] = React.useState(1);
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const { ready, authenticated, login, user, connectWallet } = usePrivy();
+    const { ready, login, user, connectWallet } = usePrivy();
     const navigate = useNavigate();
 
     const handleMintPlane = async () => {
