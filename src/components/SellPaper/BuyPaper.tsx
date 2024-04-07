@@ -10,8 +10,6 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import BuyIcon from "./assets/buy-icon.svg";
-import YETHIcon from "./assets/y-ETH.png";
-import BETHIcon from "./assets/b-ETH.png";
 import { accMul, parseAmount } from "@/utils/formatBalance";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { useChainId, usePublicClient } from "wagmi";
@@ -112,14 +110,8 @@ const BuyBt = ({
                         marginRight: "3px",
                     }}
                 >
-                    {accMul("0.01", inputAmount.toString())}
+                    {accMul("0.01", inputAmount.toString())} ETH
                 </Text>
-                <Image
-                    src={YETHIcon}
-                    sx={{
-                        width: isPc ? "13px" : "12px",
-                    }}
-                ></Image>
             </Flex>
 
             <Flex
@@ -159,14 +151,8 @@ const BuyBt = ({
                         marginRight: "3px",
                     }}
                 >
-                    {accMul("0.01", inputAmount.toString())}
+                    {accMul("0.01", inputAmount.toString())} ETH
                 </Text>
-                <Image
-                    src={BETHIcon}
-                    sx={{
-                        width: isPc ? "13px" : "12px",
-                    }}
-                ></Image>
             </Flex>
         </Flex>
     );

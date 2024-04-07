@@ -3,9 +3,7 @@ import Buycon from "./assets/buy.png";
 import PlanetIcon from "./assets/planet.png";
 import SubIcon from "./assets/sub.svg";
 import AddIcon from "./assets/add.svg";
-import BETHIcon from "./assets/b-ETH.png";
 import BuyIcon from "./assets/buy-icon.svg";
-import YETHIcon from "./assets/y-ETH.png";
 
 import {
     Box,
