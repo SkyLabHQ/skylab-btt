@@ -217,11 +217,11 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     sx={{
                         background: `url(${AmountBg})`,
                         backgroundSize: "100% 100%",
-                        width: isPc ? "28px" : "28px",
-                        height: isPc ? "28px" : "28px",
+                        width: isPc ? "40px" : "32px",
+                        height: isPc ? "40px" : "32px",
                         position: "absolute",
                         top: isPc ? "10px" : "-4px",
-                        right: "-4px",
+                        right: "-10px",
                     }}
                     justify={"center"}
                     align={"center"}
@@ -233,7 +233,7 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     >
                         <span
                             style={{
-                                fontSize: isPc ? "12px" : "8px",
+                                fontSize: isPc ? "12px" : "10px",
                             }}
                         >
                             x
@@ -431,8 +431,6 @@ const LevelLeaderboardModal = ({
         multiMercuryJarTournamentContract,
         multiMercuryPilotsContract,
     ]);
-
-    console.log(levelInfoDetail, "levelInfoDetail");
 
     return (
         <Modal

@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import PlayBackIcon from "@/assets/playback-icon.svg";
 import { shortenAddressWithout0x } from "@/utils";
 import BttHelmet from "@/components/Helmet/BttHelmet";
-import Back from "@/components/Back";
+import { BackWithText } from "@/components/Back";
 import EmptyIcon from "@/assets/empty.svg";
 
 const ListBorder = () => {
@@ -80,7 +80,7 @@ const MBttHistory = ({
                         <Image
                             src={EmptyIcon}
                             sx={{
-                                width: "300px",
+                                width: "200px",
                             }}
                         ></Image>
                     </Flex>
@@ -211,7 +211,21 @@ const BttHistory = () => {
                     top: "1.0417vw",
                 }}
             >
-                <Back onClick={() => navigate("/")}></Back>
+                <BackWithText
+                    onClick={() => navigate("/")}
+                    textContent={
+                        <Box
+                            sx={{
+                                fontSize: isPc ? "16px" : "12px",
+                                textAlign: "center",
+                                lineHeight: "1",
+                                marginTop: "8px",
+                            }}
+                        >
+                            <Text>Back</Text>
+                        </Box>
+                    }
+                ></BackWithText>
             </Box>
 
             {isPc ? (

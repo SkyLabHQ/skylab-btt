@@ -788,8 +788,8 @@ const AviationLevel = ({
                                         sx={{
                                             background: `url(${AmountBg})`,
                                             backgroundSize: "100% 100%",
-                                            width: isPc ? "48px" : "32px",
-                                            height: isPc ? "48px" : "32px",
+                                            width: isPc ? "48px" : "36px",
+                                            height: isPc ? "48px" : "36px",
                                             position: "absolute",
                                             bottom: "0",
                                             left: "50%",
