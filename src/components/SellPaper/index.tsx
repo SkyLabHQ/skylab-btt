@@ -539,10 +539,12 @@ const ScrollNum = ({
     );
 };
 
-const YellowBg = () => {
+const YellowBg = ({ onClick }: { onClick: () => void }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const clickAnimate = useAnimation();
     const handleClick = async () => {
+        onClick();
+
         const height = window.innerHeight;
         await clickAnimate.set({
             borderRadius: "50%",
@@ -642,7 +644,7 @@ const SellPaper = () => {
     const [audio1] = useState(new Audio(Turn1mp3));
     const [audio2] = useState(new Audio(Turn2mp3));
     const [bgmp3] = useState(new Audio(Bgmp3));
-
+    const [showYellowBg, setShowYellowBg] = useState(true);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [hoverInit, setHoverInit] = useState(false);
     const mounseX = useRef(0);
@@ -723,8 +725,9 @@ const SellPaper = () => {
     }, [multiProvider, multiMercuryJarTournamentContract]);
 
     useEffect(() => {
-        bgmp3.loop = true;
-        bgmp3.play();
+        return () => {
+            bgmp3.pause();
+        };
     }, []);
 
     return (
@@ -763,7 +766,13 @@ const SellPaper = () => {
                     }}
                 ></Image>
             )}
-            <YellowBg></YellowBg>
+            <YellowBg
+                onClick={() => {
+                    bgmp3.loop = true;
+                    bgmp3.play();
+                    setShowYellowBg(false);
+                }}
+            ></YellowBg>
             <ToolBar></ToolBar>
             <Box
                 className="card"
@@ -874,10 +883,12 @@ const SellPaper = () => {
                             },
                         }}
                     >
-                        <BackContent
-                            rotateY={rotateY}
-                            potAmount={potAmount}
-                        ></BackContent>
+                        {!showYellowBg && (
+                            <BackContent
+                                rotateY={rotateY}
+                                potAmount={potAmount}
+                            ></BackContent>
+                        )}
                     </Box>
                 </Box>
             </Box>

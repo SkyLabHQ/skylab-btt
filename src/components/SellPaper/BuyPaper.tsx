@@ -4,7 +4,7 @@ import RightArrowIcon from "./assets/right-arrow.svg";
 import PlanetIcon from "./assets/planet.png";
 import SubIcon from "./assets/sub.svg";
 import AddIcon from "./assets/add.svg";
-import WalletIcon from "./assets/wallet.svg";
+// import WalletIcon from "./assets/wallet.svg";
 import React from "react";
 import useSkyToast from "@/hooks/useSkyToast";
 import { usePrivy } from "@privy-io/react-auth";
@@ -14,6 +14,7 @@ import { accMul, parseAmount } from "@/utils/formatBalance";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { useChainId, usePublicClient } from "wagmi";
 import { handleError } from "@/utils/error";
+import { WalletIcon } from "../Icon";
 
 const ConnectWalletBt = () => {
     const toast = useSkyToast();
@@ -43,21 +44,24 @@ const ConnectWalletBt = () => {
                 border: "4px solid #ffecc7",
                 borderRadius: "16px",
                 marginTop: "20px",
+                color: "#FFECC7",
+                "&:hover": {
+                    background: "#ffecc7",
+                    color: "#000",
+                    filter: "drop-shadow(0px 0px 17px rgba(255, 246, 166, 0.84))",
+                },
             }}
             onClick={handleLogin}
         >
-            <Image
-                src={WalletIcon}
-                sx={{
-                    width: "24px",
+            <WalletIcon
+                style={{
                     marginRight: "7px",
                 }}
-            ></Image>
+            ></WalletIcon>
             <Text
                 sx={{
                     fontFamily: "Neon",
                     fontSize: isPc ? "34px" : "18px",
-                    color: "#FFECC7",
                 }}
             >
                 Connect Wallet
@@ -160,7 +164,6 @@ const BuyBt = ({
 
 const BuyPaper = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const chainId = useChainId();
     const publicClient = usePublicClient();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const toast = useSkyToast();
