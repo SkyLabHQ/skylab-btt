@@ -10,6 +10,7 @@ import { useUserInfoRequest } from "@/contexts/UserInfo";
 const UserInfo = () => {
     const { address } = usePrivyAccounts();
     const { activePilot } = useUserInfoRequest();
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
             flexDir={"column"}
@@ -21,12 +22,6 @@ const UserInfo = () => {
         >
             <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
 
-            <Flex
-                sx={{
-                    marginTop: "8px",
-                }}
-                align={"center"}
-            ></Flex>
             <Flex
                 sx={{
                     marginTop: "11px",
@@ -48,6 +43,16 @@ const UserInfo = () => {
                     }}
                 ></Image>
             </Flex>
+            <Text
+                sx={{
+                    fontSize: isPc ? "24px" : "12px",
+                    marginTop: isPc ? "26px" : "12px",
+                    fontFamily: "Orbitron",
+                    fontWeight: 700,
+                }}
+            >
+                Set Username
+            </Text>
         </Flex>
     );
 };
@@ -65,6 +70,7 @@ const EditNickname = ({
         <Flex
             sx={{
                 paddingBottom: "110px",
+                height: "100%",
             }}
             flexDir={"column"}
             justifyContent={"space-between"}
@@ -90,21 +96,13 @@ const EditNickname = ({
                         paddingTop: isPc ? "30px" : "15px",
                     }}
                 >
-                    <Box
-                        sx={{
-                            marginTop: "20px",
-                        }}
-                    >
-                        <Text sx={{ fontSize: isPc ? "20px" : "16px" }}>
-                            In-put New Nickname
-                        </Text>
+                    <Box>
                         <Input
                             variant={"unstyled"}
                             sx={{
                                 width: "100%",
                                 height: "40px",
                                 background: "#D9D9D9",
-                                marginTop: "15px",
                                 fontSize: "20px",
                                 color: "#000",
                                 paddingLeft: "10px",

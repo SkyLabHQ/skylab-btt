@@ -74,10 +74,6 @@ const App = (): ReactElement => {
         setType(0);
     };
 
-    const handleAgreeTerm = () => {
-        localStorage.setItem("term", "true");
-    };
-
     const handleContinue = () => {
         const agree = localStorage.getItem("term");
         if (agree === "true") {

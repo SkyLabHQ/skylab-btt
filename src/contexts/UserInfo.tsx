@@ -1,8 +1,9 @@
 import { Box, useDisclosure } from "@chakra-ui/react";
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import UserInfoDrawer from "@/components/UserInfoDrawer";
 import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import axios from "axios";
 
 const UserInfoContext = createContext<{
     isUserInfoOpen: boolean;
@@ -21,6 +22,18 @@ export const UserInfoProvider = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { address } = usePrivyAccounts();
     const { activePilot, handleGetActivePilot, init } = usePilotInfo(address);
+    const [isBlock, setIsBlock] = useState(false);
+
+    useEffect(() => {
+        axios.get("https://ipapi.co/json/").then(async (res: any) => {
+            console.log(res.data);
+            if (res.data.country_code === "US") {
+                setIsBlock(true);
+            } else {
+                setIsBlock(false);
+            }
+        });
+    }, []);
 
     return (
         <UserInfoContext.Provider

@@ -57,7 +57,6 @@ const RootContent = () => {
             appId="clt24409l0clp3488rr6vgpwh"
             config={{
                 defaultChain: baseSepolia,
-
                 appearance: {
                     accentColor: "#6A6FF5",
                     theme: "#FFFFFF",
