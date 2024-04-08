@@ -15,6 +15,7 @@ import {
 import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
 import { formatAmount } from "@/utils/formatBalance";
 import ReactCanvasNest from "react-canvas-nest";
+import Bgmp3 from "@/components/Presale/assets/bg.mp3";
 
 const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
     level: index + 1,
@@ -26,7 +27,7 @@ const levelInfoInit: any = Array.from({ length: 16 }, (_, index) => ({
     pilotImg: "",
 }));
 const TowerPage = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [bgmp3] = useState(new Audio(Bgmp3));
 
     const [potAmount, setPotAmount] = useState("0");
     const chainId = useChainId();
@@ -142,6 +143,11 @@ const TowerPage = () => {
                 window.cancelAnimationFrame(animationFrameId);
             }
         };
+    }, []);
+
+    useEffect(() => {
+        bgmp3.loop = true;
+        bgmp3.play();
     }, []);
 
     return (
