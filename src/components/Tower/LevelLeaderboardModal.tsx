@@ -19,6 +19,8 @@ import DefaultAvatar from "./assets/default-avatar.png";
 import { aviationImg } from "@/utils/aviationImg";
 import BiddingGif from "@/assets/bidding.gif";
 import Winner from "./assets/winner.png";
+import EmptyWinner from "./assets/empty-winner.png";
+
 import CloseIcon from "@/assets/close.png";
 import {
     useMultiMercuryJarTournamentContract,
@@ -511,10 +513,14 @@ const LevelLeaderboardModal = ({
                             height: isPc ? "600px" : "300px",
                         }}
                     >
-                        {levelInfoDetail.tokenId !== "0" && (
+                        {
                             <Box
                                 sx={{
-                                    background: `url(${Winner}) no-repeat`,
+                                    background: `url(${
+                                        levelInfoDetail.tokenId !== "0"
+                                            ? Winner
+                                            : EmptyWinner
+                                    }) no-repeat`,
                                     backgroundPosition: "bottom",
                                     backgroundSize: "contain",
                                     width: isPc ? "322px" : "161px",
@@ -523,7 +529,24 @@ const LevelLeaderboardModal = ({
                                     margin: "0 auto",
                                 }}
                             >
-                                <NewComer detail={levelInfoDetail}></NewComer>
+                                {levelInfoDetail.tokenId !== "0" ? (
+                                    <NewComer
+                                        detail={levelInfoDetail}
+                                    ></NewComer>
+                                ) : (
+                                    <Text
+                                        sx={{
+                                            position: "absolute",
+                                            left: "50%",
+                                            top: "35%",
+                                            transform: "translate(-50%,-50%)",
+                                            fontSize: isPc ? "30px" : "20px",
+                                            fontWeight: 700,
+                                        }}
+                                    >
+                                        Empty
+                                    </Text>
+                                )}
                                 <Text
                                     sx={{
                                         position: "absolute",
@@ -531,7 +554,10 @@ const LevelLeaderboardModal = ({
                                         fontWeight: "bold",
                                         left: "50%",
                                         transform: "translate(-50%,0)",
-                                        color: "#000",
+                                        color:
+                                            levelInfoDetail.tokenId !== "0"
+                                                ? "#000"
+                                                : "#fff",
                                         fontSize: isPc ? "20px" : "14px",
                                         width: "100%",
                                         textAlign: "center",
@@ -540,7 +566,7 @@ const LevelLeaderboardModal = ({
                                     NEWCOMER
                                 </Text>
                             </Box>
-                        )}
+                        }
                         {loading ? (
                             <Flex
                                 flexDir={"column"}
