@@ -50,13 +50,14 @@ const Timer = ({ time }: { time: number }) => {
                 background: "rgba(0, 0, 0, 0.80)",
             }}
             align={"center"}
+            justify={"center"}
         >
             {isPc && (
                 <Image
                     src={HourglassIcon}
                     sx={{
                         width: "12px",
-                        margin: "0 12px",
+                        marginRight: "12px",
                     }}
                 ></Image>
             )}
@@ -65,7 +66,6 @@ const Timer = ({ time }: { time: number }) => {
                     fontSize: isPc ? "16px" : "12px",
                     zIndex: 999,
                     textAlign: "center",
-                    flex: 1,
                 }}
             >
                 {hour}:{minutes}:{second}

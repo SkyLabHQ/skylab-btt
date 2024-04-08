@@ -12,7 +12,7 @@ import { useCountUp } from "react-countup";
 import OpenSeaIcon from "@/assets/opensea.png";
 import useCountDown from "react-countdown-hook";
 import RightArrow from "./assets/right-arrow.svg";
-import Tw from "./assets/tw.png";
+import Tw from "./assets/m-tw.png";
 
 const ScrollNum = ({
     fontSize = "95px",
@@ -499,7 +499,7 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                 <Image
                     src={OpenSeaIcon}
                     sx={{
-                        width: "28px",
+                        width: "32px",
                     }}
                 ></Image>
                 <Text
@@ -542,7 +542,7 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                 <Image
                     src={Tw}
                     sx={{
-                        width: "28px",
+                        width: "32px",
                     }}
                 ></Image>
                 <Text
