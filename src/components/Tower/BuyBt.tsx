@@ -95,7 +95,6 @@ const BuyButton = ({
                 padding: "0 12px",
                 color: "#000",
                 cursor: "pointer",
-
                 "&:hover .unHover": {
                     display: "none",
                 },

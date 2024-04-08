@@ -1,7 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
-import { Box, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import {
+    Box,
+    ChakraProvider,
+    ColorModeScript,
+    useMediaQuery,
+} from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 import { BrowserRouter } from "react-router-dom";
 import { WagmiConfig, createConfig } from "wagmi";
@@ -34,9 +39,20 @@ const config = createConfig(
     }),
 );
 
-root.render(
-    <Box sx={{ height: "100%" }}>
-        <ColorModeScript />
+const RootContent = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isMBrowser, setIsMBrowser] = useState(false);
+
+    useEffect(() => {
+        // 手机浏览器模式
+        if (!window.matchMedia("(display-mode: standalone)").matches && !isPc) {
+            setIsMBrowser(true);
+            return;
+        } else {
+            setIsMBrowser(false);
+        }
+    }, [isPc]);
+    return (
         <PrivyProvider
             appId="clt24409l0clp3488rr6vgpwh"
             config={{
@@ -48,7 +64,9 @@ root.render(
                     showWalletLoginFirst: false,
                     logo: "https://pub-dc971f65d0aa41d18c1839f8ab426dcb.r2.dev/privy.png",
                 },
-                loginMethods: ["email", "wallet", "discord", "twitter"],
+                loginMethods: isMBrowser
+                    ? ["email", "wallet"]
+                    : ["email", "wallet", "discord", "twitter"],
                 embeddedWallets: {
                     createOnLogin: "users-without-wallets",
                     requireUserPasswordOnCreate: false,
@@ -75,6 +93,13 @@ root.render(
                 </BrowserRouter>
             </ChakraProvider>
         </PrivyProvider>
+    );
+};
+
+root.render(
+    <Box sx={{ height: "100%" }}>
+        <ColorModeScript />
+        <RootContent></RootContent>
     </Box>,
 );
 

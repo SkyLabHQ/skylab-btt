@@ -19,6 +19,8 @@ import CHummer from "@/assets/c-hummer.png";
 import MouseImage from "@/assets/mouse.png";
 import MouseAImage from "@/assets/mouse-a.png";
 import MouseBImage from "@/assets/mouse-b.png";
+import Bgmp3 from "@/components/Presale/assets/bg.mp3";
+
 import Turn1mp3 from "@/components/Presale/assets/turn1.mp3";
 import Turn2mp3 from "@/components/Presale/assets/turn2.mp3";
 import Numbermp3 from "@/components/Presale/assets/number.mp3";
@@ -639,6 +641,7 @@ const SellPaper = () => {
     const [_, setUpdate] = useState(0);
     const [audio1] = useState(new Audio(Turn1mp3));
     const [audio2] = useState(new Audio(Turn2mp3));
+    const [bgmp3] = useState(new Audio(Bgmp3));
 
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [hoverInit, setHoverInit] = useState(false);
@@ -718,6 +721,11 @@ const SellPaper = () => {
         if (!multiProvider || !multiMercuryJarTournamentContract) return;
         handleLevelInfo();
     }, [multiProvider, multiMercuryJarTournamentContract]);
+
+    useEffect(() => {
+        bgmp3.loop = true;
+        bgmp3.play();
+    }, []);
 
     return (
         <motion.div
