@@ -6,6 +6,7 @@ import useSkyToast from "./hooks/useSkyToast";
 import Service from "./pages/Service";
 import AddToHome from "./pages/AddToHome";
 import TermPage from "./components/TermPage";
+import { useUserInfoRequest } from "./contexts/UserInfo";
 
 const themeColorList = [
     {
@@ -59,6 +60,7 @@ const App = (): ReactElement => {
     const [showTerm, setShowTerm] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const { isBlock } = useUserInfoRequest();
 
     const handleEnter = () => {
         if (checked) {
@@ -155,6 +157,45 @@ const App = (): ReactElement => {
                     )}
                     {type === 2 && <AddToHome onSkip={handleSkip}></AddToHome>}
                 </>
+            )}
+            {isBlock && (
+                <Box
+                    sx={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        background: "#F2D861",
+                        width: "100%",
+                        color: "#000",
+                        zIndex: 999,
+                        height: "72px",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontSize: isPc ? "16px" : "10px",
+                        fontFamily: "Quantico",
+                        fontWeight: "bold",
+                        padding: "12px",
+                    }}
+                >
+                    Bid Tac Toe Tournament is unavailable in your country It
+                    appears that you are connected from an unsupported
+                    jurisdiction. For more information, please read our{" "}
+                    <span
+                        style={{
+                            textDecoration: "underline",
+                            marginLeft: "5px",
+                        }}
+                        onClick={() => {
+                            window.open(
+                                "https://docs.google.com/document/d/1Tq04jfFTmyVzwto8BYtlBh9U9iZ7_Lsp4muaKudnQAA/edit#heading=h.dbtsmhujsl04",
+                                "_blank",
+                            );
+                        }}
+                    >
+                        {" "}
+                        Terms of Services
+                    </span>
+                </Box>
             )}
         </Box>
     );

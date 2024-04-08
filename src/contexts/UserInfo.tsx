@@ -12,6 +12,7 @@ const UserInfoContext = createContext<{
     activePilot: PilotInfo;
     handleGetActivePilot: () => void;
     pilotIsInit: boolean;
+    isBlock: boolean;
 }>(null);
 
 export const UserInfoProvider = ({
@@ -44,6 +45,7 @@ export const UserInfoProvider = ({
                 activePilot,
                 handleGetActivePilot,
                 pilotIsInit: init,
+                isBlock,
             }}
         >
             <Box
