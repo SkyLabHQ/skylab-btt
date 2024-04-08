@@ -143,7 +143,14 @@ const App = (): ReactElement => {
 
     return (
         // TO-DO: use color mode when implementing light/dark
-        <Box minH="100%" color="white" height={"100%"}>
+        <Box
+            minH="100%"
+            color="white"
+            height={"100%"}
+            sx={{
+                position: "relative",
+            }}
+        >
             {showTerm && <TermPage onContinue={handleContinue}></TermPage>}
             {!showTerm && (
                 <>
