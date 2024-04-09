@@ -34,6 +34,7 @@ import {
 } from "@/hooks/useMultiContract";
 import { useChainId } from "wagmi";
 import { formatAmount } from "@/utils/formatBalance";
+import { countDownTime } from "@/skyConstants";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -145,7 +146,7 @@ const BackContent = ({
 
     const [init, setInit] = useState(false);
 
-    const [timeLeft, { start }] = useCountDown(5000000, 1000);
+    const [timeLeft, { start }] = useCountDown(countDownTime, 1000);
 
     const { d1, d2, h1, h2, m1, m2, s1, s2 } = useMemo(() => {
         if (!init) {

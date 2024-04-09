@@ -13,6 +13,9 @@ import OpenSeaIcon from "@/assets/opensea.png";
 import useCountDown from "react-countdown-hook";
 import RightArrow from "./assets/right-arrow.svg";
 import Tw from "./assets/m-tw.png";
+import { countDownTime } from "@/skyConstants";
+import StartCountDown from "../StartCountDown";
+import useStartGame from "@/hooks/useStartGame";
 
 const ScrollNum = ({
     fontSize = "95px",
@@ -217,52 +220,13 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
         duration: 1,
         decimals: 2,
     });
-    const [timeLeft, { start }] = useCountDown(5000000, 1000);
-
-    const { d1, d2, h1, h2, m1, m2, s1, s2 } = useMemo(() => {
-        const seconds = Math.floor((timeLeft / 1000) % 60);
-        const mintues = Math.floor((timeLeft / 1000 / 60) % 60);
-        const hours = Math.floor((timeLeft / 1000 / 60 / 60) % 60);
-        const days = Math.floor((timeLeft / 1000 / 60 / 60 / 60) % 24);
-
-        let s1,
-            s2,
-            m1,
-            m2,
-            h1,
-            h2,
-            d1,
-            d2 = 0;
-        [s1, s2] = handleDateNumber(seconds);
-        [m1, m2] = handleDateNumber(mintues);
-        [h1, h2] = handleDateNumber(hours);
-        [d1, d2] = handleDateNumber(days);
-
-        return {
-            s1,
-            s2,
-            m1,
-            m2,
-            h1,
-            h2,
-            d1,
-            d2,
-        };
-    }, [timeLeft]);
-
-    const handleInit = () => {
-        start();
-    };
+    const { timeLeft } = useStartGame();
 
     useEffect(() => {
         if (Number(potAmount) > 0) {
             update(Number(potAmount));
         }
     }, [potAmount]);
-
-    useEffect(() => {
-        handleInit();
-    }, []);
 
     return (
         <Box
@@ -345,145 +309,8 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                     background: "#FFE045",
                 }}
             ></motion.div>
-            <motion.div
-                style={{
-                    color: "rgba(56, 248, 255, 1)",
-                    fontSize: "70px",
-                    textAlign: "center",
-                    margin: "20px auto 0",
-                    width: "100%",
-                    lineHeight: "1",
-                    fontFamily: "neon",
-                }}
-                animate={animationObj}
-            >
-                <SimpleGrid columns={4} width={"100%"}>
-                    <Box>
-                        <Flex
-                            align={"center"}
-                            justify={"center"}
-                            sx={{
-                                position: "relative",
-                                "&::after": {
-                                    content: "':'",
-                                    position: "absolute",
-                                    right: "0",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                },
-                            }}
-                        >
-                            <ScrollNum
-                                maxNumber={6}
-                                number={d1}
-                                fontSize={"70px"}
-                            ></ScrollNum>
-                            <ScrollNum
-                                maxNumber={9}
-                                number={d2}
-                                fontSize={"70px"}
-                            ></ScrollNum>{" "}
-                        </Flex>
-                        <Text
-                            sx={{
-                                fontSize: "18px",
-                            }}
-                        >
-                            DAYS
-                        </Text>
-                    </Box>
+            <StartCountDown timeLeft={timeLeft}></StartCountDown>
 
-                    <Box>
-                        <Flex
-                            align={"center"}
-                            justify={"center"}
-                            sx={{
-                                position: "relative",
-                                "&::after": {
-                                    content: "':'",
-                                    position: "absolute",
-                                    right: "0",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                },
-                            }}
-                        >
-                            <ScrollNum
-                                maxNumber={6}
-                                number={h1}
-                                fontSize={"70px"}
-                            ></ScrollNum>
-                            <ScrollNum
-                                maxNumber={9}
-                                number={h2}
-                                fontSize={"70px"}
-                            ></ScrollNum>
-                        </Flex>
-                        <Text
-                            sx={{
-                                fontSize: "18px",
-                            }}
-                        >
-                            HOURS
-                        </Text>
-                    </Box>
-                    <Box>
-                        <Flex
-                            align={"center"}
-                            justify={"center"}
-                            sx={{
-                                position: "relative",
-                                "&::after": {
-                                    content: "':'",
-                                    position: "absolute",
-                                    right: "0",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                },
-                            }}
-                        >
-                            <ScrollNum
-                                maxNumber={6}
-                                number={m1}
-                                fontSize={"70px"}
-                            ></ScrollNum>
-                            <ScrollNum
-                                maxNumber={9}
-                                number={m2}
-                                fontSize={"70px"}
-                            ></ScrollNum>
-                        </Flex>
-                        <Text
-                            sx={{
-                                fontSize: "18px",
-                            }}
-                        >
-                            MINS
-                        </Text>
-                    </Box>
-                    <Box>
-                        <Flex align={"center"} justify={"center"}>
-                            <ScrollNum
-                                maxNumber={6}
-                                number={s1}
-                                fontSize={"70px"}
-                            ></ScrollNum>
-                            <ScrollNum
-                                maxNumber={9}
-                                number={s2}
-                                fontSize={"70px"}
-                            ></ScrollNum>
-                        </Flex>
-                        <Text
-                            sx={{
-                                fontSize: "18px",
-                            }}
-                        >
-                            SECS
-                        </Text>
-                    </Box>
-                </SimpleGrid>
-            </motion.div>
             <Flex
                 sx={{
                     width: "156px",

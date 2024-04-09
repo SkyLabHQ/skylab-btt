@@ -81,15 +81,23 @@ export const PlayButtonGroup = ({
             </Flex>
             <GrayButton
                 className="bt"
-                onClick={onPlayTournament}
+                onClick={() => {
+                    if (tournamentDisabled) {
+                        return;
+                    }
+                    onPlayTournament();
+                }}
                 sx={{
                     paddingLeft: "100px !important",
-                    opacity: tournamentDisabled ? 0.5 : 1,
                     marginTop: isPc ? "36px" : "20px",
+                    background: tournamentDisabled && "#787878",
+                    cursor: tournamentDisabled
+                        ? "not-allowed !important"
+                        : "cursor",
                 }}
             >
                 <Image
-                    src={tournamentDisabled ? GrayHumanPlane : HumanPlane}
+                    src={HumanPlane}
                     sx={{
                         width: isPc ? "120px" : "80px",
                         position: "absolute",
