@@ -175,13 +175,14 @@ const App = (): ReactElement => {
                         width: "100%",
                         color: "#000",
                         zIndex: 999,
-                        height: "72px",
+                        height: "50px",
                         justifyContent: "center",
                         alignItems: "center",
                         fontSize: isPc ? "16px" : "10px",
                         fontFamily: "Quantico",
                         fontWeight: "bold",
                         padding: "12px",
+                        textAlign: "center",
                     }}
                 >
                     Bid Tac Toe Tournament is unavailable in your country It

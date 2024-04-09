@@ -28,19 +28,19 @@ export const PlayButtonGroup = ({
                 fontFamily: "Quantico",
                 "& .bt": {
                     width: "100% !important",
-                    height: `${isPc ? "4.7917vw" : "70px"} !important`,
+                    height: `${isPc ? "90px" : "70px"} !important`,
                     justifyContent: "flex-end",
                     borderRadius: "18px !important",
                 },
                 "& .text-wrapper": {
-                    width: `${isPc ? "15.625vw" : "180px"} !important`,
+                    width: `${isPc ? "300px" : "180px"} !important`,
                 },
                 "& .play-button-text": {
-                    fontSize: isPc ? "1.6667vw" : "20px",
+                    fontSize: isPc ? "32px" : "20px",
                     fontWeight: "400",
                 },
                 "& .play-button-text2": {
-                    fontSize: isPc ? "1.0417vw" : "12px",
+                    fontSize: isPc ? "20px" : "12px",
                     fontWeight: "400",
                 },
             }}
@@ -60,12 +60,12 @@ export const PlayButtonGroup = ({
                 ></Box>
                 <Text
                     sx={{
-                        fontSize: isPc ? "1.5625vw" : "16px",
+                        fontSize: isPc ? "30px" : "16px",
                         fontWeight: 700,
                         WebkitTextStrokeWidth: 1,
                         WebkitTextStrokeColor: "#FDDC2D",
                         textAlign: "center",
-                        margin: "0 0.5208vw",
+                        margin: "0 10px",
                         fontFamily: "Orbitron",
                     }}
                 >
@@ -83,17 +83,17 @@ export const PlayButtonGroup = ({
                 className="bt"
                 onClick={onPlayTournament}
                 sx={{
-                    paddingLeft: "5.2083vw !important",
+                    paddingLeft: "100px !important",
                     opacity: tournamentDisabled ? 0.5 : 1,
-                    marginTop: isPc ? "1.875vw" : "1.0417vw",
+                    marginTop: isPc ? "36px" : "20px",
                 }}
             >
                 <Image
                     src={tournamentDisabled ? GrayHumanPlane : HumanPlane}
                     sx={{
-                        width: isPc ? "6.25vw" : "80px",
+                        width: isPc ? "120px" : "80px",
                         position: "absolute",
-                        left: "0.2604vw",
+                        left: "5px",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
@@ -146,12 +146,12 @@ export const PlayButtonGroup = ({
                 >
                     <Text
                         sx={{
-                            fontSize: isPc ? "1.5625vw" : "16px",
+                            fontSize: isPc ? "30px" : "16px",
                             fontWeight: 700,
                             WebkitTextStrokeWidth: 1,
                             WebkitTextStrokeColor: "#FDDC2D",
                             textAlign: "center",
-                            margin: "0 0.5208vw",
+                            margin: "0 10px",
                             fontFamily: "Orbitron",
                         }}
                     >
@@ -166,7 +166,7 @@ export const PlayButtonGroup = ({
                             transform: "translateX(-50%)",
                             width: "200%",
                             textAlign: "center",
-                            fontSize: isPc ? "1.0417vw" : "12px",
+                            fontSize: isPc ? "20px" : "12px",
                         }}
                     >
                         Without Plane
@@ -185,16 +185,16 @@ export const PlayButtonGroup = ({
                 className="bt"
                 onClick={onPlayWithBot}
                 sx={{
-                    marginTop: isPc ? "2.6042vw" : "30px",
+                    marginTop: isPc ? "50px" : "30px",
                 }}
                 position={"relative"}
             >
                 <Image
                     src={RobotIcon}
                     sx={{
-                        width: isPc ? "2.2917vw" : "40px",
+                        width: isPc ? "44px" : "40px",
                         position: "absolute",
-                        left: "1.0417vw",
+                        left: "20px",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
@@ -214,15 +214,15 @@ export const PlayButtonGroup = ({
                 className="bt"
                 onClick={onPlayTestLobby}
                 sx={{
-                    marginTop: isPc ? "1.0417vw" : "20px",
+                    marginTop: isPc ? "20px" : "20px",
                 }}
             >
                 <Image
                     src={PrivateLobbyIcon}
                     sx={{
-                        width: isPc ? "4.1667vw" : "60px",
+                        width: isPc ? "80px" : "60px",
                         position: "absolute",
-                        left: "0.2083vw",
+                        left: "4px",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}

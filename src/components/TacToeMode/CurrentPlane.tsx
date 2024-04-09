@@ -1,13 +1,29 @@
 import { Box, Text, Image, Flex } from "@chakra-ui/react";
-import React from "react";
 import PlaneBorder from "./assets/plane-border.png";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import NoPlane from "./assets/no-plane.png";
+import { usePrivy } from "@privy-io/react-auth";
+import useSkyToast from "@/hooks/useSkyToast";
 
 const CurrentPlane = ({ selectPlane }: { selectPlane: any }) => {
     const { address } = usePrivyAccounts();
+    const toast = useSkyToast();
+    const { ready, login, user, connectWallet } = usePrivy();
+
+    const handleLogin = () => {
+        if (!ready) {
+            toast("Please wait for the wallet to be ready");
+            return;
+        }
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
+        login();
+    };
     return (
-        <Box>
+        <Box onClick={() => {}}>
             <Text
                 sx={{
                     color: address ? "#f2d861" : "#fff",
@@ -19,6 +35,13 @@ const CurrentPlane = ({ selectPlane }: { selectPlane: any }) => {
                 {address ? "Current Plane" : "Not Conncet Wallet yet"}
             </Text>
             <Flex
+                onClick={() => {
+                    if (address) {
+                        return;
+                    }
+
+                    handleLogin();
+                }}
                 sx={{
                     background: `url(${PlaneBorder})`,
                     width: "262px",
@@ -26,6 +49,7 @@ const CurrentPlane = ({ selectPlane }: { selectPlane: any }) => {
                     backgroundSize: "100%",
                     marginTop: "20px",
                     position: "relative",
+                    cursor: address ? "normal" : "pointer",
                 }}
                 justify={"center"}
                 align={"center"}
