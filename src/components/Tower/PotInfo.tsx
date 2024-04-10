@@ -1,91 +1,12 @@
-import {
-    Box,
-    Flex,
-    Image,
-    SimpleGrid,
-    Text,
-    useMediaQuery,
-} from "@chakra-ui/react";
-import { motion, useAnimation } from "framer-motion";
-import React, { useEffect, useMemo } from "react";
+import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import React, { useEffect } from "react";
 import { useCountUp } from "react-countup";
 import OpenSeaIcon from "@/assets/opensea.png";
-import useCountDown from "react-countdown-hook";
 import RightArrow from "./assets/right-arrow.svg";
 import Tw from "./assets/m-tw.png";
-import { countDownTime } from "@/skyConstants";
 import StartCountDown from "../StartCountDown";
 import useStartGame from "@/hooks/useStartGame";
-
-const ScrollNum = ({
-    fontSize = "95px",
-    maxNumber = 9,
-    number = -1,
-}: {
-    fontSize?: string;
-    maxNumber?: number;
-    number?: number;
-}) => {
-    const [init, setInit] = React.useState(false);
-    const numAnimate = useAnimation();
-
-    useEffect(() => {
-        const handle = async () => {
-            if (init) {
-                await numAnimate.stop();
-                if (number === maxNumber) {
-                    await numAnimate.start({
-                        transform: [
-                            `translateY(-${(maxNumber + 1) * 9.09}%)`,
-                            `translateY(-${number * 9.09}%)`,
-                        ],
-
-                        transition: {
-                            duration: init ? 0.5 : 0,
-                            ease: "linear",
-                        },
-                    });
-                } else {
-                    numAnimate.start({
-                        transform: `translateY(-${number * 9.09}%)`,
-                        transition: {
-                            duration: init ? 0.5 : 0,
-                            ease: "linear",
-                        },
-                    });
-                }
-            } else {
-                await numAnimate.set({
-                    transform: [
-                        `translateY(-${(maxNumber + 1) * 9.09}%)`,
-                        `translateY(-${number * 9.09}%)`,
-                    ],
-                });
-                setInit(true);
-            }
-        };
-        handle();
-    }, [number]);
-
-    return (
-        <Box sx={{}}>
-            <Box
-                sx={{
-                    height: fontSize,
-                    overflow: "hidden",
-                    fontSize: fontSize,
-                    lineHeight: "1",
-                }}
-            >
-                <motion.div animate={numAnimate}>
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item, index) => {
-                        return <Box key={index}>{item}</Box>;
-                    })}
-                </motion.div>
-            </Box>
-        </Box>
-    );
-};
 
 const animationObj = {
     color: [
@@ -98,14 +19,6 @@ const animationObj = {
         duration: 2,
         yoyo: Infinity,
     },
-};
-
-const handleDateNumber = (number: number) => {
-    if (number >= 10) {
-        return [Math.floor(number / 10), number % 10];
-    } else {
-        return [0, number];
-    }
 };
 
 const MPotInfo = ({ potAmount }: { potAmount: string }) => {
@@ -234,8 +147,9 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                 fontFamily: "Neoneon",
                 position: "absolute",
                 top: "146px",
-                left: "60px",
+                left: "40px",
                 lineHeight: 1,
+                width: "360px",
             }}
         >
             <Flex sx={{}} align={"center"}>

@@ -522,6 +522,7 @@ const UserInfoDrawer = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
+    const { isBlock, blockOpen, handleBlock } = useUserInfoRequest();
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);
@@ -592,6 +593,14 @@ const UserInfoDrawer = ({
     };
 
     const handleMintPlane = async () => {
+        if (isBlock) {
+            if (blockOpen) {
+                return;
+            }
+            handleBlock(true);
+            return;
+        }
+
         if (Number(paperBalance) === 0) {
             return;
         }

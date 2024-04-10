@@ -65,8 +65,8 @@ import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
 import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { usePrivy } from "@privy-io/react-auth";
-import useStartGame from "@/hooks/useStartGame";
 import StartCountDown from "@/components/StartCountDown";
+import { useUserInfoRequest } from "@/contexts/UserInfo";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -121,7 +121,8 @@ export const GrayButton = (props: BoxProps) => {
 const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(30000, 1000);
-    const { timeLeft: timeLeft1 } = useStartGame();
+    // const { timeLeft: timeLeft1 } = useStartGame();
+    const timeLeft1 = 0;
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
     const { ready, login, user, connectWallet } = usePrivy();
     const {
@@ -151,6 +152,7 @@ const TacToeMode = () => {
     const [loading, setLoading] = useState(false);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
+    const { isBlock, blockOpen, handleBlock } = useUserInfoRequest();
 
     const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
     const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");
@@ -269,6 +271,15 @@ const TacToeMode = () => {
             handleLogin();
             return;
         }
+
+        if (isBlock) {
+            if (blockOpen) {
+                return;
+            }
+            handleBlock(true);
+            return;
+        }
+
         onMyAviationOpen();
     };
 
@@ -462,7 +473,6 @@ const TacToeMode = () => {
             }}
         >
             <BttHelmet></BttHelmet>
-
             <Box
                 sx={{
                     display: "flex",
@@ -513,7 +523,9 @@ const TacToeMode = () => {
                         height: "100%",
                     }}
                 >
-                    <StartCountDown timeLeft={timeLeft1}></StartCountDown>
+                    {isPc && (
+                        <StartCountDown timeLeft={timeLeft1}></StartCountDown>
+                    )}
                     <Box
                         sx={{
                             paddingTop: "1.8229vw",

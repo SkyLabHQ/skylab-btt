@@ -1,4 +1,4 @@
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text, useMediaQuery } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
 import React, { useEffect, useMemo } from "react";
 
@@ -93,7 +93,14 @@ const animationObj = {
     },
 };
 
-const StartCountDown = ({ timeLeft }: { timeLeft: number }) => {
+const StartCountDown = ({
+    timeLeft,
+    fontSize,
+}: {
+    timeLeft: number;
+    fontSize?: string;
+}) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     const { d1, d2, h1, h2, m1, m2, s1, s2 } = useMemo(() => {
         const seconds = Math.floor((timeLeft / 1000) % 60);
         const mintues = Math.floor((timeLeft / 1000 / 60) % 60);
@@ -128,7 +135,7 @@ const StartCountDown = ({ timeLeft }: { timeLeft: number }) => {
         <motion.div
             style={{
                 color: "rgba(56, 248, 255, 1)",
-                fontSize: "70px",
+                fontSize: fontSize,
                 textAlign: "center",
                 margin: "20px auto 0",
                 width: "100%",
@@ -156,17 +163,17 @@ const StartCountDown = ({ timeLeft }: { timeLeft: number }) => {
                         <ScrollNum
                             maxNumber={6}
                             number={d1}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>
                         <ScrollNum
                             maxNumber={9}
                             number={d2}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>{" "}
                     </Flex>
                     <Text
                         sx={{
-                            fontSize: "18px",
+                            fontSize: isPc ? "18px" : "12px",
                         }}
                     >
                         DAYS
@@ -191,17 +198,17 @@ const StartCountDown = ({ timeLeft }: { timeLeft: number }) => {
                         <ScrollNum
                             maxNumber={6}
                             number={h1}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>
                         <ScrollNum
                             maxNumber={9}
                             number={h2}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>
                     </Flex>
                     <Text
                         sx={{
-                            fontSize: "18px",
+                            fontSize: isPc ? "18px" : "12px",
                         }}
                     >
                         HOURS
@@ -225,17 +232,17 @@ const StartCountDown = ({ timeLeft }: { timeLeft: number }) => {
                         <ScrollNum
                             maxNumber={6}
                             number={m1}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>
                         <ScrollNum
                             maxNumber={9}
                             number={m2}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>
                     </Flex>
                     <Text
                         sx={{
-                            fontSize: "18px",
+                            fontSize: isPc ? "18px" : "12px",
                         }}
                     >
                         MINS
@@ -246,17 +253,17 @@ const StartCountDown = ({ timeLeft }: { timeLeft: number }) => {
                         <ScrollNum
                             maxNumber={6}
                             number={s1}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>
                         <ScrollNum
                             maxNumber={9}
                             number={s2}
-                            fontSize={"70px"}
+                            fontSize={fontSize}
                         ></ScrollNum>
                     </Flex>
                     <Text
                         sx={{
-                            fontSize: "18px",
+                            fontSize: isPc ? "18px" : "12px",
                         }}
                     >
                         SECS

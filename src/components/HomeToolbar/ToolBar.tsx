@@ -186,6 +186,7 @@ const ToolBar = ({
                             width: "60px",
                             height: "60px",
                             marginRight: "24px",
+                            cursor: "pointer",
                         }}
                     ></Image>
                     <Box id="my-wallet">

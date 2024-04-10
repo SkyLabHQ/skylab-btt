@@ -1,15 +1,13 @@
 import {
     Box,
     Flex,
-    SimpleGrid,
     Text,
     Image,
     keyframes,
     useMediaQuery,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import useCountDown from "react-countdown-hook";
+import React, { useEffect, useRef, useState } from "react";
 import Bg from "@/assets/bg.png";
 import BHummer from "@/assets/b-hummer.png";
 import OIcon from "@/assets/o.png";
@@ -34,7 +32,8 @@ import {
 } from "@/hooks/useMultiContract";
 import { useChainId } from "wagmi";
 import { formatAmount } from "@/utils/formatBalance";
-import { countDownTime } from "@/skyConstants";
+import StartCountDown from "../StartCountDown";
+import useStartGame from "@/hooks/useStartGame";
 
 const LightBorder = ({ width }: { width: string }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -132,6 +131,8 @@ const BackContent = ({
     rotateY?: number;
     potAmount: string;
 }) => {
+    const { timeLeft: timeLeft1 } = useStartGame();
+
     const [audio1] = useState(new Audio(Numbermp3));
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
@@ -146,55 +147,9 @@ const BackContent = ({
 
     const [init, setInit] = useState(false);
 
-    const [timeLeft, { start }] = useCountDown(countDownTime, 1000);
-
-    const { d1, d2, h1, h2, m1, m2, s1, s2 } = useMemo(() => {
-        if (!init) {
-            return {
-                d1: 3,
-                d2: 4,
-                h1: 5,
-                h2: 6,
-                m1: 7,
-                m2: 8,
-                s1: 9,
-                s2: 1,
-            };
-        }
-        const seconds = Math.floor((timeLeft / 1000) % 60);
-        const mintues = Math.floor((timeLeft / 1000 / 60) % 60);
-        const hours = Math.floor((timeLeft / 1000 / 60 / 60) % 60);
-        const days = Math.floor((timeLeft / 1000 / 60 / 60 / 60) % 24);
-
-        let s1,
-            s2,
-            m1,
-            m2,
-            h1,
-            h2,
-            d1,
-            d2 = 0;
-        [s1, s2] = handleDateNumber(seconds);
-        [m1, m2] = handleDateNumber(mintues);
-        [h1, h2] = handleDateNumber(hours);
-        [d1, d2] = handleDateNumber(days);
-
-        return {
-            s1,
-            s2,
-            m1,
-            m2,
-            h1,
-            h2,
-            d1,
-            d2,
-        };
-    }, [timeLeft, init]);
-
     const handleInit = () => {
         setTimeout(() => {
             audio1.play();
-            start();
             setInit(true);
         }, 1000);
     };
@@ -325,145 +280,10 @@ const BackContent = ({
                         width: "100%",
                     }}
                 >
-                    <motion.div
-                        style={{
-                            color: "rgba(56, 248, 255, 1)",
-                            fontSize: isPc ? "70px" : "42px",
-                            textAlign: "center",
-                            margin: "20px auto 0",
-                            width: "100%",
-                            lineHeight: "1",
-                            fontFamily: "neon",
-                        }}
-                        animate={animationObj}
-                    >
-                        <SimpleGrid columns={4} width={"100%"}>
-                            <Box>
-                                <Flex
-                                    align={"center"}
-                                    justify={"center"}
-                                    sx={{
-                                        position: "relative",
-                                        "&::after": {
-                                            content: "':'",
-                                            position: "absolute",
-                                            right: "0",
-                                            top: "50%",
-                                            transform: "translateY(-50%)",
-                                        },
-                                    }}
-                                >
-                                    <ScrollNum
-                                        maxNumber={6}
-                                        number={d1}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>
-                                    <ScrollNum
-                                        maxNumber={9}
-                                        number={d2}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>{" "}
-                                </Flex>
-                                <Text
-                                    sx={{
-                                        fontSize: isPc ? "18px" : "14px",
-                                    }}
-                                >
-                                    DAYS
-                                </Text>
-                            </Box>
-
-                            <Box>
-                                <Flex
-                                    align={"center"}
-                                    justify={"center"}
-                                    sx={{
-                                        position: "relative",
-                                        "&::after": {
-                                            content: "':'",
-                                            position: "absolute",
-                                            right: "0",
-                                            top: "50%",
-                                            transform: "translateY(-50%)",
-                                        },
-                                    }}
-                                >
-                                    <ScrollNum
-                                        maxNumber={6}
-                                        number={h1}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>
-                                    <ScrollNum
-                                        maxNumber={9}
-                                        number={h2}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>
-                                </Flex>
-                                <Text
-                                    sx={{
-                                        fontSize: isPc ? "18px" : "14px",
-                                    }}
-                                >
-                                    HOURS
-                                </Text>
-                            </Box>
-                            <Box>
-                                <Flex
-                                    align={"center"}
-                                    justify={"center"}
-                                    sx={{
-                                        position: "relative",
-                                        "&::after": {
-                                            content: "':'",
-                                            position: "absolute",
-                                            right: "0",
-                                            top: "50%",
-                                            transform: "translateY(-50%)",
-                                        },
-                                    }}
-                                >
-                                    <ScrollNum
-                                        maxNumber={6}
-                                        number={m1}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>
-                                    <ScrollNum
-                                        maxNumber={9}
-                                        number={m2}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>
-                                </Flex>
-                                <Text
-                                    sx={{
-                                        fontSize: isPc ? "18px" : "14px",
-                                    }}
-                                >
-                                    MINS
-                                </Text>
-                            </Box>
-                            <Box>
-                                <Flex align={"center"} justify={"center"}>
-                                    <ScrollNum
-                                        maxNumber={6}
-                                        number={s1}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>
-                                    <ScrollNum
-                                        maxNumber={9}
-                                        number={s2}
-                                        fontSize={isPc ? "70px" : "42px"}
-                                    ></ScrollNum>
-                                </Flex>
-                                <Text
-                                    sx={{
-                                        fontSize: isPc ? "18px" : "14px",
-                                    }}
-                                >
-                                    SECS
-                                </Text>
-                            </Box>
-                        </SimpleGrid>
-                    </motion.div>
+                    <StartCountDown
+                        timeLeft={timeLeft1}
+                        fontSize={isPc ? "70px" : "42px"}
+                    ></StartCountDown>
                 </Box>
             </Flex>
         </Box>

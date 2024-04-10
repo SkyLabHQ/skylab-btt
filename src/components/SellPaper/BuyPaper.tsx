@@ -4,7 +4,6 @@ import RightArrowIcon from "./assets/right-arrow.svg";
 import PlanetIcon from "./assets/planet.png";
 import SubIcon from "./assets/sub.svg";
 import AddIcon from "./assets/add.svg";
-// import WalletIcon from "./assets/wallet.svg";
 import React from "react";
 import useSkyToast from "@/hooks/useSkyToast";
 import { usePrivy } from "@privy-io/react-auth";
@@ -12,9 +11,10 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import BuyIcon from "./assets/buy-icon.svg";
 import { accMul, parseAmount } from "@/utils/formatBalance";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
-import { useChainId, usePublicClient } from "wagmi";
+import { usePublicClient } from "wagmi";
 import { handleError } from "@/utils/error";
 import { WalletIcon } from "../Icon";
+import { useUserInfoRequest } from "@/contexts/UserInfo";
 
 const ConnectWalletBt = () => {
     const toast = useSkyToast();
@@ -169,8 +169,17 @@ const BuyPaper = () => {
     const toast = useSkyToast();
     const { address } = usePrivyAccounts();
     const [inputAmount, setInputAmount] = React.useState(1);
+    const { isBlock, blockOpen, handleBlock } = useUserInfoRequest();
 
     const handleBuy = async () => {
+        if (isBlock) {
+            if (blockOpen) {
+                return;
+            }
+            handleBlock(true);
+            return;
+        }
+
         try {
             const hash = await mercuryJarTournamentContract.write.mintPaper(
                 [inputAmount],

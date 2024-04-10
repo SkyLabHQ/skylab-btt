@@ -12,7 +12,9 @@ const UserInfoContext = createContext<{
     activePilot: PilotInfo;
     handleGetActivePilot: () => void;
     pilotIsInit: boolean;
+    blockOpen: boolean;
     isBlock: boolean;
+    handleBlock: (block: boolean) => void;
 }>(null);
 
 export const UserInfoProvider = ({
@@ -24,14 +26,20 @@ export const UserInfoProvider = ({
     const { address } = usePrivyAccounts();
     const { activePilot, handleGetActivePilot, init } = usePilotInfo(address);
     const [isBlock, setIsBlock] = useState(false);
+    const [blockOpen, setIsBlockOpen] = useState(false);
+
+    const handleBlock = (block: boolean) => {
+        setIsBlockOpen(block);
+    };
 
     useEffect(() => {
         axios.get("https://ipapi.co/json/").then(async (res: any) => {
-            console.log(res.data);
             if (res.data.country_code === "US") {
                 setIsBlock(true);
+                setIsBlockOpen(true);
             } else {
                 setIsBlock(false);
+                setIsBlockOpen(false);
             }
         });
     }, []);
@@ -45,7 +53,9 @@ export const UserInfoProvider = ({
                 activePilot,
                 handleGetActivePilot,
                 pilotIsInit: init,
+                blockOpen,
                 isBlock,
+                handleBlock,
             }}
         >
             <Box

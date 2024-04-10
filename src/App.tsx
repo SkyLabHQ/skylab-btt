@@ -1,12 +1,13 @@
 import "swiper/css/bundle";
-import { Box, useMediaQuery } from "@chakra-ui/react";
-import React, { ReactElement, useEffect, useState } from "react";
+import { Box, useMediaQuery, Image, Flex } from "@chakra-ui/react";
+import { ReactElement, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useSkyToast from "./hooks/useSkyToast";
 import Service from "./pages/Service";
 import AddToHome from "./pages/AddToHome";
 import TermPage from "./components/TermPage";
 import { useUserInfoRequest } from "./contexts/UserInfo";
+import CloseIcon from "@/assets/close.svg";
 
 const themeColorList = [
     {
@@ -60,7 +61,8 @@ const App = (): ReactElement => {
     const [showTerm, setShowTerm] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const { isBlock } = useUserInfoRequest();
+
+    const { blockOpen, handleBlock } = useUserInfoRequest();
 
     const handleEnter = () => {
         if (checked) {
@@ -165,8 +167,8 @@ const App = (): ReactElement => {
                     {type === 2 && <AddToHome onSkip={handleSkip}></AddToHome>}
                 </>
             )}
-            {isBlock && (
-                <Box
+            {blockOpen && (
+                <Flex
                     sx={{
                         position: "fixed",
                         top: 0,
@@ -176,34 +178,50 @@ const App = (): ReactElement => {
                         color: "#000",
                         zIndex: 999,
                         height: "50px",
-                        justifyContent: "center",
                         alignItems: "center",
                         fontSize: isPc ? "16px" : "10px",
                         fontFamily: "Quantico",
                         fontWeight: "bold",
-                        padding: "12px",
+                        padding: isPc ? "0 36px" : "0 12px",
                         textAlign: "center",
                     }}
                 >
-                    Bid Tac Toe Tournament is unavailable in your country It
-                    appears that you are connected from an unsupported
-                    jurisdiction. For more information, please read our{" "}
-                    <span
-                        style={{
-                            textDecoration: "underline",
-                            marginLeft: "5px",
-                        }}
-                        onClick={() => {
-                            window.open(
-                                "https://docs.google.com/document/d/1Tq04jfFTmyVzwto8BYtlBh9U9iZ7_Lsp4muaKudnQAA/edit#heading=h.dbtsmhujsl04",
-                                "_blank",
-                            );
+                    <Box
+                        sx={{
+                            flex: 1,
                         }}
                     >
-                        {" "}
-                        Terms of Services
-                    </span>
-                </Box>
+                        Bid Tac Toe Tournament is unavailable in your country It
+                        appears that you are connected from an unsupported
+                        jurisdiction. For more information, please read our{" "}
+                        <span
+                            style={{
+                                textDecoration: "underline",
+                                marginLeft: "5px",
+                            }}
+                            onClick={() => {
+                                window.open(
+                                    "https://docs.google.com/document/d/1Tq04jfFTmyVzwto8BYtlBh9U9iZ7_Lsp4muaKudnQAA/edit#heading=h.dbtsmhujsl04",
+                                    "_blank",
+                                );
+                            }}
+                        >
+                            {" "}
+                            Terms of Services
+                        </span>
+                    </Box>
+                    <Image
+                        onClick={() => {
+                            handleBlock(false);
+                        }}
+                        src={CloseIcon}
+                        sx={{
+                            width: isPc ? "18px" : "12px",
+                            height: isPc ? "18px" : "12px",
+                            cursor: "pointer",
+                        }}
+                    ></Image>
+                </Flex>
             )}
         </Box>
     );
