@@ -50,6 +50,8 @@ const PlayGame = ({
 }: {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
 }) => {
+    const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
+
     const commitWorkerRef = useRef<Worker>(null);
     const callTimeoutWorkerRef = useRef<Worker>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -348,6 +350,12 @@ const PlayGame = ({
         tacToeGameRetryWrite,
         getGridCommited,
     ]);
+
+    const handleBoardClick = () => {
+        setShowAnimateConfirm((number) => {
+            return number + 1;
+        });
+    };
 
     const handleSetMessage = async (
         type: "setMessage" | "setEmote",
@@ -783,6 +791,8 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                         onOpen();
                     }}
                     loading={loading}
+                    handleBoardClick={handleBoardClick}
+                    showAnimateConfirm={showAnimateConfirm}
                 ></MLayout>
             )}
             <QuitModal

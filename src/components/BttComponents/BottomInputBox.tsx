@@ -14,11 +14,12 @@ import {
     useDisclosure,
     keyframes,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { GameState, MESSAGES } from "@/skyConstants/bttGameTypes";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
 import SubIcon from "@/components/BttComponents/assets/sub.svg";
 import MessageIcon1 from "./assets/message-dot.svg";
+import ConfirmVideo from "@/assets/confirm.wav";
 
 const move = keyframes`
     0% {
@@ -52,7 +53,7 @@ const BottomInputBox = ({
     onSetMessage,
     onInputAmountClick,
     onIuputAmount,
-    showAnimate,
+    showAnimateConfirm,
 }: {
     myBalance?: number;
     bidAmount: string;
@@ -67,7 +68,7 @@ const BottomInputBox = ({
         type: "setMessage" | "setEmote",
         emoteIndex?: number,
     ) => void;
-    showAnimate?: boolean;
+    showAnimateConfirm?: number;
 }) => {
     const [selectMessageIndex, setSelectMessageIndex] = React.useState(-1);
     const { onOpen, onClose, isOpen } = useDisclosure();
@@ -243,15 +244,17 @@ const BottomInputBox = ({
                         min={0}
                     >
                         <SliderTrack
+                            key={showAnimateConfirm + ""}
                             bg="#545454"
                             height={"10px"}
                             borderRadius={"10px"}
                             sx={{
                                 padding: "0 20px",
+                                animationIterationCount: "2",
                             }}
                             animation={`${
-                                showAnimate ? move : ""
-                            } 0.5s linear infinite alternate`}
+                                showAnimateConfirm !== 0 ? move : ""
+                            } 0.5s linear alternate`}
                         >
                             <SliderFilledTrack bg="transparent" />
                         </SliderTrack>
@@ -296,8 +299,11 @@ const BottomInputBox = ({
                 ) : (
                     <Text
                         onClick={() => {
+                            const audio = new Audio(ConfirmVideo);
+                            audio.play();
                             onConfirm();
                         }}
+                        key={showAnimateConfirm + ""}
                         sx={{
                             color:
                                 myGameState === GameState.WaitingForBid
@@ -306,8 +312,8 @@ const BottomInputBox = ({
                             // width: "114px",
                         }}
                         animation={`${
-                            showAnimate ? bt : ""
-                        } 0.5s linear infinite alternate`}
+                            showAnimateConfirm !== 0 ? bt : ""
+                        } 0.5s linear alternate`}
                     >
                         {myGameState === GameState.Commited ||
                         myGameState === GameState.Revealed

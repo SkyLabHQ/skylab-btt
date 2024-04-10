@@ -80,6 +80,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const commitWorkerRef = useRef<Worker>(null);
     const callTimeoutWorkerRef = useRef<Worker>(null);
 
+    const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const { blockNumber } = useBlockNumber();
     const [revealing, setRevealing] = useState<boolean>(false);
@@ -124,6 +125,12 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
             myInfo.burner,
         )}`;
     }, [bidTacToeGameAddress, myInfo]);
+
+    const handleBoardClick = () => {
+        setShowAnimateConfirm((number) => {
+            return number + 1;
+        });
+    };
 
     const handleShareTw = () => {
         const text = `${
@@ -630,6 +637,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         }
     };
 
+    const handleShowConfirmAnimation = () => {};
+
     useEffect(() => {
         handleGameOver();
     }, [myGameInfo.gameState, deleteTokenIdCommited, addBttTransaction]);
@@ -771,11 +780,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                             ></MyUserCard>
                         </Box>
 
-                        <Box
-                            sx={{
-                                paddingTop: "1.5625vw",
-                            }}
-                        >
+                        <Box>
                             <Board
                                 list={list}
                                 showAnimateNumber={showAnimateNumber}
@@ -835,6 +840,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                         onOpen();
                     }}
                     loading={loading}
+                    handleBoardClick={handleBoardClick}
+                    showAnimateConfirm={showAnimateConfirm}
                 ></MLayout>
             )}
 

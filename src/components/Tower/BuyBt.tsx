@@ -4,6 +4,7 @@ import PlanetIcon from "./assets/planet.png";
 import SubIcon from "./assets/sub.svg";
 import AddIcon from "./assets/add.svg";
 import BuyIcon from "./assets/buy-icon.svg";
+import Click1Wav from "@/assets/click1.wav";
 
 import {
     Box,
@@ -224,6 +225,8 @@ const BuyBt = () => {
                 arrowSize={20}
                 isOpen={isOpen}
                 onOpen={() => {
+                    const audio = new Audio(Click1Wav);
+                    audio.play();
                     if (!address) {
                         handleLogin();
                         return;

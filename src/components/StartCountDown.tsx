@@ -95,7 +95,7 @@ const animationObj = {
 
 const StartCountDown = ({
     timeLeft,
-    fontSize,
+    fontSize = "70px",
 }: {
     timeLeft: number;
     fontSize?: string;

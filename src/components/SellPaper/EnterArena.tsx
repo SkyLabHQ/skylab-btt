@@ -1,7 +1,8 @@
 import React from "react";
 import ArenaIcon from "./assets/arena-icon.png";
-import { Box, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, useMediaQuery } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import Click1Wav from "@/assets/click1.wav";
 
 const EnterArena = () => {
     const navigate = useNavigate();
@@ -9,6 +10,8 @@ const EnterArena = () => {
     return (
         <Box
             onClick={() => {
+                const audio = new Audio(Click1Wav);
+                audio.play();
                 navigate("/tower");
             }}
             sx={{

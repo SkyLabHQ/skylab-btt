@@ -28,6 +28,8 @@ const MLayout = ({
     emoteLoading,
     messageLoading,
     loading,
+    handleBoardClick,
+    showAnimateConfirm,
 }: any) => {
     const { isOpen, onOpen, onClose } = useDisclosure({
         defaultIsOpen: true,
@@ -43,13 +45,6 @@ const MLayout = ({
 
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } = useGameContext();
     const myGameState = myGameInfo.gameState;
-
-    const showAnimate =
-        list.every((item) => {
-            return item.mark === -1 || item.mark === 0;
-        }) &&
-        myGameState === GameState.WaitingForBid &&
-        !loading;
 
     useEffect(() => {
         if (messageLoading || emoteLoading) {
@@ -123,6 +118,9 @@ const MLayout = ({
                 <Box
                     sx={{
                         marginTop: "20px",
+                    }}
+                    onClick={() => {
+                        handleBoardClick();
                     }}
                 >
                     <Board
@@ -216,7 +214,7 @@ const MLayout = ({
                     </Flex>
                 </Box>
                 <BottomInputBox
-                    showAnimate={showAnimate}
+                    showAnimateConfirm={showAnimateConfirm}
                     onSetMessage={onSetMessage}
                     myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}

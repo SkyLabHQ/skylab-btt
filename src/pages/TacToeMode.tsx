@@ -67,6 +67,7 @@ import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { usePrivy } from "@privy-io/react-auth";
 import StartCountDown from "@/components/StartCountDown";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
+import useStartGame from "@/hooks/useStartGame";
 
 export interface PlaneInfo {
     tokenId: number;
@@ -121,8 +122,8 @@ export const GrayButton = (props: BoxProps) => {
 const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(30000, 1000);
-    // const { timeLeft: timeLeft1 } = useStartGame();
-    const timeLeft1 = 0;
+    const { timeLeft: timeLeft1 } = useStartGame();
+    // const timeLeft1 = 0;
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
     const { ready, login, user, connectWallet } = usePrivy();
     const {
