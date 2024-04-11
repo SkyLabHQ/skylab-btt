@@ -14,6 +14,7 @@ import {
     useClipboard,
     NumberInput,
     NumberInputField,
+    keyframes,
 } from "@chakra-ui/react";
 import CopyIcon from "./assets/copy-icon.svg";
 import GoldIcon from "./assets/gold.svg";
@@ -25,9 +26,9 @@ import LockIcon from "./assets/lock.svg";
 import Plane1 from "@/assets/aviations/a1.png";
 import useSkyToast from "@/hooks/useSkyToast";
 import { PilotInfo } from "@/hooks/usePilotInfo";
-import BotIcon from "./assets/bot.png";
-import GearIcon from "./assets/gear.svg";
 import { useCountUp } from "react-countup";
+import ConfirmVideo from "@/assets/confirm.wav";
+
 import {
     EMOTES,
     GameState,
@@ -35,6 +36,16 @@ import {
     MESSAGES,
     MessageStatus,
 } from "@/skyConstants/bttGameTypes";
+
+const move = keyframes`
+    0% {
+        border: 3px solid #fff;
+    }
+    
+    100% {
+        border: 3px solid #fddc2d;
+    }
+`;
 
 export const Message = ({
     message = 0,
@@ -236,12 +247,14 @@ const MyBid = ({
     gameState,
     onInputChange,
     onConfirm,
+    showAnimateConfirm,
 }: {
     showTutorialStep?: boolean;
     loading: boolean;
     balance: number;
     bidAmount: number;
     gameState: number;
+    showAnimateConfirm?: number;
     onInputChange?: (value: number) => void;
     onConfirm: () => void;
 }) => {
@@ -335,8 +348,9 @@ const MyBid = ({
                                 width: "1.25vw",
                             }}
                         ></Image>
-                        <motion.div
-                            style={{
+                        <Box
+                            key={showAnimateConfirm + ""}
+                            sx={{
                                 height: "2.2917vw",
                                 width: "6.25vw",
                                 borderRadius: "0.9375vw",
@@ -345,22 +359,11 @@ const MyBid = ({
                                 background: "rgba(255, 255, 255, 0.40)",
                                 display: "flex",
                                 alignItems: "center",
+                                animationIterationCount: 2,
                             }}
-                            animate={{
-                                border:
-                                    gameState !== GameState.WaitingForBid ||
-                                    loading
-                                        ? ["4px solid #fff", "4px solid #fff"]
-                                        : [
-                                              "4px solid #fff",
-                                              "4px solid #fddc2d",
-                                          ],
-                            }}
-                            transition={{
-                                duration: 0.4,
-                                repeat: Infinity,
-                                repeatType: "reverse",
-                            }}
+                            animation={`${
+                                showAnimateConfirm !== 0 ? move : ""
+                            } 0.5s linear alternate`}
                         >
                             <NumberInput
                                 isDisabled={
@@ -391,7 +394,7 @@ const MyBid = ({
                             >
                                 <NumberInputField />
                             </NumberInput>
-                        </motion.div>
+                        </Box>
                     </Box>
                 </Box>
 
@@ -450,6 +453,8 @@ const MyBid = ({
                 ) : (
                     <Button
                         onClick={() => {
+                            const audio = new Audio(ConfirmVideo);
+                            audio.play();
                             onConfirm();
                         }}
                         disabled={
@@ -592,6 +597,7 @@ const OpBid = ({
 interface UserCardProps {
     pilotInfo?: PilotInfo;
     showTutorialStep?: boolean;
+    showAnimateConfirm?: number;
     loading?: boolean;
     messageLoading?: MessageStatus;
     emoteLoading?: MessageStatus;
@@ -722,6 +728,7 @@ export const MyUserCard = ({
     emoteLoading,
     onConfirm,
     onInputChange,
+    showAnimateConfirm,
 }: UserCardProps) => {
     const { onCopy } = useClipboard(address ?? "");
     const toast = useSkyToast();
@@ -860,6 +867,7 @@ export const MyUserCard = ({
                     onInputChange={onInputChange}
                     onConfirm={onConfirm}
                     gameState={myGameState}
+                    showAnimateConfirm={showAnimateConfirm}
                 ></MyBid>
             </Box>
         </Box>

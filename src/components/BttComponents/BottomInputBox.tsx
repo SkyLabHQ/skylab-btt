@@ -14,7 +14,7 @@ import {
     useDisclosure,
     keyframes,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { GameState, MESSAGES } from "@/skyConstants/bttGameTypes";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
 import SubIcon from "@/components/BttComponents/assets/sub.svg";

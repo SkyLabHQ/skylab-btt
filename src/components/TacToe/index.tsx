@@ -777,10 +777,11 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 onInputChange={handleBidAmount}
                                 status="my"
                                 planeUrl={myInfo.img}
+                                showAnimateConfirm={showAnimateConfirm}
                             ></MyUserCard>
                         </Box>
 
-                        <Box>
+                        <Box onClick={handleBoardClick}>
                             <Board
                                 list={list}
                                 showAnimateNumber={showAnimateNumber}
