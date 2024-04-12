@@ -48,4 +48,4 @@ export const twitterUrl =
 
 export const ZERO_DATA = "0x0000000000000000000000000000000000000000";
 
-export const countDownTime = 500000;
+export const countDownTime = 3000;
