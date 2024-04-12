@@ -284,6 +284,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     };
 
     const handleCallTimeOut = async () => {
+        return;
         const [myGameStateHex, opGameStateHex] = await ethcallProvider.all([
             multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
             multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
@@ -333,6 +334,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     };
 
     const handleBid = useCallback(async () => {
+        return;
         try {
             if (loading) return;
             if (myGameInfo.gameState !== GameState.WaitingForBid) return;
@@ -433,19 +435,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         const gameResult = getWinState(myGameInfo.gameState);
 
         if (gameType === GameType.HumanWithBot) {
-            if (gameResult) {
-                onChangeNewInfo({
-                    point: 2,
-                    level: 2,
-                    img: A2Testflight,
-                });
-            } else {
-                onChangeNewInfo({
-                    point: 0,
-                    level: 0,
-                    img: A0Testflight,
-                });
-            }
         } else {
             handleGetGas();
             try {
@@ -636,8 +625,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             });
         }
     };
-
-    const handleShowConfirmAnimation = () => {};
 
     useEffect(() => {
         handleGameOver();

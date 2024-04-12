@@ -39,11 +39,15 @@ import {
 
 const move = keyframes`
     0% {
-        border: 3px solid #fff;
+        background: #fddc2d;
+        border: 3px solid #fddc2d;
+       
     }
     
     100% {
-        border: 3px solid #fddc2d;
+        background: rgba(255, 255, 255, 0.40);
+        border: 3px solid rgba(255, 255, 255, 0.40);
+
     }
 `;
 
@@ -359,7 +363,7 @@ const MyBid = ({
                                 background: "rgba(255, 255, 255, 0.40)",
                                 display: "flex",
                                 alignItems: "center",
-                                animationIterationCount: 2,
+                                animationIterationCount: "2",
                             }}
                             animation={`${
                                 showAnimateConfirm !== 0 ? move : ""

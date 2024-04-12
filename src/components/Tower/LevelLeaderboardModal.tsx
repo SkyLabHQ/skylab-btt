@@ -263,8 +263,6 @@ const InfoItem = ({ detail }: { detail: any }) => {
                     height: isPc ? "28px" : "20px",
                     lineHeight: isPc ? "28px" : "20px",
                     background: "rgba(0,0,0,0.5)",
-                    marginTop: "-2px",
-                    zIndex: -1,
                 }}
                 onClick={handleCopy}
             >

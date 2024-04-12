@@ -73,14 +73,6 @@ const rotation = keyframes`
   }
 `;
 
-const handleDateNumber = (number: number) => {
-    if (number >= 10) {
-        return [Math.floor(number / 10), number % 10];
-    } else {
-        return [0, number];
-    }
-};
-
 const FirstContent = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
@@ -133,7 +125,6 @@ const BackContent = ({
 }) => {
     const { timeLeft: timeLeft1 } = useStartGame();
 
-    const [audio1] = useState(new Audio(Numbermp3));
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
     const countUpRef = React.useRef(null);
@@ -149,6 +140,7 @@ const BackContent = ({
 
     const handleInit = () => {
         setTimeout(() => {
+            const audio1 = new Audio(Numbermp3);
             audio1.play();
             setInit(true);
         }, 1000);
@@ -290,76 +282,6 @@ const BackContent = ({
     );
 };
 
-const ScrollNum = ({
-    fontSize = "95px",
-    maxNumber = 9,
-    number = -1,
-}: {
-    fontSize?: string;
-    maxNumber?: number;
-    number?: number;
-}) => {
-    const [init, setInit] = React.useState(false);
-    const numAnimate = useAnimation();
-
-    useEffect(() => {
-        const handle = async () => {
-            if (init) {
-                await numAnimate.stop();
-                if (number === maxNumber) {
-                    await numAnimate.start({
-                        transform: [
-                            `translateY(-${(maxNumber + 1) * 9.09}%)`,
-                            `translateY(-${number * 9.09}%)`,
-                        ],
-
-                        transition: {
-                            duration: init ? 0.5 : 0,
-                            ease: "linear",
-                        },
-                    });
-                } else {
-                    numAnimate.start({
-                        transform: `translateY(-${number * 9.09}%)`,
-                        transition: {
-                            duration: init ? 0.5 : 0,
-                            ease: "linear",
-                        },
-                    });
-                }
-            } else {
-                await numAnimate.set({
-                    transform: [
-                        `translateY(-${(maxNumber + 1) * 9.09}%)`,
-                        `translateY(-${number * 9.09}%)`,
-                    ],
-                });
-                setInit(true);
-            }
-        };
-        handle();
-    }, [number]);
-
-    return (
-        <Box sx={{}}>
-            <Box
-                sx={{
-                    height: fontSize,
-                    overflow: "hidden",
-                    fontSize: fontSize,
-                    lineHeight: "1",
-                }}
-            >
-                <motion.div animate={numAnimate}>
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((item, index) => {
-                        return <Box key={index}>{item}</Box>;
-                    })}
-                </motion.div>
-            </Box>
-        </Box>
-    );
-};
-
 const YellowBg = ({ onClick }: { onClick: () => void }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const clickAnimate = useAnimation();
@@ -459,12 +381,12 @@ const YellowBg = ({ onClick }: { onClick: () => void }) => {
     );
 };
 
+const bgAudio = new Audio(Bgmp3);
+
 const SellPaper = () => {
     const [rotateY, setRotateY] = useState(0);
     const [_, setUpdate] = useState(0);
-    const [audio1] = useState(new Audio(Turn1mp3));
-    const [audio2] = useState(new Audio(Turn2mp3));
-    const [bgmp3] = useState(new Audio(Bgmp3));
+    const bgmp3 = useRef(bgAudio);
     const [showYellowBg, setShowYellowBg] = useState(true);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [hoverInit, setHoverInit] = useState(false);
@@ -547,7 +469,7 @@ const SellPaper = () => {
 
     useEffect(() => {
         return () => {
-            bgmp3.pause();
+            bgmp3.current.pause();
         };
     }, []);
 
@@ -589,8 +511,8 @@ const SellPaper = () => {
             )}
             <YellowBg
                 onClick={() => {
-                    bgmp3.loop = true;
-                    bgmp3.play();
+                    bgmp3.current.loop = true;
+                    bgmp3.current.play();
                     setShowYellowBg(false);
                 }}
             ></YellowBg>
@@ -608,10 +530,12 @@ const SellPaper = () => {
                         if (rotateY === 180) {
                             return;
                         }
+                        const audio1 = new Audio(Turn1mp3);
                         audio1.play();
                         setRotateY(180);
                         return;
                     }
+                    const audio1 = new Audio(Turn1mp3);
                     audio1.play();
                     setRotateY(180);
 
@@ -624,6 +548,7 @@ const SellPaper = () => {
                         if (rotateY === 0) {
                             return;
                         }
+                        const audio2 = new Audio(Turn2mp3);
                         audio2.play();
                         setRotateY(0);
                         return;
@@ -643,9 +568,11 @@ const SellPaper = () => {
                     }}
                     onClick={() => {
                         if (rotateY === 0) {
+                            const audio1 = new Audio(Turn1mp3);
                             audio1.play();
                             setRotateY(180);
                         } else {
+                            const audio2 = new Audio(Turn2mp3);
                             audio2.play();
                             setRotateY(0);
                         }

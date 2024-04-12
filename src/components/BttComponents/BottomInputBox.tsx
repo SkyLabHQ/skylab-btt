@@ -27,7 +27,7 @@ const move = keyframes`
     }
     
     100% {
-        background: transparent;
+        background: #545454;
     }
 `;
 
@@ -37,7 +37,7 @@ const bt = keyframes`
     }
     
     100% {
-        color: transparent;
+        color: #545454;
     }
 
 `;
