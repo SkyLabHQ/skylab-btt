@@ -284,7 +284,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     };
 
     const handleCallTimeOut = async () => {
-        return;
         const [myGameStateHex, opGameStateHex] = await ethcallProvider.all([
             multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
             multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),

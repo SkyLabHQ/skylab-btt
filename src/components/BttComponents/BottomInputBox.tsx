@@ -309,7 +309,7 @@ const BottomInputBox = ({
                                 myGameState === GameState.WaitingForBid
                                     ? "#FDDC2D"
                                     : "#414141",
-                            // width: "114px",
+                            animationIterationCount: "2",
                         }}
                         animation={`${
                             showAnimateConfirm !== 0 ? bt : ""
