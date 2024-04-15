@@ -10,6 +10,8 @@ import { useUserInfoRequest } from "@/contexts/UserInfo";
 import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import useSkyToast from "@/hooks/useSkyToast";
+import Click1Wav from "@/assets/click1.wav";
+const audio = new Audio(Click1Wav);
 
 export const Toolbar = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -20,6 +22,7 @@ export const Toolbar = () => {
     const { address } = usePrivyAccounts();
     const { activePilot } = useUserInfoRequest();
     const handleLogin = () => {
+        audio.play();
         if (!ready) {
             toast("Please wait for the wallet to be ready");
             return;
@@ -52,6 +55,7 @@ export const Toolbar = () => {
                     isPc ? (
                         <Flex
                             onClick={() => {
+                                audio.play();
                                 onUserInfoOpen();
                             }}
                             sx={{
@@ -92,7 +96,10 @@ export const Toolbar = () => {
                         </Flex>
                     ) : (
                         <MyPilot
-                            onClick={onUserInfoOpen}
+                            onClick={() => {
+                                audio.play();
+                                onUserInfoOpen();
+                            }}
                             imgUrl={activePilot.img}
                             sx={{
                                 width: "40px",
@@ -121,6 +128,7 @@ export const Toolbar = () => {
                     cursor: "pointer",
                 }}
                 onClick={() => {
+                    audio.play();
                     navigate("/btt/history");
                 }}
             ></Image>

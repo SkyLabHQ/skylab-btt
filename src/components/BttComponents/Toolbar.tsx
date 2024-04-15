@@ -4,7 +4,8 @@ import KeyBoard from "../BttComponents/KeyBoard";
 import QuitIcon from "@/components/BttComponents/assets/quit.png";
 import { ToolShare } from "../BttComponents/ToolShare";
 import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
-
+import Click1Wav from "@/assets/click1.wav";
+const audio = new Audio(Click1Wav);
 const ToolBar = ({
     inviteLink,
     handleShareTw,
@@ -49,6 +50,7 @@ const ToolBar = ({
         >
             <KeyBoard
                 onToggle={() => {
+                    audio.play();
                     keyBoardOnToggle();
                     quitType === "game" && shareOnClose();
                 }}
@@ -61,6 +63,7 @@ const ToolBar = ({
                     handleShareTw={handleShareTw}
                     isOpen={shareOpen}
                     onToggle={() => {
+                        audio.play();
                         shareOnToggle();
                         keyBoardOnClose();
                     }}
@@ -77,7 +80,10 @@ const ToolBar = ({
                 ></Image>
             </BidTacToeTutorial>
             <Image
-                onClick={onQuitClick}
+                onClick={() => {
+                    audio.play();
+                    onQuitClick();
+                }}
                 src={QuitIcon}
                 sx={{
                     height: isPc ? "48px" : "40px",

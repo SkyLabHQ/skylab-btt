@@ -30,41 +30,41 @@ const PreviousLobbyModal = ({
             <ModalContent
                 bg="#383838"
                 border={isPc ? "3px solid #fff" : "1px solid #fff"}
-                borderRadius={isPc ? "1.0417vw" : "8px"}
+                borderRadius={isPc ? "20px" : "8px"}
                 sx={{
-                    width: isPc ? "31.25vw" : "350px",
-                    maxWidth: isPc && "31.25vw",
+                    width: isPc ? "600px" : "350px",
+                    maxWidth: isPc && "600px",
                 }}
             >
                 <ModalCloseButton></ModalCloseButton>
                 <ModalBody
                     pb="0"
-                    pt="1.875vw"
+                    pt="36px"
                     sx={{
                         textAlign: "center",
                     }}
                 >
                     <Text
-                        fontSize={isPc ? "1.25vw" : "20px"}
+                        fontSize={isPc ? "24px" : "20px"}
                         sx={{
-                            marginTop: "1.0417vw",
+                            marginTop: "20px",
                         }}
                     >
                         You were previously in
                     </Text>
                     <Text
-                        fontSize={isPc ? "1.25vw" : "20px"}
+                        fontSize={isPc ? "24px" : "20px"}
                         sx={{
-                            marginTop: "1.0417vw",
+                            marginTop: "20px",
                             color: "#FDDC2D",
                         }}
                     >
                         Lobby {lobbyName}
                     </Text>
                     <Text
-                        fontSize={isPc ? "1.25vw" : "20px"}
+                        fontSize={isPc ? "24px" : "20px"}
                         sx={{
-                            marginTop: "1.0417vw",
+                            marginTop: "20px",
                         }}
                     >
                         Do you want to re-join
@@ -74,27 +74,27 @@ const PreviousLobbyModal = ({
                 <ModalFooter
                     display="flex"
                     justifyContent="space-between"
-                    pt="2.6042vw"
+                    pt="50px"
                 >
                     <Button
                         onClick={onConfirm}
-                        fontSize={isPc ? "1.25vw" : "20px"}
-                        w={isPc ? "10.9375vw" : "120px"}
-                        padding="1.6667vw 0"
-                        borderRadius={isPc ? "1.0417vw" : "8px"}
+                        fontSize={isPc ? "24px" : "20px"}
+                        w={isPc ? "210px" : "120px"}
+                        padding="32px 0"
+                        borderRadius={isPc ? "20px" : "8px"}
                         fontWeight={400}
-                        height={isPc ? "3vw" : "32px"}
+                        height={isPc ? "56px" : "32px"}
                     >
                         Yes
                     </Button>
                     <Button
                         colorScheme="white"
                         onClick={onClose}
-                        fontSize={isPc ? "1.25vw" : "20px"}
-                        w={isPc ? "10.9375vw" : "120px"}
-                        height={isPc ? "3vw" : "32px"}
-                        padding="1.6667vw 0"
-                        borderRadius={isPc ? "1.0417vw" : "8px"}
+                        fontSize={isPc ? "24px" : "20px"}
+                        w={isPc ? "210px" : "120px"}
+                        height={isPc ? "56px" : "32px"}
+                        padding="32px 0"
+                        borderRadius={isPc ? "20px" : "8px"}
                         fontWeight={400}
                         variant={"outline"}
                     >

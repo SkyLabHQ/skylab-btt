@@ -17,8 +17,9 @@ import MyPilot from "../MyPilot";
 import MenuIcon from "./assets/menu.png";
 import OpenSeaIcon from "./assets/opensea.png";
 import MTwIcon from "./assets/m-tw.png";
-
 import { useState } from "react";
+import Click1Wav from "@/assets/click1.wav";
+const audio = new Audio(Click1Wav);
 
 const MToolBar = ({
     onUserInfoOpen,
@@ -180,7 +181,10 @@ const ToolBar = ({
                     align={"center"}
                 >
                     <Image
-                        onClick={onRulesModalOpen}
+                        onClick={() => {
+                            audio.play();
+                            onRulesModalOpen();
+                        }}
                         src={TipIcon}
                         sx={{
                             width: "60px",
@@ -193,6 +197,7 @@ const ToolBar = ({
                         {address ? (
                             <Flex
                                 onClick={() => {
+                                    audio.play();
                                     onUserInfoOpen();
                                 }}
                                 sx={{
@@ -245,8 +250,14 @@ const ToolBar = ({
                 </Flex>
             ) : (
                 <MToolBar
-                    onUserInfoOpen={onUserInfoOpen}
-                    onRulesModalOpen={onRulesModalOpen}
+                    onUserInfoOpen={() => {
+                        audio.play();
+                        onUserInfoOpen();
+                    }}
+                    onRulesModalOpen={() => {
+                        audio.play();
+                        onRulesModalOpen();
+                    }}
                     showOpensea={showOpensea}
                     showTw={showTw}
                     onWalletClick={handleLogin}

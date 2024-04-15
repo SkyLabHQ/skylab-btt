@@ -20,7 +20,6 @@ import { aviationImg } from "@/utils/aviationImg";
 import BiddingGif from "@/assets/bidding.gif";
 import Winner from "./assets/winner.png";
 import EmptyWinner from "./assets/empty-winner.png";
-
 import CloseIcon from "@/assets/close.png";
 import {
     useMultiMercuryJarTournamentContract,
@@ -30,7 +29,7 @@ import {
 import { useChainId } from "wagmi";
 import { ActivePilotRes, handlePilotsInfo1 } from "@/skyConstants/pilots";
 import { shortenAddress } from "@/utils";
-import { getLevel, levelRanges } from "@/utils/level";
+import { levelRanges } from "@/utils/level";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import useCountDown from "react-countdown-hook";
 import HourglassIcon from "./assets/hourglass.png";

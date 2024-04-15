@@ -6,7 +6,8 @@ import { mTourConfig, tourConfig } from "@/components/TacToe/config";
 import ContentComponent from "@/components/TacToe/TourComponent";
 import TacToeTutorial from "@/components/TacToe/TacTocTutorial";
 import MTacToeTutorial from "./MTacTocTutorial";
-
+import Click1Wav from "@/assets/click1.wav";
+const audio = new Audio(Click1Wav);
 const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -15,6 +16,7 @@ const BidTacToeTutorial = ({ children }: { children: React.ReactNode }) => {
         <Box>
             <Box
                 onClick={() => {
+                    audio.play();
                     onOpen();
                 }}
             >

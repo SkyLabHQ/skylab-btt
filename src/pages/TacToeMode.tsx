@@ -68,6 +68,9 @@ import { usePrivy } from "@privy-io/react-auth";
 import StartCountDown from "@/components/StartCountDown";
 import { useUserInfoRequest } from "@/contexts/UserInfo";
 import useStartGame from "@/hooks/useStartGame";
+import GameMp3 from "@/assets/game.mp3";
+
+const gameAudio = new Audio(GameMp3);
 
 export interface PlaneInfo {
     tokenId: number;
@@ -524,7 +527,7 @@ const TacToeMode = () => {
                         height: "100%",
                     }}
                 >
-                    {isPc && (
+                    {isPc && !isPrivateLobbyMode && (
                         <StartCountDown timeLeft={timeLeft1}></StartCountDown>
                     )}
                     <Box
@@ -550,14 +553,24 @@ const TacToeMode = () => {
                                     onBack={() => {
                                         setIsPrivateLobbyMode.off();
                                     }}
-                                    onCreateLobby={handleCreatePrivateLobby}
-                                    onJoinLobby={handleJoinPrivateLobby}
+                                    onCreateLobby={() => {
+                                        gameAudio.play();
+                                        handleCreatePrivateLobby();
+                                    }}
+                                    onJoinLobby={() => {
+                                        gameAudio.play();
+                                        handleJoinPrivateLobby();
+                                    }}
                                 ></PrivateLobbyButtons>
                             ) : (
                                 <PlayButtonGroup
                                     tournamentDisabled={timeLeft1 > 0}
-                                    onPlayTournament={handleCreateOrJoinDefault}
+                                    onPlayTournament={() => {
+                                        gameAudio.play();
+                                        handleCreateOrJoinDefault();
+                                    }}
                                     onPlayTestLobby={async () => {
+                                        gameAudio.play();
                                         if (activeLobbyAddress === "") {
                                             toast(
                                                 "Querying lobby address, please try again later",
@@ -577,6 +590,8 @@ const TacToeMode = () => {
                                         }
                                     }}
                                     onPlayWithBot={() => {
+                                        gameAudio.play();
+
                                         handleMintPlayTest("bot");
                                     }}
                                 ></PlayButtonGroup>

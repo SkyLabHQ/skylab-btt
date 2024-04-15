@@ -28,7 +28,7 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import WalletIcon from "./assets/wallet-icon.svg";
 import { usePrivy } from "@privy-io/react-auth";
 import { useNavigate } from "react-router-dom";
-
+const audio = new Audio(Click1Wav);
 const ConnectWalletBt = () => {
     const toast = useSkyToast();
     const { ready, login, connectWallet, user } = usePrivy();
@@ -225,7 +225,6 @@ const BuyBt = () => {
                 arrowSize={20}
                 isOpen={isOpen}
                 onOpen={() => {
-                    const audio = new Audio(Click1Wav);
                     audio.play();
                     if (!address) {
                         handleLogin();
