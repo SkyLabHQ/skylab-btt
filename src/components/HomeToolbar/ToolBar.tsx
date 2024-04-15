@@ -175,7 +175,7 @@ const ToolBar = ({
                     sx={{
                         position: "absolute",
                         top: "70px",
-                        right: "88px",
+                        right: "48px",
                     }}
                     align={"center"}
                 >

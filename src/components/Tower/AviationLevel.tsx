@@ -658,7 +658,7 @@ const AviationLevel = ({
                                                     left:
                                                         item.comerPosition ===
                                                         "right"
-                                                            ? "168px"
+                                                            ? "148px"
                                                             : "-104px",
                                                     transform: `translate(0%,-50%)`,
                                                 }}
