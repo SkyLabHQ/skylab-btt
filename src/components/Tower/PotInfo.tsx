@@ -149,7 +149,6 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                 top: "146px",
                 left: "40px",
                 lineHeight: 1,
-                width: "360px",
             }}
         >
             <Flex sx={{}} align={"center"}>
@@ -158,7 +157,7 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                         width: "100%",
                         textShadow: "0px 0px 19px  #00CCFF",
                         color: "rgba(255, 255, 255, 0.2)",
-                        fontSize: "74px",
+                        fontSize: "64px",
                         textAlign: "center",
                         fontFamily: "neonsans",
                     }}
@@ -200,16 +199,16 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                     <Text
                         ref={countUpPcRef}
                         sx={{
-                            fontSize: "100px",
+                            fontSize: "80px",
                             fontFamily: "neon",
-                            width: "180px",
-                            textAlign: "right",
+                            width: "140px",
+                            textAlign: "left",
                             marginRight: "20px",
                         }}
                     ></Text>
                     <Text
                         sx={{
-                            fontSize: "70px",
+                            fontSize: "54px",
                             fontFamily: "Neon",
                         }}
                     >
@@ -223,7 +222,10 @@ const PcPotInfo = ({ potAmount }: { potAmount: string }) => {
                     background: "#FFE045",
                 }}
             ></motion.div>
-            <StartCountDown timeLeft={timeLeft}></StartCountDown>
+            <StartCountDown
+                fontSize="48px"
+                timeLeft={timeLeft}
+            ></StartCountDown>
 
             <Flex
                 sx={{

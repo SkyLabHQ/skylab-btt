@@ -37,7 +37,7 @@ const list = [
         comerPosition: "left",
         arrowImg: LYellowIcon,
         imgPosition: {
-            width: "320px",
+            width: "300px",
             top: "75px",
             left: "50%",
             transform: "translateX(-50%)",
@@ -54,7 +54,7 @@ const list = [
         arrowImg: SYellowIcon,
         imgPosition: {
             top: "360px",
-            right: "220px",
+            right: "206px",
             width: "25px",
         },
         avatarDirection: "left",
@@ -69,8 +69,8 @@ const list = [
 
         arrowImg: RYellowIcon,
         imgPosition: {
-            top: "700px",
-            width: "320px",
+            top: "684px",
+            width: "300px",
             left: "50%",
             transform: "translateX(-50%)",
         },
@@ -88,7 +88,7 @@ const list = [
         imgPosition: {
             top: "930px",
             width: "25px",
-            left: "220px",
+            left: "206px",
         },
         avatarDirection: "right",
     },
@@ -103,7 +103,7 @@ const list = [
         arrowImg: LYellowIcon,
         imgPosition: {
             top: "1270px",
-            width: "320px",
+            width: "300px",
             left: "50%",
             transform: "translateX(-50%)",
         },
@@ -112,14 +112,14 @@ const list = [
     {
         level: 11,
         position: {
-            top: "1320",
+            top: "1340px",
             right: "150px",
         },
         comerPosition: "right",
         arrowImg: SYellowIcon,
         imgPosition: {
-            top: "1500",
-            right: "220px",
+            top: "1500px",
+            right: "206px",
             width: "25px",
         },
         avatarDirection: "left",
@@ -127,7 +127,7 @@ const list = [
     {
         level: 10,
         position: {
-            top: "1770px",
+            top: "1785px",
             right: "150px",
         },
         comerPosition: "right",
@@ -135,7 +135,7 @@ const list = [
         arrowImg: RYellowIcon,
         imgPosition: {
             top: "1840px",
-            width: "320px",
+            width: "300px",
             left: "50%",
             transform: "translateX(-50%)",
         },
@@ -150,8 +150,8 @@ const list = [
         comerPosition: "left",
         arrowImg: SYellowIcon,
         imgPosition: {
-            top: "2070px",
-            left: "220px",
+            top: "2080px",
+            left: "206px",
             width: "25px",
         },
         avatarDirection: "right",
@@ -159,15 +159,15 @@ const list = [
     {
         level: 8,
         position: {
-            top: "2350px",
+            top: "2365px",
             left: "150px",
         },
         comerPosition: "left",
 
         arrowImg: LYellowIcon,
         imgPosition: {
-            top: "2410px",
-            width: "320px",
+            top: "2420px",
+            width: "300px",
             left: "50%",
             transform: "translateX(-50%)",
         },
@@ -183,24 +183,24 @@ const list = [
 
         arrowImg: SYellowIcon,
         imgPosition: {
-            top: "2640px",
+            top: "2650px",
             width: "25px",
-            right: "220px",
+            right: "206px",
         },
         avatarDirection: "left",
     },
     {
         level: 6,
         position: {
-            top: "2920px",
+            top: "2935px",
             right: "150px",
         },
         comerPosition: "right",
 
         arrowImg: RYellowIcon,
         imgPosition: {
-            top: "2980px",
-            width: "320px",
+            top: "2995px",
+            width: "300px",
             left: "50%",
             transform: "translateX(-50%)",
         },
@@ -216,9 +216,9 @@ const list = [
 
         arrowImg: SYellowIcon,
         imgPosition: {
-            top: "3210px",
+            top: "3220px",
             width: "25px",
-            left: "220px",
+            left: "206px",
         },
         avatarDirection: "right",
     },
@@ -233,7 +233,7 @@ const list = [
         arrowImg: LYellowIcon,
         imgPosition: {
             top: "3550px",
-            width: "320px",
+            width: "300px",
             left: "50%",
             transform: "translateX(-50%)",
         },
@@ -251,7 +251,7 @@ const list = [
         imgPosition: {
             top: "3780px",
             width: "25px",
-            right: "220px",
+            right: "206px",
         },
         avatarDirection: "left",
     },
@@ -266,7 +266,7 @@ const list = [
         arrowImg: RYellowIcon,
         imgPosition: {
             top: "4130px",
-            width: "320px",
+            width: "300px",
             left: "50%",
             transform: "translateX(-50%)",
         },
@@ -284,7 +284,7 @@ const list = [
         imgPosition: {
             top: "4380px",
             width: "25px",
-            left: "220px",
+            left: "206px",
         },
         avatarDirection: "right",
     },
@@ -588,8 +588,8 @@ const AviationLevel = ({
     };
 
     useEffect(() => {
-        const blank = document.getElementById("blank");
-        blank.scrollIntoView(true);
+        // const blank = document.getElementById("blank");
+        // blank.scrollIntoView(true);
     }, [isPc]);
 
     return (
@@ -611,7 +611,7 @@ const AviationLevel = ({
         >
             <Box
                 sx={{
-                    width: isPc ? "960px" : "300px",
+                    width: isPc ? "880px" : "300px",
                     margin: "0 auto",
                     position: "relative",
                 }}
@@ -635,8 +635,8 @@ const AviationLevel = ({
                             >
                                 <Flex
                                     sx={{
-                                        width: isPc ? "160px" : "84px",
-                                        height: isPc ? "160px" : "84px",
+                                        width: isPc ? "130px" : "84px",
+                                        height: isPc ? "130px" : "84px",
                                         backgroundImage: `url(${LevelBg})`,
                                         backgroundSize: "100% 100%",
                                     }}
@@ -659,7 +659,7 @@ const AviationLevel = ({
                                                         item.comerPosition ===
                                                         "right"
                                                             ? "168px"
-                                                            : "-114px",
+                                                            : "-104px",
                                                     transform: `translate(0%,-50%)`,
                                                 }}
                                             >
@@ -679,8 +679,10 @@ const AviationLevel = ({
                                                 <Flex
                                                     sx={{
                                                         background: `url(${NewComerBg})`,
-                                                        width: "107px",
-                                                        height: "98px",
+                                                        width: "90px",
+                                                        height: "82px",
+                                                        backgroundSize:
+                                                            "100% 100%",
                                                         transform:
                                                             item.avatarDirection ===
                                                             "left"
@@ -700,8 +702,8 @@ const AviationLevel = ({
                                                                 : DefaultAvatar
                                                         }
                                                         sx={{
-                                                            width: "72px",
-                                                            height: "72px",
+                                                            width: "60px",
+                                                            height: "60px",
                                                             borderRadius: "50%",
                                                         }}
                                                     ></Image>
@@ -853,8 +855,8 @@ const AviationLevel = ({
                     >
                         <Flex
                             sx={{
-                                width: isPc ? "160px" : "84px",
-                                height: isPc ? "160px" : "84px",
+                                width: isPc ? "130px" : "84px",
+                                height: isPc ? "130px" : "84px",
                                 backgroundImage: `url(${LevelBg})`,
                                 backgroundSize: "100% 100%",
                             }}
