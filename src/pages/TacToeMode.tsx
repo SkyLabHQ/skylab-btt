@@ -8,7 +8,6 @@ import {
     Image,
     Flex,
     BoxProps,
-    SimpleGrid,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";

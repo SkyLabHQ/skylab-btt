@@ -23,19 +23,19 @@ const PrivateLobbyButtons = ({
                 fontFamily: "Quantico",
                 "&>div": {
                     width: "100% !important",
-                    height: `${isPc ? "4.7917vw" : "70px"} !important`,
+                    height: `${isPc ? "92px" : "70px"} !important`,
                     justifyContent: "flex-end",
                     borderRadius: "18px !important",
                 },
                 "& .text-wrapper": {
-                    width: `${isPc ? "15.625vw" : "180px"} !important`,
+                    width: `${isPc ? "300px" : "180px"} !important`,
                 },
                 "& .play-button-text": {
-                    fontSize: isPc ? "1.6667vw" : "20px",
+                    fontSize: isPc ? "32px" : "20px",
                     fontWeight: "400",
                 },
                 "& .play-button-text2": {
-                    fontSize: isPc ? "1.0417vw" : "12px",
+                    fontSize: isPc ? "20px" : "12px",
                     fontWeight: "400",
                 },
             }}
@@ -51,15 +51,15 @@ const PrivateLobbyButtons = ({
             <GrayButton
                 onClick={onCreateLobby}
                 sx={{
-                    marginTop: "1.0417vw",
+                    marginTop: "20px",
                 }}
             >
                 <Image
                     src={NewLobbyIcon}
                     sx={{
-                        width: isPc ? "2.5vw" : "40px",
+                        width: isPc ? "48px" : "40px",
                         position: "absolute",
-                        left: "0.9375vw",
+                        left: "18px",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
@@ -67,7 +67,7 @@ const PrivateLobbyButtons = ({
                 <Box className="text-wrapper">
                     <Text
                         sx={{
-                            fontSize: isPc ? "1.0417vw" : "16px",
+                            fontSize: isPc ? "20px" : "16px",
                         }}
                     >
                         Start a new lobby
@@ -77,16 +77,16 @@ const PrivateLobbyButtons = ({
             <GrayButton
                 onClick={onJoinLobby}
                 sx={{
-                    marginTop: "1.0417vw",
+                    marginTop: "20px",
                 }}
                 position={"relative"}
             >
                 <Image
                     src={JoinLobbyIcon}
                     sx={{
-                        width: isPc ? "2.5vw" : "40px",
+                        width: isPc ? "48px" : "40px",
                         position: "absolute",
-                        left: "0.9375vw",
+                        left: "18px",
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
@@ -95,7 +95,7 @@ const PrivateLobbyButtons = ({
                 <Box className="text-wrapper">
                     <Text
                         sx={{
-                            fontSize: isPc ? "1.0417vw" : "16px",
+                            fontSize: isPc ? "20px" : "16px",
                         }}
                     >
                         Join an existing lobby{" "}
