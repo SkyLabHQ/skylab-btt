@@ -60,14 +60,16 @@ const ToolBar = ({
                     cursor: "pointer",
                 }}
             ></Image>
-            <KeyBoard
-                onToggle={() => {
-                    audio.play();
-                    keyBoardOnToggle();
-                    quitType === "game" && shareOnClose();
-                }}
-                onClose={keyBoardOnClose}
-            ></KeyBoard>
+            {isPc && (
+                <KeyBoard
+                    onToggle={() => {
+                        audio.play();
+                        keyBoardOnToggle();
+                        quitType === "game" && shareOnClose();
+                    }}
+                    onClose={keyBoardOnClose}
+                ></KeyBoard>
+            )}
 
             {quitType === "game" && (
                 <ToolShare
