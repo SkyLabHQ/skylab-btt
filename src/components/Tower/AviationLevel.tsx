@@ -22,7 +22,7 @@ import LevelLeaderboardModal from "./LevelLeaderboardModal";
 import PaperIcon from "./assets/paper.png";
 import DefaultAvatar from "./assets/default-avatar.png";
 import LockIcon from "./assets/lock.png";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { useUserInfo } from "@/contexts/UserInfo";
 import { usePrivy } from "@privy-io/react-auth";
 import useSkyToast from "@/hooks/useSkyToast";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
@@ -550,7 +550,7 @@ const AviationLevel = ({
     totalPaper: any;
 }) => {
     const toast = useSkyToast();
-    const { onUserInfoOpen } = useUserInfoRequest();
+    const { onUserInfoOpen } = useUserInfo();
     const { ready, authenticated, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
     const [isPc] = useMediaQuery("(min-width: 800px)");

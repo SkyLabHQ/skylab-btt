@@ -35,7 +35,9 @@ import {
     MERCS,
     MESSAGES,
     MessageStatus,
+    UserMarkType,
 } from "@/skyConstants/bttGameTypes";
+import useBidIcon from "@/hooks/useBidIcon";
 
 const move = keyframes`
     0% {
@@ -366,7 +368,7 @@ const MyBid = ({
                                 animationIterationCount: "2",
                             }}
                             animation={`${
-                                showAnimateConfirm !== 0 ? move : ""
+                                showAnimateConfirm !== 0 && !loading ? move : ""
                             } 0.5s linear alternate`}
                         >
                             <NumberInput
@@ -605,7 +607,7 @@ interface UserCardProps {
     loading?: boolean;
     messageLoading?: MessageStatus;
     emoteLoading?: MessageStatus;
-    markIcon: string;
+    markIcon: UserMarkType;
     address: string;
     balance: number;
     bidAmount: number;
@@ -629,9 +631,11 @@ export const AdvantageTip = ({
     showAdvantageTip,
 }: {
     direction: "right" | "left";
-    markIcon: string;
+    markIcon: UserMarkType;
     showAdvantageTip: boolean;
 }) => {
+    const MarkIcon = useBidIcon();
+
     return (
         <Box
             sx={{
@@ -640,7 +644,18 @@ export const AdvantageTip = ({
             }}
         >
             <Popover placement={direction}>
-                <Image src={markIcon} sx={{ width: "1.875vw" }}></Image>
+                <Image
+                    width={"1.875vw"}
+                    height={"1.875vw"}
+                    src={
+                        markIcon === UserMarkType.Circle
+                            ? MarkIcon.Circle
+                            : markIcon === UserMarkType.BotX
+                            ? MarkIcon.BotX
+                            : MarkIcon.Cross
+                    }
+                ></Image>
+
                 <PopoverTrigger>
                     <Box
                         sx={{

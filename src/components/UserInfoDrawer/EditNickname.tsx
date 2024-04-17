@@ -5,11 +5,11 @@ import { shortenAddress } from "@/utils";
 import CopyIcon from "@/assets/copy-icon.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import MyPilot from "../MyPilot";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { useUserInfo } from "@/contexts/UserInfo";
 
 const UserInfo = () => {
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfoRequest();
+    const { activePilot } = useUserInfo();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex

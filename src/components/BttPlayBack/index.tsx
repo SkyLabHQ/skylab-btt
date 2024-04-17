@@ -9,7 +9,6 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
-import Loading from "../Loading";
 import { shortenAddressWithout0x } from "@/utils";
 import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "./BttPlayBackContent";
@@ -17,7 +16,6 @@ import { botAddress } from "@/hooks/useContract";
 import {
     BoardItem,
     GameState,
-    UserMarkIcon,
     UserMarkType,
     getShareEmoji,
     getWinState,
@@ -43,7 +41,6 @@ const BttPlayBackPage = () => {
     const [bttGameAddress, setBttGameAddress] = useState("");
     const [currentRound, setCurrentRound] = useState(0);
 
-    const timer = useRef<any>(null);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(params.chainId);
     const multiSkylabBidTacToeGameContract =
@@ -88,15 +85,15 @@ const BttPlayBackPage = () => {
     const myMark = useMemo(() => {
         if (myInfo.mark === UserMarkType.Circle) {
             if (getWinState(myGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCircle;
+                return UserMarkType.YellowCircle;
             } else {
-                return UserMarkIcon.Circle;
+                return UserMarkType.Circle;
             }
         } else {
             if (getWinState(myGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCross;
+                return UserMarkType.YellowCross;
             } else {
-                return UserMarkIcon.Cross;
+                return UserMarkType.Cross;
             }
         }
     }, [myInfo, gameOver, myGameInfo]);
@@ -104,21 +101,21 @@ const BttPlayBackPage = () => {
     const opMark = useMemo(() => {
         if (opInfo.mark === UserMarkType.Circle) {
             if (getWinState(opGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCircle;
+                return UserMarkType.YellowCircle;
             } else {
-                return UserMarkIcon.Circle;
+                return UserMarkType.Circle;
             }
         } else if (opInfo.mark === UserMarkType.BotX) {
             if (getWinState(opGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowBotX;
+                return UserMarkType.YellowBotX;
             } else {
-                return UserMarkIcon.BotX;
+                return UserMarkType.BotX;
             }
         } else {
             if (getWinState(opGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCross;
+                return UserMarkType.YellowCross;
             } else {
-                return UserMarkIcon.Cross;
+                return UserMarkType.Cross;
             }
         }
     }, [opInfo, opGameInfo]);

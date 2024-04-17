@@ -9,7 +9,6 @@ import { ZERO_DATA } from "@/skyConstants";
 import {
     BoardItem,
     GameState,
-    UserMarkIcon,
     UserMarkType,
     getShareEmoji,
     getWinState,
@@ -19,13 +18,13 @@ import {
 import { usePrivateGameContext } from "@/pages/PrivateRoom";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import PrivateLobbyPlayBack from "./PrivateLobbyPlayBack";
-import { shortenAddressWithout0x } from "@/utils";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "./ShareButton";
 import { useNavigate } from "react-router-dom";
+import useBidIcon from "@/hooks/useBidIcon";
 
 const ResultPlayBack = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const UserMarkIcon = useBidIcon();
     const navigate = useNavigate();
     const {
         bidTacToeGameAddress,

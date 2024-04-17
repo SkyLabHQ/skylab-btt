@@ -11,7 +11,6 @@ import BttPlayBackContent from "../BttPlayBack/BttPlayBackContent";
 import {
     BoardItem,
     GameState,
-    UserMarkIcon,
     UserMarkType,
     getShareEmoji,
     getWinState,
@@ -53,15 +52,15 @@ const ResultPage = () => {
     const myMark = useMemo(() => {
         if (myInfo.mark === UserMarkType.Circle) {
             if (getWinState(myGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCircle;
+                return UserMarkType.YellowCircle;
             } else {
-                return UserMarkIcon.Circle;
+                return UserMarkType.Circle;
             }
         } else {
             if (getWinState(myGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCross;
+                return UserMarkType.YellowCross;
             } else {
-                return UserMarkIcon.Cross;
+                return UserMarkType.Cross;
             }
         }
     }, [myGameInfo, myInfo, gameOver]);
@@ -69,15 +68,15 @@ const ResultPage = () => {
     const opMark = useMemo(() => {
         if (opInfo.mark === UserMarkType.Circle) {
             if (getWinState(opGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCircle;
+                return UserMarkType.YellowCircle;
             } else {
-                return UserMarkIcon.Circle;
+                return UserMarkType.Circle;
             }
         } else {
             if (getWinState(opGameInfo.gameState) && gameOver) {
-                return UserMarkIcon.YellowCross;
+                return UserMarkType.YellowCross;
             } else {
-                return UserMarkIcon.Cross;
+                return UserMarkType.Cross;
             }
         }
     }, [opInfo, opGameInfo]);

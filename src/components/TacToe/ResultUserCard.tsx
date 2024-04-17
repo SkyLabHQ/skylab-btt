@@ -1,8 +1,9 @@
 import { Info } from "@/pages/TacToe";
 import { Box, Image, Text } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { shortenAddress } from "@/utils";
-import { UserMarkIcon, UserMarkType } from "@/skyConstants/bttGameTypes";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
+import useBidIcon from "@/hooks/useBidIcon";
 
 const ResultUserCard = ({
     showResult,
@@ -13,6 +14,8 @@ const ResultUserCard = ({
     win?: boolean;
     userInfo: Info;
 }) => {
+    const UserMarkIcon = useBidIcon();
+
     const mark = useMemo(() => {
         if (win) {
             if (userInfo.mark === UserMarkType.Circle) {

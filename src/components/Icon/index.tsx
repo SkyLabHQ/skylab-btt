@@ -17,3 +17,216 @@ export const WalletIcon = ({ ...props }) => {
         </svg>
     );
 };
+
+export const BidCircle = ({ ...props }) => {
+    return (
+        <svg
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <circle
+                cx="7.5"
+                cy="7.5"
+                r="6"
+                stroke="currentColor"
+                strokeWidth="3"
+            />
+        </svg>
+    );
+};
+
+export const BidCircle1 = ({ ...props }) => {
+    return (
+        <svg
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <circle
+                cx="7.5"
+                cy="7.5"
+                r="6"
+                stroke="currentColor"
+                strokeWidth="3"
+            />
+        </svg>
+    );
+};
+
+export const BidX = ({ ...props }) => {
+    return (
+        <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M2.10376 2L14.1038 14"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+            />
+            <path
+                d="M2 14L14 2"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+};
+
+export const BidX1 = ({ ...props }) => {
+    return (
+        <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M2.10376 2L14.1038 14"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+            />
+            <path
+                d="M2 14L14 2"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+};
+
+export const BotBidX = ({ ...props }) => {
+    return (
+        <svg
+            width="113"
+            height="107"
+            viewBox="0 0 113 107"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                d="M39 82.8384L79 42.8384"
+                stroke="currentColor"
+                strokeWidth="4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M22 85L56 51"
+                stroke="currentColor"
+                strokeWidth="4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M55 48L88 15"
+                stroke="currentColor"
+                strokeWidth="4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M86 26L101 11"
+                stroke="currentColor"
+                strokeWidth="4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M52 55L12 15"
+                stroke="currentColor"
+                strokeWidth="4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M47 59L25 37"
+                stroke="currentColor"
+                strokeWidth="4"
+                strokeLinecap="round"
+            />
+            <path
+                d="M31 25L94 88"
+                stroke="currentColor"
+                strokeWidth="4"
+                strokeLinecap="round"
+            />
+            <circle
+                cx="101"
+                cy="95"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="86"
+                cy="36"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="15"
+                cy="93"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="28"
+                cy="14"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="105.5"
+                cy="7.5"
+                r="5.5"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="90.5"
+                cy="9.5"
+                r="5.5"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="7.5"
+                cy="10.5"
+                r="5.5"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="19.5"
+                cy="34.5"
+                r="5.5"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+            <circle
+                cx="34.5"
+                cy="87.5"
+                r="5.5"
+                stroke="currentColor"
+                strokeWidth="4"
+            />
+        </svg>
+    );
+};

@@ -44,7 +44,7 @@ import { levelRanges } from "@/utils/level";
 import PlaneBg from "./assets/plane-bg.png";
 import SetPilotIcon from "./assets/setPilot.svg";
 import SetNameIcon from "./assets/setName.png";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
 
 const UserInfo = ({
@@ -60,7 +60,7 @@ const UserInfo = ({
     const { address } = usePrivyAccounts();
     const toast = useSkyToast();
     const { onCopy } = useClipboard(address);
-    const { activePilot } = useUserInfoRequest();
+    const { activePilot } = useUserInfo();
 
     return (
         <Flex flexDir={"column"} align={"center"}>
@@ -522,7 +522,7 @@ const UserInfoDrawer = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
-    const { isBlock, blockOpen, handleBlock } = useUserInfoRequest();
+    const { isBlock, blockOpen, handleBlock } = useUserInfo();
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);

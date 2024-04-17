@@ -65,7 +65,7 @@ import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { usePrivy } from "@privy-io/react-auth";
 import StartCountDown from "@/components/StartCountDown";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { useUserInfo } from "@/contexts/UserInfo";
 import useStartGame from "@/hooks/useStartGame";
 import GameMp3 from "@/assets/game.mp3";
 
@@ -155,7 +155,7 @@ const TacToeMode = () => {
     const [loading, setLoading] = useState(false);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
-    const { isBlock, blockOpen, handleBlock } = useUserInfoRequest();
+    const { isBlock, blockOpen, handleBlock } = useUserInfo();
 
     const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
     const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");

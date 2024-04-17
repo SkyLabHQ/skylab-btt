@@ -454,7 +454,7 @@ const TacToeTutorial = ({}) => {
                             showTutorialStep
                             status="my"
                             showAdvantageTip
-                            markIcon={CircleIcon}
+                            markIcon={UserMarkType.Circle}
                             level={1}
                             address={
                                 "0x2f49Be6976324000da4Bd091B0217E217b81A93d"
@@ -472,7 +472,7 @@ const TacToeTutorial = ({}) => {
 
                         <OpUserCard
                             status="op"
-                            markIcon={XIcon}
+                            markIcon={UserMarkType.Cross}
                             level={1}
                             address={
                                 "0x40BA69df5c58A1106480b42aFEF78DA08860081c"

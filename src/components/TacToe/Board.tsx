@@ -3,19 +3,14 @@ import {
     Flex,
     Grid,
     GridItem,
-    Image,
     keyframes,
     Text,
+    Image,
     useMediaQuery,
 } from "@chakra-ui/react";
 import BaseGrid from "./assets/base-grid.svg";
-import BlackXIcon from "./assets/black-x.svg";
-import BlackCircle from "./assets/black-circle.svg";
-import {
-    BoardItem,
-    UserMarkIcon,
-    UserMarkType,
-} from "@/skyConstants/bttGameTypes";
+import { BoardItem, UserMarkType } from "@/skyConstants/bttGameTypes";
+import useBidIcon from "@/hooks/useBidIcon";
 
 const move = keyframes`
     0% {
@@ -45,6 +40,7 @@ export const BoardGrid = ({
     opMark,
     showAnimate,
 }: BoardItem) => {
+    const MarkIcon = useBidIcon();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <GridItem
@@ -99,14 +95,16 @@ export const BoardGrid = ({
                                 }}
                             >
                                 <Image
-                                    src={
-                                        myMark === UserMarkType.Circle
-                                            ? BlackCircle
-                                            : BlackXIcon
-                                    }
+                                    width={"10px"}
+                                    height={"10px"}
                                     sx={{
                                         marginRight: isPc ? "0.5208vw" : "2px",
                                     }}
+                                    src={
+                                        myMark === UserMarkType.Circle
+                                            ? MarkIcon.BlackCircle
+                                            : MarkIcon.BlackCross
+                                    }
                                 ></Image>
                                 <Box> {myValue}</Box>
                             </Box>
@@ -119,14 +117,18 @@ export const BoardGrid = ({
                                 }}
                             >
                                 <Image
-                                    src={
-                                        opMark === UserMarkType.Circle
-                                            ? BlackCircle
-                                            : BlackXIcon
-                                    }
+                                    width={"10px"}
+                                    height={"10px"}
                                     sx={{
                                         marginRight: isPc ? "0.5208vw" : "2px",
                                     }}
+                                    src={
+                                        opMark === UserMarkType.Circle
+                                            ? MarkIcon.BlackCircle
+                                            : opMark === UserMarkType.BotX
+                                            ? MarkIcon.BlackBotX
+                                            : MarkIcon.BlackCross
+                                    }
                                 ></Image>
                                 <Box>{opValue}</Box>
                             </Box>
@@ -162,50 +164,50 @@ export const BoardGrid = ({
                     <Image
                         width={"70%"}
                         height={"70%"}
-                        src={UserMarkIcon.Circle}
                         animation={showAnimate && `${move} 1s`}
                         sx={{
                             transition: "all 0.8s",
                         }}
+                        src={MarkIcon.Circle}
                     ></Image>
                 )}
                 {mark === UserMarkType.Cross && (
                     <Image
                         width={"70%"}
                         height={"70%"}
-                        src={UserMarkIcon.Cross}
                         animation={showAnimate && `${move} 1s`}
                         sx={{
                             transition: "all 0.8s",
                         }}
+                        src={MarkIcon.Cross}
                     ></Image>
                 )}
                 {mark === UserMarkType.YellowCircle && (
                     <Image
                         width={"70%"}
                         height={"70%"}
-                        src={UserMarkIcon.YellowCircle}
+                        src={MarkIcon.YellowCircle}
                     ></Image>
                 )}
                 {mark === UserMarkType.YellowCross && (
                     <Image
                         width={"70%"}
                         height={"70%"}
-                        src={UserMarkIcon.YellowCross}
+                        src={MarkIcon.YellowCross}
                     ></Image>
                 )}
                 {mark === UserMarkType.YellowBotX && (
                     <Image
                         width={"70%"}
                         height={"70%"}
-                        src={UserMarkIcon.YellowBotX}
+                        src={MarkIcon.YellowBotX}
                     ></Image>
                 )}
                 {mark === UserMarkType.BotX && (
                     <Image
                         width={"70%"}
                         height={"70%"}
-                        src={UserMarkIcon.BotX}
+                        src={MarkIcon.BotX}
                     ></Image>
                 )}
             </Box>

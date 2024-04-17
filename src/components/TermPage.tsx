@@ -93,7 +93,7 @@ const TermPage = ({ onContinue }: { onContinue: () => void }) => {
                 alignItems: "center",
                 flexDirection: "column",
                 overflow: "hidden",
-                // cursor: `none`,
+                cursor: `none`,
                 padding: "0 32px",
             }}
             onClick={() => {

@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import TipIcon from "./assets/tip-icon.png";
 import WalletIcon from "./assets/wallet-icon.png";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { useUserInfo } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { usePrivy } from "@privy-io/react-auth";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -36,7 +36,7 @@ const MToolBar = ({
 }) => {
     const [active, setActive] = useState(false);
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfoRequest();
+    const { activePilot } = useUserInfo();
 
     return (
         <Flex
@@ -151,10 +151,10 @@ const ToolBar = ({
         onClose: onRulesModalClose,
     } = useDisclosure();
     const toast = useSkyToast();
-    const { onUserInfoOpen } = useUserInfoRequest();
+    const { onUserInfoOpen } = useUserInfo();
     const { ready, authenticated, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfoRequest();
+    const { activePilot } = useUserInfo();
 
     const handleLogin = () => {
         if (!ready) {

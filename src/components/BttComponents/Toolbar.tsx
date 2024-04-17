@@ -5,6 +5,8 @@ import QuitIcon from "@/components/BttComponents/assets/quit.png";
 import { ToolShare } from "../BttComponents/ToolShare";
 import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
 import Click1Wav from "@/assets/click1.wav";
+import { useUserInfo } from "@/contexts/UserInfo";
+import SkinIcon from "@/components/BttComponents/assets/skin.png";
 const audio = new Audio(Click1Wav);
 const ToolBar = ({
     inviteLink,
@@ -18,6 +20,7 @@ const ToolBar = ({
     onQuitClick: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const { handleToggleType } = useUserInfo();
 
     const {
         isOpen: keyBoardOpen,
@@ -48,6 +51,15 @@ const ToolBar = ({
                 gap: isPc ? "16px" : "12px",
             }}
         >
+            <Image
+                onClick={handleToggleType}
+                src={SkinIcon}
+                sx={{
+                    height: isPc ? "48px" : "40px",
+                    width: isPc ? "48px" : "40px",
+                    cursor: "pointer",
+                }}
+            ></Image>
             <KeyBoard
                 onToggle={() => {
                     audio.play();

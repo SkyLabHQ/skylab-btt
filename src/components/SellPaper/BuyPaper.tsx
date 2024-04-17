@@ -14,7 +14,7 @@ import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { usePublicClient } from "wagmi";
 import { handleError } from "@/utils/error";
 import { WalletIcon } from "../Icon";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { useUserInfo } from "@/contexts/UserInfo";
 
 const ConnectWalletBt = () => {
     const toast = useSkyToast();
@@ -169,7 +169,7 @@ const BuyPaper = () => {
     const toast = useSkyToast();
     const { address } = usePrivyAccounts();
     const [inputAmount, setInputAmount] = React.useState(1);
-    const { isBlock, blockOpen, handleBlock } = useUserInfoRequest();
+    const { isBlock, blockOpen, handleBlock } = useUserInfo();
 
     const handleBuy = async () => {
         if (isBlock) {

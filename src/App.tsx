@@ -6,7 +6,7 @@ import useSkyToast from "./hooks/useSkyToast";
 import Service from "./pages/Service";
 import AddToHome from "./pages/AddToHome";
 import TermPage from "./components/TermPage";
-import { useUserInfoRequest } from "./contexts/UserInfo";
+import { useUserInfo } from "./contexts/UserInfo";
 import CloseIcon from "@/assets/close.svg";
 
 const themeColorList = [
@@ -62,7 +62,7 @@ const App = (): ReactElement => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { blockOpen, handleBlock } = useUserInfoRequest();
+    const { blockOpen, handleBlock } = useUserInfo();
 
     const handleEnter = () => {
         if (checked) {

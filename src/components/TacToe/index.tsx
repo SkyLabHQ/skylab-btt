@@ -150,137 +150,141 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     };
 
     const handleGetGameInfo = async () => {
-        const [
-            resCurrentGrid,
-            boardGrids,
-            myBalance,
-            myGameState,
-            myRevealedBid,
-            myTimeout,
-            myMessage,
-            myEmote,
-            opBalance,
-            opGameState,
-            opRevealedBid,
-            opTimeout,
-            opMessage,
-            opEmote,
-            nextDrawWinner,
-        ] = await ethcallProvider.all([
-            multiSkylabBidTacToeGameContract.currentSelectedGrid(),
-            multiSkylabBidTacToeGameContract.getGrid(),
-            multiSkylabBidTacToeGameContract.balances(myInfo.burner),
-            multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
-            multiSkylabBidTacToeGameContract.getRevealedBids(myInfo.burner),
-            multiSkylabBidTacToeGameContract.timeouts(myInfo.burner),
-            multiSkylabBidTacToeGameContract.playerMessage(myInfo.burner),
-            multiSkylabBidTacToeGameContract.playerEmote(myInfo.burner),
-            multiSkylabBidTacToeGameContract.balances(opInfo.burner),
-            multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
-            multiSkylabBidTacToeGameContract.getRevealedBids(opInfo.burner),
-            multiSkylabBidTacToeGameContract.timeouts(opInfo.burner),
-            multiSkylabBidTacToeGameContract.playerMessage(opInfo.burner),
-            multiSkylabBidTacToeGameContract.playerEmote(opInfo.burner),
-            multiSkylabBidTacToeGameContract.nextDrawWinner(),
-        ]);
+        try {
+            const [
+                resCurrentGrid,
+                boardGrids,
+                myBalance,
+                myGameState,
+                myRevealedBid,
+                myTimeout,
+                myMessage,
+                myEmote,
+                opBalance,
+                opGameState,
+                opRevealedBid,
+                opTimeout,
+                opMessage,
+                opEmote,
+                nextDrawWinner,
+            ] = await ethcallProvider.all([
+                multiSkylabBidTacToeGameContract.currentSelectedGrid(),
+                multiSkylabBidTacToeGameContract.getGrid(),
+                multiSkylabBidTacToeGameContract.balances(myInfo.burner),
+                multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
+                multiSkylabBidTacToeGameContract.getRevealedBids(myInfo.burner),
+                multiSkylabBidTacToeGameContract.timeouts(myInfo.burner),
+                multiSkylabBidTacToeGameContract.playerMessage(myInfo.burner),
+                multiSkylabBidTacToeGameContract.playerEmote(myInfo.burner),
+                multiSkylabBidTacToeGameContract.balances(opInfo.burner),
+                multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
+                multiSkylabBidTacToeGameContract.getRevealedBids(opInfo.burner),
+                multiSkylabBidTacToeGameContract.timeouts(opInfo.burner),
+                multiSkylabBidTacToeGameContract.playerMessage(opInfo.burner),
+                multiSkylabBidTacToeGameContract.playerEmote(opInfo.burner),
+                multiSkylabBidTacToeGameContract.nextDrawWinner(),
+            ]);
 
-        if (showAnimateNumber === -1) {
-            setShowAnimate(resCurrentGrid.toNumber());
-        } else if (resCurrentGrid.toNumber() !== currentGrid) {
-            setShowAnimate(currentGrid);
-            setBufferTime(-1);
-        }
-
-        const _list = JSON.parse(JSON.stringify(list));
-        const gameState = myGameState.toNumber();
-        for (let i = 0; i < boardGrids.length; i++) {
-            if (boardGrids[i] === ZERO_DATA) {
-                _list[i].mark = UserMarkType.Empty;
-            } else if (boardGrids[i] === myInfo.burner) {
-                _list[i].mark = myInfo.mark;
-            } else if (boardGrids[i] === opInfo.burner) {
-                _list[i].mark = opInfo.mark;
+            if (showAnimateNumber === -1) {
+                setShowAnimate(resCurrentGrid.toNumber());
+            } else if (resCurrentGrid.toNumber() !== currentGrid) {
+                setShowAnimate(currentGrid);
+                setBufferTime(-1);
             }
-            _list[i].myValue = myRevealedBid[i].toNumber();
-            _list[i].opValue = opRevealedBid[i].toNumber();
-            _list[i].myMark = myInfo.mark;
-            _list[i].opMark = opInfo.mark;
-        }
-        if (
-            [
-                GameState.WaitingForBid,
-                GameState.Commited,
-                GameState.Revealed,
-            ].includes(gameState)
-        ) {
-            _list[resCurrentGrid.toNumber()].mark = UserMarkType.Square;
-        }
 
-        // game over result
-        if (gameState > GameState.Revealed) {
-            const myIsWin = getWinState(gameState);
-            const burner = myIsWin ? myInfo.burner : opInfo.burner;
-            let mark;
-            if (myIsWin) {
-                mark =
-                    myInfo.mark === UserMarkType.Circle
-                        ? UserMarkType.YellowCircle
-                        : myInfo.mark === UserMarkType.Cross
-                        ? UserMarkType.YellowCross
-                        : UserMarkType.YellowBotX;
-            } else {
-                mark =
-                    opInfo.mark === UserMarkType.Circle
-                        ? UserMarkType.YellowCircle
-                        : opInfo.mark === UserMarkType.Cross
-                        ? UserMarkType.YellowCross
-                        : UserMarkType.YellowBotX;
+            const _list = JSON.parse(JSON.stringify(list));
+            const gameState = myGameState.toNumber();
+            for (let i = 0; i < boardGrids.length; i++) {
+                if (boardGrids[i] === ZERO_DATA) {
+                    _list[i].mark = UserMarkType.Empty;
+                } else if (boardGrids[i] === myInfo.burner) {
+                    _list[i].mark = myInfo.mark;
+                } else if (boardGrids[i] === opInfo.burner) {
+                    _list[i].mark = opInfo.mark;
+                }
+                _list[i].myValue = myRevealedBid[i].toNumber();
+                _list[i].opValue = opRevealedBid[i].toNumber();
+                _list[i].myMark = myInfo.mark;
+                _list[i].opMark = opInfo.mark;
             }
             if (
-                gameState === GameState.WinByConnecting ||
-                gameState === GameState.LoseByConnecting
+                [
+                    GameState.WaitingForBid,
+                    GameState.Commited,
+                    GameState.Revealed,
+                ].includes(gameState)
             ) {
-                for (let i = 0; i < winPatterns.length; i++) {
-                    const index0 = winPatterns[i][0];
-                    const index1 = winPatterns[i][1];
-                    const index2 = winPatterns[i][2];
-                    if (
-                        boardGrids[index0] === burner &&
-                        boardGrids[index1] === burner &&
-                        boardGrids[index2] === burner
-                    ) {
-                        _list[index0].mark = mark;
-                        _list[index1].mark = mark;
-                        _list[index2].mark = mark;
-                        break;
-                    }
+                _list[resCurrentGrid.toNumber()].mark = UserMarkType.Square;
+            }
+
+            // game over result
+            if (gameState > GameState.Revealed) {
+                const myIsWin = getWinState(gameState);
+                const burner = myIsWin ? myInfo.burner : opInfo.burner;
+                let mark;
+                if (myIsWin) {
+                    mark =
+                        myInfo.mark === UserMarkType.Circle
+                            ? UserMarkType.YellowCircle
+                            : myInfo.mark === UserMarkType.Cross
+                            ? UserMarkType.YellowCross
+                            : UserMarkType.YellowBotX;
+                } else {
+                    mark =
+                        opInfo.mark === UserMarkType.Circle
+                            ? UserMarkType.YellowCircle
+                            : opInfo.mark === UserMarkType.Cross
+                            ? UserMarkType.YellowCross
+                            : UserMarkType.YellowBotX;
                 }
-            } else {
-                for (let i = 0; i < boardGrids.length; i++) {
-                    if (boardGrids[i] === burner) {
-                        _list[i].mark = mark;
+                if (
+                    gameState === GameState.WinByConnecting ||
+                    gameState === GameState.LoseByConnecting
+                ) {
+                    for (let i = 0; i < winPatterns.length; i++) {
+                        const index0 = winPatterns[i][0];
+                        const index1 = winPatterns[i][1];
+                        const index2 = winPatterns[i][2];
+                        if (
+                            boardGrids[index0] === burner &&
+                            boardGrids[index1] === burner &&
+                            boardGrids[index2] === burner
+                        ) {
+                            _list[index0].mark = mark;
+                            _list[index1].mark = mark;
+                            _list[index2].mark = mark;
+                            break;
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < boardGrids.length; i++) {
+                        if (boardGrids[i] === burner) {
+                            _list[i].mark = mark;
+                        }
                     }
                 }
             }
-        }
-        setCurrentGrid(resCurrentGrid.toNumber());
-        onList(_list);
-        onChangeGame("my", {
-            balance: myBalance.toNumber(),
-            gameState: myGameState.toNumber(),
-            timeout: myTimeout.toNumber(),
-            message: myMessage.toNumber(),
-            emote: myEmote.toNumber(),
-        });
+            setCurrentGrid(resCurrentGrid.toNumber());
+            onList(_list);
+            onChangeGame("my", {
+                balance: myBalance.toNumber(),
+                gameState: myGameState.toNumber(),
+                timeout: myTimeout.toNumber(),
+                message: myMessage.toNumber(),
+                emote: myEmote.toNumber(),
+            });
 
-        onChangeGame("op", {
-            balance: opBalance.toNumber(),
-            gameState: opGameState.toNumber(),
-            timeout: opTimeout.toNumber(),
-            message: opMessage.toNumber(),
-            emote: opEmote.toNumber(),
-        });
-        setNextDrawWinner(nextDrawWinner);
+            onChangeGame("op", {
+                balance: opBalance.toNumber(),
+                gameState: opGameState.toNumber(),
+                timeout: opTimeout.toNumber(),
+                message: opMessage.toNumber(),
+                emote: opEmote.toNumber(),
+            });
+            setNextDrawWinner(nextDrawWinner);
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const handleCallTimeOut = async () => {
@@ -333,7 +337,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     };
 
     const handleBid = useCallback(async () => {
-        return;
         try {
             if (loading) return;
             if (myGameInfo.gameState !== GameState.WaitingForBid) return;
@@ -751,11 +754,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 level={myInfo.level}
                                 messageIndex={messageIndex}
                                 emoteIndex={emoteIndex}
-                                markIcon={
-                                    myInfo.mark === UserMarkType.Circle
-                                        ? CircleIcon
-                                        : XIcon
-                                }
+                                markIcon={myInfo.mark}
                                 address={myInfo.address}
                                 balance={myGameInfo.balance}
                                 bidAmount={bidAmount}
@@ -780,11 +779,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                         >
                             <OpUserCard
                                 pilotInfo={opActivePilot}
-                                markIcon={
-                                    opInfo.mark === UserMarkType.Circle
-                                        ? CircleIcon
-                                        : XIcon
-                                }
+                                markIcon={opInfo.mark}
                                 level={opInfo.level}
                                 showAdvantageTip={
                                     opInfo.burner === nextDrawWinner

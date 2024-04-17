@@ -6,7 +6,7 @@ import WalletIcon from "./assets/wallet-icon.png";
 import { useNavigate } from "react-router-dom";
 import { shortenAddress } from "@/utils";
 import MyPilot from "../MyPilot";
-import { useUserInfoRequest } from "@/contexts/UserInfo";
+import { useUserInfo } from "@/contexts/UserInfo";
 import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -17,10 +17,10 @@ export const Toolbar = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const toast = useSkyToast();
-    const { onUserInfoOpen } = useUserInfoRequest();
+    const { onUserInfoOpen } = useUserInfo();
     const { ready, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfoRequest();
+    const { activePilot } = useUserInfo();
     const handleLogin = () => {
         audio.play();
         if (!ready) {

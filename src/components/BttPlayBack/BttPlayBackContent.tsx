@@ -10,7 +10,12 @@ import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
 import { aviationImg } from "@/utils/aviationImg";
 import RoundInfo from "../BttComponents/RoundInfo";
-import { BoardItem, GameInfo, GameState } from "@/skyConstants/bttGameTypes";
+import {
+    BoardItem,
+    GameInfo,
+    GameState,
+    UserMarkType,
+} from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 
@@ -37,8 +42,8 @@ const BttPlayBackContent = ({
     opBalance: number;
     myBid: number;
     opBid: number;
-    myMark: string;
-    opMark: string;
+    myMark: UserMarkType;
+    opMark: UserMarkType;
     myIsNextDrawWinner: boolean;
     currentRound: number;
     allSelectedGrids: BoardItem[];

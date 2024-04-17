@@ -13,11 +13,9 @@ import PrivateLobbyPlayBack from "../PrivateRoom/PrivateLobbyPlayBack";
 import Back from "../Back";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import ShareButtons from "../PrivateRoom/ShareButton";
-import { shortenAddressWithout0x } from "@/utils";
 import {
     BoardItem,
     GameState,
-    UserMarkIcon,
     UserMarkType,
     getShareEmoji,
     getWinState,
@@ -27,8 +25,10 @@ import {
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import StartJourney from "../BttComponents/StartJourney";
 import LoadingPage from "../PrivateLobby/LoadingPage";
+import useBidIcon from "@/hooks/useBidIcon";
 
 const PrivatePlayBackPage = () => {
+    const UserMarkIcon = useBidIcon();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const [init, setInit] = useState(false);

@@ -3,13 +3,16 @@ import { Box, Image, Text } from "@chakra-ui/react";
 import GoldIcon from "@/components/TacToe/assets/gold.svg";
 import Plane1 from "@/assets/aviations/a1.png";
 import { AdvantageTip, Message } from "../TacToe/UserCard";
-import BotIcon from "./assets/bot.png";
-import GearIcon from "./assets/gear.svg";
-import { GameState, getWinState } from "@/skyConstants/bttGameTypes";
+import {
+    GameState,
+    UserMarkType,
+    getWinState,
+} from "@/skyConstants/bttGameTypes";
+import useBidIcon from "@/hooks/useBidIcon";
 
 interface UserCardProps {
     gameState?: GameState;
-    markIcon: string;
+    markIcon: UserMarkType;
     balance: number;
     bidAmount: number;
     showAdvantageTip?: boolean;
@@ -33,6 +36,8 @@ export const UserCard = ({
     gameState,
 }: UserCardProps) => {
     const isMy = status === "my";
+    const MarkIcon = useBidIcon();
+
     return (
         <Box
             sx={{
@@ -90,9 +95,14 @@ export const UserCard = ({
                     }}
                 >
                     <Image
-                        src={markIcon}
                         sx={{ width: "1.875vw", marginRight: "0.3125vw" }}
+                        src={
+                            markIcon === UserMarkType.Circle
+                                ? MarkIcon.Circle
+                                : MarkIcon.Cross
+                        }
                     ></Image>
+
                     {isMy &&
                         (getWinState(gameState) ? (
                             <Box

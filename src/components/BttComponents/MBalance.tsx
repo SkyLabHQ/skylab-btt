@@ -10,9 +10,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import GoldIcon from "@/assets/gold.svg";
-import { UserMarkIcon, UserMarkType } from "@/skyConstants/bttGameTypes";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import AdvantageIcon from "@/assets/advantage-icon.svg";
 import { Lose, Win } from "./ResultFlag";
+import useBidIcon from "@/hooks/useBidIcon";
 
 const MBalance = ({
     balance,
@@ -29,6 +30,7 @@ const MBalance = ({
     showResult?: boolean;
     win?: boolean;
 }) => {
+    const UserMarkIcon = useBidIcon();
     const popoverDirection = status === "left" ? "right" : "left";
 
     return (

@@ -14,9 +14,18 @@ import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import CrossIcon from "@/components/TacToe/assets/x.svg";
 import YellowCircle from "@/components/TacToe/assets/yellow-circle.svg";
 import YellowCross from "@/components/TacToe/assets/yellow-x.svg";
+import BlackCircle from "@/components/TacToe/assets/black-circle.svg";
+import BlackCross from "@/components/TacToe/assets/black-x.svg";
+
 import BotX from "@/components/TacToe/assets/bot-x.svg";
 import YellowBotX from "@/components/TacToe/assets/yellow-bot-x.svg";
-
+import CircleIcon1 from "@/components/TacToe/assets/white-o1.png";
+import CrossIcon1 from "@/components/TacToe/assets/white-x1.png";
+import YellowCircle1 from "@/components/TacToe/assets/yellow-o1.png";
+import YellowCross1 from "@/components/TacToe/assets/yellow-x1.png";
+import BlackCircle1 from "@/components/TacToe/assets/black-o1.png";
+import BlackCross1 from "@/components/TacToe/assets/black-x1.png";
+import BlackBotX from "@/components/TacToe/assets/black-bot-x.png";
 export enum GameState {
     Unknown = 0,
     WaitingForBid = 1,
@@ -99,6 +108,21 @@ export const UserMarkIcon = {
     YellowCross: YellowCross,
     BotX: BotX,
     YellowBotX: YellowBotX,
+    BlackCircle: BlackCircle,
+    BlackCross: BlackCross,
+    BlackBotX: BlackBotX,
+};
+
+export const UserMarkIcon1 = {
+    Circle: CircleIcon1,
+    Cross: CrossIcon1,
+    YellowCircle: YellowCircle1,
+    YellowCross: YellowCross1,
+    BotX: BotX,
+    YellowBotX: YellowBotX,
+    BlackCircle: BlackCircle1,
+    BlackCross: BlackCross1,
+    BlackBotX: BlackBotX,
 };
 
 export const initBoard = () => {

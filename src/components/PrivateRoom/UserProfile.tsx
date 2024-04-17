@@ -9,16 +9,17 @@ import {
     PopoverTrigger,
     useClipboard,
 } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import CopyIcon from "./assets/copy-icon.svg";
 import avatars from "@/skyConstants/avatars";
-import { UserMarkIcon, UserMarkType } from "@/skyConstants/bttGameTypes";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import AdvantageIcon from "@/assets/advantage-icon.svg";
 import { shortenAddress } from "@/utils";
 import useSkyToast from "@/hooks/useSkyToast";
 import { motion } from "framer-motion";
 import UserLeftArrow from "./assets/user-left-arrow.svg";
 import UserIcon from "./assets/user.svg";
+import useBidIcon from "@/hooks/useBidIcon";
 
 const UserProfile = ({
     address,
@@ -35,6 +36,7 @@ const UserProfile = ({
     address?: string;
     status?: "my" | "op";
 }) => {
+    const UserMarkIcon = useBidIcon();
     const { onCopy } = useClipboard(address ?? "");
     const toast = useSkyToast();
     const direction = status === "my" ? "row" : "row-reverse";

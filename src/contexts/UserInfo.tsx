@@ -14,7 +14,9 @@ const UserInfoContext = createContext<{
     pilotIsInit: boolean;
     blockOpen: boolean;
     isBlock: boolean;
+    bidIconType: string;
     handleBlock: (block: boolean) => void;
+    handleToggleType: () => void;
 }>(null);
 
 export const UserInfoProvider = ({
@@ -27,12 +29,28 @@ export const UserInfoProvider = ({
     const { activePilot, handleGetActivePilot, init } = usePilotInfo(address);
     const [isBlock, setIsBlock] = useState(false);
     const [blockOpen, setIsBlockOpen] = useState(false);
+    const [bidIconType, setBidIconType] = useState("0");
 
     const handleBlock = (block: boolean) => {
         setIsBlockOpen(block);
     };
 
+    const handleToggleType = () => {
+        if (bidIconType === "0") {
+            setBidIconType("1");
+            localStorage.setItem("bidIconType", "1");
+        } else {
+            setBidIconType("0");
+            localStorage.setItem("bidIconType", "0");
+        }
+    };
+
     useEffect(() => {
+        const _bidIconType = localStorage.getItem("bidIconType");
+        if (_bidIconType && bidIconType !== _bidIconType) {
+            setBidIconType("1");
+        }
+
         axios.get("https://ipapi.co/json/").then(async (res: any) => {
             if (res.data.country_code === "US") {
                 setIsBlock(true);
@@ -56,6 +74,8 @@ export const UserInfoProvider = ({
                 blockOpen,
                 isBlock,
                 handleBlock,
+                bidIconType,
+                handleToggleType,
             }}
         >
             <Box
@@ -73,6 +93,6 @@ export const UserInfoProvider = ({
     );
 };
 
-export const useUserInfoRequest = () => {
+export const useUserInfo = () => {
     return useContext(UserInfoContext);
 };

@@ -23,7 +23,6 @@ import {
     RobotImg,
     SixtySecond,
     ThirtySecond,
-    UserMarkIcon,
     UserMarkType,
     getWinState,
     initBoard,
@@ -312,15 +311,15 @@ const BttLiveGamePage = () => {
     const myMark = useMemo(() => {
         if (myInfo.mark === UserMarkType.Circle) {
             if (getWinState(myGameInfo.gameState)) {
-                return UserMarkIcon.YellowCircle;
+                return UserMarkType.YellowCircle;
             } else {
-                return UserMarkIcon.Circle;
+                return UserMarkType.Circle;
             }
         } else {
             if (getWinState(myGameInfo.gameState)) {
-                return UserMarkIcon.YellowCross;
+                return UserMarkType.YellowCross;
             } else {
-                return UserMarkIcon.Cross;
+                return UserMarkType.Cross;
             }
         }
     }, [myInfo, myGameInfo]);
@@ -328,21 +327,21 @@ const BttLiveGamePage = () => {
     const opMark = useMemo(() => {
         if (opInfo.mark === UserMarkType.Circle) {
             if (getWinState(opGameInfo.gameState)) {
-                return UserMarkIcon.YellowCircle;
+                return UserMarkType.YellowCircle;
             } else {
-                return UserMarkIcon.Circle;
+                return UserMarkType.Circle;
             }
         } else if (opInfo.mark === UserMarkType.BotX) {
             if (getWinState(opGameInfo.gameState)) {
-                return UserMarkIcon.YellowBotX;
+                return UserMarkType.YellowBotX;
             } else {
-                return UserMarkIcon.BotX;
+                return UserMarkType.BotX;
             }
         } else {
             if (getWinState(opGameInfo.gameState)) {
-                return UserMarkIcon.YellowCross;
+                return UserMarkType.YellowCross;
             } else {
-                return UserMarkIcon.Cross;
+                return UserMarkType.Cross;
             }
         }
     }, [opInfo, opGameInfo]);
