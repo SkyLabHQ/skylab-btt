@@ -36,14 +36,14 @@ const BttTimer = ({
                     display: "flex",
                     justifyContent: "flex-end",
                     padding: isPc ? "0.1042vw" : "1px",
-                    borderRadius: "10px",
+                    borderRadius: "0.5208vw",
                 }}
             >
                 <Box
                     sx={{
                         width: width,
                         background: gray ? "#616161" : "#fddc2d",
-                        borderRadius: "10px",
+                        borderRadius: "0.5208vw",
                     }}
                 ></Box>
             </Box>
