@@ -148,7 +148,7 @@ export const BoardGrid = ({
                                 "2px 12px, 2px 12px, 12px 2px, 12px 2px",
                             backgroundPosition: "0 0, 100% 0, 0 0, 0 100%",
                             color: "#FDDC2D",
-                            fontSize: isPc ? "16px" : "10px",
+                            fontSize: isPc ? "0.8333vw" : "10px",
                             fontWeight: 700,
                         }}
                         animation={`${move2} 1s infinite linear`}

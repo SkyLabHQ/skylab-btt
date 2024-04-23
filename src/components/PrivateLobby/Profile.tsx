@@ -50,7 +50,7 @@ const NickName = ({
                     fontWeight: "bold",
                 }}
             >
-                Nick Name
+                Nickname
             </Text>
             <InputGroup
                 sx={{
