@@ -229,10 +229,15 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                         address,
                                     );
 
+                                    console.log("指定gas", gasLimit);
+                                    console.log("实际gas", gas);
+
                                     const gas1 =
                                         gasLimit && gasLimit > Number(gas)
                                             ? gasLimit
-                                            : calculateGasMargin(Number(gas));
+                                            : calculateGasMargin(
+                                                  Number(gas),
+                                              ).toNumber();
 
                                     const hash = await newSigner.writeContract({
                                         address: contract.address,
