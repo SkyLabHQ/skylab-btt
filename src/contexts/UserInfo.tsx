@@ -54,10 +54,8 @@ export const UserInfoProvider = ({
         axios.get("https://ipapi.co/json/").then(async (res: any) => {
             if (res.data.country_code === "US") {
                 setIsBlock(true);
-                setIsBlockOpen(true);
             } else {
                 setIsBlock(false);
-                setIsBlockOpen(false);
             }
         });
     }, []);

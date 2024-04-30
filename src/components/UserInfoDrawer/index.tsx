@@ -593,12 +593,8 @@ const UserInfoDrawer = ({
     };
 
     const handleMintPlane = async () => {
-        if (isBlock) {
-            if (blockOpen) {
-                return;
-            }
+        if (isBlock || !blockOpen) {
             handleBlock(true);
-            return;
         }
 
         if (Number(paperBalance) === 0) {
