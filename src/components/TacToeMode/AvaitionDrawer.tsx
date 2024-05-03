@@ -251,7 +251,7 @@ const PlaneItem = ({
                     sx={{
                         width:
                             ((detail.points - detail.prePoints) /
-                                (detail.nextPoints - detail.points)) *
+                                (detail.nextPoints - detail.prePoints)) *
                                 100 +
                             "%",
                         height: "100%",
