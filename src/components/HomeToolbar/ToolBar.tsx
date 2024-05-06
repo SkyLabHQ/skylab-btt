@@ -40,6 +40,7 @@ const MToolBar = ({
 
     return (
         <Flex
+            id="my-wallet"
             sx={{
                 position: "absolute",
                 top: "70px",
