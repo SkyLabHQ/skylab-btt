@@ -712,7 +712,7 @@ const SettlementPage = ({}) => {
                                 width: isPc ? "11.4583vw" : "240px",
                                 height: isPc ? "3.2292vw" : "50px",
                                 cursor: "pointer",
-                                borderRadius: isPc ? "0.8333vw" : "10px",
+                                borderRadius: isPc ? "0.8333vw" : "16px",
                                 fontSize: isPc ? "1.4583vw" : "20px",
                                 display: "flex",
                                 alignItems: "center",

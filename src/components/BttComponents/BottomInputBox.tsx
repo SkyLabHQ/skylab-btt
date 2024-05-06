@@ -14,7 +14,7 @@ import {
     useDisclosure,
     keyframes,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import { GameState, MESSAGES } from "@/skyConstants/bttGameTypes";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
 import SubIcon from "@/components/BttComponents/assets/sub.svg";
@@ -46,7 +46,9 @@ const BottomInputBox = ({
     myBalance,
     bidAmount,
     loading,
+    revealing,
     myGameState,
+    opGameState,
     onSubClick,
     onAddClick,
     onConfirm,
@@ -54,11 +56,14 @@ const BottomInputBox = ({
     onInputAmountClick,
     onIuputAmount,
     showAnimateConfirm,
+    onReveal,
 }: {
     myBalance?: number;
     bidAmount: string;
     loading: boolean;
+    revealing?: boolean;
     myGameState: GameState;
+    opGameState?: GameState;
     onSubClick: () => void;
     onAddClick: () => void;
     onConfirm: () => void;
@@ -69,9 +74,32 @@ const BottomInputBox = ({
         emoteIndex?: number,
     ) => void;
     showAnimateConfirm?: number;
+    onReveal?: () => void;
 }) => {
     const [selectMessageIndex, setSelectMessageIndex] = React.useState(-1);
     const { onOpen, onClose, isOpen } = useDisclosure();
+
+    const [commitButtonText, status] = useMemo(() => {
+        if (myGameState === GameState.WaitingForBid) {
+            return loading ? ["Confirming", 0] : ["Confirm", 1];
+        } else if (myGameState === GameState.Commited) {
+            if (opGameState === GameState.WaitingForBid) {
+                return ["Confirmed", 0];
+            } else if (
+                opGameState === GameState.Commited ||
+                opGameState === GameState.Revealed
+            ) {
+                if (revealing) {
+                    return ["Revealing", 0];
+                } else {
+                    return ["Reveal", 2];
+                }
+            }
+        } else if (myGameState === GameState.Revealed) {
+            return ["Revealed", 0];
+        }
+        return ["Confirm", 0];
+    }, [loading, revealing, myGameState, opGameState]);
 
     return (
         <Flex
@@ -280,48 +308,43 @@ const BottomInputBox = ({
                     </Slider>
                 </Box>
             </Box>
-            <Box
+
+            <Flex
                 sx={{
                     flex: 1,
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    textAlign: "right",
                 }}
+                justify={"flex-end"}
             >
-                {loading ? (
-                    <Text
-                        sx={{
-                            color: "#fff",
-                        }}
-                    >
-                        Confirming
-                    </Text>
-                ) : (
-                    <Text
-                        onClick={() => {
-                            const audio = new Audio(ConfirmVideo);
-                            audio.play();
+                <Flex
+                    key={showAnimateConfirm + ""}
+                    animation={`${
+                        showAnimateConfirm !== 0 ? move : ""
+                    } 0.5s linear alternate`}
+                    onClick={() => {
+                        const audio = new Audio(ConfirmVideo);
+                        audio.play();
+                        if (status === 1) {
                             onConfirm();
-                        }}
-                        key={showAnimateConfirm + ""}
-                        sx={{
-                            color:
-                                myGameState === GameState.WaitingForBid
-                                    ? "#FDDC2D"
-                                    : "#414141",
-                            animationIterationCount: "2",
-                        }}
-                        animation={`${
-                            showAnimateConfirm !== 0 ? bt : ""
-                        } 0.5s linear alternate`}
-                    >
-                        {myGameState === GameState.Commited ||
-                        myGameState === GameState.Revealed
-                            ? "Confirmed"
-                            : "Confirm"}
-                    </Text>
-                )}
-            </Box>
+                        } else if (status === 2) {
+                            onReveal();
+                        }
+                    }}
+                    sx={{
+                        width: "78px",
+                        height: "28px",
+                        background: status === 0 ? "transparent" : "#FDDC2D",
+                        borderRadius: "16px",
+                        fontSize: "12px",
+                        color: status === 0 ? "#414141" : "#1b1b1b",
+                        fontWeight: "bold",
+                        animationIterationCount: "2",
+                    }}
+                    align={"center"}
+                    justify={"center"}
+                >
+                    {commitButtonText}
+                </Flex>
+            </Flex>
         </Flex>
     );
 };

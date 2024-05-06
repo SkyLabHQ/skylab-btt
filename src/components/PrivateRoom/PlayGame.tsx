@@ -560,16 +560,16 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         multiProvider,
     ]);
 
-    useEffect(() => {
-        if (revealing || loading) return;
-        if (
-            myGameInfo.gameState === GameState.Commited &&
-            (opGameInfo.gameState === GameState.Commited ||
-                opGameInfo.gameState === GameState.Revealed)
-        ) {
-            handleRevealedBid();
-        }
-    }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
+    // useEffect(() => {
+    //     if (revealing || loading) return;
+    //     if (
+    //         myGameInfo.gameState === GameState.Commited &&
+    //         (opGameInfo.gameState === GameState.Commited ||
+    //             opGameInfo.gameState === GameState.Revealed)
+    //     ) {
+    //         handleRevealedBid();
+    //     }
+    // }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
 
     useEffect(() => {
         if (!gameOver) return;
@@ -782,6 +782,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                     bidAmount={bidAmount}
                     onInputChange={handleBidAmount}
                     onConfirm={handleBid}
+                    onReveal={handleRevealedBid}
                     onSetMessage={handleSetMessage}
                     emoteIndex={emoteIndex}
                     messageIndex={messageIndex}
@@ -791,6 +792,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                         onOpen();
                     }}
                     loading={loading}
+                    revealing={revealing}
                     handleBoardClick={handleBoardClick}
                     showAnimateConfirm={showAnimateConfirm}
                 ></MLayout>

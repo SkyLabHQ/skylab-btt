@@ -28,8 +28,10 @@ const MLayout = ({
     emoteLoading,
     messageLoading,
     loading,
+    revealing,
     handleBoardClick,
     showAnimateConfirm,
+    onReveal,
 }: any) => {
     const { isOpen, onOpen, onClose } = useDisclosure({
         defaultIsOpen: true,
@@ -216,7 +218,9 @@ const MLayout = ({
                     myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}
                     myGameState={myGameState}
+                    opGameState={opGameInfo.gameState}
                     loading={loading}
+                    revealing={revealing}
                     onIuputAmount={(amount: number) => {
                         onInputChange(amount);
                     }}
@@ -243,6 +247,7 @@ const MLayout = ({
                         }
                     }}
                     onConfirm={onConfirm}
+                    onReveal={onReveal}
                 ></BottomInputBox>
             </Box>
         </Box>

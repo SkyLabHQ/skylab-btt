@@ -275,10 +275,7 @@ const TacToeMode = () => {
             return;
         }
 
-        if (isBlock) {
-            if (blockOpen) {
-                return;
-            }
+        if (isBlock && !blockOpen) {
             handleBlock(true);
             return;
         }

@@ -22,12 +22,14 @@ const MLayout = ({
     showAnimateNumber,
     onInputChange,
     onConfirm,
+    onReveal,
     onSetMessage,
     emoteIndex,
     messageIndex,
     emoteLoading,
     messageLoading,
     loading,
+    revealing,
     handleBoardClick,
     showAnimateConfirm,
 }: any) => {
@@ -144,7 +146,7 @@ const MLayout = ({
                     }}
                 >
                     <Flex justify={"space-between"} align={"flex-end"}>
-                        {myGameInfo.gameState < GameState.Commited && (
+                        {myGameInfo.gameState < GameState.Revealed && (
                             <Box
                                 sx={{
                                     width: "160px",
@@ -219,6 +221,7 @@ const MLayout = ({
                     myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}
                     myGameState={myGameState}
+                    opGameState={opGameInfo.gameState}
                     loading={loading}
                     onIuputAmount={(amount: number) => {
                         onInputChange(amount);
@@ -246,6 +249,8 @@ const MLayout = ({
                         }
                     }}
                     onConfirm={onConfirm}
+                    onReveal={onReveal}
+                    revealing={revealing}
                 ></BottomInputBox>
             </Box>
         </Box>

@@ -496,8 +496,7 @@ const LevelInfo = ({
                 >
                     <Text
                         sx={{
-                            fontSize: isPc ? "1.25vw" : "20px",
-
+                            fontSize: isPc ? "1vw" : "18px",
                             fontWeight: "400",
                         }}
                     >

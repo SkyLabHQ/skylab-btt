@@ -593,7 +593,7 @@ const UserInfoDrawer = ({
     };
 
     const handleMintPlane = async () => {
-        if (isBlock || !blockOpen) {
+        if (isBlock && !blockOpen) {
             handleBlock(true);
         }
 

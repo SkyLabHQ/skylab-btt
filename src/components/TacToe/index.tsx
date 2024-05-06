@@ -7,8 +7,6 @@ import React, {
     useRef,
     useState,
 } from "react";
-import CircleIcon from "@/components/TacToe/assets/circle.svg";
-import XIcon from "@/components/TacToe/assets/x.svg";
 import Board from "@/components/TacToe/Board";
 import { useBlockNumber } from "@/contexts/BlockNumber";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
@@ -27,8 +25,6 @@ import {
     useGridCommited,
 } from "@/hooks/useTacToeStore";
 import { ZERO_DATA } from "@/skyConstants";
-import A0Testflight from "@/assets/aviations/a0-testflight.png";
-import A2Testflight from "@/assets/aviations/a2-testflight.png";
 import {
     GameInfo,
     GameState,
@@ -387,13 +383,16 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     const handleRevealedBid = async () => {
         try {
             const localSalt = getGridCommited();
-
             if (!localSalt) return;
             const { salt, amount } = localSalt;
             setRevealing(true);
             await tacToeGameRetryWrite("revealBid", [amount, Number(salt)], {
                 gasLimit: 1500000,
                 usePaymaster: istest,
+            });
+            onChangeGame("my", {
+                ...myGameInfo,
+                gameState: GameState.Revealed,
             });
             setRevealing(false);
             setBidAmount(0);
@@ -417,16 +416,16 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         handleGetGameInfo();
     }, [blockNumber, multiSkylabBidTacToeGameContract, ethcallProvider]);
 
-    useEffect(() => {
-        if (revealing || loading) return;
-        if (
-            myGameInfo.gameState === GameState.Commited &&
-            (opGameInfo.gameState === GameState.Commited ||
-                opGameInfo.gameState === GameState.Revealed)
-        ) {
-            handleRevealedBid();
-        }
-    }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
+    // useEffect(() => {
+    //     if (revealing || loading) return;
+    //     if (
+    //         myGameInfo.gameState === GameState.Commited &&
+    //         (opGameInfo.gameState === GameState.Commited ||
+    //             opGameInfo.gameState === GameState.Revealed)
+    //     ) {
+    //         handleRevealedBid();
+    //     }
+    // }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
 
     // game over
     const handleGameOver = async () => {
@@ -814,6 +813,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                     onInputChange={handleBidAmount}
                     onConfirm={handleBid}
                     onSetMessage={handleSetMessage}
+                    onReveal={handleRevealedBid}
                     emoteIndex={emoteIndex}
                     messageIndex={messageIndex}
                     messageLoading={messageLoading}
@@ -822,6 +822,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                         onOpen();
                     }}
                     loading={loading}
+                    revealing={revealing}
                     handleBoardClick={handleBoardClick}
                     showAnimateConfirm={showAnimateConfirm}
                 ></MLayout>

@@ -30,20 +30,21 @@ const BttTimer = ({
                         : show
                         ? "3px solid #FFF"
                         : "3px solid #616161",
+                    borderWidth: isPc ? "3px" : "2px",
                     width: isPc ? "21.4583vw" : "100%",
                     background: "transparent",
-                    height: isPc ? "1.25vw" : "16px",
+                    height: isPc ? "1.25vw" : "12px",
                     display: "flex",
                     justifyContent: "flex-end",
                     padding: isPc ? "0.1042vw" : "1px",
-                    borderRadius: "0.5208vw",
+                    borderRadius: isPc ? "0.5208vw" : "8px",
                 }}
             >
                 <Box
                     sx={{
                         width: width,
                         background: gray ? "#616161" : "#fddc2d",
-                        borderRadius: "0.5208vw",
+                        borderRadius: isPc ? "0.5208vw" : "8px",
                     }}
                 ></Box>
             </Box>
@@ -91,11 +92,12 @@ const BufferTimer = ({ width, show }: { width: string; show: boolean }) => {
             <Box
                 sx={{
                     background: "#616161",
-                    height: isPc ? "0.3125vw" : "4px",
+                    height: isPc ? "0.3125vw" : "3px",
                     width: isPc ? "21.4583vw" : "100%",
                     marginTop: isPc ? "1.4815vh" : "8px",
                     display: "flex",
                     justifyContent: "flex-end",
+                    borderRadius: isPc ? "0.5208vw" : "4px",
                 }}
                 animation={`${show ? move : ""} 1s linear infinite alternate`}
             >
@@ -103,7 +105,7 @@ const BufferTimer = ({ width, show }: { width: string; show: boolean }) => {
                     sx={{
                         width: width,
                         background: show ? "#fff" : "#616161",
-                        height: isPc ? "0.3125vw" : "4px",
+                        height: isPc ? "0.3125vw" : "3px",
                     }}
                 ></Box>
             </Box>
