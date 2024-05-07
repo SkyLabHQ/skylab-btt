@@ -1,4 +1,4 @@
-import { Box, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import Bg from "@/assets/bg.png";

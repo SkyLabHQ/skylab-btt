@@ -14,13 +14,15 @@ import LYellowIcon from "./assets/x-yellow-l.png";
 import AmountBg from "./assets/amount-bg.png";
 import AmountBg1 from "./assets/amount-bg1.png";
 import LevelBg from "./assets/level-bg.png";
+import ETHBg from "./assets/ETH-bg.png";
+import ETHIcon from "./assets/eth.svg";
+import DefaultAvatar from "./assets/default-avatar.png";
 import { aviationImg } from "@/utils/aviationImg";
-import NewComerBg from "./assets/newcomer-bg.png";
 import Timer from "./Timer";
+import NewComerBg from "./assets/newcomer-bg.png";
 import { shortenAddress } from "@/utils";
 import LevelLeaderboardModal from "./LevelLeaderboardModal";
 import PaperIcon from "./assets/paper.png";
-import DefaultAvatar from "./assets/default-avatar.png";
 import LockIcon from "./assets/lock.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import { usePrivy } from "@privy-io/react-auth";
@@ -54,7 +56,7 @@ const list = [
         arrowImg: SYellowIcon,
         imgPosition: {
             top: "360px",
-            right: "206px",
+            right: "210px",
             width: "25px",
         },
         avatarDirection: "left",
@@ -88,7 +90,7 @@ const list = [
         imgPosition: {
             top: "930px",
             width: "25px",
-            left: "206px",
+            left: "202px",
         },
         avatarDirection: "right",
     },
@@ -151,7 +153,7 @@ const list = [
         arrowImg: SYellowIcon,
         imgPosition: {
             top: "2080px",
-            left: "206px",
+            left: "202px",
             width: "25px",
         },
         avatarDirection: "right",
@@ -218,7 +220,7 @@ const list = [
         imgPosition: {
             top: "3220px",
             width: "25px",
-            left: "206px",
+            left: "202px",
         },
         avatarDirection: "right",
     },
@@ -284,7 +286,7 @@ const list = [
         imgPosition: {
             top: "4380px",
             width: "25px",
-            left: "206px",
+            left: "202px",
         },
         avatarDirection: "right",
     },
@@ -716,12 +718,11 @@ const AviationLevel = ({
                                                         width: "100%",
                                                         textAlign: "center",
                                                         fontFamily: "Quantico",
-                                                        fontSize: "14px",
+                                                        fontSize: "12px",
                                                     }}
                                                 >
                                                     <Text
                                                         sx={{
-                                                            width: "120px",
                                                             textAlign: "center",
                                                         }}
                                                     >
@@ -738,6 +739,53 @@ const AviationLevel = ({
                                                 </Box>
                                             </Flex>
                                         )}
+
+                                    {levelInfo[index].levelTokenIds.length !==
+                                        0 && (
+                                        <Flex
+                                            sx={{
+                                                position: "absolute",
+                                                left: "50%",
+                                                top: "-20%",
+                                                transform: "translateX(-50%)",
+                                                background: `url(${ETHBg})`,
+                                                backgroundSize: "100% 100%",
+                                                width: "65px",
+                                                height: "65px",
+                                                lineHeight: "1",
+                                            }}
+                                            flexDir={"column"}
+                                            align={"center"}
+                                        >
+                                            <Image
+                                                src={ETHIcon}
+                                                sx={{
+                                                    width: "20px",
+                                                    marginTop: "-10px",
+                                                }}
+                                            ></Image>
+                                            <Text
+                                                sx={{
+                                                    fontSize: "26px",
+                                                    color: "#FFECC7",
+                                                    fontFamily: "Neon",
+                                                    fontWeight: "normal",
+                                                }}
+                                            >
+                                                0.12
+                                            </Text>
+                                            <Text
+                                                sx={{
+                                                    fontSize: "14px",
+                                                    fontWeight: "normal",
+                                                    fontFamily: "Neon",
+                                                    color: "#FFECC7",
+                                                }}
+                                            >
+                                                ETH
+                                            </Text>
+                                        </Flex>
+                                    )}
 
                                     <Image
                                         src={aviationImg(item.level)}
@@ -776,7 +824,7 @@ const AviationLevel = ({
                                     <Text
                                         sx={{
                                             position: "absolute",
-                                            bottom: isPc ? "30px" : "15px",
+                                            bottom: isPc ? "25px" : "15px",
                                             left: "50%",
                                             transform: "translateX(-50%)",
                                             fontSize: isPc ? "30px" : "14px",
