@@ -750,8 +750,8 @@ const AviationLevel = ({
                                                 transform: "translateX(-50%)",
                                                 background: `url(${ETHBg})`,
                                                 backgroundSize: "100% 100%",
-                                                width: "65px",
-                                                height: "65px",
+                                                width: isPc ? "65px" : "44px",
+                                                height: isPc ? "65px" : "44px",
                                                 lineHeight: "1",
                                             }}
                                             flexDir={"column"}
@@ -760,13 +760,17 @@ const AviationLevel = ({
                                             <Image
                                                 src={ETHIcon}
                                                 sx={{
-                                                    width: "20px",
+                                                    width: isPc
+                                                        ? "20px"
+                                                        : "14px",
                                                     marginTop: "-10px",
                                                 }}
                                             ></Image>
                                             <Text
                                                 sx={{
-                                                    fontSize: "26px",
+                                                    fontSize: isPc
+                                                        ? "26px"
+                                                        : "18px",
                                                     color: "#FFECC7",
                                                     fontFamily: "Neon",
                                                     fontWeight: "normal",
@@ -776,7 +780,9 @@ const AviationLevel = ({
                                             </Text>
                                             <Text
                                                 sx={{
-                                                    fontSize: "14px",
+                                                    fontSize: isPc
+                                                        ? "14px"
+                                                        : "12px",
                                                     fontWeight: "normal",
                                                     fontFamily: "Neon",
                                                     color: "#FFECC7",
