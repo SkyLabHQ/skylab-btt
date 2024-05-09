@@ -6,6 +6,8 @@ import {
     useDisclosure,
     useMediaQuery,
     BoxProps,
+    Flex,
+    Image,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +66,8 @@ import useStartGame from "@/hooks/useStartGame";
 import GameMp3 from "@/assets/game.mp3";
 import LeftButton from "@/components/TacToeMode/LeftButton";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
+import MRobotIcon from "@/components/TacToeMode/assets/m-robot.svg";
+import MLobbyIcon from "@/components/TacToeMode/assets/m-private-lobby.svg.svg";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -473,7 +477,7 @@ const TacToeMode = () => {
                 sx={{
                     display: "flex",
                     alignItems: "center",
-                    paddingTop: "120px",
+                    paddingTop: isPc ? "120px" : "40px",
                     flexDirection: "column",
                     height: "100%",
                     background: "rgb(54,54,54,0.5)",
@@ -487,8 +491,8 @@ const TacToeMode = () => {
                 <Box
                     sx={{
                         position: "absolute",
-                        left: "20px",
-                        top: "20px",
+                        left: "12px",
+                        top: "12px",
                     }}
                 >
                     <BackWithText
@@ -514,16 +518,20 @@ const TacToeMode = () => {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        width: isPc ? "378px" : "250px",
+                        width: isPc ? "378px" : "100%",
                         justifyContent: "center",
                     }}
                 >
-                    {isPc && !isPrivateLobbyMode && (
+                    {/* {isPc && !isPrivateLobbyMode && (
                         <StartCountDown timeLeft={timeLeft1}></StartCountDown>
-                    )}
+                    )} */}
                     <Box
                         sx={{
-                            paddingTop: isPrivateLobbyMode ? "230px" : "30px",
+                            paddingTop: isPrivateLobbyMode
+                                ? isPc
+                                    ? "230px"
+                                    : "130px"
+                                : "30px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -540,28 +548,95 @@ const TacToeMode = () => {
                             }}
                         >
                             {isPrivateLobbyMode ? (
-                                <PrivateLobbyButtons
-                                    onBack={() => {
-                                        setIsPrivateLobbyMode.off();
+                                <Box
+                                    sx={{
+                                        padding: "0 40px",
                                     }}
-                                    onCreateLobby={() => {
-                                        gameAudio.play();
-                                        handleCreatePrivateLobby();
-                                    }}
-                                    onJoinLobby={() => {
-                                        gameAudio.play();
-                                        handleJoinPrivateLobby();
-                                    }}
-                                ></PrivateLobbyButtons>
+                                >
+                                    <PrivateLobbyButtons
+                                        onBack={() => {
+                                            setIsPrivateLobbyMode.off();
+                                        }}
+                                        onCreateLobby={() => {
+                                            gameAudio.play();
+                                            handleCreatePrivateLobby();
+                                        }}
+                                        onJoinLobby={() => {
+                                            gameAudio.play();
+                                            handleJoinPrivateLobby();
+                                        }}
+                                    ></PrivateLobbyButtons>
+                                </Box>
                             ) : (
-                                <PlayButtonGroup
-                                    tournamentDisabled={!selectPlane?.tokenId}
-                                    onPlayTournament={() => {
-                                        gameAudio.play();
-                                        // handleCreateOrJoinDefault();
-                                        handleTournament();
+                                <Flex
+                                    sx={{
+                                        width: "100%",
+                                        padding: "0 12px",
                                     }}
-                                ></PlayButtonGroup>
+                                    justify={"space-between"}
+                                    align={"flex-end"}
+                                >
+                                    <Flex
+                                        flexDir={"column"}
+                                        align={"center"}
+                                        onClick={() => {
+                                            gameAudio.play();
+                                            handleMintPlayTest("bot");
+                                        }}
+                                    >
+                                        <Image src={MRobotIcon}></Image>
+                                        <Text
+                                            sx={{
+                                                fontSize: "12px",
+                                            }}
+                                        >
+                                            Bot Game
+                                        </Text>
+                                    </Flex>
+                                    <PlayButtonGroup
+                                        tournamentDisabled={
+                                            !selectPlane?.tokenId
+                                        }
+                                        onPlayTournament={() => {
+                                            gameAudio.play();
+                                            // handleCreateOrJoinDefault();
+                                            handleTournament();
+                                        }}
+                                    ></PlayButtonGroup>
+                                    <Flex
+                                        flexDir={"column"}
+                                        align={"center"}
+                                        onClick={async () => {
+                                            gameAudio.play();
+                                            if (activeLobbyAddress === "") {
+                                                toast(
+                                                    "Querying lobby address, please try again later",
+                                                );
+                                            } else if (
+                                                lobbyGameAddress !== ZERO_DATA
+                                            ) {
+                                                navigate(
+                                                    `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
+                                                );
+                                            } else if (
+                                                activeLobbyAddress === ZERO_DATA
+                                            ) {
+                                                setIsPrivateLobbyMode.on();
+                                            } else {
+                                                onPreviousLobbyModalOpen();
+                                            }
+                                        }}
+                                    >
+                                        <Image src={MLobbyIcon}></Image>
+                                        <Text
+                                            sx={{
+                                                fontSize: "12px",
+                                            }}
+                                        >
+                                            Lobby Game
+                                        </Text>
+                                    </Flex>
+                                </Flex>
                             )}
                         </motion.div>
                     </Box>
@@ -614,7 +689,16 @@ const TacToeMode = () => {
                     </Box> */}
                 </Box>
 
-                {!isPrivateLobbyMode && (
+                <Box
+                    sx={{
+                        position: "absolute",
+                        left: "50%",
+                        bottom: 0,
+                        transform: "translate(-50%, 0)",
+                        width: isPc ? "800px" : "100%",
+                        display: isPrivateLobbyMode ? "none" : "block",
+                    }}
+                >
                     <SelectPlane
                         selectPlane={selectPlane}
                         onSelectPlane={(plane: any) => {
@@ -625,29 +709,32 @@ const TacToeMode = () => {
                             setSelectPlane(plane);
                         }}
                     ></SelectPlane>
+                </Box>
+
+                {isPc && (
+                    <LeftButton
+                        onPlayTestLobby={async () => {
+                            gameAudio.play();
+                            if (activeLobbyAddress === "") {
+                                toast(
+                                    "Querying lobby address, please try again later",
+                                );
+                            } else if (lobbyGameAddress !== ZERO_DATA) {
+                                navigate(
+                                    `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
+                                );
+                            } else if (activeLobbyAddress === ZERO_DATA) {
+                                setIsPrivateLobbyMode.on();
+                            } else {
+                                onPreviousLobbyModalOpen();
+                            }
+                        }}
+                        onPlayWithBot={() => {
+                            gameAudio.play();
+                            handleMintPlayTest("bot");
+                        }}
+                    ></LeftButton>
                 )}
-                <LeftButton
-                    onPlayTestLobby={async () => {
-                        gameAudio.play();
-                        if (activeLobbyAddress === "") {
-                            toast(
-                                "Querying lobby address, please try again later",
-                            );
-                        } else if (lobbyGameAddress !== ZERO_DATA) {
-                            navigate(
-                                `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
-                            );
-                        } else if (activeLobbyAddress === ZERO_DATA) {
-                            setIsPrivateLobbyMode.on();
-                        } else {
-                            onPreviousLobbyModalOpen();
-                        }
-                    }}
-                    onPlayWithBot={() => {
-                        gameAudio.play();
-                        handleMintPlayTest("bot");
-                    }}
-                ></LeftButton>
                 <PreviousLobbyModal
                     lobbyName={lobbyName}
                     isOpen={isPreviousLobbyModalOpen}

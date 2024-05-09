@@ -46,7 +46,7 @@ const QuitModal = ({
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
             <ModalOverlay />
             <ModalContent
                 bg="rgba(255, 255, 255, 0.7)"

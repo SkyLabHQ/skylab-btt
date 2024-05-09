@@ -95,13 +95,14 @@ const SelectPlane = ({
         handleGetUserPaper();
     }, [multiMercuryJarTournamentContract, multiProvider, address]);
     return (
-        <Box
-            sx={{
-                marginTop: "30px",
-            }}
-        >
+        <Box>
             <Flex justify={"center"} align={"center"}>
-                <Image src={TipIcon}></Image>
+                <Image
+                    src={TipIcon}
+                    sx={{
+                        marginRight: "4px",
+                    }}
+                ></Image>
                 <Text
                     sx={{
                         color: "#F2D861",
@@ -114,10 +115,12 @@ const SelectPlane = ({
             </Flex>
             <Box
                 sx={{
-                    width: "800px",
-                    borderRadius: "18px",
+                    borderRadius: "18px 18px 0 0",
                     border: "1px solid #FFF",
-                    height: "calc(100vh - 560px)",
+                    borderBottom: "none",
+                    height: isPc
+                        ? "calc(100vh - 560px)"
+                        : "calc(100vh - 300px)",
                     marginTop: "10px",
                     overflow: "auto",
                 }}
@@ -130,7 +133,7 @@ const SelectPlane = ({
                 >
                     <Text
                         sx={{
-                            fontSize: "30px",
+                            fontSize: isPc ? "30px" : "20px",
                             textAlign: "center",
                             marginTop: "20px",
                             fontFamily: "Orbitron",
@@ -148,27 +151,32 @@ const SelectPlane = ({
                     >
                         {planeListInit ? (
                             <SimpleGrid
-                                columns={4}
+                                columns={isPc ? 4 : 3}
                                 sx={{
                                     position: "relative",
                                 }}
                                 spacingY={"30px"}
                             >
-                                {new Array(4).fill("").map((item, index) => {
-                                    return (
-                                        <Box
-                                            sx={{
-                                                position: "relative",
-                                            }}
-                                            key={index}
-                                        >
-                                            <Image src={BiddingGif}></Image>
-                                        </Box>
-                                    );
-                                })}
+                                {new Array(isPc ? 4 : 3)
+                                    .fill("")
+                                    .map((item, index) => {
+                                        return (
+                                            <Box
+                                                sx={{
+                                                    position: "relative",
+                                                }}
+                                                key={index}
+                                            >
+                                                <Image src={BiddingGif}></Image>
+                                            </Box>
+                                        );
+                                    })}
                             </SimpleGrid>
                         ) : planeList.length > 0 ? (
-                            <SimpleGrid columns={4} spacingY={"20px"}>
+                            <SimpleGrid
+                                columns={isPc ? 4 : 3}
+                                spacingY={"20px"}
+                            >
                                 {planeList.map((detail, index) => {
                                     const isSelected =
                                         selectPlane?.tokenId === detail.tokenId;
@@ -186,7 +194,9 @@ const SelectPlane = ({
                                         >
                                             <Text
                                                 sx={{
-                                                    fontSize: "16px",
+                                                    fontSize: isPc
+                                                        ? "16px"
+                                                        : "14px",
                                                 }}
                                             >
                                                 #{detail.tokenId}

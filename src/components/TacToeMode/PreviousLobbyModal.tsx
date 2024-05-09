@@ -30,7 +30,7 @@ const PreviousLobbyModal = ({
             <ModalContent
                 bg="#383838"
                 border={isPc ? "3px solid #fff" : "1px solid #fff"}
-                borderRadius={isPc ? "20px" : "8px"}
+                borderRadius={isPc ? "20px" : "12px"}
                 sx={{
                     width: isPc ? "600px" : "350px",
                     maxWidth: isPc && "600px",
@@ -47,7 +47,7 @@ const PreviousLobbyModal = ({
                     <Text
                         fontSize={isPc ? "24px" : "20px"}
                         sx={{
-                            marginTop: "20px",
+                            marginTop: isPc ? "20px" : "10px",
                         }}
                     >
                         You were previously in
@@ -55,7 +55,7 @@ const PreviousLobbyModal = ({
                     <Text
                         fontSize={isPc ? "24px" : "20px"}
                         sx={{
-                            marginTop: "20px",
+                            marginTop: isPc ? "20px" : "10px",
                             color: "#FDDC2D",
                         }}
                     >
@@ -64,7 +64,7 @@ const PreviousLobbyModal = ({
                     <Text
                         fontSize={isPc ? "24px" : "20px"}
                         sx={{
-                            marginTop: "20px",
+                            marginTop: isPc ? "20px" : "10px",
                         }}
                     >
                         Do you want to re-join
@@ -74,13 +74,13 @@ const PreviousLobbyModal = ({
                 <ModalFooter
                     display="flex"
                     justifyContent="space-between"
-                    pt="50px"
+                    pt={isPc ? "50px" : "20px"}
                 >
                     <Button
                         onClick={onConfirm}
                         fontSize={isPc ? "24px" : "20px"}
                         w={isPc ? "210px" : "120px"}
-                        padding="32px 0"
+                        padding={isPc ? "32px 0" : "20px 0"}
                         borderRadius={isPc ? "20px" : "8px"}
                         fontWeight={400}
                         height={isPc ? "56px" : "32px"}
@@ -93,7 +93,7 @@ const PreviousLobbyModal = ({
                         fontSize={isPc ? "24px" : "20px"}
                         w={isPc ? "210px" : "120px"}
                         height={isPc ? "56px" : "32px"}
-                        padding="32px 0"
+                        padding={isPc ? "32px 0" : "20px 0"}
                         borderRadius={isPc ? "20px" : "8px"}
                         fontWeight={400}
                         variant={"outline"}

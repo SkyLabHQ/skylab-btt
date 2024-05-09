@@ -768,7 +768,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 height: "90px",
                             }}
                         >
-                            {myGameInfo.gameState < GameState.Commited && (
+                            {myGameInfo.gameState < GameState.Revealed && (
                                 <Timer
                                     time1={autoCommitTimeoutTime}
                                     time2={bufferTime}

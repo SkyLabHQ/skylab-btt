@@ -28,7 +28,7 @@ export const PlayButtonGroup = ({
                         borderRadius: "18px !important",
                     },
                     "& .text-wrapper": {
-                        width: `${isPc ? "300px" : "180px"} !important`,
+                        width: `${isPc ? "300px" : "140px"} !important`,
                     },
                     "& .play-button-text": {
                         fontSize: isPc ? "32px" : "20px",
@@ -83,7 +83,9 @@ export const PlayButtonGroup = ({
                         onPlayTournament();
                     }}
                     sx={{
-                        paddingLeft: "100px !important",
+                        paddingLeft: isPc
+                            ? "100px !important"
+                            : "40px !important",
                         marginTop: isPc ? "36px" : "20px",
                         background: tournamentDisabled && "#787878",
                         cursor: tournamentDisabled
@@ -96,7 +98,7 @@ export const PlayButtonGroup = ({
                         sx={{
                             width: isPc ? "120px" : "80px",
                             position: "absolute",
-                            left: "5px",
+                            left: "-10px",
                             top: "50%",
                             transform: "translateY(-50%)",
                         }}
