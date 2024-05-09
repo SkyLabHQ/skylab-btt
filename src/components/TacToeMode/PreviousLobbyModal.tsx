@@ -25,7 +25,7 @@ const PreviousLobbyModal = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
             <ModalOverlay />
             <ModalContent
                 bg="#383838"

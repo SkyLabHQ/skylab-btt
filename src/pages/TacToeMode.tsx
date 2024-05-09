@@ -5,8 +5,6 @@ import {
     useBoolean,
     useDisclosure,
     useMediaQuery,
-    Image,
-    Flex,
     BoxProps,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
@@ -34,7 +32,7 @@ import {
 } from "@/hooks/useMultiContract";
 import { DEAFAULT_CHAINID, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
 import {
@@ -56,18 +54,16 @@ import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
 import ReactCanvasNest from "react-canvas-nest";
 import useCountDown from "react-countdown-hook";
-import EnterLoadingIcon from "@/assets/enter-loading.gif";
-import DotLoading from "@/components/Loading/DotLoading";
 import styled from "@emotion/styled";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import AvaitionDrawer from "@/components/TacToeMode/AvaitionDrawer";
-import CurrentPlane from "@/components/TacToeMode/CurrentPlane";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { usePrivy } from "@privy-io/react-auth";
 import StartCountDown from "@/components/StartCountDown";
 import { useUserInfo } from "@/contexts/UserInfo";
 import useStartGame from "@/hooks/useStartGame";
 import GameMp3 from "@/assets/game.mp3";
+import LeftButton from "@/components/TacToeMode/LeftButton";
+import SelectPlane from "@/components/TacToeMode/SelectPlane";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -477,7 +473,7 @@ const TacToeMode = () => {
                 sx={{
                     display: "flex",
                     alignItems: "center",
-                    paddingTop: "10vh",
+                    paddingTop: "120px",
                     flexDirection: "column",
                     height: "100%",
                     background: "rgb(54,54,54,0.5)",
@@ -491,8 +487,8 @@ const TacToeMode = () => {
                 <Box
                     sx={{
                         position: "absolute",
-                        left: "1.0417vw",
-                        top: "1.0417vw",
+                        left: "20px",
+                        top: "20px",
                     }}
                 >
                     <BackWithText
@@ -520,7 +516,6 @@ const TacToeMode = () => {
                         alignItems: "center",
                         width: isPc ? "378px" : "250px",
                         justifyContent: "center",
-                        height: "100%",
                     }}
                 >
                     {isPc && !isPrivateLobbyMode && (
@@ -528,7 +523,7 @@ const TacToeMode = () => {
                     )}
                     <Box
                         sx={{
-                            paddingTop: "1.8229vw",
+                            paddingTop: isPrivateLobbyMode ? "230px" : "30px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -560,41 +555,17 @@ const TacToeMode = () => {
                                 ></PrivateLobbyButtons>
                             ) : (
                                 <PlayButtonGroup
-                                    tournamentDisabled={timeLeft1 > 0}
+                                    tournamentDisabled={!selectPlane?.tokenId}
                                     onPlayTournament={() => {
                                         gameAudio.play();
-                                        handleCreateOrJoinDefault();
-                                    }}
-                                    onPlayTestLobby={async () => {
-                                        gameAudio.play();
-                                        if (activeLobbyAddress === "") {
-                                            toast(
-                                                "Querying lobby address, please try again later",
-                                            );
-                                        } else if (
-                                            lobbyGameAddress !== ZERO_DATA
-                                        ) {
-                                            navigate(
-                                                `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
-                                            );
-                                        } else if (
-                                            activeLobbyAddress === ZERO_DATA
-                                        ) {
-                                            setIsPrivateLobbyMode.on();
-                                        } else {
-                                            onPreviousLobbyModalOpen();
-                                        }
-                                    }}
-                                    onPlayWithBot={() => {
-                                        gameAudio.play();
-
-                                        handleMintPlayTest("bot");
+                                        // handleCreateOrJoinDefault();
+                                        handleTournament();
                                     }}
                                 ></PlayButtonGroup>
                             )}
                         </motion.div>
                     </Box>
-                    <Box
+                    {/* <Box
                         sx={{
                             display: "flex",
                             alignItems: "center",
@@ -640,42 +611,49 @@ const TacToeMode = () => {
                                 </Text>
                             </Flex>
                         )}
-                    </Box>
+                    </Box> */}
                 </Box>
-                {!isPrivateLobbyMode && isPc && (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            position: "absolute",
-                            bottom: "6.6042vw",
-                            left: "6.25vw",
-                        }}
-                    >
-                        <CurrentPlane selectPlane={selectPlane}></CurrentPlane>
-                    </Box>
-                )}
 
+                {!isPrivateLobbyMode && (
+                    <SelectPlane
+                        selectPlane={selectPlane}
+                        onSelectPlane={(plane: any) => {
+                            if (plane.tokenId === selectPlane.tokenId) {
+                                setSelectPlane({});
+                                return;
+                            }
+                            setSelectPlane(plane);
+                        }}
+                    ></SelectPlane>
+                )}
+                <LeftButton
+                    onPlayTestLobby={async () => {
+                        gameAudio.play();
+                        if (activeLobbyAddress === "") {
+                            toast(
+                                "Querying lobby address, please try again later",
+                            );
+                        } else if (lobbyGameAddress !== ZERO_DATA) {
+                            navigate(
+                                `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
+                            );
+                        } else if (activeLobbyAddress === ZERO_DATA) {
+                            setIsPrivateLobbyMode.on();
+                        } else {
+                            onPreviousLobbyModalOpen();
+                        }
+                    }}
+                    onPlayWithBot={() => {
+                        gameAudio.play();
+                        handleMintPlayTest("bot");
+                    }}
+                ></LeftButton>
                 <PreviousLobbyModal
                     lobbyName={lobbyName}
                     isOpen={isPreviousLobbyModalOpen}
                     onConfirm={handlePreviousLobbyConfirm}
                     onClose={handlePreviousLobbyClose}
                 ></PreviousLobbyModal>
-                <AvaitionDrawer
-                    selectPlane={selectPlane}
-                    isOpen={isMyAviationOpen}
-                    onClose={onMyAviationClose}
-                    onSelectPlane={(plane: any) => {
-                        if (plane.tokenId === selectPlane.tokenId) {
-                            setSelectPlane({});
-                            return;
-                        }
-                        setSelectPlane(plane);
-                    }}
-                    onPlay={handleTournament}
-                ></AvaitionDrawer>
             </Box>
             <ReactCanvasNest
                 className="canvasNest"
