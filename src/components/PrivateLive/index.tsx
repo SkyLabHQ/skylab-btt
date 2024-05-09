@@ -167,14 +167,12 @@ const MBttLiveGame = ({
                             bottom: "12px",
                         }}
                     >
-                        {myGameInfo.gameState < GameState.Commited && (
+                        {myGameInfo.gameState < GameState.Revealed && (
                             <Timer
                                 direction="top"
                                 time1={autoCommitTimeoutTime}
                                 time2={bufferTime}
-                                time1Gray={
-                                    myGameInfo.gameState === GameState.Commited
-                                }
+                                time1Gray={false}
                             ></Timer>
                         )}
                     </Box>
@@ -675,14 +673,11 @@ const BttLiveGamePage = () => {
                                     }}
                                 >
                                     {myGameInfo.gameState <
-                                        GameState.Commited && (
+                                        GameState.Revealed && (
                                         <Timer
                                             time1={autoCommitTimeoutTime}
                                             time2={bufferTime}
-                                            time1Gray={
-                                                myGameInfo.gameState ===
-                                                GameState.Commited
-                                            }
+                                            time1Gray={false}
                                         ></Timer>
                                     )}
                                 </Box>

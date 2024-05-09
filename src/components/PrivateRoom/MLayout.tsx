@@ -144,7 +144,7 @@ const MLayout = ({
                     }}
                 >
                     <Flex justify={"space-between"} align={"flex-end"}>
-                        {myGameInfo.gameState < GameState.Commited && (
+                        {myGameInfo.gameState < GameState.Revealed && (
                             <Box
                                 sx={{
                                     width: "160px",
@@ -157,10 +157,7 @@ const MLayout = ({
                                     direction="top"
                                     time1={autoCommitTimeoutTime}
                                     time2={bufferTime}
-                                    time1Gray={
-                                        myGameInfo.gameState ===
-                                            GameState.Commited || loading
-                                    }
+                                    time1Gray={loading}
                                 ></Timer>
                             </Box>
                         )}

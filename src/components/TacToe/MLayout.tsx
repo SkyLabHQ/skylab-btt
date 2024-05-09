@@ -159,10 +159,7 @@ const MLayout = ({
                                     direction="top"
                                     time1={autoCommitTimeoutTime}
                                     time2={bufferTime}
-                                    time1Gray={
-                                        myGameInfo.gameState ===
-                                            GameState.Commited || loading
-                                    }
+                                    time1Gray={loading}
                                 ></Timer>
                             </Box>
                         )}

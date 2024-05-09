@@ -74,6 +74,7 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const commitWorkerRef = useRef<Worker>(null);
+    const revealWorkerRef = useRef<Worker>(null);
     const callTimeoutWorkerRef = useRef<Worker>(null);
 
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
@@ -590,6 +591,55 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         }
     };
 
+    const handleRevealWorker = () => {
+        if (revealWorkerRef.current) {
+            revealWorkerRef.current.terminate();
+        }
+        if (
+            myGameInfo.gameState !== GameState.Commited ||
+            !bidTacToeGameAddress
+        ) {
+            return;
+        }
+        revealWorkerRef.current = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+        const time = myGameInfo.timeout * 1000;
+        const now = getNowSecondsTimestamp();
+        revealWorkerRef.current.onmessage = async (event) => {
+            const timeLeft = event.data;
+            setAutoCommitTimeoutTime(timeLeft);
+
+            if (timeLeft === 0) {
+                handleBid();
+            }
+        };
+
+        const remainTime = time - now;
+        if (remainTime > ThirtySecond) {
+            let temBufferTime = -1;
+            if (bufferTime === -1) {
+                if (remainTime > SixtySecond) {
+                    temBufferTime = remainTime - SixtySecond;
+                } else if (remainTime > ThirtySecond) {
+                    temBufferTime = remainTime - ThirtySecond;
+                } else {
+                    temBufferTime = remainTime;
+                }
+                setBufferTime(temBufferTime);
+            }
+
+            revealWorkerRef.current.postMessage({
+                action: "start",
+                timeToCount: remainTime - ThirtySecond,
+            });
+        } else {
+            revealWorkerRef.current.postMessage({
+                action: "stop",
+            });
+        }
+    };
+
     const handleCallTimeoutWorkerRef = () => {
         if (callTimeoutWorkerRef.current) {
             callTimeoutWorkerRef.current.terminate();
@@ -642,6 +692,16 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     ]);
 
     useEffect(() => {
+        handleRevealWorker();
+    }, [
+        myGameInfo.gameState,
+        myGameInfo.timeout,
+        myGameInfo.gameState,
+        currentGrid,
+        loading,
+    ]);
+
+    useEffect(() => {
         handleCallTimeoutWorkerRef();
     }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
 
@@ -655,11 +715,16 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 if (commitWorkerRef.current) {
                     commitWorkerRef.current.terminate();
                 }
+                if (revealWorkerRef.current) {
+                    revealWorkerRef.current.terminate();
+                }
+
                 if (callTimeoutWorkerRef.current) {
                     callTimeoutWorkerRef.current.terminate();
                 }
             } else {
                 handleCommitWorker();
+                handleRevealWorker();
                 handleCallTimeoutWorkerRef();
             }
         };
@@ -707,10 +772,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 <Timer
                                     time1={autoCommitTimeoutTime}
                                     time2={bufferTime}
-                                    time1Gray={
-                                        myGameInfo.gameState ===
-                                            GameState.Commited || loading
-                                    }
+                                    time1Gray={loading}
                                 ></Timer>
                             )}
                         </Box>
