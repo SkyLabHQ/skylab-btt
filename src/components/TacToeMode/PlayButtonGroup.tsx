@@ -28,7 +28,7 @@ export const PlayButtonGroup = ({
                         borderRadius: "18px !important",
                     },
                     "& .text-wrapper": {
-                        width: `${isPc ? "300px" : "140px"} !important`,
+                        width: `${isPc ? "280px" : "140px"} !important`,
                     },
                     "& .play-button-text": {
                         fontSize: isPc ? "32px" : "20px",

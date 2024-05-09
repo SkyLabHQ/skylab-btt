@@ -576,23 +576,25 @@ const TacToeMode = () => {
                                     justify={"space-between"}
                                     align={"flex-end"}
                                 >
-                                    <Flex
-                                        flexDir={"column"}
-                                        align={"center"}
-                                        onClick={() => {
-                                            gameAudio.play();
-                                            handleMintPlayTest("bot");
-                                        }}
-                                    >
-                                        <Image src={MRobotIcon}></Image>
-                                        <Text
-                                            sx={{
-                                                fontSize: "12px",
+                                    {!isPc && (
+                                        <Flex
+                                            flexDir={"column"}
+                                            align={"center"}
+                                            onClick={() => {
+                                                gameAudio.play();
+                                                handleMintPlayTest("bot");
                                             }}
                                         >
-                                            Bot Game
-                                        </Text>
-                                    </Flex>
+                                            <Image src={MRobotIcon}></Image>
+                                            <Text
+                                                sx={{
+                                                    fontSize: "12px",
+                                                }}
+                                            >
+                                                Bot Game
+                                            </Text>
+                                        </Flex>
+                                    )}
                                     <PlayButtonGroup
                                         tournamentDisabled={
                                             !selectPlane?.tokenId
@@ -603,39 +605,43 @@ const TacToeMode = () => {
                                             handleTournament();
                                         }}
                                     ></PlayButtonGroup>
-                                    <Flex
-                                        flexDir={"column"}
-                                        align={"center"}
-                                        onClick={async () => {
-                                            gameAudio.play();
-                                            if (activeLobbyAddress === "") {
-                                                toast(
-                                                    "Querying lobby address, please try again later",
-                                                );
-                                            } else if (
-                                                lobbyGameAddress !== ZERO_DATA
-                                            ) {
-                                                navigate(
-                                                    `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
-                                                );
-                                            } else if (
-                                                activeLobbyAddress === ZERO_DATA
-                                            ) {
-                                                setIsPrivateLobbyMode.on();
-                                            } else {
-                                                onPreviousLobbyModalOpen();
-                                            }
-                                        }}
-                                    >
-                                        <Image src={MLobbyIcon}></Image>
-                                        <Text
-                                            sx={{
-                                                fontSize: "12px",
+                                    {!isPc && (
+                                        <Flex
+                                            flexDir={"column"}
+                                            align={"center"}
+                                            onClick={async () => {
+                                                gameAudio.play();
+                                                if (activeLobbyAddress === "") {
+                                                    toast(
+                                                        "Querying lobby address, please try again later",
+                                                    );
+                                                } else if (
+                                                    lobbyGameAddress !==
+                                                    ZERO_DATA
+                                                ) {
+                                                    navigate(
+                                                        `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
+                                                    );
+                                                } else if (
+                                                    activeLobbyAddress ===
+                                                    ZERO_DATA
+                                                ) {
+                                                    setIsPrivateLobbyMode.on();
+                                                } else {
+                                                    onPreviousLobbyModalOpen();
+                                                }
                                             }}
                                         >
-                                            Lobby Game
-                                        </Text>
-                                    </Flex>
+                                            <Image src={MLobbyIcon}></Image>
+                                            <Text
+                                                sx={{
+                                                    fontSize: "12px",
+                                                }}
+                                            >
+                                                Lobby Game
+                                            </Text>
+                                        </Flex>
+                                    )}
                                 </Flex>
                             )}
                         </motion.div>
