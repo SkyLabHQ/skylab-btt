@@ -33,6 +33,7 @@ import { levelRanges } from "@/utils/level";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import useCountDown from "react-countdown-hook";
 import HourglassIcon from "./assets/hourglass.png";
+import ETHIcon from "./assets/eth.svg";
 
 const Timer = ({ time }: { time: number }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -461,7 +462,7 @@ const LevelLeaderboardModal = ({
                 <ModalBody
                     sx={{
                         position: "relative",
-                        padding: "10px",
+                        padding: "0",
                     }}
                 >
                     <Timer time={levelInfoDetail?.claimTime}></Timer>
@@ -507,7 +508,6 @@ const LevelLeaderboardModal = ({
                     <Box
                         sx={{
                             overflow: "auto",
-                            height: isPc ? "600px" : "300px",
                         }}
                     >
                         {
@@ -564,40 +564,75 @@ const LevelLeaderboardModal = ({
                                 </Text>
                             </Box>
                         }
-                        {loading ? (
-                            <Flex
-                                flexDir={"column"}
-                                align={"center"}
-                                justify={"center"}
-                                sx={{
-                                    marginTop: isPc ? "40px" : "20px",
-                                }}
-                            >
-                                <Image
-                                    src={BiddingGif}
+                        <Box
+                            sx={{
+                                borderBottom: "2px solid #FDDC2D",
+                                borderRadius: "0 0 16px 16px",
+                                height: isPc ? "300px" : "100px",
+                            }}
+                        >
+                            {loading ? (
+                                <Flex
+                                    flexDir={"column"}
+                                    align={"center"}
+                                    justify={"center"}
                                     sx={{
-                                        width: isPc ? "160px" : "50px",
+                                        marginTop: isPc ? "40px" : "20px",
                                     }}
-                                ></Image>
-                            </Flex>
-                        ) : (
-                            <SimpleGrid
-                                columns={isPc ? 5 : 3}
+                                >
+                                    <Image
+                                        src={BiddingGif}
+                                        sx={{
+                                            width: isPc ? "160px" : "50px",
+                                        }}
+                                    ></Image>
+                                </Flex>
+                            ) : (
+                                <SimpleGrid
+                                    columns={isPc ? 5 : 3}
+                                    sx={{
+                                        marginTop: isPc ? "40px" : "20px",
+                                    }}
+                                    spacingY={"10px"}
+                                >
+                                    {leaderBoardList.map((item, index) => {
+                                        return (
+                                            <InfoItem
+                                                detail={item}
+                                                key={index}
+                                            ></InfoItem>
+                                        );
+                                    })}
+                                </SimpleGrid>
+                            )}
+                        </Box>
+
+                        <Flex
+                            justify={"center"}
+                            align={"center"}
+                            sx={{
+                                fontSize: isPc ? "40px" : "18px",
+                                color: "#FFECC7",
+                                fontFamily: "Neon",
+                                height: isPc ? "80px" : "32px",
+                            }}
+                        >
+                            <Image
+                                src={ETHIcon}
                                 sx={{
-                                    marginTop: isPc ? "40px" : "20px",
+                                    width: isPc ? "20px" : "12px",
+                                    marginRight: isPc ? "24px" : "8px",
                                 }}
-                                spacingY={"10px"}
+                            ></Image>
+                            <Text
+                                sx={{
+                                    marginRight: isPc ? "12px" : "8px",
+                                }}
                             >
-                                {leaderBoardList.map((item, index) => {
-                                    return (
-                                        <InfoItem
-                                            detail={item}
-                                            key={index}
-                                        ></InfoItem>
-                                    );
-                                })}
-                            </SimpleGrid>
-                        )}
+                                0.12
+                            </Text>
+                            <Text>ETH</Text>
+                        </Flex>
                     </Box>
                 </ModalBody>
                 <Image
