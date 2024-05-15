@@ -456,7 +456,7 @@ const Games = () => {
             openLoading();
             await bttPrivateLobbyContract(
                 "createRoom",
-                [[3, 3, 3, 100, 1, 0, false]],
+                [[3, 3, 3, 100, 1, 0, false, 90]],
                 {
                     usePaymaster: true,
                     signer: localSinger,
