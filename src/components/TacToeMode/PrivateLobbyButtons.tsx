@@ -28,7 +28,7 @@ const PrivateLobbyButtons = ({
                     borderRadius: "18px !important",
                 },
                 "& .text-wrapper": {
-                    width: `${isPc ? "300px" : "180px"} !important`,
+                    width: `${isPc ? "250px" : "180px"} !important`,
                 },
                 "& .play-button-text": {
                     fontSize: isPc ? "32px" : "20px",

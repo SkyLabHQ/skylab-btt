@@ -150,9 +150,6 @@ const TacToeMode = () => {
 
     const toast = useSkyToast();
 
-    const [enterText, setEnterText] = useState("");
-    const mercuryBaseContract = useMercuryBaseContract(true);
-    const [loading, setLoading] = useState(false);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
     const { isBlock, blockOpen, handleBlock } = useUserInfo();
@@ -166,7 +163,6 @@ const TacToeMode = () => {
     );
     const { data: signer } = useWalletClient();
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
-    const burnerRetryContract = useBurnerRetryContract(contract);
     const testflightContract = useTestflightRetryContract();
 
     const bttFactoryRetryTest = useBttFactoryRetry(true, signer);
@@ -205,12 +201,10 @@ const TacToeMode = () => {
                 TESTFLIGHT_CHAINID,
                 true,
             );
+            openLoading();
             const { sCWAddress } = await getSCWallet(
                 testflightSinger.privateKey,
             );
-            setLoading(true);
-            setEnterText("Entering bot game");
-            start(60000);
 
             const receipt = await testflightContract("playTestMint", [], {
                 usePaymaster: true,
@@ -225,47 +219,32 @@ const TacToeMode = () => {
                 topics: transferLog.topics,
             });
             const tokenId = transferData.args.tokenId.toNumber();
-
-            if (type === "bot") {
-                await bttFactoryRetryTest(
-                    "approveForGame",
-                    [
-                        sCWAddress,
-                        tokenId,
-                        skylabTestFlightAddress[TESTFLIGHT_CHAINID],
-                    ],
-                    {
-                        usePaymaster: true,
-                    },
-                );
-
-                await bttFactoryRetryTest(
-                    "createBotGame",
-                    [botAddress[TESTFLIGHT_CHAINID]],
-                    {
-                        usePaymaster: true,
-                    },
-                );
-                const url = `/btt/game?tokenId=${tokenId}&testflight=true`;
-                navigate(url);
-            } else if (type === "human") {
-                await checkBurnerBalanceAndApprove(
-                    mercuryBaseContract.address,
+            await bttFactoryRetryTest(
+                "approveForGame",
+                [
+                    sCWAddress,
                     tokenId,
-                    testflightSinger.account.address,
-                );
-                await burnerRetryContract("createOrJoinDefault", [], {
-                    gasLimit: 1000000,
-                    signer: testflightSinger,
-                });
+                    skylabTestFlightAddress[TESTFLIGHT_CHAINID],
+                ],
+                {
+                    usePaymaster: true,
+                },
+            );
 
-                const url = `/btt/game?tokenId=${tokenId}&testflight=true`;
-                navigate(url);
-            }
+            await bttFactoryRetryTest(
+                "createBotGame",
+                [botAddress[TESTFLIGHT_CHAINID]],
+                {
+                    usePaymaster: true,
+                },
+            );
+            const url = `/btt/game?tokenId=${tokenId}&testflight=true`;
+            closeLoading();
+            navigate(url);
         } catch (error) {
             console.log(error);
-            setLoading(false);
             toast(handleError(error, true));
+            closeLoading();
         }
     };
 
@@ -324,9 +303,7 @@ const TacToeMode = () => {
 
     const handleCreatePrivateLobby = async () => {
         try {
-            setLoading(true);
-            setEnterText("Entering lobby");
-            start();
+            openLoading();
             const privateLobbySigner = getPrivateLobbySigner();
             if (bttPrivateLobbyContract) {
                 await bttPrivateLobbyContract("quitPrivateLobby", [], {
@@ -383,10 +360,11 @@ const TacToeMode = () => {
 
             const url =
                 `/btt/lobby?lobbyAddress=` + result.args.privateLobbyAddress;
+            closeLoading();
             navigate(url);
         } catch (error) {
+            closeLoading();
             console.log(error);
-            setLoading(false);
             toast(handleError(error, true));
         }
     };
@@ -529,7 +507,7 @@ const TacToeMode = () => {
                         sx={{
                             paddingTop: isPrivateLobbyMode
                                 ? isPc
-                                    ? "230px"
+                                    ? "200px"
                                     : "130px"
                                 : "30px",
                             display: "flex",
@@ -646,53 +624,6 @@ const TacToeMode = () => {
                             )}
                         </motion.div>
                     </Box>
-                    {/* <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginTop: "10vh",
-                            height: "2.2917vw",
-                        }}
-                    >
-                        {loading && (
-                            <Flex
-                                flexDir={"column"}
-                                align={"center"}
-                                sx={{
-                                    marginTop: "10px",
-                                }}
-                            >
-                                <DotLoading
-                                    text={enterText}
-                                    fontSize={isPc ? "1.25vw" : "16px"}
-                                ></DotLoading>
-
-                                <Image
-                                    src={EnterLoadingIcon}
-                                    sx={{
-                                        width: "65px",
-                                    }}
-                                ></Image>
-                                <Text
-                                    sx={{
-                                        fontSize: isPc ? "1.25vw" : "20px",
-                                    }}
-                                >
-                                    {minutes}:{second}
-                                </Text>
-                                <Text
-                                    sx={{
-                                        fontSize: isPc ? "1.25vw" : "12px",
-                                    }}
-                                >
-                                    Average time:{" "}
-                                    {enterText === "Entering lobby"
-                                        ? "20sec"
-                                        : "30sec"}
-                                </Text>
-                            </Flex>
-                        )}
-                    </Box> */}
                 </Box>
 
                 <Box
