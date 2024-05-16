@@ -284,7 +284,7 @@ const TacToeMode = () => {
                 defaultSinger.account.address,
             );
 
-            await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
+            await tacToeFactoryRetryWrite("createOrJoinDefault", [false], {
                 gasLimit: 1000000,
                 signer: defaultSinger,
             });

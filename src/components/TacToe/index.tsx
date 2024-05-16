@@ -314,7 +314,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
 
         try {
             await tacToeGameRetryWrite("claimTimeoutPenalty", [], {
-                gasLimit: 500000,
+                gasLimit: 5000000,
                 usePaymaster: istest,
             });
             handleGetGameInfo();
@@ -804,12 +804,14 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                             <MyUserCard
                                 pilotInfo={myActivePilot}
                                 loading={loading}
+                                revealing={revealing}
                                 messageLoading={messageLoading}
                                 emoteLoading={emoteLoading}
                                 showAdvantageTip={
                                     myInfo.burner === nextDrawWinner
                                 }
                                 myGameState={myGameInfo.gameState}
+                                opGameState={opGameInfo.gameState}
                                 message={myGameInfo.message}
                                 emote={myGameInfo.emote}
                                 level={myInfo.level}
@@ -820,6 +822,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 balance={myGameInfo.balance}
                                 bidAmount={bidAmount}
                                 onConfirm={handleBid}
+                                onReveal={handleRevealedBid}
                                 onInputChange={handleBidAmount}
                                 status="my"
                                 planeUrl={myInfo.img}

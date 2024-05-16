@@ -15,6 +15,7 @@ import {
     NumberInput,
     NumberInputField,
     keyframes,
+    Flex,
 } from "@chakra-ui/react";
 import CopyIcon from "./assets/copy-icon.svg";
 import GoldIcon from "./assets/gold.svg";
@@ -248,21 +249,27 @@ export const Message = ({
 const MyBid = ({
     showTutorialStep,
     loading,
+    revealing,
     balance,
     bidAmount,
-    gameState,
+    myGameState,
+    opGameState,
     onInputChange,
     onConfirm,
     showAnimateConfirm,
+    onReveal,
 }: {
     showTutorialStep?: boolean;
     loading: boolean;
+    revealing: boolean;
     balance: number;
     bidAmount: number;
-    gameState: number;
+    myGameState: number;
+    opGameState: number;
     showAnimateConfirm?: number;
     onInputChange?: (value: number) => void;
     onConfirm: () => void;
+    onReveal: () => void;
 }) => {
     const countUpRef = React.useRef(null);
     const { update } = useCountUp({
@@ -271,6 +278,29 @@ const MyBid = ({
         duration: 1,
         prefix: "/ ",
     });
+
+    const [commitButtonText, status] = useMemo(() => {
+        console.log(myGameState, opGameState, "myGameState");
+        if (myGameState === GameState.WaitingForBid) {
+            return loading ? ["Confirming", 0] : ["Confirm", 1];
+        } else if (myGameState === GameState.Commited) {
+            if (opGameState === GameState.WaitingForBid) {
+                return ["Confirmed", 0];
+            } else if (
+                opGameState === GameState.Commited ||
+                opGameState === GameState.Revealed
+            ) {
+                if (revealing) {
+                    return ["Revealing", 0];
+                } else {
+                    return ["Reveal", 2];
+                }
+            }
+        } else if (myGameState === GameState.Revealed) {
+            return ["Revealed", 0];
+        }
+        return ["Confirm", 0];
+    }, [loading, revealing, myGameState, opGameState]);
 
     useEffect(() => {
         update(balance);
@@ -374,7 +404,7 @@ const MyBid = ({
                             <NumberInput
                                 isDisabled={
                                     loading ||
-                                    gameState !== GameState.WaitingForBid
+                                    myGameState !== GameState.WaitingForBid
                                 }
                                 variant="unstyled"
                                 max={balance}
@@ -433,7 +463,7 @@ const MyBid = ({
                 </Box>
             </Box>
             <>
-                {loading ? (
+                {/* {loading ? (
                     <Button
                         disabled={true}
                         variant={"outline"}
@@ -499,8 +529,35 @@ const MyBid = ({
                             ? "Confirmed"
                             : "Confirm"}
                     </Button>
-                )}
+                )} */}
             </>
+            <Flex
+                onClick={() => {
+                    const audio = new Audio(ConfirmVideo);
+                    audio.play();
+                    if (status === 1) {
+                        onConfirm();
+                    } else if (status === 2) {
+                        onReveal();
+                    }
+                }}
+                sx={{
+                    marginTop: "0.5208vw",
+                    fontSize: "0.8333vw",
+                    height: "2.2917vw",
+                    width: "6.25vw",
+                    background: status === 0 ? "transparent" : "#FDDC2D",
+                    borderRadius: "16px",
+                    color: status === 0 ? "#414141" : "#1b1b1b",
+                    fontWeight: "bold",
+                    animationIterationCount: "2",
+                    cursor: status === 0 ? "not-allowed" : "pointer",
+                }}
+                align={"center"}
+                justify={"center"}
+            >
+                {commitButtonText}
+            </Flex>
         </Box>
     );
 };
@@ -605,6 +662,7 @@ interface UserCardProps {
     showTutorialStep?: boolean;
     showAnimateConfirm?: number;
     loading?: boolean;
+    revealing?: boolean;
     messageLoading?: MessageStatus;
     emoteLoading?: MessageStatus;
     markIcon: UserMarkType;
@@ -623,6 +681,7 @@ interface UserCardProps {
     planeUrl?: string;
     onConfirm?: () => void;
     onInputChange?: (value: number) => void;
+    onReveal?: () => void;
 }
 
 export const AdvantageTip = ({
@@ -731,6 +790,7 @@ export const MyUserCard = ({
     showTutorialStep,
     level,
     loading,
+    revealing,
     markIcon,
     address,
     balance,
@@ -738,6 +798,7 @@ export const MyUserCard = ({
     showAdvantageTip,
     status = "my",
     myGameState,
+    opGameState,
     emote = 0,
     message = 0,
     messageIndex = 0,
@@ -747,6 +808,7 @@ export const MyUserCard = ({
     emoteLoading,
     onConfirm,
     onInputChange,
+    onReveal,
     showAnimateConfirm,
 }: UserCardProps) => {
     const { onCopy } = useClipboard(address ?? "");
@@ -881,11 +943,14 @@ export const MyUserCard = ({
                 <MyBid
                     showTutorialStep={showTutorialStep}
                     loading={loading}
+                    revealing={revealing}
                     balance={balance}
                     bidAmount={bidAmount}
                     onInputChange={onInputChange}
                     onConfirm={onConfirm}
-                    gameState={myGameState}
+                    onReveal={onReveal}
+                    myGameState={myGameState}
+                    opGameState={opGameState}
                     showAnimateConfirm={showAnimateConfirm}
                 ></MyBid>
             </Box>

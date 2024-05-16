@@ -47,6 +47,31 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "player1",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "player2",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "gameAddress",
+        "type": "address"
+      }
+    ],
+    "name": "StartGame",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "uint256",
         "name": "tokenId",
@@ -213,6 +238,11 @@
             "internalType": "bool",
             "name": "isBot",
             "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "universalTimeout",
+            "type": "uint256"
           }
         ],
         "internalType": "struct MercuryBidTacToe.GameParams",
@@ -237,7 +267,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "needComfirmation",
+        "type": "bool"
+      }
+    ],
     "name": "createOrJoinDefault",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -650,6 +686,11 @@
         "internalType": "bool",
         "name": "isBot",
         "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "universalTimeout",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

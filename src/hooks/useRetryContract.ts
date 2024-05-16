@@ -214,15 +214,15 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                         chainId,
                                     });
 
-                                    const gas =
-                                        // @ts-ignore
-                                        await publicClient.estimateContractGas({
-                                            address: contract.address,
-                                            abi: contract.abi,
-                                            functionName: method,
-                                            account: newSigner.account.address,
-                                            args: args,
-                                        });
+                                    // const gas =
+                                    //     // @ts-ignore
+                                    //     await publicClient.estimateContractGas({
+                                    //         address: contract.address,
+                                    //         abi: contract.abi,
+                                    //         functionName: method,
+                                    //         account: newSigner.account.address,
+                                    //         args: args,
+                                    //     });
 
                                     const nonce = await nonceManager.getNonce(
                                         provider,
@@ -230,14 +230,14 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                     );
 
                                     console.log("指定gas", gasLimit);
-                                    console.log("实际gas", gas);
+                                    // console.log("实际gas", gas);
 
-                                    const gas1 =
-                                        gasLimit && gasLimit > Number(gas)
-                                            ? gasLimit
-                                            : calculateGasMargin(
-                                                  Number(gas),
-                                              ).toNumber();
+                                    const gas1 = gasLimit;
+                                    // && gasLimit > Number(gas)
+                                    //     ? gasLimit
+                                    //     : calculateGasMargin(
+                                    //           Number(gas),
+                                    //       ).toNumber();
 
                                     const hash = await newSigner.writeContract({
                                         address: contract.address,
