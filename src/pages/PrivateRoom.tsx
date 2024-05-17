@@ -115,7 +115,7 @@ const PrivateRoom = () => {
                 });
             } else {
                 setOpInfo({
-                    address: playerAddress2,
+                    address: playerAddress1,
                     avatar: user1.avatar.toNumber() - 1,
                     name: user1.name,
                     mark: UserMarkType.Circle,
@@ -145,7 +145,7 @@ const PrivateRoom = () => {
                     loseCount: loseCount1.toNumber(),
                 });
                 setOpInfo({
-                    address: playerAddress1,
+                    address: playerAddress2,
                     avatar: user2.avatar.toNumber() - 1,
                     name: user2.name,
                     mark: UserMarkType.Cross,

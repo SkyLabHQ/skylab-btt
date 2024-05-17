@@ -68,7 +68,6 @@ const ContentComponent = (props: any) => {
                         return (
                             <Flex
                                 onClick={() => {
-                                    console.log(index, "---");
                                     props.setCurrentStep(index);
                                 }}
                                 key={index}

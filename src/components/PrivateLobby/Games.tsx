@@ -109,7 +109,7 @@ const Header = ({
     return (
         <Flex
             sx={{
-                height: isPc ? "125px" : "76px",
+                height: isPc ? "6.5104vw" : "76px",
                 borderRadius: "1.0417vw 1.0417vw 0 0",
                 background:
                     "linear-gradient(180deg, #303030 0%, rgba(120, 120, 120, 0.30) 100%)",
@@ -124,8 +124,8 @@ const Header = ({
                     sx={{
                         border: "1px solid #FDDC2D",
                         padding: "0.1563vw",
-                        width: isPc ? "96px" : "54px",
-                        height: isPc ? "96px" : "54px",
+                        width: isPc ? "5vw" : "54px",
+                        height: isPc ? "5vw" : "54px",
                         borderRadius: isPc ? "1.1458vw" : "10px",
                         marginRight: "1.25vw",
                     }}
@@ -456,7 +456,7 @@ const Games = () => {
             openLoading();
             await bttPrivateLobbyContract(
                 "createRoom",
-                [[3, 3, 3, 100, 1, 0, false, 90]],
+                [[3, 3, 3, 100, 1, 0, false, 12 * 60 * 60]],
                 {
                     usePaymaster: true,
                     signer: localSinger,
@@ -650,7 +650,7 @@ const Games = () => {
                 {isPc ? (
                     <Flex
                         sx={{
-                            height: "475px",
+                            height: "100%",
                         }}
                     >
                         <Box
@@ -675,7 +675,7 @@ const Games = () => {
                         <Box
                             sx={{
                                 width: "26.0417vw",
-                                height: "475px",
+                                height: "100%",
                             }}
                         >
                             <Vacant list={vacantList}></Vacant>

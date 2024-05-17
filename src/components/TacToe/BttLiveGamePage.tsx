@@ -48,7 +48,6 @@ interface Info {
 const MBttLiveGame = ({
     autoCommitTimeoutTime,
     myGameInfo,
-    bufferTime,
     opInfo,
     opGameInfo,
     myInfo,
@@ -177,11 +176,10 @@ const MBttLiveGame = ({
                             bottom: "12px",
                         }}
                     >
-                        {myGameInfo.gameState < GameState.Revealed && (
+                        {myGameInfo.gameState <= GameState.Revealed && (
                             <Timer
                                 direction="top"
                                 time1={autoCommitTimeoutTime}
-                                time2={bufferTime}
                                 time1Gray={false}
                             ></Timer>
                         )}
@@ -275,7 +273,6 @@ const BttLiveGamePage = () => {
     const ethcallProvider = useMultiProvider(params.chainId);
     const [bttGameAddress] = useState(params.gameAddress);
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
-    const [bufferTime, setBufferTime] = useState(0);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(params.chainId);
     const multiSkylabBidTacToeGameContract =
@@ -582,25 +579,10 @@ const BttLiveGamePage = () => {
 
         const remainTime = time - now;
 
-        if (remainTime > ThirtySecond) {
-            let bufferTime = 0;
-
-            if (Number(bufferTime) === 0 || remainTime > bufferTime) {
-                if (remainTime > SixtySecond) {
-                    bufferTime = remainTime - SixtySecond;
-                } else if (remainTime > ThirtySecond) {
-                    bufferTime = remainTime - ThirtySecond;
-                } else {
-                    bufferTime = remainTime;
-                }
-            } else {
-                bufferTime = remainTime;
-            }
-
-            setBufferTime(Number(bufferTime));
+        if (remainTime > 0) {
             commitWorkerRef.postMessage({
                 action: "start",
-                timeToCount: remainTime - ThirtySecond,
+                timeToCount: remainTime,
             });
         } else {
             commitWorkerRef.postMessage({
@@ -714,7 +696,6 @@ const BttLiveGamePage = () => {
                                         GameState.Revealed && (
                                         <Timer
                                             time1={autoCommitTimeoutTime}
-                                            time2={bufferTime}
                                             time1Gray={false}
                                         ></Timer>
                                     )}
@@ -793,7 +774,6 @@ const BttLiveGamePage = () => {
                     autoCommitTimeoutTime={autoCommitTimeoutTime}
                     myGameInfo={myGameInfo}
                     lastBidIndex={lastBidIndex}
-                    bufferTime={bufferTime}
                     opInfo={opInfo}
                     opGameInfo={opGameInfo}
                     myInfo={myInfo}

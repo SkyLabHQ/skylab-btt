@@ -486,7 +486,6 @@ const MTacToeTutorial = ({}) => {
                                 <Timer
                                     direction="top"
                                     time1={30000}
-                                    time2={0}
                                     time1Gray={false}
                                 ></Timer>
                             </Box>

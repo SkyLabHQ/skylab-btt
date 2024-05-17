@@ -29,8 +29,6 @@ import {
     GameInfo,
     GameState,
     MessageStatus,
-    SixtySecond,
-    ThirtySecond,
     UserMarkType,
     getWinState,
     winPatterns,
@@ -110,7 +108,6 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
 
     const ethcallProvider = useMultiProvider(realChainId);
     const [loading, setLoading] = useState<boolean>(false);
-    const [bufferTime, setBufferTime] = useState(-1);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 
     const inviteLink = useMemo(() => {
@@ -186,9 +183,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 setShowAnimate(resCurrentGrid.toNumber());
             } else if (resCurrentGrid.toNumber() !== currentGrid) {
                 setShowAnimate(currentGrid);
-                setBufferTime(-1);
             }
-
             const _list = JSON.parse(JSON.stringify(list));
             const gameState = myGameState.toNumber();
             for (let i = 0; i < boardGrids.length; i++) {
@@ -417,17 +412,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         handleGetGameInfo();
     }, [blockNumber, multiSkylabBidTacToeGameContract, ethcallProvider]);
 
-    // useEffect(() => {
-    //     if (revealing || loading) return;
-    //     if (
-    //         myGameInfo.gameState === GameState.Commited &&
-    //         (opGameInfo.gameState === GameState.Commited ||
-    //             opGameInfo.gameState === GameState.Revealed)
-    //     ) {
-    //         handleRevealedBid();
-    //     }
-    // }, [loading, myGameInfo.gameState, opGameInfo.gameState, getGridCommited]);
-
     // game over
     const handleGameOver = async () => {
         if (myGameInfo.gameState <= GameState.Revealed) return;
@@ -547,7 +531,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             commitWorkerRef.current.terminate();
         }
         if (
-            myGameInfo.gameState !== GameState.WaitingForBid ||
+            (!myGameInfo.timeout && !opGameInfo.timeout) ||
             !bidTacToeGameAddress
         ) {
             return;
@@ -555,86 +539,20 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         commitWorkerRef.current = new Worker(
             new URL("../../utils/timerWorker.ts", import.meta.url),
         );
-        const time = myGameInfo.timeout * 1000;
-        const now = getNowSecondsTimestamp();
         commitWorkerRef.current.onmessage = async (event) => {
             const timeLeft = event.data;
             setAutoCommitTimeoutTime(timeLeft);
-
-            if (timeLeft === 0) {
-                handleBid();
-            }
         };
-
-        const remainTime = time - now;
-        if (remainTime > ThirtySecond) {
-            let temBufferTime = -1;
-            if (bufferTime === -1) {
-                if (remainTime > SixtySecond) {
-                    temBufferTime = remainTime - SixtySecond;
-                } else if (remainTime > ThirtySecond) {
-                    temBufferTime = remainTime - ThirtySecond;
-                } else {
-                    temBufferTime = remainTime;
-                }
-                setBufferTime(temBufferTime);
-            }
-
-            commitWorkerRef.current.postMessage({
-                action: "start",
-                timeToCount: remainTime - ThirtySecond,
-            });
-        } else {
-            commitWorkerRef.current.postMessage({
-                action: "stop",
-            });
-        }
-    };
-
-    const handleRevealWorker = () => {
-        if (revealWorkerRef.current) {
-            revealWorkerRef.current.terminate();
-        }
-        if (
-            myGameInfo.gameState !== GameState.Commited ||
-            !bidTacToeGameAddress
-        ) {
-            return;
-        }
-        revealWorkerRef.current = new Worker(
-            new URL("../../utils/timerWorker.ts", import.meta.url),
-        );
-        const time = myGameInfo.timeout * 1000;
+        const time = Math.max(myGameInfo.timeout, opGameInfo.timeout) * 1000;
         const now = getNowSecondsTimestamp();
-        revealWorkerRef.current.onmessage = async (event) => {
-            const timeLeft = event.data;
-            setAutoCommitTimeoutTime(timeLeft);
-
-            if (timeLeft === 0) {
-                handleBid();
-            }
-        };
-
         const remainTime = time - now;
-        if (remainTime > ThirtySecond) {
-            let temBufferTime = -1;
-            if (bufferTime === -1) {
-                if (remainTime > SixtySecond) {
-                    temBufferTime = remainTime - SixtySecond;
-                } else if (remainTime > ThirtySecond) {
-                    temBufferTime = remainTime - ThirtySecond;
-                } else {
-                    temBufferTime = remainTime;
-                }
-                setBufferTime(temBufferTime);
-            }
-
-            revealWorkerRef.current.postMessage({
+        if (remainTime > 0) {
+            commitWorkerRef.current.postMessage({
                 action: "start",
-                timeToCount: remainTime - ThirtySecond,
+                timeToCount: remainTime,
             });
         } else {
-            revealWorkerRef.current.postMessage({
+            commitWorkerRef.current.postMessage({
                 action: "stop",
             });
         }
@@ -683,23 +601,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
 
     useEffect(() => {
         handleCommitWorker();
-    }, [
-        myGameInfo.gameState,
-        myGameInfo.timeout,
-        myGameInfo.gameState,
-        currentGrid,
-        loading,
-    ]);
-
-    useEffect(() => {
-        handleRevealWorker();
-    }, [
-        myGameInfo.gameState,
-        myGameInfo.timeout,
-        myGameInfo.gameState,
-        currentGrid,
-        loading,
-    ]);
+    }, [myGameInfo.timeout, opGameInfo.timeout]);
 
     useEffect(() => {
         handleCallTimeoutWorkerRef();
@@ -724,7 +626,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 }
             } else {
                 handleCommitWorker();
-                handleRevealWorker();
                 handleCallTimeoutWorkerRef();
             }
         };
@@ -736,7 +637,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 handleVisibilityChange,
             );
         };
-    }, [isPc, bufferTime]);
+    }, [isPc]);
 
     return (
         <Box
@@ -768,11 +669,17 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 height: "90px",
                             }}
                         >
-                            {myGameInfo.gameState < GameState.Revealed && (
+                            {myGameInfo.gameState <= GameState.Revealed && (
                                 <Timer
                                     time1={autoCommitTimeoutTime}
-                                    time2={bufferTime}
-                                    time1Gray={loading}
+                                    time1Gray={
+                                        loading ||
+                                        revealing ||
+                                        myGameInfo.gameState ===
+                                            GameState.Commited ||
+                                        myGameInfo.gameState ===
+                                            GameState.Revealed
+                                    }
                                 ></Timer>
                             )}
                         </Box>
@@ -872,7 +779,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                     handleShareTw={handleShareTw}
                     nextDrawWinner={nextDrawWinner}
                     autoCommitTimeoutTime={autoCommitTimeoutTime}
-                    bufferTime={bufferTime}
                     showAnimateNumber={showAnimateNumber}
                     bidAmount={bidAmount}
                     onInputChange={handleBidAmount}

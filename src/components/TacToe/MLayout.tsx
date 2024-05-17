@@ -17,7 +17,6 @@ const MLayout = ({
     handleShareTw,
     nextDrawWinner,
     autoCommitTimeoutTime,
-    bufferTime,
     bidAmount,
     showAnimateNumber,
     onInputChange,
@@ -146,7 +145,7 @@ const MLayout = ({
                     }}
                 >
                     <Flex justify={"space-between"} align={"flex-end"}>
-                        {myGameInfo.gameState < GameState.Revealed && (
+                        {myGameInfo.gameState <= GameState.Revealed && (
                             <Box
                                 sx={{
                                     width: "160px",
@@ -158,8 +157,14 @@ const MLayout = ({
                                 <Timer
                                     direction="top"
                                     time1={autoCommitTimeoutTime}
-                                    time2={bufferTime}
-                                    time1Gray={loading}
+                                    time1Gray={
+                                        loading ||
+                                        revealing ||
+                                        myGameInfo.gameState ===
+                                            GameState.Commited ||
+                                        myGameInfo.gameState ===
+                                            GameState.Revealed
+                                    }
                                 ></Timer>
                             </Box>
                         )}

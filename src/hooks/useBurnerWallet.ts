@@ -71,7 +71,6 @@ export const useCheckBurnerBalanceAndApprove = () => {
                     : "start approveForGame",
             );
 
-            console.log(burnerAddress, tokenId, aviationAddress, "----");
             const approveResult =
                 await skylabBidTacToeContract.write.approveForGame(
                     [burnerAddress, tokenId, aviationAddress],

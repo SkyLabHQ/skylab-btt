@@ -204,3 +204,4 @@ ${mark}${mark}${emojiList.join("")}${mark}${mark}
 
 export const SixtySecond = 60 * 1000;
 export const ThirtySecond = 30 * 1000;
+export const TwelveHours = 12 * 60 * 60; //十二小时
