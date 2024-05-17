@@ -15,7 +15,6 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
     useMultiMercuryBaseContract,
-    useMultiMercuryJarTournamentContract,
 } from "@/hooks/useMultiContract";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { useBlockNumber } from "@/contexts/BlockNumber";

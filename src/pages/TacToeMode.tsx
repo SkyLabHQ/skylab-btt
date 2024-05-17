@@ -15,7 +15,6 @@ import {
     useBidTacToeFactoryRetry,
     useBttFactoryRetry,
     useBttPrivateLobbyContract,
-    useBurnerRetryContract,
     useTestflightRetryContract,
 } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
@@ -23,8 +22,6 @@ import {
     botAddress,
     mercuryJarTournamentAddress,
     skylabTestFlightAddress,
-    useMercuryBaseContract,
-    useSkylabBidTacToeContract,
 } from "@/hooks/useContract";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
