@@ -199,8 +199,6 @@ const PrivatePlayBackPage = () => {
             _opInfo.lose = loseCount1.toNumber();
         }
 
-        console.log(_myInfo, "_myInfo");
-        console.log(_opInfo);
         setMyInfo(_myInfo);
         setOpInfo(_opInfo);
 
@@ -391,6 +389,10 @@ const PrivatePlayBackPage = () => {
         setCurrentRound(allSelectedGrids.length);
     };
 
+    const handleTextClick = () => {
+        navigate("/btt/lobby?lobbyAddress=" + lobbyAddress);
+    };
+
     const handleShare = () => {
         const text = getShareEmoji(
             myInfo.mark,
@@ -506,7 +508,7 @@ ${des}`;
                         ) : (
                             <ShareButtons
                                 handleShare={handleShare}
-                                // handleTextClick={handleTextClick}
+                                handleTextClick={handleTextClick}
                                 showText={!onlyShow}
                             ></ShareButtons>
                         )}
