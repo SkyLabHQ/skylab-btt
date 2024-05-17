@@ -68,6 +68,7 @@ import LeftButton from "@/components/TacToeMode/LeftButton";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
 import MRobotIcon from "@/components/TacToeMode/assets/m-robot.svg";
 import MLobbyIcon from "@/components/TacToeMode/assets/m-private-lobby.svg.svg";
+import { privateKeyToAccount } from "viem/accounts";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -146,10 +147,10 @@ const TacToeMode = () => {
     const [selectPlane, setSelectPlane] = useState<any>({});
 
     const checkBurnerBalanceAndApprove = useCheckBurnerBalanceAndApprove();
-    const contract = useSkylabBidTacToeContract();
 
     const toast = useSkyToast();
 
+    const multiProvider = useMultiProvider(chainId);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
     const { isBlock, blockOpen, handleBlock } = useUserInfo();
@@ -263,17 +264,34 @@ const TacToeMode = () => {
     };
 
     const handleTournament = async () => {
-        if (!selectPlane?.tokenId) {
-            return;
-        }
-
+        const tokenId = selectPlane?.tokenId;
         try {
             if (selectPlane.state) {
-                navigate(`/btt/game?tokenId=${selectPlane.tokenId}`);
-                return;
-            }
+                let objPrivateKey = {};
+                let stringPrivateKey = localStorage.getItem("tactoePrivateKey");
+                try {
+                    objPrivateKey = stringPrivateKey
+                        ? JSON.parse(stringPrivateKey)
+                        : {};
+                } catch (e) {
+                    objPrivateKey = {};
+                }
+                const key = chainId + "-" + tokenId;
+                const account = privateKeyToAccount(objPrivateKey[key]);
+                if (!account) {
+                    return;
+                }
+                const [bidTacToeGameAddress] = await multiProvider.all([
+                    multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                        account.address,
+                    ),
+                ]);
 
-            const tokenId = selectPlane?.tokenId;
+                if (bidTacToeGameAddress !== ZERO_DATA) {
+                    navigate(`/btt/game?tokenId=${tokenId}`);
+                    return;
+                }
+            }
 
             openLoading();
             const defaultSinger = getDefaultWithProvider(tokenId, chainId);
