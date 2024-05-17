@@ -66,6 +66,11 @@
             "internalType": "bool",
             "name": "isBot",
             "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "universalTimeout",
+            "type": "uint256"
           }
         ],
         "internalType": "struct MercuryBidTacToe.GameParams",
