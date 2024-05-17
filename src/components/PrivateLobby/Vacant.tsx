@@ -53,7 +53,7 @@ const Vacant = ({ list }: { list: any }) => {
                                         color: "#BCBBBE",
                                         fontSize: isPc ? "0.8333vw" : "12px",
                                         position: "absolute",
-                                        bottom: "-1.0417vw",
+                                        bottom: isPc ? "-1.0417vw" : "-20px",
                                         left: "50%",
                                         transform: "translateX(-50%)",
                                     }}
