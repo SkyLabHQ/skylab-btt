@@ -481,7 +481,7 @@ const TacToeMode = () => {
                     width: "100%",
                 }}
             >
-                <Box
+                {/* <Box
                     sx={{
                         position: "absolute",
                         left: "12px",
@@ -504,7 +504,7 @@ const TacToeMode = () => {
                             </Box>
                         }
                     ></BackWithText>
-                </Box>
+                </Box> */}
                 <Toolbar></Toolbar>
                 <Box
                     sx={{
