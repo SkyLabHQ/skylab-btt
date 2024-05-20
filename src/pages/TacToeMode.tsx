@@ -231,7 +231,10 @@ const TacToeMode = () => {
 
             await bttFactoryRetryTest(
                 "createBotGame",
-                [botAddress[TESTFLIGHT_CHAINID]],
+                [
+                    [3, 3, 3, 100, 1, 0, true, 1 * 60 * 60],
+                    botAddress[TESTFLIGHT_CHAINID],
+                ],
                 {
                     usePaymaster: true,
                 },
@@ -299,10 +302,14 @@ const TacToeMode = () => {
                 defaultSinger.account.address,
             );
 
-            await tacToeFactoryRetryWrite("createOrJoinDefault", [false], {
-                gasLimit: 1000000,
-                signer: defaultSinger,
-            });
+            await tacToeFactoryRetryWrite(
+                "createOrJoinDefault",
+                [[3, 3, 3, 100, 1, 0, false, 12 * 60 * 60], false],
+                {
+                    gasLimit: 1000000,
+                    signer: defaultSinger,
+                },
+            );
 
             setTimeout(() => {
                 closeLoading();

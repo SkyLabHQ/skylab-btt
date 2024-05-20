@@ -4,7 +4,6 @@ import AdvantageIcon from "./assets/advantage-icon.svg";
 import { motion } from "framer-motion";
 import {
     Box,
-    Button,
     Image,
     Text,
     Popover,
@@ -280,7 +279,6 @@ const MyBid = ({
     });
 
     const [commitButtonText, status] = useMemo(() => {
-        console.log(myGameState, opGameState, "myGameState");
         if (myGameState === GameState.WaitingForBid) {
             return loading ? ["Confirming", 0] : ["Confirm", 1];
         } else if (myGameState === GameState.Commited) {

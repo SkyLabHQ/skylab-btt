@@ -190,6 +190,53 @@
   {
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "gridWidth",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "gridHeight",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "lengthToWin",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "initialBalance",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridMaxSelectionCount",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridSelectionStrategy",
+            "type": "uint128"
+          },
+          {
+            "internalType": "bool",
+            "name": "isBot",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "universalTimeout",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MercuryBidTacToe.GameParams",
+        "name": "gameParams",
+        "type": "tuple"
+      },
+      {
         "internalType": "address",
         "name": "bot",
         "type": "address"
@@ -268,6 +315,53 @@
   },
   {
     "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "gridWidth",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "gridHeight",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "lengthToWin",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "initialBalance",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridMaxSelectionCount",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridSelectionStrategy",
+            "type": "uint128"
+          },
+          {
+            "internalType": "bool",
+            "name": "isBot",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "universalTimeout",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MercuryBidTacToe.GameParams",
+        "name": "gameParams",
+        "type": "tuple"
+      },
       {
         "internalType": "bool",
         "name": "needComfirmation",
@@ -732,6 +826,53 @@
   },
   {
     "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "gridWidth",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "gridHeight",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "lengthToWin",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "initialBalance",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridMaxSelectionCount",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridSelectionStrategy",
+            "type": "uint128"
+          },
+          {
+            "internalType": "bool",
+            "name": "isBot",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "universalTimeout",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MercuryBidTacToe.GameParams",
+        "name": "gameParams",
+        "type": "tuple"
+      },
       {
         "internalType": "address",
         "name": "aviation",

@@ -46,6 +46,7 @@ import SetPilotIcon from "./assets/setPilot.svg";
 import SetNameIcon from "./assets/setName.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
+import TgIcon from "./assets/tg-icon.svg";
 
 const UserInfo = ({
     userName,
@@ -86,55 +87,94 @@ const UserInfo = ({
                 ></Image>
             </Box>
             {userNameInit ? (
-                <Flex
-                    sx={{
-                        marginTop: "8px",
-                    }}
-                    align={"center"}
-                >
-                    {user?.discord && (
-                        <Image
-                            src={DiscordIcon}
-                            sx={{
-                                width: "16px",
-                                marginRight: "4px",
-                            }}
-                        ></Image>
-                    )}
-                    {user?.twitter && (
-                        <Image
-                            src={TwIcon}
-                            sx={{
-                                width: "16px",
-                                marginRight: "4px",
-                            }}
-                        ></Image>
-                    )}
-
+                <Flex flexDir={"column"} align={"center"}>
                     <Flex
                         sx={{
-                            fontSize: "14px",
-                            color: "#F2D861",
+                            marginTop: "8px",
+                        }}
+                        align={"center"}
+                    >
+                        {user?.discord && (
+                            <Image
+                                src={DiscordIcon}
+                                sx={{
+                                    width: "16px",
+                                    marginRight: "4px",
+                                }}
+                            ></Image>
+                        )}
+                        {user?.twitter && (
+                            <Image
+                                src={TwIcon}
+                                sx={{
+                                    width: "16px",
+                                    marginRight: "4px",
+                                }}
+                            ></Image>
+                        )}
+                        <Flex
+                            sx={{
+                                fontSize: "14px",
+                                color: "#F2D861",
+                            }}
+                            onClick={() => {
+                                onCopy();
+                                toast("Address copied");
+                            }}
+                        >
+                            <Text
+                                sx={{
+                                    fontSize: "14px",
+                                    marginRight: "11px",
+                                }}
+                            >
+                                {userName
+                                    ? userName
+                                    : `${shortenAddress(address, 4, 4)}`}
+                            </Text>
+                            <Image
+                                src={CopyIcon}
+                                sx={{
+                                    width: "14px",
+                                }}
+                            ></Image>
+                        </Flex>
+                    </Flex>
+                    <Flex
+                        sx={{
+                            borderRadius: "12px",
+                            background: "#F2D861",
+                            height: "40px",
+                            width: "180px",
+                            paddingLeft: "8px",
+                            marginTop: "15px",
                         }}
                         onClick={() => {
-                            onCopy();
-                            toast("Address copied");
+                            window.open("https://t.me/BidTacToeBot");
                         }}
+                        align={"center"}
+                        justify={"center"}
                     >
                         <Text
                             sx={{
-                                fontSize: "14px",
-                                marginRight: "11px",
+                                fontSize: "12px",
+                                color: "#1b1b1b",
+                                marginRight: "5px",
                             }}
                         >
-                            {userName
-                                ? userName
-                                : `${shortenAddress(address, 4, 4)}`}
+                            Link to TG
                         </Text>
                         <Image
-                            src={CopyIcon}
+                            src={Blackrrow}
                             sx={{
-                                width: "14px",
+                                marginRight: "15px",
+                            }}
+                        ></Image>
+                        <Image
+                            src={TgIcon}
+                            sx={{
+                                width: "28px",
+                                maxWidth: "28px",
                             }}
                         ></Image>
                     </Flex>
