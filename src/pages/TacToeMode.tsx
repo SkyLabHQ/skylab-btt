@@ -48,7 +48,6 @@ import {
 import { useChainId, useWalletClient } from "wagmi";
 import { decodeEventLog } from "viem";
 import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
-import Back, { BackWithText } from "@/components/Back";
 import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
 import ReactCanvasNest from "react-canvas-nest";
@@ -126,12 +125,6 @@ const TacToeMode = () => {
     // const timeLeft1 = 0;
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
     const { ready, login, user, connectWallet } = usePrivy();
-    const {
-        isOpen: isMyAviationOpen,
-        onOpen: onMyAviationOpen,
-        onClose: onMyAviationClose,
-    } = useDisclosure();
-
     const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
     const {
         isOpen: isPreviousLobbyModalOpen,
@@ -139,7 +132,6 @@ const TacToeMode = () => {
         onClose: onPreviousLobbyModalClose,
     } = useDisclosure();
     const navigate = useNavigate();
-    const { address } = usePrivyAccounts();
     const chainId = useChainId();
     const [selectPlane, setSelectPlane] = useState<any>({});
 
@@ -150,8 +142,7 @@ const TacToeMode = () => {
     const multiProvider = useMultiProvider(chainId);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
-    const { isBlock, blockOpen, handleBlock } = useUserInfo();
-
+    const { handleGetUserPaper } = useUserInfo();
     const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
     const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");
 
@@ -244,20 +235,6 @@ const TacToeMode = () => {
             toast(handleError(error, true));
             closeLoading();
         }
-    };
-
-    const handleCreateOrJoinDefault = async () => {
-        if (!address) {
-            handleLogin();
-            return;
-        }
-
-        if (isBlock && !blockOpen) {
-            handleBlock(true);
-            return;
-        }
-
-        onMyAviationOpen();
     };
 
     const handleTournament = async () => {
@@ -462,6 +439,10 @@ const TacToeMode = () => {
 
         handleGetLoobyName();
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
+
+    useEffect(() => {
+        handleGetUserPaper();
+    }, []);
 
     return (
         <Box

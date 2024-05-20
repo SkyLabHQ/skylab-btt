@@ -543,135 +543,23 @@ const MyPlane = ({
 const UserInfoDrawer = ({
     onClose,
     isOpen,
+    onUserNameChange,
+    onMintPlane,
 }: {
     isOpen: boolean;
     onClose: () => void;
+    onUserNameChange: (name: string) => void;
+    onMintPlane: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const toast = useSkyToast();
-    const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const publicClient = usePublicClient();
-    const chainId = useChainId();
-    const { address } = usePrivyAccounts();
-    const multiProvider = useMultiProvider(chainId);
-    const multiMercuryJarTournamentContract =
-        useMultiMercuryJarTournamentContract();
     const { logout } = usePrivy();
-    const [paperBalance, setPaperBalance] = useState("0");
-    const [userName, setUserName] = useState("");
-    const [userNameInit, setUserNameInit] = useState(false);
-    const [planeList, setPlaneList] = useState([] as any[]);
-    const [planeInit, setPlaneInit] = useState(false);
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
-    const { isBlock, blockOpen, handleBlock } = useUserInfo();
+    const { planeInit, planeList, userName, paperBalance, userNameInit } =
+        useUserInfo();
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);
     };
-
-    const handleGetUserPaper = async () => {
-        const [planeBalance, paperBalance, userName] = await multiProvider.all([
-            multiMercuryJarTournamentContract.balanceOf(address),
-            multiMercuryJarTournamentContract.paperBalance(address),
-            multiMercuryJarTournamentContract.userName(address),
-        ]);
-        setUserName(userName);
-        setUserNameInit(true);
-        setPaperBalance(paperBalance.toString());
-        const p = [];
-        for (let i = 0; i < Number(planeBalance.toString()); i++) {
-            p.push(
-                multiMercuryJarTournamentContract.tokenOfOwnerByIndex(
-                    address,
-                    i,
-                ),
-            );
-        }
-
-        const tokenIds = await multiProvider.all(p);
-
-        const levelP = tokenIds.map((item) => {
-            return multiMercuryJarTournamentContract.aviationPoints(item);
-        });
-
-        const levels = await multiProvider.all(levelP);
-
-        const planeList = tokenIds.map((item, index) => {
-            const points = Number(levels[index].toString());
-            const levelItem = levelRanges.find((item) => {
-                return points < item.maxPoints && points >= item.minPoints;
-            });
-            const level = levelItem.level;
-            const nextPoints = levelItem.maxPoints;
-            const prePoints = levelItem.minPoints;
-            return {
-                tokenId: item.toString(),
-                points,
-                level: level,
-                img: aviationImg(level),
-                nextPoints,
-                prePoints,
-            };
-        });
-
-        setPlaneInit(true);
-        setPlaneList(planeList);
-    };
-
-    const handleSetUserName = async (name: string) => {
-        try {
-            const hash =
-                await mercuryJarTournamentContract.write.registerUserName([
-                    name,
-                ]);
-
-            // @ts-ignore
-            await publicClient.waitForTransactionReceipt({ hash });
-            setUserName(name);
-        } catch (e) {
-            toast(handleError(e));
-        }
-    };
-
-    const handleMintPlane = async () => {
-        if (isBlock && !blockOpen) {
-            handleBlock(true);
-        }
-
-        if (Number(paperBalance) === 0) {
-            return;
-        }
-        try {
-            const hash = await mercuryJarTournamentContract.write.mintWithPaper(
-                [1],
-                {},
-            );
-            console.log(hash, "hash");
-            // @ts-ignore
-            const receipt = await publicClient.waitForTransactionReceipt({
-                hash,
-            });
-            if (receipt.status !== "success") {
-                toast("Transaction failed");
-                return;
-            }
-            handleGetUserPaper();
-        } catch (e) {
-            toast(handleError(e));
-        }
-    };
-
-    useEffect(() => {
-        if (
-            !isOpen ||
-            !multiMercuryJarTournamentContract ||
-            !multiProvider ||
-            !address
-        ) {
-            return;
-        }
-        handleGetUserPaper();
-    }, [isOpen, multiMercuryJarTournamentContract, multiProvider]);
 
     return (
         <Drawer
@@ -755,7 +643,7 @@ const UserInfoDrawer = ({
                             ></UserInfo>
                             <MyPaper
                                 balance={paperBalance}
-                                handleMintPlane={handleMintPlane}
+                                handleMintPlane={onMintPlane}
                             ></MyPaper>
                             <MyPlane
                                 planeList={planeList}
@@ -766,7 +654,7 @@ const UserInfoDrawer = ({
                     {currentMode === 1 && (
                         <EditNickname
                             onSetUserName={(userName: string) => {
-                                handleSetUserName(userName);
+                                onUserNameChange(userName);
                             }}
                             onChangeMode={(mode: number) => {
                                 handleChangeMode(mode);
