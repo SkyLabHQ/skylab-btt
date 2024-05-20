@@ -186,7 +186,10 @@ const TacToeMode = () => {
 
     const handleMintPlayTest = async (type: string) => {
         try {
-            const testflightSinger = getTestflightSigner(TESTFLIGHT_CHAINID);
+            const testflightSinger = getTestflightSigner(
+                TESTFLIGHT_CHAINID,
+                true,
+            );
             openLoading();
             const { sCWAddress } = await getSCWallet(
                 testflightSinger.privateKey,
