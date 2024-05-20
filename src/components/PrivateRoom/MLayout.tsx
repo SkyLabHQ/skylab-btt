@@ -158,8 +158,10 @@ const MLayout = ({
                                     time1Gray={
                                         loading ||
                                         revealing ||
-                                        myGameInfo.gameState ===
-                                            GameState.Commited ||
+                                        (myGameInfo.gameState ===
+                                            GameState.Commited &&
+                                            opGameInfo.gameState ===
+                                                GameState.WaitingForBid) ||
                                         myGameInfo.gameState ===
                                             GameState.Revealed
                                     }

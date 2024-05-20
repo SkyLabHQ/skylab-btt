@@ -148,6 +148,7 @@ const UserInfo = ({
                             width: "180px",
                             paddingLeft: "8px",
                             marginTop: "15px",
+                            cursor: "pointer",
                         }}
                         onClick={() => {
                             window.open("https://t.me/BidTacToeBot");
