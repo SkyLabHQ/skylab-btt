@@ -230,7 +230,7 @@ const TacToeMode = () => {
                     usePaymaster: true,
                 },
             );
-            const url = `/btt/game?tokenId=${tokenId}&testflight=true`;
+            const url = `/btt/match?tokenId=${tokenId}&testflight=true`;
             closeLoading();
             navigate(url);
         } catch (error) {

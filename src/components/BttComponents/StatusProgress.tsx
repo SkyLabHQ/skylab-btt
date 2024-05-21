@@ -91,14 +91,13 @@ const StatusProgress = ({
                     sx={{
                         position: "absolute",
                         left: 0,
-                        top: "10px",
+                        top: "20px",
                         transform: "translateX(-50%)",
                         fontSize: "12px",
                         textAlign: "center",
                         color: activeIndex > 0 ? "#F2d861" : "#fff",
                     }}
                 >
-                    <Text>1 Player</Text>
                     <DotLoading
                         text="commited"
                         dotSize="3px"
@@ -110,14 +109,13 @@ const StatusProgress = ({
                     sx={{
                         position: "absolute",
                         left: "50%",
-                        top: "10px",
+                        top: "20px",
                         transform: "translateX(-50%)",
                         fontSize: "12px",
                         textAlign: "center",
                         color: activeIndex >= 1 ? "#F2d861" : "#fff",
                     }}
                 >
-                    <Text>2 Player</Text>
                     <DotLoading
                         text="commited"
                         dotSize="3px"

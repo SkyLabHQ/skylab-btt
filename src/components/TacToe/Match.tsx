@@ -6,7 +6,7 @@ import {
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
-import { Info, useGameContext, GameType } from "@/pages/TacToe";
+import { Info, useGameContext, GameType } from "@/pages/Match";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
 import { getMetadataImg } from "@/utils/ipfsImg";
@@ -226,7 +226,6 @@ export const MatchPage = ({
     ) => void;
 }) => {
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
-
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [showPlayWithBot, setShowPlayWithBot] = useState(false);
@@ -306,7 +305,8 @@ export const MatchPage = ({
             player1LoseMileage.toNumber(),
         );
         onGameType(GameType.HumanWithBot);
-        onStep(2);
+        const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}&testflight=${true}`;
+        navigate(url);
     };
 
     const handleGetHuamnAndHumanInfo = async (
@@ -382,7 +382,8 @@ export const MatchPage = ({
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         }
         onGameType(GameType.HumanWithHuman);
-        onStep(2);
+        const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}`;
+        navigate(url);
     };
 
     const handleGetAllPlayerInfo = async () => {

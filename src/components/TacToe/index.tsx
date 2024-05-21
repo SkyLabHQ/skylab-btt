@@ -8,7 +8,6 @@ import React, {
     useState,
 } from "react";
 import Board from "@/components/TacToe/Board";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { GameType, MyNewInfo, useGameContext } from "@/pages/TacToe";
 import { ethers } from "ethers";
@@ -24,14 +23,11 @@ import {
     useDeleteTokenIdCommited,
     useGridCommited,
 } from "@/hooks/useTacToeStore";
-import { ZERO_DATA } from "@/skyConstants";
 import {
     GameInfo,
     GameState,
     MessageStatus,
-    UserMarkType,
     getWinState,
-    winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
@@ -44,11 +40,22 @@ import { shortenAddressWithout0x } from "@/utils";
 import StatusProgress from "../BttComponents/StatusProgress";
 
 interface TacToeProps {
+    showAnimateNumber: number;
+    currentGrid: number;
+    nextDrawWinner: string;
+    handleGetGameInfo: () => void;
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
     onChangeNewInfo: (info: MyNewInfo) => void;
 }
 
-const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
+const TacToePage = ({
+    showAnimateNumber,
+    currentGrid,
+    nextDrawWinner,
+    onChangeGame,
+    onChangeNewInfo,
+    handleGetGameInfo,
+}: TacToeProps) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
 
@@ -61,7 +68,6 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
         bidTacToeGameAddress,
         tokenId,
         list,
-        onList,
         myActivePilot,
         opActivePilot,
         onStep,
@@ -76,12 +82,8 @@ const TacToePage = ({ onChangeGame, onChangeNewInfo }: TacToeProps) => {
     const callTimeoutWorkerRef = useRef<Worker>(null);
 
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
-    const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
-    const { blockNumber } = useBlockNumber();
     const [revealing, setRevealing] = useState<boolean>(false);
-    const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [bidAmount, setBidAmount] = useState<number>(0);
-    const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
     const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
     const [messageLoading, setMessageLoading] = useState<MessageStatus>(
         MessageStatus.Unknown,
@@ -141,142 +143,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         window.open(
             `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
         );
-    };
-
-    const handleGetGameInfo = async () => {
-        try {
-            const [
-                resCurrentGrid,
-                boardGrids,
-                myBalance,
-                myGameState,
-                myRevealedBid,
-                myTimeout,
-                myMessage,
-                myEmote,
-                opBalance,
-                opGameState,
-                opRevealedBid,
-                opTimeout,
-                opMessage,
-                opEmote,
-                nextDrawWinner,
-            ] = await ethcallProvider.all([
-                multiSkylabBidTacToeGameContract.currentSelectedGrid(),
-                multiSkylabBidTacToeGameContract.getGrid(),
-                multiSkylabBidTacToeGameContract.balances(myInfo.burner),
-                multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
-                multiSkylabBidTacToeGameContract.getRevealedBids(myInfo.burner),
-                multiSkylabBidTacToeGameContract.timeouts(myInfo.burner),
-                multiSkylabBidTacToeGameContract.playerMessage(myInfo.burner),
-                multiSkylabBidTacToeGameContract.playerEmote(myInfo.burner),
-                multiSkylabBidTacToeGameContract.balances(opInfo.burner),
-                multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
-                multiSkylabBidTacToeGameContract.getRevealedBids(opInfo.burner),
-                multiSkylabBidTacToeGameContract.timeouts(opInfo.burner),
-                multiSkylabBidTacToeGameContract.playerMessage(opInfo.burner),
-                multiSkylabBidTacToeGameContract.playerEmote(opInfo.burner),
-                multiSkylabBidTacToeGameContract.nextDrawWinner(),
-            ]);
-
-            if (showAnimateNumber === -1) {
-                setShowAnimate(resCurrentGrid.toNumber());
-            } else if (resCurrentGrid.toNumber() !== currentGrid) {
-                setShowAnimate(currentGrid);
-            }
-            const _list = JSON.parse(JSON.stringify(list));
-            const gameState = myGameState.toNumber();
-            for (let i = 0; i < boardGrids.length; i++) {
-                if (boardGrids[i] === ZERO_DATA) {
-                    _list[i].mark = UserMarkType.Empty;
-                } else if (boardGrids[i] === myInfo.burner) {
-                    _list[i].mark = myInfo.mark;
-                } else if (boardGrids[i] === opInfo.burner) {
-                    _list[i].mark = opInfo.mark;
-                }
-                _list[i].myValue = myRevealedBid[i].toNumber();
-                _list[i].opValue = opRevealedBid[i].toNumber();
-                _list[i].myMark = myInfo.mark;
-                _list[i].opMark = opInfo.mark;
-            }
-            if (
-                [
-                    GameState.WaitingForBid,
-                    GameState.Commited,
-                    GameState.Revealed,
-                ].includes(gameState)
-            ) {
-                _list[resCurrentGrid.toNumber()].mark = UserMarkType.Square;
-            }
-
-            // game over result
-            if (gameState > GameState.Revealed) {
-                const myIsWin = getWinState(gameState);
-                const burner = myIsWin ? myInfo.burner : opInfo.burner;
-                let mark;
-                if (myIsWin) {
-                    mark =
-                        myInfo.mark === UserMarkType.Circle
-                            ? UserMarkType.YellowCircle
-                            : myInfo.mark === UserMarkType.Cross
-                            ? UserMarkType.YellowCross
-                            : UserMarkType.YellowBotX;
-                } else {
-                    mark =
-                        opInfo.mark === UserMarkType.Circle
-                            ? UserMarkType.YellowCircle
-                            : opInfo.mark === UserMarkType.Cross
-                            ? UserMarkType.YellowCross
-                            : UserMarkType.YellowBotX;
-                }
-                if (
-                    gameState === GameState.WinByConnecting ||
-                    gameState === GameState.LoseByConnecting
-                ) {
-                    for (let i = 0; i < winPatterns.length; i++) {
-                        const index0 = winPatterns[i][0];
-                        const index1 = winPatterns[i][1];
-                        const index2 = winPatterns[i][2];
-                        if (
-                            boardGrids[index0] === burner &&
-                            boardGrids[index1] === burner &&
-                            boardGrids[index2] === burner
-                        ) {
-                            _list[index0].mark = mark;
-                            _list[index1].mark = mark;
-                            _list[index2].mark = mark;
-                            break;
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < boardGrids.length; i++) {
-                        if (boardGrids[i] === burner) {
-                            _list[i].mark = mark;
-                        }
-                    }
-                }
-            }
-            setCurrentGrid(resCurrentGrid.toNumber());
-            onList(_list);
-            onChangeGame("my", {
-                balance: myBalance.toNumber(),
-                gameState: myGameState.toNumber(),
-                timeout: myTimeout.toNumber(),
-                message: myMessage.toNumber(),
-                emote: myEmote.toNumber(),
-            });
-
-            onChangeGame("op", {
-                balance: opBalance.toNumber(),
-                gameState: opGameState.toNumber(),
-                timeout: opTimeout.toNumber(),
-                message: opMessage.toNumber(),
-                emote: opEmote.toNumber(),
-            });
-            setNextDrawWinner(nextDrawWinner);
-        } catch (e) {
-            console.log(e);
-        }
     };
 
     const handleCallTimeOut = async () => {
@@ -399,25 +265,11 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         }
     };
 
-    useEffect(() => {
-        if (
-            !multiSkylabBidTacToeGameContract ||
-            !blockNumber ||
-            !ethcallProvider ||
-            revealing ||
-            myGameInfo.gameState > GameState.Revealed
-        )
-            return;
-
-        handleGetGameInfo();
-    }, [blockNumber, multiSkylabBidTacToeGameContract, ethcallProvider]);
-
     // game over
     const handleGameOver = async () => {
         if (myGameInfo.gameState <= GameState.Revealed) return;
         deleteTokenIdCommited();
-        onStep(3);
-
+        onStep(1);
         const gameResult = getWinState(myGameInfo.gameState);
 
         if (gameType === GameType.HumanWithBot) {
@@ -660,7 +512,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 : "flex-start",
                     }}
                     onClick={() => {
-                        myGameInfo.gameState > 3 && onStep(3);
+                        myGameInfo.gameState > 3 && onStep(2);
                     }}
                 >
                     <Flex flexDir={"column"} align={"center"}>

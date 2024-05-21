@@ -1,4 +1,4 @@
-import { GameType, Info, useGameContext } from "@/pages/TacToe";
+import { Info, useGameContext, GameType } from "@/pages/Match";
 import { Box, Text, Image, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo } from "react";
 import LevelUpIcon from "./assets/level-up.svg";
