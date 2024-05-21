@@ -290,7 +290,7 @@ const TacToeMode = () => {
 
             setTimeout(() => {
                 closeLoading();
-                const url = `/btt/game?tokenId=${tokenId}`;
+                const url = `/btt/match?tokenId=${tokenId}`;
                 navigate(url);
             }, 1000);
         } catch (e) {
@@ -499,7 +499,7 @@ const TacToeMode = () => {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        width: isPc ? "378px" : "100%",
+                        width: isPc ? "390px" : "100%",
                         justifyContent: "center",
                     }}
                 >

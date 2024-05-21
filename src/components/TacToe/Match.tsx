@@ -305,8 +305,11 @@ export const MatchPage = ({
             player1LoseMileage.toNumber(),
         );
         onGameType(GameType.HumanWithBot);
-        const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}&testflight=${true}`;
-        navigate(url);
+
+        setTimeout(() => {
+            const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}&testflight=${true}`;
+            navigate(url);
+        }, 1500);
     };
 
     const handleGetHuamnAndHumanInfo = async (
@@ -382,8 +385,10 @@ export const MatchPage = ({
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         }
         onGameType(GameType.HumanWithHuman);
-        const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}`;
-        navigate(url);
+        setTimeout(() => {
+            const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}`;
+            navigate(url);
+        }, 1500);
     };
 
     const handleGetAllPlayerInfo = async () => {

@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import { useTacToeSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
@@ -45,12 +45,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { getMetadataImg } from "@/utils/ipfsImg";
 import { ZERO_DATA } from "@/skyConstants";
-import { useBlockNumber } from "@/contexts/BlockNumber";
-import { useGridCommited } from "@/hooks/useTacToeStore";
-import { useBttGameRetry } from "@/hooks/useRetryContract";
-import { handleError } from "@/utils/error";
-import useSkyToast from "@/hooks/useSkyToast";
-import { ethers } from "ethers";
 
 export interface Info {
     burner: string;
@@ -104,6 +98,7 @@ const GameContext = createContext<{
 export const useGameContext = () => useContext(GameContext);
 
 const TacToe = () => {
+    const navitate = useNavigate();
     const chainId = useChainId();
     const { address } = usePrivyAccounts();
     const [gameType, setGameType] = useState<GameType>(GameType.Unkown);
@@ -174,14 +169,10 @@ const TacToe = () => {
     const [bidTacToeGameAddress, setBidTacToeGameAddress] = useState<string>(
         params.gameAddress,
     );
-    const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress, tokenId);
 
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [step, setStep] = useState(0);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
-
-    const [revealing, setRevealing] = useState<boolean>(false);
-
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
     const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
     const multiSkylabBidTacToeGameContract =
@@ -248,6 +239,11 @@ const TacToe = () => {
             multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId1),
             multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
         ]);
+
+        if (playerAddress1 !== burnerWallet.account.address) {
+            // navitate("/");
+            return;
+        }
 
         const player1Info = {
             burner: playerAddress1,
@@ -378,7 +374,7 @@ const TacToe = () => {
             );
             onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
             onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
-        } else {
+        } else if (player2Info.burner === burnerWallet.account.address) {
             onChangeMileage(
                 player2WinMileage.toNumber(),
                 player2LoseMileage.toNumber(),
@@ -386,6 +382,9 @@ const TacToe = () => {
             onChangePoint(player2Move.toNumber(), player1Move.toNumber());
             onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
+        } else {
+            navitate("/");
+            return;
         }
         onGameType(GameType.HumanWithHuman);
     };
