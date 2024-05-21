@@ -190,10 +190,13 @@ const TacToeMode = () => {
                 TESTFLIGHT_CHAINID,
                 true,
             );
+            console.log(testflightSinger, "testflightSinger");
             openLoading();
             const { sCWAddress } = await getSCWallet(
                 testflightSinger.privateKey,
             );
+
+            console.log(sCWAddress, "sCWAddress授权给我");
 
             const receipt = await testflightContract("playTestMint", [], {
                 usePaymaster: true,

@@ -9,7 +9,7 @@ import React, {
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { useTacToeSigner } from "@/hooks/useSigner";
+import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import SettlementPage from "@/components/TacToe/SettlementPage";
@@ -45,6 +45,7 @@ import {
 } from "@/hooks/useMultiContract";
 import { getMetadataImg } from "@/utils/ipfsImg";
 import { ZERO_DATA } from "@/skyConstants";
+import { getSCWallet } from "@/hooks/useSCWallet";
 
 export interface Info {
     burner: string;
@@ -157,6 +158,7 @@ const TacToe = () => {
         message: 0,
         emote: 0,
     });
+    console.log(burnerWallet, "burnerWallet");
 
     const [opGameInfo, setOpGameInfo] = useState<GameInfo>({
         balance: 0,
@@ -240,8 +242,12 @@ const TacToe = () => {
             multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
         ]);
 
-        if (playerAddress1 !== burnerWallet.account.address) {
-            // navitate("/");
+        const testflightSinger = getTestflightSigner(TESTFLIGHT_CHAINID);
+
+        const { sCWAddress } = await getSCWallet(testflightSinger.privateKey);
+
+        if (playerAddress1 !== sCWAddress) {
+            navitate("/");
             return;
         }
 
