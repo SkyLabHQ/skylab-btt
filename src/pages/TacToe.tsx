@@ -158,7 +158,6 @@ const TacToe = () => {
         message: 0,
         emote: 0,
     });
-    console.log(burnerWallet, "burnerWallet");
 
     const [opGameInfo, setOpGameInfo] = useState<GameInfo>({
         balance: 0,
