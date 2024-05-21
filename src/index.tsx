@@ -23,7 +23,7 @@ import logoIcon from "./assets/tournament.jpg";
 import { UserInfoProvider } from "./contexts/UserInfo";
 
 const chains =
-    process.env.REACT_APP_ENV === "development" ? [baseSepolia] : [base];
+    process.env.REACT_APP_ENV === "development" ? [baseSepolia] : [baseSepolia];
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement,

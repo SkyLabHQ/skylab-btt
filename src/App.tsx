@@ -8,6 +8,7 @@ import AddToHome from "./pages/AddToHome";
 import TermPage from "./components/TermPage";
 import { useUserInfo } from "./contexts/UserInfo";
 import CloseIcon from "@/assets/close.svg";
+import qs from "query-string";
 
 const themeColorList = [
     {
@@ -54,6 +55,8 @@ const themeColorList = [
 ];
 
 const App = (): ReactElement => {
+    const { search } = useLocation();
+    const params = qs.parse(search) as any;
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [type, setType] = useState(-1);
     const toast = useSkyToast();
@@ -86,8 +89,12 @@ const App = (): ReactElement => {
     };
 
     useEffect(() => {
+        const isTg = sessionStorage.getItem("isTg");
         const agree = localStorage.getItem("service");
-        if (isPc || window.ethereum) {
+        if (isPc || window.ethereum || params.tg || isTg) {
+            if (params.tg || isTg) {
+                sessionStorage.setItem("isTg", "true");
+            }
             setType(0);
             return;
         }
