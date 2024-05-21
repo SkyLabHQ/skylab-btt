@@ -52,7 +52,7 @@ const SelectPlane = ({
                     borderBottom: "none",
                     height: isPc
                         ? "calc(100vh - 400px)"
-                        : "calc(100vh - 300px)",
+                        : "calc(100vh - 250px)",
                     marginTop: "10px",
                     overflow: "auto",
                 }}
