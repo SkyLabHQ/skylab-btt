@@ -592,6 +592,7 @@ const TacToe = () => {
         <Box
             sx={{
                 height: "100%",
+                background: "#36363680",
             }}
         >
             <BttHelmet></BttHelmet>
@@ -600,7 +601,6 @@ const TacToe = () => {
             ) : (
                 <Box
                     sx={{
-                        background: "#36363680",
                         height: "100%",
                         fontFamily: "Quantico",
                         position: "absolute",
