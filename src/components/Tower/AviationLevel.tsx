@@ -25,8 +25,6 @@ import LevelLeaderboardModal from "./LevelLeaderboardModal";
 import PaperIcon from "./assets/paper.png";
 import LockIcon from "./assets/lock.png";
 import { useUserInfo } from "@/contexts/UserInfo";
-import { usePrivy } from "@privy-io/react-auth";
-import useSkyToast from "@/hooks/useSkyToast";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const list = [
@@ -551,9 +549,7 @@ const AviationLevel = ({
     levelInfo: any[];
     totalPaper: any;
 }) => {
-    const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfo();
-    const { ready, authenticated, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const {
@@ -567,19 +563,7 @@ const AviationLevel = ({
         setCurrentIndex(index);
         openLeaderboardModal();
     };
-
-    const handleLogin = () => {
-        if (!ready) {
-            toast("Please wait for the wallet to be ready");
-            return;
-        }
-
-        if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
-            return;
-        }
-        login();
-    };
+    const { handleLogin } = useUserInfo();
 
     const handleClickPaper = () => {
         if (!address) {

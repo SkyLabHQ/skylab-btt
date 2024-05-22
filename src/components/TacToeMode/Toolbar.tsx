@@ -7,33 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { shortenAddress } from "@/utils";
 import MyPilot from "../MyPilot";
 import { useUserInfo } from "@/contexts/UserInfo";
-import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import useSkyToast from "@/hooks/useSkyToast";
 import Click1Wav from "@/assets/click1.wav";
 const audio = new Audio(Click1Wav);
 
 export const Toolbar = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfo();
-    const { ready, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfo();
-    const handleLogin = () => {
-        audio.play();
-        if (!ready) {
-            toast("Please wait for the wallet to be ready");
-            return;
-        }
-
-        if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
-            return;
-        }
-        login();
-    };
+    const { activePilot, handleLogin } = useUserInfo();
 
     return (
         <Box

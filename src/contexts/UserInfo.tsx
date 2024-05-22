@@ -15,6 +15,9 @@ import { aviationImg } from "@/utils/aviationImg";
 import { handleError } from "@/utils/error";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useLocation } from "react-router-dom";
+import Click1Wav from "@/assets/click1.wav";
+import { usePrivy } from "@privy-io/react-auth";
+const audio = new Audio(Click1Wav);
 
 const UserInfoContext = createContext<{
     isUserInfoOpen: boolean;
@@ -34,6 +37,7 @@ const UserInfoContext = createContext<{
     handleBlock: (block: boolean) => void;
     handleToggleType: () => void;
     handleGetUserPaper: () => void;
+    handleLogin: () => void;
 }>(null);
 
 const whiteList = ["/"];
@@ -43,6 +47,7 @@ export const UserInfoProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
+    const { ready, login, user, connectWallet } = usePrivy();
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
@@ -63,6 +68,20 @@ export const UserInfoProvider = ({
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
     const toast = useSkyToast();
+
+    const handleLogin = () => {
+        audio.play();
+        if (!ready) {
+            toast("Please wait for the wallet to be ready");
+            return;
+        }
+
+        if (user && user.wallet.walletClientType !== "privy") {
+            connectWallet();
+            return;
+        }
+        login();
+    };
 
     const handleBlock = (block: boolean) => {
         setIsBlockOpen(block);
@@ -223,6 +242,7 @@ export const UserInfoProvider = ({
                 planeInit,
                 userNameInit,
                 handleGetUserPaper,
+                handleLogin,
             }}
         >
             <Box

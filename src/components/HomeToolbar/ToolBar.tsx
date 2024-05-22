@@ -9,8 +9,6 @@ import TipIcon from "./assets/tip-icon.png";
 import WalletIcon from "./assets/wallet-icon.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import { usePrivy } from "@privy-io/react-auth";
-import useSkyToast from "@/hooks/useSkyToast";
 import { shortenAddress } from "@/utils";
 import RulesModal from "./RulesModal";
 import MyPilot from "../MyPilot";
@@ -151,24 +149,9 @@ const ToolBar = ({
         onOpen: onRulesModalOpen,
         onClose: onRulesModalClose,
     } = useDisclosure();
-    const toast = useSkyToast();
     const { onUserInfoOpen } = useUserInfo();
-    const { ready, authenticated, login, user, connectWallet } = usePrivy();
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfo();
-
-    const handleLogin = () => {
-        if (!ready) {
-            toast("Please wait for the wallet to be ready");
-            return;
-        }
-
-        if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
-            return;
-        }
-        login();
-    };
+    const { activePilot, handleLogin } = useUserInfo();
 
     return (
         <>

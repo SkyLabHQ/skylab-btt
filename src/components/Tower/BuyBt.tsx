@@ -26,24 +26,12 @@ import { useMercuryJarTournamentContract } from "@/hooks/useContract";
 import { usePublicClient } from "wagmi";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import WalletIcon from "./assets/wallet-icon.svg";
-import { usePrivy } from "@privy-io/react-auth";
 import { useNavigate } from "react-router-dom";
+import { useUserInfo } from "@/contexts/UserInfo";
 const audio = new Audio(Click1Wav);
 const ConnectWalletBt = () => {
-    const toast = useSkyToast();
-    const { ready, login, connectWallet, user } = usePrivy();
-    const handleLogin = () => {
-        if (!ready) {
-            toast("Please wait for the wallet to be ready");
-            return;
-        }
+    const { handleLogin } = useUserInfo();
 
-        if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
-            return;
-        }
-        login();
-    };
     return (
         <Flex
             onClick={handleLogin}
@@ -176,8 +164,8 @@ const BuyBt = () => {
     const { onOpen, onClose, isOpen } = useDisclosure();
     const [inputAmount, setInputAmount] = React.useState(1);
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const { ready, login, user, connectWallet } = usePrivy();
     const navigate = useNavigate();
+    const { handleLogin } = useUserInfo();
 
     const handleMintPlane = async () => {
         try {
@@ -199,19 +187,6 @@ const BuyBt = () => {
             console.log(e, "e");
             toast(handleError(e));
         }
-    };
-
-    const handleLogin = () => {
-        if (!ready) {
-            toast("Please wait for the wallet to be ready");
-            return;
-        }
-
-        if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
-            return;
-        }
-        login();
     };
 
     return (

@@ -6,7 +6,6 @@ import SubIcon from "./assets/sub.svg";
 import AddIcon from "./assets/add.svg";
 import React from "react";
 import useSkyToast from "@/hooks/useSkyToast";
-import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import BuyIcon from "./assets/buy-icon.svg";
 import { accMul, parseAmount } from "@/utils/formatBalance";
@@ -17,22 +16,9 @@ import { WalletIcon } from "../Icon";
 import { useUserInfo } from "@/contexts/UserInfo";
 
 const ConnectWalletBt = () => {
-    const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const { handleLogin } = useUserInfo();
 
-    const { ready, login, connectWallet, user } = usePrivy();
-    const handleLogin = () => {
-        if (!ready) {
-            toast("Please wait for the wallet to be ready");
-            return;
-        }
-
-        if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
-            return;
-        }
-        login();
-    };
     return (
         <Flex
             align={"center"}

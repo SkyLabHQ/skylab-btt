@@ -53,9 +53,7 @@ import { ZERO_DATA } from "@/skyConstants";
 import ReactCanvasNest from "react-canvas-nest";
 import useCountDown from "react-countdown-hook";
 import styled from "@emotion/styled";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
-import { usePrivy } from "@privy-io/react-auth";
 import StartCountDown from "@/components/StartCountDown";
 import { useUserInfo } from "@/contexts/UserInfo";
 import useStartGame from "@/hooks/useStartGame";
@@ -119,13 +117,11 @@ export const GrayButton = (props: BoxProps) => {
 };
 
 const TacToeMode = () => {
-    const { address } = usePrivyAccounts();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(30000, 1000);
     const { timeLeft: timeLeft1 } = useStartGame();
     // const timeLeft1 = 0;
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
-    const { ready, login, user, connectWallet } = usePrivy();
     const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
     const {
         isOpen: isPreviousLobbyModalOpen,
@@ -143,7 +139,7 @@ const TacToeMode = () => {
     const multiProvider = useMultiProvider(chainId);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
-    const { handleGetUserPaper } = useUserInfo();
+    const { handleLogin } = useUserInfo();
     const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
     const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");
 
@@ -401,19 +397,6 @@ const TacToeMode = () => {
 
     const handlePreviousLobbyConfirm = async () => {
         navigate(`/btt/lobby?lobbyAddress=${activeLobbyAddress}`);
-    };
-
-    const handleLogin = () => {
-        if (!ready) {
-            toast("Please wait for the wallet to be ready");
-            return;
-        }
-
-        if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
-            return;
-        }
-        login();
     };
 
     useEffect(() => {
