@@ -262,7 +262,9 @@ const TacToeMode = () => {
                 ]);
 
                 if (bidTacToeGameAddress !== ZERO_DATA) {
-                    navigate(`/btt/game?tokenId=${tokenId}`);
+                    navigate(
+                        `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}`,
+                    );
                     return;
                 }
             }
