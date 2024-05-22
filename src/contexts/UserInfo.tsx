@@ -99,6 +99,7 @@ export const UserInfoProvider = ({
 
     const handleGetUserPaper = async () => {
         if (!multiMercuryJarTournamentContract || !multiProvider || !address) {
+            setPlaneList([]);
             return;
         }
         if (loading) {
