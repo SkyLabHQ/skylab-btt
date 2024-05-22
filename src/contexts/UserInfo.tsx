@@ -14,6 +14,7 @@ import { levelRanges } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
 import { handleError } from "@/utils/error";
 import useSkyToast from "@/hooks/useSkyToast";
+import { useLocation } from "react-router-dom";
 
 const UserInfoContext = createContext<{
     isUserInfoOpen: boolean;
@@ -35,11 +36,14 @@ const UserInfoContext = createContext<{
     handleGetUserPaper: () => void;
 }>(null);
 
+const whiteList = ["/"];
+
 export const UserInfoProvider = ({
     children,
 }: {
     children: React.ReactNode;
 }) => {
+    const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const publicClient = usePublicClient();
@@ -194,8 +198,10 @@ export const UserInfoProvider = ({
     }, []);
 
     useEffect(() => {
-        handleGetUserPaper();
-    }, [multiMercuryJarTournamentContract, multiProvider, address]);
+        if (whiteList.includes(pathname)) {
+            handleGetUserPaper();
+        }
+    }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
 
     return (
         <UserInfoContext.Provider

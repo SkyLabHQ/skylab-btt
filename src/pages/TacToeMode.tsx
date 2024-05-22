@@ -119,6 +119,7 @@ export const GrayButton = (props: BoxProps) => {
 };
 
 const TacToeMode = () => {
+    const { address } = usePrivyAccounts();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [timeLeft, { start }] = useCountDown(30000, 1000);
     const { timeLeft: timeLeft1 } = useStartGame();
@@ -442,10 +443,6 @@ const TacToeMode = () => {
 
         handleGetLoobyName();
     }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
-
-    useEffect(() => {
-        handleGetUserPaper();
-    }, []);
 
     return (
         <Box
