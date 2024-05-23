@@ -1,5 +1,5 @@
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
@@ -31,6 +31,7 @@ const MLayout = ({
     revealing,
     handleBoardClick,
     showAnimateConfirm,
+    onCallTimeout,
 }: any) => {
     const { isOpen, onOpen, onClose } = useDisclosure({
         defaultIsOpen: true,
@@ -46,6 +47,17 @@ const MLayout = ({
 
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } = useGameContext();
     const myGameState = myGameInfo.gameState;
+
+    const canCallTimeout = useMemo(() => {
+        if (
+            autoCommitTimeoutTime === 0 &&
+            myGameInfo.gameState <= opGameInfo.gameState
+        ) {
+            return true;
+        }
+
+        return false;
+    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
     useEffect(() => {
         if (messageLoading || emoteLoading) {
@@ -167,6 +179,37 @@ const MLayout = ({
                                             GameState.Revealed
                                     }
                                 ></Timer>
+                                <Flex
+                                    onClick={() => {
+                                        if (canCallTimeout) {
+                                            onCallTimeout();
+                                        }
+                                    }}
+                                    sx={{
+                                        marginTop: "5px",
+                                        fontSize: "12px",
+                                        height: "30px",
+                                        width: "84px",
+                                        background: canCallTimeout
+                                            ? "transparent"
+                                            : "#787878",
+                                        borderRadius: "16px",
+                                        color: canCallTimeout
+                                            ? "#FDDC2D"
+                                            : "#555",
+                                        fontWeight: "bold",
+                                        cursor: canCallTimeout
+                                            ? "pointer"
+                                            : "not-allowed",
+                                        border: canCallTimeout
+                                            ? "1px solid #FDDC2D"
+                                            : "1px solid #787878",
+                                    }}
+                                    align={"center"}
+                                    justify={"center"}
+                                >
+                                    Call Timeout
+                                </Flex>
                             </Box>
                         )}
                     </Flex>

@@ -78,9 +78,6 @@ const TacToePage = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const commitWorkerRef = useRef<Worker>(null);
-    const revealWorkerRef = useRef<Worker>(null);
-    const callTimeoutWorkerRef = useRef<Worker>(null);
-
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const [revealing, setRevealing] = useState<boolean>(false);
     const [bidAmount, setBidAmount] = useState<number>(0);
@@ -111,6 +108,17 @@ const TacToePage = ({
     const ethcallProvider = useMultiProvider(realChainId);
     const [loading, setLoading] = useState<boolean>(false);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
+
+    const canCallTimeout = useMemo(() => {
+        if (
+            autoCommitTimeoutTime === 0 &&
+            myGameInfo.gameState <= opGameInfo.gameState
+        ) {
+            return true;
+        }
+
+        return false;
+    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
     const inviteLink = useMemo(() => {
         if (!bidTacToeGameAddress) return "";
@@ -428,13 +436,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 if (commitWorkerRef.current) {
                     commitWorkerRef.current.terminate();
                 }
-                if (revealWorkerRef.current) {
-                    revealWorkerRef.current.terminate();
-                }
-
-                if (callTimeoutWorkerRef.current) {
-                    callTimeoutWorkerRef.current.terminate();
-                }
             } else {
                 handleCommitWorker();
             }
@@ -546,7 +547,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 onCallTimeout={handleCallTimeOut}
                                 planeUrl={myInfo.img}
                                 showAnimateConfirm={showAnimateConfirm}
-                                canCallTimeout={autoCommitTimeoutTime === 0}
+                                canCallTimeout={canCallTimeout}
                             ></MyUserCard>
                         </Box>
 
@@ -607,6 +608,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                     revealing={revealing}
                     handleBoardClick={handleBoardClick}
                     showAnimateConfirm={showAnimateConfirm}
+                    onCallTimeout={handleCallTimeOut}
                 ></MLayout>
             )}
 
