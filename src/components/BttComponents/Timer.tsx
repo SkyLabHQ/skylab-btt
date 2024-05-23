@@ -5,31 +5,31 @@ import { TwelveHours } from "@/skyConstants/bttGameTypes";
 const BttTimer = ({
     width,
     time,
-    show = true,
     gray = false,
-    direction = "right",
 }: {
     width: string;
     time: string;
-    show?: boolean;
     gray?: boolean;
-    direction?: "top" | "right";
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
-                position: "relative",
                 width: "100%",
             }}
         >
+            <Text
+                sx={{
+                    fontSize: isPc ? "1.25vw" : "20px",
+                    color: gray ? "#616161" : "#fddc2d",
+                    textAlign: "center",
+                }}
+            >
+                {time}
+            </Text>
             <Box
                 sx={{
-                    border: gray
-                        ? "3px solid #616161"
-                        : show
-                        ? "3px solid #FFF"
-                        : "3px solid #616161",
+                    border: gray ? "3px solid #616161" : "3px solid #FFFFFF",
                     borderWidth: isPc ? "3px" : "2px",
                     width: isPc ? "21.4583vw" : "100%",
                     background: "transparent",
@@ -48,24 +48,6 @@ const BttTimer = ({
                     }}
                 ></Box>
             </Box>
-            {show && (
-                <Text
-                    sx={{
-                        fontSize: isPc ? "1.25vw" : "20px",
-                        position: "absolute",
-                        right: direction === "right" && "-6.875vw",
-                        top: direction === "right" ? "50%" : "-28px",
-                        left: direction === "top" && "50%",
-                        transform:
-                            direction === "right"
-                                ? "translateY(-50%)"
-                                : "translateX(-50%)",
-                        color: gray ? "#616161" : "#fddc2d",
-                    }}
-                >
-                    {time}
-                </Text>
-            )}
         </Box>
     );
 };
@@ -107,7 +89,6 @@ const Timer = ({
             }}
         >
             <BttTimer
-                direction={direction}
                 width={(time1 / TwelveHours) * 100 + "%"}
                 time={`${hours}:${minutes}:${seconds}`}
                 gray={time1Gray}

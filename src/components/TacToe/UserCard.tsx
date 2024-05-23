@@ -17,7 +17,7 @@ import {
     Flex,
 } from "@chakra-ui/react";
 import CopyIcon from "./assets/copy-icon.svg";
-import GoldIcon from "./assets/gold.svg";
+import GoldIcon from "./assets/gold.png";
 import AddIcon from "./assets/add-icon.svg";
 import SubIcon from "./assets/sub-icon.svg";
 import DotIcon from "./assets/dot3.svg";
@@ -28,7 +28,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { useCountUp } from "react-countup";
 import ConfirmVideo from "@/assets/confirm.wav";
-
+import { ClockIcon } from "@/components/Icon/index";
 import {
     EMOTES,
     GameState,
@@ -248,27 +248,21 @@ export const Message = ({
 const MyBid = ({
     showTutorialStep,
     loading,
-    revealing,
     balance,
     bidAmount,
     myGameState,
-    opGameState,
     onInputChange,
     onConfirm,
     showAnimateConfirm,
-    onReveal,
 }: {
     showTutorialStep?: boolean;
     loading: boolean;
-    revealing: boolean;
     balance: number;
     bidAmount: number;
     myGameState: number;
-    opGameState: number;
     showAnimateConfirm?: number;
     onInputChange?: (value: number) => void;
     onConfirm: () => void;
-    onReveal: () => void;
 }) => {
     const countUpRef = React.useRef(null);
     const { update } = useCountUp({
@@ -277,28 +271,6 @@ const MyBid = ({
         duration: 1,
         prefix: "/ ",
     });
-
-    const [commitButtonText, status] = useMemo(() => {
-        if (myGameState === GameState.WaitingForBid) {
-            return loading ? ["Confirming", 0] : ["Confirm", 1];
-        } else if (myGameState === GameState.Commited) {
-            if (opGameState === GameState.WaitingForBid) {
-                return ["Confirmed", 0];
-            } else if (
-                opGameState === GameState.Commited ||
-                opGameState === GameState.Revealed
-            ) {
-                if (revealing) {
-                    return ["Revealing", 0];
-                } else {
-                    return ["Reveal", 2];
-                }
-            }
-        } else if (myGameState === GameState.Revealed) {
-            return ["Revealed", 0];
-        }
-        return ["Confirm", 0];
-    }, [loading, revealing, myGameState, opGameState]);
 
     useEffect(() => {
         update(balance);
@@ -339,12 +311,12 @@ const MyBid = ({
         >
             <Box
                 sx={{
-                    marginTop: "0.7813vw",
+                    marginTop: "1.25vw",
                     display: "flex",
                 }}
             >
                 <Box>
-                    <Text sx={{ fontSize: "1.25vw" }}>Bid</Text>
+                    <Text sx={{ fontSize: "0.8333vw" }}>Bid</Text>
                     <Box
                         sx={{
                             position: "relative",
@@ -416,6 +388,7 @@ const MyBid = ({
                                         fontSize: "1.6667vw",
                                         width: "100%",
                                         textAlign: "center",
+                                        background: "#616161",
                                     },
                                 }}
                                 onChange={(e) => {
@@ -444,7 +417,6 @@ const MyBid = ({
                             textAlign: "right",
                             flex: 1,
                             color: "#bcbbbe",
-                            lineHeight: "1.875vw",
                         }}
                     >
                         Remaining
@@ -460,120 +432,22 @@ const MyBid = ({
                     ></Box>
                 </Box>
             </Box>
-            <>
-                {/* {loading ? (
-                    <Button
-                        disabled={true}
-                        variant={"outline"}
-                        sx={{
-                            color: "#BCBBBE",
-                            borderRadius: "0.9375vw",
-                            fontSize: "0.8333vw",
-                            height: "2.2917vw",
-                            width: "6.25vw",
-                            marginTop: "0.5208vw",
-                            "&:disabled": {
-                                border: "2px solid #fff !important",
-                                opacity: 1,
-                                background: "transparent",
-                            },
-                            "&:hover[disabled]": {
-                                background: "transparent",
-                            },
-                        }}
-                    >
-                        Confirming
-                    </Button>
-                ) : (
-                    <Button
-                        onClick={() => {
-                            const audio = new Audio(ConfirmVideo);
-                            audio.play();
-                            onConfirm();
-                        }}
-                        disabled={
-                            gameState === GameState.Commited ||
-                            gameState === GameState.Revealed
-                        }
-                        variant={"outline"}
-                        sx={{
-                            color: "#fddc2d",
-                            border: "2px solid #fddc2d !important",
-                            borderRadius: "0.9375vw",
-                            background:
-                                gameState === GameState.Commited ||
-                                gameState === GameState.Revealed
-                                    ? "linear-gradient(180deg, rgba(253, 220, 45, 0.50) 0%, rgba(253, 220, 45, 0.00) 100%)"
-                                    : "transparent",
-                            fontSize: "0.8333vw",
-                            height: "2.2917vw",
-                            width: "6.25vw",
-                            marginTop: "0.5208vw",
-                            "&:disabled": {
-                                border: "2px solid #fddc2d !important",
-                                opacity: 1,
-                            },
-                            "&:hover[disabled]": {
-                                background:
-                                    gameState === GameState.Commited ||
-                                    gameState === GameState.Revealed
-                                        ? "linear-gradient(180deg, rgba(253, 220, 45, 0.50) 0%, rgba(253, 220, 45, 0.00) 100%)"
-                                        : "transparent",
-                            },
-                        }}
-                    >
-                        {gameState === GameState.Commited ||
-                        gameState === GameState.Revealed
-                            ? "Confirmed"
-                            : "Confirm"}
-                    </Button>
-                )} */}
-            </>
-            <Flex
-                onClick={() => {
-                    const audio = new Audio(ConfirmVideo);
-                    audio.play();
-                    if (status === 1) {
-                        onConfirm();
-                    } else if (status === 2) {
-                        onReveal();
-                    }
-                }}
-                sx={{
-                    marginTop: "0.5208vw",
-                    fontSize: "0.8333vw",
-                    height: "2.2917vw",
-                    width: "6.25vw",
-                    background: status === 0 ? "transparent" : "#FDDC2D",
-                    borderRadius: "16px",
-                    color: status === 0 ? "#414141" : "#1b1b1b",
-                    fontWeight: "bold",
-                    animationIterationCount: "2",
-                    cursor: status === 0 ? "not-allowed" : "pointer",
-                }}
-                align={"center"}
-                justify={"center"}
-            >
-                {commitButtonText}
-            </Flex>
         </Box>
     );
 };
 
 const OpBid = ({
-    myGameState,
     opGameState,
     balance,
 }: {
-    myGameState: number;
     opGameState: number;
     balance: number;
 }) => {
     return (
         <Box>
-            <Box sx={{ marginTop: "0.7813vw", display: "flex" }}>
+            <Box sx={{ marginTop: "1.25vw", display: "flex" }}>
                 <Box>
-                    <Text sx={{ fontSize: "1.25vw" }}>Bid</Text>
+                    <Text sx={{ fontSize: "0.8333vw" }}>Bid</Text>
                     <Box
                         sx={{
                             height: "2.2917vw",
@@ -633,7 +507,6 @@ const OpBid = ({
                             textAlign: "right",
                             flex: 1,
                             color: "#bcbbbe",
-                            lineHeight: "1.875vw",
                         }}
                     >
                         Remaining
@@ -675,7 +548,6 @@ interface UserCardProps {
     message?: number;
     myGameState?: number;
     opGameState?: number;
-    status?: "my" | "op";
     planeUrl?: string;
     onConfirm?: () => void;
     onInputChange?: (value: number) => void;
@@ -794,7 +666,6 @@ export const MyUserCard = ({
     balance,
     bidAmount,
     showAdvantageTip,
-    status = "my",
     myGameState,
     opGameState,
     emote = 0,
@@ -811,6 +682,37 @@ export const MyUserCard = ({
 }: UserCardProps) => {
     const { onCopy } = useClipboard(address ?? "");
     const toast = useSkyToast();
+    const [commitButtonText, status] = useMemo(() => {
+        if (myGameState === GameState.WaitingForBid) {
+            return loading ? ["Confirming", 0] : ["Confirm", 1];
+        } else if (myGameState === GameState.Commited) {
+            if (opGameState === GameState.WaitingForBid) {
+                return ["Confirmed", 0];
+            } else if (
+                opGameState === GameState.Commited ||
+                opGameState === GameState.Revealed
+            ) {
+                if (revealing) {
+                    return ["Revealing", 0];
+                } else {
+                    return ["Reveal", 2];
+                }
+            }
+        } else if (myGameState === GameState.Revealed) {
+            return ["Revealed", 0];
+        }
+        return ["Confirm", 0];
+    }, [loading, revealing, myGameState, opGameState]);
+
+    const handleSumbit = async () => {
+        const audio = new Audio(ConfirmVideo);
+        audio.play();
+        if (status === 1) {
+            onConfirm();
+        } else if (status === 2) {
+            onReveal();
+        }
+    };
 
     return (
         <Box
@@ -873,7 +775,7 @@ export const MyUserCard = ({
                         emote={emote}
                         messageLoading={messageLoading}
                         emoteLoading={emoteLoading}
-                        status={status}
+                        status={"my"}
                         emoteIndex={emoteIndex}
                         messageIndex={messageIndex}
                     ></Message>
@@ -908,49 +810,99 @@ export const MyUserCard = ({
             </Text>
             <Box
                 sx={{
-                    background: "#787878",
-                    borderRadius: "1.0417vw",
-                    height: "13.5417vw",
-                    padding: "0.3646vw 0.8333vw 0.625vw 1.9792vw",
-                    marginTop: "0.7813vw",
+                    marginTop: "1.5625vw",
                 }}
             >
                 <Box
                     sx={{
-                        width: "9.6875vw",
-                        height: "2.5vw",
-                        background: "#bcbbbe",
-                        display: "flex",
-                        alignItems: "center",
-                        borderRadius: "1.3542vw",
-                        paddingLeft: "0.7292vw",
+                        background: "#787878",
+                        borderRadius: "1.0417vw",
+                        height: "6.3542vw",
+                        padding: "0.3646vw 0.8333vw 0.625vw 1.9792vw",
+                        position: "relative",
+                        border: "1px solid #fff",
                     }}
                 >
-                    <Image src={GoldIcon} sx={{ width: "2.8125vw" }}></Image>
-                    <Text
+                    <Box
                         sx={{
-                            textShadow: "1px 1px 0px #303030",
-                            fontSize: "1.25vw",
-                            color: "#fddc2d",
-                            marginLeft: "0.6771vw",
+                            width: "8.6979vw",
+                            height: "3.75vw",
+                            display: "flex",
+                            alignItems: "center",
+                            borderRadius: "1.3542vw",
+                            paddingLeft: "0.7292vw",
+                            position: "absolute",
+                            left: "50%",
+                            top: "0",
+                            transform: "translate(-50%,-50%)",
+                            background: `url(${GoldIcon})`,
+                            backgroundSize: "100% 100%",
                         }}
-                    >
-                        GOLD
-                    </Text>
+                    ></Box>
+                    <MyBid
+                        showTutorialStep={showTutorialStep}
+                        loading={loading}
+                        balance={balance}
+                        bidAmount={bidAmount}
+                        onInputChange={onInputChange}
+                        onConfirm={onConfirm}
+                        myGameState={myGameState}
+                        showAnimateConfirm={showAnimateConfirm}
+                    ></MyBid>
                 </Box>
-                <MyBid
-                    showTutorialStep={showTutorialStep}
-                    loading={loading}
-                    revealing={revealing}
-                    balance={balance}
-                    bidAmount={bidAmount}
-                    onInputChange={onInputChange}
-                    onConfirm={onConfirm}
-                    onReveal={onReveal}
-                    myGameState={myGameState}
-                    opGameState={opGameState}
-                    showAnimateConfirm={showAnimateConfirm}
-                ></MyBid>
+                <Flex flexDir={"column"} align={"center"}>
+                    <Flex
+                        onClick={handleSumbit}
+                        sx={{
+                            marginTop: "0.5208vw",
+                            fontSize: "0.8333vw",
+                            height: "2.2917vw",
+                            width: "6.25vw",
+                            background:
+                                status === 0 ? "transparent" : "#FDDC2D",
+                            borderRadius: "16px",
+                            color: status === 0 ? "#414141" : "#1b1b1b",
+                            fontWeight: "bold",
+                            animationIterationCount: "2",
+                            cursor: status === 0 ? "not-allowed" : "pointer",
+                        }}
+                        align={"center"}
+                        justify={"center"}
+                    >
+                        {commitButtonText}
+                    </Flex>
+                    <Flex
+                        onClick={handleSumbit}
+                        sx={{
+                            marginTop: "0.5208vw",
+                            fontSize: "0.8333vw",
+                            height: "2.2917vw",
+                            width: "6.25vw",
+                            background: true ? "transparent" : "#787878",
+                            borderRadius: "16px",
+                            color: true ? "#FDDC2D" : "#555",
+                            fontWeight: "bold",
+                            cursor: true ? "pointer" : "not-allowed",
+                            border: true
+                                ? "1px solid #FDDC2D"
+                                : "1px solid #787878",
+                            position: "relative",
+                        }}
+                        align={"center"}
+                        justify={"center"}
+                    >
+                        Call Timeout
+                        <ClockIcon
+                            color={true ? "#FDDC2D" : "#555555"}
+                            style={{
+                                position: "absolute",
+                                left: "-40px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                            }}
+                        ></ClockIcon>
+                    </Flex>
+                </Flex>
             </Box>
         </Box>
     );
@@ -964,13 +916,12 @@ export const OpUserCard = ({
     balance,
     opGameState,
     showAdvantageTip,
-    status = "my",
-    myGameState,
     emote = 0,
     message = 0,
     planeUrl = Plane1,
 }: UserCardProps) => {
     const { onCopy } = useClipboard(address ?? "");
+
     return (
         <Box
             sx={{
@@ -1032,7 +983,7 @@ export const OpUserCard = ({
                     <Message
                         message={message}
                         emote={emote}
-                        status={status}
+                        status={"op"}
                     ></Message>
                 </Box>
             </Box>
@@ -1062,42 +1013,37 @@ export const OpUserCard = ({
             </Text>
             <Box
                 sx={{
-                    background: "#787878",
-                    borderRadius: "1.0417vw",
-                    height: "13.5417vw",
-                    padding: "0.3646vw 0.8333vw 0.625vw 0.8333vw",
-                    marginTop: "0.7813vw",
-                    width: "100%",
+                    marginTop: "1.5625vw",
                 }}
             >
                 <Box
                     sx={{
-                        width: "9.6875vw",
-                        height: "2.5vw",
-                        background: "#bcbbbe",
-                        display: "flex",
-                        alignItems: "center",
-                        borderRadius: "1.3542vw",
-                        paddingLeft: "0.7292vw",
+                        background: "#787878",
+                        borderRadius: "1.0417vw",
+                        height: "6.3542vw",
+                        padding: "0.3646vw 0.8333vw 0.625vw 0.7813vw",
+                        position: "relative",
+                        border: "1px solid #fff",
                     }}
                 >
-                    <Image src={GoldIcon} sx={{ width: "2.8125vw" }}></Image>
-                    <Text
+                    <Box
                         sx={{
-                            textShadow: "1px 1px 0px #303030",
-                            fontSize: "1.25vw",
-                            color: "#fddc2d",
-                            marginLeft: "0.6771vw",
+                            width: "8.6979vw",
+                            height: "3.75vw",
+                            display: "flex",
+                            alignItems: "center",
+                            borderRadius: "1.3542vw",
+                            paddingLeft: "0.7292vw",
+                            position: "absolute",
+                            left: "50%",
+                            top: "0",
+                            transform: "translate(-50%,-50%)",
+                            background: `url(${GoldIcon})`,
+                            backgroundSize: "100% 100%",
                         }}
-                    >
-                        GOLD
-                    </Text>
+                    ></Box>
+                    <OpBid opGameState={opGameState} balance={balance}></OpBid>
                 </Box>
-                <OpBid
-                    myGameState={myGameState}
-                    opGameState={opGameState}
-                    balance={balance}
-                ></OpBid>
             </Box>
         </Box>
     );

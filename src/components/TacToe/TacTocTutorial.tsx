@@ -1,8 +1,6 @@
 import { Box, Grid, Text, Image } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { MyUserCard, OpUserCard } from "./UserCard";
-import CircleIcon from "@/components/TacToe/assets/circle.svg";
-import XIcon from "@/components/TacToe/assets/x.svg";
 import { BoardGrid } from "@/components/TacToe/Board";
 import BaseGrid from "./assets/base-grid.svg";
 import { useTour } from "@reactour/tour";
@@ -452,7 +450,6 @@ const TacToeTutorial = ({}) => {
                     >
                         <MyUserCard
                             showTutorialStep
-                            status="my"
                             showAdvantageTip
                             markIcon={UserMarkType.Circle}
                             level={1}
@@ -469,9 +466,7 @@ const TacToeTutorial = ({}) => {
                             {currentStep === 2 && <SecondBoard></SecondBoard>}
                             {currentStep === 3 && <ThirdBoard></ThirdBoard>}
                         </Box>
-
                         <OpUserCard
-                            status="op"
                             markIcon={UserMarkType.Cross}
                             level={1}
                             address={
@@ -482,7 +477,7 @@ const TacToeTutorial = ({}) => {
                             opGameState={GameState.Revealed}
                         ></OpUserCard>
                     </Box>
-                </Box>{" "}
+                </Box>
             </Box>
         </Box>
     );

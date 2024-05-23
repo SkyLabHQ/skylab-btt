@@ -585,7 +585,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 onConfirm={handleBid}
                                 onReveal={handleRevealedBid}
                                 onInputChange={handleBidAmount}
-                                status="my"
                                 planeUrl={myInfo.img}
                                 showAnimateConfirm={showAnimateConfirm}
                             ></MyUserCard>
@@ -609,7 +608,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 showAdvantageTip={
                                     opInfo.burner === nextDrawWinner
                                 }
-                                myGameState={myGameInfo.gameState}
                                 opGameState={opGameInfo.gameState}
                                 message={opGameInfo.message}
                                 emote={opGameInfo.emote}
@@ -620,7 +618,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                         ? list[currentGrid].opValue
                                         : 0
                                 }
-                                status="op"
                                 planeUrl={opInfo.img}
                             ></OpUserCard>
                         </Box>
