@@ -549,9 +549,11 @@ interface UserCardProps {
     myGameState?: number;
     opGameState?: number;
     planeUrl?: string;
+    canCallTimeout?: boolean;
     onConfirm?: () => void;
     onInputChange?: (value: number) => void;
     onReveal?: () => void;
+    onCallTimeout?: () => void;
 }
 
 export const AdvantageTip = ({
@@ -678,16 +680,18 @@ export const MyUserCard = ({
     onConfirm,
     onInputChange,
     onReveal,
+    onCallTimeout,
     showAnimateConfirm,
+    canCallTimeout,
 }: UserCardProps) => {
     const { onCopy } = useClipboard(address ?? "");
     const toast = useSkyToast();
     const [commitButtonText, status] = useMemo(() => {
         if (myGameState === GameState.WaitingForBid) {
-            return loading ? ["Confirming", 0] : ["Confirm", 1];
+            return loading ? ["Committing", 0] : ["Commit", 1];
         } else if (myGameState === GameState.Commited) {
             if (opGameState === GameState.WaitingForBid) {
-                return ["Confirmed", 0];
+                return ["Committed", 0];
             } else if (
                 opGameState === GameState.Commited ||
                 opGameState === GameState.Revealed
@@ -701,7 +705,7 @@ export const MyUserCard = ({
         } else if (myGameState === GameState.Revealed) {
             return ["Revealed", 0];
         }
-        return ["Confirm", 0];
+        return ["Commit", 0];
     }, [loading, revealing, myGameState, opGameState]);
 
     const handleSumbit = async () => {
@@ -872,18 +876,20 @@ export const MyUserCard = ({
                         {commitButtonText}
                     </Flex>
                     <Flex
-                        onClick={handleSumbit}
+                        onClick={onCallTimeout}
                         sx={{
                             marginTop: "0.5208vw",
                             fontSize: "0.8333vw",
                             height: "2.2917vw",
                             width: "6.25vw",
-                            background: true ? "transparent" : "#787878",
+                            background: canCallTimeout
+                                ? "transparent"
+                                : "#787878",
                             borderRadius: "16px",
-                            color: true ? "#FDDC2D" : "#555",
+                            color: canCallTimeout ? "#FDDC2D" : "#555",
                             fontWeight: "bold",
-                            cursor: true ? "pointer" : "not-allowed",
-                            border: true
+                            cursor: canCallTimeout ? "pointer" : "not-allowed",
+                            border: canCallTimeout
                                 ? "1px solid #FDDC2D"
                                 : "1px solid #787878",
                             position: "relative",
@@ -893,7 +899,7 @@ export const MyUserCard = ({
                     >
                         Call Timeout
                         <ClockIcon
-                            color={true ? "#FDDC2D" : "#555555"}
+                            color={canCallTimeout ? "#FDDC2D" : "#555555"}
                             style={{
                                 position: "absolute",
                                 left: "-40px",

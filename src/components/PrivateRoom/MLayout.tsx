@@ -153,7 +153,6 @@ const MLayout = ({
                                 }}
                             >
                                 <Timer
-                                    direction="top"
                                     time1={autoCommitTimeoutTime}
                                     time1Gray={
                                         loading ||

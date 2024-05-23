@@ -168,7 +168,6 @@ const MBttLiveGame = ({
                     >
                         {myGameInfo.gameState <= GameState.Revealed && (
                             <Timer
-                                direction="top"
                                 time1={autoCommitTimeoutTime}
                                 time1Gray={false}
                             ></Timer>

@@ -148,14 +148,13 @@ const MLayout = ({
                         {myGameInfo.gameState <= GameState.Revealed && (
                             <Box
                                 sx={{
-                                    width: "160px",
+                                    width: "84px",
                                     position: "absolute",
                                     left: "12px",
                                     bottom: "20px",
                                 }}
                             >
                                 <Timer
-                                    direction="top"
                                     time1={autoCommitTimeoutTime}
                                     time1Gray={
                                         loading ||

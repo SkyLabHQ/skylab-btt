@@ -410,43 +410,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         }
     };
 
-    const handleCallTimeoutWorkerRef = () => {
-        if (callTimeoutWorkerRef.current) {
-            callTimeoutWorkerRef.current.terminate();
-        }
-        if (
-            !opGameInfo.timeout ||
-            !opGameInfo.gameState ||
-            !myGameInfo.gameState
-        ) {
-            return;
-        }
-        const now = getNowSecondsTimestamp();
-        const autoCallTimeoutTime =
-            opGameInfo.timeout * 1000 - now > 0
-                ? opGameInfo.timeout * 1000 - now
-                : 0;
-
-        callTimeoutWorkerRef.current = new Worker(
-            new URL("../../utils/timerWorker.ts", import.meta.url),
-        );
-
-        callTimeoutWorkerRef.current.onmessage = async (event) => {
-            const timeLeft = event.data;
-            if (timeLeft === 0) {
-                handleCallTimeOut();
-            }
-        };
-        if (autoCallTimeoutTime === 0) {
-            handleCallTimeOut();
-        } else {
-            callTimeoutWorkerRef.current.postMessage({
-                action: "start",
-                timeToCount: autoCallTimeoutTime,
-            });
-        }
-    };
-
     useEffect(() => {
         handleGameOver();
     }, [myGameInfo.gameState, deleteTokenIdCommited, addBttTransaction]);
@@ -454,10 +417,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     useEffect(() => {
         handleCommitWorker();
     }, [myGameInfo.timeout, opGameInfo.timeout]);
-
-    useEffect(() => {
-        handleCallTimeoutWorkerRef();
-    }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
 
     useEffect(() => {
         if (isPc) {
@@ -478,7 +437,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 }
             } else {
                 handleCommitWorker();
-                handleCallTimeoutWorkerRef();
             }
         };
         document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -585,8 +543,10 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 onConfirm={handleBid}
                                 onReveal={handleRevealedBid}
                                 onInputChange={handleBidAmount}
+                                onCallTimeout={handleCallTimeOut}
                                 planeUrl={myInfo.img}
                                 showAnimateConfirm={showAnimateConfirm}
+                                canCallTimeout={autoCommitTimeoutTime === 0}
                             ></MyUserCard>
                         </Box>
 

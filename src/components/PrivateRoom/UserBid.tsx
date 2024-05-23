@@ -146,10 +146,10 @@ export const MyBid = ({
 
     const [commitButtonText, status] = useMemo(() => {
         if (myGameState === GameState.WaitingForBid) {
-            return loading ? ["Confirming", 0] : ["Confirm", 1];
+            return loading ? ["Committing", 0] : ["Commit", 1];
         } else if (myGameState === GameState.Commited) {
             if (opGameState === GameState.WaitingForBid) {
-                return ["Confirmed", 0];
+                return ["Committed", 0];
             } else if (
                 opGameState === GameState.Commited ||
                 opGameState === GameState.Revealed
@@ -163,7 +163,7 @@ export const MyBid = ({
         } else if (myGameState === GameState.Revealed) {
             return ["Revealed", 0];
         }
-        return ["Confirm", 0];
+        return ["Commit", 0];
     }, [loading, revealing, myGameState, opGameState]);
 
     useEffect(() => {

@@ -20,7 +20,7 @@ const BttTimer = ({
         >
             <Text
                 sx={{
-                    fontSize: isPc ? "1.25vw" : "20px",
+                    fontSize: isPc ? "1.25vw" : "16px",
                     color: gray ? "#616161" : "#fddc2d",
                     textAlign: "center",
                 }}
@@ -52,15 +52,7 @@ const BttTimer = ({
     );
 };
 
-const Timer = ({
-    time1,
-    time1Gray,
-    direction = "right",
-}: {
-    time1: number;
-    time1Gray: boolean;
-    direction?: "top" | "right";
-}) => {
+const Timer = ({ time1, time1Gray }: { time1: number; time1Gray: boolean }) => {
     const { hours, minutes, seconds } = useMemo(() => {
         let hours: string | number = Math.floor(time1 / 3600000);
         if (hours < 10) {

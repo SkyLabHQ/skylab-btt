@@ -483,11 +483,7 @@ const MTacToeTutorial = ({}) => {
                                     bottom: "12px",
                                 }}
                             >
-                                <Timer
-                                    direction="top"
-                                    time1={30000}
-                                    time1Gray={false}
-                                ></Timer>
+                                <Timer time1={30000} time1Gray={false}></Timer>
                             </Box>
                             <Flex
                                 sx={{

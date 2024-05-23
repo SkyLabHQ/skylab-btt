@@ -48,7 +48,7 @@ const ToolBar = ({
                     cursor: "pointer",
                 },
                 zIndex: 100,
-                gap: isPc ? "16px" : "12px",
+                gap: isPc ? "16px" : "8px",
             }}
         >
             <Image
