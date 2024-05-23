@@ -20,6 +20,7 @@ import { usePrivy } from "@privy-io/react-auth";
 const audio = new Audio(Click1Wav);
 
 const UserInfoContext = createContext<{
+    loading: boolean;
     isUserInfoOpen: boolean;
     onUserInfoOpen: () => void;
     onUserInfoClose: () => void;
@@ -244,6 +245,7 @@ export const UserInfoProvider = ({
                 userNameInit,
                 handleGetUserPaper,
                 handleLogin,
+                loading,
             }}
         >
             <Box

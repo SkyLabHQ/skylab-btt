@@ -127,8 +127,13 @@ const SelectPlane = ({
 }) => {
     const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { planeInit, planeList, handleLogin, handleGetUserPaper } =
-        useUserInfo();
+    const {
+        planeInit,
+        planeList,
+        handleLogin,
+        handleGetUserPaper,
+        loading: planetLoading,
+    } = useUserInfo();
     const { address } = usePrivyAccounts();
     const [inputAmount, setInputAmount] = useState(1);
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
@@ -221,7 +226,7 @@ const SelectPlane = ({
                                         height: "100%",
                                     }}
                                 >
-                                    {!planeInit ? (
+                                    {planetLoading ? (
                                         <SimpleGrid
                                             columns={isPc ? 4 : 3}
                                             sx={{
