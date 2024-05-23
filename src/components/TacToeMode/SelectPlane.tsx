@@ -41,7 +41,7 @@ const BuyButton = ({
                 height: "40px",
                 borderRadius: "12px",
                 background: "#f2d861",
-                fontSize: isPc ? "16px" : "10px",
+                fontSize: "16px",
                 padding: "0 12px",
                 marginTop: "10px",
                 color: "#000",
