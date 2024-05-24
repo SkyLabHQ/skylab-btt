@@ -21,7 +21,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
 
 export const PlaneImg = ({
@@ -132,7 +131,6 @@ const LevelInfo = ({
     const toast = useSkyToast();
     const [loading, setLoading] = React.useState(false);
     const [tacToeBurner] = useTacToeSigner(tokenId);
-    const { blockNumber } = useBlockNumber();
     const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
@@ -312,7 +310,6 @@ const LevelInfo = ({
 
     useEffect(() => {
         if (
-            !blockNumber ||
             !tokenId ||
             !tacToeBurner ||
             !multiSkylabBidTacToeFactoryContract ||
@@ -320,14 +317,14 @@ const LevelInfo = ({
         ) {
             return;
         }
-        handleGetGameInfo();
-    }, [
-        multiProvider,
-        blockNumber,
-        tokenId,
-        tacToeBurner,
-        multiMercuryBaseContract,
-    ]);
+        const timer = setInterval(() => {
+            handleGetGameInfo();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [multiProvider, tokenId, tacToeBurner, multiMercuryBaseContract]);
 
     useEffect(() => {
         if (

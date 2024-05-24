@@ -8,7 +8,6 @@ import React, {
     useState,
 } from "react";
 import Board from "@/components/TacToe/Board";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { ethers } from "ethers";
 import {
@@ -77,7 +76,6 @@ const PlayGame = ({
     const deleteTokenIdCommited =
         useDeleteTokenIdCommited(bidTacToeGameAddress);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
-    const { blockNumber } = useBlockNumber();
     const [revealing, setRevealing] = useState<boolean>(false);
     const { getGridCommited, addGridCommited } = useGridCommited(
         bidTacToeGameAddress,
@@ -528,17 +526,21 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
             !myInfo.address ||
             !opInfo.address ||
             !multiSkylabBidTacToeGameContract ||
-            !multiProvider ||
-            revealing ||
-            !blockNumber
+            !multiProvider
         ) {
             return;
         }
-        handleGetGameInfo();
+
+        const timer = setInterval(() => {
+            handleGetGameInfo();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
     }, [
         myInfo.address,
         opInfo.address,
-        blockNumber,
         multiSkylabBidTacToeGameContract,
         multiProvider,
     ]);

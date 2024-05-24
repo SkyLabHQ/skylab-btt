@@ -17,7 +17,6 @@ import {
     useMultiMercuryBaseContract,
 } from "@/hooks/useMultiContract";
 import { PilotInfo } from "@/hooks/usePilotInfo";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import { botAddress } from "@/hooks/useContract";
 import { GrayButton } from "../Button/Index";
 import QuitModal from "@/components/BttComponents/QuitModal";
@@ -231,7 +230,6 @@ export const MatchPage = ({
     const [showPlayWithBot, setShowPlayWithBot] = useState(false);
     const navigate = useNavigate();
     const toast = useSkyToast();
-    const { blockNumber } = useBlockNumber();
     const {
         realChainId,
         myInfo,
@@ -635,7 +633,6 @@ export const MatchPage = ({
 
     useEffect(() => {
         if (
-            !blockNumber ||
             !tokenId ||
             !tacToeBurner ||
             !multiSkylabBidTacToeFactoryContract ||
@@ -643,10 +640,16 @@ export const MatchPage = ({
         ) {
             return;
         }
-        handleGetGameInfo();
+
+        const timer = setInterval(() => {
+            handleGetGameInfo();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
     }, [
         multiProvider,
-        blockNumber,
         tokenId,
         tacToeBurner,
         multiMercuryBaseContract,

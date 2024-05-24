@@ -10,8 +10,6 @@ import {
 } from "@/hooks/useMultiContract";
 import Board from "../TacToe/Board";
 import { UserCard } from "../BttPlayBack/UserCard";
-import Loading from "../Loading";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import { shortenAddressWithout0x } from "@/utils";
 import { aviationImg } from "@/utils/aviationImg";
 import { ZERO_DATA } from "@/skyConstants";
@@ -21,8 +19,6 @@ import {
     GameInfo,
     GameState,
     RobotImg,
-    SixtySecond,
-    ThirtySecond,
     UserMarkType,
     getWinState,
     initBoard,
@@ -261,7 +257,6 @@ const MBttLiveGame = ({
 
 const BttLiveGamePage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { blockNumber } = useBlockNumber();
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 
     const [init, setInit] = useState(false);
@@ -545,11 +540,16 @@ const BttLiveGamePage = () => {
     };
 
     useEffect(() => {
-        handleGetGameInfo();
+        const timer = setInterval(() => {
+            handleGetGameInfo();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
     }, [
         myInfo.burner,
         opInfo.burner,
-        blockNumber,
         multiSkylabBidTacToeGameContract,
         multiSkylabBidTacToeFactoryContract,
     ]);

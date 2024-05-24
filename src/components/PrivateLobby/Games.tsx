@@ -20,7 +20,6 @@ import avatars from "@/skyConstants/avatars";
 import { useNavigate } from "react-router-dom";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import Vacant from "./Vacant";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
@@ -377,7 +376,6 @@ const GameList = ({
                     align={"center"}
                     sx={{
                         height: "100%",
-
                         width: "100%",
                     }}
                 >
@@ -427,7 +425,6 @@ const Games = () => {
     const [listInit, setListInit] = useState(false);
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { blockNumber } = useBlockNumber();
     const [queueList, setQueueList] = useState([]);
     const [onGameList, setOnGameList] = useState([]);
     const navigate = useNavigate();
@@ -625,91 +622,93 @@ const Games = () => {
     };
 
     useEffect(() => {
-        if (!multiMercuryBTTPrivateLobby || !multiProvider || !blockNumber) {
+        if (!multiMercuryBTTPrivateLobby || !multiProvider) {
             return;
         }
 
-        handleGetGameList();
-    }, [multiMercuryBTTPrivateLobby, multiProvider, blockNumber]);
+        const timer = setInterval(() => {
+            handleGetGameList();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [multiMercuryBTTPrivateLobby, multiProvider]);
 
     return (
         <Box
             sx={{
                 height: "100%",
+                display: "flex",
             }}
+            flexDir={"column"}
         >
-            <Box
-                sx={{
-                    height: "100%",
-                }}
-            >
-                <Header
-                    gameCount={myGameCount}
-                    onStartGame={handleStartGame}
-                ></Header>
-                {isPc ? (
-                    <Flex
+            <Header
+                gameCount={myGameCount}
+                onStartGame={handleStartGame}
+            ></Header>
+            {isPc ? (
+                <Flex
+                    sx={{
+                        height: "100%",
+                    }}
+                >
+                    <Box
                         sx={{
+                            height: "100%",
+                            flex: 1,
+                            overflowY: "auto",
+                        }}
+                    >
+                        <GameList
+                            onJoinGame={(gameAddress: string) => {
+                                handleJoinGame(gameAddress);
+                            }}
+                            onWatchGame={(gameAddress: string) => {
+                                handleWatchGame(gameAddress);
+                            }}
+                            loading={listLoading}
+                            queueList={queueList}
+                            onGameList={onGameList}
+                        ></GameList>
+                    </Box>
+                    <Box
+                        sx={{
+                            width: "26.0417vw",
                             height: "100%",
                         }}
                     >
-                        <Box
-                            sx={{
-                                height: "100%",
-                                flex: 1,
-                                overflowY: "auto",
-                            }}
-                        >
-                            <GameList
-                                onJoinGame={(gameAddress: string) => {
-                                    handleJoinGame(gameAddress);
-                                }}
-                                onWatchGame={(gameAddress: string) => {
-                                    handleWatchGame(gameAddress);
-                                }}
-                                loading={listLoading}
-                                queueList={queueList}
-                                onGameList={onGameList}
-                            ></GameList>
-                        </Box>
-                        <Box
-                            sx={{
-                                width: "26.0417vw",
-                                height: "100%",
-                            }}
-                        >
-                            <Vacant list={vacantList}></Vacant>
-                        </Box>
-                    </Flex>
-                ) : (
-                    <Box>
-                        <Box
-                            sx={{
-                                height: "274px",
-                            }}
-                        >
-                            <GameList
-                                onJoinGame={(gameAddress: string) => {
-                                    handleJoinGame(gameAddress);
-                                }}
-                                onWatchGame={(gameAddress: string) => {
-                                    handleWatchGame(gameAddress);
-                                }}
-                                loading={listLoading}
-                                queueList={queueList}
-                                onGameList={onGameList}
-                            ></GameList>
-                        </Box>
-                        <Box
-                            sx={{
-                                height: "98px",
-                            }}
-                        >
-                            <Vacant list={vacantList}></Vacant>
-                        </Box>
+                        <Vacant list={vacantList}></Vacant>
                     </Box>
-                )}
-            </Box>
+                </Flex>
+            ) : (
+                <Box>
+                    <Box
+                        sx={{
+                            height: "274px",
+                        }}
+                    >
+                        <GameList
+                            onJoinGame={(gameAddress: string) => {
+                                handleJoinGame(gameAddress);
+                            }}
+                            onWatchGame={(gameAddress: string) => {
+                                handleWatchGame(gameAddress);
+                            }}
+                            loading={listLoading}
+                            queueList={queueList}
+                            onGameList={onGameList}
+                        ></GameList>
+                    </Box>
+                    <Box
+                        sx={{
+                            height: "98px",
+                        }}
+                    >
+                        <Vacant list={vacantList}></Vacant>
+                    </Box>
+                </Box>
+            )}
         </Box>
     );
 };

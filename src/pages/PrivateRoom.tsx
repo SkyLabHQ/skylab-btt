@@ -11,7 +11,6 @@ import {
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { ZERO_DATA } from "@/skyConstants";
 import Match from "@/components/PrivateRoom/Match";
-import { useBlockNumber } from "@/contexts/BlockNumber";
 import PlayGame from "@/components/PrivateRoom/PlayGame";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
@@ -46,7 +45,6 @@ const PrivateRoom = () => {
     const localSinger = getPrivateLobbySigner();
     const { sCWAddress } = useSCWallet(localSinger.privateKey);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
-    const { blockNumber } = useBlockNumber();
     const { search } = useLocation();
     const [step, setStep] = useState<number>(0);
     const params = qs.parse(search) as any;
@@ -219,7 +217,6 @@ const PrivateRoom = () => {
 
     useEffect(() => {
         if (
-            !blockNumber ||
             !multiSkylabBidTacToeGameContract ||
             !multiProvider ||
             !sCWAddress
@@ -231,19 +228,20 @@ const PrivateRoom = () => {
             return;
         }
 
-        if (!myInfo.address) {
-            handleGetPlayer1Info();
-        }
+        const timer = setInterval(() => {
+            if (!myInfo.address) {
+                handleGetPlayer1Info();
+            }
 
-        if (!opInfo.address) {
-            handleGetPlayer2Info();
-        }
-    }, [
-        blockNumber,
-        multiSkylabBidTacToeGameContract,
-        multiProvider,
-        sCWAddress,
-    ]);
+            if (!opInfo.address) {
+                handleGetPlayer2Info();
+            }
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [multiSkylabBidTacToeGameContract, multiProvider, sCWAddress]);
 
     const handleGetUserInfo = async (playerAddress: string) => {
         const [user, winCount, loseCount] = await multiProvider.all([

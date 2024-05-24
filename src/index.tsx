@@ -15,7 +15,6 @@ import { GlobalStyles } from "./skyConstants";
 import AppRoutes from "./Routes";
 import theme from "./theme";
 import { HelmetProvider } from "react-helmet-async";
-import { BlockNumberProvider } from "./contexts/BlockNumber";
 import { base, baseSepolia } from "viem/chains";
 import { SubmitRequestProvider } from "./contexts/SubmitRequest";
 import { PrivyProvider } from "@privy-io/react-auth";
@@ -77,17 +76,15 @@ const RootContent = () => {
                 <Global styles={GlobalStyles} />
                 <BrowserRouter>
                     <WagmiConfig config={config}>
-                        <BlockNumberProvider>
-                            <UserInfoProvider>
-                                <SubmitRequestProvider>
-                                    <Fragment>
-                                        <HelmetProvider>
-                                            <AppRoutes />
-                                        </HelmetProvider>
-                                    </Fragment>
-                                </SubmitRequestProvider>
-                            </UserInfoProvider>
-                        </BlockNumberProvider>
+                        <UserInfoProvider>
+                            <SubmitRequestProvider>
+                                <Fragment>
+                                    <HelmetProvider>
+                                        <AppRoutes />
+                                    </HelmetProvider>
+                                </Fragment>
+                            </SubmitRequestProvider>
+                        </UserInfoProvider>
                     </WagmiConfig>
                 </BrowserRouter>
             </ChakraProvider>
