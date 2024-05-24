@@ -241,7 +241,13 @@ const PrivateRoom = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [multiSkylabBidTacToeGameContract, multiProvider, sCWAddress]);
+    }, [
+        multiSkylabBidTacToeGameContract,
+        multiProvider,
+        sCWAddress,
+        myInfo.address,
+        opInfo.address,
+    ]);
 
     const handleGetUserInfo = async (playerAddress: string) => {
         const [user, winCount, loseCount] = await multiProvider.all([

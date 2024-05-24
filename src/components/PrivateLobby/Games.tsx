@@ -633,7 +633,7 @@ const Games = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [multiMercuryBTTPrivateLobby, multiProvider]);
+    }, [multiMercuryBTTPrivateLobby, multiProvider, listInit]);
 
     return (
         <Box
