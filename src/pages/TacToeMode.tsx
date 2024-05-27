@@ -350,7 +350,7 @@ const TacToeMode = () => {
             testMultiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
                 privateLobbySCWAddress,
             ),
-            multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+            testMultiSkylabBidTacToeFactoryContract.gamePerPlayer(
                 privateLobbySCWAddress,
             ),
         ]);
@@ -433,7 +433,7 @@ const TacToeMode = () => {
                     ),
                 ]);
 
-                if (userInfo.avatar.toNumber === 0) {
+                if (userInfo.avatar.toNumber() === 0) {
                     const avatar = Math.floor(Math.random() * 12);
                     const nickname = generateRandomName();
                     await bttPrivateLobbyContract("setUserInfo", [
@@ -466,8 +466,7 @@ const TacToeMode = () => {
         if (
             !testMultiSkylabBidTacToeFactoryContract ||
             !testProvider ||
-            !privateLobbySCWAddress ||
-            !multiSkylabBidTacToeFactoryContract
+            !privateLobbySCWAddress
         )
             return;
 
@@ -476,7 +475,6 @@ const TacToeMode = () => {
         testProvider,
         testMultiSkylabBidTacToeFactoryContract,
         privateLobbySCWAddress,
-        multiSkylabBidTacToeFactoryContract,
     ]);
 
     useEffect(() => {

@@ -5,7 +5,6 @@ import {
     Input,
     InputRightElement,
     InputGroup,
-    Button,
     Flex,
     useMediaQuery,
     SimpleGrid,
