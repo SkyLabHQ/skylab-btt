@@ -138,14 +138,12 @@ const TacToeMode = () => {
 
     const multiProvider = useMultiProvider(chainId);
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const localSinger = getPrivateLobbySigner();
-    const { handleLogin } = useUserInfo();
     const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
     const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");
 
     const [lobbyName, setLobbyName] = useState<string>("");
     const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
-        localSinger.privateKey,
+        getPrivateLobbySigner().privateKey,
     );
     const { data: signer } = useWalletClient();
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
@@ -401,6 +399,57 @@ const TacToeMode = () => {
         navigate(`/btt/lobby?lobbyAddress=${activeLobbyAddress}`);
     };
 
+    const handlePlayQuickGame = async () => {
+        try {
+            const signer = getPrivateLobbySigner();
+
+            if (activeLobbyAddress === "") {
+                toast("Querying lobby address, please try again later");
+                return;
+            } else if (lobbyGameAddress !== ZERO_DATA) {
+                navigate(
+                    `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
+                );
+                return;
+            }
+
+            openLoading();
+            if (activeLobbyAddress === ZERO_DATA) {
+                await bttFactoryRetryTest("createPrivateLobby", [], {
+                    usePaymaster: true,
+                    signer,
+                });
+            }
+
+            await bttFactoryRetryTest(
+                "createOrJoinDefault",
+                [[3, 3, 3, 100, 1, 0, false, 12 * 60 * 60], false],
+                {
+                    usePaymaster: true,
+                    signer,
+                },
+            );
+
+            const [afterActiveLobbyAddress, gameAddress] =
+                await testProvider.all([
+                    testMultiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
+                        privateLobbySCWAddress,
+                    ),
+                    multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                        privateLobbySCWAddress,
+                    ),
+                ]);
+            closeLoading();
+            navigate(
+                `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${afterActiveLobbyAddress}`,
+            );
+        } catch (e) {
+            closeLoading();
+            console.log(e);
+            toast(handleError(e));
+        }
+    };
+
     useEffect(() => {
         if (
             !testMultiSkylabBidTacToeFactoryContract ||
@@ -654,6 +703,10 @@ const TacToeMode = () => {
                         onPlayWithBot={() => {
                             gameAudio.play();
                             handleMintPlayTest("bot");
+                        }}
+                        onPlayQuickGame={() => {
+                            gameAudio.play();
+                            handlePlayQuickGame();
                         }}
                     ></LeftButton>
                 )}
