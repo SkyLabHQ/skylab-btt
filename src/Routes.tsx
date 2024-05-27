@@ -16,6 +16,7 @@ import PrivateLiveGame from "./pages/PrivateLiveGame";
 import Tower from "./pages/Tower";
 import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";
+import Accept from "./pages/Accept";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -24,6 +25,7 @@ const AppRoutes = (): ReactElement => {
                 <Route index path="/" element={<TacToeMode />}></Route>
                 <Route path="/home" element={<Activities />} />
                 <Route path="/btt/match" element={<Match />}></Route>
+                <Route path="/btt/accept" element={<Accept />}></Route>
                 <Route path="/btt/game" element={<TacToe />}></Route>
                 <Route path="/btt/history" element={<BttHistory />}></Route>
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>

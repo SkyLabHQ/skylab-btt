@@ -46,6 +46,7 @@ import {
 import { getMetadataImg } from "@/utils/ipfsImg";
 import { ZERO_DATA } from "@/skyConstants";
 import { getSCWallet } from "@/hooks/useSCWallet";
+import Nest from "@/components/Nest";
 
 export interface Info {
     burner: string;
@@ -592,7 +593,6 @@ const TacToe = () => {
         <Box
             sx={{
                 height: "100%",
-                background: "#36363680",
             }}
         >
             <BttHelmet></BttHelmet>
@@ -603,9 +603,6 @@ const TacToe = () => {
                     sx={{
                         height: "100%",
                         fontFamily: "Quantico",
-                        position: "absolute",
-                        left: 0,
-                        top: 0,
                         width: "100%",
                     }}
                 >
@@ -657,15 +654,7 @@ const TacToe = () => {
                 </Box>
             )}
 
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    count: 66,
-                    pointColor: " 255, 255, 255 ",
-                    lineColor: "255,255,255",
-                    dist: 1500,
-                }}
-            />
+            <Nest />
         </Box>
     );
 };

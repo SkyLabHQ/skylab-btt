@@ -24,6 +24,7 @@ import {
 import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
 import ReactCanvasNest from "react-canvas-nest";
+import Nest from "@/components/Nest";
 
 const PrivateGameContext = createContext<{
     lobbyName: string;
@@ -276,12 +277,8 @@ const PrivateRoom = () => {
             <BttHelmet></BttHelmet>
             <Box
                 sx={{
-                    background: "#36363680",
                     height: "100%",
                     fontFamily: "Quantico",
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
                     width: "100%",
                 }}
             >
@@ -319,15 +316,7 @@ const PrivateRoom = () => {
                     {step === 3 && <ResultPlayBack></ResultPlayBack>}
                 </PrivateGameContext.Provider>
             </Box>
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    count: 66,
-                    pointColor: " 255, 255, 255 ",
-                    lineColor: "255,255,255",
-                    dist: 1500,
-                }}
-            />
+            <Nest />
         </Box>
     );
 };

@@ -1,8 +1,8 @@
 import BttHelmet from "@/components/Helmet/BttHelmet";
+import Nest from "@/components/Nest";
 import BttLiveGamePage from "@/components/TacToe/BttLiveGamePage";
 import { Box } from "@chakra-ui/react";
 import React from "react";
-import ReactCanvasNest from "react-canvas-nest";
 
 const BttLiveGame = () => {
     return (
@@ -13,15 +13,7 @@ const BttLiveGame = () => {
         >
             <BttHelmet></BttHelmet>
             <BttLiveGamePage></BttLiveGamePage>
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    count: 66,
-                    pointColor: " 255, 255, 255 ",
-                    lineColor: "255,255,255",
-                    dist: 1500,
-                }}
-            />
+            <Nest />
         </Box>
     );
 };

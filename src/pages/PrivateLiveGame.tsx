@@ -1,4 +1,5 @@
 import BttHelmet from "@/components/Helmet/BttHelmet";
+import Nest from "@/components/Nest";
 import PrivateLivePage from "@/components/PrivateLive";
 import { Box } from "@chakra-ui/react";
 import React from "react";
@@ -12,15 +13,7 @@ const PrivateLiveGame = () => {
         >
             <BttHelmet></BttHelmet>
             <PrivateLivePage></PrivateLivePage>
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    count: 66,
-                    pointColor: " 255, 255, 255 ",
-                    lineColor: "255,255,255",
-                    dist: 1500,
-                }}
-            />
+            <Nest />
         </Box>
     );
 };

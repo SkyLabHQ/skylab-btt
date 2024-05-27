@@ -24,6 +24,7 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import ReactCanvasNest from "react-canvas-nest";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import Nest from "@/components/Nest";
 
 export interface Info {
     burner: string;
@@ -200,12 +201,8 @@ const MatchPage = () => {
             <BttHelmet></BttHelmet>
             <Box
                 sx={{
-                    background: "#36363680",
                     height: "100%",
                     fontFamily: "Quantico",
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
                     width: "100%",
                 }}
             >
@@ -303,15 +300,7 @@ const MatchPage = () => {
                     </Box>
                 </GameContext.Provider>
             </Box>
-            <ReactCanvasNest
-                className="canvasNest"
-                config={{
-                    count: 66,
-                    pointColor: " 255, 255, 255 ",
-                    lineColor: "255,255,255",
-                    dist: 1500,
-                }}
-            />
+            <Nest />
         </Box>
     );
 };

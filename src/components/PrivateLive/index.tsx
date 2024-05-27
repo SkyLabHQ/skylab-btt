@@ -560,9 +560,6 @@ const BttLiveGamePage = () => {
         <Box
             sx={{
                 height: "100%",
-                position: "absolute",
-                top: 0,
-                left: 0,
                 width: "100%",
             }}
         >

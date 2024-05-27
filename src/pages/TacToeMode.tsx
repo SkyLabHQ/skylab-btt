@@ -63,6 +63,7 @@ import SelectPlane from "@/components/TacToeMode/SelectPlane";
 import MRobotIcon from "@/components/TacToeMode/assets/m-robot.svg";
 import MLobbyIcon from "@/components/TacToeMode/assets/m-private-lobby.svg.svg";
 import { privateKeyToAccount } from "viem/accounts";
+import Nest from "@/components/Nest";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -492,11 +493,7 @@ const TacToeMode = () => {
                     paddingTop: isPc ? "120px" : "40px",
                     flexDirection: "column",
                     height: "100%",
-                    background: "rgb(54,54,54,0.5)",
                     fontFamily: "Orbitron",
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
                     width: "100%",
                 }}
             >
@@ -717,16 +714,7 @@ const TacToeMode = () => {
                     onClose={handlePreviousLobbyClose}
                 ></PreviousLobbyModal>
             </Box>
-            <ReactCanvasNest
-                className="canvasNest"
-                style={{}}
-                config={{
-                    count: 66,
-                    pointColor: " 255, 255, 255 ",
-                    lineColor: "255,255,255",
-                    dist: 1500,
-                }}
-            />
+            <Nest />
         </Box>
     );
 };
