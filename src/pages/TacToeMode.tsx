@@ -64,6 +64,7 @@ import MLobbyIcon from "@/components/TacToeMode/assets/m-private-lobby.svg.svg";
 import { privateKeyToAccount } from "viem/accounts";
 import Nest from "@/components/Nest";
 import { generateRandomName } from "@/skyConstants/bttGameTypes";
+import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -307,7 +308,14 @@ const TacToeMode = () => {
                 await bttPrivateLobbyContract("quitPrivateLobby", []);
             }
 
-            const receipt = await bttFactoryRetryTest("createPrivateLobby", []);
+            const receipt = await bttFactoryRetryTest(
+                "createPrivateLobby",
+                [],
+                {
+                    usePaymaster: true,
+                    signer: lobbySigner,
+                },
+            );
 
             const logs = receipt.logs.find((item: any) => {
                 return item.topics[0] === topic0PrivateLobbyCreated;
@@ -315,39 +323,15 @@ const TacToeMode = () => {
 
             // @ts-ignore
             const result: any = decodeEventLog({
-                abi: [
-                    {
-                        anonymous: false,
-                        inputs: [
-                            {
-                                indexed: false,
-                                internalType: "address",
-                                name: "privateLobbyAddress",
-                                type: "address",
-                            },
-                            {
-                                indexed: false,
-                                internalType: "string",
-                                name: "name",
-                                type: "string",
-                            },
-                            {
-                                indexed: false,
-                                internalType: "address",
-                                name: "admin",
-                                type: "address",
-                            },
-                        ],
-                        name: "PrivateLobbyCreated",
-                        type: "event",
-                    },
-                ],
+                abi: SKYLABBIDTACTOE_ABI,
                 data: logs.data,
                 topics: logs.topics,
             });
 
-            const url =
-                `/btt/lobby?lobbyAddress=` + result.args.privateLobbyAddress;
+            const lobbyAddress = result.args.privateLobbyAddress;
+            const lobbyContract = getBttPrivateLobbyContract(lobbyAddress);
+            await lobbyContract("joinPrivateLobby", []);
+            const url = `/btt/lobby?lobbyAddress=` + lobbyAddress;
             closeLoading();
             navigate(url);
         } catch (error) {
@@ -422,33 +406,7 @@ const TacToeMode = () => {
 
                 // @ts-ignore
                 const result: any = decodeEventLog({
-                    abi: [
-                        {
-                            anonymous: false,
-                            inputs: [
-                                {
-                                    indexed: false,
-                                    internalType: "address",
-                                    name: "privateLobbyAddress",
-                                    type: "address",
-                                },
-                                {
-                                    indexed: false,
-                                    internalType: "string",
-                                    name: "name",
-                                    type: "string",
-                                },
-                                {
-                                    indexed: false,
-                                    internalType: "address",
-                                    name: "admin",
-                                    type: "address",
-                                },
-                            ],
-                            name: "PrivateLobbyCreated",
-                            type: "event",
-                        },
-                    ],
+                    abi: SKYLABBIDTACTOE_ABI,
                     data: logs.data,
                     topics: logs.topics,
                 });
@@ -663,7 +621,6 @@ const TacToeMode = () => {
                                         }
                                         onPlayTournament={() => {
                                             gameAudio.play();
-                                            // handleCreateOrJoinDefault();
                                             handleTournament();
                                         }}
                                     ></PlayButtonGroup>

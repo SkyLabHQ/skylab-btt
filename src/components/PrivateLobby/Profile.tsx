@@ -259,7 +259,7 @@ const Profile = ({
                 <Text
                     sx={{
                         textAlign: "left",
-                        fontSize: "0.8333vw",
+                        fontSize: "1.0417vw",
                         width: "100%",
                     }}
                 >

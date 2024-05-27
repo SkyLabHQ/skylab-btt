@@ -453,14 +453,14 @@ export const useBttGameRetry = (address: string, tokenId?: number) => {
 
 export const usePrivateLobbyContract = (address: string) => {
     const contract = useBurnerMercuryBTTPrivateLobbyContract(address);
+    if (!contract) {
+        return null;
+    }
     const signer = getPrivateLobbySigner();
     const tacToeGameRetryWrite = getPayMasterBurnerRetryContract(
         contract,
         signer,
     );
-    if (!contract) {
-        return null;
-    }
     return tacToeGameRetryWrite;
 };
 
