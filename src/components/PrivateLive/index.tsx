@@ -31,6 +31,7 @@ import StartJourney from "../BttComponents/StartJourney";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { motion } from "framer-motion";
 import LoadingPage from "../PrivateLobby/LoadingPage";
+import { OpInputBid } from "../TacToe/UserCard";
 
 const MBttLiveGame = ({
     autoCommitTimeoutTime,
@@ -701,15 +702,10 @@ const BttLiveGamePage = () => {
                                         ></Message>
                                     </Box>
                                 </Flex>
-                                <OpBid
-                                    myGameState={myGameInfo.gameState}
+                                <OpInputBid
+                                    opGameState={myGameInfo.gameState}
                                     balance={myGameInfo.balance}
-                                    bidAmount={
-                                        lastBidIndex !== -1
-                                            ? list[lastBidIndex].myValue
-                                            : 0
-                                    }
-                                ></OpBid>
+                                ></OpInputBid>
                             </Box>
                             <Box>
                                 <Box
@@ -751,14 +747,10 @@ const BttLiveGamePage = () => {
                                         }
                                     ></UserProfile>
                                 </Flex>
-                                <OpBid
+                                <OpInputBid
+                                    opGameState={opGameInfo.gameState}
                                     balance={opGameInfo.balance}
-                                    bidAmount={
-                                        lastBidIndex !== -1
-                                            ? list[lastBidIndex].opValue
-                                            : 0
-                                    }
-                                ></OpBid>
+                                ></OpInputBid>
                             </Flex>
                         </Box>
                     </Box>

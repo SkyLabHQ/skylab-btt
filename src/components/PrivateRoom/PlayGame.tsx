@@ -1,4 +1,3 @@
-import { MyBid, OpBid } from "./UserBid";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import React, {
     useCallback,
@@ -41,6 +40,7 @@ import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import StatusProgress from "../BttComponents/StatusProgress";
+import { MyInputBid, OpInputBid } from "../TacToe/UserCard";
 
 const PlayGame = ({
     onChangeGame,
@@ -50,7 +50,6 @@ const PlayGame = ({
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
 
     const commitWorkerRef = useRef<Worker>(null);
-    const callTimeoutWorkerRef = useRef<Worker>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState<boolean>(false);
@@ -58,7 +57,6 @@ const PlayGame = ({
     const toast = useSkyToast();
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
-
     const {
         myGameInfo,
         opGameInfo,
@@ -70,6 +68,16 @@ const PlayGame = ({
         onList,
         handleStepChange,
     } = usePrivateGameContext();
+    const canCallTimeout = useMemo(() => {
+        if (
+            autoCommitTimeoutTime === 0 &&
+            myGameInfo.gameState <= opGameInfo.gameState
+        ) {
+            return true;
+        }
+
+        return false;
+    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
     const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress);
 
@@ -483,44 +491,6 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
         }
     };
 
-    const handleCallTimeoutWorkerRef = () => {
-        if (callTimeoutWorkerRef.current) {
-            callTimeoutWorkerRef.current.terminate();
-        }
-        if (
-            !opGameInfo.timeout ||
-            !opGameInfo.gameState ||
-            !myGameInfo.gameState
-        ) {
-            return;
-        }
-
-        const now = getNowSecondsTimestamp();
-        const autoCallTimeoutTime =
-            opGameInfo.timeout * 1000 - now > 0
-                ? opGameInfo.timeout * 1000 - now
-                : 0;
-
-        callTimeoutWorkerRef.current = new Worker(
-            new URL("../../utils/timerWorker.ts", import.meta.url),
-        );
-
-        callTimeoutWorkerRef.current.onmessage = async (event) => {
-            const timeLeft = event.data;
-            if (timeLeft === 0) {
-                handleCallTimeOut();
-            }
-        };
-        if (autoCallTimeoutTime === 0) {
-            handleCallTimeOut();
-        } else {
-            callTimeoutWorkerRef.current.postMessage({
-                action: "start",
-                timeToCount: autoCallTimeoutTime,
-            });
-        }
-    };
-
     useEffect(() => {
         if (
             !myInfo.address ||
@@ -555,24 +525,17 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
     }, [myGameInfo.timeout, opGameInfo.timeout]);
 
     useEffect(() => {
-        handleCallTimeoutWorkerRef();
-    }, [opGameInfo.timeout, opGameInfo.gameState, myGameInfo.gameState]);
-
-    useEffect(() => {
         if (isPc) {
             return;
         }
+
         const handleVisibilityChange = () => {
             if (document.hidden) {
                 if (commitWorkerRef.current) {
                     commitWorkerRef.current.terminate();
                 }
-                if (callTimeoutWorkerRef.current) {
-                    callTimeoutWorkerRef.current.terminate();
-                }
             } else {
                 handleCommitWorker();
-                handleCallTimeoutWorkerRef();
             }
         };
         document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -677,17 +640,20 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                                 </Box>
                             </Flex>
 
-                            <MyBid
+                            <MyInputBid
                                 loading={loading}
-                                myGameState={myGameInfo.gameState}
-                                opGameState={opGameInfo.gameState}
+                                revealing={revealing}
                                 balance={myGameInfo.balance}
                                 bidAmount={bidAmount}
-                                onConfirm={handleBid}
                                 onInputChange={handleBidAmount}
+                                onConfirm={handleBid}
+                                myGameState={myGameInfo.gameState}
+                                opGameState={opGameInfo.gameState}
+                                showAnimateConfirm={showAnimateConfirm}
+                                canCallTimeout={canCallTimeout}
+                                onCallTimeout={handleCallTimeOut}
                                 onReveal={handleRevealedBid}
-                                revealing={revealing}
-                            ></MyBid>
+                            ></MyInputBid>
                         </Box>
 
                         <Box
@@ -731,11 +697,10 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                                 ></UserProfile>
                             </Flex>
 
-                            <OpBid
-                                myGameState={myGameInfo.gameState}
+                            <OpInputBid
                                 opGameState={opGameInfo.gameState}
                                 balance={opGameInfo.balance}
-                            ></OpBid>
+                            ></OpInputBid>
                         </Flex>
                     </Box>
                     <Chat onSetMessage={handleSetMessage}></Chat>

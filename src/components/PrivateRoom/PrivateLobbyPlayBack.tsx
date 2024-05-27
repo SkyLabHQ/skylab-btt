@@ -185,11 +185,7 @@ const PrivateLobbyPlayBack = ({
                         showAdvantageTip={myIsNextDrawWinner}
                     ></UserProfile>
 
-                    <OpBid
-                        myGameState={myGameInfo.gameState}
-                        balance={myBalance}
-                        bidAmount={myBid}
-                    ></OpBid>
+                    <OpBid balance={myBalance} bidAmount={myBid}></OpBid>
                 </Box>
 
                 <Box>

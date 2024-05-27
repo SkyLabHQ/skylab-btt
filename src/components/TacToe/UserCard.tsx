@@ -436,7 +436,7 @@ const MyBid = ({
     );
 };
 
-const OpBid = ({
+export const OpBid = ({
     opGameState,
     balance,
 }: {
@@ -657,35 +657,35 @@ export const AdvantageTip = ({
     );
 };
 
-export const MyUserCard = ({
-    pilotInfo,
+export const MyInputBid = ({
     showTutorialStep,
-    level,
     loading,
     revealing,
-    markIcon,
-    address,
     balance,
     bidAmount,
-    showAdvantageTip,
     myGameState,
     opGameState,
-    emote = 0,
-    message = 0,
-    messageIndex = 0,
-    emoteIndex = 0,
-    planeUrl = Plane1,
-    messageLoading,
-    emoteLoading,
-    onConfirm,
     onInputChange,
+    onConfirm,
     onReveal,
     onCallTimeout,
     showAnimateConfirm,
     canCallTimeout,
-}: UserCardProps) => {
-    const { onCopy } = useClipboard(address ?? "");
-    const toast = useSkyToast();
+}: {
+    showTutorialStep?: boolean;
+    loading: boolean;
+    revealing: boolean;
+    balance: number;
+    bidAmount: number;
+    myGameState: number;
+    opGameState: number;
+    showAnimateConfirm?: number;
+    onInputChange?: (value: number) => void;
+    onConfirm: () => void;
+    onReveal: () => void;
+    onCallTimeout: () => void;
+    canCallTimeout: boolean;
+}) => {
     const [commitButtonText, status] = useMemo(() => {
         if (myGameState === GameState.WaitingForBid) {
             return loading ? ["Committing", 0] : ["Commit", 1];
@@ -717,6 +717,179 @@ export const MyUserCard = ({
             onReveal();
         }
     };
+    return (
+        <Box
+            sx={{
+                marginTop: "1.5625vw",
+            }}
+        >
+            <Box
+                sx={{
+                    background: "#787878",
+                    borderRadius: "1.0417vw",
+                    height: "6.3542vw",
+                    padding: "0.3646vw 0.8333vw 0.625vw 1.9792vw",
+                    position: "relative",
+                    border: "1px solid #fff",
+                }}
+            >
+                <Box
+                    sx={{
+                        width: "8.6979vw",
+                        height: "3.75vw",
+                        display: "flex",
+                        alignItems: "center",
+                        borderRadius: "1.3542vw",
+                        paddingLeft: "0.7292vw",
+                        position: "absolute",
+                        left: "50%",
+                        top: "0",
+                        transform: "translate(-50%,-50%)",
+                        background: `url(${GoldIcon})`,
+                        backgroundSize: "100% 100%",
+                    }}
+                ></Box>
+                <MyBid
+                    showTutorialStep={showTutorialStep}
+                    loading={loading}
+                    balance={balance}
+                    bidAmount={bidAmount}
+                    onInputChange={onInputChange}
+                    onConfirm={handleSumbit}
+                    myGameState={myGameState}
+                    showAnimateConfirm={showAnimateConfirm}
+                ></MyBid>
+            </Box>
+            <Flex flexDir={"column"} align={"center"}>
+                <Flex
+                    onClick={handleSumbit}
+                    sx={{
+                        marginTop: "0.5208vw",
+                        fontSize: "0.8333vw",
+                        height: "2.2917vw",
+                        width: "6.25vw",
+                        background: status === 0 ? "transparent" : "#FDDC2D",
+                        borderRadius: "16px",
+                        color: status === 0 ? "#414141" : "#1b1b1b",
+                        fontWeight: "bold",
+                        animationIterationCount: "2",
+                        cursor: status === 0 ? "not-allowed" : "pointer",
+                    }}
+                    align={"center"}
+                    justify={"center"}
+                >
+                    {commitButtonText}
+                </Flex>
+                <Flex
+                    onClick={onCallTimeout}
+                    sx={{
+                        marginTop: "0.5208vw",
+                        fontSize: "0.8333vw",
+                        height: "2.2917vw",
+                        width: "6.25vw",
+                        background: canCallTimeout ? "transparent" : "#787878",
+                        borderRadius: "16px",
+                        color: canCallTimeout ? "#FDDC2D" : "#555",
+                        fontWeight: "bold",
+                        cursor: canCallTimeout ? "pointer" : "not-allowed",
+                        border: canCallTimeout
+                            ? "1px solid #FDDC2D"
+                            : "1px solid #787878",
+                        position: "relative",
+                    }}
+                    align={"center"}
+                    justify={"center"}
+                >
+                    Call Timeout
+                    <ClockIcon
+                        color={canCallTimeout ? "#FDDC2D" : "#555555"}
+                        style={{
+                            position: "absolute",
+                            left: "-40px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                        }}
+                    ></ClockIcon>
+                </Flex>
+            </Flex>
+        </Box>
+    );
+};
+
+export const OpInputBid = ({
+    opGameState,
+    balance,
+}: {
+    opGameState: GameState;
+    balance: number;
+}) => {
+    return (
+        <Box
+            sx={{
+                marginTop: "1.5625vw",
+            }}
+        >
+            <Box
+                sx={{
+                    background: "#787878",
+                    borderRadius: "1.0417vw",
+                    height: "6.3542vw",
+                    padding: "0.3646vw 0.8333vw 0.625vw 0.7813vw",
+                    position: "relative",
+                    border: "1px solid #fff",
+                }}
+            >
+                <Box
+                    sx={{
+                        width: "8.6979vw",
+                        height: "3.75vw",
+                        display: "flex",
+                        alignItems: "center",
+                        borderRadius: "1.3542vw",
+                        paddingLeft: "0.7292vw",
+                        position: "absolute",
+                        left: "50%",
+                        top: "0",
+                        transform: "translate(-50%,-50%)",
+                        background: `url(${GoldIcon})`,
+                        backgroundSize: "100% 100%",
+                    }}
+                ></Box>
+                <OpBid opGameState={opGameState} balance={balance}></OpBid>
+            </Box>
+        </Box>
+    );
+};
+
+export const MyUserCard = ({
+    pilotInfo,
+    showTutorialStep,
+    level,
+    loading,
+    revealing,
+    markIcon,
+    address,
+    balance,
+    bidAmount,
+    showAdvantageTip,
+    myGameState,
+    opGameState,
+    emote = 0,
+    message = 0,
+    messageIndex = 0,
+    emoteIndex = 0,
+    planeUrl = Plane1,
+    messageLoading,
+    emoteLoading,
+    onConfirm,
+    onInputChange,
+    onReveal,
+    onCallTimeout,
+    showAnimateConfirm,
+    canCallTimeout,
+}: UserCardProps) => {
+    const { onCopy } = useClipboard(address ?? "");
+    const toast = useSkyToast();
 
     return (
         <Box
@@ -812,104 +985,21 @@ export const MyUserCard = ({
                     }}
                 ></Image>
             </Text>
-            <Box
-                sx={{
-                    marginTop: "1.5625vw",
-                }}
-            >
-                <Box
-                    sx={{
-                        background: "#787878",
-                        borderRadius: "1.0417vw",
-                        height: "6.3542vw",
-                        padding: "0.3646vw 0.8333vw 0.625vw 1.9792vw",
-                        position: "relative",
-                        border: "1px solid #fff",
-                    }}
-                >
-                    <Box
-                        sx={{
-                            width: "8.6979vw",
-                            height: "3.75vw",
-                            display: "flex",
-                            alignItems: "center",
-                            borderRadius: "1.3542vw",
-                            paddingLeft: "0.7292vw",
-                            position: "absolute",
-                            left: "50%",
-                            top: "0",
-                            transform: "translate(-50%,-50%)",
-                            background: `url(${GoldIcon})`,
-                            backgroundSize: "100% 100%",
-                        }}
-                    ></Box>
-                    <MyBid
-                        showTutorialStep={showTutorialStep}
-                        loading={loading}
-                        balance={balance}
-                        bidAmount={bidAmount}
-                        onInputChange={onInputChange}
-                        onConfirm={onConfirm}
-                        myGameState={myGameState}
-                        showAnimateConfirm={showAnimateConfirm}
-                    ></MyBid>
-                </Box>
-                <Flex flexDir={"column"} align={"center"}>
-                    <Flex
-                        onClick={handleSumbit}
-                        sx={{
-                            marginTop: "0.5208vw",
-                            fontSize: "0.8333vw",
-                            height: "2.2917vw",
-                            width: "6.25vw",
-                            background:
-                                status === 0 ? "transparent" : "#FDDC2D",
-                            borderRadius: "16px",
-                            color: status === 0 ? "#414141" : "#1b1b1b",
-                            fontWeight: "bold",
-                            animationIterationCount: "2",
-                            cursor: status === 0 ? "not-allowed" : "pointer",
-                        }}
-                        align={"center"}
-                        justify={"center"}
-                    >
-                        {commitButtonText}
-                    </Flex>
-                    <Flex
-                        onClick={onCallTimeout}
-                        sx={{
-                            marginTop: "0.5208vw",
-                            fontSize: "0.8333vw",
-                            height: "2.2917vw",
-                            width: "6.25vw",
-                            background: canCallTimeout
-                                ? "transparent"
-                                : "#787878",
-                            borderRadius: "16px",
-                            color: canCallTimeout ? "#FDDC2D" : "#555",
-                            fontWeight: "bold",
-                            cursor: canCallTimeout ? "pointer" : "not-allowed",
-                            border: canCallTimeout
-                                ? "1px solid #FDDC2D"
-                                : "1px solid #787878",
-                            position: "relative",
-                        }}
-                        align={"center"}
-                        justify={"center"}
-                    >
-                        Call Timeout
-                        <ClockIcon
-                            color={canCallTimeout ? "#FDDC2D" : "#555555"}
-                            style={{
-                                position: "absolute",
-                                left: "-40px",
-                                top: "50%",
-                                transform: "translateY(-50%)",
-                            }}
-                        ></ClockIcon>
-                    </Flex>
-                </Flex>
-            </Box>
+            <MyInputBid
+                showTutorialStep={showTutorialStep}
+                loading={loading}
+                balance={balance}
+                bidAmount={bidAmount}
+                onInputChange={onInputChange}
+                onConfirm={onConfirm}
+                myGameState={myGameState}
+                opGameState={opGameState}
+                showAnimateConfirm={showAnimateConfirm}
+                revealing={revealing}
+                onReveal={onReveal}
+                onCallTimeout={onCallTimeout}
+                canCallTimeout={canCallTimeout}
+            ></MyInputBid>
         </Box>
     );
 };
@@ -1017,40 +1107,10 @@ export const OpUserCard = ({
                     }}
                 ></Image>
             </Text>
-            <Box
-                sx={{
-                    marginTop: "1.5625vw",
-                }}
-            >
-                <Box
-                    sx={{
-                        background: "#787878",
-                        borderRadius: "1.0417vw",
-                        height: "6.3542vw",
-                        padding: "0.3646vw 0.8333vw 0.625vw 0.7813vw",
-                        position: "relative",
-                        border: "1px solid #fff",
-                    }}
-                >
-                    <Box
-                        sx={{
-                            width: "8.6979vw",
-                            height: "3.75vw",
-                            display: "flex",
-                            alignItems: "center",
-                            borderRadius: "1.3542vw",
-                            paddingLeft: "0.7292vw",
-                            position: "absolute",
-                            left: "50%",
-                            top: "0",
-                            transform: "translate(-50%,-50%)",
-                            background: `url(${GoldIcon})`,
-                            backgroundSize: "100% 100%",
-                        }}
-                    ></Box>
-                    <OpBid opGameState={opGameState} balance={balance}></OpBid>
-                </Box>
-            </Box>
+            <OpInputBid
+                opGameState={opGameState}
+                balance={balance}
+            ></OpInputBid>
         </Box>
     );
 };
