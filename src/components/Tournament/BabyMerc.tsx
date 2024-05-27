@@ -16,7 +16,6 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const Price = {
     [ChainId.POLYGON]: 1,
-    [ChainId.MUMBAI]: 0.001,
 };
 
 const BabyMerc = ({

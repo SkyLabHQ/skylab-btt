@@ -66,36 +66,7 @@ export interface PilotBaseInfo {
 const AllPilotList: {
     [chainId in ChainId]?: PilotBaseInfo[];
 } = {
-    [ChainId.MUMBAI]: [
-        {
-            address: "0xfa068dB54c31B230530B0D287Dd5cE0C869D6640",
-            img: MercsImg,
-            name: "Merc",
-            enumerable: true,
-            chainId: ChainId.MUMBAI,
-            disabled: true,
-            start: 1,
-        },
-        {
-            address: babyMercsAddress[ChainId.MUMBAI],
-            img: BabymercImg,
-            name: "Baby Merc",
-            enumerable: true,
-            chainId: ChainId.MUMBAI,
-            start: 1,
-        },
-        ...MainnetPilotList,
-    ],
     [ChainId.POLYGON]: [
-        {
-            address: "0xfa068dB54c31B230530B0D287Dd5cE0C869D6640",
-            img: MercsImg,
-            name: "Merc",
-            enumerable: true,
-            chainId: ChainId.MUMBAI,
-            disabled: true,
-            start: 1,
-        },
         {
             address: babyMercsAddress[ChainId.POLYGON],
             img: BabymercImg,
@@ -108,37 +79,8 @@ const AllPilotList: {
         ...MainnetPilotList,
     ],
 
-    [ChainId.SEPOLIA]: [
-        // {
-        //     address: "0xfa068dB54c31B230530B0D287Dd5cE0C869D6640",
-        //     img: MercsImg,
-        //     name: "Merc",
-        //     enumerable: true,
-        //     chainId: ChainId.MUMBAI,
-        //     disabled: true,
-        //     start: 1,
-        // },
-        // {
-        //     address: babyMercsAddress[ChainId.POLYGON],
-        //     img: BabymercImg,
-        //     name: "Baby Merc",
-        //     enumerable: true,
-        //     chainId: ChainId.POLYGON,
-        //     openSeaUrl: "https://opensea.io/collection/babymercs-2",
-        //     start: 1,
-        // },
-        ...MainnetPilotList,
-    ],
+    [ChainId.SEPOLIA]: [...MainnetPilotList],
     [ChainId.BASE]: [
-        {
-            address: "0xfa068dB54c31B230530B0D287Dd5cE0C869D6640",
-            img: MercsImg,
-            name: "Merc",
-            enumerable: true,
-            chainId: ChainId.MUMBAI,
-            disabled: true,
-            start: 1,
-        },
         {
             address: babyMercsAddress[ChainId.POLYGON],
             img: BabymercImg,

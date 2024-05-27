@@ -14,7 +14,7 @@ import Loading from "../Loading";
 import useCountDown from "react-countdown-hook";
 import { useNavigate } from "react-router-dom";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
-import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import { usePrivateLobbyContract } from "@/hooks/useRetryContract";
 import QuitModal from "../BttComponents/QuitModal";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -95,14 +95,11 @@ const Match = () => {
 
     const [timeLeft, { start }] = useCountDown(5000, 1000);
     const { myInfo, opInfo, handleStepChange } = usePrivateGameContext();
-    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
+    const bttPrivateLobbyContract = usePrivateLobbyContract(lobbyAddress);
 
     const handleQuit = async () => {
         const privateLobbySigner = getPrivateLobbySigner();
-        await bttPrivateLobbyContract("deleteRoom", [bidTacToeGameAddress], {
-            usePaymaster: true,
-            signer: privateLobbySigner,
-        });
+        await bttPrivateLobbyContract("deleteRoom", [bidTacToeGameAddress]);
         navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
     };
 

@@ -5,7 +5,6 @@ import { ethers } from "ethers";
 export enum ChainId {
     ETHEREUM = 1,
     POLYGON = 137,
-    MUMBAI = 80001,
     BASE = 8453,
     SEPOLIA = 84532,
 }
@@ -27,14 +26,13 @@ export const RPC_URLS = {
         "https://rpc.ankr.com/polygon",
         "https://polygon.llamarpc.com",
     ],
-    [ChainId.MUMBAI]: [
-        "https://polygon-mumbai.blockpi.network/v1/rpc/public",
-        // "https://polygon-mumbai.blockpi.network/v1/rpc/public",
-        // "https://polygon-mumbai-bor.publicnode.com",
-        // "https://rpc.ankr.com/polygon_mumbai",
-        // "https://rpc-mumbai.maticvigil.com",
+
+    [ChainId.BASE]: [
+        "https://base-mainnet.g.alchemy.com/v2/eeIqX9BroszId4tnmaeDlBAIH0KAvCgz",
     ],
-    [ChainId.BASE]: ["https://base.llamarpc.com"],
+    [ChainId.SEPOLIA]: [
+        "https://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D",
+    ],
 };
 
 export const BURNER_RPC_URLS = {
@@ -45,9 +43,6 @@ export const BURNER_RPC_URLS = {
     [ChainId.POLYGON]: [
         "https://rpc.ankr.com/polygon",
         "https://polygon.llamarpc.com",
-    ],
-    [ChainId.MUMBAI]: [
-        "https://polygon-mumbai.g.alchemy.com/v2/LiVNRJ2a_S9tx3uwWTdMLfZ6GmBrG324",
     ],
 
     [ChainId.BASE]: [
@@ -73,7 +68,6 @@ export const getRandomProvider = (chainId: ChainId) => {
 
 export const CHAIN_NAMES = {
     [ChainId.POLYGON]: "Polygon",
-    [ChainId.MUMBAI]: "Mumbai",
     [ChainId.BASE]: "Base",
     [ChainId.SEPOLIA]: "Base Sepolia",
 };
@@ -89,16 +83,7 @@ export const SUPPORTED_NETWORKS: { [chainId in ChainId]?: ChainInfo } = {
         },
         blockExplorerUrls: ["https://polygonscan.com/"],
     },
-    [ChainId.MUMBAI]: {
-        rpcUrls: RPC_URLS[ChainId.MUMBAI],
-        chainName: "Mumbai",
-        nativeCurrency: {
-            name: "MATIC",
-            decimals: 18,
-            symbol: "MATIC",
-        },
-        blockExplorerUrls: ["https://mumbai.polygonscan.com"],
-    },
+
     [ChainId.SEPOLIA]: {
         rpcUrls: RPC_URLS[ChainId.SEPOLIA],
         chainName: CHAIN_NAMES[ChainId.SEPOLIA],

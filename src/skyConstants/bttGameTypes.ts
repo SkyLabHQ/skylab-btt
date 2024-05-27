@@ -202,6 +202,19 @@ ${mark}${mark}${emojiList.join("")}${mark}${mark}
 @skylabHQ on @base`;
 };
 
+export function generateRandomName() {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const nameLength = Math.floor(Math.random() * 5) + 6; // 随机生成6到10个字符的名称
+    let name = "";
+
+    for (let i = 0; i < nameLength; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        name += characters[randomIndex];
+    }
+
+    return name;
+}
+
 export const SixtySecond = 60 * 1000;
 export const ThirtySecond = 30 * 1000;
 export const TwelveHours = 12 * 60 * 60; //十二小时

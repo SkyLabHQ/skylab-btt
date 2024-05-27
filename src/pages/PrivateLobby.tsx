@@ -15,7 +15,7 @@ import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Back from "@/components/Back";
-import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import { usePrivateLobbyContract } from "@/hooks/useRetryContract";
 import { ZERO_DATA } from "@/skyConstants";
 import LoadingPage from "@/components/PrivateLobby/LoadingPage";
 
@@ -75,9 +75,9 @@ const PrivateLobby = () => {
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
 
-    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
+    const bttPrivateLobbyContract = usePrivateLobbyContract(lobbyAddress);
     const activeBttPrivateLobbyContract =
-        useBttPrivateLobbyContract(activeLobbyAddress);
+        usePrivateLobbyContract(activeLobbyAddress);
 
     const multiMercuryBTTPrivateLobby =
         useMultiMercuryBTTPrivateLobby(lobbyAddress);
@@ -187,26 +187,19 @@ const PrivateLobby = () => {
 
     useEffect(() => {
         const handleJoin = async () => {
-            const privateLobbySigner = getPrivateLobbySigner();
             if (
                 activeLobbyAddress !== ZERO_DATA &&
                 activeLobbyAddress.toLocaleLowerCase() !==
                     lobbyAddress.toLocaleLowerCase()
             ) {
-                await activeBttPrivateLobbyContract("quitPrivateLobby", [], {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                });
+                await activeBttPrivateLobbyContract("quitPrivateLobby", []);
             }
 
             if (
                 activeLobbyAddress.toLocaleLowerCase() !==
                 lobbyAddress.toLocaleLowerCase()
             ) {
-                await bttPrivateLobbyContract("joinPrivateLobby", [], {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                });
+                await bttPrivateLobbyContract("joinPrivateLobby", []);
             }
 
             if (nickname) {

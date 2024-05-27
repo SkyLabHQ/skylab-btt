@@ -13,7 +13,7 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import { usePrivateLobbyContract } from "@/hooks/useRetryContract";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import avatars from "@/skyConstants/avatars";
@@ -435,7 +435,7 @@ const Games = () => {
         usePrivateLobbyContext();
 
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
+    const bttPrivateLobbyContract = usePrivateLobbyContract(lobbyAddress);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
     const localSinger = getPrivateLobbySigner();
@@ -451,14 +451,9 @@ const Games = () => {
 
         try {
             openLoading();
-            await bttPrivateLobbyContract(
-                "createRoom",
-                [[3, 3, 3, 100, 1, 0, false, 12 * 60 * 60]],
-                {
-                    usePaymaster: true,
-                    signer: localSinger,
-                },
-            );
+            await bttPrivateLobbyContract("createRoom", [
+                [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
+            ]);
 
             const [gameAddress] = await multiProvider.all([
                 multiSkylabBidTacToeFactoryContract.gamePerPlayer(sCWAddress),
@@ -482,10 +477,7 @@ const Games = () => {
         const privateLobbySigner = getPrivateLobbySigner();
         try {
             openLoading();
-            await bttPrivateLobbyContract("joinRoom", [gameAddress], {
-                usePaymaster: true,
-                signer: privateLobbySigner,
-            });
+            await bttPrivateLobbyContract("joinRoom", [gameAddress]);
             navigate(
                 `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
             );

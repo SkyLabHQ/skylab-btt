@@ -12,9 +12,10 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+    getBttPrivateLobbyContract,
     useBidTacToeFactoryRetry,
     useBttFactoryRetry,
-    useBttPrivateLobbyContract,
+    usePrivateLobbyContract,
     useTestflightRetryContract,
 } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
@@ -50,12 +51,10 @@ import { decodeEventLog } from "viem";
 import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
 import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
-import ReactCanvasNest from "react-canvas-nest";
 import useCountDown from "react-countdown-hook";
 import styled from "@emotion/styled";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import StartCountDown from "@/components/StartCountDown";
-import { useUserInfo } from "@/contexts/UserInfo";
 import useStartGame from "@/hooks/useStartGame";
 import GameMp3 from "@/assets/game.mp3";
 import LeftButton from "@/components/TacToeMode/LeftButton";
@@ -64,6 +63,7 @@ import MRobotIcon from "@/components/TacToeMode/assets/m-robot.svg";
 import MLobbyIcon from "@/components/TacToeMode/assets/m-private-lobby.svg.svg";
 import { privateKeyToAccount } from "viem/accounts";
 import Nest from "@/components/Nest";
+import { generateRandomName } from "@/skyConstants/bttGameTypes";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -143,9 +143,11 @@ const TacToeMode = () => {
     const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");
 
     const [lobbyName, setLobbyName] = useState<string>("");
+    const [lobbySigner] = useState(getPrivateLobbySigner());
     const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
-        getPrivateLobbySigner().privateKey,
+        lobbySigner.privateKey,
     );
+
     const { data: signer } = useWalletClient();
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
     const testflightContract = useTestflightRetryContract();
@@ -161,7 +163,7 @@ const TacToeMode = () => {
     const multiMercuryBTTPrivateLobby = useMultiMercuryBTTPrivateLobby(
         activeLobbyAddress !== ZERO_DATA ? activeLobbyAddress : "",
     );
-    const bttPrivateLobbyContract = useBttPrivateLobbyContract(
+    const bttPrivateLobbyContract = usePrivateLobbyContract(
         activeLobbyAddress && activeLobbyAddress !== ZERO_DATA
             ? activeLobbyAddress
             : "",
@@ -301,22 +303,11 @@ const TacToeMode = () => {
     const handleCreatePrivateLobby = async () => {
         try {
             openLoading();
-            const privateLobbySigner = getPrivateLobbySigner();
             if (bttPrivateLobbyContract) {
-                await bttPrivateLobbyContract("quitPrivateLobby", [], {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                });
+                await bttPrivateLobbyContract("quitPrivateLobby", []);
             }
 
-            const receipt = await bttFactoryRetryTest(
-                "createPrivateLobby",
-                [],
-                {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                },
-            );
+            const receipt = await bttFactoryRetryTest("createPrivateLobby", []);
 
             const logs = receipt.logs.find((item: any) => {
                 return item.topics[0] === topic0PrivateLobbyCreated;
@@ -402,8 +393,6 @@ const TacToeMode = () => {
 
     const handlePlayQuickGame = async () => {
         try {
-            const signer = getPrivateLobbySigner();
-
             if (activeLobbyAddress === "") {
                 toast("Querying lobby address, please try again later");
                 return;
@@ -415,31 +404,95 @@ const TacToeMode = () => {
             }
 
             openLoading();
+
+            let afterActiveLobbyAddress = activeLobbyAddress;
             if (activeLobbyAddress === ZERO_DATA) {
-                await bttFactoryRetryTest("createPrivateLobby", [], {
-                    usePaymaster: true,
-                    signer,
+                const receipt = await bttFactoryRetryTest(
+                    "createPrivateLobby",
+                    [],
+                    {
+                        usePaymaster: true,
+                        signer: lobbySigner,
+                    },
+                );
+
+                const logs = receipt.logs.find((item: any) => {
+                    return item.topics[0] === topic0PrivateLobbyCreated;
                 });
-            }
 
-            await bttFactoryRetryTest(
-                "createOrJoinDefault",
-                [[3, 3, 3, 100, 1, 0, false, 12 * 60 * 60], false],
-                {
-                    usePaymaster: true,
-                    signer,
-                },
-            );
+                // @ts-ignore
+                const result: any = decodeEventLog({
+                    abi: [
+                        {
+                            anonymous: false,
+                            inputs: [
+                                {
+                                    indexed: false,
+                                    internalType: "address",
+                                    name: "privateLobbyAddress",
+                                    type: "address",
+                                },
+                                {
+                                    indexed: false,
+                                    internalType: "string",
+                                    name: "name",
+                                    type: "string",
+                                },
+                                {
+                                    indexed: false,
+                                    internalType: "address",
+                                    name: "admin",
+                                    type: "address",
+                                },
+                            ],
+                            name: "PrivateLobbyCreated",
+                            type: "event",
+                        },
+                    ],
+                    data: logs.data,
+                    topics: logs.topics,
+                });
 
-            const [afterActiveLobbyAddress, gameAddress] =
-                await testProvider.all([
-                    testMultiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
-                        privateLobbySCWAddress,
-                    ),
-                    multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                afterActiveLobbyAddress = result.args.privateLobbyAddress;
+                const lobbyContract = getBttPrivateLobbyContract(
+                    afterActiveLobbyAddress,
+                );
+
+                await lobbyContract("joinPrivateLobby", []);
+
+                const avatar = Math.floor(Math.random() * 12);
+                const nickname = generateRandomName();
+
+                await lobbyContract("setUserInfo", [avatar + 1, nickname]);
+
+                await lobbyContract("createRoom", [
+                    [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
+                ]);
+            } else {
+                const [userInfo] = await testProvider.all([
+                    multiMercuryBTTPrivateLobby.userInfo(
                         privateLobbySCWAddress,
                     ),
                 ]);
+
+                if (userInfo.avatar.toNumber === 0) {
+                    const avatar = Math.floor(Math.random() * 12);
+                    const nickname = generateRandomName();
+                    await bttPrivateLobbyContract("setUserInfo", [
+                        avatar + 1,
+                        nickname,
+                    ]);
+                }
+                await bttPrivateLobbyContract("createRoom", [
+                    [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
+                ]);
+            }
+
+            const [gameAddress] = await testProvider.all([
+                multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                    privateLobbySCWAddress,
+                ),
+            ]);
             closeLoading();
             navigate(
                 `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${afterActiveLobbyAddress}`,

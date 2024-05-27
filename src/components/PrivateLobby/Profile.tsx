@@ -14,7 +14,7 @@ import EditIcon from "./assets/edit.svg";
 import BackIcon from "./assets/back.svg";
 import React, { useState } from "react";
 import { usePrivateLobbyContext } from "@/pages/PrivateLobby";
-import { useBttPrivateLobbyContract } from "@/hooks/useRetryContract";
+import { usePrivateLobbyContract } from "@/hooks/useRetryContract";
 import LobbyInfo from "./LobbyInfo";
 import Loading from "../Loading";
 import avatars from "@/skyConstants/avatars";
@@ -215,7 +215,7 @@ const Profile = ({
     const [mode, setMode] = useState<"name" | "avatar">("name");
     const { lobbyAddress, avatarIndex, nickname, handleStepChange } =
         usePrivateLobbyContext();
-    const bttPrivateLobbyContract = useBttPrivateLobbyContract(lobbyAddress);
+    const bttPrivateLobbyContract = usePrivateLobbyContract(lobbyAddress);
 
     const toast = useSkyToast();
 
@@ -229,14 +229,10 @@ const Profile = ({
             openLoading();
             const privateLobbySigner = getPrivateLobbySigner();
 
-            await bttPrivateLobbyContract(
-                "setUserInfo",
-                [avatarIndex + 1, nickname],
-                {
-                    usePaymaster: true,
-                    signer: privateLobbySigner,
-                },
-            );
+            await bttPrivateLobbyContract("setUserInfo", [
+                avatarIndex + 1,
+                nickname,
+            ]);
             closeLoading();
             handleStepChange(1);
             setLoading(false);

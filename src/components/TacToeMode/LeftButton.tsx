@@ -13,7 +13,6 @@ const LeftButton = ({
     onPlayTestLobby: () => void;
     onPlayQuickGame: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
             sx={{
