@@ -4015,6 +4015,18 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
+"@tma.js/sdk-react@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@tma.js/sdk-react/-/sdk-react-2.2.2.tgz#751b41386665b91c880a80bfa4daf0d44f349f39"
+  integrity sha512-zu0eEbZ6eAOwpJuR0dKrYYMrKNcx4xXMeC/7ZwmuxQldb5xwfH9HG4y/62Hs1br3nbidg6TPrkH5YHLxQRisgQ==
+  dependencies:
+    "@tma.js/sdk" "2.4.0"
+
+"@tma.js/sdk@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@tma.js/sdk/-/sdk-2.4.0.tgz#9ea6fc485988a8aa5ff2dc6074d92eed9b88210c"
+  integrity sha512-cSJClNfoI7S0mC7b7RJQwaUCeR83UahqNG4A8kmCO4SeFFYsOX/XXXMQN0NilcQA4BfqwTMLPUbi/dV7r6b7BQ==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"

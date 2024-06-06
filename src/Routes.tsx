@@ -17,6 +17,7 @@ import Tower from "./pages/Tower";
 import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";
 import Accept from "./pages/Accept";
+import Solo from "./pages/Solo";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -34,6 +35,7 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/btt/joinlobby" element={<JoinLobby />}></Route>
                 <Route path="/btt/lobby" element={<PrivateLobby />}></Route>
                 <Route path="/btt/lobbyRoom" element={<PrivateRoom />} />
+                <Route path="/btt/solo" element={<Solo />} />
                 <Route
                     path="/btt/lobbyPlayback"
                     element={<PrivatePlayBack />}
