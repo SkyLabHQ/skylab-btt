@@ -1,24 +1,41 @@
-import { useInitData, useLaunchParams } from "@tma.js/sdk-react";
+import { useInitData, useLaunchParams, useUtils } from "@tma.js/sdk-react";
 import React, { useEffect } from "react";
 import { retrieveLaunchParams } from "@tma.js/sdk";
 import { useLocation } from "react-router-dom";
+import { initUtils } from "@tma.js/sdk";
 
 const SoloPage = () => {
-    const data = useInitData();
-    console.log(data, "data");
-    console.log(window?.Telegram?.WebApp, "t1111elegram");
+    const initDataRaw = useLaunchParams().initDataRaw;
+    const initData = useInitData();
+    const utils = initUtils();
+    const utilsss = useUtils();
 
-    // const initDataRaw = useLaunchParams();
-    // console.log(initDataRaw, "initDataRaw");
+    console.log(initData, "initData");
 
-    // useEffect(() => {
+    const { hash, queryId, chatType, chatInstance, authDate } = initData;
 
-    //     setInterval(() => {
-    //         console.log(window.location);
-    //     }, 1000);
-    // }, []);
+    console.log(
+        hash,
+        queryId,
+        chatType,
+        chatInstance,
+        authDate,
 
-    return <button onClick={() => {}}>Show Alert</button>;
+        "initData",
+    );
+
+    return (
+        <button
+            onClick={() => {
+                (utilsss as any).shareURL(
+                    " https://t.me/testtesttesttesttest_bot/hahaha",
+                    "aaa",
+                );
+            }}
+        >
+            Show Alert111122222
+        </button>
+    );
 };
 
 export default SoloPage;
