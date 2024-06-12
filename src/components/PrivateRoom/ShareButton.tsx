@@ -32,7 +32,7 @@ Btt is a fully on-chain cryptoeconomic game of deduction and psychology
 `;
 
 const ShareButtons = ({
-    text = "Back to Lobby",
+    text = "Back to 1v1",
     handleShare,
     handleTextClick,
     showText = true,
@@ -236,7 +236,6 @@ const ShareButtons = ({
                     <Flex
                         onClick={handleTextClick}
                         sx={{
-                            // width: isPc ? "200px" : "80px",
                             justifyContent: "flex-end",
                             alignItems: "center",
                             cursor: "pointer",

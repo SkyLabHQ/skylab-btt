@@ -25,7 +25,7 @@ import {
 import PlayBackButton from "./PlayBackButton";
 import ShareButtons from "../PrivateRoom/ShareButton";
 import StartJourney from "../BttComponents/StartJourney";
-import LoadingPage from "../PrivateLobby/LoadingPage";
+import LoadingPage from "../LoadingPage";
 
 const BttPlayBackPage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");

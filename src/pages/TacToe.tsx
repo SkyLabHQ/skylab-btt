@@ -34,9 +34,8 @@ import {
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/TacToe/GameOver";
-import ReactCanvasNest from "react-canvas-nest";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import LoadingPage from "@/components/PrivateLobby/LoadingPage";
+import LoadingPage from "@/components/LoadingPage";
 import {
     useMultiMercuryBaseContract,
     useMultiProvider,

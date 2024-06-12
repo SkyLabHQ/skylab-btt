@@ -32,7 +32,7 @@ import MBalance from "../BttComponents/MBalance";
 import StartJourney from "../BttComponents/StartJourney";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { motion } from "framer-motion";
-import LoadingPage from "../PrivateLobby/LoadingPage";
+import LoadingPage from "../LoadingPage";
 
 interface Info {
     burner?: string;

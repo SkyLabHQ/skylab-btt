@@ -20,20 +20,18 @@ import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import PrivateLobbyPlayBack from "./PrivateLobbyPlayBack";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "./ShareButton";
-import { useNavigate } from "react-router-dom";
 import useBidIcon from "@/hooks/useBidIcon";
+import { useNavigate } from "react-router-dom";
 
 const ResultPlayBack = () => {
-    const UserMarkIcon = useBidIcon();
     const navigate = useNavigate();
+    const UserMarkIcon = useBidIcon();
     const { bidTacToeGameAddress, myInfo, myGameInfo, opInfo, opGameInfo } =
         usePvpGameContext();
-
     const [init, setInit] = useState(false);
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const [allSelectedGrids, setAllSelectedGrids] = useState<any[]>([]);
     const [currentRound, setCurrentRound] = useState(0);
-
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract();
     const multiSkylabBidTacToeGameContract =
@@ -295,7 +293,9 @@ ${des}`;
         );
     };
 
-    const handleTextClick = async () => {};
+    const handleTextClick = async () => {
+        navigate("/pvp");
+    };
 
     useEffect(() => {
         handleGetGameInfo();
@@ -305,6 +305,7 @@ ${des}`;
         multiSkylabBidTacToeFactoryContract,
     ]);
 
+    console.log(myBalance, "myBalance");
     return (
         <Box
             sx={{

@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import CopyIcon from "./assets/copy-icon.svg";
-import avatars from "@/skyConstants/avatars";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import AdvantageIcon from "@/assets/advantage-icon.svg";
 import { shortenAddress } from "@/utils";
@@ -252,17 +251,6 @@ export const MUserProfile = ({
                         }}
                         flexDir={"column"}
                     >
-                        {avatar >= 0 && (
-                            <Box
-                                sx={{
-                                    borderRadius: "12px",
-                                    border: "1px solid #FDDC2D",
-                                    background: avatars[avatar],
-                                    width: "40px",
-                                    height: "40px",
-                                }}
-                            ></Box>
-                        )}
                         {img && (
                             <Box
                                 sx={{
@@ -363,18 +351,6 @@ export const MUserProfileResult = ({
             }}
         >
             <Flex align={"flex-end"}>
-                {avatar >= 0 && (
-                    <Box
-                        sx={{
-                            borderRadius: "12px",
-                            border: "1px solid #FDDC2D",
-                            background: avatars[avatar],
-                            width: "40px",
-                            height: "40px",
-                        }}
-                    ></Box>
-                )}
-
                 {img && (
                     <Box
                         sx={{

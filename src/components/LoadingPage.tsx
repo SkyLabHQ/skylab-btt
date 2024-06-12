@@ -1,7 +1,6 @@
 import { Flex, Image, useMediaQuery } from "@chakra-ui/react";
-import React from "react";
-import BiddingIcon from "./assets/bidding.gif";
-import LoadingText from "../BttComponents/LoadingText";
+import BiddingIcon from "@/assets/bidding.gif";
+import LoadingText from "./BttComponents/LoadingText";
 
 const LoadingPage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");

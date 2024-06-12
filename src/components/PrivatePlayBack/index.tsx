@@ -24,7 +24,7 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import StartJourney from "../BttComponents/StartJourney";
-import LoadingPage from "../PrivateLobby/LoadingPage";
+import LoadingPage from "../LoadingPage";
 import useBidIcon from "@/hooks/useBidIcon";
 
 const PrivatePlayBackPage = () => {
