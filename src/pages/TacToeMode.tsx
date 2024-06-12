@@ -31,7 +31,7 @@ import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
 import { getDefaultWithProvider, getTestflightSigner } from "@/hooks/useSigner";
-import { getSCWallet, useSCWallet } from "@/hooks/useSCWallet";
+import { getSCWallet } from "@/hooks/useSCWallet";
 import { erc721iface, topic0Transfer } from "@/skyConstants/iface";
 import { useChainId, useWalletClient } from "wagmi";
 import { ZERO_DATA } from "@/skyConstants";
@@ -313,7 +313,7 @@ const TacToeMode = () => {
                     )} */}
                     <Box
                         sx={{
-                            paddingTop: isPc ? "200px" : "130px",
+                            paddingTop: "30px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
