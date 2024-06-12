@@ -2,20 +2,16 @@ import { useCheckBurnerBalanceAndApprove } from "@/hooks/useBurnerWallet";
 import {
     Box,
     Text,
-    useBoolean,
-    useDisclosure,
     useMediaQuery,
     BoxProps,
     Flex,
     Image,
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    getBttPrivateLobbyContract,
     useBidTacToeFactoryRetry,
     useBttFactoryRetry,
-    usePrivateLobbyContract,
     useTestflightRetryContract,
 } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
@@ -26,7 +22,6 @@ import {
 } from "@/hooks/useContract";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
-    useMultiMercuryBTTPrivateLobby,
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
@@ -35,21 +30,10 @@ import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import {
-    getDefaultWithProvider,
-    getPrivateLobbySigner,
-    getTestflightSigner,
-} from "@/hooks/useSigner";
+import { getDefaultWithProvider, getTestflightSigner } from "@/hooks/useSigner";
 import { getSCWallet, useSCWallet } from "@/hooks/useSCWallet";
-import {
-    erc721iface,
-    topic0PrivateLobbyCreated,
-    topic0Transfer,
-} from "@/skyConstants/iface";
+import { erc721iface, topic0Transfer } from "@/skyConstants/iface";
 import { useChainId, useWalletClient } from "wagmi";
-import { decodeEventLog } from "viem";
-import PrivateLobbyButtons from "@/components/TacToeMode/PrivateLobbyButtons";
-import PreviousLobbyModal from "@/components/TacToeMode/PreviousLobbyModal";
 import { ZERO_DATA } from "@/skyConstants";
 import useCountDown from "react-countdown-hook";
 import styled from "@emotion/styled";
@@ -60,11 +44,8 @@ import GameMp3 from "@/assets/game.mp3";
 import LeftButton from "@/components/TacToeMode/LeftButton";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
 import MRobotIcon from "@/components/TacToeMode/assets/m-robot.svg";
-import MLobbyIcon from "@/components/TacToeMode/assets/m-private-lobby.svg.svg";
 import { privateKeyToAccount } from "viem/accounts";
 import Nest from "@/components/Nest";
-import { generateRandomName } from "@/skyConstants/bttGameTypes";
-import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -124,12 +105,7 @@ const TacToeMode = () => {
     const { timeLeft: timeLeft1 } = useStartGame();
     // const timeLeft1 = 0;
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
-    const [isPrivateLobbyMode, setIsPrivateLobbyMode] = useBoolean();
-    const {
-        isOpen: isPreviousLobbyModalOpen,
-        onOpen: onPreviousLobbyModalOpen,
-        onClose: onPreviousLobbyModalClose,
-    } = useDisclosure();
+
     const navigate = useNavigate();
     const chainId = useChainId();
     const [selectPlane, setSelectPlane] = useState<any>({});
@@ -139,15 +115,6 @@ const TacToeMode = () => {
     const toast = useSkyToast();
 
     const multiProvider = useMultiProvider(chainId);
-    const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const [activeLobbyAddress, setActiveLobbyAddress] = useState<string>("");
-    const [lobbyGameAddress, setLobbyGameAddress] = useState<string>("");
-
-    const [lobbyName, setLobbyName] = useState<string>("");
-    const [lobbySigner] = useState(getPrivateLobbySigner());
-    const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
-        lobbySigner.privateKey,
-    );
 
     const { data: signer } = useWalletClient();
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
@@ -157,18 +124,6 @@ const TacToeMode = () => {
 
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
-
-    const testMultiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
-
-    const multiMercuryBTTPrivateLobby = useMultiMercuryBTTPrivateLobby(
-        activeLobbyAddress !== ZERO_DATA ? activeLobbyAddress : "",
-    );
-    const bttPrivateLobbyContract = usePrivateLobbyContract(
-        activeLobbyAddress && activeLobbyAddress !== ZERO_DATA
-            ? activeLobbyAddress
-            : "",
-    );
 
     const { minutes, second } = useMemo(() => {
         let minutes: string | number = Math.floor(timeLeft / 60000);
@@ -301,193 +256,6 @@ const TacToeMode = () => {
         }
     };
 
-    const handleCreatePrivateLobby = async () => {
-        try {
-            openLoading();
-            if (bttPrivateLobbyContract) {
-                await bttPrivateLobbyContract("quitPrivateLobby", []);
-            }
-
-            const receipt = await bttFactoryRetryTest(
-                "createPrivateLobby",
-                [],
-                {
-                    usePaymaster: true,
-                    signer: lobbySigner,
-                },
-            );
-
-            const logs = receipt.logs.find((item: any) => {
-                return item.topics[0] === topic0PrivateLobbyCreated;
-            });
-
-            // @ts-ignore
-            const result: any = decodeEventLog({
-                abi: SKYLABBIDTACTOE_ABI,
-                data: logs.data,
-                topics: logs.topics,
-            });
-
-            const lobbyAddress = result.args.privateLobbyAddress;
-            const lobbyContract = getBttPrivateLobbyContract(lobbyAddress);
-            await lobbyContract("joinPrivateLobby", []);
-            const url = `/btt/lobby?lobbyAddress=` + lobbyAddress;
-            closeLoading();
-            navigate(url);
-        } catch (error) {
-            closeLoading();
-            console.log(error);
-            toast(handleError(error, true));
-        }
-    };
-
-    const handleJoinPrivateLobby = async () => {
-        navigate("/btt/joinlobby");
-    };
-
-    const handleGetActiveLobby = async () => {
-        const [activeLobbyAddress, gameAddress] = await testProvider.all([
-            testMultiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
-                privateLobbySCWAddress,
-            ),
-            testMultiSkylabBidTacToeFactoryContract.gamePerPlayer(
-                privateLobbySCWAddress,
-            ),
-        ]);
-        setLobbyGameAddress(gameAddress);
-        setActiveLobbyAddress(activeLobbyAddress);
-    };
-
-    const handleGetLoobyName = async () => {
-        const [lobbyName] = await testProvider.all([
-            multiMercuryBTTPrivateLobby.lobbyName(),
-        ]);
-
-        setLobbyName(lobbyName);
-    };
-
-    const handlePreviousLobbyClose = () => {
-        onPreviousLobbyModalClose();
-        setIsPrivateLobbyMode.on();
-    };
-
-    const handlePreviousLobbyConfirm = async () => {
-        navigate(`/btt/lobby?lobbyAddress=${activeLobbyAddress}`);
-    };
-
-    const handlePlayQuickGame = async () => {
-        try {
-            if (activeLobbyAddress === "") {
-                toast("Querying lobby address, please try again later");
-                return;
-            } else if (lobbyGameAddress !== ZERO_DATA) {
-                navigate(
-                    `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
-                );
-                return;
-            }
-
-            openLoading();
-
-            let afterActiveLobbyAddress = activeLobbyAddress;
-            if (activeLobbyAddress === ZERO_DATA) {
-                const receipt = await bttFactoryRetryTest(
-                    "createPrivateLobby",
-                    [],
-                    {
-                        usePaymaster: true,
-                        signer: lobbySigner,
-                    },
-                );
-
-                const logs = receipt.logs.find((item: any) => {
-                    return item.topics[0] === topic0PrivateLobbyCreated;
-                });
-
-                // @ts-ignore
-                const result: any = decodeEventLog({
-                    abi: SKYLABBIDTACTOE_ABI,
-                    data: logs.data,
-                    topics: logs.topics,
-                });
-
-                afterActiveLobbyAddress = result.args.privateLobbyAddress;
-                const lobbyContract = getBttPrivateLobbyContract(
-                    afterActiveLobbyAddress,
-                );
-
-                await lobbyContract("joinPrivateLobby", []);
-
-                const avatar = Math.floor(Math.random() * 12);
-                const nickname = generateRandomName();
-
-                await lobbyContract("setUserInfo", [avatar + 1, nickname]);
-
-                await lobbyContract("createRoom", [
-                    [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
-                ]);
-            } else {
-                const [userInfo] = await testProvider.all([
-                    multiMercuryBTTPrivateLobby.userInfo(
-                        privateLobbySCWAddress,
-                    ),
-                ]);
-
-                if (userInfo.avatar.toNumber() === 0) {
-                    const avatar = Math.floor(Math.random() * 12);
-                    const nickname = generateRandomName();
-                    await bttPrivateLobbyContract("setUserInfo", [
-                        avatar + 1,
-                        nickname,
-                    ]);
-                }
-                await bttPrivateLobbyContract("createRoom", [
-                    [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
-                ]);
-            }
-
-            const [gameAddress] = await testProvider.all([
-                multiSkylabBidTacToeFactoryContract.gamePerPlayer(
-                    privateLobbySCWAddress,
-                ),
-            ]);
-            closeLoading();
-            navigate(
-                `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${afterActiveLobbyAddress}`,
-            );
-        } catch (e) {
-            closeLoading();
-            console.log(e);
-            toast(handleError(e));
-        }
-    };
-
-    useEffect(() => {
-        if (
-            !testMultiSkylabBidTacToeFactoryContract ||
-            !testProvider ||
-            !privateLobbySCWAddress
-        )
-            return;
-
-        handleGetActiveLobby();
-    }, [
-        testProvider,
-        testMultiSkylabBidTacToeFactoryContract,
-        privateLobbySCWAddress,
-    ]);
-
-    useEffect(() => {
-        if (
-            !activeLobbyAddress ||
-            !testProvider ||
-            !multiMercuryBTTPrivateLobby
-        )
-            return;
-
-        handleGetLoobyName();
-    }, [activeLobbyAddress, testProvider, multiMercuryBTTPrivateLobby]);
-
     return (
         <Box
             sx={{
@@ -540,16 +308,12 @@ const TacToeMode = () => {
                         justifyContent: "center",
                     }}
                 >
-                    {/* {isPc && !isPrivateLobbyMode && (
+                    {/* {isPc  && (
                         <StartCountDown timeLeft={timeLeft1}></StartCountDown>
                     )} */}
                     <Box
                         sx={{
-                            paddingTop: isPrivateLobbyMode
-                                ? isPc
-                                    ? "200px"
-                                    : "130px"
-                                : "30px",
+                            paddingTop: isPc ? "200px" : "130px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -565,102 +329,41 @@ const TacToeMode = () => {
                                 width: "100%",
                             }}
                         >
-                            {isPrivateLobbyMode ? (
-                                <Box
-                                    sx={{
-                                        padding: "0 40px",
-                                    }}
-                                >
-                                    <PrivateLobbyButtons
-                                        onBack={() => {
-                                            setIsPrivateLobbyMode.off();
-                                        }}
-                                        onCreateLobby={() => {
+                            <Flex
+                                sx={{
+                                    width: "100%",
+                                    padding: "0 12px",
+                                }}
+                                justify={"space-between"}
+                                align={"flex-end"}
+                            >
+                                {!isPc && (
+                                    <Flex
+                                        flexDir={"column"}
+                                        align={"center"}
+                                        onClick={() => {
                                             gameAudio.play();
-                                            handleCreatePrivateLobby();
+                                            handleMintPlayTest("bot");
                                         }}
-                                        onJoinLobby={() => {
-                                            gameAudio.play();
-                                            handleJoinPrivateLobby();
-                                        }}
-                                    ></PrivateLobbyButtons>
-                                </Box>
-                            ) : (
-                                <Flex
-                                    sx={{
-                                        width: "100%",
-                                        padding: "0 12px",
-                                    }}
-                                    justify={"space-between"}
-                                    align={"flex-end"}
-                                >
-                                    {!isPc && (
-                                        <Flex
-                                            flexDir={"column"}
-                                            align={"center"}
-                                            onClick={() => {
-                                                gameAudio.play();
-                                                handleMintPlayTest("bot");
+                                    >
+                                        <Image src={MRobotIcon}></Image>
+                                        <Text
+                                            sx={{
+                                                fontSize: "12px",
                                             }}
                                         >
-                                            <Image src={MRobotIcon}></Image>
-                                            <Text
-                                                sx={{
-                                                    fontSize: "12px",
-                                                }}
-                                            >
-                                                Bot Game
-                                            </Text>
-                                        </Flex>
-                                    )}
-                                    <PlayButtonGroup
-                                        tournamentDisabled={
-                                            !selectPlane?.tokenId
-                                        }
-                                        onPlayTournament={() => {
-                                            gameAudio.play();
-                                            handleTournament();
-                                        }}
-                                    ></PlayButtonGroup>
-                                    {!isPc && (
-                                        <Flex
-                                            flexDir={"column"}
-                                            align={"center"}
-                                            onClick={async () => {
-                                                gameAudio.play();
-                                                if (activeLobbyAddress === "") {
-                                                    toast(
-                                                        "Querying lobby address, please try again later",
-                                                    );
-                                                } else if (
-                                                    lobbyGameAddress !==
-                                                    ZERO_DATA
-                                                ) {
-                                                    navigate(
-                                                        `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
-                                                    );
-                                                } else if (
-                                                    activeLobbyAddress ===
-                                                    ZERO_DATA
-                                                ) {
-                                                    setIsPrivateLobbyMode.on();
-                                                } else {
-                                                    onPreviousLobbyModalOpen();
-                                                }
-                                            }}
-                                        >
-                                            <Image src={MLobbyIcon}></Image>
-                                            <Text
-                                                sx={{
-                                                    fontSize: "12px",
-                                                }}
-                                            >
-                                                Lobby Game
-                                            </Text>
-                                        </Flex>
-                                    )}
-                                </Flex>
-                            )}
+                                            Bot Game
+                                        </Text>
+                                    </Flex>
+                                )}
+                                <PlayButtonGroup
+                                    tournamentDisabled={!selectPlane?.tokenId}
+                                    onPlayTournament={() => {
+                                        gameAudio.play();
+                                        handleTournament();
+                                    }}
+                                ></PlayButtonGroup>
+                            </Flex>
                         </motion.div>
                     </Box>
                 </Box>
@@ -672,7 +375,7 @@ const TacToeMode = () => {
                         bottom: 0,
                         transform: "translate(-50%, 0)",
                         width: isPc ? "800px" : "100%",
-                        display: isPrivateLobbyMode ? "none" : "block",
+                        display: "block",
                     }}
                 >
                     <SelectPlane
@@ -689,38 +392,12 @@ const TacToeMode = () => {
 
                 {isPc && (
                     <LeftButton
-                        onPlayTestLobby={async () => {
-                            gameAudio.play();
-                            if (activeLobbyAddress === "") {
-                                toast(
-                                    "Querying lobby address, please try again later",
-                                );
-                            } else if (lobbyGameAddress !== ZERO_DATA) {
-                                navigate(
-                                    `/btt/lobbyRoom?gameAddress=${lobbyGameAddress}&lobbyAddress=${activeLobbyAddress}`,
-                                );
-                            } else if (activeLobbyAddress === ZERO_DATA) {
-                                setIsPrivateLobbyMode.on();
-                            } else {
-                                onPreviousLobbyModalOpen();
-                            }
-                        }}
                         onPlayWithBot={() => {
                             gameAudio.play();
                             handleMintPlayTest("bot");
                         }}
-                        onPlayQuickGame={() => {
-                            gameAudio.play();
-                            handlePlayQuickGame();
-                        }}
                     ></LeftButton>
                 )}
-                <PreviousLobbyModal
-                    lobbyName={lobbyName}
-                    isOpen={isPreviousLobbyModalOpen}
-                    onConfirm={handlePreviousLobbyConfirm}
-                    onClose={handlePreviousLobbyClose}
-                ></PreviousLobbyModal>
             </Box>
             <Nest />
         </Box>

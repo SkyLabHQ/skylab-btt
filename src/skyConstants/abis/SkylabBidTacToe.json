@@ -24,31 +24,6 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "privateLobbyAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "admin",
-        "type": "address"
-      }
-    ],
-    "name": "PrivateLobbyCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
         "name": "player1",
         "type": "address"
       },
@@ -86,32 +61,6 @@
     ],
     "name": "WinGame",
     "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "activeLobbyPerPlayer",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "activeQueueTimeout",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
   },
   {
     "inputs": [
@@ -190,53 +139,6 @@
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "uint64",
-            "name": "gridWidth",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "gridHeight",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "lengthToWin",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "initialBalance",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridMaxSelectionCount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridSelectionStrategy",
-            "type": "uint128"
-          },
-          {
-            "internalType": "bool",
-            "name": "isBot",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "universalTimeout",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MercuryBidTacToe.GameParams",
-        "name": "gameParams",
-        "type": "tuple"
-      },
-      {
         "internalType": "address",
         "name": "bot",
         "type": "address"
@@ -248,147 +150,68 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint64",
-            "name": "gridWidth",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "gridHeight",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "lengthToWin",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "initialBalance",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridMaxSelectionCount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridSelectionStrategy",
-            "type": "uint128"
-          },
-          {
-            "internalType": "bool",
-            "name": "isBot",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "universalTimeout",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MercuryBidTacToe.GameParams",
-        "name": "gameParams",
-        "type": "tuple"
-      },
-      {
-        "internalType": "address",
-        "name": "player1",
-        "type": "address"
-      }
-    ],
-    "name": "createGameInPrivateLobby",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint64",
-            "name": "gridWidth",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "gridHeight",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "lengthToWin",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "initialBalance",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridMaxSelectionCount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridSelectionStrategy",
-            "type": "uint128"
-          },
-          {
-            "internalType": "bool",
-            "name": "isBot",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "universalTimeout",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MercuryBidTacToe.GameParams",
-        "name": "gameParams",
-        "type": "tuple"
-      },
-      {
-        "internalType": "bool",
-        "name": "needComfirmation",
-        "type": "bool"
-      }
-    ],
+    "inputs": [],
     "name": "createOrJoinDefault",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "createPrivateLobby",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "player",
-        "type": "address"
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "gridWidth",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "gridHeight",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "lengthToWin",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "initialBalance",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridMaxSelectionCount",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "gridSelectionStrategy",
+            "type": "uint128"
+          },
+          {
+            "internalType": "bool",
+            "name": "isBot",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "universalTimeout",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MercuryBidTacToe.GameParams",
+        "name": "gameParams",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "hash",
+        "type": "bytes32"
       }
     ],
-    "name": "deactiveLobbyForPlayer",
+    "name": "createPvPRoom",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -410,32 +233,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "room",
-        "type": "address"
-      }
-    ],
-    "name": "deleteGameInPrivateLobby",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      }
-    ],
-    "name": "deletePrivateLobby",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -606,56 +403,18 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "gameAddress",
+        "name": "player1",
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "player2",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "passward",
+        "type": "uint256"
       }
     ],
-    "name": "joinGameInPrivateLobby",
+    "name": "joinPvPRoom",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "lobbyExists",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "name": "nameToPrivateLobby",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -827,53 +586,6 @@
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "uint64",
-            "name": "gridWidth",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "gridHeight",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "lengthToWin",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "initialBalance",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridMaxSelectionCount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "gridSelectionStrategy",
-            "type": "uint128"
-          },
-          {
-            "internalType": "bool",
-            "name": "isBot",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "universalTimeout",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MercuryBidTacToe.GameParams",
-        "name": "gameParams",
-        "type": "tuple"
-      },
-      {
         "internalType": "address",
         "name": "aviation",
         "type": "address"
@@ -897,31 +609,12 @@
         "type": "address"
       }
     ],
-    "name": "playerToOpponent",
+    "name": "pvpRoom",
     "outputs": [
       {
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "playerToTimeout",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -949,20 +642,19 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "player",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "setActiveLobby",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "setActiveQueue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "roomPassword",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

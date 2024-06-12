@@ -18,6 +18,7 @@ import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";
 import Accept from "./pages/Accept";
 import Solo from "./pages/Solo";
+import DuelLayout from "./components/DuelLayout";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -34,8 +35,6 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/btt/rules" element={<BttRules />}></Route>
                 <Route path="/btt/joinlobby" element={<JoinLobby />}></Route>
                 <Route path="/btt/lobby" element={<PrivateLobby />}></Route>
-                <Route path="/btt/lobbyRoom" element={<PrivateRoom />} />
-                <Route path="/btt/solo" element={<Solo />} />
                 <Route
                     path="/btt/lobbyPlayback"
                     element={<PrivatePlayBack />}
@@ -46,6 +45,11 @@ const AppRoutes = (): ReactElement => {
                 ></Route>
                 <Route path="/tower" element={<Tower />}></Route>
                 <Route path="/buypaper" element={<SellPaperPage />}></Route>
+
+                <Route path="/duel" element={<DuelLayout />}>
+                    <Route path="/duel/solo" element={<Solo />} />
+                    <Route path="/duel/lobbyRoom" element={<PrivateRoom />} />
+                </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

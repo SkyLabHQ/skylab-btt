@@ -10,6 +10,7 @@ interface Window {
     };
     web3?: unknown;
     Telegram?: any;
+    TelegramGameProxy?: any;
 }
 
 declare module "*.svg" {
