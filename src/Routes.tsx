@@ -10,7 +10,7 @@ import BttLiveGame from "./pages/BttLiveGame";
 import BttRules from "./pages/BttRules";
 import JoinLobby from "./pages/JoinLobby";
 import PrivateLobby from "./pages/PrivateLobby";
-import PrivateRoom from "./pages/PrivateRoom";
+import PvpRoom from "./pages/PvpRoom";
 import PrivatePlayBack from "./pages/PrivatePlayBack";
 import PrivateLiveGame from "./pages/PrivateLiveGame";
 import Tower from "./pages/Tower";
@@ -18,7 +18,7 @@ import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";
 import Accept from "./pages/Accept";
 import Solo from "./pages/Solo";
-import DuelLayout from "./components/DuelLayout";
+import PvpLayout from "./components/PvpLayout";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -46,9 +46,10 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/tower" element={<Tower />}></Route>
                 <Route path="/buypaper" element={<SellPaperPage />}></Route>
 
-                <Route path="/duel" element={<DuelLayout />}>
-                    <Route path="/duel/solo" element={<Solo />} />
-                    <Route path="/duel/lobbyRoom" element={<PrivateRoom />} />
+                <Route path="/pvp" element={<PvpLayout />}>
+                    <Route path="/pvp" element={<Solo />} />
+                    <Route path="/pvp/game" element={<PvpRoom />} />
+                    <Route path="/pvp/accept" element={<Accept />}></Route>
                 </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
