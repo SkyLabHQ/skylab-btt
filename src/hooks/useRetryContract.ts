@@ -37,6 +37,7 @@ import {
     useBurnerMercuryBTTPrivateLobbyContract,
     useBurnerSkylabBidTacToeContract,
     useBurnerSkylabBidTacToeGameContract,
+    useTestSkylabBidTacToeContract,
 } from "./useBurnerContract";
 import { getReason } from "@/utils/receipt";
 import {
@@ -303,7 +304,10 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
 };
 
 export const getPayMasterBurnerRetryContract = (contract: any, signer: any) => {
-    return async (method: string, args: any[]) => {
+    return async (method: string, args: any[], overrides?: any) => {
+        if (overrides?.clearQueue) {
+            queue.clear();
+        }
         const result = await queue.add(
             () => {
                 return retry(
@@ -312,7 +316,13 @@ export const getPayMasterBurnerRetryContract = (contract: any, signer: any) => {
                             const provider = getViemClients({
                                 chainId: TESTFLIGHT_CHAINID,
                             });
-                            const localSinger = signer;
+                            console.log(overrides, "overrides");
+                            const localSinger = overrides?.signer
+                                ? overrides?.signer
+                                : signer;
+
+                            console.log(localSinger.privateKey, "localSinger");
+
                             const { sCWSigner, sCWAddress } = await getSCWallet(
                                 localSinger.privateKey,
                             );
@@ -441,6 +451,19 @@ export const useTestflightRetryContract = () => {
 export const useBttFactoryRetry = (testflight: boolean, signer?: any) => {
     const contract = useBurnerSkylabBidTacToeContract(testflight);
     const contractWrite = useBurnerRetryContract(contract, signer);
+    return contractWrite;
+};
+
+export const useBttFactoryRetryPaymaster = () => {
+    const contract = useTestSkylabBidTacToeContract();
+    const signer = getPrivateLobbySigner();
+    const contractWrite = getPayMasterBurnerRetryContract(contract, signer);
+    return contractWrite;
+};
+
+export const useBttGameRetryPaymaster = (address: string, signer: any) => {
+    const contract = useBurnerSkylabBidTacToeGameContract(address);
+    const contractWrite = getPayMasterBurnerRetryContract(contract, signer);
     return contractWrite;
 };
 

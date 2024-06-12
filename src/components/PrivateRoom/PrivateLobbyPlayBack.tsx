@@ -179,8 +179,6 @@ const PrivateLobbyPlayBack = ({
                 >
                     <UserProfile
                         status="my"
-                        avatar={myInfo.avatar}
-                        name={myInfo.name}
                         mark={myInfo.mark}
                         showAdvantageTip={myIsNextDrawWinner}
                     ></UserProfile>
@@ -204,8 +202,6 @@ const PrivateLobbyPlayBack = ({
                 >
                     <UserProfile
                         status="op"
-                        avatar={opInfo.avatar}
-                        name={opInfo.name}
                         mark={opInfo.mark}
                         showAdvantageTip={!myIsNextDrawWinner}
                     ></UserProfile>

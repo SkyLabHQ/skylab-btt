@@ -1,4 +1,4 @@
-import { usePrivateGameContext } from "@/pages/PrivateRoom";
+import { usePvpGameContext } from "@/pages/PvpRoom";
 import avatars from "@/skyConstants/avatars";
 import {
     Box,
@@ -9,18 +9,15 @@ import {
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import Loading from "../Loading";
 import useCountDown from "react-countdown-hook";
-import { useNavigate } from "react-router-dom";
-import { getPrivateLobbySigner } from "@/hooks/useSigner";
-import { usePrivateLobbyContract } from "@/hooks/useRetryContract";
 import QuitModal from "../BttComponents/QuitModal";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
 import { motion } from "framer-motion";
 import UserIcon from "./assets/user1.svg";
-import { ethers } from "ethers";
+import { shortenAddress } from "@/utils";
 
 const UserInfo = ({ detail, status }: { detail: any; status: "my" | "op" }) => {
     const isMy = status === "my";
@@ -79,32 +76,21 @@ const Match = () => {
     const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const navigate = useNavigate();
-    const { bidTacToeGameAddress, lobbyAddress, lobbyName } =
-        usePrivateGameContext();
-    const { onCopy } = useClipboard(lobbyName);
-    const [signer] = useState(getPrivateLobbySigner());
-
-    const copyLink = useMemo(() => {
-        console.log(window.location, "window.location");
-        const wallet = new ethers.Wallet(signer.privateKey).address;
-        return `${window.location.host}/btt/accept?lobbyAddress=${lobbyAddress}&gameAddress=${bidTacToeGameAddress}&from=${wallet}`;
-    }, [lobbyAddress, bidTacToeGameAddress]);
-
-    const { onCopy: onCopy1 } = useClipboard(copyLink);
-
     const [timeLeft, { start }] = useCountDown(5000, 1000);
-    const { myInfo, opInfo, handleStepChange } = usePrivateGameContext();
-    const bttPrivateLobbyContract = usePrivateLobbyContract(lobbyAddress);
+    const { myInfo, opInfo, handleStepChange, bidTacToeGameAddress } =
+        usePvpGameContext();
 
-    const handleQuit = async () => {
-        const privateLobbySigner = getPrivateLobbySigner();
-        await bttPrivateLobbyContract("deleteRoom", [bidTacToeGameAddress]);
-        navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
-    };
+    const inviteLink = useMemo(() => {
+        const password = localStorage.getItem("password");
+        return `${window.location.origin}/pvp/accept?gameAddress=${bidTacToeGameAddress}`;
+    }, [bidTacToeGameAddress]);
+
+    const { onCopy } = useClipboard(inviteLink);
+
+    const handleQuit = async () => {};
 
     const handleCopyLink = () => {
-        onCopy1();
+        onCopy();
         toast("Copy code success");
     };
 
@@ -167,7 +153,7 @@ const Match = () => {
                         marginTop: "40px",
                     }}
                 >
-                    <UserInfo detail={myInfo} status="my"></UserInfo>
+                    {shortenAddress(myInfo?.address)}
                     <Text
                         sx={{
                             fontSize: isPc ? "48px" : "20px",
@@ -175,7 +161,7 @@ const Match = () => {
                     >
                         VS
                     </Text>
-                    <UserInfo detail={opInfo} status="op"></UserInfo>
+                    {shortenAddress(opInfo?.address)}
                 </Flex>
 
                 <Flex justify={"center"} flexDir={"column"} align={"center"}>
@@ -258,20 +244,6 @@ const Match = () => {
                         </>
                     )}
                 </Flex>
-                <Box
-                    sx={{
-                        textAlign: "center",
-                        fontSize: "16px",
-                        marginTop: "10px",
-                    }}
-                    onClick={() => {
-                        onCopy();
-                        toast("Copy code success");
-                    }}
-                >
-                    <Text>Lobby Code</Text>
-                    <Text>{lobbyName}</Text>
-                </Box>
             </Box>
             <QuitModal
                 onConfirm={handleQuit}

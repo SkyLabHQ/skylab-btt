@@ -23,14 +23,10 @@ import useBidIcon from "@/hooks/useBidIcon";
 
 const UserProfile = ({
     address,
-    avatar,
-    name,
     status,
     mark,
     showAdvantageTip,
 }: {
-    avatar: number;
-    name: string;
     showAdvantageTip?: boolean;
     mark?: number;
     address?: string;
@@ -47,27 +43,6 @@ const UserProfile = ({
             flexDir={"column"}
             align={status === "my" ? "flex-start" : "flex-end"}
         >
-            <Flex>
-                <Box
-                    sx={{
-                        borderRadius: "1.0417vw",
-                        border: "1px solid #FDDC2D",
-                        background: avatars[avatar],
-                        width: "4.1667vw",
-                        height: "4.1667vw",
-                    }}
-                ></Box>
-            </Flex>
-
-            <Text
-                sx={{
-                    color: "#fff",
-                    fontSize: "0.8333vw",
-                    marginTop: "0.2083vw",
-                }}
-            >
-                {name}
-            </Text>
             <Flex
                 sx={{
                     flexDirection: direction,

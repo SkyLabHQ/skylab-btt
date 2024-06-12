@@ -15,7 +15,7 @@ import PILOTNETPOINTS_ABI from "@/skyConstants/abis/PilotNetPoints.json";
 import PILOTWINSTREAK_ABI from "@/skyConstants/abis/PilotWinStreak.json";
 import MERCURYBTTPRIVATELOBBY_ABI from "@/skyConstants/abis/MercuryBTTPrivateLobby.json";
 import qs from "query-string";
-import { ChainId, randomRpc } from "@/utils/web3Utils";
+import { ChainId, TESTFLIGHT_CHAINID, randomRpc } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
 import {
     skylabBidTacToeAddress,
@@ -105,6 +105,11 @@ export const useMultiSkylabBidTacToeFactoryContract = (
     const activeChainId = useChainId();
     const chainId = propChainId || activeChainId;
 
+    return useContract(skylabBidTacToeAddress[chainId], SKYLABBIDTACTOE_ABI);
+};
+
+export const useMultiTestSkylabBidTacToeFactoryContract = () => {
+    const chainId = TESTFLIGHT_CHAINID;
     return useContract(skylabBidTacToeAddress[chainId], SKYLABBIDTACTOE_ABI);
 };
 

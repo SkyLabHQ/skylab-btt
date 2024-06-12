@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react";
 import Board from "@/components/TacToe/Board";
-import { useBttGameRetry } from "@/hooks/useRetryContract";
+import { useBttGameRetryPaymaster } from "@/hooks/useRetryContract";
 import { ethers } from "ethers";
 import {
     useMultiProvider,
@@ -20,7 +20,7 @@ import {
     useGridCommited,
 } from "@/hooks/useTacToeStore";
 import { ZERO_DATA } from "@/skyConstants";
-import { usePrivateGameContext } from "@/pages/PrivateRoom";
+import { usePvpGameContext } from "@/pages/PvpRoom";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import UserProfile from "./UserProfile";
 import {
@@ -31,7 +31,6 @@ import {
     getWinState,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
-import { getPrivateLobbySigner } from "@/hooks/useSigner";
 import { Message } from "./Message";
 import MLayout from "./MLayout";
 import getNowSecondsTimestamp from "@/utils/nowTime";
@@ -41,14 +40,15 @@ import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { MyInputBid, OpInputBid } from "../TacToe/UserCard";
+import { usePvpInfo } from "@/contexts/PvpContext";
 
 const PlayGame = ({
     onChangeGame,
 }: {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
 }) => {
+    const { privateKey } = usePvpInfo();
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
-
     const commitWorkerRef = useRef<Worker>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -62,12 +62,11 @@ const PlayGame = ({
         opGameInfo,
         bidTacToeGameAddress,
         myInfo,
-        lobbyAddress,
         opInfo,
         list,
         onList,
         handleStepChange,
-    } = usePrivateGameContext();
+    } = usePvpGameContext();
     const canCallTimeout = useMemo(() => {
         if (
             autoCommitTimeoutTime === 0 &&
@@ -79,7 +78,12 @@ const PlayGame = ({
         return false;
     }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
-    const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress);
+    const tacToeGameRetryWrite = useBttGameRetryPaymaster(
+        bidTacToeGameAddress,
+        {
+            privateKey,
+        },
+    );
 
     const deleteTokenIdCommited =
         useDeleteTokenIdCommited(bidTacToeGameAddress);
@@ -111,10 +115,8 @@ const PlayGame = ({
         useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
 
     const inviteLink = useMemo(() => {
-        if (!bidTacToeGameAddress || !lobbyAddress) return "";
-
-        return `${window.location.origin}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}`;
-    }, [bidTacToeGameAddress, lobbyAddress]);
+        return "";
+    }, []);
 
     const handleGetGameInfo = async () => {
         const [
@@ -251,15 +253,11 @@ const PlayGame = ({
 
     const handleRevealedBid = async () => {
         try {
-            const privateLobbySigner = getPrivateLobbySigner();
             const localSalt = getGridCommited();
             if (!localSalt) return;
             const { salt, amount } = localSalt;
             setRevealing(true);
-            await tacToeGameRetryWrite("revealBid", [amount, Number(salt)], {
-                usePaymaster: true,
-                signer: privateLobbySigner,
-            });
+            await tacToeGameRetryWrite("revealBid", [amount, Number(salt)]);
             onChangeGame("my", {
                 ...myGameInfo,
                 gameState: GameState.Revealed,
@@ -297,11 +295,7 @@ const PlayGame = ({
         }
 
         try {
-            const privateLobbySigner = getPrivateLobbySigner();
-            await tacToeGameRetryWrite("claimTimeoutPenalty", [], {
-                usePaymaster: true,
-                signer: privateLobbySigner,
-            });
+            await tacToeGameRetryWrite("claimTimeoutPenalty", []);
             handleGetGameInfo();
         } catch (e) {
             console.log(e);
@@ -331,10 +325,9 @@ const PlayGame = ({
                 `currentGird: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
             );
 
-            const privateLobbySigner = getPrivateLobbySigner();
             await tacToeGameRetryWrite("commitBid", [hash], {
                 usePaymaster: true,
-                signer: privateLobbySigner,
+                signer: { privateKey },
             });
             onChangeGame("my", {
                 ...myGameInfo,
@@ -386,11 +379,7 @@ const PlayGame = ({
                 }
             }
 
-            const privateLobbySigner = getPrivateLobbySigner();
-            await tacToeGameRetryWrite(type, [index], {
-                usePaymaster: true,
-                signer: privateLobbySigner,
-            });
+            await tacToeGameRetryWrite(type, [index]);
             if (type === "setMessage") {
                 setMessageLoading(MessageStatus.Sent);
                 setMessageIndex(index);
@@ -426,10 +415,7 @@ const PlayGame = ({
         }
         try {
             setSurrenderLoading(true);
-            const privateLobbySigner = getPrivateLobbySigner();
             await tacToeGameRetryWrite("surrender", [], {
-                usePaymaster: true,
-                signer: privateLobbySigner,
                 clearQueue: true,
             });
             setSurrenderLoading(false);
@@ -445,19 +431,7 @@ const PlayGame = ({
         handleStepChange(2);
     };
 
-    const handleShareTw = () => {
-        const text = `⭕️❌⭕️❌Watch me crush the opponent！⭕️❌⭕️❌
-
-${window.location.host}/btt/lobbyLive?gameAddress=${bidTacToeGameAddress}&lobbyAddress=${lobbyAddress}
-
-bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base 
-
-@skylabHQ`;
-
-        window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
-        );
-    };
+    const handleShareTw = () => {};
 
     const handleCommitWorker = () => {
         if (commitWorkerRef.current) {
@@ -616,8 +590,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
                             <Flex>
                                 <UserProfile
                                     status="my"
-                                    avatar={myInfo.avatar}
-                                    name={myInfo.name}
+                                    address={myInfo.address}
                                     mark={myInfo.mark}
                                     showAdvantageTip={
                                         myInfo.address === nextDrawWinner
@@ -688,8 +661,7 @@ bid tac toe, a fully on-chain PvP game of psychology and strategy, on@base
 
                                 <UserProfile
                                     status="op"
-                                    avatar={opInfo.avatar}
-                                    name={opInfo.name}
+                                    address={opInfo.address}
                                     mark={opInfo.mark}
                                     showAdvantageTip={
                                         opInfo.address === nextDrawWinner

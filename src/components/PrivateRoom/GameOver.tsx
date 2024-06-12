@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import Board from "@/components/TacToe/Board";
-import { usePrivateGameContext } from "@/pages/PrivateRoom";
+import { usePvpGameContext } from "@/pages/PvpRoom";
 import ResultUserCard from "../TacToe/ResultUserCard";
 import { getWinState } from "@/skyConstants/bttGameTypes";
 import { MUserProfile, MUserProfileResult } from "./UserProfile";
@@ -10,7 +10,7 @@ import MBalance from "../BttComponents/MBalance";
 const GameOver = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { myInfo, opInfo, myGameInfo, opGameInfo, list, handleStepChange } =
-        usePrivateGameContext();
+        usePvpGameContext();
 
     const isMyWin = getWinState(myGameInfo.gameState);
 

@@ -17,7 +17,7 @@ import Tower from "./pages/Tower";
 import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";
 import Accept from "./pages/Accept";
-import Solo from "./pages/Solo";
+import PvpHome from "./pages/PvpHome";
 import PvpLayout from "./components/PvpLayout";
 
 const AppRoutes = (): ReactElement => {
@@ -47,7 +47,7 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/buypaper" element={<SellPaperPage />}></Route>
 
                 <Route path="/pvp" element={<PvpLayout />}>
-                    <Route path="/pvp" element={<Solo />} />
+                    <Route path="/pvp" element={<PvpHome />} />
                     <Route path="/pvp/game" element={<PvpRoom />} />
                     <Route path="/pvp/accept" element={<Accept />}></Route>
                 </Route>

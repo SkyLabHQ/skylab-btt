@@ -35,6 +35,11 @@ export const useBurnerSkylabBidTacToeContract = (istest: boolean = false) => {
     );
 };
 
+export const useTestSkylabBidTacToeContract = () => {
+    const chainId = TESTFLIGHT_CHAINID;
+    return useContract(skylabBidTacToeAddress[chainId], SKYLABBIDTACTOE_ABI);
+};
+
 export const useBurnerSkylabBidTacToeGameContract = (address: string) => {
     return useContract(address, SKYLABBIDTACTOEGAME_ABI);
 };

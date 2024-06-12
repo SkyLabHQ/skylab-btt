@@ -683,8 +683,7 @@ const BttLiveGamePage = () => {
                                 <Flex>
                                     <UserProfile
                                         status="my"
-                                        avatar={myInfo.avatar}
-                                        name={myInfo.name}
+                                        address={myInfo.address}
                                         mark={myInfo.mark}
                                         showAdvantageTip={
                                             myInfo.address === nextDrawWinner
@@ -739,8 +738,6 @@ const BttLiveGamePage = () => {
 
                                     <UserProfile
                                         status="op"
-                                        avatar={opInfo.avatar}
-                                        name={opInfo.name}
                                         mark={opInfo.mark}
                                         showAdvantageTip={
                                             opInfo.address === nextDrawWinner

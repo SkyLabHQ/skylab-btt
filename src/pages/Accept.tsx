@@ -1,49 +1,34 @@
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import ToolBar from "@/components/BttComponents/Toolbar";
 import { shortenAddress } from "@/utils";
 import { BackWithText } from "@/components/Back";
 import Nest from "@/components/Nest";
-import {
-    getBttPrivateLobbyContract,
-    usePrivateLobbyContract,
-} from "@/hooks/useRetryContract";
-import { getPrivateLobbySigner } from "@/hooks/useSigner";
+import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { handleError } from "@/utils/error";
 import useSkyToast from "@/hooks/useSkyToast";
 import {
-    useMultiMercuryBTTPrivateLobby,
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useSCWallet } from "@/hooks/useSCWallet";
-import { generateRandomName } from "@/skyConstants/bttGameTypes";
-import { ZERO_DATA } from "@/skyConstants";
+import { usePvpInfo } from "@/contexts/PvpContext";
 
 const Accept = () => {
+    const navigate = useNavigate();
+    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster();
     const toast = useSkyToast();
     const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const testMultiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const navigate = useNavigate();
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const [from] = useState<string>(params.from);
-    const [lobbyAddress] = useState<string>(params.lobbyAddress);
+    const { privateKey, pvpAddress } = usePvpInfo();
     const [gameAddress] = useState<string>(params.gameAddress);
-    const [lobbySigner] = useState(getPrivateLobbySigner());
-    const { sCWAddress: privateLobbySCWAddress } = useSCWallet(
-        lobbySigner.privateKey,
-    );
-    const multiMercuryBTTPrivateLobby =
-        useMultiMercuryBTTPrivateLobby(lobbyAddress);
-    const bttPrivateLobbyContract = usePrivateLobbyContract(lobbyAddress);
 
     const handleJoinGame = async () => {
         if (isLoading) {
@@ -51,59 +36,16 @@ const Accept = () => {
         }
         try {
             openLoading();
-            const [activeLobbyAddress, activeGameAddress] =
-                await testProvider.all([
-                    testMultiSkylabBidTacToeFactoryContract.activeLobbyPerPlayer(
-                        privateLobbySCWAddress,
-                    ),
-                    testMultiSkylabBidTacToeFactoryContract.gamePerPlayer(
-                        privateLobbySCWAddress,
-                    ),
-                ]);
-
-            // 如果已经在游戏中，直接跳转
-            if (activeGameAddress !== ZERO_DATA) {
-                if (activeGameAddress !== gameAddress) {
-                    closeLoading();
-                    toast("You are already in a game, please quit first");
-                    return;
-                } else {
-                    navigate(
-                        `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
-                    );
-                    closeLoading();
-                    return;
-                }
-            }
-
-            if (activeLobbyAddress === ZERO_DATA) {
-                await bttPrivateLobbyContract("joinPrivateLobby", []);
-            } else if (activeLobbyAddress !== lobbyAddress) {
-                const lobbyContract =
-                    getBttPrivateLobbyContract(activeLobbyAddress);
-                // 先退出 后加入
-                await lobbyContract("quitPrivateLobby", []);
-                await bttPrivateLobbyContract("joinPrivateLobby", []);
-            }
-
-            const [userInfo] = await testProvider.all([
-                multiMercuryBTTPrivateLobby.userInfo(privateLobbySCWAddress),
+            const res = await bttFactoryRetryPaymaster("joinPvPRoom", [
+                "0x5130937424Be6107B7549bECaA0D7b70025dad94",
+                1234,
+                {
+                    signer: {
+                        privateKey,
+                    },
+                },
             ]);
 
-            // 如果没有设置头像和昵称，随机生成
-            if (userInfo.avatar.toNumber() === 0) {
-                const avatar = Math.floor(Math.random() * 12);
-                const nickname = generateRandomName();
-                await bttPrivateLobbyContract("setUserInfo", [
-                    avatar + 1,
-                    nickname,
-                ]);
-            }
-
-            await bttPrivateLobbyContract("joinRoom", [gameAddress]);
-            navigate(
-                `/btt/lobbyRoom?gameAddress=${gameAddress}&lobbyAddress=${lobbyAddress}`,
-            );
             closeLoading();
         } catch (e) {
             closeLoading();

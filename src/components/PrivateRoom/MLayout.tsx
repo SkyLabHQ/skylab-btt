@@ -1,4 +1,4 @@
-import { usePrivateGameContext } from "@/pages/PrivateRoom";
+import { usePvpGameContext } from "@/pages/PvpRoom";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { MUserProfile } from "./UserProfile";
@@ -45,7 +45,7 @@ const MLayout = ({
     const [inputMode, setInputMode] = useState<"message" | "keyboard">(null);
 
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
-        usePrivateGameContext();
+        usePvpGameContext();
     const myGameState = myGameInfo.gameState;
 
     useEffect(() => {

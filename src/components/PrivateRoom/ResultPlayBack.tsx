@@ -15,7 +15,7 @@ import {
     initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
-import { usePrivateGameContext } from "@/pages/PrivateRoom";
+import { usePvpGameContext } from "@/pages/PvpRoom";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import PrivateLobbyPlayBack from "./PrivateLobbyPlayBack";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
@@ -26,14 +26,8 @@ import useBidIcon from "@/hooks/useBidIcon";
 const ResultPlayBack = () => {
     const UserMarkIcon = useBidIcon();
     const navigate = useNavigate();
-    const {
-        bidTacToeGameAddress,
-        myInfo,
-        myGameInfo,
-        opInfo,
-        opGameInfo,
-        lobbyAddress,
-    } = usePrivateGameContext();
+    const { bidTacToeGameAddress, myInfo, myGameInfo, opInfo, opGameInfo } =
+        usePvpGameContext();
 
     const [init, setInit] = useState(false);
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
@@ -301,9 +295,7 @@ ${des}`;
         );
     };
 
-    const handleTextClick = async () => {
-        navigate(`/btt/lobby?lobbyAddress=${lobbyAddress}`);
-    };
+    const handleTextClick = async () => {};
 
     useEffect(() => {
         handleGetGameInfo();

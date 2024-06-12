@@ -13,7 +13,6 @@ export const PlayButtonGroup = ({
     onPlayTournament: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-
     return (
         <Box>
             <Box
