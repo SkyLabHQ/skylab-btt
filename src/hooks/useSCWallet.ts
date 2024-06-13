@@ -79,7 +79,7 @@ export const useSCWallet = (privateKey: string) => {
                 privateKey,
             );
             setSCWSigner(sCWSigner);
-            setSCWAddress(sCWAddress);
+            setSCWAddress(sCWAddress.toLocaleLowerCase() as `0x${string}`);
             setSCWClient(sCWClient);
         })();
     }, [privateKey]);

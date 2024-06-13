@@ -3,7 +3,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { login } from "@/api";
 import useSkyToast from "@/hooks/useSkyToast";
-import { ethers } from "ethers";
 import { useSCWallet } from "@/hooks/useSCWallet";
 
 const PvpContext = createContext<{
@@ -17,7 +16,7 @@ export const PvpProvider = () => {
     const [init, setInit] = useState(false);
     const [privateKey, setPrivateKey] = useState("");
     const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
-    console.log(privateKey, "privateKey");
+
     const initData = useInitData();
     const handleLogin = async () => {
         try {

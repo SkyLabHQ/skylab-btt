@@ -89,7 +89,7 @@ const PvpRoom = () => {
         console.log("playerAddress2", playerAddress2);
         console.log("pvpAddress", pvpAddress);
         if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
-            if (playerAddress1 === pvpAddress) {
+            if (playerAddress1.toLowerCase() === pvpAddress) {
                 setMyInfo({
                     address: playerAddress1,
                     mark: UserMarkType.Circle,
@@ -108,7 +108,7 @@ const PvpRoom = () => {
                     mark: UserMarkType.Cross,
                 });
             }
-        } else if (playerAddress1 !== pvpAddress) {
+        } else if (playerAddress1.toLowerCase() !== pvpAddress) {
             navigate("/pvp");
         }
     };
