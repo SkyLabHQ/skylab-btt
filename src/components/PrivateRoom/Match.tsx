@@ -35,7 +35,11 @@ const Match = () => {
 
     const inviteLink = useMemo(() => {
         const password = localStorage.getItem("password");
-        return `https://t.me/testtesttesttesttest_bot/hahaha?startapp=${bidTacToeGameAddress}-${password}`;
+        const url =
+            process.env.NODE_ENV === "production"
+                ? "https://t.me/BidTacToeBot/btt"
+                : "https://t.me/testtesttesttesttest_bot/hahaha";
+        return `${url}?startapp=${bidTacToeGameAddress}-${password}`;
     }, [bidTacToeGameAddress]);
 
     const { onCopy } = useClipboard(inviteLink);
