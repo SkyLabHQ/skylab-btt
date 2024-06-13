@@ -237,8 +237,6 @@ const PrivateLobbyPlayBack = ({
                         >
                             <MUserProfileResult
                                 position="left"
-                                avatar={myInfo.avatar}
-                                name={myInfo.name}
                                 mark={myInfo.mark}
                             ></MUserProfileResult>
                         </Box>
@@ -257,8 +255,6 @@ const PrivateLobbyPlayBack = ({
                         >
                             <MUserProfileResult
                                 position="right"
-                                avatar={opInfo.avatar}
-                                name={opInfo.name}
                                 mark={opInfo.mark}
                                 showAdvantageTip={!myIsNextDrawWinner}
                             ></MUserProfileResult>

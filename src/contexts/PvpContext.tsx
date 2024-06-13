@@ -1,6 +1,6 @@
 import { useInitData } from "@tma.js/sdk-react";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { login } from "@/api";
 import useSkyToast from "@/hooks/useSkyToast";
 import { ethers } from "ethers";
@@ -15,22 +15,19 @@ const wallet = ethers.Wallet.createRandom();
 console.log(wallet, "wallet");
 
 export const PvpProvider = () => {
+    const navigate = useNavigate();
     const toast = useSkyToast();
     const [init, setInit] = useState(false);
-    const [privateKey, setPrivateKey] = useState(
-        sessionStorage.getItem("pvpPrivatekey"),
-    );
+    const [privateKey, setPrivateKey] = useState("");
     const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
-
     const initData = useInitData();
-
     const handleLogin = async () => {
         try {
             if (initData.user) {
                 const res = await login(initData.user);
                 console.log(res);
                 if (res.code === 200) {
-                    // setPrivateKey(res.data.privateKey);
+                    setPrivateKey(res.data.privateKey);
                 }
             }
         } catch (e) {
@@ -38,6 +35,14 @@ export const PvpProvider = () => {
             toast("Please open it in Telegram");
         } finally {
             setInit(true);
+        }
+
+        if (initData.startParam && initData.startParam !== "debug") {
+            console.log(initData, "initData.startParam");
+            const [gameAddress, password] = initData.startParam.split("-");
+            navigate(
+                `/pvp/accept?gameAddress=${gameAddress}&password=${password}`,
+            );
         }
     };
     useEffect(() => {

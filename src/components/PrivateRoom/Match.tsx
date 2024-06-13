@@ -9,45 +9,44 @@ import {
     useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo } from "react";
-import Loading from "../Loading";
 import QuitModal from "../BttComponents/QuitModal";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
 import { motion } from "framer-motion";
 import UserIcon from "./assets/user1.svg";
 import { shortenAddress } from "@/utils";
-import { useCloudStorage } from "@tma.js/sdk-react";
-import { useBttGameRetryPaymaster } from "@/hooks/useRetryContract";
+import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
 import { usePvpInfo } from "@/contexts/PvpContext";
 import { useNavigate } from "react-router-dom";
+import { handleError } from "@/utils/error";
 
 const Match = () => {
     const toast = useSkyToast();
     const navigate = useNavigate();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
+
     const { myInfo, opInfo, handleStepChange, bidTacToeGameAddress } =
         usePvpGameContext();
-    const cloudStorage = useCloudStorage();
     const { privateKey } = usePvpInfo();
-
-    const tacToeGameRetryWrite = useBttGameRetryPaymaster(
-        bidTacToeGameAddress,
-        {
-            privateKey,
-        },
-    );
+    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
+        privateKey,
+    });
 
     const inviteLink = useMemo(() => {
-        const password = cloudStorage.get("password");
-        return `${window.location.origin}/pvp/accept?gameAddress=${bidTacToeGameAddress}&password=${password}`;
+        const password = localStorage.getItem("password");
+        return `https://t.me/testtesttesttesttest_bot/hahaha?startapp=${bidTacToeGameAddress}-${password}`;
     }, [bidTacToeGameAddress]);
 
     const { onCopy } = useClipboard(inviteLink);
 
     const handleQuit = async () => {
-        // await tacToeGameRetryWrite("deleteRoom", [bidTacToeGameAddress]);
-        // navigate(`/pvp`);
+        try {
+            await bttFactoryRetryPaymaster("quitPvpRoom", []);
+            navigate(`/pvp/home`);
+        } catch (error) {
+            toast(handleError(error));
+        }
     };
     const handleCopyLink = () => {
         onCopy();

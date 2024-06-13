@@ -12,49 +12,121 @@ import { handleError } from "@/utils/error";
 import useSkyToast from "@/hooks/useSkyToast";
 import {
     useMultiProvider,
-    useMultiSkylabBidTacToeFactoryContract,
+    useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { usePvpInfo } from "@/contexts/PvpContext";
+import { ZERO_DATA } from "@/skyConstants";
 
 const Accept = () => {
     const navigate = useNavigate();
-    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster();
+
     const toast = useSkyToast();
-    const testProvider = useMultiProvider(TESTFLIGHT_CHAINID);
+    const [player1, setPlayer1] = useState<string>("");
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const [from] = useState<string>(params.from);
     const { privateKey, pvpAddress } = usePvpInfo();
+    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
+        privateKey,
+    });
+
     const [gameAddress] = useState<string>(params.gameAddress);
+    const multiSkylabBidTacToeGameContract =
+        useMultiSkylabBidTacToeGameContract(gameAddress);
+    const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
 
     const handleJoinGame = async () => {
         if (isLoading) {
             return;
         }
+
         try {
             openLoading();
-            const res = await bttFactoryRetryPaymaster("joinPvPRoom", [
-                "0x5130937424Be6107B7549bECaA0D7b70025dad94",
-                1234,
+            await bttFactoryRetryPaymaster(
+                "joinPvPRoom",
+                [player1, params.password],
                 {
                     signer: {
                         privateKey,
                     },
                 },
-            ]);
-
+            );
             closeLoading();
+            navigate(`/pvp/game?gameAddress=${gameAddress}`);
         } catch (e) {
             closeLoading();
             toast(handleError(e));
         }
     };
+
     const handleCancel = () => {
-        navigate("/");
+        navigate("/pvp/home", {
+            replace: true,
+        });
     };
+
+    const handleGetAllPlayerInfo = async () => {
+        const [playerAddress1, playerAddress2] = await multiProvider.all([
+            multiSkylabBidTacToeGameContract.player1(),
+            multiSkylabBidTacToeGameContract.player2(),
+        ]);
+
+        console.log("playerAddress1", playerAddress1);
+        console.log("playerAddress2", playerAddress2);
+        console.log("pvpAddress", pvpAddress);
+        if (playerAddress1 !== ZERO_DATA) {
+            setPlayer1(playerAddress1);
+            if (playerAddress1 === pvpAddress) {
+                navigate(`/pvp/game?gameAddress=${gameAddress}`);
+                return;
+            }
+        }
+
+        if (playerAddress2 !== ZERO_DATA) {
+            if (playerAddress2 === pvpAddress) {
+                navigate(`/pvp/game?gameAddress=${gameAddress}`);
+                return;
+            }
+        }
+
+        if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
+            if (
+                playerAddress1 !== pvpAddress &&
+                playerAddress2 !== pvpAddress
+            ) {
+                navigate("/pvp/home", {
+                    replace: true,
+                });
+                return;
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (
+            !multiSkylabBidTacToeGameContract ||
+            !multiProvider ||
+            !gameAddress ||
+            !pvpAddress
+        )
+            return;
+
+        const timer = setInterval(() => {
+            handleGetAllPlayerInfo();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [
+        multiSkylabBidTacToeGameContract,
+        multiProvider,
+        gameAddress,
+        pvpAddress,
+    ]);
 
     return (
         <Flex
@@ -99,20 +171,20 @@ const Accept = () => {
             ></ToolBar>
             <Box
                 sx={{
-                    fontSize: "24px",
+                    fontSize: isPc ? "24px" : "16px",
                 }}
             >
-                Accept {shortenAddress(from)} 1v1 invitation?{" "}
+                Accept {shortenAddress(player1)} 1v1 invitation?{" "}
             </Box>
             <Flex
                 onClick={handleJoinGame}
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    fontSize: "32px",
-                    width: "378px",
-                    height: "90px",
-                    borderRadius: "20px",
+                    fontSize: isPc ? "32px" : "20px",
+                    width: isPc ? "378px" : "168px",
+                    height: isPc ? "90px" : "40px",
+                    borderRadius: isPc ? "20px" : "12px",
                     border: "2px solid #fff",
                     marginTop: "40px",
                     background: "#303030",
@@ -126,12 +198,12 @@ const Accept = () => {
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    fontSize: "32px",
-                    width: "378px",
-                    height: "90px",
-                    borderRadius: "20px",
+                    fontSize: isPc ? "32px" : "20px",
+                    width: isPc ? "378px" : "168px",
+                    height: isPc ? "90px" : "40px",
+                    borderRadius: isPc ? "20px" : "12px",
                     border: "2px solid #fff",
-                    marginTop: "40px",
+                    marginTop: isPc ? "40px" : "20px",
                     background: "#303030",
                     cursor: "pointer",
                 }}

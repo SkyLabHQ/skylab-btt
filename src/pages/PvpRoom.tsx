@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
@@ -21,6 +21,7 @@ import {
 import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
 import Nest from "@/components/Nest";
+import { usePvpInfo } from "@/contexts/PvpContext";
 
 const PvpGameContext = createContext<{
     myGameInfo: GameInfo;
@@ -43,6 +44,10 @@ const PvpRoom = () => {
     const [bidTacToeGameAddress] = useState<string>(params.gameAddress);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+
+    const navigate = useNavigate();
+
+    const { pvpAddress } = usePvpInfo();
     const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
         balance: 0,
         gameState: GameState.Unknown,
@@ -82,25 +87,54 @@ const PvpRoom = () => {
 
         console.log("playerAddress1", playerAddress1);
         console.log("playerAddress2", playerAddress2);
-        if (playerAddress1 !== ZERO_DATA) {
-            setMyInfo({
-                address: playerAddress1,
-                mark: UserMarkType.Circle,
-            });
-        }
-
-        if (playerAddress2 !== ZERO_DATA) {
-            setOpInfo({
-                address: playerAddress2,
-                mark: UserMarkType.Cross,
-            });
+        if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
+            if (playerAddress1 === pvpAddress) {
+                setMyInfo({
+                    address: playerAddress1,
+                    mark: UserMarkType.Circle,
+                });
+                setOpInfo({
+                    address: playerAddress2,
+                    mark: UserMarkType.Cross,
+                });
+            } else {
+                setMyInfo({
+                    address: playerAddress2,
+                    mark: UserMarkType.Circle,
+                });
+                setOpInfo({
+                    address: playerAddress1,
+                    mark: UserMarkType.Cross,
+                });
+            }
+        } else if (playerAddress1 !== pvpAddress) {
+            navigate("/pvp");
         }
     };
 
+    console.log(myGameInfo, pvpAddress, "setMyInfo");
+
     useEffect(() => {
-        if (!multiSkylabBidTacToeGameContract || !multiProvider) return;
-        handleGetAllPlayerInfo();
-    }, [multiSkylabBidTacToeGameContract, multiProvider]);
+        if (
+            !multiSkylabBidTacToeGameContract ||
+            !multiProvider ||
+            (myInfo.address && opInfo.address)
+        )
+            return;
+
+        const timer = setInterval(() => {
+            handleGetAllPlayerInfo();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [
+        multiSkylabBidTacToeGameContract,
+        multiProvider,
+        myInfo.address,
+        opInfo.address,
+    ]);
 
     return (
         <Box

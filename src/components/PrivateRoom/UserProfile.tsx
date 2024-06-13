@@ -152,8 +152,6 @@ export const MUserProfile = ({
     level,
     address,
     img,
-    avatar,
-    name,
     status,
     open,
     onClick,
@@ -161,8 +159,6 @@ export const MUserProfile = ({
     level?: number;
     address?: string;
     img?: string;
-    avatar?: number;
-    name?: string;
     showAdvantageTip?: boolean;
     mark?: number;
     status?: "my" | "op";
@@ -274,17 +270,7 @@ export const MUserProfile = ({
                                 ></Image>
                             </Box>
                         )}
-                        {name && (
-                            <Text
-                                sx={{
-                                    fontSize: "14px",
-                                    fontWeight: 700,
-                                    color: "#000",
-                                }}
-                            >
-                                {name}
-                            </Text>
-                        )}
+
                         <Flex
                             sx={{
                                 flexDirection: direction,
@@ -326,8 +312,6 @@ export const MUserProfileResult = ({
     level,
     address,
     img,
-    avatar,
-    name,
     showUserIcon = true,
     showAdvantageTip,
     position,
@@ -336,8 +320,7 @@ export const MUserProfileResult = ({
     showUserIcon?: boolean;
     address?: string;
     img?: string;
-    avatar?: number;
-    name?: string;
+
     showAdvantageTip?: boolean;
     mark?: number;
     position?: "left" | "right";
@@ -385,18 +368,6 @@ export const MUserProfileResult = ({
                 )}
             </Flex>
 
-            {name && (
-                <Text
-                    sx={{
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        color: "#fff",
-                    }}
-                >
-                    {name}
-                </Text>
-            )}
-
             <Flex align={"center"}>
                 {level && (
                     <Text
@@ -422,6 +393,34 @@ export const MUserProfileResult = ({
                 )}
             </Flex>
         </Flex>
+    );
+};
+
+export const MUserProfilePvp = ({
+    address,
+    status,
+    showAdvantageTip,
+    mark,
+}: {
+    address?: string;
+    showAdvantageTip?: boolean;
+    mark?: number;
+    status?: "my" | "op";
+}) => {
+    return (
+        <Box>
+            {address && (
+                <Text
+                    sx={{
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        color: "#fff",
+                    }}
+                >
+                    {shortenAddress(address, 4, 4)}
+                </Text>
+            )}
+        </Box>
     );
 };
 

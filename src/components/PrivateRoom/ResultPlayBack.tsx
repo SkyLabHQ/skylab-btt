@@ -294,7 +294,9 @@ ${des}`;
     };
 
     const handleTextClick = async () => {
-        navigate("/pvp");
+        navigate("/pvp/home", {
+            replace: true,
+        });
     };
 
     useEffect(() => {

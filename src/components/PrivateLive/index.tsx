@@ -21,7 +21,6 @@ import {
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import UserProfile, { MUserProfileResult } from "../PrivateRoom/UserProfile";
-import { OpBid } from "../PrivateRoom/UserBid";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { MMessage, Message } from "../PrivateRoom/Message";
 import Timer from "../BttComponents/Timer";
@@ -129,10 +128,8 @@ const MBttLiveGame = ({
                         <MUserProfileResult
                             showUserIcon={false}
                             position="left"
-                            avatar={opInfo.avatar}
                             mark={opInfo.mark}
                             showAdvantageTip={opInfo.burner === nextDrawWinner}
-                            name={opInfo.name}
                         ></MUserProfileResult>
                         <MMessage
                             message={opGameInfo.message}
@@ -186,11 +183,9 @@ const MBttLiveGame = ({
                                 status={"my"}
                             ></MMessage>
                             <MUserProfileResult
-                                name={myInfo.name}
                                 position="right"
                                 showUserIcon={false}
                                 mark={myInfo.mark}
-                                avatar={myInfo.avatar}
                                 showAdvantageTip={
                                     myInfo.address === nextDrawWinner
                                 }

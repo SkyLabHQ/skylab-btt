@@ -1,7 +1,7 @@
 import { usePvpGameContext } from "@/pages/PvpRoom";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { MUserProfile } from "./UserProfile";
+import React, { useState } from "react";
+import { MUserProfilePvp } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
@@ -32,13 +32,6 @@ const MLayout = ({
     showAnimateConfirm,
     onReveal,
 }: any) => {
-    const { isOpen, onOpen, onClose } = useDisclosure({
-        defaultIsOpen: true,
-    });
-    const { isOpen: opIsOpen, onToggle: opOnToggle } = useDisclosure({
-        defaultIsOpen: true,
-    });
-
     const { isOpen: keyBoardIsOpen, onToggle: keyBoardOnToggle } =
         useDisclosure();
 
@@ -47,12 +40,6 @@ const MLayout = ({
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
         usePvpGameContext();
     const myGameState = myGameInfo.gameState;
-
-    useEffect(() => {
-        if (messageLoading || emoteLoading) {
-            onClose();
-        }
-    }, [messageLoading, emoteLoading]);
 
     return (
         <Box
@@ -78,24 +65,17 @@ const MLayout = ({
                 flexDir={"column"}
             >
                 <Flex align={"flex-end"}>
-                    <MUserProfile
+                    <MUserProfilePvp
+                        address={opInfo.address}
                         status="op"
-                        avatar={opInfo.avatar}
-                        name={opInfo.name}
                         mark={opInfo.mark}
                         showAdvantageTip={opInfo.address === nextDrawWinner}
-                        open={opIsOpen}
-                        onClick={() => {
-                            opOnToggle();
-                        }}
-                    ></MUserProfile>
-                    {!opIsOpen && (
-                        <MMessage
-                            message={opGameInfo.message}
-                            emote={opGameInfo.emote}
-                            status={"op"}
-                        ></MMessage>
-                    )}
+                    ></MUserProfilePvp>
+                    <MMessage
+                        message={opGameInfo.message}
+                        emote={opGameInfo.emote}
+                        status={"op"}
+                    ></MMessage>
                 </Flex>
 
                 <MBalance
@@ -178,34 +158,24 @@ const MLayout = ({
                         align={"flex-end"}
                     >
                         <Flex align={"flex-end"}>
-                            {!isOpen && (
-                                <MMessage
-                                    message={myGameInfo.message}
-                                    emote={myGameInfo.emote}
-                                    status={"my"}
-                                    emoteIndex={emoteIndex}
-                                    messageIndex={messageIndex}
-                                    emoteLoading={emoteLoading}
-                                    messageLoading={messageLoading}
-                                ></MMessage>
-                            )}
-                            <MUserProfile
+                            <MMessage
+                                message={myGameInfo.message}
+                                emote={myGameInfo.emote}
+                                status={"my"}
+                                emoteIndex={emoteIndex}
+                                messageIndex={messageIndex}
+                                emoteLoading={emoteLoading}
+                                messageLoading={messageLoading}
+                            ></MMessage>
+
+                            <MUserProfilePvp
                                 status="my"
-                                avatar={myInfo.avatar}
-                                name={myInfo.name}
+                                address={myInfo.address}
                                 mark={myInfo.mark}
                                 showAdvantageTip={
                                     myInfo.address === nextDrawWinner
                                 }
-                                open={isOpen}
-                                onClick={() => {
-                                    if (isOpen) {
-                                        onClose();
-                                    } else {
-                                        onOpen();
-                                    }
-                                }}
-                            ></MUserProfile>
+                            ></MUserProfilePvp>
                         </Flex>
 
                         <MBalance

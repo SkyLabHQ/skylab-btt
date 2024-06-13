@@ -43,7 +43,7 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/buypaper" element={<SellPaperPage />}></Route>
 
                 <Route path="/pvp" element={<PvpLayout />}>
-                    <Route path="/pvp" element={<PvpHome />} />
+                    <Route path="/pvp/home" element={<PvpHome />} />
                     <Route path="/pvp/game" element={<PvpRoom />} />
                     <Route path="/pvp/accept" element={<Accept />}></Route>
                 </Route>

@@ -25,16 +25,10 @@ import {
     getRandomProvider,
     TESTFLIGHT_CHAINID,
 } from "@/utils/web3Utils";
-import {
-    getPrivateLobbySigner,
-    getTestflightSigner,
-    useTacToeSigner,
-} from "./useSigner";
+import { getTestflightSigner, useTacToeSigner } from "./useSigner";
 import NonceManager from "@/utils/nonceManager";
 import { getSCWallet } from "./useSCWallet";
 import {
-    getBurnerMercuryBTTPrivateLobbyContract,
-    useBurnerMercuryBTTPrivateLobbyContract,
     useBurnerSkylabBidTacToeContract,
     useBurnerSkylabBidTacToeGameContract,
     useTestSkylabBidTacToeContract,
@@ -454,9 +448,8 @@ export const useBttFactoryRetry = (testflight: boolean, signer?: any) => {
     return contractWrite;
 };
 
-export const useBttFactoryRetryPaymaster = () => {
+export const useBttFactoryRetryPaymaster = (signer: any) => {
     const contract = useTestSkylabBidTacToeContract();
-    const signer = getPrivateLobbySigner();
     const contractWrite = getPayMasterBurnerRetryContract(contract, signer);
     return contractWrite;
 };
@@ -471,29 +464,6 @@ export const useBttGameRetry = (address: string, tokenId?: number) => {
     const [signer] = useTacToeSigner(tokenId);
     const contract = useBurnerSkylabBidTacToeGameContract(address);
     const tacToeGameRetryWrite = useBurnerRetryContract(contract, signer);
-    return tacToeGameRetryWrite;
-};
-
-export const usePrivateLobbyContract = (address: string) => {
-    const contract = useBurnerMercuryBTTPrivateLobbyContract(address);
-    if (!contract) {
-        return null;
-    }
-    const signer = getPrivateLobbySigner();
-    const tacToeGameRetryWrite = getPayMasterBurnerRetryContract(
-        contract,
-        signer,
-    );
-    return tacToeGameRetryWrite;
-};
-
-export const getBttPrivateLobbyContract = (address: any) => {
-    const contract = getBurnerMercuryBTTPrivateLobbyContract(address);
-    const signer = getPrivateLobbySigner();
-    const tacToeGameRetryWrite = getPayMasterBurnerRetryContract(
-        contract,
-        signer,
-    );
     return tacToeGameRetryWrite;
 };
 

@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Box, Flex, useMediaQuery, Image, Text } from "@chakra-ui/react";
 import LineBg from "@/assets/line.png";
 import SoloIcon from "./assets/solo-icon.png";
 import ButtonBg from "@/assets/bt-bg.png";
 import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     useMultiProvider,
     useMultiTestSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useSCWallet } from "@/hooks/useSCWallet";
 import { ZERO_DATA } from "@/skyConstants";
 import { utils as ethersUtils } from "ethers";
 import { usePvpInfo } from "@/contexts/PvpContext";
-import { useCloudStorage } from "@tma.js/sdk-react";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
+import useSkyToast from "@/hooks/useSkyToast";
+import { handleError } from "@/utils/error";
 
 const PlayButtonGroup = ({
     onPlayTournament,
@@ -129,24 +130,22 @@ const PlayButtonGroup = ({
 
 const PvpHomePage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const toast = useSkyToast();
     const navigate = useNavigate();
-
+    const { openLoading, closeLoading, isLoading } = useSubmitRequest();
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const multiTestSkylabBidTacToeFactoryContract =
         useMultiTestSkylabBidTacToeFactoryContract();
-    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster();
-    const location = useLocation();
-    const [userInfo, setUserInfo] = useState<any>({});
-    const { privateKey } = usePvpInfo();
-    const { sCWAddress } = useSCWallet(privateKey);
-    const cloudStorage = useCloudStorage();
-
-    console.log(userInfo, sCWAddress, "location");
+    const { privateKey, pvpAddress } = usePvpInfo();
+    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
+        privateKey,
+    });
 
     const handlePlay1V1 = async () => {
         try {
+            openLoading();
             const password = 1234;
-            cloudStorage.set("password", String(password));
+            localStorage.setItem("password", String(password));
             const encodedPassword = ethersUtils.defaultAbiCoder.encode(
                 ["uint256"],
                 [password],
@@ -154,38 +153,42 @@ const PvpHomePage = () => {
             const hashedPassword = ethersUtils.keccak256(encodedPassword);
             await bttFactoryRetryPaymaster(
                 "createPvPRoom",
-                [[3, 3, 3, 100, 1, 0, true, 1 * 60 * 60], hashedPassword],
+                [[3, 3, 3, 100, 1, 0, false, 1 * 60 * 60], hashedPassword],
                 {
                     signer: { privateKey },
                 },
             );
 
             handleGetGamePerPlayer();
+            closeLoading();
         } catch (e) {
-            console.log(e, "ee");
+            toast(handleError(e));
+            closeLoading();
         }
     };
 
     const handleGetGamePerPlayer = async () => {
-        const res = await multiProvider.all([
-            multiTestSkylabBidTacToeFactoryContract.gamePerPlayer(sCWAddress),
+        const [gameAddress] = await multiProvider.all([
+            multiTestSkylabBidTacToeFactoryContract.gamePerPlayer(pvpAddress),
         ]);
 
-        if (res[0] !== ZERO_DATA) {
-            navigate(`/pvp/game?gameAddress=${res[0]}`);
+        console.log(gameAddress, pvpAddress, "gameAddress");
+
+        if (gameAddress !== ZERO_DATA) {
+            navigate(`/pvp/game?gameAddress=${gameAddress}`);
         }
     };
 
     useEffect(() => {
         if (
-            !sCWAddress ||
+            !pvpAddress ||
             !multiProvider ||
             !multiTestSkylabBidTacToeFactoryContract
         ) {
             return;
         }
         handleGetGamePerPlayer();
-    }, [multiProvider, multiTestSkylabBidTacToeFactoryContract, sCWAddress]);
+    }, [multiProvider, multiTestSkylabBidTacToeFactoryContract, pvpAddress]);
 
     return (
         <Flex
@@ -197,14 +200,6 @@ const PvpHomePage = () => {
             }}
         >
             <PlayButtonGroup onPlayTournament={handlePlay1V1}></PlayButtonGroup>
-            <Box
-                onClick={() => {
-                    // utilsaa.shareURL("");
-                    window.TelegramGameProxy.shareScore();
-                }}
-            >
-                share按钮
-            </Box>
         </Flex>
     );
 };

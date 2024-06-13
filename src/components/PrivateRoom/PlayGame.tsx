@@ -325,10 +325,7 @@ const PlayGame = ({
                 `currentGird: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
             );
 
-            await tacToeGameRetryWrite("commitBid", [hash], {
-                usePaymaster: true,
-                signer: { privateKey },
-            });
+            await tacToeGameRetryWrite("commitBid", [hash]);
             onChangeGame("my", {
                 ...myGameInfo,
                 gameState: GameState.Commited,

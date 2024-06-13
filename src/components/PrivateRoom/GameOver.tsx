@@ -90,8 +90,6 @@ const GameOver = () => {
             >
                 <MUserProfileResult
                     position="left"
-                    avatar={opInfo.avatar}
-                    name={opInfo.name}
                     mark={opInfo.mark}
                 ></MUserProfileResult>
                 <MBalance
@@ -114,8 +112,6 @@ const GameOver = () => {
             >
                 <MUserProfileResult
                     position="right"
-                    avatar={myInfo.avatar}
-                    name={myInfo.name}
                     mark={myInfo.mark}
                 ></MUserProfileResult>
                 <MBalance
