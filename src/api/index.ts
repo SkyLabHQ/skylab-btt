@@ -3,7 +3,7 @@ import axios from "axios";
 export const api = axios.create({
     baseURL:
         process.env.NODE_ENV == "production"
-            ? "http://118.139.164.191:3333"
+            ? "https://richer.social"
             : "http://localhost:3333",
 });
 
