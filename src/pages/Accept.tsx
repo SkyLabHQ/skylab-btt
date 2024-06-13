@@ -68,10 +68,12 @@ const Accept = () => {
     };
 
     const handleGetAllPlayerInfo = async () => {
-        const [playerAddress1, playerAddress2] = await multiProvider.all([
+        let [playerAddress1, playerAddress2] = await multiProvider.all([
             multiSkylabBidTacToeGameContract.player1(),
             multiSkylabBidTacToeGameContract.player2(),
         ]);
+        playerAddress1 = playerAddress1.toLocaleLowerCase();
+        playerAddress2 = playerAddress2.toLocaleLowerCase();
 
         console.log("playerAddress1", playerAddress1);
         console.log("playerAddress2", playerAddress2);

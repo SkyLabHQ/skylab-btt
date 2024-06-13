@@ -80,16 +80,19 @@ const PvpRoom = () => {
     };
 
     const handleGetAllPlayerInfo = async () => {
-        const [playerAddress1, playerAddress2] = await multiProvider.all([
+        let [playerAddress1, playerAddress2] = await multiProvider.all([
             multiSkylabBidTacToeGameContract.player1(),
             multiSkylabBidTacToeGameContract.player2(),
         ]);
+
+        playerAddress1 = playerAddress1.toLocaleLowerCase();
+        playerAddress2 = playerAddress2.toLocaleLowerCase();
 
         console.log("playerAddress1", playerAddress1);
         console.log("playerAddress2", playerAddress2);
         console.log("pvpAddress", pvpAddress);
         if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
-            if (playerAddress1.toLowerCase() === pvpAddress) {
+            if (playerAddress1 === pvpAddress) {
                 setMyInfo({
                     address: playerAddress1,
                     mark: UserMarkType.Circle,
@@ -108,7 +111,7 @@ const PvpRoom = () => {
                     mark: UserMarkType.Cross,
                 });
             }
-        } else if (playerAddress1.toLowerCase() !== pvpAddress) {
+        } else if (playerAddress1 !== pvpAddress) {
             navigate("/pvp");
         }
     };
