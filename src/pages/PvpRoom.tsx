@@ -87,6 +87,7 @@ const PvpRoom = () => {
 
         console.log("playerAddress1", playerAddress1);
         console.log("playerAddress2", playerAddress2);
+        console.log("pvpAddress", pvpAddress);
         if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
             if (playerAddress1 === pvpAddress) {
                 setMyInfo({
