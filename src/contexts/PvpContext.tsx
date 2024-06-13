@@ -11,21 +11,19 @@ const PvpContext = createContext<{
     pvpAddress: string;
 }>(null);
 
-const wallet = ethers.Wallet.createRandom();
-console.log(wallet, "wallet");
-
 export const PvpProvider = () => {
     const navigate = useNavigate();
     const toast = useSkyToast();
     const [init, setInit] = useState(false);
     const [privateKey, setPrivateKey] = useState("");
     const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
+    console.log(privateKey, "privateKey");
     const initData = useInitData();
     const handleLogin = async () => {
         try {
             if (initData.user) {
                 const res = await login(initData.user);
-                console.log(res);
+                console.log(res.data);
                 if (res.code === 200) {
                     setPrivateKey(res.data.privateKey);
                 }

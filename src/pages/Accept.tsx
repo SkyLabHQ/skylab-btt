@@ -27,7 +27,6 @@ const Accept = () => {
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const { search } = useLocation();
     const params = qs.parse(search) as any;
-    const [from] = useState<string>(params.from);
     const { privateKey, pvpAddress } = usePvpInfo();
     const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
         privateKey,

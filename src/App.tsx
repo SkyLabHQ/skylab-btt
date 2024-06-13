@@ -88,67 +88,67 @@ const App = (): ReactElement => {
         }
     };
 
-    useEffect(() => {
-        const isTg = sessionStorage.getItem("isTg");
-        const agree = localStorage.getItem("service");
-        if (isPc || window.ethereum || params.tg || isTg) {
-            if (params.tg || isTg) {
-                sessionStorage.setItem("isTg", "true");
-            }
-            setType(0);
-            return;
-        }
+    // useEffect(() => {
+    //     const isTg = sessionStorage.getItem("isTg");
+    //     const agree = localStorage.getItem("service");
+    //     if (isPc || window.ethereum || params.tg || isTg) {
+    //         if (params.tg || isTg) {
+    //             sessionStorage.setItem("isTg", "true");
+    //         }
+    //         setType(0);
+    //         return;
+    //     }
 
-        // 手机浏览器模式
-        if (!window.matchMedia("(display-mode: standalone)").matches) {
-            if (location.pathname === "/") {
-                setType(2);
-            } else {
-                setType(0);
-            }
-            return;
-        }
+    //     // 手机浏览器模式
+    //     if (!window.matchMedia("(display-mode: standalone)").matches) {
+    //         if (location.pathname === "/") {
+    //             setType(2);
+    //         } else {
+    //             setType(0);
+    //         }
+    //         return;
+    //     }
 
-        //手机pwa模式  且同意service
-        if (
-            window.matchMedia("(display-mode: standalone)").matches &&
-            agree === "true" &&
-            !isPc
-        ) {
-            setType(0);
-            return;
-        }
+    //     //手机pwa模式  且同意service
+    //     if (
+    //         window.matchMedia("(display-mode: standalone)").matches &&
+    //         agree === "true" &&
+    //         !isPc
+    //     ) {
+    //         setType(0);
+    //         return;
+    //     }
 
-        //手机pwa模式  不同意service
-        if (
-            window.matchMedia("(display-mode: standalone)").matches &&
-            !agree &&
-            !isPc
-        ) {
-            setType(1);
-            return;
-        }
-    }, [isPc]);
+    //     //手机pwa模式  不同意service
+    //     if (
+    //         window.matchMedia("(display-mode: standalone)").matches &&
+    //         !agree &&
+    //         !isPc
+    //     ) {
+    //         setType(1);
+    //         return;
+    //     }
+    // }, [isPc]);
 
-    useEffect(() => {
-        const metaThemeColor = document.querySelector("meta[name=theme-color]");
-        const item = themeColorList.find(
-            (item) => item.link === location.pathname,
-        );
-        // 动态修改meta标签的content属性
-        if (metaThemeColor && item) {
-            metaThemeColor.setAttribute("content", item.color);
-        }
-    }, [location.pathname]);
+    // useEffect(() => {
+    //     const metaThemeColor = document.querySelector("meta[name=theme-color]");
+    //     const item = themeColorList.find(
+    //         (item) => item.link === location.pathname,
+    //     );
+    //     // 动态修改meta标签的content属性
+    //     if (metaThemeColor && item) {
+    //         metaThemeColor.setAttribute("content", item.color);
+    //     }
+    // }, [location.pathname]);
 
-    useEffect(() => {
-        const localStorageTerm = localStorage.getItem("term");
-        if (localStorageTerm === "true") {
-            setShowTerm(false);
-        } else {
-            setShowTerm(true);
-        }
-    }, [showTerm]);
+    // useEffect(() => {
+    //     const localStorageTerm = localStorage.getItem("term");
+    //     if (localStorageTerm === "true") {
+    //         setShowTerm(false);
+    //     } else {
+    //         setShowTerm(true);
+    //     }
+    // }, [showTerm]);
 
     return (
         // TO-DO: use color mode when implementing light/dark
@@ -160,7 +160,8 @@ const App = (): ReactElement => {
                 position: "relative",
             }}
         >
-            {showTerm && <TermPage onContinue={handleContinue}></TermPage>}
+            <Outlet></Outlet>
+            {/* {showTerm && <TermPage onContinue={handleContinue}></TermPage>}
             {!showTerm && (
                 <>
                     {type === 0 && <Outlet />}
@@ -229,7 +230,7 @@ const App = (): ReactElement => {
                         }}
                     ></Image>
                 </Flex>
-            )}
+            )} */}
         </Box>
     );
 };

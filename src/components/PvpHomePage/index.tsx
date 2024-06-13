@@ -151,13 +151,10 @@ const PvpHomePage = () => {
                 [password],
             );
             const hashedPassword = ethersUtils.keccak256(encodedPassword);
-            await bttFactoryRetryPaymaster(
-                "createPvPRoom",
-                [[3, 3, 3, 100, 1, 0, false, 1 * 60 * 60], hashedPassword],
-                {
-                    signer: { privateKey },
-                },
-            );
+            await bttFactoryRetryPaymaster("createPvPRoom", [
+                [3, 3, 3, 100, 1, 0, false, 1 * 60 * 60],
+                hashedPassword,
+            ]);
 
             handleGetGamePerPlayer();
             closeLoading();
