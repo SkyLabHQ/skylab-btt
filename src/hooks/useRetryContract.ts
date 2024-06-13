@@ -310,12 +310,9 @@ export const getPayMasterBurnerRetryContract = (contract: any, signer: any) => {
                             const provider = getViemClients({
                                 chainId: TESTFLIGHT_CHAINID,
                             });
-                            console.log(overrides, "overrides");
                             const localSinger = overrides?.signer
                                 ? overrides?.signer
                                 : signer;
-
-                            console.log(localSinger.privateKey, "localSinger");
 
                             const { sCWSigner, sCWAddress } = await getSCWallet(
                                 localSinger.privateKey,

@@ -93,6 +93,7 @@ const PvpRoom = () => {
         console.log("pvpAddress", pvpAddress);
         if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
             if (playerAddress1 === pvpAddress) {
+                console.log("playerAddress1 === pvpAddress呃等于啊啊");
                 setMyInfo({
                     address: playerAddress1,
                     mark: UserMarkType.Circle,
@@ -104,25 +105,26 @@ const PvpRoom = () => {
             } else {
                 setMyInfo({
                     address: playerAddress2,
-                    mark: UserMarkType.Circle,
+                    mark: UserMarkType.Cross,
                 });
                 setOpInfo({
                     address: playerAddress1,
-                    mark: UserMarkType.Cross,
+                    mark: UserMarkType.Circle,
                 });
             }
         } else if (playerAddress1 !== pvpAddress) {
-            navigate("/pvp");
+            navigate("/pvp/home");
         }
     };
 
-    console.log(myGameInfo, pvpAddress, "setMyInfo");
+    console.log(myInfo, opInfo, pvpAddress, "setMyInfo");
 
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
             !multiProvider ||
-            (myInfo.address && opInfo.address)
+            (myInfo.address && opInfo.address) ||
+            !pvpAddress
         )
             return;
 
@@ -138,6 +140,7 @@ const PvpRoom = () => {
         multiProvider,
         myInfo.address,
         opInfo.address,
+        pvpAddress,
     ]);
 
     return (

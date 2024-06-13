@@ -161,12 +161,14 @@ const PlayGame = ({
 
         const _list = JSON.parse(JSON.stringify(list));
         const gameState = myGameState.toNumber();
+
         for (let i = 0; i < boardGrids.length; i++) {
-            if (boardGrids[i] === ZERO_DATA) {
+            const winAddress = boardGrids[i].toLocaleLowerCase();
+            if (winAddress === ZERO_DATA) {
                 _list[i].mark = UserMarkType.Empty;
-            } else if (boardGrids[i] === myInfo.address) {
+            } else if (winAddress === myInfo.address) {
                 _list[i].mark = myInfo.mark;
-            } else if (boardGrids[i] === opInfo.address) {
+            } else if (winAddress === opInfo.address) {
                 _list[i].mark = opInfo.mark;
             }
             _list[i].myValue = myRevealedBid[i].toNumber();
