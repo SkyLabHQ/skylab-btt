@@ -4,7 +4,6 @@ import {
     Image,
     Flex,
     Text,
-    useClipboard,
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
@@ -16,33 +15,20 @@ import { motion } from "framer-motion";
 import UserIcon from "./assets/user1.svg";
 import { shortenAddress } from "@/utils";
 import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
-import { usePvpInfo } from "@/contexts/PvpContext";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
+import { MINI_APP_URL } from "@/skyConstants";
 
 const Match = () => {
     const toast = useSkyToast();
     const navigate = useNavigate();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
-
-    const { myInfo, opInfo, handleStepChange, bidTacToeGameAddress } =
+    const { myInfo, opInfo, handleStepChange, gameAddress, privateKey } =
         usePvpGameContext();
-    const { privateKey } = usePvpInfo();
     const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
         privateKey,
     });
-
-    const inviteLink = useMemo(() => {
-        const password = localStorage.getItem("password");
-        const url =
-            process.env.NODE_ENV === "production"
-                ? "https://t.me/BidTacToeBot/btt"
-                : "https://t.me/testtesttesttesttest_bot/hahaha";
-        return `${url}?startapp=${bidTacToeGameAddress}-${password}`;
-    }, [bidTacToeGameAddress]);
-
-    const { onCopy } = useClipboard(inviteLink);
 
     const handleQuit = async () => {
         try {
@@ -52,12 +38,29 @@ const Match = () => {
             toast(handleError(error));
         }
     };
-    const handleCopyLink = () => {
-        onCopy();
-        toast("Copy code success");
-    };
+
+    const shareUrl = useMemo(() => {
+        try {
+            const pvpPasswords =
+                JSON.parse(localStorage.getItem("pvpPasswords")) || {};
+            const share_url =
+                "https://t.me/share/url?url=" +
+                encodeURIComponent(
+                    `${MINI_APP_URL}?startapp=accept-${gameAddress}-${pvpPasswords[gameAddress]}`,
+                ) +
+                "&text=" +
+                encodeURIComponent(
+                    "Invite friends to join the 1v1 immediately",
+                );
+            return share_url;
+        } catch (e) {
+            console.log(e);
+            return "";
+        }
+    }, []);
 
     useEffect(() => {
+        console.log(myInfo, "myInfo", opInfo, "opInfo");
         if (myInfo.address && opInfo.address) {
             handleStepChange(1);
         }
@@ -124,52 +127,58 @@ const Match = () => {
                     {shortenAddress(opInfo?.address)}
                 </Flex>
 
-                <Flex justify={"center"} flexDir={"column"} align={"center"}>
+                <a href={shareUrl} target="_blank">
                     <Flex
-                        align={"center"}
                         justify={"center"}
-                        onClick={handleCopyLink}
-                        sx={{
-                            width: isPc ? "420px" : "180px",
-                            height: isPc ? "55px" : "40px",
-                            borderRadius: isPc ? "18px" : "12px",
-                            border: "2px solid #FFF",
-                            background: "#303030",
-                            fontSize: isPc ? "24px" : "14px",
-                            marginTop: isPc ? "74px" : "20px",
-                            cursor: "pointer",
-                        }}
+                        flexDir={"column"}
+                        align={"center"}
                     >
-                        <Image
+                        <Flex
+                            align={"center"}
+                            justify={"center"}
+                            // onClick={handleCopyLink}
                             sx={{
-                                width: isPc ? "32px" : "16px",
-                                height: isPc ? "32px" : "16px",
-                                marginRight: isPc ? "12px" : "6px",
+                                width: isPc ? "420px" : "180px",
+                                height: isPc ? "55px" : "40px",
+                                borderRadius: isPc ? "18px" : "12px",
+                                border: "2px solid #FFF",
+                                background: "#303030",
+                                fontSize: isPc ? "24px" : "14px",
+                                marginTop: isPc ? "74px" : "20px",
+                                cursor: "pointer",
                             }}
-                            src={UserIcon}
-                        ></Image>
-                        <Text>Copy 1v1 Invite Link</Text>
+                        >
+                            <Image
+                                sx={{
+                                    width: isPc ? "32px" : "16px",
+                                    height: isPc ? "32px" : "16px",
+                                    marginRight: isPc ? "12px" : "6px",
+                                }}
+                                src={UserIcon}
+                            ></Image>
+                            <Text>Copy 1v1 Invite Link</Text>
+                        </Flex>
+                        <Flex
+                            align={"center"}
+                            justify={"center"}
+                            onClick={() => {
+                                onOpen();
+                            }}
+                            sx={{
+                                width: isPc ? "420px" : "180px",
+                                height: isPc ? "55px" : "40px",
+                                borderRadius: isPc ? "18px" : "12px",
+                                border: "2px solid #FFF",
+                                background: "#303030",
+                                fontSize: isPc ? "24px" : "14px",
+                                marginTop: isPc ? "60px" : "20px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            <Text>Quit Match</Text>
+                        </Flex>
                     </Flex>
-                    <Flex
-                        align={"center"}
-                        justify={"center"}
-                        onClick={() => {
-                            onOpen();
-                        }}
-                        sx={{
-                            width: isPc ? "420px" : "180px",
-                            height: isPc ? "55px" : "40px",
-                            borderRadius: isPc ? "18px" : "12px",
-                            border: "2px solid #FFF",
-                            background: "#303030",
-                            fontSize: isPc ? "24px" : "14px",
-                            marginTop: isPc ? "60px" : "20px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        <Text>Quit Match</Text>
-                    </Flex>
-                </Flex>
+                </a>
             </Box>
             <QuitModal
                 onConfirm={handleQuit}

@@ -117,10 +117,6 @@ export const useMultiSkylabBidTacToeGameContract = (address: string) => {
     return useContract(address, SKYLABBIDTACTOEGAME_ABI);
 };
 
-export const getMultiSkylabBidTacToeGameContract = (address: string) => {
-    return getContract(address, SKYLABBIDTACTOEGAME_ABI);
-};
-
 export const useMultiERC721Contract = (address: string) => {
     return useContract(address, SKYLABTESSTFLIGHT_ABI);
 };

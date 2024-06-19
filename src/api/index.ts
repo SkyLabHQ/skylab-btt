@@ -7,7 +7,12 @@ export const api = axios.create({
             : "http://localhost:3333",
 });
 
-export const login = async (data: any) => {
-    const response = await api.post("/login", data);
+export const login = async (initData: any) => {
+    const response = await api.post("/login", initData);
+    return response.data;
+};
+
+export const bindBurner = async (data: any) => {
+    const response = await api.post("/bindBurner", data);
     return response.data;
 };

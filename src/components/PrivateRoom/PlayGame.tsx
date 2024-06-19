@@ -40,14 +40,12 @@ import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { MyInputBid, OpInputBid } from "../TacToe/UserCard";
-import { usePvpInfo } from "@/contexts/PvpContext";
 
 const PlayGame = ({
     onChangeGame,
 }: {
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
 }) => {
-    const { privateKey } = usePvpInfo();
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const commitWorkerRef = useRef<Worker>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -60,10 +58,11 @@ const PlayGame = ({
     const {
         myGameInfo,
         opGameInfo,
-        bidTacToeGameAddress,
+        gameAddress,
         myInfo,
         opInfo,
         list,
+        privateKey,
         onList,
         handleStepChange,
     } = usePvpGameContext();
@@ -78,19 +77,15 @@ const PlayGame = ({
         return false;
     }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
-    const tacToeGameRetryWrite = useBttGameRetryPaymaster(
-        bidTacToeGameAddress,
-        {
-            privateKey,
-        },
-    );
+    const tacToeGameRetryWrite = useBttGameRetryPaymaster(gameAddress, {
+        privateKey,
+    });
 
-    const deleteTokenIdCommited =
-        useDeleteTokenIdCommited(bidTacToeGameAddress);
+    const deleteTokenIdCommited = useDeleteTokenIdCommited(gameAddress);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [revealing, setRevealing] = useState<boolean>(false);
     const { getGridCommited, addGridCommited } = useGridCommited(
-        bidTacToeGameAddress,
+        gameAddress,
         currentGrid,
     );
     const [bidAmount, setBidAmount] = useState<number>(0);
@@ -112,7 +107,7 @@ const PlayGame = ({
     const [messageIndex, setMessageIndex] = useState<number>(0);
     const [emoteIndex, setEmoteIndex] = useState<number>(0);
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
 
     const inviteLink = useMemo(() => {
         return "";
@@ -436,10 +431,7 @@ const PlayGame = ({
         if (commitWorkerRef.current) {
             commitWorkerRef.current.terminate();
         }
-        if (
-            (!myGameInfo.timeout && !opGameInfo.timeout) ||
-            !bidTacToeGameAddress
-        ) {
+        if ((!myGameInfo.timeout && !opGameInfo.timeout) || !gameAddress) {
             return;
         }
         commitWorkerRef.current = new Worker(

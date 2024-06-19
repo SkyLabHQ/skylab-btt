@@ -1,7 +1,17 @@
 import { SDKProvider } from "@tma.js/sdk-react";
 import { mockTelegramEnv, parseInitData } from "@tma.js/sdk";
-import { PvpProvider } from "@/contexts/PvpContext";
+import { useInitData } from "@tma.js/sdk-react";
+import React, { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
+const customRouters = [
+    {
+        params: ["accept", "gameAddress", "password"],
+    },
+    {
+        params: ["game", "gameAddress"],
+    },
+];
 const search = new URLSearchParams(window.location.search);
 
 if (search.get("outer")) {
@@ -51,10 +61,49 @@ if (search.get("outer")) {
     });
 }
 
+const PvpContent = () => {
+    const navigate = useNavigate();
+    const initData = useInitData();
+
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        if (pathname === "/pvp") {
+            if (initData.startParam) {
+                const params = initData.startParam.split("-");
+                console.log(params, "params");
+                const route = customRouters.find(
+                    (item) => item.params[0] === params[0],
+                );
+                if (route && route.params.length === params.length) {
+                    console.log("jinlai o ", route);
+                    let url = `/pvp/${params[0]}`;
+                    for (let i = 1; i < params.length; i++) {
+                        if (i === 1) {
+                            url += "?";
+                        } else {
+                            url += "&";
+                        }
+
+                        url += `${route.params[i]}=${params[i]}`;
+                    }
+
+                    console.log(url, "url");
+                    navigate(url);
+                }
+            } else {
+                navigate("/pvp/home");
+            }
+        }
+    }, [pathname]);
+
+    return <Outlet></Outlet>;
+};
+
 const PvpLayout = () => {
     return (
         <SDKProvider acceptCustomStyles debug>
-            <PvpProvider></PvpProvider>
+            <PvpContent></PvpContent>
         </SDKProvider>
     );
 };

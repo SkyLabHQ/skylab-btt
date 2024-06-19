@@ -26,7 +26,7 @@ import { useNavigate } from "react-router-dom";
 const ResultPlayBack = () => {
     const navigate = useNavigate();
     const UserMarkIcon = useBidIcon();
-    const { bidTacToeGameAddress, myInfo, myGameInfo, opInfo, opGameInfo } =
+    const { gameAddress, myInfo, myGameInfo, opInfo, opGameInfo } =
         usePvpGameContext();
     const [init, setInit] = useState(false);
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
@@ -35,7 +35,7 @@ const ResultPlayBack = () => {
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract();
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
     const [resultList, setResultList] = useState<BoardItem[]>(initBoard()); // init board
 
     const gameOver = useMemo(() => {

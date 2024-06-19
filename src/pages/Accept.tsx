@@ -15,23 +15,27 @@ import {
     useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { usePvpInfo } from "@/contexts/PvpContext";
 import { ZERO_DATA } from "@/skyConstants";
+import { ethers } from "ethers";
+import { useSCWallet } from "@/hooks/useSCWallet";
+import { bindBurner } from "@/api";
+import { useInitData } from "@tma.js/sdk-react";
 
 const Accept = () => {
     const navigate = useNavigate();
-
+    [];
     const toast = useSkyToast();
     const [player1, setPlayer1] = useState<string>("");
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const { search } = useLocation();
     const params = qs.parse(search) as any;
-    const { privateKey, pvpAddress } = usePvpInfo();
+    const [privateKey, setPrivateKey] = useState("");
+    const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
     const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
         privateKey,
     });
-
+    const initData = useInitData();
     const [gameAddress] = useState<string>(params.gameAddress);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(gameAddress);
@@ -53,6 +57,19 @@ const Accept = () => {
                     },
                 },
             );
+            const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
+                ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
+                : {};
+            pvpPrivateKeys[gameAddress] = privateKey;
+            localStorage.setItem(
+                "pvpPrivateKeys",
+                JSON.stringify(pvpPrivateKeys),
+            );
+            await bindBurner({
+                user: initData.user,
+                burner: pvpAddress,
+            });
+
             closeLoading();
             navigate(`/pvp/game?gameAddress=${gameAddress}`);
         } catch (e) {
@@ -128,6 +145,18 @@ const Accept = () => {
         gameAddress,
         pvpAddress,
     ]);
+
+    useEffect(() => {
+        const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
+            ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
+            : {};
+        if (pvpPrivateKeys[gameAddress]) {
+            setPrivateKey(pvpPrivateKeys[gameAddress]);
+        } else {
+            const newWallet = ethers.Wallet.createRandom().privateKey;
+            setPrivateKey(newWallet);
+        }
+    }, []);
 
     return (
         <Flex

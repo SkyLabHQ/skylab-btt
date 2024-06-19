@@ -49,3 +49,5 @@ export const twitterUrl =
 export const ZERO_DATA = "0x0000000000000000000000000000000000000000";
 
 export const countDownTime = 3000;
+
+export const MINI_APP_URL = "https://t.me/testtesttesttesttest_bot/hahaha";

@@ -21,14 +21,15 @@ import {
 import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
 import Nest from "@/components/Nest";
-import { usePvpInfo } from "@/contexts/PvpContext";
+import { useSCWallet } from "@/hooks/useSCWallet";
 
 const PvpGameContext = createContext<{
     myGameInfo: GameInfo;
     opGameInfo: GameInfo;
     list: BoardItem[];
-    bidTacToeGameAddress: string;
+    gameAddress: string;
     step: number;
+    privateKey: string;
     myInfo: any;
     opInfo: any;
     handleStepChange: (step?: number) => void;
@@ -37,17 +38,18 @@ const PvpGameContext = createContext<{
 export const usePvpGameContext = () => useContext(PvpGameContext);
 
 const PvpRoom = () => {
+    const [privateKey, setPrivateKey] = useState<string>("");
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
     const { search } = useLocation();
     const [step, setStep] = useState<number>(0);
     const params = qs.parse(search) as any;
-    const [bidTacToeGameAddress] = useState<string>(params.gameAddress);
+    const [gameAddress] = useState<string>(params.gameAddress);
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
 
     const navigate = useNavigate();
 
-    const { pvpAddress } = usePvpInfo();
+    const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
     const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
         balance: 0,
         gameState: GameState.Unknown,
@@ -143,6 +145,26 @@ const PvpRoom = () => {
         pvpAddress,
     ]);
 
+    useEffect(() => {
+        try {
+            const gameAddress = params.gameAddress;
+            const localPvpPrivateKeys =
+                JSON.parse(localStorage.getItem("pvpPrivateKeys")) || {};
+
+            console.log(
+                localPvpPrivateKeys[gameAddress],
+                "localPvpPrivateKeys",
+            );
+            if (localPvpPrivateKeys[gameAddress]) {
+                setPrivateKey(localPvpPrivateKeys[gameAddress]);
+            } else {
+                // navigate("/pvp/home");
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
+
     return (
         <Box
             sx={{
@@ -162,10 +184,11 @@ const PvpRoom = () => {
                         list,
                         myGameInfo,
                         opGameInfo,
-                        bidTacToeGameAddress,
+                        gameAddress,
                         step,
                         myInfo,
                         opInfo,
+                        privateKey,
                         handleStepChange: handleStep,
                         onList: handleChangeList,
                     }}

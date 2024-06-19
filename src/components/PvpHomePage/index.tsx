@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Flex, useMediaQuery, Image, Text } from "@chakra-ui/react";
 import LineBg from "@/assets/line.png";
-import SoloIcon from "./assets/solo-icon.png";
 import ButtonBg from "@/assets/bt-bg.png";
 import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
 import { useNavigate } from "react-router-dom";
@@ -11,11 +10,15 @@ import {
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { ZERO_DATA } from "@/skyConstants";
-import { utils as ethersUtils } from "ethers";
-import { usePvpInfo } from "@/contexts/PvpContext";
+import { ethers, utils as ethersUtils } from "ethers";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
+import { useSCWallet } from "@/hooks/useSCWallet";
+import { useInitData } from "@tma.js/sdk-react";
+import { bindBurner } from "@/api";
+import BttIcon from "@/assets/btt-icon.png";
+import SoloIcon from "./assets/solo-icon.svg";
 
 const PlayButtonGroup = ({
     onPlayTournament,
@@ -24,26 +27,16 @@ const PlayButtonGroup = ({
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
-        <Box>
+        <Box
+            sx={{
+                marginTop: "10px",
+            }}
+        >
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",
                     fontFamily: "Quantico",
-                    "& .bt": {
-                        width: "100% !important",
-                        height: `${isPc ? "90px" : "70px"} !important`,
-                        justifyContent: "flex-end",
-                        borderRadius: "18px !important",
-                        position: "relative",
-                    },
-                    "& .text-wrapper": {
-                        width: `${isPc ? "280px" : "140px"} !important`,
-                    },
-                    "& .play-button-text": {
-                        fontSize: isPc ? "32px" : "20px",
-                        fontWeight: "400",
-                    },
                 }}
             >
                 <Flex
@@ -59,19 +52,28 @@ const PlayButtonGroup = ({
                             background: `url(${LineBg})`,
                         }}
                     ></Box>
-                    <Text
+                    <Box
                         sx={{
-                            fontSize: isPc ? "30px" : "16px",
+                            margin: "0 20px",
                             fontWeight: 700,
-                            WebkitTextStrokeWidth: 1,
-                            WebkitTextStrokeColor: "#FDDC2D",
+                            fontSize: isPc ? "30px" : "16px",
                             textAlign: "center",
-                            margin: "0 10px",
-                            fontFamily: "Orbitron",
+                            color: "#FDDC2D",
                         }}
                     >
-                        1 v 1 GAME
-                    </Text>
+                        <Flex align={"center"}>
+                            <Text>1</Text>
+                            <Image
+                                src={SoloIcon}
+                                sx={{
+                                    margin: "0 4px",
+                                }}
+                            ></Image>
+                            <Text>1</Text>
+                        </Flex>
+                        <Text>GAME</Text>
+                    </Box>
+
                     <Box
                         sx={{
                             flex: 1,
@@ -81,47 +83,29 @@ const PlayButtonGroup = ({
                     ></Box>
                 </Flex>
                 <Flex
-                    className="bt"
                     align={"center"}
                     onClick={() => {
                         onPlayTournament();
                     }}
+                    alignItems={"center"}
+                    justify={"center"}
                     sx={{
-                        paddingLeft: isPc
-                            ? "100px !important"
-                            : "40px !important",
+                        width: "194px",
+                        height: "60px",
                         marginTop: isPc ? "36px" : "20px",
                         cursor: "pointer",
                         background: `url(${ButtonBg})`,
                         backgroundSize: "100% 100%",
                     }}
                 >
-                    <Image
-                        src={SoloIcon}
+                    <Text
+                        className="play-button-text"
                         sx={{
-                            width: isPc ? "120px" : "80px",
-                            position: "absolute",
-                            left: "-10px",
-                            top: "50%",
-                            transform: "translateY(-50%)",
+                            color: "#fff",
                         }}
-                    ></Image>
-                    <Box
-                        sx={{
-                            textAlign: "center",
-                            width: "100%",
-                        }}
-                        className="text-wrapper"
                     >
-                        <Text
-                            className="play-button-text"
-                            sx={{
-                                color: "#fff",
-                            }}
-                        >
-                            Start Game
-                        </Text>
-                    </Box>
+                        Start Game
+                    </Text>
                 </Flex>
             </Box>
         </Box>
@@ -132,11 +116,17 @@ const PvpHomePage = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const navigate = useNavigate();
+
+    const initData = useInitData();
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const multiTestSkylabBidTacToeFactoryContract =
         useMultiTestSkylabBidTacToeFactoryContract();
-    const { privateKey, pvpAddress } = usePvpInfo();
+    const [privateKey] = useState(ethers.Wallet.createRandom().privateKey);
+
+    const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
+
+    console.log(initData.user, "privateKey");
     const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
         privateKey,
     });
@@ -144,7 +134,7 @@ const PvpHomePage = () => {
     const handlePlay1V1 = async () => {
         try {
             openLoading();
-            const password = 1234;
+            const password = Math.floor(Math.random() * 1000000);
             localStorage.setItem("password", String(password));
             const encodedPassword = ethersUtils.defaultAbiCoder.encode(
                 ["uint256"],
@@ -156,7 +146,33 @@ const PvpHomePage = () => {
                 hashedPassword,
             ]);
 
-            handleGetGamePerPlayer();
+            const [gameAddress] = await multiProvider.all([
+                multiTestSkylabBidTacToeFactoryContract.gamePerPlayer(
+                    pvpAddress,
+                ),
+            ]);
+            console.log(gameAddress, "gameAddress");
+
+            await bindBurner({
+                user: initData.user,
+                burner: pvpAddress,
+            });
+
+            const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
+                ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
+                : {};
+            pvpPrivateKeys[gameAddress] = privateKey;
+            localStorage.setItem(
+                "pvpPrivateKeys",
+                JSON.stringify(pvpPrivateKeys),
+            );
+
+            const pvpPasswords = localStorage.getItem("pvpPasswords")
+                ? JSON.parse(localStorage.getItem("pvpPasswords"))
+                : {};
+            pvpPasswords[gameAddress] = password;
+            localStorage.setItem("pvpPasswords", JSON.stringify(pvpPasswords));
+            navigate(`/pvp/game?gameAddress=${gameAddress}`);
             closeLoading();
         } catch (e) {
             toast(handleError(e));
@@ -164,28 +180,20 @@ const PvpHomePage = () => {
         }
     };
 
-    const handleGetGamePerPlayer = async () => {
-        const [gameAddress] = await multiProvider.all([
-            multiTestSkylabBidTacToeFactoryContract.gamePerPlayer(pvpAddress),
-        ]);
+    // const handleGetGamePerPlayer = async () => {
 
-        console.log(gameAddress, pvpAddress, "gameAddress");
+    // };
 
-        if (gameAddress !== ZERO_DATA) {
-            navigate(`/pvp/game?gameAddress=${gameAddress}`);
-        }
-    };
-
-    useEffect(() => {
-        if (
-            !pvpAddress ||
-            !multiProvider ||
-            !multiTestSkylabBidTacToeFactoryContract
-        ) {
-            return;
-        }
-        handleGetGamePerPlayer();
-    }, [multiProvider, multiTestSkylabBidTacToeFactoryContract, pvpAddress]);
+    // useEffect(() => {
+    //     if (
+    //         !pvpAddress ||
+    //         !multiProvider ||
+    //         !multiTestSkylabBidTacToeFactoryContract
+    //     ) {
+    //         return;
+    //     }
+    //     handleGetGamePerPlayer();
+    // }, [multiProvider, multiTestSkylabBidTacToeFactoryContract, pvpAddress]);
 
     return (
         <Flex
@@ -194,8 +202,24 @@ const PvpHomePage = () => {
             justify={"center"}
             sx={{
                 height: "100%",
+                fontFamily: "Orbitron",
             }}
         >
+            <Image
+                src={BttIcon}
+                sx={{
+                    width: "120px",
+                }}
+            ></Image>
+            <Text
+                sx={{
+                    fontSize: "24px",
+                    fontWeight: 700,
+                    marginTop: "10px",
+                }}
+            >
+                Bid Tac Toe
+            </Text>
             <PlayButtonGroup onPlayTournament={handlePlay1V1}></PlayButtonGroup>
         </Flex>
     );
