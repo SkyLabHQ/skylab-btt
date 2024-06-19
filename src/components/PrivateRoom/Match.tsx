@@ -17,7 +17,7 @@ import { shortenAddress } from "@/utils";
 import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
-import { MINI_APP_URL } from "@/skyConstants/tgconfig";
+import { MINI_APP_URL } from "@/skyConstants/tgConfig";
 
 const Match = () => {
     const toast = useSkyToast();
