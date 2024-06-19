@@ -119,8 +119,6 @@ const PvpRoom = () => {
         }
     };
 
-    console.log(myInfo, opInfo, pvpAddress, "setMyInfo");
-
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
@@ -148,17 +146,16 @@ const PvpRoom = () => {
     useEffect(() => {
         try {
             const gameAddress = params.gameAddress;
-            const localPvpPrivateKeys =
-                JSON.parse(localStorage.getItem("pvpPrivateKeys")) || {};
-
-            console.log(
-                localPvpPrivateKeys[gameAddress],
-                "localPvpPrivateKeys",
-            );
-            if (localPvpPrivateKeys[gameAddress]) {
-                setPrivateKey(localPvpPrivateKeys[gameAddress]);
+            const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
+                ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
+                : {};
+            console.log(gameAddress, "gameAddress");
+            console.log(pvpPrivateKeys, "pvpPrivateKeys");
+            console.log(pvpPrivateKeys[gameAddress], "localPvpPrivateKeys");
+            if (pvpPrivateKeys[gameAddress]) {
+                setPrivateKey(pvpPrivateKeys[gameAddress]);
             } else {
-                // navigate("/pvp/home");
+                navigate("/pvp/home");
             }
         } catch (e) {
             console.log(e);

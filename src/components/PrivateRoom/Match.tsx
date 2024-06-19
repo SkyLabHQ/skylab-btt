@@ -60,7 +60,6 @@ const Match = () => {
     }, []);
 
     useEffect(() => {
-        console.log(myInfo, "myInfo", opInfo, "opInfo");
         if (myInfo.address && opInfo.address) {
             handleStepChange(1);
         }
@@ -156,7 +155,7 @@ const Match = () => {
                                 }}
                                 src={UserIcon}
                             ></Image>
-                            <Text>Copy 1v1 Invite Link</Text>
+                            <Text>Invite Friend</Text>
                         </Flex>
                         <Flex
                             align={"center"}

@@ -156,7 +156,7 @@ const Accept = () => {
             const newWallet = ethers.Wallet.createRandom().privateKey;
             setPrivateKey(newWallet);
         }
-    }, []);
+    }, [gameAddress]);
 
     return (
         <Flex
