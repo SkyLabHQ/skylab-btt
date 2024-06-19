@@ -21,7 +21,7 @@ import {
 } from "@/hooks/useTacToeStore";
 import { ZERO_DATA } from "@/skyConstants";
 import { usePvpGameContext } from "@/pages/PvpRoom";
-import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { CHAIN_NAMES, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import UserProfile from "./UserProfile";
 import {
     GameInfo,
@@ -40,6 +40,8 @@ import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { MyInputBid, OpInputBid } from "../TacToe/UserCard";
+import { shortenAddressWithout0x } from "@/utils";
+import { MINI_APP_URL } from "@/skyConstants/tgConfig";
 
 const PlayGame = ({
     onChangeGame,
@@ -425,7 +427,20 @@ const PlayGame = ({
         handleStepChange(2);
     };
 
-    const handleShareTw = () => {};
+    const handleShareTw = () => {
+        const text = `${MINI_APP_URL}?startapp=live-${gameAddress}-${shortenAddressWithout0x(
+            myInfo.burner,
+        )}
+⭕️❌⭕️❌Watch me play Bid tac toe and crush the opponent！⭕️❌⭕️❌
+Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
+            CHAIN_NAMES[TESTFLIGHT_CHAINID]
+        }
+(Twitter)@skylabHQ`;
+
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+        );
+    };
 
     const handleCommitWorker = () => {
         if (commitWorkerRef.current) {

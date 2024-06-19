@@ -5,12 +5,9 @@ import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const customRouters = [
-    {
-        params: ["accept", "gameAddress", "password"],
-    },
-    {
-        params: ["game", "gameAddress"],
-    },
+    ["accept", "gameAddress", "password"],
+    ["game", "gameAddress"],
+    ["live", "gameAddress", "burner"],
 ];
 const search = new URLSearchParams(window.location.search);
 
@@ -73,9 +70,9 @@ const PvpContent = () => {
                 const params = initData.startParam.split("-");
                 console.log(params, "params");
                 const route = customRouters.find(
-                    (item) => item.params[0] === params[0],
+                    (item) => item[0] === params[0],
                 );
-                if (route && route.params.length === params.length) {
+                if (route && route.length === params.length) {
                     console.log("jinlai o ", route);
                     let url = `/pvp/${params[0]}`;
                     for (let i = 1; i < params.length; i++) {
@@ -85,7 +82,7 @@ const PvpContent = () => {
                             url += "&";
                         }
 
-                        url += `${route.params[i]}=${params[i]}`;
+                        url += `${route[i]}=${params[i]}`;
                     }
 
                     console.log(url, "url");
