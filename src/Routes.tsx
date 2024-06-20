@@ -17,6 +17,7 @@ import Match from "./pages/Match";
 import Accept from "./pages/Accept";
 import PvpHome from "./pages/PvpHome";
 import PvpLayout from "./components/PvpLayout";
+import PvpMatch from "./pages/PvpMatch";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -44,6 +45,7 @@ const AppRoutes = (): ReactElement => {
 
                 <Route path="/pvp" element={<PvpLayout />}>
                     <Route path="/pvp/home" element={<PvpHome />} />
+                    <Route path="/pvp/match" element={<PvpMatch />} />
                     <Route path="/pvp/game" element={<PvpRoom />} />
                     <Route path="/pvp/accept" element={<Accept />}></Route>
                 </Route>

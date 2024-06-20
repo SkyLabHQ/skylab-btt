@@ -2,7 +2,6 @@ import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import ToolBar from "@/components/BttComponents/Toolbar";
 import { shortenAddress } from "@/utils";
 import { BackWithText } from "@/components/Back";
 import Nest from "@/components/Nest";
@@ -20,13 +19,14 @@ import { ethers } from "ethers";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import { bindBurner } from "@/api";
 import { useInitData } from "@tma.js/sdk-react";
+import LoadingPage from "@/components/LoadingPage";
 
 const Accept = () => {
     const navigate = useNavigate();
-    [];
     const toast = useSkyToast();
     const [player1, setPlayer1] = useState<string>("");
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [init, setInit] = useState(false);
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const { search } = useLocation();
     const params = qs.parse(search) as any;
@@ -48,15 +48,14 @@ const Accept = () => {
 
         try {
             openLoading();
-            await bttFactoryRetryPaymaster(
-                "joinPvPRoom",
-                [player1, params.password],
-                {
-                    signer: {
-                        privateKey,
-                    },
-                },
-            );
+            await bindBurner({
+                user: initData.user,
+                burner: pvpAddress,
+            });
+            await bttFactoryRetryPaymaster("joinPvPRoom", [
+                player1,
+                params.password,
+            ]);
             const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
                 ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
                 : {};
@@ -65,10 +64,6 @@ const Accept = () => {
                 "pvpPrivateKeys",
                 JSON.stringify(pvpPrivateKeys),
             );
-            await bindBurner({
-                user: initData.user,
-                burner: pvpAddress,
-            });
 
             closeLoading();
             navigate(`/pvp/game?gameAddress=${gameAddress}`);
@@ -95,32 +90,27 @@ const Accept = () => {
         console.log("playerAddress1", playerAddress1);
         console.log("playerAddress2", playerAddress2);
         console.log("pvpAddress", pvpAddress);
-        if (playerAddress1 !== ZERO_DATA) {
-            setPlayer1(playerAddress1);
-            if (playerAddress1 === pvpAddress) {
-                navigate(`/pvp/game?gameAddress=${gameAddress}`);
-                return;
-            }
-        }
-
-        if (playerAddress2 !== ZERO_DATA) {
-            if (playerAddress2 === pvpAddress) {
-                navigate(`/pvp/game?gameAddress=${gameAddress}`);
-                return;
-            }
-        }
 
         if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
             if (
-                playerAddress1 !== pvpAddress &&
-                playerAddress2 !== pvpAddress
+                playerAddress1 === pvpAddress ||
+                playerAddress2 === pvpAddress
             ) {
-                navigate("/pvp/home", {
-                    replace: true,
-                });
-                return;
+                navigate(`/pvp/game?gameAddress=${gameAddress}`);
+            } else {
+                navigate("/pvp/home");
             }
         }
+
+        if (playerAddress1 !== ZERO_DATA) {
+            if (playerAddress1 === pvpAddress) {
+                navigate(`/pvp/match?gameAddress=${gameAddress}`);
+                return;
+            }
+
+            setPlayer1(playerAddress1);
+        }
+        setInit(true);
     };
 
     useEffect(() => {
@@ -132,13 +122,7 @@ const Accept = () => {
         )
             return;
 
-        const timer = setInterval(() => {
-            handleGetAllPlayerInfo();
-        }, 3000);
-
-        return () => {
-            clearInterval(timer);
-        };
+        handleGetAllPlayerInfo();
     }, [
         multiSkylabBidTacToeGameContract,
         multiProvider,
@@ -159,89 +143,89 @@ const Accept = () => {
     }, [gameAddress]);
 
     return (
-        <Flex
-            sx={{
-                width: "100%",
-                height: "100%",
-                position: "relative",
-            }}
-            align={"center"}
-            justify={"center"}
-            flexDir={"column"}
-        >
-            <Box
-                sx={{
-                    position: "absolute",
-                    left: "12px",
-                    top: "12px",
-                }}
-            >
-                <BackWithText
-                    onClick={handleCancel}
-                    textContent={
-                        <Box
-                            sx={{
-                                fontSize: isPc ? "16px" : "12px",
-                                textAlign: "center",
-                                lineHeight: "1",
-                                marginTop: "8px",
-                            }}
-                        >
-                            <Text>Back</Text>
-                            {isPc && <Text>To Arena</Text>}
-                        </Box>
-                    }
-                ></BackWithText>
-            </Box>
-            <ToolBar
-                quitType="wait"
-                onQuitClick={() => {
-                    // onOpen();
-                }}
-            ></ToolBar>
-            <Box
-                sx={{
-                    fontSize: isPc ? "24px" : "16px",
-                }}
-            >
-                Accept {shortenAddress(player1)} 1v1 invitation?{" "}
-            </Box>
-            <Flex
-                onClick={handleJoinGame}
-                justify={"center"}
-                align={"center"}
-                sx={{
-                    fontSize: isPc ? "32px" : "20px",
-                    width: isPc ? "378px" : "168px",
-                    height: isPc ? "90px" : "40px",
-                    borderRadius: isPc ? "20px" : "12px",
-                    border: "2px solid #fff",
-                    marginTop: "40px",
-                    background: "#303030",
-                    cursor: "pointer",
-                }}
-            >
-                <Box>Accept</Box>
-            </Flex>
-            <Flex
-                onClick={handleCancel}
-                justify={"center"}
-                align={"center"}
-                sx={{
-                    fontSize: isPc ? "32px" : "20px",
-                    width: isPc ? "378px" : "168px",
-                    height: isPc ? "90px" : "40px",
-                    borderRadius: isPc ? "20px" : "12px",
-                    border: "2px solid #fff",
-                    marginTop: isPc ? "40px" : "20px",
-                    background: "#303030",
-                    cursor: "pointer",
-                }}
-            >
-                Cancel
-            </Flex>
-            <Nest />
-        </Flex>
+        <>
+            {init ? (
+                <Flex
+                    sx={{
+                        width: "100%",
+                        height: "100%",
+                        position: "relative",
+                    }}
+                    align={"center"}
+                    justify={"center"}
+                    flexDir={"column"}
+                >
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "12px",
+                        }}
+                    >
+                        <BackWithText
+                            onClick={handleCancel}
+                            textContent={
+                                <Box
+                                    sx={{
+                                        fontSize: isPc ? "16px" : "12px",
+                                        textAlign: "center",
+                                        lineHeight: "1",
+                                        marginTop: "8px",
+                                    }}
+                                >
+                                    <Text>Back</Text>
+                                    {isPc && <Text>To Arena</Text>}
+                                </Box>
+                            }
+                        ></BackWithText>
+                    </Box>
+                    <Box
+                        sx={{
+                            fontSize: isPc ? "24px" : "16px",
+                        }}
+                    >
+                        Accept {shortenAddress(player1)} 1v1 invitation?{" "}
+                    </Box>
+                    <Flex
+                        onClick={handleJoinGame}
+                        justify={"center"}
+                        align={"center"}
+                        sx={{
+                            fontSize: isPc ? "32px" : "20px",
+                            width: isPc ? "378px" : "168px",
+                            height: isPc ? "90px" : "40px",
+                            borderRadius: isPc ? "20px" : "12px",
+                            border: "2px solid #fff",
+                            marginTop: "40px",
+                            background: "#303030",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <Box>Accept</Box>
+                    </Flex>
+                    <Flex
+                        onClick={handleCancel}
+                        justify={"center"}
+                        align={"center"}
+                        sx={{
+                            fontSize: isPc ? "32px" : "20px",
+                            width: isPc ? "378px" : "168px",
+                            height: isPc ? "90px" : "40px",
+                            borderRadius: isPc ? "20px" : "12px",
+                            border: "2px solid #fff",
+                            marginTop: isPc ? "40px" : "20px",
+                            background: "#303030",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Cancel
+                    </Flex>
+                    <Nest />
+                </Flex>
+            ) : (
+                <LoadingPage></LoadingPage>
+            )}
+        </>
     );
 };
 export default Accept;

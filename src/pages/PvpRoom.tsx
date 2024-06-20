@@ -9,7 +9,6 @@ import {
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { ZERO_DATA } from "@/skyConstants";
-import Match from "@/components/PrivateRoom/Match";
 import PlayGame from "@/components/PrivateRoom/PlayGame";
 import {
     BoardItem,
@@ -95,7 +94,6 @@ const PvpRoom = () => {
         console.log("pvpAddress", pvpAddress);
         if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
             if (playerAddress1 === pvpAddress) {
-                console.log("playerAddress1 === pvpAddress呃等于啊啊");
                 setMyInfo({
                     address: playerAddress1,
                     mark: UserMarkType.Circle,
@@ -114,34 +112,17 @@ const PvpRoom = () => {
                     mark: UserMarkType.Circle,
                 });
             }
-        } else if (playerAddress1 !== pvpAddress) {
+        } else {
             navigate("/pvp/home");
         }
     };
 
     useEffect(() => {
-        if (
-            !multiSkylabBidTacToeGameContract ||
-            !multiProvider ||
-            (myInfo.address && opInfo.address) ||
-            !pvpAddress
-        )
+        if (!multiSkylabBidTacToeGameContract || !multiProvider || !pvpAddress)
             return;
 
-        const timer = setInterval(() => {
-            handleGetAllPlayerInfo();
-        }, 3000);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, [
-        multiSkylabBidTacToeGameContract,
-        multiProvider,
-        myInfo.address,
-        opInfo.address,
-        pvpAddress,
-    ]);
+        handleGetAllPlayerInfo();
+    }, [multiSkylabBidTacToeGameContract, multiProvider, pvpAddress]);
 
     useEffect(() => {
         try {
@@ -190,8 +171,7 @@ const PvpRoom = () => {
                         onList: handleChangeList,
                     }}
                 >
-                    {step === 0 && <Match></Match>}
-                    {step === 1 && (
+                    {step === 0 && (
                         <PlayGame
                             onChangeGame={(position, info) => {
                                 if (position === "my") {
@@ -205,8 +185,8 @@ const PvpRoom = () => {
                             }}
                         ></PlayGame>
                     )}
-                    {step === 2 && <GameOver></GameOver>}
-                    {step === 3 && <ResultPlayBack></ResultPlayBack>}
+                    {step === 1 && <GameOver></GameOver>}
+                    {step === 2 && <ResultPlayBack></ResultPlayBack>}
                 </PvpGameContext.Provider>
             </Box>
             <Nest />

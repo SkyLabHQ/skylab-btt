@@ -172,7 +172,7 @@ const PvpHomePage = () => {
                 : {};
             pvpPasswords[gameAddress] = password;
             localStorage.setItem("pvpPasswords", JSON.stringify(pvpPasswords));
-            navigate(`/pvp/game?gameAddress=${gameAddress}`);
+            navigate(`/pvp/match?gameAddress=${gameAddress}`);
             closeLoading();
         } catch (e) {
             toast(handleError(e));
