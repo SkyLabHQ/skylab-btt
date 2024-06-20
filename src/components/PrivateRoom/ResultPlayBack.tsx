@@ -1,4 +1,4 @@
-import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,
@@ -307,7 +307,6 @@ ${des}`;
         multiSkylabBidTacToeFactoryContract,
     ]);
 
-    console.log(myBalance, "myBalance");
     return (
         <Box
             sx={{
