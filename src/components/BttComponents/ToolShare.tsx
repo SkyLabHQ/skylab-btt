@@ -17,12 +17,14 @@ import TwIcon from "./assets/tw.svg";
 import useSkyToast from "@/hooks/useSkyToast";
 
 export const ToolShare = ({
+    showLive = true,
     inviteLink,
     isOpen,
     onToggle,
     onClose,
     handleShareTw,
 }: {
+    showLive?: boolean;
     inviteLink: string;
     isOpen: boolean;
     onToggle: () => void;
@@ -79,29 +81,31 @@ export const ToolShare = ({
                     }}
                 >
                     <Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                            }}
-                            onClick={handleCopyLink}
-                        >
-                            <Image
-                                src={LinkIcon}
+                        {showLive && (
+                            <Box
                                 sx={{
-                                    marginRight: "4px",
-                                    width: isPc ? "0.8333vw" : "12px",
+                                    display: "flex",
+                                    alignItems: "center",
                                 }}
-                            ></Image>
-                            <Text
-                                sx={{
-                                    fontSize: isPc ? "0.8333vw" : "12px",
-                                    fontWeight: "bold",
-                                }}
+                                onClick={handleCopyLink}
                             >
-                                Live game invite link
-                            </Text>
-                        </Box>
+                                <Image
+                                    src={LinkIcon}
+                                    sx={{
+                                        marginRight: "4px",
+                                        width: isPc ? "0.8333vw" : "12px",
+                                    }}
+                                ></Image>
+                                <Text
+                                    sx={{
+                                        fontSize: isPc ? "0.8333vw" : "12px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Live game invite link
+                                </Text>
+                            </Box>
+                        )}
                         <Box
                             sx={{
                                 display: "flex",

@@ -142,7 +142,7 @@ const PvpHomePage = () => {
             );
             const hashedPassword = ethersUtils.keccak256(encodedPassword);
             await bttFactoryRetryPaymaster("createPvPRoom", [
-                [3, 3, 3, 100, 1, 0, false, 1 * 60 * 60],
+                [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
                 hashedPassword,
             ]);
 

@@ -575,6 +575,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                         ></StatusProgress>
                     </Flex>
                     <ToolBar
+                        showLive={false}
                         inviteLink={inviteLink}
                         quitType="game"
                         onQuitClick={() => {

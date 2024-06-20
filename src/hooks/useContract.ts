@@ -29,7 +29,7 @@ export const skylabTournamentAddress: ChainIdToAddressMap = {
 export const skylabBidTacToeAddress: ChainIdToAddressMap = {
     [ChainId.POLYGON]: "0xb0D5AB79F5A0e6023861e45692C66BC0B87f1658",
     [ChainId.BASE]: "0x22b0B94541D4De8B94cE10B7493a2cF7D10F2059",
-    [ChainId.SEPOLIA]: "0x02eAD01f21b2e07522A4e349213B7da659532479",
+    [ChainId.SEPOLIA]: "0x01C180cEa33CB091717D244A6109944995e67E01",
 };
 
 export const mercuryPilotsAddress: ChainIdToAddressMap = {

@@ -331,6 +331,37 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "host",
+        "type": "address"
+      }
+    ],
+    "name": "getPvpRoom",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "aviation",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "roomPassword",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct MercuryBidTacToe.RoomInfo",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "playerBurner",
         "type": "address"
       },
@@ -638,8 +669,13 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "aviation",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "roomPassword",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -668,25 +704,6 @@
     "name": "registerBot",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "roomPassword",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

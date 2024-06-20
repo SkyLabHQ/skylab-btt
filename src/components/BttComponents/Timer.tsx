@@ -81,7 +81,7 @@ const Timer = ({ time1, time1Gray }: { time1: number; time1Gray: boolean }) => {
             }}
         >
             <BttTimer
-                width={(time1 / TwelveHours) * 100 + "%"}
+                width={(time1 / 1000 / TwelveHours) * 100 + "%"}
                 time={`${hours}:${minutes}:${seconds}`}
                 gray={time1Gray}
             ></BttTimer>

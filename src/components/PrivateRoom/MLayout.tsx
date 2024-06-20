@@ -50,6 +50,7 @@ const MLayout = ({
             }}
         >
             <ToolBar
+                showLive={false}
                 inviteLink={inviteLink}
                 quitType="game"
                 handleShareTw={handleShareTw}

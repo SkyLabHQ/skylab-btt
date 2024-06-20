@@ -9,11 +9,13 @@ import { useUserInfo } from "@/contexts/UserInfo";
 import SkinIcon from "@/components/BttComponents/assets/skin.png";
 const audio = new Audio(Click1Wav);
 const ToolBar = ({
+    showLive = true,
     inviteLink,
     handleShareTw,
     quitType,
     onQuitClick,
 }: {
+    showLive?: boolean;
     inviteLink?: string;
     handleShareTw?: () => void;
     quitType?: "wait" | "game";
@@ -73,6 +75,7 @@ const ToolBar = ({
 
             {quitType === "game" && (
                 <ToolShare
+                    showLive={showLive}
                     inviteLink={inviteLink}
                     handleShareTw={handleShareTw}
                     isOpen={shareOpen}

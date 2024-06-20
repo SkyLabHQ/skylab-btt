@@ -10,7 +10,6 @@ import BttLiveGame from "./pages/BttLiveGame";
 import BttRules from "./pages/BttRules";
 import PvpRoom from "./pages/PvpRoom";
 import PrivatePlayBack from "./pages/PrivatePlayBack";
-import PrivateLiveGame from "./pages/PrivateLiveGame";
 import Tower from "./pages/Tower";
 import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";
@@ -32,17 +31,8 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>
                 <Route path="/btt/live" element={<BttLiveGame />}></Route>
                 <Route path="/btt/rules" element={<BttRules />}></Route>
-                <Route
-                    path="/btt/lobbyPlayback"
-                    element={<PrivatePlayBack />}
-                />
-                <Route
-                    path="/btt/lobbyLive"
-                    element={<PrivateLiveGame />}
-                ></Route>
                 <Route path="/tower" element={<Tower />}></Route>
                 <Route path="/buypaper" element={<SellPaperPage />}></Route>
-
                 <Route path="/pvp" element={<PvpLayout />}>
                     <Route path="/pvp/home" element={<PvpHome />} />
                     <Route path="/pvp/match" element={<PvpMatch />} />
