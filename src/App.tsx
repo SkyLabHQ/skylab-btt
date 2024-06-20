@@ -20,22 +20,6 @@ const themeColorList = [
         color: "#1b1b1b",
     },
     {
-        link: "/btt/joinlobby",
-        color: "#303030",
-    },
-    {
-        link: "/btt/lobby",
-        color: "#303030",
-    },
-    {
-        link: "/btt/lobbyRoom",
-        color: "#1b1b1b",
-    },
-    {
-        link: "/btt/lobbyPlayback",
-        color: "#1b1b1b",
-    },
-    {
         link: "/btt/live",
         color: "#1b1b1b",
     },
@@ -47,7 +31,6 @@ const themeColorList = [
         link: "/btt/history",
         color: "#303030",
     },
-    { link: "/btt/lobbyLive", color: "#1b1b1b" },
     {
         link: "/activity",
         color: "transparent",

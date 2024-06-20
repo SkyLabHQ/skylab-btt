@@ -18,35 +18,3 @@ export const topic0UserOperationRevertReason = UserOperationiface.getEventTopic(
 
 export const topic0UserOpearationEvent =
     UserOperationiface.getEventTopic("UserOperationEvent");
-
-// @ts-ignore
-export const topic0PrivateLobbyCreated = encodeEventTopics({
-    abi: [
-        {
-            anonymous: false,
-            inputs: [
-                {
-                    indexed: false,
-                    internalType: "address",
-                    name: "privateLobbyAddress",
-                    type: "address",
-                },
-                {
-                    indexed: false,
-                    internalType: "string",
-                    name: "name",
-                    type: "string",
-                },
-                {
-                    indexed: false,
-                    internalType: "address",
-                    name: "admin",
-                    type: "address",
-                },
-            ],
-            name: "PrivateLobbyCreated",
-            type: "event",
-        },
-    ],
-    eventName: "PrivateLobbyCreated",
-})[0];

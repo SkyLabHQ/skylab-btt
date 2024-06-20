@@ -9,7 +9,6 @@ import BttPlayBack from "./pages/BttPlayBack";
 import BttLiveGame from "./pages/BttLiveGame";
 import BttRules from "./pages/BttRules";
 import PvpRoom from "./pages/PvpRoom";
-import PrivatePlayBack from "./pages/PrivatePlayBack";
 import Tower from "./pages/Tower";
 import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";

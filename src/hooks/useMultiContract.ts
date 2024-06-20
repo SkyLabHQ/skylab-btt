@@ -13,7 +13,6 @@ import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.j
 import PILOTMILEAGE_ABI from "@/skyConstants/abis/PilotMileage.json";
 import PILOTNETPOINTS_ABI from "@/skyConstants/abis/PilotNetPoints.json";
 import PILOTWINSTREAK_ABI from "@/skyConstants/abis/PilotWinStreak.json";
-import MERCURYBTTPRIVATELOBBY_ABI from "@/skyConstants/abis/MercuryBTTPrivateLobby.json";
 import qs from "query-string";
 import { ChainId, TESTFLIGHT_CHAINID, randomRpc } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
@@ -145,20 +144,12 @@ export const useMultiPilotWinStreakContract = (chainId: number) => {
     return useContract(pilotWinStreakAddress[chainId], PILOTWINSTREAK_ABI);
 };
 
-export const useMultiMercuryBTTPrivateLobby = (address: string) => {
-    return useContract(address, MERCURYBTTPRIVATELOBBY_ABI);
-};
-
 export const useMultiMercuryJarTournamentContract = () => {
     const chainId = useChainId();
     return useContract(
         mercuryJarTournamentAddress[chainId],
         MERCURYJARTOURNAMENT_ABI,
     );
-};
-
-export const getMultiMercuryBTTPrivateLobby = (address: string) => {
-    return getContract(address, MERCURYBTTPRIVATELOBBY_ABI);
 };
 
 export const useMultiProvider = (chainId: number) => {
