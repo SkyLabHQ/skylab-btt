@@ -445,6 +445,12 @@ export const useBttFactoryRetry = (testflight: boolean, signer?: any) => {
     return contractWrite;
 };
 
+export const useTestflightRetryPaymaster = (signer: any) => {
+    const contract = useTestflightContract();
+    const contractWrite = getPayMasterBurnerRetryContract(contract, signer);
+    return contractWrite;
+};
+
 export const useBttFactoryRetryPaymaster = (signer: any) => {
     const contract = useTestSkylabBidTacToeContract();
     const contractWrite = getPayMasterBurnerRetryContract(contract, signer);

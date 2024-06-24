@@ -8,13 +8,9 @@ import Match from "@/components/TacToe/Match";
 import LevelInfo from "@/components/TacToe/LevelInfo";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
-import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
-import {
-    mercuryJarTournamentAddress,
-    skylabTestFlightAddress,
-} from "@/hooks/useContract";
+import { mercuryJarTournamentAddress } from "@/hooks/useContract";
 import {
     BoardItem,
     GameInfo,
@@ -22,7 +18,6 @@ import {
     UserMarkType,
     initBoard,
 } from "@/skyConstants/bttGameTypes";
-import ReactCanvasNest from "react-canvas-nest";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Nest from "@/components/Nest";
 
@@ -50,11 +45,9 @@ export enum GameType {
 
 const GameContext = createContext<{
     realChainId: number;
-    istest: boolean;
     gameType: GameType;
     list: BoardItem[];
     tokenId: number;
-    myNewInfo: MyNewInfo;
     myInfo: Info;
     opInfo: Info;
     myGameInfo: GameInfo;
@@ -103,11 +96,8 @@ const MatchPage = () => {
     const params = qs.parse(search) as any;
     const istest = params.testflight === "true";
     const [tokenId] = useState<number>(params.tokenId);
-    const [myNewInfo, setMyNewInfo] = useState<MyNewInfo>(null); // if game over update my info
-    const realChainId = istest ? TESTFLIGHT_CHAINID : chainId;
-    const avaitionAddress = istest
-        ? skylabTestFlightAddress[TESTFLIGHT_CHAINID]
-        : mercuryJarTournamentAddress[realChainId];
+    const realChainId = chainId;
+    const avaitionAddress = mercuryJarTournamentAddress[realChainId];
     const [myConfirmTimeout, setMyConfirmTimeout] = useState(-1);
     const [opConfirmTimeout, setOpConfirmTimeout] = useState(-1);
     const [myInfo, setMyInfo] = useState<Info>({
@@ -210,12 +200,10 @@ const MatchPage = () => {
                     value={{
                         realChainId,
                         gameType,
-                        istest,
                         myActivePilot,
                         opActivePilot,
                         myInfo,
                         opInfo,
-                        myNewInfo,
                         tokenId,
                         myGameInfo,
                         opGameInfo,

@@ -24,6 +24,25 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "gameAddress",
+        "type": "address"
+      }
+    ],
+    "name": "StartBotGame",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "player1",
         "type": "address"
       },

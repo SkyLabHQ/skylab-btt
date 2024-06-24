@@ -190,7 +190,6 @@ const TacToe = () => {
 
     const handleGetGas = async () => {
         console.log("start transfer gas");
-
         const publicClient: any = getViemClients({ chainId: realChainId });
         const balance = await publicClient.getBalance({
             address: burnerWallet.account.address,
@@ -550,13 +549,23 @@ const TacToe = () => {
     };
 
     useEffect(() => {
+        console.log(
+            multiProvider,
+            multiSkylabBidTacToeGameContract,
+            multiSkylabBidTacToeFactoryContract,
+            "multiProvider",
+        );
         if (
             !multiProvider ||
             !multiSkylabBidTacToeGameContract ||
             !multiSkylabBidTacToeFactoryContract
         ) {
+            console.log("111进这里");
+
             return;
         }
+
+        console.log("进这里");
         handleGetAllPlayerInfo();
     }, [
         multiProvider,

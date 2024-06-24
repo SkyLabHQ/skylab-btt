@@ -8,11 +8,10 @@ import { getLevel } from "@/utils/level";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { GrayButton } from "../Button/Index";
 import { useBttFactoryRetry } from "@/hooks/useRetryContract";
-import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
+import { useTacToeSigner } from "@/hooks/useSigner";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import Loading from "../Loading";
-import { getSCWallet } from "@/hooks/useSCWallet";
 import {
     useMultiMercuryBaseContract,
     useMultiProvider,
@@ -118,7 +117,6 @@ const LevelInfo = ({
         opActivePilot,
         tokenId,
         onStep,
-        istest,
         avaitionAddress,
         bidTacToeGameAddress,
         setBidTacToeGameAddress,
@@ -174,17 +172,7 @@ const LevelInfo = ({
 
     const handleGetGameInfo = async () => {
         try {
-            let operateAddress = "";
-            if (istest) {
-                const testflightSinger = getTestflightSigner(realChainId);
-                const { sCWAddress } = await getSCWallet(
-                    testflightSinger.privateKey,
-                );
-                operateAddress = sCWAddress;
-            } else {
-                operateAddress = tacToeBurner.account.address;
-            }
-
+            let operateAddress = tacToeBurner.account.address;
             const [bidTacToeGameAddress, defaultGameQueue, opPlayer] =
                 await multiProvider.all([
                     multiSkylabBidTacToeFactoryContract.gamePerPlayer(

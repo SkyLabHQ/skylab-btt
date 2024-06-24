@@ -115,9 +115,7 @@ export const PlaneImg = ({
 
 const StopMatch = ({ onClick }: { onClick: () => void }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-
     const [show, setShow] = useState(false);
-
     useEffect(() => {
         const stopMatchTip = localStorage.getItem("stopMatchTip");
         if (stopMatchTip === "true") {
@@ -238,7 +236,6 @@ export const MatchPage = ({
         myActivePilot,
         opActivePilot,
         tokenId,
-        istest,
         avaitionAddress,
         handleGetGas,
         onStep,
@@ -408,16 +405,7 @@ export const MatchPage = ({
     // get my and op info
     const handleGetGameInfo = async () => {
         try {
-            let operateAddress = "";
-            if (istest) {
-                const testflightSinger = getTestflightSigner(realChainId);
-                const { sCWAddress } = await getSCWallet(
-                    testflightSinger.privateKey,
-                );
-                operateAddress = sCWAddress;
-            } else {
-                operateAddress = tacToeBurner.account.address;
-            }
+            let operateAddress = tacToeBurner.account.address;
 
             const [bidTacToeGameAddress, defaultGameQueue, opPlayer] =
                 await multiProvider.all([
@@ -590,7 +578,7 @@ export const MatchPage = ({
         } catch (error) {
             console.log(error);
             closeLoading();
-            toast(handleError(error, istest));
+            toast(handleError(error));
         }
     };
 
@@ -598,19 +586,14 @@ export const MatchPage = ({
         try {
             await tacToeFactoryRetryWrite("withdrawFromQueue", [], {
                 gasLimit: 250000,
-                usePaymaster: istest,
             });
-            const url = istest
-                ? `/btt?tokenId=${tokenId}&testflight=true`
-                : `/btt?tokenId=${tokenId}`;
-            if (!istest) {
-                handleGetGas();
-            }
+            const url = `/btt?tokenId=${tokenId}`;
+            handleGetGas();
             navigate(url);
             onClose();
         } catch (error) {
             console.log(error);
-            toast(handleError(error, istest));
+            toast(handleError(error));
         }
     };
 

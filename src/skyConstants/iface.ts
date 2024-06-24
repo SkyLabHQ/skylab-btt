@@ -1,9 +1,11 @@
 import { ethers } from "ethers";
-import { encodeEventTopics } from "viem";
+import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 
 export const erc721iface = new ethers.utils.Interface([
     "event Transfer(address indexed from,address indexed to,uint256 indexed tokenId);",
 ]);
+
+export const bttFactoryIface = new ethers.utils.Interface(SKYLABBIDTACTOE_ABI);
 
 export const topic0Transfer = erc721iface.getEventTopic("Transfer");
 

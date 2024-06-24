@@ -12,7 +12,9 @@ import { useNavigate } from "react-router-dom";
 import {
     useBidTacToeFactoryRetry,
     useBttFactoryRetry,
+    useBttFactoryRetryPaymaster,
     useTestflightRetryContract,
+    useTestflightRetryPaymaster,
 } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
 import {
@@ -30,10 +32,14 @@ import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import { getDefaultWithProvider, getTestflightSigner } from "@/hooks/useSigner";
-import { getSCWallet } from "@/hooks/useSCWallet";
-import { erc721iface, topic0Transfer } from "@/skyConstants/iface";
-import { useChainId, useWalletClient } from "wagmi";
+import { getDefaultWithProvider } from "@/hooks/useSigner";
+import { useSCWallet } from "@/hooks/useSCWallet";
+import {
+    bttFactoryIface,
+    erc721iface,
+    topic0Transfer,
+} from "@/skyConstants/iface";
+import { useChainId } from "wagmi";
 import { ZERO_DATA } from "@/skyConstants";
 import useCountDown from "react-countdown-hook";
 import styled from "@emotion/styled";
@@ -46,6 +52,7 @@ import SelectPlane from "@/components/TacToeMode/SelectPlane";
 import MRobotIcon from "@/components/TacToeMode/assets/m-robot.svg";
 import { privateKeyToAccount } from "viem/accounts";
 import Nest from "@/components/Nest";
+import { ethers } from "ethers";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -115,12 +122,18 @@ const TacToeMode = () => {
     const toast = useSkyToast();
 
     const multiProvider = useMultiProvider(chainId);
-
-    const { data: signer } = useWalletClient();
+    const [privateKey] = useState<string>(
+        ethers.Wallet.createRandom().privateKey,
+    );
+    const { sCWAddress: botAccount } = useSCWallet(privateKey);
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
-    const testflightContract = useTestflightRetryContract();
+    const testflightRetryPaymaster = useTestflightRetryPaymaster({
+        privateKey,
+    });
 
-    const bttFactoryRetryTest = useBttFactoryRetry(true, signer);
+    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
+        privateKey,
+    });
 
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
@@ -138,53 +151,44 @@ const TacToeMode = () => {
         return { minutes, second };
     }, [timeLeft]);
 
-    const handleMintPlayTest = async (type: string) => {
+    const handleMintPlayTest = async () => {
         try {
-            const testflightSinger = getTestflightSigner(
-                TESTFLIGHT_CHAINID,
-                true,
-            );
             openLoading();
-            const { sCWAddress } = await getSCWallet(
-                testflightSinger.privateKey,
-            );
-
-            const receipt = await testflightContract("playTestMint", [], {
-                usePaymaster: true,
-            });
-
+            const receipt = await testflightRetryPaymaster("playTestMint", []);
             const transferLog = receipt.logs.find((item: any) => {
                 return item.topics[0] === topic0Transfer;
             });
-
             const transferData = erc721iface.parseLog({
                 data: transferLog.data,
                 topics: transferLog.topics,
             });
             const tokenId = transferData.args.tokenId.toNumber();
-            await bttFactoryRetryTest(
-                "approveForGame",
-                [
-                    sCWAddress,
-                    tokenId,
-                    skylabTestFlightAddress[TESTFLIGHT_CHAINID],
-                ],
-                {
-                    usePaymaster: true,
+            await bttFactoryRetryPaymaster("approveForGame", [
+                botAccount,
+                tokenId,
+                skylabTestFlightAddress[TESTFLIGHT_CHAINID],
+            ]);
+            const createBotGameReceipt = await bttFactoryRetryPaymaster(
+                "createBotGame",
+                [botAddress[TESTFLIGHT_CHAINID]],
+            );
+
+            const startBotGameTopic0 =
+                bttFactoryIface.getEventTopic("StartBotGame");
+
+            const startBotGameLog = createBotGameReceipt.logs.find(
+                (item: any) => {
+                    return item.topics[0] === startBotGameTopic0;
                 },
             );
 
-            await bttFactoryRetryTest(
-                "createBotGame",
-                [
-                    [3, 3, 3, 100, 1, 0, true, 1 * 60 * 60],
-                    botAddress[TESTFLIGHT_CHAINID],
-                ],
-                {
-                    usePaymaster: true,
-                },
-            );
-            const url = `/btt/match?tokenId=${tokenId}&testflight=true`;
+            const startBotGameData = bttFactoryIface.parseLog({
+                data: startBotGameLog.data,
+                topics: startBotGameLog.topics,
+            });
+
+            sessionStorage.setItem("testflight", privateKey);
+            const url = `/btt/game?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}&testflight=true`;
             closeLoading();
             navigate(url);
         } catch (error) {
@@ -343,7 +347,7 @@ const TacToeMode = () => {
                                         align={"center"}
                                         onClick={() => {
                                             gameAudio.play();
-                                            handleMintPlayTest("bot");
+                                            handleMintPlayTest();
                                         }}
                                     >
                                         <Image src={MRobotIcon}></Image>
@@ -394,7 +398,7 @@ const TacToeMode = () => {
                     <LeftButton
                         onPlayWithBot={() => {
                             gameAudio.play();
-                            handleMintPlayTest("bot");
+                            handleMintPlayTest();
                         }}
                     ></LeftButton>
                 )}

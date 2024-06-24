@@ -16,12 +16,14 @@ import Accept from "./pages/Accept";
 import PvpHome from "./pages/PvpHome";
 import PvpLayout from "./components/PvpLayout";
 import PvpMatch from "./pages/PvpMatch";
+import StartBot from "./pages/StartBot";
 
 const AppRoutes = (): ReactElement => {
     return (
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<TacToeMode />}></Route>
+                <Route path="/startBot" element={<StartBot />} />
                 <Route path="/home" element={<Activities />} />
                 <Route path="/btt/match" element={<Match />}></Route>
                 <Route path="/btt/accept" element={<Accept />}></Route>
