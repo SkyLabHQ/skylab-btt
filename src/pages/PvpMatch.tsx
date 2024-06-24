@@ -6,36 +6,15 @@ import {
     useMediaQuery,
     useDisclosure,
 } from "@chakra-ui/react";
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from "react";
-import "@reactour/popover/dist/index.css"; // arrow css
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { useTacToeSigner } from "@/hooks/useSigner";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import UserIcon from "@/assets/user1.svg";
-import {
-    mercuryJarTournamentAddress,
-    skylabTestFlightAddress,
-} from "@/hooks/useContract";
-import {
-    BoardItem,
-    GameInfo,
-    GameState,
-    UserMarkType,
-    initBoard,
-} from "@/skyConstants/bttGameTypes";
-import ReactCanvasNest from "react-canvas-nest";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import Nest from "@/components/Nest";
 import { MINI_APP_URL } from "@/skyConstants/tgConfig";
 import { shortenAddress } from "@/utils";
-import { motion } from "framer-motion";
 import QuitModal from "@/components/BttComponents/QuitModal";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
@@ -100,7 +79,7 @@ const MatchPage = () => {
                 ) +
                 "&text=" +
                 encodeURIComponent(
-                    "Invite friends to join the 1v1 immediately",
+                    "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. I invite you to play with me. Click here to accept my invite!",
                 );
             return share_url;
         } catch (e) {
@@ -220,26 +199,6 @@ const MatchPage = () => {
                             width: isPc ? "600px" : "350px",
                         }}
                     >
-                        {(!myInfo.address || !opInfo.address) && (
-                            <motion.div
-                                style={{
-                                    fontSize: isPc ? "30px" : "20px",
-                                    textAlign: "center",
-                                    marginBottom: "20px",
-                                    fontWeight: "bold",
-                                }}
-                                animate={{
-                                    opacity: [0, 1, 0],
-                                }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                }}
-                            >
-                                Matching
-                            </motion.div>
-                        )}
-
                         <Flex
                             align={"center"}
                             justify={"space-around"}
@@ -269,7 +228,6 @@ const MatchPage = () => {
                                 <Flex
                                     align={"center"}
                                     justify={"center"}
-                                    // onClick={handleCopyLink}
                                     sx={{
                                         width: isPc ? "420px" : "180px",
                                         height: isPc ? "55px" : "40px",

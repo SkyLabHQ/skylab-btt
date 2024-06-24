@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import CopyIcon from "./assets/copy-icon.svg";
-import { UserMarkType } from "@/skyConstants/bttGameTypes";
+import { UserMarkIcon, UserMarkType } from "@/skyConstants/bttGameTypes";
 import AdvantageIcon from "@/assets/advantage-icon.svg";
 import { shortenAddress } from "@/utils";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -320,19 +320,12 @@ export const MUserProfileResult = ({
     showUserIcon?: boolean;
     address?: string;
     img?: string;
-
     showAdvantageTip?: boolean;
     mark?: number;
     position?: "left" | "right";
 }) => {
     return (
-        <Flex
-            flexDir={"column"}
-            align={position === "left" ? "flex-start" : "flex-end"}
-            sx={{
-                padding: "0 12px",
-            }}
-        >
+        <Flex flexDir={"column"}>
             <Flex align={"flex-end"}>
                 {img && (
                     <Box
@@ -357,18 +350,17 @@ export const MUserProfileResult = ({
                         ></Image>
                     </Box>
                 )}
+            </Flex>
 
+            <Flex align={"center"}>
                 {position === "left" && showUserIcon && (
                     <Image
                         src={UserIcon}
                         sx={{
-                            marginLeft: "10px",
+                            marginRight: "4px",
                         }}
                     ></Image>
                 )}
-            </Flex>
-
-            <Flex align={"center"}>
                 {level && (
                     <Text
                         sx={{
@@ -399,17 +391,27 @@ export const MUserProfileResult = ({
 export const MUserProfilePvp = ({
     address,
     status,
-    showAdvantageTip,
     mark,
 }: {
     address?: string;
-    showAdvantageTip?: boolean;
     mark?: number;
     status?: "my" | "op";
 }) => {
     return (
-        <Box>
-            {address && (
+        <Flex
+            sx={{
+                margin: status === "my" ? "0 0 0 10px" : "0 10px 0 0",
+
+                "&>img": {
+                    width: "12px",
+                    height: "12px",
+                    margin: "4px",
+                },
+            }}
+            align={"center"}
+            justify={"center"}
+        >
+            {address && status !== "my" && (
                 <Text
                     sx={{
                         fontSize: "12px",
@@ -420,7 +422,27 @@ export const MUserProfilePvp = ({
                     {shortenAddress(address, 4, 4)}
                 </Text>
             )}
-        </Box>
+            {mark === UserMarkType.Circle && (
+                <Image src={UserMarkIcon.Circle}></Image>
+            )}
+            {mark === UserMarkType.Cross && (
+                <Image src={UserMarkIcon.Cross}></Image>
+            )}
+            {mark === UserMarkType.BotX && (
+                <Image src={UserMarkIcon.BotX}></Image>
+            )}
+            {address && status === "my" && (
+                <Text
+                    sx={{
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        color: "#fff",
+                    }}
+                >
+                    {shortenAddress(address, 4, 4)}
+                </Text>
+            )}
+        </Flex>
     );
 };
 

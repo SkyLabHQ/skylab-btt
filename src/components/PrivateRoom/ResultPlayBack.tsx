@@ -82,7 +82,7 @@ const ResultPlayBack = () => {
         )
             return;
 
-        const [boardGrids, player1, player2] = await multiProvider.all([
+        let [boardGrids, player1, player2] = await multiProvider.all([
             multiSkylabBidTacToeGameContract.getGrid(),
             multiSkylabBidTacToeGameContract.player1(),
             multiSkylabBidTacToeGameContract.player2(),
@@ -92,6 +92,9 @@ const ResultPlayBack = () => {
             multiSkylabBidTacToeGameContract.getRevealedBids(player1),
             multiSkylabBidTacToeGameContract.getRevealedBids(player2),
         ]);
+
+        player1 = player1.toLocaleLowerCase();
+        player2 = player2.toLocaleLowerCase();
 
         const myIsPlayer1 = player1 === myInfo.address;
 
@@ -110,11 +113,12 @@ const ResultPlayBack = () => {
         const _gridOrder = await multiProvider.all(p);
         const _list = initBoard();
         for (let i = 0; i < boardGrids.length; i++) {
-            if (boardGrids[i] === ZERO_DATA) {
+            const winAddress = boardGrids[i].toLocaleLowerCase();
+            if (winAddress === ZERO_DATA) {
                 _list[i].mark = UserMarkType.Empty;
-            } else if (boardGrids[i] === myInfo.address) {
+            } else if (winAddress === myInfo.address) {
                 _list[i].mark = myInfo.mark;
-            } else if (boardGrids[i] === opInfo.address) {
+            } else if (winAddress === opInfo.address) {
                 _list[i].mark = opInfo.mark;
             }
             _list[i].myValue = myIsPlayer1

@@ -1,8 +1,8 @@
 import { usePvpGameContext } from "@/pages/PvpRoom";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { MUserProfilePvp } from "./UserProfile";
-import MBalance from "../BttComponents/MBalance";
+import MBalance, { MPvpBalance } from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../TacToe/Board";
 import { MMessage } from "./Message";
@@ -31,6 +31,7 @@ const MLayout = ({
     handleBoardClick,
     showAnimateConfirm,
     onReveal,
+    onCallTimeout,
 }: any) => {
     const { isOpen: keyBoardIsOpen, onToggle: keyBoardOnToggle } =
         useDisclosure();
@@ -40,6 +41,17 @@ const MLayout = ({
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
         usePvpGameContext();
     const myGameState = myGameInfo.gameState;
+
+    const canCallTimeout = useMemo(() => {
+        if (
+            autoCommitTimeoutTime === 0 &&
+            myGameInfo.gameState <= opGameInfo.gameState
+        ) {
+            return true;
+        }
+
+        return false;
+    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
     return (
         <Box
@@ -60,7 +72,7 @@ const MLayout = ({
                 sx={{
                     position: "absolute",
                     top: "12px",
-                    left: 0,
+                    left: "16px",
                     alignItems: "flex-start",
                 }}
                 flexDir={"column"}
@@ -70,7 +82,6 @@ const MLayout = ({
                         address={opInfo.address}
                         status="op"
                         mark={opInfo.mark}
-                        showAdvantageTip={opInfo.address === nextDrawWinner}
                     ></MUserProfilePvp>
                     <MMessage
                         message={opGameInfo.message}
@@ -79,10 +90,10 @@ const MLayout = ({
                     ></MMessage>
                 </Flex>
 
-                <MBalance
+                <MPvpBalance
                     balance={opGameInfo.balance}
                     mark={opInfo.mark}
-                ></MBalance>
+                ></MPvpBalance>
             </Flex>
 
             <Flex
@@ -127,7 +138,7 @@ const MLayout = ({
                         {myGameInfo.gameState <= GameState.Revealed && (
                             <Box
                                 sx={{
-                                    width: "160px",
+                                    width: "84px",
                                     position: "absolute",
                                     left: "12px",
                                     bottom: "20px",
@@ -146,6 +157,37 @@ const MLayout = ({
                                             GameState.Revealed
                                     }
                                 ></Timer>
+                                <Flex
+                                    onClick={() => {
+                                        if (canCallTimeout) {
+                                            onCallTimeout();
+                                        }
+                                    }}
+                                    sx={{
+                                        marginTop: "5px",
+                                        fontSize: "12px",
+                                        height: "30px",
+                                        width: "84px",
+                                        background: canCallTimeout
+                                            ? "transparent"
+                                            : "#787878",
+                                        borderRadius: "16px",
+                                        color: canCallTimeout
+                                            ? "#FDDC2D"
+                                            : "#555",
+                                        fontWeight: "bold",
+                                        cursor: canCallTimeout
+                                            ? "pointer"
+                                            : "not-allowed",
+                                        border: canCallTimeout
+                                            ? "1px solid #FDDC2D"
+                                            : "1px solid #787878",
+                                    }}
+                                    align={"center"}
+                                    justify={"center"}
+                                >
+                                    Call Timeout
+                                </Flex>
                             </Box>
                         )}
                     </Flex>
@@ -153,7 +195,7 @@ const MLayout = ({
                         sx={{
                             position: "absolute",
                             bottom: "16px",
-                            right: 0,
+                            right: "16px",
                         }}
                         flexDir={"column"}
                         align={"flex-end"}
@@ -173,17 +215,14 @@ const MLayout = ({
                                 status="my"
                                 address={myInfo.address}
                                 mark={myInfo.mark}
-                                showAdvantageTip={
-                                    myInfo.address === nextDrawWinner
-                                }
                             ></MUserProfilePvp>
                         </Flex>
 
-                        <MBalance
+                        <MPvpBalance
                             balance={myGameInfo.balance}
                             status="right"
                             mark={myInfo.mark}
-                        ></MBalance>
+                        ></MPvpBalance>
                     </Flex>
                 </Box>
                 <BottomInputBox

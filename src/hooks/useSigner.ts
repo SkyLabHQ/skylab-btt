@@ -95,41 +95,6 @@ export const getDefaultWithProvider = (tokenId: number, chainId: number) => {
     });
     return { ...client, privateKey: objPrivateKey[key] };
 };
-export const getTestflightWithProvider = (tokenId: number, chainId: number) => {
-    if (!tokenId || !chainId) {
-        return null;
-    }
-    let stringPrivateKey = sessionStorage.getItem("testflightPrivateKey");
-
-    let objPrivateKey;
-    try {
-        objPrivateKey = stringPrivateKey ? JSON.parse(stringPrivateKey) : {};
-    } catch (e) {
-        objPrivateKey = {};
-    }
-    const key = chainId + "-" + tokenId;
-
-    if (!objPrivateKey[key]) {
-        // 随机创建一个私钥账户
-        const randomAccount = ethers.Wallet.createRandom();
-        objPrivateKey[key] = randomAccount.privateKey;
-        sessionStorage.setItem(
-            "testflightPrivateKey",
-            JSON.stringify(objPrivateKey),
-        );
-    }
-    const account = privateKeyToAccount(objPrivateKey[key] as any);
-
-    const client = createWalletClient({
-        account,
-        chain: CHAINS.find((item) => {
-            return item.id === chainId;
-        }),
-        transport: http(),
-    });
-
-    return { ...client, privateKey: objPrivateKey[key] };
-};
 
 export const getTestflightSigner = (chainId: number, useNew?: boolean) => {
     if (!chainId) {

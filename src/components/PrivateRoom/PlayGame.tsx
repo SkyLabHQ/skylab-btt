@@ -311,7 +311,8 @@ const PlayGame = ({
             const localSalt = getGridCommited();
             const salt = localSalt?.salt
                 ? localSalt?.salt
-                : Math.floor(Math.random() * 10000000) + 100000;
+                : Math.floor(Math.random() * 9000000000000000) +
+                  1000000000000000;
             if (!localSalt?.salt) {
                 addGridCommited(bidAmount, salt, false);
             }
@@ -476,7 +477,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             !myInfo.address ||
             !opInfo.address ||
             !multiSkylabBidTacToeGameContract ||
-            !multiProvider
+            !multiProvider ||
+            revealing
         ) {
             return;
         }
@@ -493,6 +495,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         opInfo.address,
         multiSkylabBidTacToeGameContract,
         multiProvider,
+        revealing,
     ]);
 
     useEffect(() => {

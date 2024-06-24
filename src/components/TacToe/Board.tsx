@@ -106,7 +106,7 @@ export const BoardGrid = ({
                                             : MarkIcon.BlackCross
                                     }
                                 ></Image>
-                                <Box> {myValue}</Box>
+                                <Box>{myValue}</Box>
                             </Box>
 
                             <Box

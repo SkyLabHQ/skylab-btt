@@ -1,5 +1,4 @@
 import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
-import React from "react";
 import Logo from "@/assets/logo.svg";
 import BttIcon from "@/assets/btt-icon.png";
 import XIcon from "@/components/TacToe/assets/x.svg";
@@ -40,7 +39,7 @@ const PrivateLobbyPlayBack = ({
     showList: BoardItem[];
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-
+    console.log(showList, "showList");
     return isPc ? (
         <Box
             id="share-content"
@@ -178,6 +177,7 @@ const PrivateLobbyPlayBack = ({
                     }}
                 >
                     <UserProfile
+                        address={myInfo.address}
                         status="my"
                         mark={myInfo.mark}
                         showAdvantageTip={myIsNextDrawWinner}
@@ -201,6 +201,7 @@ const PrivateLobbyPlayBack = ({
                     alignItems={"flex-end"}
                 >
                     <UserProfile
+                        address={opInfo.address}
                         status="op"
                         mark={opInfo.mark}
                         showAdvantageTip={!myIsNextDrawWinner}
@@ -236,6 +237,7 @@ const PrivateLobbyPlayBack = ({
                             }}
                         >
                             <MUserProfileResult
+                                address={myInfo.address}
                                 position="left"
                                 mark={myInfo.mark}
                             ></MUserProfileResult>
@@ -247,13 +249,18 @@ const PrivateLobbyPlayBack = ({
                         ></MBalance>
                     </Box>
 
-                    <Flex flexDir={"column"} align={"flex"}>
+                    <Flex
+                        flexDir={"column"}
+                        align={"flex"}
+                        alignItems={"flex-end"}
+                    >
                         <Box
                             sx={{
                                 paddingRight: "12px",
                             }}
                         >
                             <MUserProfileResult
+                                address={opInfo.address}
                                 position="right"
                                 mark={opInfo.mark}
                                 showAdvantageTip={!myIsNextDrawWinner}
