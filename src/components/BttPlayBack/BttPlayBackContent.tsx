@@ -1,5 +1,4 @@
 import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
-import React from "react";
 import Logo from "@/assets/logo.svg";
 import BttIcon from "@/assets/btt-icon.png";
 import XIcon from "@/components/TacToe/assets/x.svg";
@@ -8,7 +7,6 @@ import Board from "../TacToe/Board";
 import { UserCard } from "./UserCard";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
-import { aviationImg } from "@/utils/aviationImg";
 import RoundInfo from "../BttComponents/RoundInfo";
 import {
     BoardItem,
@@ -191,7 +189,7 @@ const BttPlayBackContent = ({
                     balance={myBalance}
                     bidAmount={myBid}
                     showAdvantageTip={myIsNextDrawWinner}
-                    planeUrl={aviationImg(myInfo.level)}
+                    planeUrl={myInfo.img}
                     gameState={
                         gameOver
                             ? myGameInfo.gameState
@@ -212,7 +210,7 @@ const BttPlayBackContent = ({
                     balance={opBalance}
                     bidAmount={opBid}
                     showAdvantageTip={!myIsNextDrawWinner}
-                    planeUrl={aviationImg(opInfo.level)}
+                    planeUrl={opInfo.img}
                     gameState={
                         gameOver
                             ? opGameInfo.gameState
@@ -255,13 +253,12 @@ const BttPlayBackContent = ({
                         ></MBalance>
                     </Box>
 
-                    <Flex flexDir={"column"} align={"flex"}>
+                    <Flex flexDir={"column"} align={"flex-end"}>
                         <MUserProfileResult
                             position="right"
                             address={opInfo.address}
                             img={opInfo.img}
                             mark={opInfo.mark}
-                            showAdvantageTip={!myIsNextDrawWinner}
                             level={opInfo.level}
                         ></MUserProfileResult>
 

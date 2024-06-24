@@ -17,7 +17,6 @@ import { shortenAddress } from "@/utils";
 import useSkyToast from "@/hooks/useSkyToast";
 import { motion } from "framer-motion";
 import UserLeftArrow from "./assets/user-left-arrow.svg";
-import UserIcon from "./assets/user.svg";
 import useBidIcon from "@/hooks/useBidIcon";
 
 const UserProfile = ({
@@ -325,8 +324,8 @@ export const MUserProfileResult = ({
     position?: "left" | "right";
 }) => {
     return (
-        <Flex flexDir={"column"}>
-            <Flex align={"flex-end"}>
+        <>
+            <Flex>
                 {img && (
                     <Box
                         sx={{
@@ -351,16 +350,7 @@ export const MUserProfileResult = ({
                     </Box>
                 )}
             </Flex>
-
             <Flex align={"center"}>
-                {position === "left" && showUserIcon && (
-                    <Image
-                        src={UserIcon}
-                        sx={{
-                            marginRight: "4px",
-                        }}
-                    ></Image>
-                )}
                 {level && (
                     <Text
                         sx={{
@@ -384,7 +374,7 @@ export const MUserProfileResult = ({
                     </Text>
                 )}
             </Flex>
-        </Flex>
+        </>
     );
 };
 
