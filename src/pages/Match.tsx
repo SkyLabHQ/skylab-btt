@@ -1,23 +1,16 @@
 import { Box } from "@chakra-ui/react";
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
 import { useTacToeSigner } from "@/hooks/useSigner";
 import Match from "@/components/TacToe/Match";
-import LevelInfo from "@/components/TacToe/LevelInfo";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
 import { mercuryJarTournamentAddress } from "@/hooks/useContract";
-import {
-    BoardItem,
-    GameInfo,
-    GameState,
-    UserMarkType,
-    initBoard,
-} from "@/skyConstants/bttGameTypes";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Nest from "@/components/Nest";
 
@@ -28,31 +21,13 @@ export interface Info {
     point: number;
     img: string;
     mark: UserMarkType;
-    isBot?: boolean;
-}
-
-export interface MyNewInfo {
-    level: number;
-    point: number;
-    img?: string;
-}
-
-export enum GameType {
-    Unkown,
-    HumanWithHuman,
-    HumanWithBot,
 }
 
 const GameContext = createContext<{
     realChainId: number;
-    gameType: GameType;
-    list: BoardItem[];
     tokenId: number;
     myInfo: Info;
     opInfo: Info;
-    myGameInfo: GameInfo;
-    opGameInfo: GameInfo;
-    bidTacToeGameAddress: string;
     myActivePilot: PilotInfo;
     opActivePilot: PilotInfo;
     avaitionAddress: string;
@@ -64,10 +39,7 @@ const GameContext = createContext<{
         winPoint: number;
         losePoint: number;
     };
-    onStep: (step?: number) => void;
-    onList: (list: BoardItem[]) => void;
     handleGetGas: () => void;
-    setBidTacToeGameAddress: (address: string) => void;
 }>(null);
 export const useGameContext = () => useContext(GameContext);
 
@@ -75,7 +47,6 @@ const MatchPage = () => {
     const chainId = useChainId();
     const { address: account } = usePrivyAccounts();
 
-    const [gameType, setGameType] = useState<GameType>(GameType.Unkown);
     const [mileages, setMileages] = useState<{
         winMileage: number;
         loseMileage: number;
@@ -94,12 +65,9 @@ const MatchPage = () => {
 
     const { search } = useLocation();
     const params = qs.parse(search) as any;
-    const istest = params.testflight === "true";
     const [tokenId] = useState<number>(params.tokenId);
     const realChainId = chainId;
     const avaitionAddress = mercuryJarTournamentAddress[realChainId];
-    const [myConfirmTimeout, setMyConfirmTimeout] = useState(-1);
-    const [opConfirmTimeout, setOpConfirmTimeout] = useState(-1);
     const [myInfo, setMyInfo] = useState<Info>({
         burner: "",
         address: "",
@@ -121,39 +89,6 @@ const MatchPage = () => {
     const { activePilot: myActivePilot } = usePilotInfo(account);
 
     const { activePilot: opActivePilot } = usePilotInfo(opInfo.address);
-
-    const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
-        balance: 0,
-        gameState: GameState.Unknown,
-        timeout: 0,
-        message: 0,
-        emote: 0,
-    });
-    const [opGameInfo, setOpGameInfo] = useState<GameInfo>({
-        balance: 0,
-        gameState: GameState.Unknown,
-        timeout: 0,
-        message: 0,
-        emote: 0,
-    });
-
-    const [bidTacToeGameAddress, setBidTacToeGameAddress] =
-        useState<string>(null);
-    const [step, setStep] = useState(0);
-
-    const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
-
-    const handleStep = (step?: number) => {
-        if (step === undefined) {
-            setStep((step) => step + 1);
-            return;
-        }
-        setStep(step);
-    };
-
-    const handleChangeList = (list: any) => {
-        setList(list);
-    };
 
     const handleGetGas = async () => {
         console.log("start transfer gas");
@@ -199,23 +134,15 @@ const MatchPage = () => {
                 <GameContext.Provider
                     value={{
                         realChainId,
-                        gameType,
                         myActivePilot,
                         opActivePilot,
                         myInfo,
                         opInfo,
                         tokenId,
-                        myGameInfo,
-                        opGameInfo,
-                        list,
-                        bidTacToeGameAddress,
                         mileages,
                         points,
                         avaitionAddress,
-                        onStep: handleStep,
-                        onList: handleChangeList,
                         handleGetGas: handleGetGas,
-                        setBidTacToeGameAddress,
                     }}
                 >
                     <Box
@@ -223,68 +150,30 @@ const MatchPage = () => {
                             height: "100%",
                         }}
                     >
-                        {step === 0 && (
-                            <Match
-                                onSetConfirmTimeout={(
-                                    myConfirmTimeout: number,
-                                    opConfirmTimeout: number,
-                                ) => {
-                                    setMyConfirmTimeout(myConfirmTimeout);
-                                    setOpConfirmTimeout(opConfirmTimeout);
-                                }}
-                                onGameType={(type: GameType) => {
-                                    setGameType(type);
-                                }}
-                                onChangeInfo={(position, info) => {
-                                    if (position === "my") {
-                                        setMyInfo(info);
-                                        return;
-                                    }
-                                    if (position === "op") {
-                                        setOpInfo(info);
-                                        return;
-                                    }
-                                }}
-                                onChangeMileage={(winMileage, loseMileage) => {
-                                    setMileages({
-                                        winMileage,
-                                        loseMileage,
-                                    });
-                                }}
-                                onChangePoint={(winPoint, losePoint) => {
-                                    setPoints({
-                                        winPoint,
-                                        losePoint,
-                                    });
-                                }}
-                            ></Match>
-                        )}
-                        {step === 1 && (
-                            <LevelInfo
-                                myConfirmTimeout={myConfirmTimeout}
-                                opConfirmTimeout={opConfirmTimeout}
-                                onSetConfirmTimeout={(
-                                    myConfirmTimeout: number,
-                                    opConfirmTimeout: number,
-                                ) => {
-                                    setMyConfirmTimeout(myConfirmTimeout);
-                                    setOpConfirmTimeout(opConfirmTimeout);
-                                }}
-                                onGameType={(type: GameType) => {
-                                    setGameType(type);
-                                }}
-                                onChangeInfo={(position, info) => {
-                                    if (position === "my") {
-                                        setMyInfo(info);
-                                        return;
-                                    }
-                                    if (position === "op") {
-                                        setOpInfo(info);
-                                        return;
-                                    }
-                                }}
-                            ></LevelInfo>
-                        )}
+                        <Match
+                            onChangeInfo={(position, info) => {
+                                if (position === "my") {
+                                    setMyInfo(info);
+                                    return;
+                                }
+                                if (position === "op") {
+                                    setOpInfo(info);
+                                    return;
+                                }
+                            }}
+                            onChangeMileage={(winMileage, loseMileage) => {
+                                setMileages({
+                                    winMileage,
+                                    loseMileage,
+                                });
+                            }}
+                            onChangePoint={(winPoint, losePoint) => {
+                                setPoints({
+                                    winPoint,
+                                    losePoint,
+                                });
+                            }}
+                        ></Match>
                     </Box>
                 </GameContext.Provider>
             </Box>

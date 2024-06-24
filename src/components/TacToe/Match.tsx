@@ -6,7 +6,7 @@ import {
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
-import { Info, useGameContext, GameType } from "@/pages/Match";
+import { Info, useGameContext } from "@/pages/Match";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
 import { getMetadataImg } from "@/utils/ipfsImg";
@@ -30,7 +30,7 @@ import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
 import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
-import { RobotImg, UserMarkType } from "@/skyConstants/bttGameTypes";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
 import DotLoading from "../Loading/DotLoading";
@@ -58,12 +58,7 @@ export const PlaneImg = ({
                     <Image
                         src={detail?.img}
                         sx={{
-                            width: isPc
-                                ? detail?.isBot
-                                    ? "9vw"
-                                    : "14.5833vw"
-                                : "136px",
-                            // height: isPc ? "14.5833vw" : "136px",
+                            width: isPc ? "14.5833vw" : "136px",
                             transform: flip ? "scaleX(-1)" : "",
                             /*兼容IE*/
                             filter: "FlipH",
@@ -207,21 +202,15 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
 };
 
 export const MatchPage = ({
-    onGameType,
     onChangeInfo,
     onChangeMileage,
     onChangePoint,
-    onSetConfirmTimeout,
 }: {
-    onGameType: (type: GameType) => void;
     onChangeMileage: (winMileage: number, loseMileage: number) => void;
     onChangePoint: (winPoint: number, losePoint: number) => void;
     onChangeInfo: (position: "my" | "op", info: Info) => void;
-    onSetConfirmTimeout: (
-        myConfirmTimeout: number,
-        opConfirmTimeout: number,
-    ) => void;
 }) => {
+    const [gameAddress, setGameAddress] = useState("");
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -232,14 +221,11 @@ export const MatchPage = ({
         realChainId,
         myInfo,
         opInfo,
-        bidTacToeGameAddress,
         myActivePilot,
         opActivePilot,
         tokenId,
         avaitionAddress,
         handleGetGas,
-        onStep,
-        setBidTacToeGameAddress,
     } = useGameContext();
 
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
@@ -248,64 +234,9 @@ export const MatchPage = ({
 
     const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(realChainId);
-
-    const handleGetHuamnAndBotInfo = async (
-        playerAddress1: string,
-        playerAddress2: string,
-    ) => {
-        const [tokenId1] = await multiProvider.all([
-            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                playerAddress1,
-            ),
-        ]);
-        const [
-            account1,
-            level1,
-            mtadata1,
-            point1,
-            player1Move,
-            [player1WinMileage, player1LoseMileage],
-        ] = await multiProvider.all([
-            multiMercuryBaseContract.ownerOf(tokenId1),
-            multiMercuryBaseContract.aviationLevels(tokenId1),
-            multiMercuryBaseContract.tokenURI(tokenId1),
-            multiMercuryBaseContract.aviationPoints(tokenId1),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId1),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
-        ]);
-
-        const player1Info = {
-            burner: playerAddress1,
-            address: account1,
-            point: point1.toNumber(),
-            level: level1.toNumber(),
-            img: getMetadataImg(mtadata1),
-        };
-        const botInfo = {
-            burner: playerAddress2,
-            address: playerAddress2,
-            point: point1.toNumber(),
-            level: level1.toNumber(),
-            img: RobotImg,
-            isBot: true,
-        };
-        onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
-        onChangeInfo("op", { ...botInfo, mark: UserMarkType.BotX });
-        onChangePoint(player1Move.toNumber(), player1Move.toNumber());
-        onChangeMileage(
-            player1WinMileage.toNumber(),
-            player1LoseMileage.toNumber(),
-        );
-        onGameType(GameType.HumanWithBot);
-
-        setTimeout(() => {
-            const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}&testflight=${true}`;
-            navigate(url);
-        }, 1500);
-    };
 
     const handleGetHuamnAndHumanInfo = async (
         playerAddress1: string,
@@ -379,9 +310,8 @@ export const MatchPage = ({
             onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         }
-        onGameType(GameType.HumanWithHuman);
         setTimeout(() => {
-            const url = `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}`;
+            const url = `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`;
             navigate(url);
         }, 1500);
     };
@@ -394,12 +324,7 @@ export const MatchPage = ({
 
         console.log("playerAddress1", playerAddress1);
         console.log("playerAddress2", playerAddress2);
-
-        if (playerAddress2 === botAddress[realChainId]) {
-            handleGetHuamnAndBotInfo(playerAddress1, playerAddress2);
-        } else {
-            handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
-        }
+        handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
     };
 
     // get my and op info
@@ -474,87 +399,10 @@ export const MatchPage = ({
                         img: "",
                         mark: null,
                     });
-                } else {
-                    const [opTokenId] = await multiProvider.all([
-                        multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                            opPlayer,
-                        ),
-                    ]);
-
-                    const [
-                        account,
-                        level,
-                        mtadata,
-                        point,
-                        opAccount,
-                        opLevel,
-                        opMtadata,
-                        opPoint,
-                        myWinMove,
-                        myLoseMove,
-                        [myWinMileage, myLoseMileage],
-                        myConfirmTimeout,
-                        opConfirmTimeout,
-                    ] = await multiProvider.all([
-                        multiMercuryBaseContract.ownerOf(tokenId),
-                        multiMercuryBaseContract.aviationLevels(tokenId),
-                        multiMercuryBaseContract.tokenURI(tokenId),
-                        multiMercuryBaseContract.aviationPoints(tokenId),
-                        multiMercuryBaseContract.ownerOf(opTokenId),
-                        multiMercuryBaseContract.aviationLevels(opTokenId),
-                        multiMercuryBaseContract.tokenURI(opTokenId),
-                        multiMercuryBaseContract.aviationPoints(opTokenId),
-                        multiMercuryBaseContract.estimatePointsToMove(
-                            tokenId,
-                            opTokenId,
-                        ),
-                        multiMercuryBaseContract.estimatePointsToMove(
-                            opTokenId,
-                            tokenId,
-                        ),
-                        multiMercuryBaseContract.estimateMileageToGain(
-                            tokenId,
-                            opTokenId,
-                        ),
-                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
-                            operateAddress,
-                        ),
-                        multiSkylabBidTacToeFactoryContract.playerToTimeout(
-                            opPlayer,
-                        ),
-                    ]);
-
-                    onChangeInfo("my", {
-                        burner: operateAddress,
-                        address: account,
-                        level: level.toNumber(),
-                        point: point.toNumber(),
-                        img: getMetadataImg(mtadata),
-                        mark: null,
-                    });
-                    onChangeInfo("op", {
-                        burner: opPlayer,
-                        address: opAccount,
-                        level: opLevel.toNumber(),
-                        point: opPoint.toNumber(),
-                        img: getMetadataImg(opMtadata),
-                        mark: null,
-                    });
-                    onSetConfirmTimeout(
-                        myConfirmTimeout.toNumber() * 1000,
-                        opConfirmTimeout.toNumber() * 1000,
-                    );
-                    onChangePoint(myWinMove.toNumber(), myLoseMove.toNumber());
-                    onChangeMileage(
-                        myWinMileage.toNumber(),
-                        myLoseMileage.toNumber(),
-                    );
-                    onStep(1);
                 }
             } else {
                 setShowPlayWithBot(false);
-
-                setBidTacToeGameAddress(bidTacToeGameAddress);
+                setGameAddress(bidTacToeGameAddress);
             }
         } catch (e: any) {
             console.log(e);

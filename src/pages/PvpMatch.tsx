@@ -6,7 +6,7 @@ import {
     useMediaQuery,
     useDisclosure,
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import BttHelmet from "@/components/Helmet/BttHelmet";
@@ -14,7 +14,6 @@ import UserIcon from "@/assets/user1.svg";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import Nest from "@/components/Nest";
 import { MINI_APP_URL } from "@/skyConstants/tgConfig";
-import { shortenAddress } from "@/utils";
 import QuitModal from "@/components/BttComponents/QuitModal";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
@@ -27,6 +26,7 @@ import {
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import { ZERO_DATA } from "@/skyConstants";
+import ArrowIcon from "@/assets/arrow.svg";
 
 const MatchPage = () => {
     const { search } = useLocation();
@@ -194,31 +194,28 @@ const MatchPage = () => {
                         }}
                     ></ToolBar>
 
-                    <Box
+                    <Flex
+                        align={"center"}
+                        flexDir={"column"}
                         sx={{
                             width: isPc ? "600px" : "350px",
                         }}
                     >
-                        <Flex
-                            align={"center"}
-                            justify={"space-around"}
-                            w={"100%"}
+                        <Text
                             sx={{
-                                height: isPc ? "250px" : "120px",
-                                marginTop: "40px",
+                                fontSize: "12px",
+                                textAlign: "center",
+                                fontFamily: "PingFang SC",
                             }}
                         >
-                            {shortenAddress(myInfo?.address)}
-                            <Text
-                                sx={{
-                                    fontSize: isPc ? "48px" : "20px",
-                                }}
-                            >
-                                VS
-                            </Text>
-                            {shortenAddress(opInfo?.address)}
-                        </Flex>
-
+                            Click to invite your frenid
+                        </Text>
+                        <Image
+                            src={ArrowIcon}
+                            sx={{
+                                marginTop: "10px",
+                            }}
+                        ></Image>
                         <a href={shareUrl} target="_blank">
                             <Flex
                                 justify={"center"}
@@ -270,7 +267,7 @@ const MatchPage = () => {
                                 </Flex>
                             </Flex>
                         </a>
-                    </Box>
+                    </Flex>
                     <QuitModal
                         onConfirm={handleQuit}
                         isOpen={isOpen}
