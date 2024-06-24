@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { Box, Flex, useMediaQuery, Image, Text } from "@chakra-ui/react";
 import LineBg from "@/assets/line.png";
 import ButtonBg from "@/assets/bt-bg.png";
@@ -9,7 +9,6 @@ import {
     useMultiTestSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { ZERO_DATA } from "@/skyConstants";
 import { ethers, utils as ethersUtils } from "ethers";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -19,6 +18,7 @@ import { useInitData } from "@tma.js/sdk-react";
 import { bindBurner } from "@/api";
 import BttIcon from "@/assets/btt-icon.png";
 import SoloIcon from "./assets/solo-icon.svg";
+import { bttFactoryIface } from "@/skyConstants/iface";
 
 const PlayButtonGroup = ({
     onPlayTournament,
@@ -141,17 +141,19 @@ const PvpHomePage = () => {
                 [password],
             );
             const hashedPassword = ethersUtils.keccak256(encodedPassword);
-            await bttFactoryRetryPaymaster("createPvPRoom", [
+            const receipt = await bttFactoryRetryPaymaster("createPvPRoom", [
                 [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
                 hashedPassword,
             ]);
+
+            const startPvpGameTopic0 =
+                bttFactoryIface.getEventTopic("StartBotGame");
 
             const [gameAddress] = await multiProvider.all([
                 multiTestSkylabBidTacToeFactoryContract.gamePerPlayer(
                     pvpAddress,
                 ),
             ]);
-            console.log(gameAddress, "gameAddress");
 
             await bindBurner({
                 user: initData.user,
@@ -179,21 +181,6 @@ const PvpHomePage = () => {
             closeLoading();
         }
     };
-
-    // const handleGetGamePerPlayer = async () => {
-
-    // };
-
-    // useEffect(() => {
-    //     if (
-    //         !pvpAddress ||
-    //         !multiProvider ||
-    //         !multiTestSkylabBidTacToeFactoryContract
-    //     ) {
-    //         return;
-    //     }
-    //     handleGetGamePerPlayer();
-    // }, [multiProvider, multiTestSkylabBidTacToeFactoryContract, pvpAddress]);
 
     return (
         <Flex

@@ -24,8 +24,8 @@ const AppRoutes = (): ReactElement => {
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<TacToeMode />}></Route>
-                <Route path="/startBot" element={<StartBot />} />
-                <Route path="/startTournament" element={<StartTournament />} />
+                <Route path="/bot" element={<StartBot />} />
+                <Route path="/tournament" element={<StartTournament />} />
                 <Route path="/home" element={<Activities />} />
                 <Route path="/btt/match" element={<Match />}></Route>
                 <Route path="/btt/accept" element={<Accept />}></Route>
