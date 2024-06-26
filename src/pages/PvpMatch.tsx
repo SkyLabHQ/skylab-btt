@@ -203,7 +203,7 @@ const MatchPage = () => {
                     >
                         <Text
                             sx={{
-                                fontSize: "12px",
+                                fontSize: isPc ? "16px" : "12px",
                                 textAlign: "center",
                                 fontFamily: "PingFang SC",
                             }}
@@ -216,57 +216,68 @@ const MatchPage = () => {
                                 marginTop: "10px",
                             }}
                         ></Image>
-                        <a href={shareUrl} target="_blank">
-                            <Flex
-                                justify={"center"}
-                                flexDir={"column"}
-                                align={"center"}
-                            >
+                        <Box
+                            sx={{
+                                marginTop: isPc ? "74px" : "20px",
+                            }}
+                        >
+                            <a href={shareUrl} target="_blank">
                                 <Flex
-                                    align={"center"}
                                     justify={"center"}
-                                    sx={{
-                                        width: isPc ? "420px" : "180px",
-                                        height: isPc ? "55px" : "40px",
-                                        borderRadius: isPc ? "18px" : "12px",
-                                        border: "2px solid #FFF",
-                                        background: "#303030",
-                                        fontSize: isPc ? "24px" : "14px",
-                                        marginTop: isPc ? "74px" : "20px",
-                                        cursor: "pointer",
-                                    }}
+                                    flexDir={"column"}
+                                    align={"center"}
                                 >
-                                    <Image
+                                    <Flex
+                                        align={"center"}
+                                        justify={"center"}
                                         sx={{
-                                            width: isPc ? "32px" : "16px",
-                                            height: isPc ? "32px" : "16px",
-                                            marginRight: isPc ? "12px" : "6px",
+                                            width: isPc ? "420px" : "180px",
+                                            height: isPc ? "55px" : "40px",
+                                            borderRadius: isPc
+                                                ? "16px"
+                                                : "12px",
+                                            border: "2px solid #FFF",
+                                            background: "#303030",
+                                            fontSize: isPc ? "24px" : "14px",
+                                            cursor: "pointer",
                                         }}
-                                        src={UserIcon}
-                                    ></Image>
-                                    <Text>Invite Friend</Text>
+                                    >
+                                        <Image
+                                            sx={{
+                                                width: isPc ? "32px" : "16px",
+                                                height: isPc ? "32px" : "16px",
+                                                marginRight: isPc
+                                                    ? "12px"
+                                                    : "6px",
+                                            }}
+                                            src={UserIcon}
+                                        ></Image>
+                                        <Text>Invite Friend</Text>
+                                    </Flex>
+                                    <Flex
+                                        align={"center"}
+                                        justify={"center"}
+                                        onClick={() => {
+                                            onOpen();
+                                        }}
+                                        sx={{
+                                            width: isPc ? "420px" : "180px",
+                                            height: isPc ? "55px" : "40px",
+                                            borderRadius: isPc
+                                                ? "18px"
+                                                : "12px",
+                                            border: "2px solid #FFF",
+                                            background: "#303030",
+                                            fontSize: isPc ? "24px" : "14px",
+                                            marginTop: isPc ? "60px" : "20px",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        <Text>Quit Match</Text>
+                                    </Flex>
                                 </Flex>
-                                <Flex
-                                    align={"center"}
-                                    justify={"center"}
-                                    onClick={() => {
-                                        onOpen();
-                                    }}
-                                    sx={{
-                                        width: isPc ? "420px" : "180px",
-                                        height: isPc ? "55px" : "40px",
-                                        borderRadius: isPc ? "18px" : "12px",
-                                        border: "2px solid #FFF",
-                                        background: "#303030",
-                                        fontSize: isPc ? "24px" : "14px",
-                                        marginTop: isPc ? "60px" : "20px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    <Text>Quit Match</Text>
-                                </Flex>
-                            </Flex>
-                        </a>
+                            </a>
+                        </Box>
                     </Flex>
                     <QuitModal
                         onConfirm={handleQuit}

@@ -345,9 +345,9 @@ const TacToe = () => {
             multiMercuryBaseContract.aviationLevels(tokenId2),
             multiMercuryBaseContract.tokenURI(tokenId2),
             multiMercuryBaseContract.aviationPoints(tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId, tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId2, tokenId),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId, tokenId2),
+            multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId2),
+            multiMercuryBaseContract.estimatePointsToMove(tokenId2, tokenId1),
+            multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId2),
             multiMercuryBaseContract.estimateMileageToGain(tokenId2, tokenId1),
         ]);
 
@@ -383,25 +383,30 @@ const TacToe = () => {
             onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         } else {
-            // navitate("/");
+            navitate("/");
             return;
         }
         onGameType(GameType.HumanWithHuman);
     };
 
     const handleGetAllPlayerInfo = async () => {
-        const [playerAddress1, playerAddress2] = await multiProvider.all([
-            multiSkylabBidTacToeGameContract.player1(),
-            multiSkylabBidTacToeGameContract.player2(),
-        ]);
+        try {
+            const [playerAddress1, playerAddress2] = await multiProvider.all([
+                multiSkylabBidTacToeGameContract.player1(),
+                multiSkylabBidTacToeGameContract.player2(),
+            ]);
 
-        console.log("playerAddress1", playerAddress1);
-        console.log("playerAddress2", playerAddress2);
+            console.log("playerAddress1", playerAddress1);
+            console.log("playerAddress2", playerAddress2);
 
-        if (playerAddress2 === botAddress[realChainId]) {
-            handleGetHuamnAndBotInfo(playerAddress1, playerAddress2);
-        } else {
-            handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
+            if (playerAddress2 === botAddress[realChainId]) {
+                handleGetHuamnAndBotInfo(playerAddress1, playerAddress2);
+            } else {
+                handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
+            }
+        } catch (e) {
+            console.log(e);
+            navitate("/");
         }
     };
 
