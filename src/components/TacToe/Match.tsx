@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
+    Flex,
     Image,
     Text,
     useDisclosure,
@@ -18,14 +19,8 @@ import {
 } from "@/hooks/useMultiContract";
 import { PilotInfo } from "@/hooks/usePilotInfo";
 import { botAddress } from "@/hooks/useContract";
-import { GrayButton } from "../Button/Index";
 import QuitModal from "@/components/BttComponents/QuitModal";
-import {
-    getDefaultWithProvider,
-    getTestflightSigner,
-    useTacToeSigner,
-} from "@/hooks/useSigner";
-import { getSCWallet } from "@/hooks/useSCWallet";
+import { getDefaultWithProvider, useTacToeSigner } from "@/hooks/useSigner";
 import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
@@ -37,8 +32,21 @@ import DotLoading from "../Loading/DotLoading";
 import PlayWithBot from "./assets/playbot.png";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { bttFactoryIface } from "@/skyConstants/iface";
+import ArrowIcon from "./assets/arrow-up.svg";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper";
+import { TG_URL } from "@/skyConstants/tgConfig";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
-export const PlaneImg = ({
+const randomText = [
+    ["*When the game starts, ", "you have 12 hours to make each move"],
+    [
+        "* Link wallet with Bid Tac Toe telegram bot to ",
+        "receive game status notification",
+    ],
+];
+
+const PlaneImg = ({
     detail,
     flip,
     pilotInfo,
@@ -59,7 +67,7 @@ export const PlaneImg = ({
                     <Image
                         src={detail?.img}
                         sx={{
-                            width: isPc ? "14.5833vw" : "136px",
+                            width: isPc ? "280px" : "136px",
                             transform: flip ? "scaleX(-1)" : "",
                             /*兼容IE*/
                             filter: "FlipH",
@@ -68,7 +76,7 @@ export const PlaneImg = ({
                     {pilotInfo.img && (
                         <Image
                             sx={{
-                                width: isPc ? "3.3333vw" : "34px",
+                                width: isPc ? "64px" : "34px",
                                 position: "absolute",
                                 left: "50%",
                                 top: "50%",
@@ -83,8 +91,8 @@ export const PlaneImg = ({
             ) : (
                 <Box
                     sx={{
-                        width: isPc ? "14.5833vw" : "136px",
-                        height: isPc ? "14.5833vw" : "136px",
+                        width: isPc ? "280px" : "136px",
+                        height: isPc ? "280px" : "136px",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -93,7 +101,7 @@ export const PlaneImg = ({
                     <motion.img
                         src={LoadingIcon}
                         style={{
-                            width: isPc ? "6.25vw" : "58px",
+                            width: isPc ? "120px" : "58px",
                             rotate: 0,
                         }}
                         transition={{
@@ -111,15 +119,7 @@ export const PlaneImg = ({
 
 const StopMatch = ({ onClick }: { onClick: () => void }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const [show, setShow] = useState(false);
-    useEffect(() => {
-        const stopMatchTip = localStorage.getItem("stopMatchTip");
-        if (stopMatchTip === "true") {
-            setShow(false);
-        } else {
-            setShow(true);
-        }
-    }, []);
+    const { address } = usePrivyAccounts();
 
     return (
         <Box
@@ -129,75 +129,64 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
                 flexDirection: "column",
             }}
         >
-            <GrayButton
+            <Flex
                 onClick={onClick}
+                align={"center"}
+                justify={"center"}
                 sx={{
-                    width: isPc ? "13.3333vw !important" : "210px !important",
-                    height: isPc ? "3.3333vw !important" : "50px !important",
-                    background: "transparent",
-                    marginTop: isPc ? "20vh" : "85px",
-                    borderRadius: isPc ? "0.8333vw" : "10px !important",
+                    border: "3px solid #bcbbbe",
+                    width: isPc ? "320px " : "180px !important",
+                    height: isPc ? "64px !important" : "50px !important",
+                    background: "#303030",
+                    marginTop: isPc ? "150px" : "20px",
+                    borderRadius: isPc ? "12px" : "10px !important",
+                    fontSize: isPc ? "24px" : "14px",
+                    cursor: "pointer",
                 }}
             >
+                Quit Matching
+            </Flex>
+            <Flex
+                onClick={() => {
+                    window.open(`${TG_URL}?start=${address}`, "_blank");
+                }}
+                align={"center"}
+                justify={"center"}
+                sx={{
+                    border: "3px solid #bcbbbe",
+                    width: isPc ? "320px" : "180px !important",
+                    height: isPc ? "64px !important" : "50px !important",
+                    background: "#303030",
+                    marginTop: isPc ? "32px" : "16px",
+                    borderRadius: isPc ? "12px" : "10px !important",
+                    fontSize: isPc ? "24px" : "14px",
+                    cursor: "pointer",
+                }}
+            >
+                Link Wallet with TG Bot
+            </Flex>
+            <Flex
+                flexDir={"column"}
+                align={"center"}
+                sx={{
+                    marginTop: isPc ? "16px" : "10px",
+                }}
+            >
+                <Image
+                    src={ArrowIcon}
+                    sx={{
+                        width: isPc ? "16px" : "12px",
+                    }}
+                ></Image>
                 <Text
                     sx={{
-                        fontSize: isPc ? "1.25vw" : "20px",
-                        textAlign: "center !important",
-                        flex: 1,
+                        fontSize: isPc ? "18px" : "12px",
+                        marginTop: "4px",
                     }}
                 >
-                    Quit Matching
+                    You can click to go to TG-Bot to bind your wallet
                 </Text>
-            </GrayButton>
-
-            {show && (
-                <>
-                    <Box
-                        sx={{
-                            width: 0,
-                            height: 0,
-                            borderLeft: `${
-                                isPc ? "0.4427vw " : "8px"
-                            } solid transparent`,
-                            borderRight: `${
-                                isPc ? "0.4427vw " : "8px"
-                            } solid transparent`,
-                            borderBottom: `${
-                                isPc ? "0.7668vw " : "12px"
-                            } solid #fff`,
-                            marginTop: isPc ? "0.5208vw" : "4px",
-                        }}
-                    ></Box>
-                    <Box
-                        sx={{
-                            width: isPc ? "35.8333vw" : "335px",
-                            border: "0.0521vw solid #616161",
-                            backdropFilter: "blur(1.3021vw)",
-                            padding: isPc ? "1.0417vw 3.125vw" : "12px",
-                            borderRadius: isPc ? "0.8333vw" : "8px",
-                            marginTop: isPc ? "1.0417vw" : "9px",
-                        }}
-                    >
-                        <Text
-                            sx={{
-                                fontSize: isPc ? "1.25vw" : "12px",
-                                textAlign: "center",
-                            }}
-                        >
-                            Make sure to{" "}
-                            <span
-                                style={{
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                STOP MATCHING
-                            </span>{" "}
-                            before closing the browser to avoid accidentally
-                            losing your aviation
-                        </Text>
-                    </Box>
-                </>
-            )}
+            </Flex>
         </Box>
     );
 };
@@ -502,7 +491,7 @@ export const MatchPage = ({
             flexDirection="column"
             alignItems="center"
             sx={{
-                padding: "1.4063vw 3.125vw",
+                padding: "24px 24px",
             }}
             justifyContent={isPc ? "flex-start" : "center"}
         >
@@ -521,10 +510,58 @@ export const MatchPage = ({
                 ></ToolBar>
             </Box>
 
-            <DotLoading
-                text={"Matching"}
-                fontSize={isPc ? "16px" : "12px"}
-            ></DotLoading>
+            <Box
+                sx={{
+                    fontWeight: 700,
+                }}
+            >
+                <DotLoading
+                    text={"Matching"}
+                    fontSize={isPc ? "28px" : "20px"}
+                ></DotLoading>
+            </Box>
+            <Swiper
+                style={{
+                    width: "100%",
+                    position: "relative",
+                    marginTop: "16px",
+                }}
+                modules={[Autoplay]}
+                autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false,
+                }}
+            >
+                {randomText.map((item, index) => {
+                    return (
+                        <SwiperSlide
+                            key={index}
+                            style={{
+                                background: "transparent",
+                                textAlign: "center",
+                                color: "#FDDC2D",
+                            }}
+                        >
+                            <Box>
+                                {item.map((item1, index1) => {
+                                    return (
+                                        <Text
+                                            sx={{
+                                                fontSize: isPc
+                                                    ? "16px"
+                                                    : "12px",
+                                            }}
+                                            key={index1}
+                                        >
+                                            {item1}
+                                        </Text>
+                                    );
+                                })}
+                            </Box>
+                        </SwiperSlide>
+                    );
+                })}
+            </Swiper>
             <Box
                 sx={{
                     display: "flex",
@@ -535,8 +572,8 @@ export const MatchPage = ({
                 <PlaneImg detail={myInfo} pilotInfo={myActivePilot}></PlaneImg>
                 <Text
                     sx={{
-                        fontSize: isPc ? "2.5vw" : "36px",
-                        margin: "0 1.5625vw",
+                        fontSize: isPc ? "32px" : "20px",
+                        margin: "0 30px",
                     }}
                 >
                     VS

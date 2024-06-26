@@ -24,18 +24,13 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
 
     return (
         <Flex
-            sx={{
-                height: "140px",
-                position: "absolute",
-                left: "50%",
-                bottom: 0,
-                width: "calc(100% - 100px)",
-                borderTop: "1px dashed #fff",
-                transform: "translateX(-50%)",
-            }}
             align={"center"}
             flexDir={"column"}
             justify={"center"}
+            sx={{
+                height: "100%",
+                borderTop: "1px dashed #fff",
+            }}
         >
             <Flex
                 onClick={handleMintPlane}
@@ -159,6 +154,8 @@ const MyPlane = ({
 }) => {
     const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
+    const { address } = usePrivyAccounts();
+    // const address = "";
     const {
         planeList,
         handleGetUserPaper,
@@ -197,17 +194,23 @@ const MyPlane = ({
             }}
         >
             <Flex flexDir={"column"}>
-                <Text
+                <Box
                     sx={{
-                        fontSize: isPc ? "30px" : "20px",
-                        textAlign: "center",
-                        marginTop: "20px",
-                        fontFamily: "Orbitron",
-                        fontWeight: "bold",
+                        height: "45px",
                     }}
                 >
-                    Select Planes
-                </Text>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "30px" : "20px",
+                            textAlign: "center",
+                            marginTop: "20px",
+                            fontFamily: "Orbitron",
+                            fontWeight: "bold",
+                        }}
+                    >
+                        {address && "Select Planes"}
+                    </Text>
+                </Box>
 
                 <Box
                     sx={{
@@ -230,187 +233,238 @@ const MyPlane = ({
                         },
                     }}
                 >
-                    {planetLoading && (
-                        <SimpleGrid
-                            columns={isPc ? 4 : 3}
-                            sx={{
-                                position: "relative",
-                            }}
-                            spacingY={"30px"}
-                        >
-                            {new Array(isPc ? 4 : 3)
-                                .fill("")
-                                .map((item, index) => {
-                                    return (
-                                        <Box
-                                            sx={{
-                                                position: "relative",
-                                            }}
-                                            key={index}
-                                        >
-                                            <Image src={BiddingGif}></Image>
-                                        </Box>
-                                    );
-                                })}
-                        </SimpleGrid>
-                    )}
-                    {!planetLoading && planeList.length > 0 && (
-                        <SimpleGrid columns={isPc ? 4 : 3} spacingY={"20px"}>
-                            {planeList.map((detail: any, index: number) => {
-                                const isSelected =
-                                    selectPlane?.tokenId === detail.tokenId;
-                                return (
-                                    <Flex
-                                        key={index}
-                                        flexDir={"column"}
-                                        align={"center"}
-                                        onClick={() => {
-                                            onSelectPlane(detail);
-                                        }}
-                                        sx={{
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        <Text
-                                            sx={{
-                                                fontSize: isPc
-                                                    ? "16px"
-                                                    : "14px",
-                                            }}
-                                        >
-                                            #{detail.tokenId}
-                                        </Text>
-                                        <Box
-                                            sx={{
-                                                width: isPc ? "100px" : "60px",
-                                                height: isPc ? "100px" : "60px",
-                                                background: `url(${
-                                                    isSelected
-                                                        ? PlaneBgSelect
-                                                        : PlaneBg
-                                                }) no-repeat`,
-                                                backgroundSize: "100% 100%",
-                                                position: "relative",
-                                                marginTop: isPc ? "6px" : "3px",
-                                            }}
-                                        >
-                                            {detail.state && (
+                    {address ? (
+                        <>
+                            {planetLoading && (
+                                <SimpleGrid
+                                    columns={isPc ? 4 : 3}
+                                    sx={{
+                                        position: "relative",
+                                    }}
+                                    spacingY={"30px"}
+                                >
+                                    {new Array(isPc ? 4 : 3)
+                                        .fill("")
+                                        .map((item, index) => {
+                                            return (
                                                 <Box
                                                     sx={{
-                                                        width: isPc
-                                                            ? "80px"
-                                                            : "60px",
-                                                        height: isPc
-                                                            ? "20px"
-                                                            : "16px",
-                                                        borderRadius: isPc
-                                                            ? "100px"
-                                                            : "6px",
-                                                        border: "1px solid #000",
-                                                        color: "#F2D861",
-                                                        textAlign: "center",
-                                                        fontFamily: "Quantico",
-                                                        fontSize: isPc
-                                                            ? "14px"
-                                                            : "10px",
-                                                        background: "#000",
-                                                        position: "absolute",
-                                                        top: "0px",
-                                                        left: "50%",
-                                                        transform:
-                                                            "translate(-50%, 0)",
+                                                        position: "relative",
+                                                    }}
+                                                    key={index}
+                                                >
+                                                    <Image
+                                                        src={BiddingGif}
+                                                    ></Image>
+                                                </Box>
+                                            );
+                                        })}
+                                </SimpleGrid>
+                            )}
+                            {!planetLoading && planeList.length > 0 && (
+                                <SimpleGrid
+                                    columns={isPc ? 4 : 3}
+                                    spacingY={"20px"}
+                                >
+                                    {planeList.map(
+                                        (detail: any, index: number) => {
+                                            const isSelected =
+                                                selectPlane?.tokenId ===
+                                                detail.tokenId;
+                                            return (
+                                                <Flex
+                                                    key={index}
+                                                    flexDir={"column"}
+                                                    align={"center"}
+                                                    onClick={() => {
+                                                        onSelectPlane(detail);
+                                                    }}
+                                                    sx={{
+                                                        cursor: "pointer",
                                                     }}
                                                 >
-                                                    In-Game
-                                                </Box>
-                                            )}
-                                            <Image
-                                                src={detail.img}
-                                                sx={{
-                                                    width: "180%",
-                                                    maxWidth: "180%",
-                                                    position: "absolute",
-                                                    left: "50%",
-                                                    top: "50%",
-                                                    transform:
-                                                        "translate(-50%,-50%)",
-                                                }}
-                                            ></Image>
-                                        </Box>
-                                        <Text
-                                            sx={{
-                                                fontWeight: "bold",
-                                                fontSize: "12px",
-                                            }}
-                                        >
-                                            Lvl.{" "}
-                                            <span
-                                                style={{
-                                                    fontSize: "16px",
-                                                }}
-                                            >
-                                                {detail.level}
-                                            </span>
-                                        </Text>
-                                        <Box
-                                            sx={{
-                                                width: isPc ? "130px" : "90px",
-                                                height: isPc ? "13px" : "10px",
-                                                padding: "2px",
-                                                border: "1px solid #FFF",
-                                                borderRadius: "12px",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    width:
-                                                        ((detail.points -
-                                                            detail.prePoints) /
-                                                            (detail.nextPoints -
-                                                                detail.prePoints)) *
-                                                            100 +
-                                                        "%",
-                                                    height: "100%",
-                                                    background: "#fff",
-                                                    borderRadius: "12px",
-                                                }}
-                                            ></Box>
-                                        </Box>
-                                        <Text
-                                            sx={{
-                                                fontSize: isPc
-                                                    ? "16px"
-                                                    : "12px",
-                                            }}
-                                        >
-                                            Next Lvl:
-                                        </Text>
-                                        <Text
-                                            sx={{
-                                                fontSize: isPc
-                                                    ? "16px"
-                                                    : "12px",
-                                            }}
-                                        >
-                                            {detail.points}/
-                                            <span
-                                                style={{
-                                                    color: "#CCC",
-                                                }}
-                                            >
-                                                {detail.nextPoints}
-                                                pt
-                                            </span>
-                                        </Text>
-                                    </Flex>
-                                );
-                            })}
-                        </SimpleGrid>
+                                                    <Text
+                                                        sx={{
+                                                            fontSize: isPc
+                                                                ? "16px"
+                                                                : "14px",
+                                                        }}
+                                                    >
+                                                        #{detail.tokenId}
+                                                    </Text>
+                                                    <Box
+                                                        sx={{
+                                                            width: isPc
+                                                                ? "100px"
+                                                                : "60px",
+                                                            height: isPc
+                                                                ? "100px"
+                                                                : "60px",
+                                                            background: `url(${
+                                                                isSelected
+                                                                    ? PlaneBgSelect
+                                                                    : PlaneBg
+                                                            }) no-repeat`,
+                                                            backgroundSize:
+                                                                "100% 100%",
+                                                            position:
+                                                                "relative",
+                                                            marginTop: isPc
+                                                                ? "6px"
+                                                                : "3px",
+                                                        }}
+                                                    >
+                                                        {detail.state && (
+                                                            <Box
+                                                                sx={{
+                                                                    width: isPc
+                                                                        ? "80px"
+                                                                        : "60px",
+                                                                    height: isPc
+                                                                        ? "20px"
+                                                                        : "16px",
+                                                                    borderRadius:
+                                                                        isPc
+                                                                            ? "100px"
+                                                                            : "6px",
+                                                                    border: "1px solid #000",
+                                                                    color: "#F2D861",
+                                                                    textAlign:
+                                                                        "center",
+                                                                    fontFamily:
+                                                                        "Quantico",
+                                                                    fontSize:
+                                                                        isPc
+                                                                            ? "14px"
+                                                                            : "10px",
+                                                                    background:
+                                                                        "#000",
+                                                                    position:
+                                                                        "absolute",
+                                                                    top: "0px",
+                                                                    left: "50%",
+                                                                    transform:
+                                                                        "translate(-50%, 0)",
+                                                                }}
+                                                            >
+                                                                In-Game
+                                                            </Box>
+                                                        )}
+                                                        <Image
+                                                            src={detail.img}
+                                                            sx={{
+                                                                width: "180%",
+                                                                maxWidth:
+                                                                    "180%",
+                                                                position:
+                                                                    "absolute",
+                                                                left: "50%",
+                                                                top: "50%",
+                                                                transform:
+                                                                    "translate(-50%,-50%)",
+                                                            }}
+                                                        ></Image>
+                                                    </Box>
+                                                    <Text
+                                                        sx={{
+                                                            fontWeight: "bold",
+                                                            fontSize: "12px",
+                                                        }}
+                                                    >
+                                                        Lvl.{" "}
+                                                        <span
+                                                            style={{
+                                                                fontSize:
+                                                                    "16px",
+                                                            }}
+                                                        >
+                                                            {detail.level}
+                                                        </span>
+                                                    </Text>
+                                                    <Box
+                                                        sx={{
+                                                            width: isPc
+                                                                ? "130px"
+                                                                : "90px",
+                                                            height: isPc
+                                                                ? "13px"
+                                                                : "10px",
+                                                            padding: "2px",
+                                                            border: "1px solid #FFF",
+                                                            borderRadius:
+                                                                "12px",
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            sx={{
+                                                                width:
+                                                                    ((detail.points -
+                                                                        detail.prePoints) /
+                                                                        (detail.nextPoints -
+                                                                            detail.prePoints)) *
+                                                                        100 +
+                                                                    "%",
+                                                                height: "100%",
+                                                                background:
+                                                                    "#fff",
+                                                                borderRadius:
+                                                                    "12px",
+                                                            }}
+                                                        ></Box>
+                                                    </Box>
+                                                    <Text
+                                                        sx={{
+                                                            fontSize: isPc
+                                                                ? "16px"
+                                                                : "12px",
+                                                        }}
+                                                    >
+                                                        Next Lvl:
+                                                    </Text>
+                                                    <Text
+                                                        sx={{
+                                                            fontSize: isPc
+                                                                ? "16px"
+                                                                : "12px",
+                                                        }}
+                                                    >
+                                                        {detail.points}/
+                                                        <span
+                                                            style={{
+                                                                color: "#CCC",
+                                                            }}
+                                                        >
+                                                            {detail.nextPoints}
+                                                            pt
+                                                        </span>
+                                                    </Text>
+                                                </Flex>
+                                            );
+                                        },
+                                    )}
+                                </SimpleGrid>
+                            )}
+                        </>
+                    ) : (
+                        <ConnectWalletBt></ConnectWalletBt>
                     )}
                 </Box>
-                {!planetLoading && (
-                    <MintPlane handleMintPlane={handleMintPlane}></MintPlane>
-                )}
+                <Box
+                    sx={{
+                        height: "140px",
+                        position: "absolute",
+                        left: "50%",
+                        bottom: 0,
+                        width: "calc(100% - 100px)",
+                        transform: "translateX(-50%)",
+                    }}
+                >
+                    {!planetLoading && (
+                        <MintPlane
+                            handleMintPlane={handleMintPlane}
+                        ></MintPlane>
+                    )}
+                </Box>
             </Flex>
         </Box>
     );
@@ -426,23 +480,25 @@ const SelectPlane = ({
     const { address } = usePrivyAccounts();
     return (
         <Box>
-            <Flex justify={"center"} align={"center"}>
-                <Image
-                    src={TipIcon}
-                    sx={{
-                        marginRight: "4px",
-                    }}
-                ></Image>
-                <Text
-                    sx={{
-                        color: "#F2D861",
-                        fontSize: "20px",
-                        fontFamily: "Quantico",
-                    }}
-                >
-                    Please select plane first
-                </Text>
-            </Flex>
+            {address && (
+                <Flex justify={"center"} align={"center"}>
+                    <Image
+                        src={TipIcon}
+                        sx={{
+                            marginRight: "4px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            color: "#F2D861",
+                            fontSize: "20px",
+                            fontFamily: "Quantico",
+                        }}
+                    >
+                        Please select plane first
+                    </Text>
+                </Flex>
+            )}
             <Box
                 sx={{
                     borderRadius: "18px 18px 0 0",
@@ -451,14 +507,11 @@ const SelectPlane = ({
                     marginTop: "10px",
                 }}
             >
-                {address ? (
-                    <MyPlane
-                        selectPlane={selectPlane}
-                        onSelectPlane={onSelectPlane}
-                    ></MyPlane>
-                ) : (
-                    <ConnectWalletBt></ConnectWalletBt>
-                )}
+                {" "}
+                <MyPlane
+                    selectPlane={selectPlane}
+                    onSelectPlane={onSelectPlane}
+                ></MyPlane>
             </Box>
         </Box>
     );
