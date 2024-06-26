@@ -206,7 +206,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         try {
             if (loading) return;
             if (myGameInfo.gameState !== GameState.WaitingForBid) return;
-
             setLoading(true);
             const localSalt = getGridCommited();
             const salt = localSalt?.salt
@@ -216,10 +215,9 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             if (!localSalt?.salt) {
                 addGridCommited(bidAmount, salt, false);
             }
-
             const hash = ethers.utils.solidityKeccak256(
                 ["uint256", "uint256"],
-                [bidAmount, salt],
+                [String(bidAmount), String(salt)],
             );
             console.log(
                 `currentGird: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
@@ -278,11 +276,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     const handleGameOver = async () => {
         if (myGameInfo.gameState <= GameState.Revealed) return;
         deleteTokenIdCommited();
-        onStep(1);
-        const gameResult = getWinState(myGameInfo.gameState);
-
-        if (gameType === GameType.HumanWithBot) {
-        } else {
+        if (!istest) {
+            const gameResult = getWinState(myGameInfo.gameState);
             handleGetGas();
             try {
                 const [level, point] = await ethcallProvider.all([
@@ -320,6 +315,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 });
             }
         }
+        onStep(1);
     };
 
     const handleSetMessage = async (

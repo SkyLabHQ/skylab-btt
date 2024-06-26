@@ -7,10 +7,16 @@ import PlaneBg from "./assets/plane-bg.png";
 import WhiteArrowRight from "./assets/white-arrow-right.svg";
 import WhiteArrowLeft from "./assets/white-arrow-left.svg";
 import RoundTime from "@/skyConstants/roundTime";
-import { PlaneInfo } from "@/pages/TacToeMode";
 import NoPlaneBg from "./assets/no-plane.svg";
 import { motion } from "framer-motion";
-import { useChainId } from "wagmi";
+
+interface PlaneInfo {
+    tokenId: number;
+    level: number;
+    img: string;
+    round: number;
+    state: boolean;
+}
 
 export const NoPlaneContent = () => {
     return (

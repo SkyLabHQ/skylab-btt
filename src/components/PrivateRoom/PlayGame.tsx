@@ -319,7 +319,7 @@ const PlayGame = ({
 
             const hash = ethers.utils.solidityKeccak256(
                 ["uint256", "uint256"],
-                [bidAmount, salt],
+                [String(bidAmount), String(salt)],
             );
             console.log(
                 `currentGird: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,

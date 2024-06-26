@@ -1,15 +1,9 @@
 import { Box } from "@chakra-ui/react";
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
+import { useTacToeSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import SettlementPage from "@/components/TacToe/SettlementPage";
@@ -240,11 +234,13 @@ const TacToe = () => {
             multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
         ]);
 
-        const testflightSinger = getTestflightSigner(TESTFLIGHT_CHAINID);
+        let burnerAddress = burnerWallet.account.address;
+        if (istest) {
+            const { sCWAddress } = await getSCWallet(burnerWallet.privateKey);
+            burnerAddress = sCWAddress;
+        }
 
-        const { sCWAddress } = await getSCWallet(testflightSinger.privateKey);
-
-        if (playerAddress1 !== sCWAddress) {
+        if (playerAddress1 !== burnerAddress) {
             navitate("/");
             return;
         }
@@ -387,7 +383,7 @@ const TacToe = () => {
             onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
             onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
         } else {
-            navitate("/");
+            // navitate("/");
             return;
         }
         onGameType(GameType.HumanWithHuman);
@@ -549,23 +545,14 @@ const TacToe = () => {
     };
 
     useEffect(() => {
-        console.log(
-            multiProvider,
-            multiSkylabBidTacToeGameContract,
-            multiSkylabBidTacToeFactoryContract,
-            "multiProvider",
-        );
         if (
             !multiProvider ||
             !multiSkylabBidTacToeGameContract ||
             !multiSkylabBidTacToeFactoryContract
         ) {
-            console.log("111进这里");
-
             return;
         }
 
-        console.log("进这里");
         handleGetAllPlayerInfo();
     }, [
         multiProvider,

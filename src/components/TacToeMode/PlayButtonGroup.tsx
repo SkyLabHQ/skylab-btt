@@ -1,9 +1,46 @@
-import { Box, Text, Image, useMediaQuery, Flex } from "@chakra-ui/react";
-import React from "react";
+import {
+    Box,
+    Text,
+    Image,
+    useMediaQuery,
+    Flex,
+    BoxProps,
+} from "@chakra-ui/react";
 import HumanPlane from "./assets/human-plane.png";
-
-import { GrayButton } from "@/pages/TacToeMode";
 import LineBg from "./assets/line.png";
+import styled from "@emotion/styled";
+
+export const GrayButtonStyle = styled(Box)`
+    text-align: center;
+    position: relative;
+    align-items: center;
+    display: flex;
+    border: 3px solid #bcbbbe;
+    border-radius: 0.9375vw;
+    height: 3.3333vw;
+    fontsize: 1.25vw;
+    textalign: left;
+    outline: none;
+    width: 20.8333vw;
+    box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
+    justify-content: flex-start;
+    padding: 0;
+    cursor: pointer;
+    &:focus {
+        box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
+    }
+    &: [data-focus] {
+        box-shadow: 0.2083vw 0.2083vw 0px 0px rgba(255, 255, 255, 0.5);
+    }
+    & .chakra-button__icon {
+        position: absolute;
+        right: 0.7813vw;
+    }
+`;
+
+export const GrayButton = (props: BoxProps) => {
+    return <GrayButtonStyle {...props}></GrayButtonStyle>;
+};
 
 export const PlayButtonGroup = ({
     tournamentDisabled,

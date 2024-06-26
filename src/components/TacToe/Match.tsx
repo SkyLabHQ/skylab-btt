@@ -36,6 +36,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import DotLoading from "../Loading/DotLoading";
 import PlayWithBot from "./assets/playbot.png";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
+import { bttFactoryIface } from "@/skyConstants/iface";
 
 export const PlaneImg = ({
     detail,
@@ -332,7 +333,7 @@ export const MatchPage = ({
         try {
             let operateAddress = tacToeBurner.account.address;
 
-            const [bidTacToeGameAddress, defaultGameQueue, opPlayer] =
+            const [bidTacToeGameAddress, defaultGameQueue] =
                 await multiProvider.all([
                     multiSkylabBidTacToeFactoryContract.gamePerPlayer(
                         operateAddress,
@@ -340,28 +341,16 @@ export const MatchPage = ({
                     multiSkylabBidTacToeFactoryContract.defaultGameQueue(
                         avaitionAddress,
                     ),
-                    multiSkylabBidTacToeFactoryContract.playerToOpponent(
-                        operateAddress,
-                    ),
                 ]);
 
             if (bidTacToeGameAddress === ZERO_DATA) {
-                if (
-                    operateAddress !== defaultGameQueue &&
-                    opPlayer === ZERO_DATA
-                ) {
+                if (operateAddress !== defaultGameQueue) {
                     navigate("/");
                     return;
                 }
 
-                if (opPlayer === ZERO_DATA) {
-                    const [
-                        account,
-                        level,
-                        mtadata,
-                        point,
-                        joinDefaultQueueTime,
-                    ] = await multiProvider.all([
+                const [account, level, mtadata, point, joinDefaultQueueTime] =
+                    await multiProvider.all([
                         multiMercuryBaseContract.ownerOf(tokenId),
                         multiMercuryBaseContract.aviationLevels(tokenId),
                         multiMercuryBaseContract.tokenURI(tokenId),
@@ -372,34 +361,30 @@ export const MatchPage = ({
                         ),
                     ]);
 
-                    const current = Math.floor(new Date().getTime() / 1000);
+                const current = Math.floor(new Date().getTime() / 1000);
 
-                    if (
-                        Number(joinDefaultQueueTime.toString()) + 45 <=
-                        current
-                    ) {
-                        setShowPlayWithBot(true);
-                    } else {
-                        setShowPlayWithBot(false);
-                    }
-
-                    onChangeInfo("my", {
-                        burner: operateAddress,
-                        address: account,
-                        level: level.toNumber(),
-                        point: point.toNumber(),
-                        img: getMetadataImg(mtadata),
-                        mark: null,
-                    });
-                    onChangeInfo("op", {
-                        burner: "",
-                        address: "",
-                        level: 0,
-                        point: 0,
-                        img: "",
-                        mark: null,
-                    });
+                if (Number(joinDefaultQueueTime.toString()) + 45 <= current) {
+                    setShowPlayWithBot(true);
+                } else {
+                    setShowPlayWithBot(false);
                 }
+
+                onChangeInfo("my", {
+                    burner: operateAddress,
+                    address: account,
+                    level: level.toNumber(),
+                    point: point.toNumber(),
+                    img: getMetadataImg(mtadata),
+                    mark: null,
+                });
+                onChangeInfo("op", {
+                    burner: "",
+                    address: "",
+                    level: 0,
+                    point: 0,
+                    img: "",
+                    mark: null,
+                });
             } else {
                 setShowPlayWithBot(false);
                 setGameAddress(bidTacToeGameAddress);
@@ -414,13 +399,30 @@ export const MatchPage = ({
         const defaultSinger = getDefaultWithProvider(tokenId, realChainId);
         try {
             openLoading();
-            await tacToeFactoryRetryWrite(
+            const createBotGameReceipt = await tacToeFactoryRetryWrite(
                 "playWithBotAfterDefaultQueueTimer",
                 [avaitionAddress, botAddress[realChainId]],
                 {
                     gasLimit: 1550000,
                     signer: defaultSinger,
                 },
+            );
+            const startBotGameTopic0 =
+                bttFactoryIface.getEventTopic("StartBotGame");
+
+            const startBotGameLog = createBotGameReceipt.logs.find(
+                (item: any) => {
+                    return item.topics[0] === startBotGameTopic0;
+                },
+            );
+
+            const startBotGameData = bttFactoryIface.parseLog({
+                data: startBotGameLog.data,
+                topics: startBotGameLog.topics,
+            });
+
+            navigate(
+                `/btt/game?gameAddress=${startBotGameData.args.gameAddress}&tokenId=${tokenId}`,
             );
             closeLoading();
         } catch (error) {
@@ -467,7 +469,8 @@ export const MatchPage = ({
             !tokenId ||
             !tacToeBurner ||
             !multiSkylabBidTacToeFactoryContract ||
-            !multiProvider
+            !multiProvider ||
+            isLoading
         ) {
             return;
         }
@@ -485,6 +488,7 @@ export const MatchPage = ({
         tacToeBurner,
         multiMercuryBaseContract,
         multiSkylabBidTacToeFactoryContract,
+        isLoading,
     ]);
 
     return (

@@ -1,19 +1,10 @@
 import { useCheckBurnerBalanceAndApprove } from "@/hooks/useBurnerWallet";
-import {
-    Box,
-    Text,
-    useMediaQuery,
-    BoxProps,
-    Flex,
-    Image,
-} from "@chakra-ui/react";
-import React, { useMemo, useState } from "react";
+import { Box, Text, useMediaQuery, Flex, Image } from "@chakra-ui/react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     useBidTacToeFactoryRetry,
-    useBttFactoryRetry,
     useBttFactoryRetryPaymaster,
-    useTestflightRetryContract,
     useTestflightRetryPaymaster,
 } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
@@ -41,77 +32,20 @@ import {
 } from "@/skyConstants/iface";
 import { useChainId } from "wagmi";
 import { ZERO_DATA } from "@/skyConstants";
-import useCountDown from "react-countdown-hook";
-import styled from "@emotion/styled";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
-import StartCountDown from "@/components/StartCountDown";
-import useStartGame from "@/hooks/useStartGame";
 import GameMp3 from "@/assets/game.mp3";
-import LeftButton from "@/components/TacToeMode/LeftButton";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
-import MRobotIcon from "@/components/TacToeMode/assets/m-robot.svg";
+import MRobotIcon from "@/components/TacToeMode/assets/bot-icon.png";
+import MarketIcon from "@/components/TacToeMode/assets/market-icon.png";
 import { privateKeyToAccount } from "viem/accounts";
 import Nest from "@/components/Nest";
 import { ethers } from "ethers";
 
 const gameAudio = new Audio(GameMp3);
 
-export interface PlaneInfo {
-    tokenId: number;
-    level: number;
-    img: string;
-    round: number;
-    state: boolean;
-}
-
-export interface onGoingGame {
-    gameAddress: string;
-    player1: string;
-    player2: string;
-    tokenId1: number;
-    tokenId2: number;
-    level1: number;
-    level2: number;
-}
-
-export const GrayButtonStyle = styled(Box)`
-    text-align: center;
-    position: relative;
-    align-items: center;
-    display: flex;
-    border: 3px solid #bcbbbe;
-    border-radius: 0.9375vw;
-    height: 3.3333vw;
-    fontsize: 1.25vw;
-    textalign: left;
-    outline: none;
-    width: 20.8333vw;
-    box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
-    justify-content: flex-start;
-    padding: 0;
-    cursor: pointer;
-    &:focus {
-        box-shadow: 0.2083vw 0.2083vw 0vw 0px rgba(255, 255, 255, 0.5);
-    }
-    &: [data-focus] {
-        box-shadow: 0.2083vw 0.2083vw 0px 0px rgba(255, 255, 255, 0.5);
-    }
-    & .chakra-button__icon {
-        position: absolute;
-        right: 0.7813vw;
-    }
-`;
-
-export const GrayButton = (props: BoxProps) => {
-    return <GrayButtonStyle {...props}></GrayButtonStyle>;
-};
-
 const TacToeMode = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const [timeLeft, { start }] = useCountDown(30000, 1000);
-    const { timeLeft: timeLeft1 } = useStartGame();
-    // const timeLeft1 = 0;
-    const { openLoading, closeLoading, isLoading } = useSubmitRequest();
+    const { openLoading, closeLoading } = useSubmitRequest();
 
     const navigate = useNavigate();
     const chainId = useChainId();
@@ -137,19 +71,6 @@ const TacToeMode = () => {
 
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
-
-    const { minutes, second } = useMemo(() => {
-        let minutes: string | number = Math.floor(timeLeft / 60000);
-        if (minutes < 10) {
-            minutes = `0${minutes}`;
-        }
-
-        let second: string | number = Math.floor((timeLeft / 1000) % 60);
-        if (second < 10) {
-            second = `0${second}`;
-        }
-        return { minutes, second };
-    }, [timeLeft]);
 
     const handleMintPlayTest = async () => {
         try {
@@ -216,16 +137,25 @@ const TacToeMode = () => {
                 if (!account) {
                     return;
                 }
-                const [bidTacToeGameAddress] = await multiProvider.all([
-                    multiSkylabBidTacToeFactoryContract.gamePerPlayer(
-                        account.address,
-                    ),
-                ]);
+                const [bidTacToeGameAddress, defaultGameQueue] =
+                    await multiProvider.all([
+                        multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                            account.address,
+                        ),
+                        multiSkylabBidTacToeFactoryContract.defaultGameQueue(
+                            mercuryJarTournamentAddress[DEAFAULT_CHAINID],
+                        ),
+                    ]);
 
                 if (bidTacToeGameAddress !== ZERO_DATA) {
                     navigate(
                         `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}`,
                     );
+                    return;
+                }
+
+                if (defaultGameQueue === account.address) {
+                    navigate(`/btt/match?tokenId=${tokenId}`);
                     return;
                 }
             }
@@ -239,14 +169,10 @@ const TacToeMode = () => {
                 defaultSinger.account.address,
             );
 
-            await tacToeFactoryRetryWrite(
-                "createOrJoinDefault",
-                [[3, 3, 3, 100, 1, 0, false, 12 * 60 * 60], false],
-                {
-                    gasLimit: 1000000,
-                    signer: defaultSinger,
-                },
-            );
+            await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
+                gasLimit: 1000000,
+                signer: defaultSinger,
+            });
 
             setTimeout(() => {
                 closeLoading();
@@ -278,43 +204,16 @@ const TacToeMode = () => {
                     width: "100%",
                 }}
             >
-                {/* <Box
-                    sx={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "12px",
-                    }}
-                >
-                    <BackWithText
-                        onClick={() => navigate("/tower")}
-                        textContent={
-                            <Box
-                                sx={{
-                                    fontSize: isPc ? "16px" : "12px",
-                                    textAlign: "center",
-                                    lineHeight: "1",
-                                    marginTop: "8px",
-                                }}
-                            >
-                                <Text>Back</Text>
-                                {isPc && <Text>To Arena</Text>}
-                            </Box>
-                        }
-                    ></BackWithText>
-                </Box> */}
                 <Toolbar></Toolbar>
                 <Box
                     sx={{
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        width: isPc ? "390px" : "100%",
+                        width: isPc ? "798px" : "100%",
                         justifyContent: "center",
                     }}
                 >
-                    {/* {isPc  && (
-                        <StartCountDown timeLeft={timeLeft1}></StartCountDown>
-                    )} */}
                     <Box
                         sx={{
                             paddingTop: "30px",
@@ -341,25 +240,29 @@ const TacToeMode = () => {
                                 justify={"space-between"}
                                 align={"flex-end"}
                             >
-                                {!isPc && (
-                                    <Flex
-                                        flexDir={"column"}
-                                        align={"center"}
-                                        onClick={() => {
-                                            gameAudio.play();
-                                            handleMintPlayTest();
+                                <Flex
+                                    flexDir={"column"}
+                                    align={"center"}
+                                    onClick={() => {
+                                        gameAudio.play();
+                                        handleMintPlayTest();
+                                    }}
+                                >
+                                    <Image
+                                        src={MRobotIcon}
+                                        sx={{
+                                            width: isPc ? "100px" : "42px",
+                                        }}
+                                    ></Image>
+                                    <Text
+                                        sx={{
+                                            fontSize: isPc ? "20px" : "12px",
+                                            fontFamily: "Quantico",
                                         }}
                                     >
-                                        <Image src={MRobotIcon}></Image>
-                                        <Text
-                                            sx={{
-                                                fontSize: "12px",
-                                            }}
-                                        >
-                                            Bot Game
-                                        </Text>
-                                    </Flex>
-                                )}
+                                        Bot Game
+                                    </Text>
+                                </Flex>
                                 <PlayButtonGroup
                                     tournamentDisabled={!selectPlane?.tokenId}
                                     onPlayTournament={() => {
@@ -367,6 +270,29 @@ const TacToeMode = () => {
                                         handleTournament();
                                     }}
                                 ></PlayButtonGroup>
+                                <Flex
+                                    flexDir={"column"}
+                                    align={"center"}
+                                    onClick={() => {
+                                        gameAudio.play();
+                                        handleMintPlayTest();
+                                    }}
+                                >
+                                    <Image
+                                        src={MarketIcon}
+                                        sx={{
+                                            width: isPc ? "100px" : "42px",
+                                        }}
+                                    ></Image>
+                                    <Text
+                                        sx={{
+                                            fontSize: isPc ? "20px" : "12px",
+                                            fontFamily: "Quantico",
+                                        }}
+                                    >
+                                        Plane Market
+                                    </Text>
+                                </Flex>
                             </Flex>
                         </motion.div>
                     </Box>
@@ -393,15 +319,6 @@ const TacToeMode = () => {
                         }}
                     ></SelectPlane>
                 </Box>
-
-                {isPc && (
-                    <LeftButton
-                        onPlayWithBot={() => {
-                            gameAudio.play();
-                            handleMintPlayTest();
-                        }}
-                    ></LeftButton>
-                )}
             </Box>
             <Nest />
         </Box>
