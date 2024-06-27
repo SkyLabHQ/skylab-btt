@@ -1,13 +1,12 @@
 import { SDKProvider } from "@tma.js/sdk-react";
 import { mockTelegramEnv, parseInitData } from "@tma.js/sdk";
 import { useInitData } from "@tma.js/sdk-react";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const customRouters = [
-    ["accept", "gameAddress", "password"],
+    ["accept", "inviteCode", "password"],
     ["game", "gameAddress"],
-    ["live", "gameAddress", "burner"],
 ];
 const search = new URLSearchParams(window.location.search);
 

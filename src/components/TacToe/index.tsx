@@ -1,12 +1,6 @@
 import { MyUserCard, OpUserCard } from "@/components/TacToe/UserCard";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/TacToe/Board";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { GameType, MyNewInfo, useGameContext } from "@/pages/TacToe";

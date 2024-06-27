@@ -10,7 +10,6 @@ import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
 import { mercuryJarTournamentAddress } from "@/hooks/useContract";
-import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Nest from "@/components/Nest";
 
@@ -20,7 +19,6 @@ export interface Info {
     level: number;
     point: number;
     img: string;
-    mark: UserMarkType;
 }
 
 const GameContext = createContext<{
@@ -74,7 +72,6 @@ const MatchPage = () => {
         level: 0,
         point: 0,
         img: "",
-        mark: UserMarkType.Empty,
     });
     const [opInfo, setOpInfo] = useState<Info>({
         burner: "",
@@ -82,7 +79,6 @@ const MatchPage = () => {
         level: 0,
         point: 0,
         img: "",
-        mark: UserMarkType.Empty,
     });
     const [burnerWallet] = useTacToeSigner(tokenId);
 

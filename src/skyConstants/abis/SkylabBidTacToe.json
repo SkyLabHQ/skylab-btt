@@ -107,6 +107,25 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "gameAddress",
+        "type": "address"
+      }
+    ],
+    "name": "createRoom",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address payable",
@@ -429,6 +448,25 @@
   {
     "inputs": [
       {
+        "internalType": "bytes2",
+        "name": "",
+        "type": "bytes2"
+      }
+    ],
+    "name": "inviteCode",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
@@ -477,9 +515,9 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "player1",
-        "type": "address"
+        "internalType": "bytes2",
+        "name": "code",
+        "type": "bytes2"
       },
       {
         "internalType": "uint256",

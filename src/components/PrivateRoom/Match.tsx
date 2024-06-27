@@ -7,7 +7,7 @@ import {
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import QuitModal from "../BttComponents/QuitModal";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";

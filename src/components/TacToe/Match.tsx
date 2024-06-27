@@ -25,7 +25,6 @@ import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
 import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
-import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
 import DotLoading from "../Loading/DotLoading";
@@ -289,16 +288,16 @@ export const MatchPage = ({
                 player1WinMileage.toNumber(),
                 player1LoseMileage.toNumber(),
             );
-            onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
-            onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
+            onChangeInfo("my", { ...player1Info });
+            onChangeInfo("op", { ...player2Info });
         } else {
             onChangeMileage(
                 player2WinMileage.toNumber(),
                 player2LoseMileage.toNumber(),
             );
             onChangePoint(player2Move.toNumber(), player1Move.toNumber());
-            onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
-            onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
+            onChangeInfo("my", { ...player2Info });
+            onChangeInfo("op", { ...player1Info });
         }
         setTimeout(() => {
             const url = `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`;
@@ -364,7 +363,6 @@ export const MatchPage = ({
                     level: level.toNumber(),
                     point: point.toNumber(),
                     img: getMetadataImg(mtadata),
-                    mark: null,
                 });
                 onChangeInfo("op", {
                     burner: "",
@@ -372,7 +370,6 @@ export const MatchPage = ({
                     level: 0,
                     point: 0,
                     img: "",
-                    mark: null,
                 });
             } else {
                 setShowPlayWithBot(false);

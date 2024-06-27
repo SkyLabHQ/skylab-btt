@@ -1,5 +1,5 @@
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import { shortenAddress } from "@/utils";
@@ -12,6 +12,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeGameContract,
+    useMultiTestSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { ZERO_DATA } from "@/skyConstants";
@@ -36,9 +37,13 @@ const Accept = () => {
         privateKey,
     });
     const initData = useInitData();
-    const [gameAddress] = useState<string>(params.gameAddress);
+    const [inviteCode] = useState<string>(params.inviteCode);
+    const [gameAddress, setGameAddress] = useState<string>("");
+
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(gameAddress);
+    const multiTestSkylabBidTacToeFactoryContract =
+        useMultiTestSkylabBidTacToeFactoryContract();
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
 
     const handleJoinGame = async () => {
@@ -53,7 +58,7 @@ const Accept = () => {
                 burner: pvpAddress,
             });
             await bttFactoryRetryPaymaster("joinPvPRoom", [
-                player1,
+                inviteCode,
                 params.password,
             ]);
             const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
@@ -80,39 +85,58 @@ const Accept = () => {
     };
 
     const handleGetAllPlayerInfo = async () => {
-        let [playerAddress1, playerAddress2] = await multiProvider.all([
-            multiSkylabBidTacToeGameContract.player1(),
+        let [playerAddress2] = await multiProvider.all([
             multiSkylabBidTacToeGameContract.player2(),
         ]);
-        playerAddress1 = playerAddress1.toLocaleLowerCase();
+        console.log(playerAddress2, "playerAddress2");
         playerAddress2 = playerAddress2.toLocaleLowerCase();
 
-        console.log("playerAddress1", playerAddress1);
         console.log("playerAddress2", playerAddress2);
         console.log("pvpAddress", pvpAddress);
 
-        if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
-            if (
-                playerAddress1 === pvpAddress ||
-                playerAddress2 === pvpAddress
-            ) {
+        if (playerAddress2 !== ZERO_DATA) {
+            if (playerAddress2 === pvpAddress) {
                 navigate(`/pvp/game?gameAddress=${gameAddress}`);
             } else {
                 navigate("/pvp/home");
             }
         }
 
-        if (playerAddress1 !== ZERO_DATA) {
-            if (playerAddress1 === pvpAddress) {
-                navigate(`/pvp/match?gameAddress=${gameAddress}`);
-                return;
-            }
-
-            setPlayer1(playerAddress1);
-        }
         setInit(true);
     };
 
+    const handleInit = async () => {
+        let [player1] = await multiProvider.all([
+            multiTestSkylabBidTacToeFactoryContract.inviteCode(inviteCode),
+        ]);
+
+        player1 = player1.toLocaleLowerCase();
+        if (player1 === ZERO_DATA) {
+            navigate("/pvp/home");
+            return;
+        }
+
+        setPlayer1(player1);
+        const [gameAddress] = await multiProvider.all([
+            multiTestSkylabBidTacToeFactoryContract.gamePerPlayer(player1),
+        ]);
+
+        if (gameAddress === ZERO_DATA) {
+            navigate("/pvp/home");
+            return;
+        }
+
+        if (player1 === pvpAddress) {
+            navigate(`/pvp/match?gameAddress=${gameAddress}`);
+            return;
+        }
+        setGameAddress(gameAddress);
+    };
+
+    console.log(
+        multiSkylabBidTacToeGameContract,
+        "multiSkylabBidTacToeGameContract",
+    );
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
@@ -131,6 +155,9 @@ const Accept = () => {
     ]);
 
     useEffect(() => {
+        if (!gameAddress) {
+            return;
+        }
         const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
             ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
             : {};
@@ -141,6 +168,16 @@ const Accept = () => {
             setPrivateKey(newWallet);
         }
     }, [gameAddress]);
+
+    useEffect(() => {
+        if (!inviteCode) {
+            navigate("/pvp/home");
+            return;
+        }
+        handleInit();
+    }, [inviteCode]);
+
+    console.log(inviteCode, "inviteCode");
 
     return (
         <>

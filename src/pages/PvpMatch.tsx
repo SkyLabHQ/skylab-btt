@@ -8,10 +8,10 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import qs from "query-string";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import UserIcon from "@/assets/user1.svg";
-import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import Nest from "@/components/Nest";
 import { MINI_APP_URL } from "@/skyConstants/tgConfig";
 import QuitModal from "@/components/BttComponents/QuitModal";
@@ -36,13 +36,11 @@ const MatchPage = () => {
         burner: "",
         address: "",
         img: "",
-        mark: UserMarkType.Empty,
     });
     const [opInfo, setOpInfo] = useState<any>({
         burner: "",
         address: "",
         img: "",
-        mark: UserMarkType.Empty,
     });
     const [privateKey, setPrivateKey] = useState<string>("");
     const multiSkylabBidTacToeGameContract =
@@ -75,7 +73,10 @@ const MatchPage = () => {
             const share_url =
                 "https://t.me/share/url?url=" +
                 encodeURIComponent(
-                    `${MINI_APP_URL}?startapp=accept-${gameAddress}-${pvpPasswords[gameAddress]}`,
+                    `${MINI_APP_URL}?startapp=accept-${pvpAddress.slice(
+                        0,
+                        6,
+                    )}-${pvpPasswords[gameAddress]}`,
                 ) +
                 "&text=" +
                 encodeURIComponent(
@@ -86,7 +87,7 @@ const MatchPage = () => {
             console.log(e);
             return "";
         }
-    }, []);
+    }, [gameAddress, pvpAddress]);
 
     const handleGetAllPlayerInfo = async () => {
         let [playerAddress1, playerAddress2] = await multiProvider.all([
@@ -104,20 +105,16 @@ const MatchPage = () => {
             if (playerAddress1 === pvpAddress) {
                 setMyInfo({
                     address: playerAddress1,
-                    mark: UserMarkType.Circle,
                 });
                 setOpInfo({
                     address: playerAddress2,
-                    mark: UserMarkType.Cross,
                 });
             } else {
                 setMyInfo({
                     address: playerAddress2,
-                    mark: UserMarkType.Cross,
                 });
                 setOpInfo({
                     address: playerAddress1,
-                    mark: UserMarkType.Circle,
                 });
             }
 
