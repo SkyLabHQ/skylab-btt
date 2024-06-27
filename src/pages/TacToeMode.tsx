@@ -169,16 +169,35 @@ const TacToeMode = () => {
                 defaultSinger.account.address,
             );
 
-            await tacToeFactoryRetryWrite("createOrJoinDefault", [], {
-                gasLimit: 1000000,
-                signer: defaultSinger,
+            const createGameReceipt = await tacToeFactoryRetryWrite(
+                "createOrJoinDefault",
+                [],
+                {
+                    gasLimit: 1000000,
+                    signer: defaultSinger,
+                },
+            );
+            const startGameTopic0 = bttFactoryIface.getEventTopic("StartGame");
+
+            const startBotGameLog = createGameReceipt.logs.find((item: any) => {
+                return item.topics[0] === startGameTopic0;
             });
 
-            setTimeout(() => {
+            if (startBotGameLog) {
+                const startGameData = bttFactoryIface.parseLog({
+                    data: startBotGameLog.data,
+                    topics: startBotGameLog.topics,
+                });
+                const gameAddress = startGameData.args.gameAddress;
+                const url = `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`;
                 closeLoading();
-                const url = `/btt/match?tokenId=${tokenId}`;
                 navigate(url);
-            }, 1000);
+                return;
+            }
+
+            closeLoading();
+            const url = `/btt/match?tokenId=${tokenId}`;
+            navigate(url);
         } catch (e) {
             closeLoading();
             console.log(e);
