@@ -40,6 +40,9 @@ const PlayButtonGroup = () => {
     });
 
     const handleMintPlayTest = async () => {
+        if (!botAccount) {
+            return;
+        }
         try {
             openLoading();
             const receipt = await testflightRetryPaymaster("playTestMint", []);

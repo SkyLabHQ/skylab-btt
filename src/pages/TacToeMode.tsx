@@ -73,6 +73,9 @@ const TacToeMode = () => {
         useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
 
     const handleMintPlayTest = async () => {
+        if (!botAccount) {
+            return;
+        }
         try {
             openLoading();
             const receipt = await testflightRetryPaymaster("playTestMint", []);

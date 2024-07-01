@@ -13,7 +13,7 @@ import {
     SkeletonCircle,
     Skeleton,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import CopyIcon from "@/assets/copy-icon.svg";
 import QuitIcon from "./assets/quit.png";
 import RightArrowIcon from "./assets/right-arrow.svg";
@@ -30,23 +30,15 @@ import DiscordIcon from "./assets/discord.png";
 import TwIcon from "./assets/twitter.png";
 import EditNickname from "./EditNickname";
 import SetPilot from "./SetPilot";
-import { PilotInfo } from "@/hooks/usePilotInfo";
 import MyPilot from "../MyPilot";
-import {
-    useMultiMercuryJarTournamentContract,
-    useMultiProvider,
-} from "@/hooks/useMultiContract";
-import { useChainId, usePublicClient } from "wagmi";
 import useSkyToast from "@/hooks/useSkyToast";
-import { handleError } from "@/utils/error";
-import { useMercuryJarTournamentContract } from "@/hooks/useContract";
-import { levelRanges } from "@/utils/level";
 import PlaneBg from "./assets/plane-bg.png";
 import SetPilotIcon from "./assets/setPilot.svg";
 import SetNameIcon from "./assets/setName.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
 import TgIcon from "./assets/tg-icon.svg";
+import { TG_URL } from "@/skyConstants/tgConfig";
 
 const UserInfo = ({
     userName,
@@ -151,7 +143,7 @@ const UserInfo = ({
                             cursor: "pointer",
                         }}
                         onClick={() => {
-                            window.open("https://t.me/BidTacToeBot");
+                            window.open(`${TG_URL}?start=${address}`, "_blank");
                         }}
                         align={"center"}
                         justify={"center"}

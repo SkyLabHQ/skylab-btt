@@ -80,7 +80,7 @@ const MatchPage = () => {
                 ) +
                 "&text=" +
                 encodeURIComponent(
-                    "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. Players blind-bid for selected grid in order to conquer the board. I invite you to play with me. Click here to accept my invite!",
+                    "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. I invite you to play with me. Click here to accept my invite!",
                 );
             return share_url;
         } catch (e) {
