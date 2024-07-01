@@ -88,9 +88,7 @@ export const useBurnerRetryContract = (contract: any, signer?: any) => {
                                     });
                                     const localSinger = overridsSigner
                                         ? overridsSigner
-                                        : getTestflightSigner(
-                                              TESTFLIGHT_CHAINID,
-                                          );
+                                        : getTestflightSigner();
                                     const { sCWSigner, sCWAddress } =
                                         await getSCWallet(
                                             localSinger.privateKey,
@@ -422,11 +420,8 @@ export const getPayMasterBurnerRetryContract = (contract: any, signer: any) => {
     };
 };
 
-export const useBidTacToeFactoryRetry = (
-    tokenId?: number,
-    propTestflight: boolean = false,
-) => {
-    const [signer] = useTacToeSigner(tokenId, propTestflight);
+export const useBidTacToeFactoryRetry = (tokenId?: number) => {
+    const [signer] = useTacToeSigner(tokenId);
     const contract = useSkylabBidTacToeContract();
     const tacToeFactoryRetryWrite = useBurnerRetryContract(contract, signer);
 

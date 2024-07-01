@@ -130,6 +130,7 @@ const PvpHomePage = () => {
     });
 
     const handlePlay1V1 = async () => {
+        if (!pvpAddress) return;
         try {
             openLoading();
             const password = Math.floor(Math.random() * 1000000);

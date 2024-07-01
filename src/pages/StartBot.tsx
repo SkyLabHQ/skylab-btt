@@ -77,6 +77,7 @@ const PlayButtonGroup = () => {
 
             sessionStorage.setItem("testflight", privateKey);
             const url = `/btt/game?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}&testflight=true`;
+            console.log(url, "url");
             closeLoading();
             navigate(url);
         } catch (error) {

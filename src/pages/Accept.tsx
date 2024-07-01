@@ -88,7 +88,6 @@ const Accept = () => {
         let [playerAddress2] = await multiProvider.all([
             multiSkylabBidTacToeGameContract.player2(),
         ]);
-        console.log(playerAddress2, "playerAddress2");
         playerAddress2 = playerAddress2.toLocaleLowerCase();
 
         console.log("playerAddress2", playerAddress2);
@@ -133,10 +132,6 @@ const Accept = () => {
         setGameAddress(gameAddress);
     };
 
-    console.log(
-        multiSkylabBidTacToeGameContract,
-        "multiSkylabBidTacToeGameContract",
-    );
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
@@ -176,8 +171,6 @@ const Accept = () => {
         }
         handleInit();
     }, [inviteCode]);
-
-    console.log(inviteCode, "inviteCode");
 
     return (
         <>

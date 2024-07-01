@@ -1,9 +1,16 @@
 import { Box } from "@chakra-ui/react";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { useTacToeSigner } from "@/hooks/useSigner";
+import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import SettlementPage from "@/components/TacToe/SettlementPage";
@@ -141,7 +148,16 @@ const TacToe = () => {
     const ethcallProvider = useMultiProvider(realChainId);
     const [tokenId] = useState<number>(params.tokenId);
     const initRef = useRef<boolean>(false);
-    const [burnerWallet] = useTacToeSigner(tokenId, istest);
+    const [planeBurner] = useTacToeSigner(tokenId);
+
+    const burnerWallet = useMemo(() => {
+        if (istest) {
+            return getTestflightSigner();
+        }
+
+        return planeBurner;
+    }, [planeBurner, istest]);
+
     const { activePilot: myActivePilot } = usePilotInfo(address);
     const { activePilot: opActivePilot } = usePilotInfo(opInfo.address);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
