@@ -198,6 +198,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
 
     const handleBid = useCallback(async () => {
         try {
+            if (currentGrid < 0) return;
             if (loading) return;
             if (myGameInfo.gameState !== GameState.WaitingForBid) return;
             setLoading(true);
@@ -214,7 +215,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 [String(bidAmount), String(salt)],
             );
             console.log(
-                `currentGird: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
+                `currentGrid: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
             );
 
             await tacToeGameRetryWrite("commitBid", [hash], {

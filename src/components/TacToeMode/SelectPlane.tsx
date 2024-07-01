@@ -459,7 +459,7 @@ const MyPlane = ({
                         transform: "translateX(-50%)",
                     }}
                 >
-                    {!planetLoading && (
+                    {!planetLoading && address && (
                         <MintPlane
                             handleMintPlane={handleMintPlane}
                         ></MintPlane>

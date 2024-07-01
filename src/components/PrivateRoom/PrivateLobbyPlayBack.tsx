@@ -39,7 +39,6 @@ const PrivateLobbyPlayBack = ({
     showList: BoardItem[];
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    console.log(showList, "showList");
     return isPc ? (
         <Box
             id="share-content"

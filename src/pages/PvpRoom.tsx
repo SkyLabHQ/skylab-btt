@@ -130,9 +130,6 @@ const PvpRoom = () => {
             const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
                 ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
                 : {};
-            console.log(gameAddress, "gameAddress");
-            console.log(pvpPrivateKeys, "pvpPrivateKeys");
-            console.log(pvpPrivateKeys[gameAddress], "localPvpPrivateKeys");
             if (pvpPrivateKeys[gameAddress]) {
                 setPrivateKey(pvpPrivateKeys[gameAddress]);
             } else {

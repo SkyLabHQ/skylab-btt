@@ -113,7 +113,6 @@ const PlayButtonGroup = ({
 };
 
 const PvpHomePage = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const navigate = useNavigate();
 
@@ -126,7 +125,6 @@ const PvpHomePage = () => {
 
     const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
 
-    console.log(initData.user, "privateKey");
     const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
         privateKey,
     });

@@ -304,6 +304,7 @@ const PlayGame = ({
 
     const handleBid = useCallback(async () => {
         try {
+            if (currentGrid < 0) return;
             if (loading) return;
             if (myGameInfo.gameState !== GameState.WaitingForBid) return;
 
@@ -322,7 +323,7 @@ const PlayGame = ({
                 [String(bidAmount), String(salt)],
             );
             console.log(
-                `currentGird: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
+                `currentGrid: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
             );
 
             await tacToeGameRetryWrite("commitBid", [hash]);

@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import qs from "query-string";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import UserIcon from "@/assets/user1.svg";
@@ -67,6 +66,7 @@ const MatchPage = () => {
     };
 
     const shareUrl = useMemo(() => {
+        if (!pvpAddress || !gameAddress) return "";
         try {
             const pvpPasswords =
                 JSON.parse(localStorage.getItem("pvpPasswords")) || {};
@@ -80,7 +80,7 @@ const MatchPage = () => {
                 ) +
                 "&text=" +
                 encodeURIComponent(
-                    "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. I invite you to play with me. Click here to accept my invite!",
+                    "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. Players blind-bid for selected grid in order to conquer the board. I invite you to play with me. Click here to accept my invite!",
                 );
             return share_url;
         } catch (e) {
