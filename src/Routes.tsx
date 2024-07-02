@@ -14,7 +14,7 @@ import SellPaperPage from "./pages/SellPaper";
 import Match from "./pages/Match";
 import Accept from "./pages/Accept";
 import PvpHome from "./pages/PvpHome";
-import PvpLayout from "./components/PvpLayout";
+import FreeLayout from "./components/FreeLayout";
 import PvpMatch from "./pages/PvpMatch";
 import StartBot from "./pages/StartBot";
 
@@ -23,7 +23,6 @@ const AppRoutes = (): ReactElement => {
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<TacToeMode />}></Route>
-                <Route path="/bot" element={<StartBot />} />
                 <Route path="/home" element={<Activities />} />
                 <Route path="/btt/match" element={<Match />}></Route>
                 <Route path="/btt/accept" element={<Accept />}></Route>
@@ -34,11 +33,13 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/btt/rules" element={<BttRules />}></Route>
                 <Route path="/tower" element={<Tower />}></Route>
                 <Route path="/buypaper" element={<SellPaperPage />}></Route>
-                <Route path="/pvp" element={<PvpLayout />}>
-                    <Route path="/pvp/home" element={<PvpHome />} />
-                    <Route path="/pvp/match" element={<PvpMatch />} />
-                    <Route path="/pvp/game" element={<PvpRoom />} />
-                    <Route path="/pvp/accept" element={<Accept />}></Route>
+                <Route path="/free" element={<FreeLayout />}>
+                    <Route path="/free/botHome" element={<StartBot />} />
+                    <Route path="/free/botGame" element={<PvpRoom />} />
+                    <Route path="/free/pvpHome" element={<PvpHome />} />
+                    <Route path="/free/pvpMatch" element={<PvpMatch />} />
+                    <Route path="/free/pvpGame" element={<PvpRoom />} />
+                    <Route path="/free/accept" element={<Accept />}></Route>
                 </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />

@@ -5,11 +5,9 @@ import { shortenAddress } from "@/utils";
 import CopyIcon from "@/assets/copy-icon.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import MyPilot from "../MyPilot";
-import { useUserInfo } from "@/contexts/UserInfo";
 
 const UserInfo = () => {
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfo();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
@@ -20,7 +18,7 @@ const UserInfo = () => {
                 paddingBottom: "20px",
             }}
         >
-            <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
+            <MyPilot imgUrl={""} width={"80px"}></MyPilot>
 
             <Flex
                 sx={{

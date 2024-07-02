@@ -16,7 +16,7 @@ export const Toolbar = () => {
     const navigate = useNavigate();
     const { onUserInfoOpen } = useUserInfo();
     const { address } = usePrivyAccounts();
-    const { activePilot, handleLogin } = useUserInfo();
+    const { handleLogin } = useUserInfo();
 
     return (
         <Box
@@ -49,7 +49,7 @@ export const Toolbar = () => {
                             align={"center"}
                         >
                             <MyPilot
-                                imgUrl={activePilot.img}
+                                imgUrl={""}
                                 width="60px"
                                 sx={{
                                     position: "absolute",
@@ -83,7 +83,7 @@ export const Toolbar = () => {
                                 audio.play();
                                 onUserInfoOpen();
                             }}
-                            imgUrl={activePilot.img}
+                            imgUrl={""}
                             sx={{
                                 width: "40px",
                                 height: "40px",

@@ -34,7 +34,6 @@ const MToolBar = ({
 }) => {
     const [active, setActive] = useState(false);
     const { address } = usePrivyAccounts();
-    const { activePilot } = useUserInfo();
 
     return (
         <Flex
@@ -102,7 +101,7 @@ const MToolBar = ({
                         <MyPilot
                             onClick={onUserInfoOpen}
                             width="36px"
-                            imgUrl={activePilot.img}
+                            imgUrl={""}
                         ></MyPilot>
                     ) : (
                         <Image
@@ -151,7 +150,7 @@ const ToolBar = ({
     } = useDisclosure();
     const { onUserInfoOpen } = useUserInfo();
     const { address } = usePrivyAccounts();
-    const { activePilot, handleLogin } = useUserInfo();
+    const { handleLogin } = useUserInfo();
 
     return (
         <>
@@ -192,7 +191,7 @@ const ToolBar = ({
                                 align={"center"}
                             >
                                 <MyPilot
-                                    imgUrl={activePilot.img}
+                                    imgUrl={""}
                                     width="60px"
                                     sx={{
                                         position: "absolute",

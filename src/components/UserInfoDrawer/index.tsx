@@ -53,7 +53,6 @@ const UserInfo = ({
     const { address } = usePrivyAccounts();
     const toast = useSkyToast();
     const { onCopy } = useClipboard(address);
-    const { activePilot } = useUserInfo();
 
     return (
         <Flex flexDir={"column"} align={"center"}>
@@ -62,21 +61,7 @@ const UserInfo = ({
                     position: "relative",
                 }}
             >
-                <MyPilot imgUrl={activePilot.img} width={"80px"}></MyPilot>
-                <Image
-                    src={SetPilotIcon}
-                    sx={{
-                        width: "24px",
-                        marginRight: "12px",
-                        position: "absolute",
-                        bottom: "-6px",
-                        left: "50%",
-                        transform: "translate(-50%,0)",
-                    }}
-                    onClick={() => {
-                        handleChangeMode(2);
-                    }}
-                ></Image>
+                <MyPilot imgUrl={""} width={"80px"}></MyPilot>
             </Box>
             {userNameInit ? (
                 <Flex flexDir={"column"} align={"center"}>

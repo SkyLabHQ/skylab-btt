@@ -3,7 +3,7 @@ import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/TacToe/Board";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
-import { GameType, MyNewInfo, useGameContext } from "@/pages/TacToe";
+import { MyNewInfo, useGameContext } from "@/pages/BotGame";
 import { ethers } from "ethers";
 import {
     useMultiProvider,
@@ -26,7 +26,7 @@ import {
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
 import MLayout from "./MLayout";
-import { CHAIN_NAMES } from "@/utils/web3Utils";
+import { CHAIN_NAMES, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
@@ -54,18 +54,14 @@ const TacToePage = ({
     const toast = useSkyToast();
 
     const {
-        istest,
         myInfo,
         opInfo,
         myGameInfo,
         opGameInfo,
-        bidTacToeGameAddress,
+        gameAddress,
         tokenId,
         list,
         onStep,
-        gameType,
-        realChainId,
-        handleGetGas,
     } = useGameContext();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -91,13 +87,13 @@ const TacToePage = ({
     );
 
     const addBttTransaction = useAddBttTransaction(tokenId);
-    const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress, tokenId);
+    const tacToeGameRetryWrite = useBttGameRetry(gameAddress, tokenId);
     const deleteTokenIdCommited = useDeleteTokenIdCommited(tokenId);
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
     const multiMercuryBaseContract = useMultiMercuryBaseContract();
 
-    const ethcallProvider = useMultiProvider(realChainId);
+    const ethcallProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const [loading, setLoading] = useState<boolean>(false);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 
@@ -113,14 +109,14 @@ const TacToePage = ({
     }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
     const inviteLink = useMemo(() => {
-        if (!bidTacToeGameAddress) return "";
+        if (!gameAddress) return "";
 
         return `${
             window.location.origin
-        }/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}&burner=${shortenAddressWithout0x(
+        }/btt/live?gameAddress=${gameAddress}&chainId=${TESTFLIGHT_CHAINID}&burner=${shortenAddressWithout0x(
             myInfo.burner,
         )}`;
-    }, [bidTacToeGameAddress, myInfo]);
+    }, [gameAddress, myInfo]);
 
     const handleBoardClick = () => {
         setShowAnimateConfirm((number) => {
@@ -131,12 +127,12 @@ const TacToePage = ({
     const handleShareTw = () => {
         const text = `${
             window.location.host
-        }/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}&burner=${shortenAddressWithout0x(
+        }/btt/live?gameAddress=${gameAddress}&chainId=${TESTFLIGHT_CHAINID}&burner=${shortenAddressWithout0x(
             myInfo.burner,
         )}
 ⭕️❌⭕️❌Watch me play Bid tac toe and crush the opponent！⭕️❌⭕️❌
 Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
-            CHAIN_NAMES[realChainId]
+            CHAIN_NAMES[TESTFLIGHT_CHAINID]
         }
 (Twitter)@skylabHQ`;
 
@@ -168,21 +164,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             return;
         }
 
-        if (gameType === GameType.HumanWithBot) {
-            handleQuit();
-            return;
-        }
-
-        try {
-            await tacToeGameRetryWrite("claimTimeoutPenalty", [], {
-                gasLimit: 5000000,
-                usePaymaster: istest,
-            });
-            handleGetGameInfo();
-        } catch (e) {
-            console.log(e);
-            toast(handleError(e, istest));
-        }
+        handleQuit();
     };
 
     const handleBidAmount = (value: number) => {
@@ -218,7 +200,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
 
             await tacToeGameRetryWrite("commitBid", [hash], {
                 gasLimit: 1000000,
-                usePaymaster: istest,
+                usePaymaster: true,
             });
             onChangeGame("my", {
                 ...myGameInfo,
@@ -229,7 +211,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         } catch (e) {
             console.log(e);
             setLoading(false);
-            toast(handleError(e, istest));
+            toast(handleError(e, true));
         }
     }, [
         currentGrid,
@@ -237,7 +219,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         myGameInfo,
         addGridCommited,
         bidAmount,
-        gameType,
         tacToeGameRetryWrite,
         getGridCommited,
     ]);
@@ -250,7 +231,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             setRevealing(true);
             await tacToeGameRetryWrite("revealBid", [amount, Number(salt)], {
                 gasLimit: 7000000,
-                usePaymaster: istest,
+                usePaymaster: true,
             });
             onChangeGame("my", {
                 ...myGameInfo,
@@ -261,7 +242,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         } catch (e) {
             setRevealing(false);
             console.log(e);
-            toast(handleError(e, istest));
+            toast(handleError(e, true));
         }
     };
 
@@ -269,45 +250,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     const handleGameOver = async () => {
         if (myGameInfo.gameState <= GameState.Revealed) return;
         deleteTokenIdCommited();
-        if (!istest) {
-            const gameResult = getWinState(myGameInfo.gameState);
-            handleGetGas();
-            try {
-                const [level, point] = await ethcallProvider.all([
-                    multiMercuryBaseContract.aviationLevels(tokenId),
-                    multiMercuryBaseContract.aviationPoints(tokenId),
-                ]);
-                onChangeNewInfo({
-                    point: point.toNumber(),
-                    level: level.toNumber(),
-                });
-                addBttTransaction({
-                    account: myInfo.address,
-                    burner: myInfo.burner,
-                    gameAddress: bidTacToeGameAddress,
-                    oldLevel: myInfo.level,
-                    newLevel: level.toNumber(),
-                    oldPoint: myInfo.point,
-                    newPoint: point.toNumber(),
-                    win: gameResult,
-                });
-            } catch (e) {
-                onChangeNewInfo({
-                    point: 0,
-                    level: 0,
-                });
-                addBttTransaction({
-                    account: myInfo.address,
-                    burner: myInfo.burner,
-                    gameAddress: bidTacToeGameAddress,
-                    oldLevel: myInfo.level,
-                    newLevel: 0,
-                    oldPoint: myInfo.point,
-                    newPoint: 0,
-                    win: gameResult,
-                });
-            }
-        }
         onStep(1);
     };
 
@@ -335,7 +277,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             }
 
             await tacToeGameRetryWrite(type, [index], {
-                usePaymaster: istest,
+                usePaymaster: true,
             });
             if (type === "setMessage") {
                 setMessageLoading(MessageStatus.Sent);
@@ -365,14 +307,14 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             setSurrenderLoading(true);
             await tacToeGameRetryWrite("surrender", [], {
                 gasLimit: 4000000,
-                usePaymaster: istest,
+                usePaymaster: true,
                 clearQueue: true,
             });
             setSurrenderLoading(false);
         } catch (error) {
             setSurrenderLoading(false);
             console.log(error);
-            toast(handleError(error, istest));
+            toast(handleError(error, true));
         }
     };
 
@@ -380,10 +322,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         if (commitWorkerRef.current) {
             commitWorkerRef.current.terminate();
         }
-        if (
-            (!myGameInfo.timeout && !opGameInfo.timeout) ||
-            !bidTacToeGameAddress
-        ) {
+        if ((!myGameInfo.timeout && !opGameInfo.timeout) || !gameAddress) {
             return;
         }
         commitWorkerRef.current = new Worker(

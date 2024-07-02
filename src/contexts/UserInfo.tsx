@@ -1,7 +1,6 @@
 import { Box, useDisclosure } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import UserInfoDrawer from "@/components/UserInfoDrawer";
-import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import axios from "axios";
 import { useMercuryJarTournamentContract } from "@/hooks/useContract";
@@ -24,9 +23,6 @@ const UserInfoContext = createContext<{
     isUserInfoOpen: boolean;
     onUserInfoOpen: () => void;
     onUserInfoClose: () => void;
-    activePilot: PilotInfo;
-    handleGetActivePilot: () => void;
-    pilotIsInit: boolean;
     blockOpen: boolean;
     isBlock: boolean;
     bidIconType: string;
@@ -58,7 +54,6 @@ export const UserInfoProvider = ({
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
     const { address } = usePrivyAccounts();
-    const { activePilot, handleGetActivePilot, init } = usePilotInfo(address);
     const [isBlock, setIsBlock] = useState(false);
     const [blockOpen, setIsBlockOpen] = useState(false);
     const [bidIconType, setBidIconType] = useState("0");
@@ -230,9 +225,6 @@ export const UserInfoProvider = ({
                 isUserInfoOpen: isOpen,
                 onUserInfoOpen: onOpen,
                 onUserInfoClose: onClose,
-                activePilot,
-                handleGetActivePilot,
-                pilotIsInit: init,
                 blockOpen,
                 isBlock,
                 handleBlock,

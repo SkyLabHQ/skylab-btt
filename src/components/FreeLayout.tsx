@@ -72,7 +72,6 @@ const PvpContent = () => {
                     (item) => item[0] === params[0],
                 );
                 if (route && route.length === params.length) {
-                    console.log("jinlai o ", route);
                     let url = `/pvp/${params[0]}`;
                     for (let i = 1; i < params.length; i++) {
                         if (i === 1) {
