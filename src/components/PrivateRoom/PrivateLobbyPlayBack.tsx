@@ -2,7 +2,7 @@ import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import Logo from "@/assets/logo.svg";
 import BttIcon from "@/assets/btt-icon.png";
 import XIcon from "@/components/TacToe/assets/x.svg";
-import Board from "../TacToe/Board";
+import Board from "../BttComponents/Board";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
 import UserProfile, { MUserProfileResult } from "./UserProfile";

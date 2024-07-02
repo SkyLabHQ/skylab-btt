@@ -1,19 +1,28 @@
 import React from "react";
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import Board from "@/components/TacToe/Board";
-import ResultUserCard from "../TacToe/ResultUserCard";
+import Board from "@/components/BttComponents/Board";
 import { getWinState } from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
-import { GameType, useGameContext } from "@/pages/TacToe";
+import ResultUserCard from "../BttComponents/ResultUserCard";
 
-const GameOver = () => {
+const GameOver = ({
+    myInfo,
+    opInfo,
+    myGameInfo,
+    opGameInfo,
+    list,
+    onStep,
+}: {
+    myInfo: any;
+    opInfo: any;
+    myGameInfo: any;
+    opGameInfo: any;
+    list: any;
+    onStep: any;
+}) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { myInfo, opInfo, myGameInfo, opGameInfo, list, onStep, gameType } =
-        useGameContext();
-
     const isMyWin = getWinState(myGameInfo.gameState);
-
     return isPc ? (
         <Flex
             sx={{
@@ -88,9 +97,7 @@ const GameOver = () => {
                 flexDir={"column"}
             >
                 <MUserProfileResult
-                    address={
-                        gameType === GameType.HumanWithBot ? "" : opInfo.address
-                    }
+                    address={""}
                     position="left"
                     img={opInfo.img}
                     mark={opInfo.mark}
@@ -117,9 +124,7 @@ const GameOver = () => {
             >
                 <MUserProfileResult
                     position="right"
-                    address={
-                        gameType === GameType.HumanWithBot ? "" : myInfo.address
-                    }
+                    address={""}
                     img={myInfo.img}
                     mark={myInfo.mark}
                     level={myInfo.level}

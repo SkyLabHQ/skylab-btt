@@ -11,14 +11,7 @@ import { getViemClients } from "@/utils/viem";
 import { mercuryJarTournamentAddress } from "@/hooks/useContract";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Nest from "@/components/Nest";
-
-export interface Info {
-    burner: string;
-    address: string;
-    level: number;
-    point: number;
-    img: string;
-}
+import { Info, UserMarkType } from "@/skyConstants/bttGameTypes";
 
 const GameContext = createContext<{
     realChainId: number;
@@ -69,6 +62,7 @@ const MatchPage = () => {
         level: 0,
         point: 0,
         img: "",
+        mark: UserMarkType.Empty,
     });
     const [opInfo, setOpInfo] = useState<Info>({
         burner: "",
@@ -76,6 +70,7 @@ const MatchPage = () => {
         level: 0,
         point: 0,
         img: "",
+        mark: UserMarkType.Empty,
     });
     const [burnerWallet] = useTacToeSigner(tokenId);
 

@@ -26,6 +26,16 @@ import YellowCross1 from "@/components/TacToe/assets/yellow-x1.png";
 import BlackCircle1 from "@/components/TacToe/assets/black-o1.png";
 import BlackCross1 from "@/components/TacToe/assets/black-x1.png";
 import BlackBotX from "@/components/TacToe/assets/black-bot-x.png";
+
+export interface Info {
+    burner: string;
+    address: string;
+    level?: number;
+    point?: number;
+    img: string;
+    mark: UserMarkType;
+    isBot?: boolean;
+}
 export enum GameState {
     Unknown = 0,
     WaitingForBid = 1,

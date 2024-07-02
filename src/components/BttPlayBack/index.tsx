@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BackIcon from "@/components/TacToe/assets/back-arrow.svg";
 import qs from "query-string";
-import { Info } from "@/pages/TacToe";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -16,6 +15,7 @@ import { botAddress } from "@/hooks/useContract";
 import {
     BoardItem,
     GameState,
+    Info,
     UserMarkType,
     getShareEmoji,
     getWinState,

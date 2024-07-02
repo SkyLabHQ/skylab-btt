@@ -3,7 +3,7 @@ import TutorialIcon from "@/components/BttComponents/assets/tutorial-icon.svg";
 import KeyBoard from "../BttComponents/KeyBoard";
 import QuitIcon from "@/components/BttComponents/assets/quit.png";
 import { ToolShare } from "../BttComponents/ToolShare";
-import BidTacToeTutorial from "../TacToe/BidTacToeTutorial";
+import BidTacToeTutorial from "./BidTacToeTutorial";
 import Click1Wav from "@/assets/click1.wav";
 import { useUserInfo } from "@/contexts/UserInfo";
 import SkinIcon from "@/components/BttComponents/assets/skin.png";

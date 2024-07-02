@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
 import GoldIcon from "@/components/TacToe/assets/gold.svg";
 import Plane1 from "@/assets/aviations/a1.png";
-import { AdvantageTip, Message } from "../TacToe/UserCard";
+import { AdvantageTip, Message } from "../BttComponents/UserCard";
 import {
     GameState,
     UserMarkType,

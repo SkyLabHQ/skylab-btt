@@ -8,7 +8,7 @@ import {
     useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
 } from "@/hooks/useMultiContract";
-import Board from "../TacToe/Board";
+import Board from "../BttComponents/Board";
 import { UserCard } from "../BttPlayBack/UserCard";
 import { shortenAddressWithout0x } from "@/utils";
 import { aviationImg } from "@/utils/aviationImg";
@@ -18,6 +18,7 @@ import {
     BoardItem,
     GameInfo,
     GameState,
+    Info,
     RobotImg,
     UserMarkType,
     getWinState,
@@ -33,13 +34,6 @@ import StartJourney from "../BttComponents/StartJourney";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { motion } from "framer-motion";
 import LoadingPage from "../LoadingPage";
-
-interface Info {
-    burner?: string;
-    level: number;
-    mark: UserMarkType;
-    isBot?: boolean;
-}
 
 const MBttLiveGame = ({
     autoCommitTimeoutTime,
@@ -287,14 +281,18 @@ const BttLiveGamePage = () => {
         emote: 0,
     });
     const [myInfo, setMyInfo] = useState<Info>({
+        address: "",
         burner: "",
         level: 0,
         mark: UserMarkType.Empty,
+        img: "",
     });
     const [opInfo, setOpInfo] = useState<Info>({
+        address: "",
         burner: "",
         level: 0,
         mark: UserMarkType.Empty,
+        img: "",
     });
 
     const myMark = useMemo(() => {

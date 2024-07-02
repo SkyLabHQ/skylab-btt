@@ -6,21 +6,20 @@ import qs from "query-string";
 import { getTestflightSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/BotGame/ResultPlayBack";
 import TacToePage from "@/components/BotGame";
-import SettlementPage from "@/components/BotGame/SettlementPage";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { skylabTestFlightAddress } from "@/hooks/useContract";
 import {
     BoardItem,
     GameInfo,
     GameState,
+    Info,
     RobotImg,
     UserMarkType,
     getWinState,
     initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
-import GameOver from "@/components/TacToe/GameOver";
+import GameOver from "@/components/BotGame/GameOver";
 import LoadingPage from "@/components/LoadingPage";
 import {
     useMultiMercuryBaseContract,
@@ -33,72 +32,27 @@ import { ZERO_DATA } from "@/skyConstants";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Nest from "@/components/Nest";
 
-export interface Info {
-    burner: string;
-    address: string;
-    level: number;
-    point: number;
-    img: string;
-    mark: UserMarkType;
-    isBot?: boolean;
-}
-
-export interface MyNewInfo {
-    level: number;
-    point: number;
-    img?: string;
-}
-
 const GameContext = createContext<{
     list: BoardItem[];
     tokenId: number;
-    myNewInfo: MyNewInfo;
     myInfo: Info;
     opInfo: Info;
     myGameInfo: GameInfo;
     opGameInfo: GameInfo;
     gameAddress: string;
-    avaitionAddress: string;
-    mileages: {
-        winMileage: number;
-        loseMileage: number;
-    };
-    points: {
-        winPoint: number;
-        losePoint: number;
-    };
     onStep: (step?: number) => void;
 }>(null);
 export const useGameContext = () => useContext(GameContext);
 
 const BotGame = () => {
     const navitate = useNavigate();
-    const [mileages, setMileages] = useState<{
-        winMileage: number;
-        loseMileage: number;
-    }>({
-        winMileage: 0,
-        loseMileage: 0,
-    });
-
-    const [points, setPoints] = useState<{
-        winPoint: number;
-        losePoint: number;
-    }>({
-        winPoint: 0,
-        losePoint: 0,
-    });
-
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const [myNewInfo, setMyNewInfo] = useState<MyNewInfo>(null); // if game over update my info
-    const avaitionAddress = skylabTestFlightAddress[TESTFLIGHT_CHAINID];
     const [myInfo, setMyInfo] = useState<Info>({
         burner: "",
         address: "",
         level: 0,
-        point: 0,
         img: "",
         mark: UserMarkType.Empty,
     });
@@ -106,7 +60,6 @@ const BotGame = () => {
         burner: "",
         address: "",
         level: 0,
-        point: 0,
         img: "",
         mark: UserMarkType.Empty,
     });
@@ -164,20 +117,10 @@ const BotGame = () => {
             ),
         ]);
 
-        const [
-            account1,
-            level1,
-            mtadata1,
-            point1,
-            player1Move,
-            [player1WinMileage, player1LoseMileage],
-        ] = await multiProvider.all([
+        const [account1, level1, mtadata1] = await multiProvider.all([
             multiMercuryBaseContract.ownerOf(tokenId1),
             multiMercuryBaseContract.aviationLevels(tokenId1),
             multiMercuryBaseContract.tokenURI(tokenId1),
-            multiMercuryBaseContract.aviationPoints(tokenId1),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId1),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
         ]);
 
         if (playerAddress1 !== sCWAddress) {
@@ -188,25 +131,18 @@ const BotGame = () => {
         const player1Info = {
             burner: playerAddress1,
             address: account1,
-            point: point1.toNumber(),
             level: level1.toNumber(),
             img: getMetadataImg(mtadata1),
         };
         const botInfo = {
             burner: playerAddress2,
             address: playerAddress2,
-            point: point1.toNumber(),
             level: level1.toNumber(),
             img: RobotImg,
             isBot: true,
         };
         onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
         onChangeInfo("op", { ...botInfo, mark: UserMarkType.BotX });
-        onChangePoint(player1Move.toNumber(), player1Move.toNumber());
-        onChangeMileage(
-            player1WinMileage.toNumber(),
-            player1LoseMileage.toNumber(),
-        );
     };
 
     const onChangeGame = (position: "my" | "op", info: GameInfo) => {
@@ -218,20 +154,6 @@ const BotGame = () => {
             setOpGameInfo(info);
             return;
         }
-    };
-
-    const onChangeMileage = (winMileage: number, loseMileage: number) => {
-        setMileages({
-            winMileage,
-            loseMileage,
-        });
-    };
-
-    const onChangePoint = (winPoint: number, losePoint: number) => {
-        setPoints({
-            winPoint,
-            losePoint,
-        });
     };
 
     const onChangeInfo = (position: "my" | "op", info: Info) => {
@@ -464,15 +386,11 @@ const BotGame = () => {
                         value={{
                             myInfo,
                             opInfo,
-                            myNewInfo,
                             tokenId,
                             myGameInfo,
                             opGameInfo,
                             list,
                             gameAddress,
-                            mileages,
-                            points,
-                            avaitionAddress,
                             onStep: handleStep,
                         }}
                     >
@@ -488,13 +406,35 @@ const BotGame = () => {
                                     nextDrawWinner={nextDrawWinner}
                                     handleGetGameInfo={handleGetGameInfo}
                                     onChangeGame={onChangeGame}
-                                    onChangeNewInfo={(info: MyNewInfo) => {
-                                        setMyNewInfo(info);
-                                    }}
+                                    myInfo={myInfo}
+                                    opInfo={opInfo}
+                                    myGameInfo={myGameInfo}
+                                    opGameInfo={opGameInfo}
+                                    gameAddress={gameAddress}
+                                    tokenId={tokenId}
+                                    list={list}
+                                    onStep={handleStep}
                                 ></TacToePage>
                             )}
-                            {step === 1 && <GameOver></GameOver>}
-                            {step === 2 && <ResultPlayBack></ResultPlayBack>}
+                            {step === 1 && (
+                                <GameOver
+                                    myInfo={myInfo}
+                                    opInfo={opInfo}
+                                    myGameInfo={myGameInfo}
+                                    opGameInfo={opGameInfo}
+                                    list={list}
+                                    onStep={handleStep}
+                                ></GameOver>
+                            )}
+                            {step === 2 && (
+                                <ResultPlayBack
+                                    gameAddress={gameAddress}
+                                    myInfo={myInfo}
+                                    myGameInfo={myGameInfo}
+                                    opInfo={opInfo}
+                                    opGameInfo={opGameInfo}
+                                ></ResultPlayBack>
+                            )}
                         </Box>
                     </GameContext.Provider>
                 </Box>

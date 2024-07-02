@@ -6,7 +6,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import Board from "@/components/TacToe/Board";
+import Board from "@/components/BttComponents/Board";
 import { useBttGameRetryPaymaster } from "@/hooks/useRetryContract";
 import { ethers } from "ethers";
 import {
@@ -39,7 +39,7 @@ import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import StatusProgress from "../BttComponents/StatusProgress";
-import { MyInputBid, OpInputBid } from "../TacToe/UserCard";
+import { MyInputBid, OpInputBid } from "../BttComponents/UserCard";
 import { shortenAddressWithout0x } from "@/utils";
 import { MINI_APP_URL } from "@/skyConstants/tgConfig";
 

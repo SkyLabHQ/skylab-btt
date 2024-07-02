@@ -2,9 +2,8 @@ import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
-import Board from "../TacToe/Board";
+import Board from "../BttComponents/Board";
 import { MMessage } from "@/components/PrivateRoom/Message";
-import { useGameContext } from "@/pages/TacToe";
 import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
@@ -12,6 +11,11 @@ import ToolBar from "../BttComponents/Toolbar";
 import StatusProgress from "../BttComponents/StatusProgress";
 
 const MLayout = ({
+    myGameInfo,
+    opGameInfo,
+    myInfo,
+    opInfo,
+    list,
     inviteLink,
     handleQuitClick,
     handleShareTw,
@@ -44,8 +48,6 @@ const MLayout = ({
         useDisclosure();
 
     const [inputMode, setInputMode] = useState<"message" | "keyboard">(null);
-
-    const { myGameInfo, opGameInfo, myInfo, opInfo, list } = useGameContext();
     const myGameState = myGameInfo.gameState;
 
     const canCallTimeout = useMemo(() => {

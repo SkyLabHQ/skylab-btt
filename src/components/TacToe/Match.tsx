@@ -7,7 +7,7 @@ import {
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
-import { Info, useGameContext } from "@/pages/Match";
+import { useGameContext } from "@/pages/Match";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
 import { getMetadataImg } from "@/utils/ipfsImg";
@@ -35,6 +35,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import { Info, UserMarkType } from "@/skyConstants/bttGameTypes";
 
 const randomText = [
     ["*When the game starts, ", "you have 12 hours to make each move"],
@@ -248,6 +249,7 @@ export const MatchPage = ({
             point: point1.toNumber(),
             level: level1.toNumber(),
             img: getMetadataImg(mtadata1),
+            mark: UserMarkType.Circle,
         };
         const player2Info = {
             burner: playerAddress2,
@@ -255,6 +257,7 @@ export const MatchPage = ({
             point: point2.toNumber(),
             level: level2.toNumber(),
             img: getMetadataImg(mtadata2),
+            mark: UserMarkType.Cross,
         };
 
         if (player1Info.burner === tacToeBurner.account.address) {
@@ -338,6 +341,7 @@ export const MatchPage = ({
                     level: level.toNumber(),
                     point: point.toNumber(),
                     img: getMetadataImg(mtadata),
+                    mark: UserMarkType.Empty,
                 });
                 onChangeInfo("op", {
                     burner: "",
@@ -345,6 +349,7 @@ export const MatchPage = ({
                     level: 0,
                     point: 0,
                     img: "",
+                    mark: UserMarkType.Empty,
                 });
             } else {
                 setShowPlayWithBot(false);

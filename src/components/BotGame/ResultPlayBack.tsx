@@ -1,5 +1,4 @@
-import { useGameContext } from "@/pages/TacToe";
-import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,
@@ -10,7 +9,9 @@ import { ZERO_DATA } from "@/skyConstants";
 import BttPlayBackContent from "../BttPlayBack/BttPlayBackContent";
 import {
     BoardItem,
+    GameInfo,
     GameState,
+    Info,
     UserMarkType,
     getShareEmoji,
     getWinState,
@@ -20,29 +21,29 @@ import {
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "../PrivateRoom/ShareButton";
 import { useNavigate } from "react-router-dom";
+import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 
-const ResultPage = () => {
+const ResultPage = ({
+    gameAddress,
+    myInfo,
+    myGameInfo,
+    opInfo,
+    opGameInfo,
+}: {
+    gameAddress: string;
+    myInfo: Info;
+    myGameInfo: GameInfo;
+    opInfo: Info;
+    opGameInfo: GameInfo;
+}) => {
     const navigate = useNavigate();
-    const {
-        realChainId,
-        bidTacToeGameAddress,
-        myInfo,
-        myGameInfo,
-        opInfo,
-        opGameInfo,
-        onStep,
-        istest,
-    } = useGameContext();
-
-    const [init, setInit] = useState(false);
-    const ethcallProvider = useMultiProvider(realChainId);
+    const ethcallProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const [allSelectedGrids, setAllSelectedGrids] = useState<any[]>([]);
     const [currentRound, setCurrentRound] = useState(0);
-
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract();
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
     const [resultList, setResultList] = useState<BoardItem[]>(initBoard()); // init board
 
     const gameOver = useMemo(() => {
@@ -142,7 +143,6 @@ const ResultPage = () => {
 
         setCurrentRound(_gridOrder.length);
         setResultList(_list);
-        setInit(true);
     };
 
     const [showList, myBalance, opBalance, myBid, opBid, myIsNextDrawWinner] =
@@ -300,11 +300,7 @@ ${des}`;
     };
 
     const handleNext = async () => {
-        if (istest) {
-            navigate("/btt");
-            return;
-        }
-        onStep();
+        navigate("/free/bot");
     };
 
     return (

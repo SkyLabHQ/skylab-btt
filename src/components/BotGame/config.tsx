@@ -20,7 +20,6 @@ function doArrow(
     if (!position || position === "custom") {
         return {};
     }
-
     const width = 16;
     const height = 12;
     const isVertical = position === "top" || position === "bottom";

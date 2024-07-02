@@ -2,7 +2,7 @@ import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
-import Board from "../TacToe/Board";
+import Board from "../BttComponents/Board";
 import { MMessage } from "@/components/PrivateRoom/Message";
 import { useGameContext } from "@/pages/TacToe";
 import { MUserProfile } from "../PrivateRoom/UserProfile";

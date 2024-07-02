@@ -2,8 +2,7 @@ import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import Logo from "@/assets/logo.svg";
 import BttIcon from "@/assets/btt-icon.png";
 import XIcon from "@/components/TacToe/assets/x.svg";
-import { Info } from "@/pages/TacToe";
-import Board from "../TacToe/Board";
+import Board from "../BttComponents/Board";
 import { UserCard } from "./UserCard";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import EarthIcon from "@/components/TacToe/assets/earth.svg";
@@ -12,6 +11,7 @@ import {
     BoardItem,
     GameInfo,
     GameState,
+    Info,
     UserMarkType,
 } from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";

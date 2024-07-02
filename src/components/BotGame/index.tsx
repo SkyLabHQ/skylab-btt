@@ -1,14 +1,12 @@
-import { MyUserCard, OpUserCard } from "@/components/TacToe/UserCard";
+import { MyUserCard, OpUserCard } from "@/components/BttComponents/UserCard";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Board from "@/components/TacToe/Board";
+import Board from "@/components/BttComponents/Board";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
-import { MyNewInfo, useGameContext } from "@/pages/BotGame";
 import { ethers } from "ethers";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeGameContract,
-    useMultiMercuryBaseContract,
 } from "@/hooks/useMultiContract";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
@@ -20,8 +18,8 @@ import {
 import {
     GameInfo,
     GameState,
+    Info,
     MessageStatus,
-    getWinState,
 } from "@/skyConstants/bttGameTypes";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
@@ -39,7 +37,14 @@ interface TacToeProps {
     nextDrawWinner: string;
     handleGetGameInfo: () => void;
     onChangeGame: (position: "my" | "op", info: GameInfo) => void;
-    onChangeNewInfo: (info: MyNewInfo) => void;
+    myInfo: Info;
+    opInfo: Info;
+    myGameInfo: GameInfo;
+    opGameInfo: GameInfo;
+    gameAddress: string;
+    tokenId: number;
+    list: any[];
+    onStep: (step: number) => void;
 }
 
 const TacToePage = ({
@@ -47,24 +52,18 @@ const TacToePage = ({
     currentGrid,
     nextDrawWinner,
     onChangeGame,
-    onChangeNewInfo,
-    handleGetGameInfo,
+    myInfo,
+    opInfo,
+    myGameInfo,
+    opGameInfo,
+    gameAddress,
+    tokenId,
+    list,
+    onStep,
 }: TacToeProps) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
-
-    const {
-        myInfo,
-        opInfo,
-        myGameInfo,
-        opGameInfo,
-        gameAddress,
-        tokenId,
-        list,
-        onStep,
-    } = useGameContext();
     const { isOpen, onOpen, onClose } = useDisclosure();
-
     const commitWorkerRef = useRef<Worker>(null);
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const [revealing, setRevealing] = useState<boolean>(false);
@@ -91,7 +90,6 @@ const TacToePage = ({
     const deleteTokenIdCommited = useDeleteTokenIdCommited(tokenId);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(gameAddress);
-    const multiMercuryBaseContract = useMultiMercuryBaseContract();
 
     const ethcallProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const [loading, setLoading] = useState<boolean>(false);
@@ -514,6 +512,11 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 </Box>
             ) : (
                 <MLayout
+                    myGameInfo={myGameInfo}
+                    opGameInfo={opGameInfo}
+                    myInfo={myInfo}
+                    opInfo={opInfo}
+                    list={list}
                     inviteLink={inviteLink}
                     handleShareTw={handleShareTw}
                     nextDrawWinner={nextDrawWinner}

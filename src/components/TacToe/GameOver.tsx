@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import Board from "@/components/TacToe/Board";
-import ResultUserCard from "../TacToe/ResultUserCard";
+import Board from "@/components/BttComponents/Board";
 import { getWinState } from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 import { GameType, useGameContext } from "@/pages/TacToe";
+import ResultUserCard from "../BttComponents/ResultUserCard";
 
 const GameOver = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");

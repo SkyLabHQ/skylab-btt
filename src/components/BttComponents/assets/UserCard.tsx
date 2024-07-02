@@ -1028,7 +1028,6 @@ export const OpUserCard = ({
                         src={planeUrl}
                     ></Image>
                 </Box>
-
                 <Text
                     sx={{
                         fontSize: "0.8333vw",

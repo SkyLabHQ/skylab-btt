@@ -1,7 +1,6 @@
 import React from "react";
 import BackIcon from "@/assets/back-arrow.svg";
 import BackIcon1 from "@/assets/back.svg";
-
 import { Flex, Image, useMediaQuery } from "@chakra-ui/react";
 
 const Back = ({ onClick }: { onClick?: () => void }) => {

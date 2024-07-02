@@ -1,7 +1,7 @@
-import { MyUserCard, OpUserCard } from "@/components/TacToe/UserCard";
+import { MyUserCard, OpUserCard } from "@/components/BttComponents/UserCard";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Board from "@/components/TacToe/Board";
+import Board from "@/components/BttComponents/Board";
 import { useBttGameRetry } from "@/hooks/useRetryContract";
 import { GameType, MyNewInfo, useGameContext } from "@/pages/TacToe";
 import { ethers } from "ethers";

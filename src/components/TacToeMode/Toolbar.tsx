@@ -1,5 +1,5 @@
 import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
-import BidTacToeTutorial from "@/components/TacToe/BidTacToeTutorial";
+import BidTacToeTutorial from "@/components/BttComponents/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
 import PlayBackIcon from "./assets/playback-icon.svg";
 import WalletIcon from "./assets/wallet-icon.png";

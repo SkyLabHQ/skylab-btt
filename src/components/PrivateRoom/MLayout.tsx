@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { MUserProfilePvp } from "./UserProfile";
 import MBalance, { MPvpBalance } from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
-import Board from "../TacToe/Board";
+import Board from "../BttComponents/Board";
 import { MMessage } from "./Message";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";

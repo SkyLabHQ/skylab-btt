@@ -4,16 +4,12 @@ import Bg from "./assets/settlement-bg.png";
 import GardenIcon from "./assets/garden-icon.png";
 import BackIcon from "./assets/back-arrow-home.svg";
 import { useNavigate } from "react-router-dom";
-import { Info, MyNewInfo, useGameContext } from "@/pages/TacToe";
+import { MyNewInfo, useGameContext } from "@/pages/TacToe";
 import UpIcon from "./assets/up-icon.svg";
 import DownIcon from "./assets/down-icon.svg";
 import Loading from "../Loading";
 import { aviationImg } from "@/utils/aviationImg";
-import MileageIcon from "@/components/Tournament/assets/mileage-icon.svg";
-import RightArrowBlack from "@/components/Tournament/assets/right-arrow-black.svg";
-import { PrimaryButton } from "../Button/Index";
-import { GameState } from "@/skyConstants/bttGameTypes";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import { GameState, Info } from "@/skyConstants/bttGameTypes";
 import { motion, useAnimation } from "framer-motion";
 import { levelRanges } from "@/utils/level";
 

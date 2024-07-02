@@ -1,8 +1,7 @@
-import { Info } from "@/pages/TacToe";
 import { Box, Image, Text } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { shortenAddress } from "@/utils";
-import { UserMarkType } from "@/skyConstants/bttGameTypes";
+import { Info, UserMarkType } from "@/skyConstants/bttGameTypes";
 import useBidIcon from "@/hooks/useBidIcon";
 
 const ResultUserCard = ({

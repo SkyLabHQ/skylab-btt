@@ -27,6 +27,7 @@ import {
     BoardItem,
     GameInfo,
     GameState,
+    Info,
     RobotImg,
     UserMarkType,
     getWinState,
@@ -46,16 +47,6 @@ import { getMetadataImg } from "@/utils/ipfsImg";
 import { ZERO_DATA } from "@/skyConstants";
 import { getSCWallet } from "@/hooks/useSCWallet";
 import Nest from "@/components/Nest";
-
-export interface Info {
-    burner: string;
-    address: string;
-    level: number;
-    point: number;
-    img: string;
-    mark: UserMarkType;
-    isBot?: boolean;
-}
 
 export interface MyNewInfo {
     level: number;

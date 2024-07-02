@@ -1,6 +1,6 @@
 import { Box, Grid, Text, Image, Flex } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { BoardGrid } from "@/components/TacToe/Board";
+import { BoardGrid } from "@/components/BttComponents/Board";
 import BaseGrid from "./assets/base-grid.svg";
 import { useTour } from "@reactour/tour";
 import CloseIcon from "./assets/close.svg";

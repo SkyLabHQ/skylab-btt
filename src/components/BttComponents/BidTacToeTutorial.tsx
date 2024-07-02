@@ -2,9 +2,9 @@ import React from "react";
 import { Box, Modal, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { TourProvider } from "@reactour/tour";
 import "@reactour/popover/dist/index.css"; // arrow css
-import { mTourConfig, tourConfig } from "@/components/TacToe/config";
-import ContentComponent from "@/components/TacToe/TourComponent";
-import TacToeTutorial from "@/components/TacToe/TacTocTutorial";
+import { mTourConfig, tourConfig } from "@/components/BttComponents/config";
+import ContentComponent from "@/components/BttComponents/TourComponent";
+import TacToeTutorial from "@/components/BttComponents/TacTocTutorial";
 import MTacToeTutorial from "./MTacTocTutorial";
 import Click1Wav from "@/assets/click1.wav";
 const audio = new Audio(Click1Wav);

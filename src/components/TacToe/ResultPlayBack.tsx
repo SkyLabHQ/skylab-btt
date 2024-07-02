@@ -1,5 +1,5 @@
 import { useGameContext } from "@/pages/TacToe";
-import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,

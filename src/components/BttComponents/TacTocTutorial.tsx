@@ -1,15 +1,12 @@
-import { Box, Grid, Text, Image, Flex } from "@chakra-ui/react";
+import { Box, Grid, Text, Image } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { BoardGrid } from "@/components/TacToe/Board";
+import { MyUserCard, OpUserCard } from "./UserCard";
+import { BoardGrid } from "@/components/BttComponents/Board";
 import BaseGrid from "./assets/base-grid.svg";
 import { useTour } from "@reactour/tour";
 import CloseIcon from "./assets/close.svg";
-import { UserMarkType } from "@/skyConstants/bttGameTypes";
-import MBalance from "../BttComponents/MBalance";
-import { MUserProfile } from "../PrivateRoom/UserProfile";
-import Timer from "../BttComponents/Timer";
-import { aviationImg } from "@/utils/aviationImg";
-import BottomInputBox from "../BttComponents/BottomInputBox";
+import BttTimer from "./BttTimer";
+import { GameState, UserMarkType } from "@/skyConstants/bttGameTypes";
 
 const FirstBoard = () => {
     const list = [
@@ -88,8 +85,8 @@ const FirstBoard = () => {
             <Grid
                 templateColumns="repeat(3, 1fr)"
                 templateRows="repeat(3, 1fr)"
-                w={"220px"}
-                h={"220px"}
+                w={"26.0938vw"}
+                h={"26.0938vw"}
                 sx={{
                     position: "relative",
                 }}
@@ -106,7 +103,6 @@ const FirstBoard = () => {
                         ></BoardGrid>
                     );
                 })}
-
                 <Box
                     className="btt-fourth-step"
                     sx={{
@@ -121,12 +117,12 @@ const FirstBoard = () => {
                 <Box
                     className="btt-0-step"
                     sx={{
-                        width: "58px",
-                        height: "58px",
+                        width: "7.2vw",
+                        height: "7.2vw",
                         position: "absolute",
-                        top: "160px",
+                        bottom: "0%",
                         left: "50%",
-                        transform: "translateX(-50%)",
+                        transform: "translateX(-50%  )",
                     }}
                 ></Box>
             </Grid>
@@ -211,8 +207,8 @@ const SecondBoard = () => {
             <Grid
                 templateColumns="repeat(3, 1fr)"
                 templateRows="repeat(3, 1fr)"
-                w={"220px"}
-                h={"220px"}
+                w={"26.0938vw"}
+                h={"26.0938vw"}
                 sx={{
                     position: "relative",
                 }}
@@ -232,8 +228,8 @@ const SecondBoard = () => {
                 <Box
                     className="btt-fifth-step"
                     sx={{
-                        width: "74px",
-                        height: "220px",
+                        width: "8.1771vw",
+                        height: "26.0938vw",
                         position: "absolute",
                         top: 0,
                         right: 0,
@@ -322,8 +318,8 @@ const ThirdBoard = () => {
             <Grid
                 templateColumns="repeat(3, 1fr)"
                 templateRows="repeat(3, 1fr)"
-                w={"220px"}
-                h={"220px"}
+                w={"26.0938vw"}
+                h={"26.0938vw"}
                 sx={{
                     position: "relative",
                 }}
@@ -358,8 +354,8 @@ const opBalanceObj = {
     3: 0,
 };
 
-const MTacToeTutorial = ({}) => {
-    const { currentStep, setIsOpen } = useTour();
+const TacToeTutorial = ({}) => {
+    const { currentStep, steps, setIsOpen, setCurrentStep } = useTour();
 
     useEffect(() => {
         setTimeout(() => {
@@ -382,16 +378,16 @@ const MTacToeTutorial = ({}) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     position: "fixed",
-                    top: "20px",
-                    left: "0",
-                    width: "100%",
+                    top: "2.6042vw",
+                    left: "50%",
+                    width: "calc(100% - 16.6667vw)",
+                    transform: "translateX(-50%)",
                     zIndex: 9999999,
-                    padding: "0 20px",
                 }}
             >
                 <Text
                     sx={{
-                        fontSize: "20px",
+                        fontSize: "1.25vw",
                     }}
                 >
                     Tutorial
@@ -400,131 +396,69 @@ const MTacToeTutorial = ({}) => {
                     src={CloseIcon}
                     sx={{
                         cursor: "pointer",
-                        width: "18px",
+                        width: "1.6667vw",
                     }}
                     onClick={() => {
                         setIsOpen(false);
                     }}
                 ></Image>
             </Box>
-
             <Box
                 sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    height: "100%",
-                    padding: "0px 18px 0",
+                    width: "100vw",
+                    height: "100vh",
+                    inset: 0,
+                    padding: "4.8958vw 8.3333vw 9.6875vw",
                     background: "rgba(217, 217, 217, 1)",
                     zIndex: 100,
                     position: "absolute",
                     left: 0,
                     top: 0,
-                    width: "100%",
-                    paddingTop: "60px",
                 }}
             >
                 <Box
-                    id="share-content"
                     sx={{
                         background: "#303030",
-                        margin: "0 auto",
+                        height: "74.537vh",
+                        padding: "2vh 1.5vw 0",
                         width: "100%",
-                        border: "2px solid #fff",
-                        boxShadow: "5px 4px 8px 0px rgba(255, 255, 255, 0.50)",
-                        padding: "20px 0 140px",
-                        position: "relative",
                         display: "flex",
                         flexDirection: "column",
-                        borderRadius: "10px",
                     }}
                 >
-                    <Flex
-                        sx={{
-                            alignItems: "flex-start",
-                        }}
-                        flexDir={"column"}
-                    >
-                        <Flex>
-                            <MUserProfile
-                                open={true}
-                                status="op"
-                                img={aviationImg(1)}
-                                level={1}
-                            ></MUserProfile>
-                        </Flex>
-                        <Box className="btt-first-step btt-third-step">
-                            <MBalance
-                                balance={opBalanceObj[currentStep]}
-                                mark={2}
-                            ></MBalance>
-                        </Box>
-                    </Flex>
                     <Box
                         sx={{
-                            position: "absolute",
-                            bottom: "0px",
-                            left: "0",
-                            width: "100%",
+                            position: "relative",
+                            display: "flex",
+                            justifyContent: "center",
                         }}
                     >
-                        <Box
-                            sx={{
-                                height: "32px",
-                                position: "relative",
-                            }}
-                            className="btt-1-step"
-                        >
-                            <Box
-                                sx={{
-                                    width: "140px",
-                                    position: "absolute",
-                                    left: "12px",
-                                    bottom: "12px",
-                                }}
-                            >
-                                <Timer time1={30000} time1Gray={false}></Timer>
-                            </Box>
-                            <Flex
-                                sx={{
-                                    position: "absolute",
-                                    bottom: "12px",
-                                    right: 0,
-                                }}
-                                flexDir={"column"}
-                                align={"flex-end"}
-                            >
-                                <MUserProfile
-                                    level={1}
-                                    open={true}
-                                    status="my"
-                                    img={aviationImg(1)}
-                                ></MUserProfile>
-                                <MBalance
-                                    balance={myBalanceObj[currentStep]}
-                                    status="right"
-                                    mark={1}
-                                ></MBalance>
-                            </Flex>
-                        </Box>
-                        <BottomInputBox
-                            bidAmount={""}
-                            myGameState={null}
-                            loading={false}
-                            onSubClick={() => {}}
-                            onAddClick={() => {}}
-                            onConfirm={() => {}}
-                            onInputAmountClick={() => {}}
-                        ></BottomInputBox>
+                        <BttTimer
+                            width={"30%"}
+                            time={`00:12`}
+                            show={true}
+                        ></BttTimer>
                     </Box>
+
                     <Box
                         sx={{
                             display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
                             flex: 1,
-                            justifyContent: "center",
-                            marginTop: "20px",
                         }}
                     >
+                        <MyUserCard
+                            showTutorialStep
+                            showAdvantageTip
+                            markIcon={UserMarkType.Circle}
+                            level={1}
+                            address={
+                                "0x2f49Be6976324000da4Bd091B0217E217b81A93d"
+                            }
+                            balance={myBalanceObj[currentStep]}
+                            bidAmount={3}
+                        ></MyUserCard>
                         <Box>
                             {[0, 1].includes(currentStep) && (
                                 <FirstBoard></FirstBoard>
@@ -532,6 +466,16 @@ const MTacToeTutorial = ({}) => {
                             {currentStep === 2 && <SecondBoard></SecondBoard>}
                             {currentStep === 3 && <ThirdBoard></ThirdBoard>}
                         </Box>
+                        <OpUserCard
+                            markIcon={UserMarkType.Cross}
+                            level={1}
+                            address={
+                                "0x40BA69df5c58A1106480b42aFEF78DA08860081c"
+                            }
+                            balance={opBalanceObj[currentStep]}
+                            bidAmount={2}
+                            opGameState={GameState.Revealed}
+                        ></OpUserCard>
                     </Box>
                 </Box>
             </Box>
@@ -539,4 +483,4 @@ const MTacToeTutorial = ({}) => {
     );
 };
 
-export default MTacToeTutorial;
+export default TacToeTutorial;
