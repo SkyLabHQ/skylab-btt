@@ -19,6 +19,7 @@ import { bindBurner } from "@/api";
 import BttIcon from "@/assets/btt-icon.png";
 import SoloIcon from "./assets/solo-icon.svg";
 import { bttFactoryIface } from "@/skyConstants/iface";
+import { savePvpGamePrivateKey } from "@/hooks/useSigner";
 
 const PlayButtonGroup = ({
     onPlayTournament,
@@ -159,15 +160,7 @@ const PvpHomePage = () => {
                 burner: pvpAddress,
             });
 
-            const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
-                ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
-                : {};
-            pvpPrivateKeys[gameAddress] = privateKey;
-            localStorage.setItem(
-                "pvpPrivateKeys",
-                JSON.stringify(pvpPrivateKeys),
-            );
-
+            savePvpGamePrivateKey(gameAddress, privateKey);
             const pvpPasswords = localStorage.getItem("pvpPasswords")
                 ? JSON.parse(localStorage.getItem("pvpPasswords"))
                 : {};

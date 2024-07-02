@@ -1,6 +1,6 @@
 import { useGameContext } from "@/pages/TacToe";
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
@@ -19,30 +19,20 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "../PrivateRoom/ShareButton";
-import { useNavigate } from "react-router-dom";
+import { useChainId } from "wagmi";
 
 const ResultPage = () => {
-    const navigate = useNavigate();
-    const {
-        realChainId,
-        bidTacToeGameAddress,
-        myInfo,
-        myGameInfo,
-        opInfo,
-        opGameInfo,
-        onStep,
-        istest,
-    } = useGameContext();
-
-    const [init, setInit] = useState(false);
-    const ethcallProvider = useMultiProvider(realChainId);
+    const { gameAddress, myInfo, myGameInfo, opInfo, opGameInfo, onStep } =
+        useGameContext();
+    const chainid = useChainId();
+    const ethcallProvider = useMultiProvider(chainid);
     const [allSelectedGrids, setAllSelectedGrids] = useState<any[]>([]);
     const [currentRound, setCurrentRound] = useState(0);
 
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract();
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
     const [resultList, setResultList] = useState<BoardItem[]>(initBoard()); // init board
 
     const gameOver = useMemo(() => {
@@ -142,7 +132,6 @@ const ResultPage = () => {
 
         setCurrentRound(_gridOrder.length);
         setResultList(_list);
-        setInit(true);
     };
 
     const [showList, myBalance, opBalance, myBid, opBid, myIsNextDrawWinner] =
@@ -300,10 +289,6 @@ ${des}`;
     };
 
     const handleNext = async () => {
-        if (istest) {
-            navigate("/btt");
-            return;
-        }
         onStep();
     };
 

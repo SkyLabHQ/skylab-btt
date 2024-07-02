@@ -15,7 +15,11 @@ import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import { getDefaultWithProvider } from "@/hooks/useSigner";
+import {
+    getDefaultWithProvider,
+    getPlaneGameSigner,
+    savePlaneGamePrivateKey,
+} from "@/hooks/useSigner";
 import { bttFactoryIface } from "@/skyConstants/iface";
 import { useChainId } from "wagmi";
 import { ZERO_DATA } from "@/skyConstants";
@@ -25,6 +29,7 @@ import SelectPlane from "@/components/TacToeMode/SelectPlane";
 import MarketIcon from "@/components/TacToeMode/assets/market-icon.png";
 import { privateKeyToAccount } from "viem/accounts";
 import Nest from "@/components/Nest";
+import { ethers } from "ethers";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -47,35 +52,27 @@ const TacToeMode = () => {
 
     const handleTournament = async () => {
         const tokenId = selectPlane?.tokenId;
+
         try {
             if (selectPlane.state) {
-                let objPrivateKey = {};
-                let stringPrivateKey = localStorage.getItem("tactoePrivateKey");
-                try {
-                    objPrivateKey = stringPrivateKey
-                        ? JSON.parse(stringPrivateKey)
-                        : {};
-                } catch (e) {
-                    objPrivateKey = {};
-                }
-                const key = chainId + "-" + tokenId;
-                const account = privateKeyToAccount(objPrivateKey[key]);
+                const account = getPlaneGameSigner(tokenId);
                 if (!account) {
                     return;
                 }
-                const [bidTacToeGameAddress, defaultGameQueue] =
-                    await multiProvider.all([
+                const [gameAddress, defaultGameQueue] = await multiProvider.all(
+                    [
                         multiSkylabBidTacToeFactoryContract.gamePerPlayer(
                             account.address,
                         ),
                         multiSkylabBidTacToeFactoryContract.defaultGameQueue(
                             mercuryJarTournamentAddress[DEAFAULT_CHAINID],
                         ),
-                    ]);
+                    ],
+                );
 
-                if (bidTacToeGameAddress !== ZERO_DATA) {
+                if (gameAddress !== ZERO_DATA) {
                     navigate(
-                        `/btt/game?gameAddress=${bidTacToeGameAddress}&tokenId=${tokenId}`,
+                        `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`,
                     );
                     return;
                 }
@@ -87,12 +84,14 @@ const TacToeMode = () => {
             }
 
             openLoading();
-            const defaultSinger = getDefaultWithProvider(tokenId, chainId);
-
+            let account = getPlaneGameSigner(tokenId);
+            if (!account) {
+                account = ethers.Wallet.createRandom();
+            }
             await checkBurnerBalanceAndApprove(
                 mercuryJarTournamentAddress[chainId],
                 tokenId,
-                defaultSinger.account.address,
+                account.address,
             );
 
             const createGameReceipt = await tacToeFactoryRetryWrite(
@@ -100,19 +99,19 @@ const TacToeMode = () => {
                 [],
                 {
                     gasLimit: 1000000,
-                    signer: defaultSinger,
+                    signer: account.privateKey,
                 },
             );
             const startGameTopic0 = bttFactoryIface.getEventTopic("StartGame");
-
-            const startBotGameLog = createGameReceipt.logs.find((item: any) => {
+            const startGameLog = createGameReceipt.logs.find((item: any) => {
                 return item.topics[0] === startGameTopic0;
             });
 
-            if (startBotGameLog) {
+            savePlaneGamePrivateKey(tokenId, account.privateKey);
+            if (startGameLog) {
                 const startGameData = bttFactoryIface.parseLog({
-                    data: startBotGameLog.data,
-                    topics: startBotGameLog.topics,
+                    data: startGameLog.data,
+                    topics: startGameLog.topics,
                 });
                 const gameAddress = startGameData.args.gameAddress;
                 const url = `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`;

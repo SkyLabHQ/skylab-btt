@@ -1,28 +1,16 @@
 import { Box } from "@chakra-ui/react";
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { getTestflightSigner, useTacToeSigner } from "@/hooks/useSigner";
+import { getPlaneGameSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import SettlementPage from "@/components/TacToe/SettlementPage";
 import BttHelmet from "@/components/Helmet/BttHelmet";
-import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
-import {
-    botAddress,
-    mercuryJarTournamentAddress,
-    skylabTestFlightAddress,
-} from "@/hooks/useContract";
+import { botAddress, mercuryJarTournamentAddress } from "@/hooks/useContract";
 import {
     BoardItem,
     GameInfo,
@@ -45,8 +33,10 @@ import {
 } from "@/hooks/useMultiContract";
 import { getMetadataImg } from "@/utils/ipfsImg";
 import { ZERO_DATA } from "@/skyConstants";
-import { getSCWallet } from "@/hooks/useSCWallet";
 import Nest from "@/components/Nest";
+import { privateKeyToAccount } from "viem/accounts";
+import { CHAINS } from "@/skyConstants/chains";
+import { createWalletClient, http } from "viem";
 
 export interface MyNewInfo {
     level: number;
@@ -61,8 +51,6 @@ export enum GameType {
 }
 
 const GameContext = createContext<{
-    realChainId: number;
-    istest: boolean;
     gameType: GameType;
     list: BoardItem[];
     tokenId: number;
@@ -71,7 +59,7 @@ const GameContext = createContext<{
     opInfo: Info;
     myGameInfo: GameInfo;
     opGameInfo: GameInfo;
-    bidTacToeGameAddress: string;
+    gameAddress: string;
     avaitionAddress: string;
     mileages: {
         winMileage: number;
@@ -83,7 +71,6 @@ const GameContext = createContext<{
     };
     onStep: (step?: number) => void;
     handleGetGas: () => void;
-    setBidTacToeGameAddress: (address: string) => void;
 }>(null);
 export const useGameContext = () => useContext(GameContext);
 
@@ -110,13 +97,9 @@ const TacToe = () => {
 
     const { search } = useLocation();
     const params = qs.parse(search) as any;
-    const istest = params.testflight === "true";
-    const realChainId = istest ? TESTFLIGHT_CHAINID : chainId;
-    const multiProvider = useMultiProvider(realChainId);
+    const multiProvider = useMultiProvider(chainId);
     const [myNewInfo, setMyNewInfo] = useState<MyNewInfo>(null); // if game over update my info
-    const avaitionAddress = istest
-        ? skylabTestFlightAddress[TESTFLIGHT_CHAINID]
-        : mercuryJarTournamentAddress[realChainId];
+    const avaitionAddress = mercuryJarTournamentAddress[chainId];
     const [myInfo, setMyInfo] = useState<Info>({
         burner: "",
         address: "",
@@ -133,18 +116,9 @@ const TacToe = () => {
         img: "",
         mark: UserMarkType.Empty,
     });
-    const ethcallProvider = useMultiProvider(realChainId);
     const [tokenId] = useState<number>(params.tokenId);
     const initRef = useRef<boolean>(false);
-    const [planeBurner] = useTacToeSigner(tokenId);
-
-    const burnerWallet = useMemo(() => {
-        if (istest) {
-            return getTestflightSigner();
-        }
-
-        return planeBurner;
-    }, [planeBurner, istest]);
+    const planeAccount = getPlaneGameSigner(tokenId);
 
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
@@ -163,19 +137,17 @@ const TacToe = () => {
         emote: 0,
     });
 
-    const [bidTacToeGameAddress, setBidTacToeGameAddress] = useState<string>(
-        params.gameAddress,
-    );
+    const [gameAddress] = useState<string>(params.gameAddress);
 
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [step, setStep] = useState(0);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
-    const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
+    const multiMercuryBaseContract = useMultiMercuryBaseContract(chainId);
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
     const multiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(realChainId);
+        useMultiSkylabBidTacToeFactoryContract(chainId);
     const handleStep = (step?: number) => {
         if (step === undefined) {
             setStep((step) => step + 1);
@@ -186,9 +158,9 @@ const TacToe = () => {
 
     const handleGetGas = async () => {
         console.log("start transfer gas");
-        const publicClient: any = getViemClients({ chainId: realChainId });
+        const publicClient: any = getViemClients({ chainId: chainId });
         const balance = await publicClient.getBalance({
-            address: burnerWallet.account.address,
+            address: planeAccount.address,
         });
         const gasPrice = await publicClient.getGasPrice();
         const fasterGasPrice = (gasPrice * BigInt(110)) / BigInt(100);
@@ -200,7 +172,17 @@ const TacToe = () => {
         }
 
         const value = balance - gasFee - l1Fees;
-        const transferResult = await burnerWallet.sendTransaction({
+        const account = privateKeyToAccount(
+            planeAccount.privateKey as `0x${string}`,
+        );
+        const signerClient: any = createWalletClient({
+            account,
+            chain: CHAINS.find((item) => {
+                return item.id === chainId;
+            }),
+            transport: http(),
+        });
+        const transferResult = await signerClient.sendTransaction({
             to: address,
             value: value,
             gasLimit: 21000,
@@ -236,11 +218,7 @@ const TacToe = () => {
             multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
         ]);
 
-        let burnerAddress = burnerWallet.account.address;
-        if (istest) {
-            const { sCWAddress } = await getSCWallet(burnerWallet.privateKey);
-            burnerAddress = sCWAddress;
-        }
+        let burnerAddress = planeAccount.address;
 
         if (playerAddress1 !== burnerAddress) {
             navitate("/");
@@ -368,7 +346,7 @@ const TacToe = () => {
             img: getMetadataImg(mtadata2),
         };
 
-        if (player1Info.burner === burnerWallet.account.address) {
+        if (player1Info.burner === planeAccount.address) {
             onChangePoint(player1Move.toNumber(), player2Move.toNumber());
             onChangeMileage(
                 player1WinMileage.toNumber(),
@@ -376,7 +354,7 @@ const TacToe = () => {
             );
             onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
             onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
-        } else if (player2Info.burner === burnerWallet.account.address) {
+        } else if (player2Info.burner === planeAccount.address) {
             onChangeMileage(
                 player2WinMileage.toNumber(),
                 player2LoseMileage.toNumber(),
@@ -401,7 +379,7 @@ const TacToe = () => {
             console.log("playerAddress1", playerAddress1);
             console.log("playerAddress2", playerAddress2);
 
-            if (playerAddress2 === botAddress[realChainId]) {
+            if (playerAddress2 === botAddress[chainId]) {
                 handleGetHuamnAndBotInfo(playerAddress1, playerAddress2);
             } else {
                 handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
@@ -430,7 +408,7 @@ const TacToe = () => {
                 opMessage,
                 opEmote,
                 nextDrawWinner,
-            ] = await ethcallProvider.all([
+            ] = await multiProvider.all([
                 multiSkylabBidTacToeGameContract.currentSelectedGrid(),
                 multiSkylabBidTacToeGameContract.getGrid(),
                 multiSkylabBidTacToeGameContract.balances(myInfo.burner),
@@ -570,7 +548,7 @@ const TacToe = () => {
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
-            !ethcallProvider ||
+            !multiProvider ||
             !myInfo.burner ||
             !opInfo.burner ||
             step !== 0
@@ -585,7 +563,7 @@ const TacToe = () => {
         };
     }, [
         multiSkylabBidTacToeGameContract,
-        ethcallProvider,
+        multiProvider,
         myInfo.burner,
         opInfo.burner,
         step,
@@ -610,9 +588,7 @@ const TacToe = () => {
                 >
                     <GameContext.Provider
                         value={{
-                            realChainId,
                             gameType,
-                            istest,
                             myInfo,
                             opInfo,
                             myNewInfo,
@@ -620,13 +596,12 @@ const TacToe = () => {
                             myGameInfo,
                             opGameInfo,
                             list,
-                            bidTacToeGameAddress,
+                            gameAddress,
                             mileages,
                             points,
                             avaitionAddress,
                             onStep: handleStep,
                             handleGetGas: handleGetGas,
-                            setBidTacToeGameAddress,
                         }}
                     >
                         <Box

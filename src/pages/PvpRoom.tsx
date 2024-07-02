@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import BttHelmet from "@/components/Helmet/BttHelmet";
@@ -21,6 +21,7 @@ import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
 import Nest from "@/components/Nest";
 import { useSCWallet } from "@/hooks/useSCWallet";
+import { getPvpGameSigner } from "@/hooks/useSigner";
 
 const PvpGameContext = createContext<{
     myGameInfo: GameInfo;
@@ -127,11 +128,9 @@ const PvpRoom = () => {
     useEffect(() => {
         try {
             const gameAddress = params.gameAddress;
-            const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
-                ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
-                : {};
-            if (pvpPrivateKeys[gameAddress]) {
-                setPrivateKey(pvpPrivateKeys[gameAddress]);
+            const pvpAccount = getPvpGameSigner(gameAddress);
+            if (pvpAccount) {
+                setPrivateKey(pvpAccount.privateKey);
             } else {
                 navigate("/free/pvpHome");
             }

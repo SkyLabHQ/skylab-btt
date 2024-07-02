@@ -21,6 +21,7 @@ import { useSCWallet } from "@/hooks/useSCWallet";
 import { bindBurner } from "@/api";
 import { useInitData } from "@tma.js/sdk-react";
 import LoadingPage from "@/components/LoadingPage";
+import { getPvpGameSigner, savePvpGamePrivateKey } from "@/hooks/useSigner";
 
 const Accept = () => {
     const navigate = useNavigate();
@@ -61,15 +62,7 @@ const Accept = () => {
                 inviteCode,
                 params.password,
             ]);
-            const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
-                ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
-                : {};
-            pvpPrivateKeys[gameAddress] = privateKey;
-            localStorage.setItem(
-                "pvpPrivateKeys",
-                JSON.stringify(pvpPrivateKeys),
-            );
-
+            savePvpGamePrivateKey(gameAddress, privateKey);
             closeLoading();
             navigate(`/free/pvpGame?gameAddress=${gameAddress}`);
         } catch (e) {
@@ -153,11 +146,10 @@ const Accept = () => {
         if (!gameAddress) {
             return;
         }
-        const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
-            ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
-            : {};
-        if (pvpPrivateKeys[gameAddress]) {
-            setPrivateKey(pvpPrivateKeys[gameAddress]);
+
+        const pvpAccount = getPvpGameSigner(gameAddress);
+        if (pvpAccount) {
+            setPrivateKey(pvpAccount.privateKey);
         } else {
             const newWallet = ethers.Wallet.createRandom().privateKey;
             setPrivateKey(newWallet);

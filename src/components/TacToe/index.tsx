@@ -32,6 +32,8 @@ import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
 import StatusProgress from "../BttComponents/StatusProgress";
+import { useChainId } from "wagmi";
+import { getPlaneGameSigner } from "@/hooks/useSigner";
 
 interface TacToeProps {
     showAnimateNumber: number;
@@ -54,21 +56,22 @@ const TacToePage = ({
     const toast = useSkyToast();
 
     const {
-        istest,
         myInfo,
         opInfo,
         myGameInfo,
         opGameInfo,
-        bidTacToeGameAddress,
+        gameAddress,
         tokenId,
         list,
         onStep,
         gameType,
-        realChainId,
         handleGetGas,
     } = useGameContext();
+
+    const chainId = useChainId();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const planeAccount = getPlaneGameSigner(tokenId);
     const commitWorkerRef = useRef<Worker>(null);
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const [revealing, setRevealing] = useState<boolean>(false);
@@ -91,13 +94,13 @@ const TacToePage = ({
     );
 
     const addBttTransaction = useAddBttTransaction(tokenId);
-    const tacToeGameRetryWrite = useBttGameRetry(bidTacToeGameAddress, tokenId);
+    const tacToeGameRetryWrite = useBttGameRetry(gameAddress);
     const deleteTokenIdCommited = useDeleteTokenIdCommited(tokenId);
     const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(bidTacToeGameAddress);
+        useMultiSkylabBidTacToeGameContract(gameAddress);
     const multiMercuryBaseContract = useMultiMercuryBaseContract();
 
-    const ethcallProvider = useMultiProvider(realChainId);
+    const ethcallProvider = useMultiProvider(chainId);
     const [loading, setLoading] = useState<boolean>(false);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 
@@ -113,14 +116,14 @@ const TacToePage = ({
     }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
     const inviteLink = useMemo(() => {
-        if (!bidTacToeGameAddress) return "";
+        if (!gameAddress) return "";
 
         return `${
             window.location.origin
-        }/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}&burner=${shortenAddressWithout0x(
+        }/btt/live?gameAddress=${gameAddress}&chainId=${chainId}&burner=${shortenAddressWithout0x(
             myInfo.burner,
         )}`;
-    }, [bidTacToeGameAddress, myInfo]);
+    }, [gameAddress, myInfo]);
 
     const handleBoardClick = () => {
         setShowAnimateConfirm((number) => {
@@ -131,12 +134,12 @@ const TacToePage = ({
     const handleShareTw = () => {
         const text = `${
             window.location.host
-        }/btt/live?gameAddress=${bidTacToeGameAddress}&chainId=${realChainId}&burner=${shortenAddressWithout0x(
+        }/btt/live?gameAddress=${gameAddress}&chainId=${chainId}&burner=${shortenAddressWithout0x(
             myInfo.burner,
         )}
 ⭕️❌⭕️❌Watch me play Bid tac toe and crush the opponent！⭕️❌⭕️❌
 Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
-            CHAIN_NAMES[realChainId]
+            CHAIN_NAMES[chainId]
         }
 (Twitter)@skylabHQ`;
 
@@ -176,12 +179,12 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         try {
             await tacToeGameRetryWrite("claimTimeoutPenalty", [], {
                 gasLimit: 5000000,
-                usePaymaster: istest,
+                signer: planeAccount.privateKey,
             });
             handleGetGameInfo();
         } catch (e) {
             console.log(e);
-            toast(handleError(e, istest));
+            toast(handleError(e));
         }
     };
 
@@ -218,7 +221,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
 
             await tacToeGameRetryWrite("commitBid", [hash], {
                 gasLimit: 1000000,
-                usePaymaster: istest,
+                signer: planeAccount.privateKey,
             });
             onChangeGame("my", {
                 ...myGameInfo,
@@ -229,7 +232,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         } catch (e) {
             console.log(e);
             setLoading(false);
-            toast(handleError(e, istest));
+            toast(handleError(e));
         }
     }, [
         currentGrid,
@@ -250,7 +253,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             setRevealing(true);
             await tacToeGameRetryWrite("revealBid", [amount, Number(salt)], {
                 gasLimit: 7000000,
-                usePaymaster: istest,
+                signer: planeAccount.privateKey,
             });
             onChangeGame("my", {
                 ...myGameInfo,
@@ -261,7 +264,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         } catch (e) {
             setRevealing(false);
             console.log(e);
-            toast(handleError(e, istest));
+            toast(handleError(e));
         }
     };
 
@@ -269,44 +272,42 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
     const handleGameOver = async () => {
         if (myGameInfo.gameState <= GameState.Revealed) return;
         deleteTokenIdCommited();
-        if (!istest) {
-            const gameResult = getWinState(myGameInfo.gameState);
-            handleGetGas();
-            try {
-                const [level, point] = await ethcallProvider.all([
-                    multiMercuryBaseContract.aviationLevels(tokenId),
-                    multiMercuryBaseContract.aviationPoints(tokenId),
-                ]);
-                onChangeNewInfo({
-                    point: point.toNumber(),
-                    level: level.toNumber(),
-                });
-                addBttTransaction({
-                    account: myInfo.address,
-                    burner: myInfo.burner,
-                    gameAddress: bidTacToeGameAddress,
-                    oldLevel: myInfo.level,
-                    newLevel: level.toNumber(),
-                    oldPoint: myInfo.point,
-                    newPoint: point.toNumber(),
-                    win: gameResult,
-                });
-            } catch (e) {
-                onChangeNewInfo({
-                    point: 0,
-                    level: 0,
-                });
-                addBttTransaction({
-                    account: myInfo.address,
-                    burner: myInfo.burner,
-                    gameAddress: bidTacToeGameAddress,
-                    oldLevel: myInfo.level,
-                    newLevel: 0,
-                    oldPoint: myInfo.point,
-                    newPoint: 0,
-                    win: gameResult,
-                });
-            }
+        const gameResult = getWinState(myGameInfo.gameState);
+        handleGetGas();
+        try {
+            const [level, point] = await ethcallProvider.all([
+                multiMercuryBaseContract.aviationLevels(tokenId),
+                multiMercuryBaseContract.aviationPoints(tokenId),
+            ]);
+            onChangeNewInfo({
+                point: point.toNumber(),
+                level: level.toNumber(),
+            });
+            addBttTransaction({
+                account: myInfo.address,
+                burner: myInfo.burner,
+                gameAddress: gameAddress,
+                oldLevel: myInfo.level,
+                newLevel: level.toNumber(),
+                oldPoint: myInfo.point,
+                newPoint: point.toNumber(),
+                win: gameResult,
+            });
+        } catch (e) {
+            onChangeNewInfo({
+                point: 0,
+                level: 0,
+            });
+            addBttTransaction({
+                account: myInfo.address,
+                burner: myInfo.burner,
+                gameAddress: gameAddress,
+                oldLevel: myInfo.level,
+                newLevel: 0,
+                oldPoint: myInfo.point,
+                newPoint: 0,
+                win: gameResult,
+            });
         }
         onStep(1);
     };
@@ -335,7 +336,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             }
 
             await tacToeGameRetryWrite(type, [index], {
-                usePaymaster: istest,
+                signer: planeAccount.privateKey,
             });
             if (type === "setMessage") {
                 setMessageLoading(MessageStatus.Sent);
@@ -365,14 +366,14 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             setSurrenderLoading(true);
             await tacToeGameRetryWrite("surrender", [], {
                 gasLimit: 4000000,
-                usePaymaster: istest,
                 clearQueue: true,
+                signer: planeAccount.privateKey,
             });
             setSurrenderLoading(false);
         } catch (error) {
             setSurrenderLoading(false);
             console.log(error);
-            toast(handleError(error, istest));
+            toast(handleError(error));
         }
     };
 
@@ -380,10 +381,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         if (commitWorkerRef.current) {
             commitWorkerRef.current.terminate();
         }
-        if (
-            (!myGameInfo.timeout && !opGameInfo.timeout) ||
-            !bidTacToeGameAddress
-        ) {
+        if ((!myGameInfo.timeout && !opGameInfo.timeout) || !gameAddress) {
             return;
         }
         commitWorkerRef.current = new Worker(

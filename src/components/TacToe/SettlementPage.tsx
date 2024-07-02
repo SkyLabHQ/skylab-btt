@@ -351,8 +351,7 @@ const LoseResult = ({
 const SettlementPage = ({}) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const { myGameInfo, myInfo, myNewInfo, mileages, istest } =
-        useGameContext();
+    const { myGameInfo, myInfo, myNewInfo, mileages } = useGameContext();
 
     // const myInfo: any = {
     //     level: 1,

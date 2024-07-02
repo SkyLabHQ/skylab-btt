@@ -19,7 +19,7 @@ import {
 } from "@/hooks/useMultiContract";
 import { botAddress } from "@/hooks/useContract";
 import QuitModal from "@/components/BttComponents/QuitModal";
-import { getDefaultWithProvider, useTacToeSigner } from "@/hooks/useSigner";
+import { getPlaneGameSigner } from "@/hooks/useSigner";
 import { ZERO_DATA } from "@/skyConstants";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/error";
@@ -36,6 +36,7 @@ import { Autoplay } from "swiper";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { Info, UserMarkType } from "@/skyConstants/bttGameTypes";
+import { useChainId } from "wagmi";
 
 const randomText = [
     ["*When the game starts, ", "you have 12 hours to make each move"],
@@ -170,13 +171,10 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
 
 export const MatchPage = ({
     onChangeInfo,
-    onChangeMileage,
-    onChangePoint,
 }: {
-    onChangeMileage: (winMileage: number, loseMileage: number) => void;
-    onChangePoint: (winPoint: number, losePoint: number) => void;
     onChangeInfo: (position: "my" | "op", info: Info) => void;
 }) => {
+    const chainId = useChainId();
     const [gameAddress, setGameAddress] = useState("");
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -184,24 +182,18 @@ export const MatchPage = ({
     const [showPlayWithBot, setShowPlayWithBot] = useState(false);
     const navigate = useNavigate();
     const toast = useSkyToast();
-    const {
-        realChainId,
-        myInfo,
-        opInfo,
-        tokenId,
-        avaitionAddress,
-        handleGetGas,
-    } = useGameContext();
+    const { myInfo, opInfo, tokenId, avaitionAddress, handleGetGas } =
+        useGameContext();
 
-    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry(tokenId);
-    const multiProvider = useMultiProvider(realChainId);
-    const [tacToeBurner] = useTacToeSigner(tokenId);
+    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
+    const planeSinger = getPlaneGameSigner(tokenId);
+    const multiProvider = useMultiProvider(chainId);
 
-    const multiMercuryBaseContract = useMultiMercuryBaseContract(realChainId);
+    const multiMercuryBaseContract = useMultiMercuryBaseContract(chainId);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(gameAddress);
     const multiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(realChainId);
+        useMultiSkylabBidTacToeFactoryContract(chainId);
 
     const handleGetHuamnAndHumanInfo = async (
         playerAddress1: string,
@@ -215,38 +207,19 @@ export const MatchPage = ({
                 playerAddress2,
             ),
         ]);
-        const [
-            account1,
-            level1,
-            mtadata1,
-            point1,
-            account2,
-            level2,
-            mtadata2,
-            point2,
-            player1Move,
-            player2Move,
-            [player1WinMileage, player1LoseMileage],
-            [player2WinMileage, player2LoseMileage],
-        ] = await multiProvider.all([
-            multiMercuryBaseContract.ownerOf(tokenId1),
-            multiMercuryBaseContract.aviationLevels(tokenId1),
-            multiMercuryBaseContract.tokenURI(tokenId1),
-            multiMercuryBaseContract.aviationPoints(tokenId1),
-            multiMercuryBaseContract.ownerOf(tokenId2),
-            multiMercuryBaseContract.aviationLevels(tokenId2),
-            multiMercuryBaseContract.tokenURI(tokenId2),
-            multiMercuryBaseContract.aviationPoints(tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId, tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId2, tokenId),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId, tokenId2),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId2, tokenId1),
-        ]);
+        const [account1, level1, mtadata1, account2, level2, mtadata2] =
+            await multiProvider.all([
+                multiMercuryBaseContract.ownerOf(tokenId1),
+                multiMercuryBaseContract.aviationLevels(tokenId1),
+                multiMercuryBaseContract.tokenURI(tokenId1),
+                multiMercuryBaseContract.ownerOf(tokenId2),
+                multiMercuryBaseContract.aviationLevels(tokenId2),
+                multiMercuryBaseContract.tokenURI(tokenId2),
+            ]);
 
         const player1Info = {
             burner: playerAddress1,
             address: account1,
-            point: point1.toNumber(),
             level: level1.toNumber(),
             img: getMetadataImg(mtadata1),
             mark: UserMarkType.Circle,
@@ -254,26 +227,15 @@ export const MatchPage = ({
         const player2Info = {
             burner: playerAddress2,
             address: account2,
-            point: point2.toNumber(),
             level: level2.toNumber(),
             img: getMetadataImg(mtadata2),
             mark: UserMarkType.Cross,
         };
 
-        if (player1Info.burner === tacToeBurner.account.address) {
-            onChangePoint(player1Move.toNumber(), player2Move.toNumber());
-            onChangeMileage(
-                player1WinMileage.toNumber(),
-                player1LoseMileage.toNumber(),
-            );
+        if (player1Info.burner === planeSinger.address) {
             onChangeInfo("my", { ...player1Info });
             onChangeInfo("op", { ...player2Info });
         } else {
-            onChangeMileage(
-                player2WinMileage.toNumber(),
-                player2LoseMileage.toNumber(),
-            );
-            onChangePoint(player2Move.toNumber(), player1Move.toNumber());
             onChangeInfo("my", { ...player2Info });
             onChangeInfo("op", { ...player1Info });
         }
@@ -297,19 +259,18 @@ export const MatchPage = ({
     // get my and op info
     const handleGetGameInfo = async () => {
         try {
-            let operateAddress = tacToeBurner.account.address;
+            let operateAddress = planeSinger.address;
 
-            const [bidTacToeGameAddress, defaultGameQueue] =
-                await multiProvider.all([
-                    multiSkylabBidTacToeFactoryContract.gamePerPlayer(
-                        operateAddress,
-                    ),
-                    multiSkylabBidTacToeFactoryContract.defaultGameQueue(
-                        avaitionAddress,
-                    ),
-                ]);
+            const [gameAddress, defaultGameQueue] = await multiProvider.all([
+                multiSkylabBidTacToeFactoryContract.gamePerPlayer(
+                    operateAddress,
+                ),
+                multiSkylabBidTacToeFactoryContract.defaultGameQueue(
+                    avaitionAddress,
+                ),
+            ]);
 
-            if (bidTacToeGameAddress === ZERO_DATA) {
+            if (gameAddress === ZERO_DATA) {
                 if (operateAddress !== defaultGameQueue) {
                     navigate("/");
                     return;
@@ -353,7 +314,7 @@ export const MatchPage = ({
                 });
             } else {
                 setShowPlayWithBot(false);
-                setGameAddress(bidTacToeGameAddress);
+                setGameAddress(gameAddress);
             }
         } catch (e: any) {
             console.log(e);
@@ -362,15 +323,14 @@ export const MatchPage = ({
     };
 
     const handlePlayWithBot = async () => {
-        const defaultSinger = getDefaultWithProvider(tokenId, realChainId);
         try {
             openLoading();
             const createBotGameReceipt = await tacToeFactoryRetryWrite(
                 "playWithBotAfterDefaultQueueTimer",
-                [avaitionAddress, botAddress[realChainId]],
+                [avaitionAddress, botAddress[chainId]],
                 {
                     gasLimit: 1550000,
-                    signer: defaultSinger,
+                    signer: planeSinger.privateKey,
                 },
             );
             const startBotGameTopic0 =
@@ -402,6 +362,7 @@ export const MatchPage = ({
         try {
             await tacToeFactoryRetryWrite("withdrawFromQueue", [], {
                 gasLimit: 250000,
+                signer: planeSinger.privateKey,
             });
             const url = `/btt?tokenId=${tokenId}`;
             handleGetGas();
@@ -433,7 +394,7 @@ export const MatchPage = ({
     useEffect(() => {
         if (
             !tokenId ||
-            !tacToeBurner ||
+            !planeSinger ||
             !multiSkylabBidTacToeFactoryContract ||
             !multiProvider ||
             isLoading
@@ -451,7 +412,7 @@ export const MatchPage = ({
     }, [
         multiProvider,
         tokenId,
-        tacToeBurner,
+        planeSinger,
         multiMercuryBaseContract,
         multiSkylabBidTacToeFactoryContract,
         isLoading,
