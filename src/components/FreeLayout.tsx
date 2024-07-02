@@ -5,8 +5,11 @@ import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const customRouters = [
+    ["botHome"],
+    ["pvpHome"],
     ["accept", "inviteCode", "password"],
-    ["game", "gameAddress"],
+    ["pvpGame", "gameAddress"],
+    ["botGame", "tokenId", "gameAddress"],
 ];
 const search = new URLSearchParams(window.location.search);
 
@@ -64,7 +67,7 @@ const PvpContent = () => {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        if (pathname === "/pvp") {
+        if (pathname === "/free") {
             if (initData.startParam) {
                 const params = initData.startParam.split("-");
                 console.log(params, "params");
@@ -72,7 +75,7 @@ const PvpContent = () => {
                     (item) => item[0] === params[0],
                 );
                 if (route && route.length === params.length) {
-                    let url = `/pvp/${params[0]}`;
+                    let url = `/free/${params[0]}`;
                     for (let i = 1; i < params.length; i++) {
                         if (i === 1) {
                             url += "?";
@@ -87,7 +90,7 @@ const PvpContent = () => {
                     navigate(url);
                 }
             } else {
-                navigate("/pvp/home");
+                navigate("/free/pvpHome");
             }
         }
     }, [pathname]);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Box, Flex, useMediaQuery, Image, Text } from "@chakra-ui/react";
 import LineBg from "@/assets/line.png";
 import ButtonBg from "@/assets/bt-bg.png";
@@ -22,6 +22,7 @@ import {
 } from "@/skyConstants/iface";
 import { useNavigate } from "react-router-dom";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
+import { saveBotGamePrivateKey } from "@/hooks/useSigner";
 
 const PlayButtonGroup = () => {
     const { closeLoading, openLoading } = useSubmitRequest();
@@ -78,9 +79,8 @@ const PlayButtonGroup = () => {
                 topics: startBotGameLog.topics,
             });
 
-            sessionStorage.setItem("testflight", privateKey);
-            const url = `/btt/game?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}&testflight=true`;
-            console.log(url, "url");
+            saveBotGamePrivateKey(tokenId, privateKey);
+            const url = `/free/botGame?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}`;
             closeLoading();
             navigate(url);
         } catch (error) {

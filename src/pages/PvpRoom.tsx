@@ -113,7 +113,7 @@ const PvpRoom = () => {
                 });
             }
         } else {
-            navigate("/pvp/home");
+            navigate("/free/pvpHome");
         }
     };
 
@@ -133,7 +133,7 @@ const PvpRoom = () => {
             if (pvpPrivateKeys[gameAddress]) {
                 setPrivateKey(pvpPrivateKeys[gameAddress]);
             } else {
-                navigate("/pvp/home");
+                navigate("/free/pvpHome");
             }
         } catch (e) {
             console.log(e);

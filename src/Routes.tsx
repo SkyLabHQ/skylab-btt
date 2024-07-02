@@ -13,6 +13,7 @@ import PvpHome from "./pages/PvpHome";
 import FreeLayout from "./components/FreeLayout";
 import PvpMatch from "./pages/PvpMatch";
 import StartBot from "./pages/StartBot";
+import BotGame from "./pages/BotGame";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -27,7 +28,7 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/btt/live" element={<BttLiveGame />}></Route>
                 <Route path="/free" element={<FreeLayout />}>
                     <Route path="/free/botHome" element={<StartBot />} />
-                    <Route path="/free/botGame" element={<PvpRoom />} />
+                    <Route path="/free/botGame" element={<BotGame />} />
                     <Route path="/free/pvpHome" element={<PvpHome />} />
                     <Route path="/free/pvpMatch" element={<PvpMatch />} />
                     <Route path="/free/pvpGame" element={<PvpRoom />} />

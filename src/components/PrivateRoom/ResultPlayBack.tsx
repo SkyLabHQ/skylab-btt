@@ -298,7 +298,7 @@ ${des}`;
     };
 
     const handleTextClick = async () => {
-        navigate("/pvp/home", {
+        navigate("/free/pvpHome", {
             replace: true,
         });
     };

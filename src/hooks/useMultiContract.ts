@@ -88,6 +88,13 @@ export const useMultiMercuryBaseContract = (propChainId?: number) => {
     );
 };
 
+export const useMultiMercuryBaseContractTest = () => {
+    return useContract(
+        skylabTestFlightAddress[TESTFLIGHT_CHAINID],
+        SKYLABTESSTFLIGHT_ABI,
+    );
+};
+
 export const useMultiSkylabBidTacToeFactoryContract = (
     propChainId?: number,
 ) => {
@@ -98,8 +105,10 @@ export const useMultiSkylabBidTacToeFactoryContract = (
 };
 
 export const useMultiTestSkylabBidTacToeFactoryContract = () => {
-    const chainId = TESTFLIGHT_CHAINID;
-    return useContract(skylabBidTacToeAddress[chainId], SKYLABBIDTACTOE_ABI);
+    return useContract(
+        skylabBidTacToeAddress[TESTFLIGHT_CHAINID],
+        SKYLABBIDTACTOE_ABI,
+    );
 };
 
 export const useMultiSkylabBidTacToeGameContract = (address: string) => {

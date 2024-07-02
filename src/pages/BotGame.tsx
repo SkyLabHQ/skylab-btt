@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { getTestflightSigner } from "@/hooks/useSigner";
+import { getBotGameSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/BotGame/ResultPlayBack";
 import TacToePage from "@/components/BotGame";
 import BttHelmet from "@/components/Helmet/BttHelmet";
@@ -22,27 +22,15 @@ import {
 import GameOver from "@/components/BotGame/GameOver";
 import LoadingPage from "@/components/LoadingPage";
 import {
-    useMultiMercuryBaseContract,
+    useMultiMercuryBaseContractTest,
     useMultiProvider,
-    useMultiSkylabBidTacToeFactoryContract,
     useMultiSkylabBidTacToeGameContract,
+    useMultiTestSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
 import { getMetadataImg } from "@/utils/ipfsImg";
 import { ZERO_DATA } from "@/skyConstants";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import Nest from "@/components/Nest";
-
-const GameContext = createContext<{
-    list: BoardItem[];
-    tokenId: number;
-    myInfo: Info;
-    opInfo: Info;
-    myGameInfo: GameInfo;
-    opGameInfo: GameInfo;
-    gameAddress: string;
-    onStep: (step?: number) => void;
-}>(null);
-export const useGameContext = () => useContext(GameContext);
 
 const BotGame = () => {
     const navitate = useNavigate();
@@ -63,13 +51,10 @@ const BotGame = () => {
         img: "",
         mark: UserMarkType.Empty,
     });
-    const ethcallProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const [tokenId] = useState<number>(params.tokenId);
     const initRef = useRef<boolean>(false);
-
-    const burnerWallet = getTestflightSigner();
+    const burnerWallet = getBotGameSigner(tokenId);
     const { sCWAddress } = useSCWallet(burnerWallet.privateKey);
-
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
         balance: 0,
@@ -88,17 +73,15 @@ const BotGame = () => {
     });
 
     const [gameAddress] = useState<string>(params.gameAddress);
-
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [step, setStep] = useState(0);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
-    const multiMercuryBaseContract =
-        useMultiMercuryBaseContract(TESTFLIGHT_CHAINID);
+    const multiMercuryBaseContract = useMultiMercuryBaseContractTest();
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(gameAddress);
     const multiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(TESTFLIGHT_CHAINID);
+        useMultiTestSkylabBidTacToeFactoryContract();
     const handleStep = (step?: number) => {
         if (step === undefined) {
             setStep((step) => step + 1);
@@ -123,7 +106,7 @@ const BotGame = () => {
             multiMercuryBaseContract.tokenURI(tokenId1),
         ]);
 
-        if (playerAddress1 !== sCWAddress) {
+        if (playerAddress1.toLocaleLowerCase() !== sCWAddress) {
             navitate("/");
             return;
         }
@@ -202,7 +185,7 @@ const BotGame = () => {
                 opMessage,
                 opEmote,
                 nextDrawWinner,
-            ] = await ethcallProvider.all([
+            ] = await multiProvider.all([
                 multiSkylabBidTacToeGameContract.currentSelectedGrid(),
                 multiSkylabBidTacToeGameContract.getGrid(),
                 multiSkylabBidTacToeGameContract.balances(myInfo.burner),
@@ -344,7 +327,7 @@ const BotGame = () => {
     useEffect(() => {
         if (
             !multiSkylabBidTacToeGameContract ||
-            !ethcallProvider ||
+            !multiProvider ||
             !myInfo.burner ||
             !opInfo.burner ||
             step !== 0
@@ -359,7 +342,7 @@ const BotGame = () => {
         };
     }, [
         multiSkylabBidTacToeGameContract,
-        ethcallProvider,
+        multiProvider,
         myInfo.burner,
         opInfo.burner,
         step,
@@ -382,61 +365,42 @@ const BotGame = () => {
                         width: "100%",
                     }}
                 >
-                    <GameContext.Provider
-                        value={{
-                            myInfo,
-                            opInfo,
-                            tokenId,
-                            myGameInfo,
-                            opGameInfo,
-                            list,
-                            gameAddress,
-                            onStep: handleStep,
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                height: "100%",
-                            }}
-                        >
-                            {step === 0 && (
-                                <TacToePage
-                                    showAnimateNumber={showAnimateNumber}
-                                    currentGrid={currentGrid}
-                                    nextDrawWinner={nextDrawWinner}
-                                    handleGetGameInfo={handleGetGameInfo}
-                                    onChangeGame={onChangeGame}
-                                    myInfo={myInfo}
-                                    opInfo={opInfo}
-                                    myGameInfo={myGameInfo}
-                                    opGameInfo={opGameInfo}
-                                    gameAddress={gameAddress}
-                                    tokenId={tokenId}
-                                    list={list}
-                                    onStep={handleStep}
-                                ></TacToePage>
-                            )}
-                            {step === 1 && (
-                                <GameOver
-                                    myInfo={myInfo}
-                                    opInfo={opInfo}
-                                    myGameInfo={myGameInfo}
-                                    opGameInfo={opGameInfo}
-                                    list={list}
-                                    onStep={handleStep}
-                                ></GameOver>
-                            )}
-                            {step === 2 && (
-                                <ResultPlayBack
-                                    gameAddress={gameAddress}
-                                    myInfo={myInfo}
-                                    myGameInfo={myGameInfo}
-                                    opInfo={opInfo}
-                                    opGameInfo={opGameInfo}
-                                ></ResultPlayBack>
-                            )}
-                        </Box>
-                    </GameContext.Provider>
+                    {step === 0 && (
+                        <TacToePage
+                            showAnimateNumber={showAnimateNumber}
+                            currentGrid={currentGrid}
+                            nextDrawWinner={nextDrawWinner}
+                            handleGetGameInfo={handleGetGameInfo}
+                            onChangeGame={onChangeGame}
+                            myInfo={myInfo}
+                            opInfo={opInfo}
+                            myGameInfo={myGameInfo}
+                            opGameInfo={opGameInfo}
+                            gameAddress={gameAddress}
+                            tokenId={tokenId}
+                            list={list}
+                            onStep={handleStep}
+                        ></TacToePage>
+                    )}
+                    {step === 1 && (
+                        <GameOver
+                            myInfo={myInfo}
+                            opInfo={opInfo}
+                            myGameInfo={myGameInfo}
+                            opGameInfo={opGameInfo}
+                            list={list}
+                            onStep={handleStep}
+                        ></GameOver>
+                    )}
+                    {step === 2 && (
+                        <ResultPlayBack
+                            gameAddress={gameAddress}
+                            myInfo={myInfo}
+                            myGameInfo={myGameInfo}
+                            opInfo={opInfo}
+                            opGameInfo={opGameInfo}
+                        ></ResultPlayBack>
+                    )}
                 </Box>
             )}
 

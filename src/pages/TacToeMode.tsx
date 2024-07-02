@@ -23,7 +23,10 @@ import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import { getDefaultWithProvider } from "@/hooks/useSigner";
+import {
+    getDefaultWithProvider,
+    saveBotGamePrivateKey,
+} from "@/hooks/useSigner";
 import { useSCWallet } from "@/hooks/useSCWallet";
 import {
     bttFactoryIface,
@@ -111,8 +114,8 @@ const TacToeMode = () => {
                 topics: startBotGameLog.topics,
             });
 
-            sessionStorage.setItem("testflight", privateKey);
-            const url = `/btt/game?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}&testflight=true`;
+            saveBotGamePrivateKey(tokenId, privateKey);
+            const url = `/free/botGame?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}`;
             closeLoading();
             navigate(url);
         } catch (error) {

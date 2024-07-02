@@ -2,7 +2,7 @@ import { MyUserCard, OpUserCard } from "@/components/BttComponents/UserCard";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/BttComponents/Board";
-import { useBttGameRetry } from "@/hooks/useRetryContract";
+import { useBttGameRetryPaymaster } from "@/hooks/useRetryContract";
 import { ethers } from "ethers";
 import {
     useMultiProvider,
@@ -30,6 +30,7 @@ import ToolBar from "../BttComponents/Toolbar";
 import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
 import StatusProgress from "../BttComponents/StatusProgress";
+import { getBotGameSigner } from "@/hooks/useSigner";
 
 interface TacToeProps {
     showAnimateNumber: number;
@@ -72,6 +73,7 @@ const TacToePage = ({
     const [messageLoading, setMessageLoading] = useState<MessageStatus>(
         MessageStatus.Unknown,
     );
+    const botGameSigner = getBotGameSigner(tokenId);
 
     const [emoteLoading, setEmoteLoading] = useState<MessageStatus>(
         MessageStatus.Unknown,
@@ -86,7 +88,9 @@ const TacToePage = ({
     );
 
     const addBttTransaction = useAddBttTransaction(tokenId);
-    const tacToeGameRetryWrite = useBttGameRetry(gameAddress, tokenId);
+    const tacToeGameRetryPaymaster = useBttGameRetryPaymaster(gameAddress, {
+        privateKey: botGameSigner?.privateKey,
+    });
     const deleteTokenIdCommited = useDeleteTokenIdCommited(tokenId);
     const multiSkylabBidTacToeGameContract =
         useMultiSkylabBidTacToeGameContract(gameAddress);
@@ -196,10 +200,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 `currentGrid: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
             );
 
-            await tacToeGameRetryWrite("commitBid", [hash], {
-                gasLimit: 1000000,
-                usePaymaster: true,
-            });
+            await tacToeGameRetryPaymaster("commitBid", [hash]);
             onChangeGame("my", {
                 ...myGameInfo,
                 gameState: GameState.Commited,
@@ -217,7 +218,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         myGameInfo,
         addGridCommited,
         bidAmount,
-        tacToeGameRetryWrite,
+        tacToeGameRetryPaymaster,
         getGridCommited,
     ]);
 
@@ -227,10 +228,13 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
             if (!localSalt) return;
             const { salt, amount } = localSalt;
             setRevealing(true);
-            await tacToeGameRetryWrite("revealBid", [amount, Number(salt)], {
-                gasLimit: 7000000,
-                usePaymaster: true,
-            });
+            await tacToeGameRetryPaymaster(
+                "revealBid",
+                [amount, Number(salt)],
+                {
+                    gasLimit: 7000000,
+                },
+            );
             onChangeGame("my", {
                 ...myGameInfo,
                 gameState: GameState.Revealed,
@@ -274,9 +278,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 }
             }
 
-            await tacToeGameRetryWrite(type, [index], {
-                usePaymaster: true,
-            });
+            await tacToeGameRetryPaymaster(type, [index], {});
             if (type === "setMessage") {
                 setMessageLoading(MessageStatus.Sent);
                 setMessageIndex(index);
@@ -303,9 +305,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         }
         try {
             setSurrenderLoading(true);
-            await tacToeGameRetryWrite("surrender", [], {
+            await tacToeGameRetryPaymaster("surrender", [], {
                 gasLimit: 4000000,
-                usePaymaster: true,
                 clearQueue: true,
             });
             setSurrenderLoading(false);

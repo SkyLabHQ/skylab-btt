@@ -59,7 +59,7 @@ const MatchPage = () => {
     const handleQuit = async () => {
         try {
             await bttFactoryRetryPaymaster("quitPvpRoom", []);
-            navigate(`/pvp/home`);
+            navigate(`/free/pvpHome`);
         } catch (error) {
             toast(handleError(error));
         }
@@ -119,10 +119,10 @@ const MatchPage = () => {
             }
 
             setTimeout(() => {
-                navigate(`/pvp/game?gameAddress=${gameAddress}`);
+                navigate(`/free/pvpGame?gameAddress=${gameAddress}`);
             }, 2000);
         } else if (playerAddress1 !== pvpAddress) {
-            navigate("/pvp/home");
+            navigate("/free/pvpHome");
         }
     };
 
@@ -135,11 +135,11 @@ const MatchPage = () => {
             if (pvpPrivateKeys[gameAddress]) {
                 setPrivateKey(pvpPrivateKeys[gameAddress]);
             } else {
-                navigate("/pvp/home");
+                navigate("/free/pvpHome");
             }
         } catch (e) {
             console.log(e);
-            navigate("/pvp/home");
+            navigate("/free/pvpHome");
         }
     }, []);
 

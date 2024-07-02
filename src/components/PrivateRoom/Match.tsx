@@ -33,7 +33,7 @@ const Match = () => {
     const handleQuit = async () => {
         try {
             await bttFactoryRetryPaymaster("quitPvpRoom", []);
-            navigate(`/pvp/home`);
+            navigate(`/free/pvpHome`);
         } catch (error) {
             toast(handleError(error));
         }

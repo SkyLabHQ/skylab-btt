@@ -71,7 +71,7 @@ const Accept = () => {
             );
 
             closeLoading();
-            navigate(`/pvp/game?gameAddress=${gameAddress}`);
+            navigate(`/free/pvpGame?gameAddress=${gameAddress}`);
         } catch (e) {
             closeLoading();
             toast(handleError(e));
@@ -79,7 +79,7 @@ const Accept = () => {
     };
 
     const handleCancel = () => {
-        navigate("/pvp/home", {
+        navigate("/free/pvpHome", {
             replace: true,
         });
     };
@@ -95,9 +95,9 @@ const Accept = () => {
 
         if (playerAddress2 !== ZERO_DATA) {
             if (playerAddress2 === pvpAddress) {
-                navigate(`/pvp/game?gameAddress=${gameAddress}`);
+                navigate(`/free/pvpGame?gameAddress=${gameAddress}`);
             } else {
-                navigate("/pvp/home");
+                navigate("/free/pvpHome");
             }
         }
 
@@ -111,7 +111,7 @@ const Accept = () => {
 
         player1 = player1.toLocaleLowerCase();
         if (player1 === ZERO_DATA) {
-            navigate("/pvp/home");
+            navigate("/free/pvpHome");
             return;
         }
 
@@ -121,12 +121,12 @@ const Accept = () => {
         ]);
 
         if (gameAddress === ZERO_DATA) {
-            navigate("/pvp/home");
+            navigate("/free/pvpHome");
             return;
         }
 
         if (player1 === pvpAddress) {
-            navigate(`/pvp/match?gameAddress=${gameAddress}`);
+            navigate(`/free/pvpMatch?gameAddress=${gameAddress}`);
             return;
         }
         setGameAddress(gameAddress);
@@ -166,7 +166,7 @@ const Accept = () => {
 
     useEffect(() => {
         if (!inviteCode) {
-            navigate("/pvp/home");
+            navigate("/free/pvpHome");
             return;
         }
         handleInit();

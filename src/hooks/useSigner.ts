@@ -98,3 +98,38 @@ export const getTestflightSigner = (useNew?: boolean) => {
 
     return { ...client, privateKey: stringPrivateKey };
 };
+
+export const getBotGameSigner = (tokenId: number) => {
+    if (!tokenId) {
+        return null;
+    }
+    let stringPrivateKey = localStorage.getItem("botPrivateKey");
+    let objPrivateKey;
+    try {
+        objPrivateKey = stringPrivateKey ? JSON.parse(stringPrivateKey) : {};
+    } catch (e) {
+        objPrivateKey = {};
+    }
+    const key = tokenId;
+    if (!objPrivateKey[key]) {
+        // 随机创建一个私钥账户
+        return null;
+    }
+    const account = new ethers.Wallet(objPrivateKey[key]);
+    return account;
+};
+
+export const saveBotGamePrivateKey = (tokenId: number, privateKey: string) => {
+    if (!tokenId || !privateKey) return;
+
+    let stringPrivateKey = localStorage.getItem("botPrivateKey");
+    let objPrivateKey;
+    try {
+        objPrivateKey = stringPrivateKey ? JSON.parse(stringPrivateKey) : {};
+    } catch (e) {
+        objPrivateKey = {};
+    }
+    const key = tokenId;
+    objPrivateKey[key] = privateKey;
+    localStorage.setItem("botPrivateKey", JSON.stringify(objPrivateKey));
+};
