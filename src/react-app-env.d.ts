@@ -9,8 +9,6 @@ interface Window {
         removeListener?: (...args: any[]) => void;
     };
     web3?: unknown;
-    Telegram?: any;
-    TelegramGameProxy?: any;
 }
 
 declare module "*.svg" {

@@ -15,7 +15,6 @@ import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import SettlementPage from "@/components/TacToe/SettlementPage";
 import BttHelmet from "@/components/Helmet/BttHelmet";
-import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
@@ -82,8 +81,6 @@ const GameContext = createContext<{
     myGameInfo: GameInfo;
     opGameInfo: GameInfo;
     bidTacToeGameAddress: string;
-    myActivePilot: PilotInfo;
-    opActivePilot: PilotInfo;
     avaitionAddress: string;
     mileages: {
         winMileage: number;
@@ -158,8 +155,6 @@ const TacToe = () => {
         return planeBurner;
     }, [planeBurner, istest]);
 
-    const { activePilot: myActivePilot } = usePilotInfo(address);
-    const { activePilot: opActivePilot } = usePilotInfo(opInfo.address);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
         balance: 0,
@@ -627,8 +622,6 @@ const TacToe = () => {
                             realChainId,
                             gameType,
                             istest,
-                            myActivePilot,
-                            opActivePilot,
                             myInfo,
                             opInfo,
                             myNewInfo,

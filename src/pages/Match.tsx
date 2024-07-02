@@ -6,7 +6,6 @@ import qs from "query-string";
 import { useTacToeSigner } from "@/hooks/useSigner";
 import Match from "@/components/TacToe/Match";
 import BttHelmet from "@/components/Helmet/BttHelmet";
-import { PilotInfo, usePilotInfo } from "@/hooks/usePilotInfo";
 import { useChainId } from "wagmi";
 import { getViemClients } from "@/utils/viem";
 import { mercuryJarTournamentAddress } from "@/hooks/useContract";
@@ -26,8 +25,6 @@ const GameContext = createContext<{
     tokenId: number;
     myInfo: Info;
     opInfo: Info;
-    myActivePilot: PilotInfo;
-    opActivePilot: PilotInfo;
     avaitionAddress: string;
     mileages: {
         winMileage: number;
@@ -82,10 +79,6 @@ const MatchPage = () => {
     });
     const [burnerWallet] = useTacToeSigner(tokenId);
 
-    const { activePilot: myActivePilot } = usePilotInfo(account);
-
-    const { activePilot: opActivePilot } = usePilotInfo(opInfo.address);
-
     const handleGetGas = async () => {
         console.log("start transfer gas");
 
@@ -130,8 +123,6 @@ const MatchPage = () => {
                 <GameContext.Provider
                     value={{
                         realChainId,
-                        myActivePilot,
-                        opActivePilot,
                         myInfo,
                         opInfo,
                         tokenId,

@@ -4,7 +4,6 @@ import LeftArrow from "./assets/left-arrow.png";
 import { shortenAddress } from "@/utils";
 import CopyIcon from "@/assets/copy-icon.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import MyPilot from "../MyPilot";
 
 const UserInfo = () => {
     const { address } = usePrivyAccounts();
@@ -18,8 +17,6 @@ const UserInfo = () => {
                 paddingBottom: "20px",
             }}
         >
-            <MyPilot imgUrl={""} width={"80px"}></MyPilot>
-
             <Flex
                 sx={{
                     marginTop: "11px",

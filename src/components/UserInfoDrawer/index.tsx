@@ -29,11 +29,8 @@ import NoPlane from "./assets/no-plane.png";
 import DiscordIcon from "./assets/discord.png";
 import TwIcon from "./assets/twitter.png";
 import EditNickname from "./EditNickname";
-import SetPilot from "./SetPilot";
-import MyPilot from "../MyPilot";
 import useSkyToast from "@/hooks/useSkyToast";
 import PlaneBg from "./assets/plane-bg.png";
-import SetPilotIcon from "./assets/setPilot.svg";
 import SetNameIcon from "./assets/setName.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
@@ -56,13 +53,6 @@ const UserInfo = ({
 
     return (
         <Flex flexDir={"column"} align={"center"}>
-            <Box
-                sx={{
-                    position: "relative",
-                }}
-            >
-                <MyPilot imgUrl={""} width={"80px"}></MyPilot>
-            </Box>
             {userNameInit ? (
                 <Flex flexDir={"column"} align={"center"}>
                     <Flex
@@ -530,7 +520,7 @@ const UserInfoDrawer = ({
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
-    const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称 2设置pilot
+    const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称
     const { planeInit, planeList, userName, paperBalance, userNameInit } =
         useUserInfo();
 
@@ -637,13 +627,6 @@ const UserInfoDrawer = ({
                                 handleChangeMode(mode);
                             }}
                         ></EditNickname>
-                    )}
-                    {currentMode === 2 && (
-                        <SetPilot
-                            onChangeMode={(mode: number) => {
-                                handleChangeMode(mode);
-                            }}
-                        ></SetPilot>
                     )}
                 </DrawerBody>
             </DrawerContent>

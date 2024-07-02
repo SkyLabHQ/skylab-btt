@@ -6,23 +6,6 @@ const handleIpfsUrl = (url: string) => {
     return url;
 };
 
-export const getPilotImgFromUrl = async (tokenURI: string) => {
-    if (!tokenURI) return "";
-    else if (tokenURI.startsWith("data:application/json;base64")) {
-        return getMetadataImg(tokenURI);
-    } else {
-        try {
-            let newTokenURI = handleIpfsUrl(tokenURI);
-            const res = await axios.get(newTokenURI);
-            const img = handleIpfsUrl(res.data.image);
-            return img;
-        } catch (e) {
-            console.log(e);
-            return "";
-        }
-    }
-};
-
 export const getMetadataImg = (basedata: string) => {
     const jsonString = window.atob(basedata.substr(basedata.indexOf(",") + 1));
     const jsonObject = JSON.parse(jsonString);

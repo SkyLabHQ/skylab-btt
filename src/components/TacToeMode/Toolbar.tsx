@@ -5,7 +5,6 @@ import PlayBackIcon from "./assets/playback-icon.svg";
 import WalletIcon from "./assets/wallet-icon.png";
 import { useNavigate } from "react-router-dom";
 import { shortenAddress } from "@/utils";
-import MyPilot from "../MyPilot";
 import { useUserInfo } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Click1Wav from "@/assets/click1.wav";
@@ -35,7 +34,7 @@ export const Toolbar = () => {
                 }}
             >
                 {address ? (
-                    isPc ? (
+                    isPc && (
                         <Flex
                             onClick={() => {
                                 audio.play();
@@ -48,18 +47,6 @@ export const Toolbar = () => {
                             justify={"flex-end"}
                             align={"center"}
                         >
-                            <MyPilot
-                                imgUrl={""}
-                                width="60px"
-                                sx={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "0px",
-                                    transform: "translate(0%, -50%)",
-                                    zIndex: 99,
-                                }}
-                            ></MyPilot>
-
                             <Box
                                 sx={{
                                     width: "184px",
@@ -77,19 +64,6 @@ export const Toolbar = () => {
                                 {shortenAddress(address, 5, 4)}
                             </Box>
                         </Flex>
-                    ) : (
-                        <MyPilot
-                            onClick={() => {
-                                audio.play();
-                                onUserInfoOpen();
-                            }}
-                            imgUrl={""}
-                            sx={{
-                                width: "40px",
-                                height: "40px",
-                                cursor: "pointer",
-                            }}
-                        ></MyPilot>
                     )
                 ) : (
                     <Image

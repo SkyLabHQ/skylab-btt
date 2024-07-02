@@ -3,27 +3,17 @@ import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { AddressZero } from "@ethersproject/constants";
 import SKYLABTESSTFLIGHT_ABI from "@/skyConstants/abis/SkylabTestFlight.json";
 import { Contract, Provider, setMulticallAddress } from "ethers-multicall";
-import MERCURYPILOTS_ABI from "@/skyConstants/abis/MercuryPilots.json";
 import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
-import DELEGATEERC721_ABI from "@/skyConstants/abis/DelegateERC721.json";
-import ERC721_ABI from "@/skyConstants/abis/ERC721.json";
 import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
-import PILOTMILEAGE_ABI from "@/skyConstants/abis/PilotMileage.json";
-import PILOTNETPOINTS_ABI from "@/skyConstants/abis/PilotNetPoints.json";
-import PILOTWINSTREAK_ABI from "@/skyConstants/abis/PilotWinStreak.json";
+
 import qs from "query-string";
 import { ChainId, TESTFLIGHT_CHAINID, randomRpc } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
 import {
     skylabBidTacToeAddress,
     skylabTestFlightAddress,
-    mercuryPilotsAddress,
-    delegateERC721Address,
-    pilotMileageAddress,
-    pilotNetPointsAddress,
-    pilotWinStreakAddress,
     mercuryJarTournamentAddress,
 } from "./useContract";
 import { ethers } from "ethers";
@@ -114,34 +104,6 @@ export const useMultiTestSkylabBidTacToeFactoryContract = () => {
 
 export const useMultiSkylabBidTacToeGameContract = (address: string) => {
     return useContract(address, SKYLABBIDTACTOEGAME_ABI);
-};
-
-export const useMultiERC721Contract = (address: string) => {
-    return useContract(address, SKYLABTESSTFLIGHT_ABI);
-};
-
-export const useMultiMercuryPilotsContract = (chainId: number) => {
-    return useContract(mercuryPilotsAddress[chainId], MERCURYPILOTS_ABI);
-};
-
-export const getMultiDelegateERC721Contract = (chainId: number) => {
-    return getContract(delegateERC721Address[chainId], DELEGATEERC721_ABI);
-};
-
-export const getMultiERC721Contract = (address: string) => {
-    return getContract(address, ERC721_ABI);
-};
-
-export const useMultiPilotMileageContract = (chainId: number) => {
-    return useContract(pilotMileageAddress[chainId], PILOTMILEAGE_ABI);
-};
-
-export const useMultiPilotNetPointsContract = (chainId: number) => {
-    return useContract(pilotNetPointsAddress[chainId], PILOTNETPOINTS_ABI);
-};
-
-export const useMultiPilotWinStreakContract = (chainId: number) => {
-    return useContract(pilotWinStreakAddress[chainId], PILOTWINSTREAK_ABI);
 };
 
 export const useMultiMercuryJarTournamentContract = () => {
