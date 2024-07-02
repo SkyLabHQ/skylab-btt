@@ -2,47 +2,29 @@ import { useCheckBurnerBalanceAndApprove } from "@/hooks/useBurnerWallet";
 import { Box, Text, useMediaQuery, Flex, Image } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-    useBidTacToeFactoryRetry,
-    useBttFactoryRetryPaymaster,
-    useTestflightRetryPaymaster,
-} from "@/hooks/useRetryContract";
+import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
-import {
-    botAddress,
-    mercuryJarTournamentAddress,
-    skylabTestFlightAddress,
-} from "@/hooks/useContract";
+import { mercuryJarTournamentAddress } from "@/hooks/useContract";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
     useMultiProvider,
     useMultiSkylabBidTacToeFactoryContract,
 } from "@/hooks/useMultiContract";
-import { DEAFAULT_CHAINID, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
+import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import {
-    getDefaultWithProvider,
-    saveBotGamePrivateKey,
-} from "@/hooks/useSigner";
-import { useSCWallet } from "@/hooks/useSCWallet";
-import {
-    bttFactoryIface,
-    erc721iface,
-    topic0Transfer,
-} from "@/skyConstants/iface";
+import { getDefaultWithProvider } from "@/hooks/useSigner";
+import { bttFactoryIface } from "@/skyConstants/iface";
 import { useChainId } from "wagmi";
 import { ZERO_DATA } from "@/skyConstants";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import GameMp3 from "@/assets/game.mp3";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
-import MRobotIcon from "@/components/TacToeMode/assets/bot-icon.png";
 import MarketIcon from "@/components/TacToeMode/assets/market-icon.png";
 import { privateKeyToAccount } from "viem/accounts";
 import Nest from "@/components/Nest";
-import { ethers } from "ethers";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -59,71 +41,9 @@ const TacToeMode = () => {
     const toast = useSkyToast();
 
     const multiProvider = useMultiProvider(chainId);
-    const [privateKey] = useState<string>(
-        ethers.Wallet.createRandom().privateKey,
-    );
-    const { sCWAddress: botAccount } = useSCWallet(privateKey);
     const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
-    const testflightRetryPaymaster = useTestflightRetryPaymaster({
-        privateKey,
-    });
-
-    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
-        privateKey,
-    });
-
     const multiSkylabBidTacToeFactoryContract =
         useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
-
-    const handleMintPlayTest = async () => {
-        if (!botAccount) {
-            return;
-        }
-        try {
-            openLoading();
-            const receipt = await testflightRetryPaymaster("playTestMint", []);
-            const transferLog = receipt.logs.find((item: any) => {
-                return item.topics[0] === topic0Transfer;
-            });
-            const transferData = erc721iface.parseLog({
-                data: transferLog.data,
-                topics: transferLog.topics,
-            });
-            const tokenId = transferData.args.tokenId.toNumber();
-            await bttFactoryRetryPaymaster("approveForGame", [
-                botAccount,
-                tokenId,
-                skylabTestFlightAddress[TESTFLIGHT_CHAINID],
-            ]);
-            const createBotGameReceipt = await bttFactoryRetryPaymaster(
-                "createBotGame",
-                [botAddress[TESTFLIGHT_CHAINID]],
-            );
-
-            const startBotGameTopic0 =
-                bttFactoryIface.getEventTopic("StartBotGame");
-
-            const startBotGameLog = createBotGameReceipt.logs.find(
-                (item: any) => {
-                    return item.topics[0] === startBotGameTopic0;
-                },
-            );
-
-            const startBotGameData = bttFactoryIface.parseLog({
-                data: startBotGameLog.data,
-                topics: startBotGameLog.topics,
-            });
-
-            saveBotGamePrivateKey(tokenId, privateKey);
-            const url = `/free/botGame?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}`;
-            closeLoading();
-            navigate(url);
-        } catch (error) {
-            console.log(error);
-            toast(handleError(error, true));
-            closeLoading();
-        }
-    };
 
     const handleTournament = async () => {
         const tokenId = selectPlane?.tokenId;
@@ -265,29 +185,6 @@ const TacToeMode = () => {
                                 justify={"space-between"}
                                 align={"flex-end"}
                             >
-                                <Flex
-                                    flexDir={"column"}
-                                    align={"center"}
-                                    onClick={() => {
-                                        gameAudio.play();
-                                        handleMintPlayTest();
-                                    }}
-                                >
-                                    <Image
-                                        src={MRobotIcon}
-                                        sx={{
-                                            width: isPc ? "100px" : "42px",
-                                        }}
-                                    ></Image>
-                                    <Text
-                                        sx={{
-                                            fontSize: isPc ? "20px" : "12px",
-                                            fontFamily: "Quantico",
-                                        }}
-                                    >
-                                        Bot Game
-                                    </Text>
-                                </Flex>
                                 <PlayButtonGroup
                                     tournamentDisabled={!selectPlane?.tokenId}
                                     onPlayTournament={() => {
@@ -298,10 +195,7 @@ const TacToeMode = () => {
                                 <Flex
                                     flexDir={"column"}
                                     align={"center"}
-                                    onClick={() => {
-                                        gameAudio.play();
-                                        handleMintPlayTest();
-                                    }}
+                                    onClick={() => {}}
                                 >
                                     <Image
                                         src={MarketIcon}

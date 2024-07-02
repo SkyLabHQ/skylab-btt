@@ -23,8 +23,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { saveBotGamePrivateKey } from "@/hooks/useSigner";
+import { bindBurner } from "@/api";
+import { useInitData } from "@tma.js/sdk-react";
 
 const PlayButtonGroup = () => {
+    const initData = useInitData();
     const { closeLoading, openLoading } = useSubmitRequest();
     const navigate = useNavigate();
     const toast = useSkyToast();
@@ -77,6 +80,11 @@ const PlayButtonGroup = () => {
             const startBotGameData = bttFactoryIface.parseLog({
                 data: startBotGameLog.data,
                 topics: startBotGameLog.topics,
+            });
+
+            await bindBurner({
+                user: initData.user,
+                burner: botAccount,
             });
 
             saveBotGamePrivateKey(tokenId, privateKey);

@@ -8,6 +8,9 @@ import { shortenAddress } from "@/utils";
 import { useUserInfo } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Click1Wav from "@/assets/click1.wav";
+import UserIcon from "@/assets/user-icon.png";
+import PilotBorder from "@/assets/pilot-border.png";
+
 const audio = new Audio(Click1Wav);
 
 export const Toolbar = () => {
@@ -34,7 +37,7 @@ export const Toolbar = () => {
                 }}
             >
                 {address ? (
-                    isPc && (
+                    isPc ? (
                         <Flex
                             onClick={() => {
                                 audio.play();
@@ -64,6 +67,21 @@ export const Toolbar = () => {
                                 {shortenAddress(address, 5, 4)}
                             </Box>
                         </Flex>
+                    ) : (
+                        <Box
+                            sx={{
+                                background: `url(${PilotBorder}) no-repeat`,
+                                backgroundSize: "cover",
+                            }}
+                        >
+                            <Image
+                                src={UserIcon}
+                                sx={{
+                                    width: isPc ? "48px" : "40px",
+                                    height: isPc ? "48px" : "40px",
+                                }}
+                            ></Image>
+                        </Box>
                     )
                 ) : (
                     <Image
