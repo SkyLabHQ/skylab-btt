@@ -35,35 +35,23 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
             <Flex
                 onClick={handleMintPlane}
                 sx={{
-                    width: isPc ? "380px" : "210px",
+                    // width: isPc ? "380px" : "210px",
                     height: "54px",
                     borderRadius: "12px",
-                    background: "#f2d861",
                     fontSize: "16px",
-                    color: "#000",
+                    color: "#F2D861",
                     cursor: "pointer",
                     position: "relative",
+                    border: "1px solid #f2d861",
+                    padding: "12px 10px 12px 30px",
                 }}
                 align={"center"}
             >
-                <Image
-                    src={Level1Plane}
-                    sx={{
-                        position: "absolute",
-                        right: isPc ? "-50px" : "-25px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        width: isPc ? "100px" : "50px",
-                    }}
-                ></Image>
                 <Text
                     sx={{
-                        flex: 1,
-                        fontSize: isPc ? "24px" : "14px",
+                        fontSize: isPc ? "18px" : "14px",
                         fontWeight: 700,
-                        color: "#1B1B1B",
                         fontFamily: "Orbitron",
-                        padding: "0 10px",
                     }}
                 >
                     Mint Plane
@@ -72,22 +60,27 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
                     sx={{
                         width: "1px",
                         height: "30px",
-                        background: "#1B1B1B",
+                        background: "#F2D861",
+                        margin: "0 20px",
                     }}
                 ></Box>
                 <Text
                     sx={{
-                        flex: 1,
-                        fontSize: isPc ? "30px" : "14px",
+                        fontSize: isPc ? "20px" : "14px",
                         textAlign: "right",
                         fontWeight: 900,
-                        color: "#1B1B1B",
-                        fontFamily: "Helvetica-Condensed-Black-Se",
-                        marginRight: isPc ? "40px" : "24px",
+                        fontFamily: "Helvetica",
+                        marginRight: isPc ? "10px" : "24px",
                     }}
                 >
                     0.01 ETH
                 </Text>
+                <Image
+                    src={Level1Plane}
+                    sx={{
+                        width: isPc ? "100px" : "50px",
+                    }}
+                ></Image>
             </Flex>
         </Flex>
     );

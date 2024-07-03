@@ -52,6 +52,25 @@ export const Toolbar = () => {
                         >
                             <Box
                                 sx={{
+                                    background: `url(${PilotBorder}) no-repeat`,
+                                    backgroundSize: "cover",
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "0px",
+                                    transform: "translate(0%, -50%)",
+                                    zIndex: 99,
+                                }}
+                            >
+                                <Image
+                                    src={UserIcon}
+                                    sx={{
+                                        width: "52px",
+                                        height: "52px",
+                                    }}
+                                ></Image>
+                            </Box>
+                            <Box
+                                sx={{
                                     width: "184px",
                                     height: "48px",
                                     border: "1px solid #f2d861",
