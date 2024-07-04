@@ -21,7 +21,6 @@ const PrivateLobbyPlayBack = ({
     myIsNextDrawWinner,
     currentRound,
     allSelectedGrids,
-    myGameInfo,
     showList,
 }: {
     myInfo: any;

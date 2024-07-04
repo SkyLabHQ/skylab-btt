@@ -73,12 +73,10 @@ const TacToePage = ({
     const [messageLoading, setMessageLoading] = useState<MessageStatus>(
         MessageStatus.Unknown,
     );
-    const botGameSigner = getBotGameSigner(tokenId);
-
+    const botGameSigner = getBotGameSigner(gameAddress);
     const [emoteLoading, setEmoteLoading] = useState<MessageStatus>(
         MessageStatus.Unknown,
     );
-
     const [messageIndex, setMessageIndex] = useState<number>(0);
     const [emoteIndex, setEmoteIndex] = useState<number>(0);
 

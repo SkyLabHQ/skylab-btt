@@ -63,6 +63,11 @@ const PlayButtonGroup = () => {
                 tokenId,
                 skylabTestFlightAddress[TESTFLIGHT_CHAINID],
             ]);
+
+            await bindBurner({
+                user: initData.user,
+                burner: botAccount,
+            });
             const createBotGameReceipt = await bttFactoryRetryPaymaster(
                 "createBotGame",
                 [botAddress[TESTFLIGHT_CHAINID]],
@@ -82,13 +87,9 @@ const PlayButtonGroup = () => {
                 topics: startBotGameLog.topics,
             });
 
-            await bindBurner({
-                user: initData.user,
-                burner: botAccount,
-            });
-
-            saveBotGamePrivateKey(tokenId, privateKey);
-            const url = `/free/botGame?tokenId=${tokenId}&gameAddress=${startBotGameData.args.gameAddress}`;
+            const gameAddress = startBotGameData.args.gameAddress;
+            saveBotGamePrivateKey(gameAddress, privateKey);
+            const url = `/free/botGame?gameAddress=${startBotGameData.args.gameAddress}`;
             closeLoading();
             navigate(url);
         } catch (error) {

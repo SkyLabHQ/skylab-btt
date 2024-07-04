@@ -300,7 +300,7 @@ ${des}`;
     };
 
     const handleNext = async () => {
-        navigate("/free/bot");
+        navigate("/free/botHome");
     };
 
     return (

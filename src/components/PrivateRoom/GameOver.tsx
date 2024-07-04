@@ -3,7 +3,7 @@ import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import Board from "@/components/BttComponents/Board";
 import { usePvpGameContext } from "@/pages/PvpRoom";
 import { getWinState } from "@/skyConstants/bttGameTypes";
-import { MUserProfile, MUserProfileResult } from "./UserProfile";
+import { MUserProfileResult } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 import ResultUserCard from "../BttComponents/ResultUserCard";
 

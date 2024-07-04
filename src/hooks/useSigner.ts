@@ -41,8 +41,8 @@ export const getDefaultWithProvider = (tokenId: number, chainId: number) => {
     return { ...client, privateKey: objPrivateKey[key] };
 };
 
-export const getBotGameSigner = (tokenId: number) => {
-    if (!tokenId) {
+export const getBotGameSigner = (storageKey: string) => {
+    if (!storageKey) {
         return null;
     }
     let stringPrivateKey = localStorage.getItem(BOT_KEYS);
@@ -52,12 +52,11 @@ export const getBotGameSigner = (tokenId: number) => {
     } catch (e) {
         objPrivateKey = {};
     }
-    const key = tokenId;
-    if (!objPrivateKey[key]) {
+    if (!objPrivateKey[storageKey]) {
         // 随机创建一个私钥账户
         return null;
     }
-    const account = new ethers.Wallet(objPrivateKey[key]);
+    const account = new ethers.Wallet(objPrivateKey[storageKey]);
     return account;
 };
 

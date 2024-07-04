@@ -9,7 +9,7 @@ const customRouters = [
     ["pvpHome"],
     ["accept", "inviteCode", "password"],
     ["pvpGame", "gameAddress"],
-    ["botGame", "tokenId", "gameAddress"],
+    ["botGame", "gameAddress"],
 ];
 const search = new URLSearchParams(window.location.search);
 
@@ -18,7 +18,7 @@ if (search.get("outer")) {
         [
             "user",
             JSON.stringify({
-                id: 99281932,
+                id: 5000284026,
                 first_name: "Andrew",
                 last_name: "Rogue",
                 username: "rogue",

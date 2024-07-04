@@ -51,9 +51,10 @@ const BotGame = () => {
         img: "",
         mark: UserMarkType.Empty,
     });
-    const [tokenId] = useState<number>(params.tokenId);
+    const [gameAddress] = useState<string>(params.gameAddress);
+    const [tokenId, setTokenId] = useState<number>(null);
     const initRef = useRef<boolean>(false);
-    const burnerWallet = getBotGameSigner(tokenId);
+    const burnerWallet = getBotGameSigner(gameAddress);
     const { sCWAddress } = useSCWallet(burnerWallet.privateKey);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
@@ -72,7 +73,6 @@ const BotGame = () => {
         emote: 0,
     });
 
-    const [gameAddress] = useState<string>(params.gameAddress);
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [step, setStep] = useState(0);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
@@ -99,6 +99,7 @@ const BotGame = () => {
                 playerAddress1,
             ),
         ]);
+        setTokenId(tokenId1.toNumber());
 
         const [account1, level1, mtadata1] = await multiProvider.all([
             multiMercuryBaseContract.ownerOf(tokenId1),
