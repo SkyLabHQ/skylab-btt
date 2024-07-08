@@ -35,7 +35,6 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
             <Flex
                 onClick={handleMintPlane}
                 sx={{
-                    // width: isPc ? "380px" : "210px",
                     height: "54px",
                     borderRadius: "12px",
                     fontSize: "16px",
@@ -43,7 +42,9 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
                     cursor: "pointer",
                     position: "relative",
                     border: "1px solid #f2d861",
-                    padding: "12px 10px 12px 30px",
+                    padding: isPc
+                        ? "12px 10px 12px 30px"
+                        : "12px 10px 12px 12px",
                 }}
                 align={"center"}
             >
@@ -61,7 +62,7 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
                         width: "1px",
                         height: "30px",
                         background: "#F2D861",
-                        margin: "0 20px",
+                        margin: isPc ? "0 20px" : "0 12px",
                     }}
                 ></Box>
                 <Text
@@ -70,7 +71,7 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
                         textAlign: "right",
                         fontWeight: 900,
                         fontFamily: "Helvetica",
-                        marginRight: isPc ? "10px" : "24px",
+                        marginRight: isPc ? "10px" : "6px",
                     }}
                 >
                     0.01 ETH

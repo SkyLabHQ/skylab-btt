@@ -184,22 +184,39 @@ const TacToeMode = () => {
                                 justify={"space-between"}
                                 align={"flex-end"}
                             >
-                                <PlayButtonGroup
-                                    tournamentDisabled={!selectPlane?.tokenId}
-                                    onPlayTournament={() => {
-                                        gameAudio.play();
-                                        handleTournament();
+                                <i
+                                    style={{
+                                        width: isPc ? "124px" : "75px",
                                     }}
-                                ></PlayButtonGroup>
+                                ></i>
+                                <Box
+                                    sx={{
+                                        paddingBottom: isPc ? "12px" : "4px",
+                                    }}
+                                >
+                                    <PlayButtonGroup
+                                        tournamentDisabled={
+                                            !selectPlane?.tokenId
+                                        }
+                                        onPlayTournament={() => {
+                                            gameAudio.play();
+                                            handleTournament();
+                                        }}
+                                    ></PlayButtonGroup>
+                                </Box>
+
                                 <Flex
                                     flexDir={"column"}
                                     align={"center"}
+                                    sx={{
+                                        marginTop: "10px",
+                                    }}
                                     onClick={() => {}}
                                 >
                                     <Image
                                         src={MarketIcon}
                                         sx={{
-                                            width: isPc ? "100px" : "42px",
+                                            width: isPc ? "100px" : "48px",
                                         }}
                                     ></Image>
                                     <Text

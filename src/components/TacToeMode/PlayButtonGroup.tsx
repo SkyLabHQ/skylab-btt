@@ -59,7 +59,7 @@ export const PlayButtonGroup = ({
                     fontFamily: "Quantico",
                     "& .bt": {
                         width: "100% !important",
-                        height: `${isPc ? "90px" : "70px"} !important`,
+                        height: `${isPc ? "90px" : "60px"} !important`,
                         justifyContent: "flex-end",
                         borderRadius: "18px !important",
                     },
