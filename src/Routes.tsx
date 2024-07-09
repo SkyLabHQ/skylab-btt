@@ -38,6 +38,7 @@ const AppRoutes = (): ReactElement => {
                 </Route>
                 <Route path="/plane" element={<PlaneMarketLayout />}>
                     <Route path="/plane/market" element={<Market />}></Route>
+                    <Route path="/plane/my" element={<Market />}></Route>
                 </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />

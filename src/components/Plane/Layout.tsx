@@ -1,6 +1,6 @@
 import { Box, Image, Flex, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Back, { BackWithText } from "../Back";
 import BackIcon from "./assets/back.svg";
 import LogoIcon from "./assets/logo.svg";
@@ -70,6 +70,7 @@ const navList = [
 
 const NavBar = () => {
     const { pathname } = useLocation();
+    const navigate = useNavigate();
     const [activeIndex, setActiveIndex] = React.useState(0);
 
     useEffect(() => {
@@ -111,6 +112,9 @@ const NavBar = () => {
                 {navList.map((nav, index) => {
                     return (
                         <Flex
+                            onClick={() => {
+                                navigate(nav.value);
+                            }}
                             key={index}
                             align={"center"}
                             justify={"center"}
@@ -146,14 +150,20 @@ const PlaneMarketLayout = () => {
     return (
         <Box
             sx={{
-                height: "100vh",
+                minHeight: "100%",
                 background: "#CEA029",
                 color: "white",
             }}
         >
             <Header></Header>
             <NavBar></NavBar>
-            <Outlet></Outlet>
+            <Box
+                sx={{
+                    padding: "20px",
+                }}
+            >
+                <Outlet></Outlet>
+            </Box>
         </Box>
     );
 };
