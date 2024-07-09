@@ -185,9 +185,15 @@ const MyPlane = ({
                 width: "100%",
                 padding: "0 12px 140px",
                 position: "relative",
+                height: "100%",
             }}
         >
-            <Flex flexDir={"column"}>
+            <Flex
+                flexDir={"column"}
+                sx={{
+                    height: "100%",
+                }}
+            >
                 <Box
                     sx={{
                         height: "45px",
@@ -197,7 +203,7 @@ const MyPlane = ({
                         sx={{
                             fontSize: isPc ? "30px" : "20px",
                             textAlign: "center",
-                            marginTop: "20px",
+                            paddingTop: "20px",
                             fontFamily: "Orbitron",
                             fontWeight: "bold",
                         }}
@@ -210,8 +216,8 @@ const MyPlane = ({
                     sx={{
                         marginTop: "20px",
                         height: isPc
-                            ? "calc(100vh - 680px)"
-                            : "calc(100vh - 450px)",
+                            ? "calc(100% - 100px)"
+                            : "calc(100% - 100px)",
                         paddingBottom: "20px",
                         overflow: "auto",
                         "&::-webkit-scrollbar-thumb": {
@@ -473,35 +479,46 @@ const SelectPlane = ({
 }) => {
     const { address } = usePrivyAccounts();
     return (
-        <Box>
-            {address && (
-                <Flex justify={"center"} align={"center"}>
-                    <Image
-                        src={TipIcon}
-                        sx={{
-                            marginRight: "4px",
-                        }}
-                    ></Image>
-                    <Text
-                        sx={{
-                            color: "#F2D861",
-                            fontSize: "20px",
-                            fontFamily: "Quantico",
-                        }}
-                    >
-                        Please select plane first
-                    </Text>
-                </Flex>
-            )}
+        <Box
+            sx={{
+                height: "100%",
+            }}
+        >
+            <Box
+                sx={{
+                    height: "30px",
+                }}
+            >
+                {address && (
+                    <Flex justify={"center"} align={"center"}>
+                        <Image
+                            src={TipIcon}
+                            sx={{
+                                marginRight: "4px",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                color: "#F2D861",
+                                fontSize: "20px",
+                                fontFamily: "Quantico",
+                            }}
+                        >
+                            Please select plane first
+                        </Text>
+                    </Flex>
+                )}
+            </Box>
+
             <Box
                 sx={{
                     borderRadius: "18px 18px 0 0",
                     border: "1px solid #FFF",
                     borderBottom: "none",
-                    marginTop: "10px",
+                    paddingTop: "10px",
+                    height: "calc(100% - 30px)",
                 }}
             >
-                {" "}
                 <MyPlane
                     selectPlane={selectPlane}
                     onSelectPlane={onSelectPlane}

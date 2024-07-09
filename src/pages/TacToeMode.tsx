@@ -211,7 +211,9 @@ const TacToeMode = () => {
                                     sx={{
                                         marginTop: "10px",
                                     }}
-                                    onClick={() => {}}
+                                    onClick={() => {
+                                        navigate("/plane/market");
+                                    }}
                                 >
                                     <Image
                                         src={MarketIcon}
@@ -241,6 +243,9 @@ const TacToeMode = () => {
                         transform: "translate(-50%, 0)",
                         width: isPc ? "800px" : "100%",
                         display: "block",
+                        height: isPc
+                            ? "calc(100% - 400px)"
+                            : "calc(100% - 220px)",
                     }}
                 >
                     <SelectPlane

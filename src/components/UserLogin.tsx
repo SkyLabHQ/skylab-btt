@@ -43,7 +43,7 @@ const UserLogin = () => {
                                 backgroundSize: "cover",
                                 position: "absolute",
                                 top: "50%",
-                                left: "0px",
+                                left: "-4px",
                                 transform: "translate(0%, -50%)",
                                 zIndex: 99,
                             }}
@@ -51,8 +51,8 @@ const UserLogin = () => {
                             <Image
                                 src={UserIcon}
                                 sx={{
-                                    width: "52px",
-                                    height: "52px",
+                                    width: "56px",
+                                    height: "56px",
                                 }}
                             ></Image>
                         </Box>
