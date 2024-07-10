@@ -6,6 +6,7 @@ import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import qs from "query-string";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
+import MARKETPLACE_ABI from "@/skyConstants/abis/MarketPlace.json";
 import { ChainId, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
 import { useChainId } from "wagmi";
@@ -37,6 +38,10 @@ export const botAddress: ChainIdToAddressMap = {
 
 export const mercuryJarTournamentAddress: ChainIdToAddressMap = {
     [ChainId.SEPOLIA]: "0xBCD70B8557A120d4025C90dE4D6705B04754Ca0B",
+};
+
+export const marketPlaceAddress: ChainIdToAddressMap = {
+    [ChainId.SEPOLIA]: "0xc6B4AF6B7C944a4C43755b83753D292Ac3447b19",
 };
 
 function useContract(address: any, abi: any) {
@@ -114,4 +119,9 @@ export const useMercuryJarTournamentContract = () => {
         mercuryJarTournamentAddress[chainId],
         MERCURYJARTOURNAMENT_ABI,
     );
+};
+
+export const useMarketPlaceContract = () => {
+    const chainId = useChainId();
+    return useContract(marketPlaceAddress[chainId], MARKETPLACE_ABI);
 };

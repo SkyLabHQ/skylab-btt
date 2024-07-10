@@ -25,6 +25,12 @@ export const GlobalStyles = css`
         font-weight: normal;
         font-style: normal;
     }
+    @font-face {
+        font-family: "DIN-Black";
+        src: url("/DIN-Black.otf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+    }
     * {
         box-sizing: border-box;
         padding: 0;

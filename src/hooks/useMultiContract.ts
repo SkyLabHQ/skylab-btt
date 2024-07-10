@@ -7,6 +7,7 @@ import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
+import MARKETPLACE_ABI from "@/skyConstants/abis/MarketPlace.json";
 
 import qs from "query-string";
 import { ChainId, TESTFLIGHT_CHAINID, randomRpc } from "@/utils/web3Utils";
@@ -15,6 +16,7 @@ import {
     skylabBidTacToeAddress,
     skylabTestFlightAddress,
     mercuryJarTournamentAddress,
+    marketPlaceAddress,
 } from "./useContract";
 import { ethers } from "ethers";
 import { isAddress } from "@/utils/isAddress";
@@ -121,6 +123,11 @@ export const useMultiMercuryJarTournamentContract = () => {
         mercuryJarTournamentAddress[chainId],
         MERCURYJARTOURNAMENT_ABI,
     );
+};
+
+export const useMultiMarketPlaceContract = () => {
+    const chainId = useChainId();
+    return useContract(marketPlaceAddress[chainId], MARKETPLACE_ABI);
 };
 
 export const useMultiProvider = (chainId: number) => {

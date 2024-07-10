@@ -1,4 +1,4 @@
-import { Box, Image, Flex, Text } from "@chakra-ui/react";
+import { Box, Image, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Back, { BackWithText } from "../Back";
@@ -147,6 +147,7 @@ const NavBar = () => {
 };
 
 const PlaneMarketLayout = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
@@ -159,7 +160,7 @@ const PlaneMarketLayout = () => {
             <NavBar></NavBar>
             <Box
                 sx={{
-                    padding: "20px",
+                    padding: isPc ? "20px" : "6px",
                 }}
             >
                 <Outlet></Outlet>
