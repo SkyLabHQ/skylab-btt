@@ -69,6 +69,8 @@ const navList = [
 ];
 
 const NavBar = () => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const [activeIndex, setActiveIndex] = React.useState(0);
@@ -83,20 +85,21 @@ const NavBar = () => {
         <Box
             sx={{
                 fontFamily: "Orbitron",
+                paddingTop: isPc ? "50px" : "20px",
             }}
         >
             <Flex justify={"center"}>
                 <Image
                     src={CartIcon}
                     sx={{
-                        width: "54px",
+                        width: isPc ? "54px" : "22px",
                         marginRight: "10px",
                     }}
                 ></Image>
                 <Text
                     sx={{
                         fontFamily: "Orbitron",
-                        fontSize: "50px",
+                        fontSize: isPc ? "50px" : "22px",
                         fontStyle: "normal",
                         fontWeight: "bold",
                     }}
@@ -107,6 +110,7 @@ const NavBar = () => {
             <Flex
                 sx={{
                     gap: "20px",
+                    marginTop: isPc ? "6px" : "24px",
                 }}
             >
                 {navList.map((nav, index) => {
@@ -129,12 +133,12 @@ const NavBar = () => {
                                     activeIndex === index
                                         ? "2px solid #000"
                                         : "2px solid #F2D861",
-                                width: "228px",
-                                height: "55px",
+                                width: isPc ? "228px" : "130px",
+                                height: isPc ? "55px" : "30px",
                                 borderRadius: "16px",
                                 cursor: "pointer",
                                 color: activeIndex === index ? "#000" : "#fff",
-                                fontSize: "24px",
+                                fontSize: isPc ? "24px" : "14px",
                             }}
                         >
                             {nav.label}
@@ -157,13 +161,21 @@ const PlaneMarketLayout = () => {
             }}
         >
             <Header></Header>
-            <NavBar></NavBar>
             <Box
                 sx={{
-                    padding: isPc ? "20px" : "6px",
+                    maxWidth: "1700px",
+                    margin: "0px auto",
+                    padding: isPc ? "20px 10px" : "20px 10px",
                 }}
             >
-                <Outlet></Outlet>
+                <NavBar></NavBar>
+                <Box
+                    sx={{
+                        marginTop: isPc ? "30px" : "20px",
+                    }}
+                >
+                    <Outlet></Outlet>
+                </Box>
             </Box>
         </Box>
     );

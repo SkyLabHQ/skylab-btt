@@ -1,5 +1,13 @@
 import { aviationImg } from "@/utils/aviationImg";
-import { Box, Image, Flex, Text, useMediaQuery, Input } from "@chakra-ui/react";
+import {
+    Box,
+    Image,
+    Flex,
+    Text,
+    useMediaQuery,
+    Input,
+    SimpleGrid,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Bg from "./assets/card-bg.png";
 import {
@@ -11,9 +19,10 @@ import { useMarketPlaceContract } from "@/hooks/useContract";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import ConfirmIcon from "./assets/confirm.svg";
 import CancelIcon from "./assets/cancel.svg";
-import { parseAmount } from "@/utils/formatBalance";
+import { formatAmount, parseAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
+import DeleteIcon from "./assets/delete.svg";
 
 const planeList = new Array(16).fill("").map((_, index) => {
     return { img: aviationImg(index + 1), level: index + 1 };
@@ -37,9 +46,10 @@ const Market = () => {
     const [myPrice, setMyPrice] = useState(new Array(16).fill("0"));
 
     const getMarketPlaceList = async () => {
+        // const res = await marketPlaceContract.read.getHighestBid([0]);
         const p = [];
         for (let i = 1; i <= 16; i++) {
-            p.push(multiMarketPlaceContract.levelInfos(i));
+            p.push(multiMarketPlaceContract.getHighestBid(i));
         }
         const list = await multiProvider.all(p);
         sethighList(
@@ -52,12 +62,13 @@ const Market = () => {
     const getMyPrice = async () => {
         const p = [];
         for (let i = 1; i <= 16; i++) {
-            p.push(multiMarketPlaceContract.userBids(address, i));
+            p.push(multiMarketPlaceContract.getBidInfo(address, i));
         }
         const list = await multiProvider.all(p);
+        console.log(list, "list");
         setMyPrice(
             list.map((item) => {
-                return item.toString();
+                return item.price.toString();
             }),
         );
     };
@@ -77,6 +88,7 @@ const Market = () => {
 
     const handleConfirm = async (index: number, level: number) => {
         if (!address) {
+            toast("Please connect wallet");
             return;
         }
 
@@ -96,6 +108,26 @@ const Market = () => {
             const _inputAmount = [...inputAmount];
             _inputAmount[index] = "0";
             setInputMode(_inputMode);
+            getMarketPlaceList();
+            getMyPrice();
+        } catch (e) {
+            toast(handleError(e));
+        }
+    };
+
+    const handleCancelBid = async (level: number) => {
+        if (!address) {
+            return;
+        }
+
+        try {
+            const hash = await marketPlaceContract.write.cancelBid([level]);
+
+            // @ts-ignore
+            const receipt = await publicClient.waitForTransactionReceipt({
+                hash,
+            });
+
             getMarketPlaceList();
             getMyPrice();
         } catch (e) {
@@ -123,17 +155,14 @@ const Market = () => {
     }, [multiMarketPlaceContract, multiProvider, marketPlaceContract, address]);
 
     return (
-        <Box
+        <SimpleGrid
             sx={{
-                margin: "0 auto",
-                display: "grid",
-                gridTemplateColumns: isPc
-                    ? "repeat(auto-fill, 320px)"
-                    : "repeat(auto-fill, 170px)",
-                gap: isPc ? "24px" : "10px",
-                maxWidth: "1700px",
-                justifyContent: "center",
+                // margin: "0 auto",
+                width: "100%",
             }}
+            columns={5}
+            spacing={isPc ? "20px" : "10px"}
+            minChildWidth={isPc ? "320px" : "170px"}
         >
             {planeList.map((item, index) => {
                 return (
@@ -143,7 +172,7 @@ const Market = () => {
                             borderRadius: "20px",
                             border: "4px solid #1B1B1B",
                             overflow: "hidden",
-                            width: isPc ? "320px" : "170px",
+                            width: "100%",
                         }}
                     >
                         <Box
@@ -216,19 +245,34 @@ const Market = () => {
                                 >
                                     {highList[index] === "0"
                                         ? "--"
-                                        : highList[index]}{" "}
+                                        : formatAmount(highList[index])}{" "}
                                     ETH
                                 </Text>
-                                <Text
-                                    sx={{
-                                        fontSize: isPc ? "24px" : "14px",
-                                    }}
-                                >
-                                    {myPrice[index] === "0"
-                                        ? "--"
-                                        : myPrice[index]}{" "}
-                                    ETH
-                                </Text>
+                                <Flex>
+                                    {myPrice[index] !== "0" && (
+                                        <Image
+                                            onClick={() => {
+                                                handleCancelBid(item.level);
+                                            }}
+                                            src={DeleteIcon}
+                                            sx={{
+                                                width: "16px",
+                                                marginRight: "4px",
+                                                cursor: "pointer",
+                                            }}
+                                        ></Image>
+                                    )}
+                                    <Text
+                                        sx={{
+                                            fontSize: isPc ? "24px" : "14px",
+                                        }}
+                                    >
+                                        {myPrice[index] === "0"
+                                            ? "--"
+                                            : formatAmount(myPrice[index])}{" "}
+                                        ETH
+                                    </Text>
+                                </Flex>
                             </Flex>
                         </Box>
 
@@ -238,7 +282,7 @@ const Market = () => {
                                     justify={"center"}
                                     align={"center"}
                                     sx={{
-                                        width: "56px",
+                                        width: isPc ? "56px" : "32px",
                                         background: "#D9D9D9",
                                         height: isPc ? "50px" : "28px",
                                         cursor: "pointer",
@@ -265,7 +309,7 @@ const Market = () => {
                                     justify={"center"}
                                     align={"center"}
                                     sx={{
-                                        width: "56px",
+                                        width: isPc ? "56px" : "32px",
                                         background: "#F2D861",
                                         height: isPc ? "50px" : "28px",
                                         cursor: "pointer",
@@ -301,7 +345,7 @@ const Market = () => {
                                         borderRadius: "0 0 18px 0px",
                                         position: "relative",
                                         flex: 1,
-                                        padding: "10px",
+                                        padding: isPc ? "10px" : "2px",
                                         color: "#fff",
                                     }}
                                 >
@@ -312,15 +356,16 @@ const Market = () => {
                                             background: "#101010",
                                             borderRadius: "18px",
                                             fontFamily: "DIN-Black",
-                                            padding: "0 8px 0 16px",
+                                            padding: isPc
+                                                ? "0 8px 0 16px"
+                                                : "0 4px 0 8px",
+                                            fontSize: isPc ? "20px" : "12px",
                                         }}
                                     >
                                         <Input
                                             variant={"unstyled"}
                                             value={inputAmount[index]}
-                                            sx={{
-                                                fontSize: "20px",
-                                            }}
+                                            sx={{}}
                                             onChange={(e) => {
                                                 const _inputAmount = [
                                                     ...inputAmount,
@@ -330,13 +375,7 @@ const Market = () => {
                                                 setInputAmount(_inputAmount);
                                             }}
                                         ></Input>
-                                        <Text
-                                            sx={{
-                                                fontSize: "20px",
-                                            }}
-                                        >
-                                            ETH
-                                        </Text>
+                                        <Text sx={{}}>ETH</Text>
                                     </Flex>
                                     <Box
                                         sx={{
@@ -436,7 +475,7 @@ const Market = () => {
                     </Box>
                 );
             })}
-        </Box>
+        </SimpleGrid>
     );
 };
 

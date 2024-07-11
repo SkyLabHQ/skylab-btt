@@ -28,6 +28,7 @@ import { useInitData } from "@tma.js/sdk-react";
 
 const PlayButtonGroup = () => {
     const initData = useInitData();
+    console.log(initData, "initData");
     const { closeLoading, openLoading } = useSubmitRequest();
     const navigate = useNavigate();
     const toast = useSkyToast();
