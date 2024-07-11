@@ -521,8 +521,7 @@ const UserInfoDrawer = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称
-    const { planeInit, planeList, userName, paperBalance, userNameInit } =
-        useUserInfo();
+    const { planeInit, planeList, userName, userNameInit } = useUserInfo();
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);
@@ -609,7 +608,7 @@ const UserInfoDrawer = ({
                                 handleChangeMode={handleChangeMode}
                             ></UserInfo>
                             <MyPaper
-                                balance={paperBalance}
+                                balance={"0"}
                                 handleMintPlane={onMintPlane}
                             ></MyPaper>
                             <MyPlane

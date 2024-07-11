@@ -69,7 +69,7 @@ const navList = [
 ];
 
 const NavBar = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [large680] = useMediaQuery("(min-width: 680px)");
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
@@ -85,21 +85,21 @@ const NavBar = () => {
         <Box
             sx={{
                 fontFamily: "Orbitron",
-                paddingTop: isPc ? "50px" : "20px",
+                paddingTop: large680 ? "50px" : "20px",
             }}
         >
             <Flex justify={"center"}>
                 <Image
                     src={CartIcon}
                     sx={{
-                        width: isPc ? "54px" : "22px",
+                        width: large680 ? "54px" : "22px",
                         marginRight: "10px",
                     }}
                 ></Image>
                 <Text
                     sx={{
                         fontFamily: "Orbitron",
-                        fontSize: isPc ? "50px" : "22px",
+                        fontSize: large680 ? "50px" : "22px",
                         fontStyle: "normal",
                         fontWeight: "bold",
                     }}
@@ -110,7 +110,7 @@ const NavBar = () => {
             <Flex
                 sx={{
                     gap: "20px",
-                    marginTop: isPc ? "6px" : "24px",
+                    marginTop: large680 ? "6px" : "24px",
                 }}
             >
                 {navList.map((nav, index) => {
@@ -133,12 +133,12 @@ const NavBar = () => {
                                     activeIndex === index
                                         ? "2px solid #000"
                                         : "2px solid #F2D861",
-                                width: isPc ? "228px" : "130px",
-                                height: isPc ? "55px" : "30px",
+                                width: large680 ? "228px" : "130px",
+                                height: large680 ? "55px" : "30px",
                                 borderRadius: "16px",
                                 cursor: "pointer",
                                 color: activeIndex === index ? "#000" : "#fff",
-                                fontSize: isPc ? "24px" : "14px",
+                                fontSize: large680 ? "24px" : "14px",
                             }}
                         >
                             {nav.label}
@@ -151,7 +151,11 @@ const NavBar = () => {
 };
 
 const PlaneMarketLayout = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [large1700] = useMediaQuery("(min-width: 1700px)");
+    const [large1360] = useMediaQuery("(min-width: 1360px)");
+    const [large1020] = useMediaQuery("(min-width: 1020px)");
+    const [large680] = useMediaQuery("(min-width: 680px)");
+
     return (
         <Box
             sx={{
@@ -164,14 +168,29 @@ const PlaneMarketLayout = () => {
             <Box
                 sx={{
                     maxWidth: "1700px",
+                    width: large1700
+                        ? "1700px"
+                        : large1360
+                        ? "1360px"
+                        : large1020
+                        ? "1020px"
+                        : large680
+                        ? "680px"
+                        : "100%",
                     margin: "0px auto",
-                    padding: isPc ? "20px 10px" : "20px 10px",
+                    // padding: large680 ? "20px 10px" : "20px 10px",
                 }}
             >
-                <NavBar></NavBar>
                 <Box
                     sx={{
-                        marginTop: isPc ? "30px" : "20px",
+                        margin: "0 10px",
+                    }}
+                >
+                    <NavBar></NavBar>
+                </Box>
+                <Box
+                    sx={{
+                        marginTop: large680 ? "30px" : "20px",
                     }}
                 >
                     <Outlet></Outlet>

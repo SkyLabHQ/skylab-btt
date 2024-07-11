@@ -16,6 +16,7 @@ import StartBot from "./pages/StartBot";
 import BotGame from "./pages/BotGame";
 import PlaneMarketLayout from "./components/Plane/Layout";
 import Market from "./components/Plane/Market";
+import My from "./components/Plane/My";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -38,7 +39,7 @@ const AppRoutes = (): ReactElement => {
                 </Route>
                 <Route path="/plane" element={<PlaneMarketLayout />}>
                     <Route path="/plane/market" element={<Market />}></Route>
-                    <Route path="/plane/my" element={<Market />}></Route>
+                    <Route path="/plane/my" element={<My />}></Route>
                 </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />} />

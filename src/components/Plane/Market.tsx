@@ -1,13 +1,5 @@
 import { aviationImg } from "@/utils/aviationImg";
-import {
-    Box,
-    Image,
-    Flex,
-    Text,
-    useMediaQuery,
-    Input,
-    SimpleGrid,
-} from "@chakra-ui/react";
+import { Box, Image, Flex, Text, useMediaQuery, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Bg from "./assets/card-bg.png";
 import {
@@ -40,13 +32,10 @@ const Market = () => {
     const multiProvider = useMultiProvider(chainId);
     const multiMarketPlaceContract = useMultiMarketPlaceContract();
     const marketPlaceContract = useMarketPlaceContract();
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [large680] = useMediaQuery("(min-width: 680px)");
     const [highList, sethighList] = useState(new Array(16).fill("0"));
-
     const [myPrice, setMyPrice] = useState(new Array(16).fill("0"));
-
     const getMarketPlaceList = async () => {
-        // const res = await marketPlaceContract.read.getHighestBid([0]);
         const p = [];
         for (let i = 1; i <= 16; i++) {
             p.push(multiMarketPlaceContract.getHighestBid(i));
@@ -73,7 +62,6 @@ const Market = () => {
         );
     };
 
-    console.log(highList, myPrice, ",mmm");
     const handleBid = (index: number) => {
         const _inputMode = [...inputMode];
         _inputMode[index] = true;
@@ -155,14 +143,15 @@ const Market = () => {
     }, [multiMarketPlaceContract, multiProvider, marketPlaceContract, address]);
 
     return (
-        <SimpleGrid
+        <Flex
             sx={{
-                // margin: "0 auto",
                 width: "100%",
+                flexWrap: "wrap",
+                "&>div": {
+                    margin: large680 ? "0 10px" : "0 1%",
+                    marginBottom: "20px",
+                },
             }}
-            columns={5}
-            spacing={isPc ? "20px" : "10px"}
-            minChildWidth={isPc ? "320px" : "170px"}
         >
             {planeList.map((item, index) => {
                 return (
@@ -172,7 +161,7 @@ const Market = () => {
                             borderRadius: "20px",
                             border: "4px solid #1B1B1B",
                             overflow: "hidden",
-                            width: "100%",
+                            width: large680 ? "320px" : "48%",
                         }}
                     >
                         <Box
@@ -180,6 +169,8 @@ const Market = () => {
                                 background: `url(${Bg}) no-repeat`,
                                 backgroundSize: "cover",
                                 position: "relative",
+                                paddingBottom: "100%",
+                                height: "0",
                             }}
                         >
                             <Flex
@@ -188,13 +179,13 @@ const Market = () => {
                                     left: "0",
                                     top: "0",
                                     background: "rgba(0, 0, 0, 0.40)",
-                                    width: isPc ? "102px" : "58px",
-                                    height: isPc ? "60px" : "35px",
-                                    borderRadius: isPc
+                                    width: large680 ? "102px" : "58px",
+                                    height: large680 ? "60px" : "35px",
+                                    borderRadius: large680
                                         ? "0px 24px 24px 0"
                                         : "0px 16px 16px 0",
                                     fontWeight: "bold",
-                                    fontSize: isPc ? "24px" : "14px",
+                                    fontSize: large680 ? "24px" : "14px",
                                 }}
                                 justify={"center"}
                                 align={"center"}
@@ -203,7 +194,9 @@ const Market = () => {
                                     Lvl.{" "}
                                     <span
                                         style={{
-                                            fontSize: isPc ? "32px" : "18px",
+                                            fontSize: large680
+                                                ? "32px"
+                                                : "18px",
                                         }}
                                     >
                                         {item.level}
@@ -215,13 +208,13 @@ const Market = () => {
                         <Box
                             sx={{
                                 background: "#2D240C",
-                                padding: isPc ? "24px 12px" : "12px 4px",
+                                padding: large680 ? "24px 12px" : "12px 4px",
                             }}
                         >
                             <Flex
                                 justify={"space-between"}
                                 sx={{
-                                    fontSize: isPc ? "14px" : "12px",
+                                    fontSize: large680 ? "14px" : "12px",
                                 }}
                             >
                                 <Text>Hignest Price</Text>
@@ -232,7 +225,7 @@ const Market = () => {
                                 align={"flex-end"}
                                 sx={{
                                     fontWeight: "bold",
-                                    marginTop: isPc ? "4px" : "2px",
+                                    marginTop: large680 ? "4px" : "2px",
                                     verticalAlign: "bottom",
                                     lineHeight: "1",
                                     fontFamily: "DIN-Black",
@@ -240,7 +233,7 @@ const Market = () => {
                             >
                                 <Text
                                     sx={{
-                                        fontSize: isPc ? "30px" : "18px",
+                                        fontSize: large680 ? "30px" : "18px",
                                     }}
                                 >
                                     {highList[index] === "0"
@@ -264,7 +257,9 @@ const Market = () => {
                                     )}
                                     <Text
                                         sx={{
-                                            fontSize: isPc ? "24px" : "14px",
+                                            fontSize: large680
+                                                ? "24px"
+                                                : "14px",
                                         }}
                                     >
                                         {myPrice[index] === "0"
@@ -282,9 +277,9 @@ const Market = () => {
                                     justify={"center"}
                                     align={"center"}
                                     sx={{
-                                        width: isPc ? "56px" : "32px",
+                                        width: large680 ? "56px" : "32px",
                                         background: "#D9D9D9",
-                                        height: isPc ? "50px" : "28px",
+                                        height: large680 ? "50px" : "28px",
                                         cursor: "pointer",
                                     }}
                                     onClick={() => {
@@ -300,7 +295,7 @@ const Market = () => {
                                 </Flex>
                                 <Box
                                     sx={{
-                                        height: isPc ? "50px" : "28px",
+                                        height: large680 ? "50px" : "28px",
                                         width: "2px",
                                         background: "#2D240C",
                                     }}
@@ -309,9 +304,9 @@ const Market = () => {
                                     justify={"center"}
                                     align={"center"}
                                     sx={{
-                                        width: isPc ? "56px" : "32px",
+                                        width: large680 ? "56px" : "32px",
                                         background: "#F2D861",
-                                        height: isPc ? "50px" : "28px",
+                                        height: large680 ? "50px" : "28px",
                                         cursor: "pointer",
                                     }}
                                     onClick={() => {
@@ -327,7 +322,7 @@ const Market = () => {
                                 </Flex>
                                 <Box
                                     sx={{
-                                        height: isPc ? "50px" : "28px",
+                                        height: large680 ? "50px" : "28px",
                                         width: "2px",
                                         background: "#2D240C",
                                     }}
@@ -336,16 +331,16 @@ const Market = () => {
                                     align={"center"}
                                     justify={"center"}
                                     sx={{
-                                        height: isPc ? "50px" : "28px",
+                                        height: large680 ? "50px" : "28px",
                                         background: "#2D240C",
-                                        fontSize: isPc ? "18px" : "14px",
+                                        fontSize: large680 ? "18px" : "14px",
                                         fontFamily: "Orbitron",
                                         fontWeight: "bold",
                                         border: "1px solid #F2D861",
                                         borderRadius: "0 0 18px 0px",
                                         position: "relative",
                                         flex: 1,
-                                        padding: isPc ? "10px" : "2px",
+                                        padding: large680 ? "10px" : "2px",
                                         color: "#fff",
                                     }}
                                 >
@@ -356,10 +351,12 @@ const Market = () => {
                                             background: "#101010",
                                             borderRadius: "18px",
                                             fontFamily: "DIN-Black",
-                                            padding: isPc
+                                            padding: large680
                                                 ? "0 8px 0 16px"
                                                 : "0 4px 0 8px",
-                                            fontSize: isPc ? "20px" : "12px",
+                                            fontSize: large680
+                                                ? "20px"
+                                                : "12px",
                                         }}
                                     >
                                         <Input
@@ -413,9 +410,11 @@ const Market = () => {
                                         align={"center"}
                                         justify={"center"}
                                         sx={{
-                                            height: isPc ? "50px" : "28px",
+                                            height: large680 ? "50px" : "28px",
                                             background: "#2D240C",
-                                            fontSize: isPc ? "18px" : "14px",
+                                            fontSize: large680
+                                                ? "18px"
+                                                : "14px",
                                             color: "#F2D861",
                                             fontFamily: "Orbitron",
                                             fontWeight: "bold",
@@ -457,9 +456,11 @@ const Market = () => {
                                         align={"center"}
                                         justify={"center"}
                                         sx={{
-                                            height: isPc ? "50px" : "28px",
+                                            height: large680 ? "50px" : "28px",
                                             background: "#F2D861",
-                                            fontSize: isPc ? "18px" : "14px",
+                                            fontSize: large680
+                                                ? "18px"
+                                                : "14px",
                                             color: "#1b1b1b",
                                             fontFamily: "Orbitron",
                                             fontWeight: "bold",
@@ -475,7 +476,7 @@ const Market = () => {
                     </Box>
                 );
             })}
-        </SimpleGrid>
+        </Flex>
     );
 };
 

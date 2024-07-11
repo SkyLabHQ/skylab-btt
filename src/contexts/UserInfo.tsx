@@ -27,7 +27,6 @@ const UserInfoContext = createContext<{
     isBlock: boolean;
     bidIconType: string;
     userName: string;
-    paperBalance: string;
     planeList: any[];
     planeInit: boolean;
     userNameInit: boolean;
@@ -35,9 +34,10 @@ const UserInfoContext = createContext<{
     handleToggleType: () => void;
     handleGetUserPaper: () => void;
     handleLogin: () => void;
+    handleGetUserPlane: () => void;
 }>(null);
 
-const whiteList = ["/"];
+const whiteList = ["/", "/plane/my"];
 
 export const UserInfoProvider = ({
     children,
@@ -57,7 +57,6 @@ export const UserInfoProvider = ({
     const [isBlock, setIsBlock] = useState(false);
     const [blockOpen, setIsBlockOpen] = useState(false);
     const [bidIconType, setBidIconType] = useState("0");
-    const [paperBalance, setPaperBalance] = useState("0");
     const [userName, setUserName] = useState("");
     const [userNameInit, setUserNameInit] = useState(false);
     const [planeList, setPlaneList] = useState([] as any[]);
@@ -102,14 +101,12 @@ export const UserInfoProvider = ({
             return;
         }
         setLoading(true);
-        const [planeBalance, paperBalance, userName] = await multiProvider.all([
+        const [planeBalance, userName] = await multiProvider.all([
             multiMercuryJarTournamentContract.balanceOf(address),
-            multiMercuryJarTournamentContract.paperBalance(address),
             multiMercuryJarTournamentContract.userName(address),
         ]);
         setUserName(userName);
         setUserNameInit(true);
-        setPaperBalance(paperBalance.toString());
         const p = [];
         for (let i = 0; i < Number(planeBalance.toString()); i++) {
             p.push(
@@ -175,9 +172,6 @@ export const UserInfoProvider = ({
             handleBlock(true);
         }
 
-        if (Number(paperBalance) === 0) {
-            return;
-        }
         try {
             const hash = await mercuryJarTournamentContract.write.mintWithPaper(
                 [1],
@@ -196,6 +190,52 @@ export const UserInfoProvider = ({
         } catch (e) {
             toast(handleError(e));
         }
+    };
+
+    const handleGetUserPlane = async () => {
+        const [planeBalance] = await multiProvider.all([
+            multiMercuryJarTournamentContract.balanceOf(address),
+        ]);
+        const p = [];
+        for (let i = 0; i < Number(planeBalance.toString()); i++) {
+            p.push(
+                multiMercuryJarTournamentContract.tokenOfOwnerByIndex(
+                    address,
+                    i,
+                ),
+            );
+        }
+
+        const tokenIds = await multiProvider.all(p);
+
+        const p2: any = [];
+        tokenIds.forEach((item) => {
+            p2.push(multiMercuryJarTournamentContract.aviationPoints(item));
+            p2.push(multiMercuryJarTournamentContract.isAviationLocked(item));
+        });
+
+        const levels = await multiProvider.all(p2);
+
+        const planeList = tokenIds.map((item, index) => {
+            const points = Number(levels[index * 2].toString());
+            const levelItem = levelRanges.find((item) => {
+                return points < item.maxPoints && points >= item.minPoints;
+            });
+            const state = levels[index * 2 + 1];
+            const level = levelItem.level;
+            const nextPoints = levelItem.maxPoints;
+            const prePoints = levelItem.minPoints;
+            return {
+                tokenId: item.toString(),
+                points,
+                level: level,
+                img: aviationImg(level),
+                nextPoints,
+                prePoints,
+                state,
+            };
+        });
+        setPlaneList(planeList);
     };
 
     useEffect(() => {
@@ -231,11 +271,11 @@ export const UserInfoProvider = ({
                 bidIconType,
                 handleToggleType,
                 userName,
-                paperBalance,
                 planeList,
                 planeInit,
                 userNameInit,
                 handleGetUserPaper,
+                handleGetUserPlane,
                 handleLogin,
                 loading,
             }}
