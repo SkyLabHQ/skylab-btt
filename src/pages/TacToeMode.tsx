@@ -210,6 +210,7 @@ const TacToeMode = () => {
                                     align={"center"}
                                     sx={{
                                         marginTop: "10px",
+                                        cursor: "pointer",
                                     }}
                                     onClick={() => {
                                         navigate("/plane/market");

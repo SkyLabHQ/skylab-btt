@@ -149,7 +149,6 @@ const MyPlane = ({
     const toast = useSkyToast();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { address } = usePrivyAccounts();
-    // const address = "";
     const {
         planeList,
         handleGetUserPaper,

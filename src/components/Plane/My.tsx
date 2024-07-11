@@ -48,6 +48,10 @@ const My = () => {
 
     const handleMintPlane = async () => {
         try {
+            await mercuryJarTournamentContract.simulate.mint([1], {
+                value: parseAmount("0.02"),
+                account: address,
+            });
             const hash = await mercuryJarTournamentContract.write.mint([1], {
                 value: parseAmount("0.02"),
             });
@@ -67,7 +71,7 @@ const My = () => {
         }
     };
 
-    const getMarketPlaceList = async () => {
+    const getHighPrice = async () => {
         const p = [];
         for (let i = 1; i <= 16; i++) {
             p.push(multiMarketPlaceContract.getHighestBid(i));
@@ -92,6 +96,12 @@ const My = () => {
 
     const handleApproveForAll = async () => {
         try {
+            await mercuryJarTournamentContract.simulate.setApprovalForAll(
+                [marketPlaceContract.address, true],
+                {
+                    account: address,
+                },
+            );
             const hash =
                 await mercuryJarTournamentContract.write.setApprovalForAll([
                     marketPlaceContract.address,
@@ -136,10 +146,12 @@ const My = () => {
 
     const handleSell = async (tokenId: number) => {
         try {
-            const res = await marketPlaceContract.simulate.sell([
-                mercuryJarTournamentAddress[chainId],
-                tokenId,
-            ]);
+            await marketPlaceContract.simulate.sell(
+                [mercuryJarTournamentAddress[chainId], tokenId],
+                {
+                    account: address,
+                },
+            );
 
             const hash = await marketPlaceContract.write.sell(
                 [mercuryJarTournamentAddress[chainId], tokenId],
@@ -167,7 +179,7 @@ const My = () => {
         if (!multiMarketPlaceContract || !multiProvider || !marketPlaceContract)
             return;
 
-        getMarketPlaceList();
+        getHighPrice();
     }, [multiMarketPlaceContract, multiProvider, marketPlaceContract]);
 
     useEffect(() => {
@@ -190,10 +202,14 @@ const My = () => {
             });
         }
 
-        planeList.forEach((item) => {
-            const listIndex = item.level - 1;
-            list[listIndex].planes.push(item);
-        });
+        planeList
+            .filter((item) => {
+                return item.state !== true;
+            })
+            .forEach((item) => {
+                const listIndex = item.level - 1;
+                list[listIndex].planes.push(item);
+            });
         const newList = list.filter((item) => {
             return item.planes.length > 0;
         });

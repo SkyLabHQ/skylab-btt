@@ -8,6 +8,7 @@ import UserLogin from "../UserLogin";
 import CartIcon from "./assets/cart.svg";
 
 const Header = () => {
+    const navigate = useNavigate();
     return (
         <Flex
             sx={{
@@ -24,9 +25,13 @@ const Header = () => {
                 }}
             >
                 <Image
+                    onClick={() => {
+                        navigate("/");
+                    }}
                     src={BackIcon}
                     sx={{
                         width: "40px",
+                        cursor: "pointer",
                     }}
                 ></Image>
             </Box>

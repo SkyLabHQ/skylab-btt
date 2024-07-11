@@ -54,7 +54,6 @@ const Market = () => {
             p.push(multiMarketPlaceContract.getBidInfo(address, i));
         }
         const list = await multiProvider.all(p);
-        console.log(list, "list");
         setMyPrice(
             list.map((item) => {
                 return item.price.toString();
@@ -74,14 +73,23 @@ const Market = () => {
         setInputMode(_inputMode);
     };
 
-    const handleConfirm = async (index: number, level: number) => {
+    const handleConfirm = async (
+        index: number,
+        level: number,
+        isAdd: boolean,
+    ) => {
         if (!address) {
             toast("Please connect wallet");
             return;
         }
 
         try {
-            const hash = await marketPlaceContract.write.bid([level], {
+            const method = isAdd ? "reBid" : "bid";
+            await marketPlaceContract.simulate[method]([level], {
+                value: parseAmount(inputAmount[index]),
+                account: address,
+            });
+            const hash = await marketPlaceContract.write[method]([level], {
                 value: parseAmount(inputAmount[index]),
             });
 
@@ -310,7 +318,11 @@ const Market = () => {
                                         cursor: "pointer",
                                     }}
                                     onClick={() => {
-                                        handleConfirm(index, item.level);
+                                        handleConfirm(
+                                            index,
+                                            item.level,
+                                            myPrice[index] !== "0",
+                                        );
                                     }}
                                 >
                                     <Image
