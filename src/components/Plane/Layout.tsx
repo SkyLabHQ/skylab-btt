@@ -15,6 +15,7 @@ const Header = () => {
                 height: "80px",
                 background: "#F2D861",
                 padding: "0 30px",
+                position: "relative",
             }}
             justify={"space-between"}
             align={"center"}
@@ -36,20 +37,16 @@ const Header = () => {
                 ></Image>
             </Box>
 
-            <Flex
+            <Image
+                src={LogoIcon}
                 sx={{
-                    flex: 1,
+                    width: "54px",
+                    position: "absolute",
+                    left: "50%",
+                    bottom: "0%",
+                    transform: "translateX(-50%)",
                 }}
-                justify={"center"}
-            >
-                {" "}
-                <Image
-                    src={LogoIcon}
-                    sx={{
-                        width: "40px",
-                    }}
-                ></Image>
-            </Flex>
+            ></Image>
             <Flex
                 sx={{
                     flex: 1,
@@ -64,11 +61,11 @@ const Header = () => {
 
 const navList = [
     {
-        label: "Market",
+        label: "Buy",
         value: "/plane/market",
     },
     {
-        label: "My Plane",
+        label: "Sell",
         value: "/plane/my",
     },
 ];
@@ -82,7 +79,6 @@ const NavBar = () => {
 
     useEffect(() => {
         const navIndex = navList.findIndex((nav) => nav.value === pathname);
-        console.log(pathname, navIndex, "navIndex");
         setActiveIndex(navIndex);
     }, [pathname]);
 

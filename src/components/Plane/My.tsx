@@ -1,4 +1,3 @@
-import { aviationImg } from "@/utils/aviationImg";
 import { Box, Image, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Bg from "./assets/card-bg.png";
@@ -15,7 +14,7 @@ import {
 } from "@/hooks/useContract";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
-import { formatAmount, parseAmount } from "@/utils/formatBalance";
+import { formatAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { useUserInfo } from "@/contexts/UserInfo";
@@ -40,31 +39,6 @@ const My = () => {
     const { planeList, handleGetUserPlane } = useUserInfo();
 
     const [highList, sethighList] = useState(new Array(16).fill("0"));
-
-    const handleMintPlane = async () => {
-        try {
-            await mercuryJarTournamentContract.simulate.mint([1], {
-                value: parseAmount("0.02"),
-                account: address,
-            });
-            const hash = await mercuryJarTournamentContract.write.mint([1], {
-                value: parseAmount("0.02"),
-            });
-            // @ts-ignore
-            const receipt = await publicClient.waitForTransactionReceipt({
-                hash,
-            });
-            if (receipt.status !== "success") {
-                toast("Transaction failed");
-                return;
-            }
-
-            handleGetUserPlane();
-        } catch (e) {
-            console.log(e, "e");
-            toast(handleError(e));
-        }
-    };
 
     const getHighPrice = async () => {
         const p = [];
@@ -125,12 +99,10 @@ const My = () => {
                 },
             );
 
-            const hash = await marketPlaceContract.write.sell(
-                [mercuryJarTournamentAddress[chainId], tokenId],
-                {
-                    gasLimit: 10000000,
-                },
-            );
+            const hash = await marketPlaceContract.write.sell([
+                mercuryJarTournamentAddress[chainId],
+                tokenId,
+            ]);
 
             // @ts-ignore
             const receipt = await publicClient.waitForTransactionReceipt({
@@ -172,64 +144,6 @@ const My = () => {
                 },
             }}
         >
-            <Box
-                sx={{
-                    borderRadius: "20px",
-                    border: "4px solid #1B1B1B",
-                    overflow: "hidden",
-                    width: large680 ? "320px" : "48%",
-                    position: "relative",
-                }}
-            >
-                <Box
-                    sx={{
-                        width: "100%",
-                        height: "0",
-                        paddingBottom: large680
-                            ? "calc(100% + 103px)"
-                            : "calc(100% + 62px)",
-                        background: `url(${aviationImg(1)}) no-repeat`,
-                        backgroundSize: "contain",
-                        backgroundPosition: "center",
-                        position: "relative",
-                    }}
-                >
-                    <Box
-                        sx={{
-                            width: "100%",
-                            height: "100%",
-                            background: "rgba(4, 4, 4, 0.80)",
-                            position: "absolute",
-                            top: "0",
-                            left: "0",
-                            paddingTop: "45%",
-                            textAlign: "center",
-                            fontSize: large680 ? "24px" : "14px",
-                            fontWeight: 700,
-                            fontFamily: "Orbitron",
-                        }}
-                    >
-                        Mint Plane
-                    </Box>
-                </Box>
-
-                <Flex
-                    align={"center"}
-                    justify={"center"}
-                    sx={{
-                        height: large680 ? "50px" : "28px",
-                        background: "#F2D861",
-                        fontSize: large680 ? "18px" : "14px",
-                        color: "#1b1b1b",
-                        fontFamily: "Orbitron",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                    }}
-                    onClick={handleMintPlane}
-                >
-                    0.01 ETH
-                </Flex>
-            </Box>
             {planeList.map((item, index) => {
                 const havePrice = highList[item.level - 1] !== "0";
                 // const
