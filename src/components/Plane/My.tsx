@@ -1,6 +1,6 @@
 import { aviationImg } from "@/utils/aviationImg";
 import { Box, Image, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Bg from "./assets/card-bg.png";
 import {
     useMultiMarketPlaceContract,
@@ -19,11 +19,6 @@ import { formatAmount, parseAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { useUserInfo } from "@/contexts/UserInfo";
-import LArrowIcon from "./assets/l-arrow.svg";
-import LGArrowIcon from "./assets/l-arrow-g.svg";
-
-import RArrowIcon from "./assets/r-arrow.svg";
-import RGArrowIcon from "./assets/r-arrow-g.svg";
 
 const My = () => {
     const [myPlaneList, setMyPlaneList] = useState([]);
@@ -121,29 +116,6 @@ const My = () => {
         }
     };
 
-    const handleNextTokenId = (index: number) => {
-        const _myPlaneList = JSON.parse(JSON.stringify(myPlaneList));
-        const current = _myPlaneList[index].planeIndex;
-        const next = current + 1;
-
-        if (next >= _myPlaneList[index].planes.length) {
-            return;
-        }
-        _myPlaneList[index].planeIndex = next;
-        setMyPlaneList(_myPlaneList);
-    };
-
-    const handlePreTokenId = (index: number) => {
-        const _myPlaneList = JSON.parse(JSON.stringify(myPlaneList));
-        const current = _myPlaneList[index].planeIndex;
-        const next = current - 1;
-        if (next < 0) {
-            return;
-        }
-        _myPlaneList[index].planeIndex = next;
-        setMyPlaneList(_myPlaneList);
-    };
-
     const handleSell = async (tokenId: number) => {
         try {
             await marketPlaceContract.simulate.sell(
@@ -188,34 +160,6 @@ const My = () => {
 
         getApprove();
     }, [multiMercuryJarTournamentContract, multiProvider, address]);
-
-    useEffect(() => {
-        const list: any[] = [];
-
-        for (let i = 0; i < 16; i++) {
-            const level = i + 1;
-            list.push({
-                planes: [],
-                level,
-                img: aviationImg(i + 1),
-                planeIndex: 0,
-            });
-        }
-
-        planeList
-            .filter((item) => {
-                return item.state !== true;
-            })
-            .forEach((item) => {
-                const listIndex = item.level - 1;
-                list[listIndex].planes.push(item);
-            });
-        const newList = list.filter((item) => {
-            return item.planes.length > 0;
-        });
-
-        setMyPlaneList(newList);
-    }, [planeList]);
 
     return (
         <Flex
@@ -286,8 +230,7 @@ const My = () => {
                     0.01 ETH
                 </Flex>
             </Box>
-            {myPlaneList.map((item, index) => {
-                const currentPlane = item.planes[item.planeIndex];
+            {planeList.map((item, index) => {
                 const havePrice = highList[item.level - 1] !== "0";
                 // const
                 return (
@@ -338,27 +281,7 @@ const My = () => {
                                     </span>
                                 </Box>
                             </Flex>
-                            <Image
-                                src={
-                                    item.planeIndex === 0
-                                        ? LGArrowIcon
-                                        : LArrowIcon
-                                }
-                                onClick={() => {
-                                    handlePreTokenId(index);
-                                }}
-                                sx={{
-                                    width: "16px",
-                                    position: "absolute",
-                                    left: "10px",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                    cursor:
-                                        item.planeIndex === 0
-                                            ? "not-allowed"
-                                            : "pointer",
-                                }}
-                            ></Image>
+
                             <Text
                                 sx={{
                                     fontSize: "18px",
@@ -369,7 +292,7 @@ const My = () => {
                                     transform: "translateX(-50%)",
                                 }}
                             >
-                                #{currentPlane.tokenId}
+                                #{item.tokenId}
                             </Text>
                             <Box
                                 sx={{
@@ -384,72 +307,18 @@ const My = () => {
                             >
                                 <Text>NextLvl:</Text>
                                 <Text>
-                                    {currentPlane.points}/
+                                    {item.points}/
                                     <span
                                         style={{
                                             color: "#CCCCCC",
                                         }}
                                     >
-                                        {currentPlane.nextPoints}pt
+                                        {item.nextPoints}pt
                                     </span>{" "}
                                 </Text>
                             </Box>
 
                             <Image src={item.img}></Image>
-                            <Image
-                                src={
-                                    item.planeIndex === item.planes.length - 1
-                                        ? RGArrowIcon
-                                        : RArrowIcon
-                                }
-                                onClick={() => {
-                                    handleNextTokenId(index);
-                                }}
-                                sx={{
-                                    width: "16px",
-                                    position: "absolute",
-                                    right: "10px",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                    cursor:
-                                        item.planeIndex ===
-                                        item.planes.length - 1
-                                            ? "not-allowed"
-                                            : "pointer",
-                                }}
-                            ></Image>
-
-                            <Flex
-                                sx={{
-                                    position: "absolute",
-                                    right: "0px",
-                                    bottom: "10px",
-                                    background: "rgba(0, 0, 0, 0.40)",
-                                    width: large680 ? "70px" : "58px",
-                                    height: large680 ? "46px" : "35px",
-                                    borderRadius: large680
-                                        ? "24px 0  0 24px "
-                                        : " 16px 0 0 16px ",
-                                    fontWeight: "bold",
-                                    fontSize: large680 ? "24px" : "14px",
-                                    fontFamily: "Orbitron",
-                                }}
-                                justify={"center"}
-                                align={"center"}
-                            >
-                                <Box>
-                                    x{" "}
-                                    <span
-                                        style={{
-                                            fontSize: large680
-                                                ? "32px"
-                                                : "18px",
-                                        }}
-                                    >
-                                        {item.planes.length}
-                                    </span>
-                                </Box>
-                            </Flex>
                         </Box>
 
                         <Box
@@ -495,7 +364,7 @@ const My = () => {
                                 <Flex
                                     onClick={() => {
                                         if (!havePrice) return;
-                                        handleSell(currentPlane.tokenId);
+                                        handleSell(item.tokenId);
                                     }}
                                     align={"center"}
                                     justify={"center"}
