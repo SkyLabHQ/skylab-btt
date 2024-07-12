@@ -18,6 +18,7 @@ import { formatAmount, parseAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import DeleteIcon from "./assets/delete.svg";
+import { useUserInfo } from "@/contexts/UserInfo";
 
 const planeList = new Array(16).fill("").map((_, index) => {
     return { img: aviationImg(index + 1), level: index + 1 };
@@ -30,6 +31,8 @@ const Market = () => {
     const [inputAmount, setInputAmount] = useState(
         new Array(16).fill("0") as string[],
     );
+
+    const { handleGetUserPlane } = useUserInfo();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const { address } = usePrivyAccounts();
     const chainId = useChainId();
@@ -152,6 +155,7 @@ const Market = () => {
                 toast("Transaction failed");
                 return;
             }
+            handleGetUserPlane();
         } catch (e) {
             console.log(e, "e");
             toast(handleError(e));

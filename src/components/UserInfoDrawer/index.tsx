@@ -40,11 +40,9 @@ import { TG_URL } from "@/skyConstants/tgConfig";
 const UserInfo = ({
     userName,
     userNameInit,
-    handleChangeMode,
 }: {
     userName: string;
     userNameInit: boolean;
-    handleChangeMode: (mode: number) => void;
 }) => {
     const { user } = usePrivy();
     const { address } = usePrivyAccounts();
@@ -181,156 +179,6 @@ const UserInfo = ({
                 </Box>
             )}
         </Flex>
-    );
-};
-
-const MyPaper = ({
-    balance,
-    handleMintPlane,
-}: {
-    balance: string;
-    handleMintPlane: () => void;
-}) => {
-    return (
-        <Box
-            sx={{
-                marginTop: "30px",
-            }}
-        >
-            <Box
-                sx={{
-                    borderBottom: "1px dashed  #fff",
-                    paddingBottom: "8px",
-                }}
-            >
-                <Text
-                    sx={{
-                        fontFamily: "Orbitron",
-                        fontSize: "18px",
-                    }}
-                >
-                    Paper
-                </Text>
-            </Box>
-            <Flex flexDir={"column"} align={"center"}>
-                <Box
-                    sx={{
-                        width: "110px",
-                        height: "110px",
-                        marginTop: "24px",
-                        background: `url(${PaperIcon}) no-repeat`,
-                        backgroundSize: "100% 100%",
-                        position: "relative",
-                    }}
-                >
-                    <Flex
-                        align={"center"}
-                        justify={"center"}
-                        sx={{
-                            width: "100px",
-                            height: "50px",
-                            position: "absolute",
-                            background: "rgba(0, 0, 0, 0.50)",
-                            bottom: "10px",
-                            left: "50%",
-                            transform: "translate(-50%,0)",
-                            borderRadius: "0 0 50px 50px",
-                            fontSize: "24px",
-                            verticalAlign: "bottom",
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                display: "inline-block",
-                            }}
-                        >
-                            <span
-                                style={{
-                                    fontSize: "14px",
-                                    verticalAlign: "bottom",
-                                    display: "inline-block",
-                                    lineHeight: "30px",
-                                }}
-                            >
-                                X
-                            </span>{" "}
-                            <span
-                                style={{
-                                    fontWeight: "bold",
-                                    display: "inline-block",
-                                    lineHeight: "30px",
-                                }}
-                            >
-                                {balance}
-                            </span>
-                        </Box>
-                    </Flex>
-                </Box>
-
-                <Flex
-                    sx={{
-                        borderRadius: "12px",
-                        background: Number(balance) > 0 ? "#F2D861" : "#777",
-                        height: "40px",
-                        width: "180px",
-                        paddingLeft: "8px",
-                        marginTop: "15px",
-                    }}
-                    onClick={handleMintPlane}
-                    align={"center"}
-                >
-                    <Text
-                        sx={{
-                            fontSize: "12px",
-                            color: Number(balance) > 0 ? "#1b1b1b" : "#999",
-                            marginRight: "5px",
-                        }}
-                    >
-                        Fold A Paper Plane
-                    </Text>
-                    <Image
-                        src={Number(balance) > 0 ? Blackrrow : GrayArrow}
-                    ></Image>
-                    <Box
-                        sx={{
-                            position: "relative",
-                        }}
-                    >
-                        <Image
-                            src={aviationImg(1)}
-                            sx={{
-                                position: "absolute",
-                                left: "0",
-                                top: 0,
-                                width: "70px",
-                                maxWidth: "70px",
-                                transform: "translate(0,-50%)",
-                            }}
-                        ></Image>
-                    </Box>
-                </Flex>
-                {/* <Flex
-                    sx={{
-                        borderRadius: "12px",
-                        background: "rgba(255, 255, 255, 0.82)",
-                        height: "40px",
-                        width: "180px",
-                        paddingLeft: "8px",
-                        marginTop: "15px",
-                        border: "1px solid #F2D861",
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: "12px",
-                            color: "#777",
-                        }}
-                    >
-                        You can only fold paper plane after Tournament Begins!
-                    </Text>
-                </Flex> */}
-            </Flex>
-        </Box>
     );
 };
 
@@ -511,12 +359,10 @@ const UserInfoDrawer = ({
     onClose,
     isOpen,
     onUserNameChange,
-    onMintPlane,
 }: {
     isOpen: boolean;
     onClose: () => void;
     onUserNameChange: (name: string) => void;
-    onMintPlane: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
@@ -605,12 +451,8 @@ const UserInfoDrawer = ({
                             <UserInfo
                                 userName={userName}
                                 userNameInit={userNameInit}
-                                handleChangeMode={handleChangeMode}
                             ></UserInfo>
-                            <MyPaper
-                                balance={"0"}
-                                handleMintPlane={onMintPlane}
-                            ></MyPaper>
+
                             <MyPlane
                                 planeList={planeList}
                                 planeInit={planeInit}

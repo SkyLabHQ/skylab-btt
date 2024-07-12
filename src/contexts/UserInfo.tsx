@@ -167,31 +167,6 @@ export const UserInfoProvider = ({
         }
     };
 
-    const handleMintPlane = async () => {
-        if (isBlock && !blockOpen) {
-            handleBlock(true);
-        }
-
-        try {
-            const hash = await mercuryJarTournamentContract.write.mintWithPaper(
-                [1],
-                {},
-            );
-            console.log(hash, "hash");
-            // @ts-ignore
-            const receipt = await publicClient.waitForTransactionReceipt({
-                hash,
-            });
-            if (receipt.status !== "success") {
-                toast("Transaction failed");
-                return;
-            }
-            handleGetUserPaper();
-        } catch (e) {
-            toast(handleError(e));
-        }
-    };
-
     const handleGetUserPlane = async () => {
         const [planeBalance] = await multiProvider.all([
             multiMercuryJarTournamentContract.balanceOf(address),
@@ -287,7 +262,6 @@ export const UserInfoProvider = ({
             >
                 {children}
                 <UserInfoDrawer
-                    onMintPlane={handleMintPlane}
                     onUserNameChange={handleSetUserName}
                     isOpen={isOpen}
                     onClose={onClose}

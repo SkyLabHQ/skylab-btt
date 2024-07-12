@@ -20,7 +20,6 @@ import { handleError } from "@/utils/error";
 import { useUserInfo } from "@/contexts/UserInfo";
 
 const My = () => {
-    const [myPlaneList, setMyPlaneList] = useState([]);
     const [isApproved, setIsApproved] = useState(false);
     const publicClient = usePublicClient();
     const toast = useSkyToast();

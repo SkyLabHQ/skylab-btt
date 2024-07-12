@@ -1,7 +1,6 @@
 import { Box, Image, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import Back, { BackWithText } from "../Back";
 import BackIcon from "./assets/back.svg";
 import LogoIcon from "./assets/logo.svg";
 import UserLogin from "../UserLogin";
@@ -179,7 +178,6 @@ const PlaneMarketLayout = () => {
                         ? "680px"
                         : "100%",
                     margin: "0px auto",
-                    // padding: large680 ? "20px 10px" : "20px 10px",
                 }}
             >
                 <Box
