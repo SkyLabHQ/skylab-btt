@@ -1,5 +1,5 @@
 import { Box, Image, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Bg from "./assets/card-bg.png";
 import {
     useMultiMarketPlaceContract,
@@ -38,6 +38,12 @@ const My = () => {
     const { planeList, handleGetUserPlane } = useUserInfo();
 
     const [highList, sethighList] = useState(new Array(16).fill("0"));
+
+    const myPlaneList = useMemo(() => {
+        return planeList.sort((a, b) => {
+            return b.points - a.points;
+        });
+    }, [planeList]);
 
     const getHighPrice = async () => {
         const p = [];
@@ -143,7 +149,7 @@ const My = () => {
                 },
             }}
         >
-            {planeList.map((item, index) => {
+            {myPlaneList.map((item, index) => {
                 const havePrice = highList[item.level - 1] !== "0";
                 // const
                 return (
