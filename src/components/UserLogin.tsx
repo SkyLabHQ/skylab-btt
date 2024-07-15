@@ -75,6 +75,10 @@ const UserLogin = () => {
                     </Flex>
                 ) : (
                     <Box
+                        onClick={() => {
+                            audio.play();
+                            onUserInfoOpen();
+                        }}
                         sx={{
                             background: `url(${PilotBorder}) no-repeat`,
                             backgroundSize: "cover",
