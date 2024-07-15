@@ -374,7 +374,7 @@ const Market = () => {
                             <Flex
                                 justify={"space-between"}
                                 sx={{
-                                    fontSize: large680 ? "14px" : "12px",
+                                    fontSize: large680 ? "14px" : "10px",
                                     fontFamily: "Orbitron",
                                 }}
                             >

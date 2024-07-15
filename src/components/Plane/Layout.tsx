@@ -7,13 +7,15 @@ import UserLogin from "../UserLogin";
 import CartIcon from "./assets/cart.svg";
 
 const Header = () => {
+    const [large680] = useMediaQuery("(min-width: 680px)");
+
     const navigate = useNavigate();
     return (
         <Flex
             sx={{
-                height: "80px",
+                height: large680 ? "80px" : "40px",
                 background: "#F2D861",
-                padding: "0 30px",
+                padding: large680 ? "0 30px" : "0 12px",
                 position: "relative",
             }}
             justify={"space-between"}
@@ -30,22 +32,24 @@ const Header = () => {
                     }}
                     src={BackIcon}
                     sx={{
-                        width: "40px",
+                        width: large680 ? "40px" : "24px",
                         cursor: "pointer",
                     }}
                 ></Image>
             </Box>
 
-            <Image
-                src={LogoIcon}
-                sx={{
-                    width: "54px",
-                    position: "absolute",
-                    left: "50%",
-                    bottom: "0%",
-                    transform: "translateX(-50%)",
-                }}
-            ></Image>
+            {large680 && (
+                <Image
+                    src={LogoIcon}
+                    sx={{
+                        width: "54px",
+                        position: "absolute",
+                        left: "50%",
+                        bottom: "0%",
+                        transform: "translateX(-50%)",
+                    }}
+                ></Image>
+            )}
             <Flex
                 sx={{
                     flex: 1,

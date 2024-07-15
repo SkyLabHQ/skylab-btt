@@ -160,8 +160,6 @@ const My = () => {
         getApprove();
     }, [multiMercuryJarTournamentContract, multiProvider, address]);
 
-    console.log(myPlaneList, "myPlaneList");
-
     return (
         <Flex
             sx={{
@@ -240,7 +238,7 @@ const My = () => {
                                             ? "24px 0px 0px 24px"
                                             : "16px 0 0  16px",
                                         fontWeight: "bold",
-                                        fontSize: large680 ? "16px" : "14px",
+                                        fontSize: large680 ? "16px" : "10px",
                                         color: "#FDDC2D",
                                     }}
                                     justify={"center"}
@@ -285,7 +283,7 @@ const My = () => {
                                 </Text>
                                 <Box
                                     sx={{
-                                        width: "176px",
+                                        width: large680 ? "176px" : "100px",
                                         height: "10px",
                                         padding: "2px",
                                         border: "1px solid #FFF",
@@ -379,9 +377,9 @@ const My = () => {
                             justify={"center"}
                             sx={{
                                 height: large680 ? "50px" : "28px",
-                                background: havePrice ? "#2D240C" : "#1e1e1e",
+                                background: havePrice ? "#F2D861" : "#1e1e1e",
                                 fontSize: large680 ? "18px" : "14px",
-                                color: havePrice ? "#F2D861" : "#7a7a7a",
+                                color: havePrice ? "#1b1b1b" : "#7a7a7a",
                                 fontFamily: "Orbitron",
                                 fontWeight: "bold",
                                 border: havePrice
