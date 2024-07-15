@@ -211,7 +211,7 @@ const Market = () => {
                         height: "0",
                         paddingBottom: large680
                             ? "calc(100% + 103px)"
-                            : "calc(100% + 62px)",
+                            : "calc(100% + 59px)",
                         backgroundSize: "contain",
                         backgroundPosition: "center",
                         background: "rgba(4, 4, 4, 0.80)",

@@ -67,33 +67,6 @@ const My = () => {
         setIsApproved(isApprovedForAll);
     };
 
-    const handleApproveForAll = async () => {
-        try {
-            await mercuryJarTournamentContract.simulate.setApprovalForAll(
-                [marketPlaceContract.address, true],
-                {
-                    account: address,
-                },
-            );
-            const hash =
-                await mercuryJarTournamentContract.write.setApprovalForAll([
-                    marketPlaceContract.address,
-                    true,
-                ]);
-            // @ts-ignore
-            const receipt = await publicClient.waitForTransactionReceipt({
-                hash,
-            });
-            if (receipt.status !== "success") {
-                toast("Transaction failed");
-                return;
-            }
-            setIsApproved(true);
-        } catch (e) {
-            toast(handleError(e));
-        }
-    };
-
     const handleSell = async (tokenId: number) => {
         try {
             if (!isApproved) {
@@ -140,6 +113,7 @@ const My = () => {
                 return;
             }
 
+            getHighPrice();
             handleGetUserPlane();
         } catch (e) {
             toast(handleError(e));
@@ -147,11 +121,10 @@ const My = () => {
     };
 
     useEffect(() => {
-        if (!multiMarketPlaceContract || !multiProvider || !marketPlaceContract)
-            return;
+        if (!multiMarketPlaceContract || !multiProvider) return;
 
         getHighPrice();
-    }, [multiMarketPlaceContract, multiProvider, marketPlaceContract]);
+    }, [multiMarketPlaceContract, multiProvider]);
 
     useEffect(() => {
         if (!multiMercuryJarTournamentContract || !address || !multiProvider)
