@@ -36,6 +36,9 @@ import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
 import TgIcon from "./assets/tg-icon.svg";
 import { TG_URL } from "@/skyConstants/tgConfig";
+import PilotBorder from "@/assets/pilot-border.png";
+import WalletIcon from "@/assets/wallet-icon.png";
+import UserIcon from "@/assets/user-icon.png";
 
 const UserInfo = ({
     userName,
@@ -445,6 +448,25 @@ const UserInfoDrawer = ({
                                     src={QuitIcon}
                                     sx={{
                                         width: "24px",
+                                    }}
+                                ></Image>
+                            </Flex>
+                            <Flex
+                                sx={{
+                                    width: "80px",
+                                    height: "80px",
+                                    background: `url(${PilotBorder}) no-repeat`,
+                                    backgroundSize: "cover",
+                                    margin: "0 auto",
+                                }}
+                                align={"center"}
+                                justify={"center"}
+                            >
+                                <Image
+                                    src={UserIcon}
+                                    sx={{
+                                        width: "56px",
+                                        height: "56px",
                                     }}
                                 ></Image>
                             </Flex>

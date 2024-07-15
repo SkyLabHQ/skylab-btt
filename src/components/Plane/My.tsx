@@ -13,7 +13,6 @@ import {
     useMercuryJarTournamentContract,
 } from "@/hooks/useContract";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-
 import { formatAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
@@ -97,6 +96,29 @@ const My = () => {
 
     const handleSell = async (tokenId: number) => {
         try {
+            if (!isApproved) {
+                await mercuryJarTournamentContract.simulate.setApprovalForAll(
+                    [marketPlaceContract.address, true],
+                    {
+                        account: address,
+                    },
+                );
+                const hash =
+                    await mercuryJarTournamentContract.write.setApprovalForAll([
+                        marketPlaceContract.address,
+                        true,
+                    ]);
+                // @ts-ignore
+                const receipt = await publicClient.waitForTransactionReceipt({
+                    hash,
+                });
+                if (receipt.status !== "success") {
+                    toast("Transaction failed");
+                    return;
+                }
+                setIsApproved(true);
+            }
+
             await marketPlaceContract.simulate.sell(
                 [mercuryJarTournamentAddress[chainId], tokenId],
                 {
@@ -138,11 +160,14 @@ const My = () => {
         getApprove();
     }, [multiMercuryJarTournamentContract, multiProvider, address]);
 
+    console.log(myPlaneList, "myPlaneList");
+
     return (
         <Flex
             sx={{
                 width: "100%",
                 flexWrap: "wrap",
+                fontFamily: "Orbitron",
                 "&>div": {
                     margin: large680 ? "0 10px" : "0 1%",
                     marginBottom: "20px",
@@ -150,8 +175,8 @@ const My = () => {
             }}
         >
             {myPlaneList.map((item, index) => {
-                const havePrice = highList[item.level - 1] !== "0";
-                // const
+                const havePrice =
+                    highList[item.level - 1] !== "0" && !item.state;
                 return (
                     <Box
                         key={index}
@@ -167,6 +192,8 @@ const My = () => {
                                 background: `url(${Bg}) no-repeat`,
                                 backgroundSize: "cover",
                                 position: "relative",
+                                paddingBottom: "100%",
+                                height: "0",
                             }}
                         >
                             <Flex
@@ -200,7 +227,28 @@ const My = () => {
                                     </span>
                                 </Box>
                             </Flex>
-
+                            {item.state && (
+                                <Flex
+                                    sx={{
+                                        position: "absolute",
+                                        right: "0",
+                                        top: "0",
+                                        background: "rgba(0, 0, 0, 0.40)",
+                                        width: large680 ? "102px" : "58px",
+                                        height: large680 ? "60px" : "35px",
+                                        borderRadius: large680
+                                            ? "24px 0px 0px 24px"
+                                            : "16px 0 0  16px",
+                                        fontWeight: "bold",
+                                        fontSize: large680 ? "16px" : "14px",
+                                        color: "#FDDC2D",
+                                    }}
+                                    justify={"center"}
+                                    align={"center"}
+                                >
+                                    <Box>In Game</Box>
+                                </Flex>
+                            )}
                             <Text
                                 sx={{
                                     fontSize: "18px",
@@ -209,6 +257,7 @@ const My = () => {
                                     left: "50%",
                                     top: "35px",
                                     transform: "translateX(-50%)",
+                                    fontFamily: "Quantico",
                                 }}
                             >
                                 #{item.tokenId}
@@ -224,20 +273,63 @@ const My = () => {
                                     textAlign: "center",
                                 }}
                             >
-                                <Text>NextLvl:</Text>
-                                <Text>
-                                    {item.points}/
-                                    <span
-                                        style={{
-                                            color: "#CCCCCC",
+                                <Text
+                                    sx={{
+                                        color: "#FFF",
+                                        textAlign: "center",
+                                        fontFamily: "Quantico",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    {item.points}xp
+                                </Text>
+                                <Box
+                                    sx={{
+                                        width: "176px",
+                                        height: "10px",
+                                        padding: "2px",
+                                        border: "1px solid #FFF",
+                                        borderRadius: "5px",
+                                        marginTop: "4px",
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            background: "#F2D861",
+                                            height: "100%",
+                                            width: `${
+                                                ((item.points -
+                                                    item.prePoints) /
+                                                    (item.nextPoints -
+                                                        item.prePoints)) *
+                                                100
+                                            }%`,
+                                            borderRadius: "5px",
                                         }}
-                                    >
-                                        {item.nextPoints}pt
-                                    </span>{" "}
+                                    ></Box>
+                                </Box>
+                                <Text
+                                    sx={{
+                                        color: "#CCC",
+                                        textAlign: "center",
+                                        fontFamily: "Quantico",
+                                        marginTop: "6px",
+                                        fontSize: "12px",
+                                    }}
+                                >
+                                    NextLvl: {item.nextPoints}pt
                                 </Text>
                             </Box>
-
-                            <Image src={item.img}></Image>
+                            <Image
+                                src={item.img}
+                                sx={{
+                                    width: "80%",
+                                    position: "absolute",
+                                    left: "50%",
+                                    top: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                }}
+                            ></Image>{" "}
                         </Box>
 
                         <Box
@@ -252,7 +344,7 @@ const My = () => {
                                     fontSize: large680 ? "14px" : "12px",
                                 }}
                             >
-                                <Text>Hignest Price</Text>
+                                <Text>Hignest Bid Price</Text>
                             </Flex>
                             <Flex
                                 justify={"space-between"}
@@ -278,84 +370,30 @@ const My = () => {
                             </Flex>
                         </Box>
 
-                        <Box>
-                            {isApproved ? (
-                                <Flex
-                                    onClick={() => {
-                                        if (!havePrice) return;
-                                        handleSell(item.tokenId);
-                                    }}
-                                    align={"center"}
-                                    justify={"center"}
-                                    sx={{
-                                        height: large680 ? "50px" : "28px",
-                                        background: havePrice
-                                            ? "#2D240C"
-                                            : "#1e1e1e",
-                                        fontSize: large680 ? "18px" : "14px",
-                                        color: havePrice
-                                            ? "#F2D861"
-                                            : "#7a7a7a",
-                                        fontFamily: "Orbitron",
-                                        fontWeight: "bold",
-                                        border: havePrice
-                                            ? "1px solid #F2D861"
-                                            : "1px solid #1e1e1e",
-                                        borderRadius: "0 0 14px 14px",
-                                        position: "relative",
-                                        cursor: havePrice
-                                            ? "pointer"
-                                            : "not-allowed",
-                                    }}
-                                >
-                                    Sell
-                                    {havePrice && (
-                                        <Box
-                                            sx={{
-                                                width: 0,
-                                                height: 0,
-                                                borderWidth: "0 10px 10px",
-                                                borderStyle: "solid",
-                                                borderColor:
-                                                    "transparent transparent #F2D861",
-                                                position: "absolute",
-                                                left: "10px",
-                                                top: "-10px",
-                                                "&::before": {
-                                                    content: '""',
-                                                    position: "absolute",
-                                                    top: "2px",
-                                                    left: "-8px",
-                                                    width: 0,
-                                                    height: 0,
-                                                    borderWidth: "0 8px 8px",
-                                                    borderStyle: "solid",
-                                                    borderColor:
-                                                        "transparent transparent #2D240C",
-                                                },
-                                            }}
-                                        ></Box>
-                                    )}
-                                </Flex>
-                            ) : (
-                                <Flex
-                                    align={"center"}
-                                    justify={"center"}
-                                    sx={{
-                                        height: large680 ? "50px" : "28px",
-                                        background: "#F2D861",
-                                        fontSize: large680 ? "18px" : "14px",
-                                        color: "#1b1b1b",
-                                        fontFamily: "Orbitron",
-                                        fontWeight: "bold",
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={handleApproveForAll}
-                                >
-                                    Approve
-                                </Flex>
-                            )}
-                        </Box>
+                        <Flex
+                            onClick={() => {
+                                if (!havePrice) return;
+                                handleSell(item.tokenId);
+                            }}
+                            align={"center"}
+                            justify={"center"}
+                            sx={{
+                                height: large680 ? "50px" : "28px",
+                                background: havePrice ? "#2D240C" : "#1e1e1e",
+                                fontSize: large680 ? "18px" : "14px",
+                                color: havePrice ? "#F2D861" : "#7a7a7a",
+                                fontFamily: "Orbitron",
+                                fontWeight: "bold",
+                                border: havePrice
+                                    ? "1px solid #F2D861"
+                                    : "1px solid #1e1e1e",
+                                borderRadius: "0 0 14px 14px",
+                                position: "relative",
+                                cursor: havePrice ? "pointer" : "not-allowed",
+                            }}
+                        >
+                            Sell
+                        </Flex>
                     </Box>
                 );
             })}

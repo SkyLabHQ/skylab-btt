@@ -60,11 +60,11 @@ const Header = () => {
 
 const navList = [
     {
-        label: "Buy",
+        label: "BUY",
         value: "/plane/market",
     },
     {
-        label: "Sell",
+        label: "SELL",
         value: "/plane/my",
     },
 ];
@@ -139,6 +139,7 @@ const NavBar = () => {
                                 cursor: "pointer",
                                 color: activeIndex === index ? "#000" : "#fff",
                                 fontSize: large680 ? "24px" : "14px",
+                                fontFamily: "Orbitron",
                             }}
                         >
                             {nav.label}

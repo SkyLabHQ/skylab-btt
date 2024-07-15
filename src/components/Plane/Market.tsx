@@ -19,6 +19,8 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import DeleteIcon from "./assets/delete.svg";
 import { useUserInfo } from "@/contexts/UserInfo";
+import ETHIcon from "./assets/eth.svg";
+import A1Icon from "./assets/a1.svg";
 
 const planeList = new Array(16).fill("").map((_, index) => {
     return { img: aviationImg(index + 1), level: index + 1 };
@@ -186,6 +188,8 @@ const Market = () => {
             sx={{
                 width: "100%",
                 flexWrap: "wrap",
+                fontFamily: "Orbitron",
+
                 "&>div": {
                     margin: large680 ? "0 10px" : "0 1%",
                     marginBottom: "20px",
@@ -208,29 +212,56 @@ const Market = () => {
                         paddingBottom: large680
                             ? "calc(100% + 103px)"
                             : "calc(100% + 62px)",
-                        background: `url(${aviationImg(1)}) no-repeat`,
                         backgroundSize: "contain",
                         backgroundPosition: "center",
+                        background: "rgba(4, 4, 4, 0.80)",
                         position: "relative",
                     }}
                 >
-                    <Box
+                    <Flex
+                        flexDir={"column"}
+                        align={"center"}
                         sx={{
                             width: "100%",
                             height: "100%",
-                            background: "rgba(4, 4, 4, 0.80)",
                             position: "absolute",
-                            top: "0",
+                            top: "30%",
                             left: "0",
-                            paddingTop: "45%",
-                            textAlign: "center",
-                            fontSize: large680 ? "24px" : "14px",
-                            fontWeight: 700,
                             fontFamily: "Orbitron",
                         }}
                     >
-                        Mint Plane
-                    </Box>
+                        <Box
+                            sx={{
+                                textAlign: "center",
+                                fontSize: large680 ? "24px" : "14px",
+                                fontWeight: 700,
+                            }}
+                        >
+                            Buy Plane
+                        </Box>
+                        <Image
+                            src={A1Icon}
+                            sx={{
+                                width: "80%",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                fontSize: "16px",
+                                fontWeight: "bold",
+                                marginTop: "-10px",
+                            }}
+                        >
+                            Lvl.{" "}
+                            <span
+                                style={{
+                                    fontSize: "24px",
+                                }}
+                            >
+                                1
+                            </span>{" "}
+                        </Text>
+                    </Flex>
                 </Box>
 
                 <Flex
@@ -241,13 +272,35 @@ const Market = () => {
                         background: "#F2D861",
                         fontSize: large680 ? "18px" : "14px",
                         color: "#1b1b1b",
-                        fontFamily: "Orbitron",
+                        fontFamily: "Helvetica",
                         fontWeight: "bold",
                         cursor: "pointer",
                     }}
                     onClick={handleMintPlane}
                 >
-                    0.01 ETH
+                    <Text
+                        sx={{
+                            marginRight: "20px",
+                            fontFamily: "Orbitron",
+                        }}
+                    >
+                        Mint
+                    </Text>
+                    <Flex
+                        align={"center"}
+                        sx={{
+                            gap: "5px",
+                        }}
+                    >
+                        <Image
+                            src={ETHIcon}
+                            sx={{
+                                width: "14px",
+                            }}
+                        ></Image>
+                        <Text> 0.01</Text>
+                        <Text> ETH</Text>
+                    </Flex>
                 </Flex>
             </Box>
             {planeList.map((item, index) => {
@@ -261,7 +314,7 @@ const Market = () => {
                             width: large680 ? "320px" : "48%",
                         }}
                     >
-                        <Box
+                        <Flex
                             sx={{
                                 background: `url(${Bg}) no-repeat`,
                                 backgroundSize: "cover",
@@ -300,8 +353,18 @@ const Market = () => {
                                     </span>
                                 </Box>
                             </Flex>
-                            <Image src={item.img}></Image>
-                        </Box>
+
+                            <Image
+                                src={item.img}
+                                sx={{
+                                    width: "80%",
+                                    position: "absolute",
+                                    left: "50%",
+                                    top: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                }}
+                            ></Image>
+                        </Flex>
                         <Box
                             sx={{
                                 background: "#2D240C",
@@ -312,9 +375,10 @@ const Market = () => {
                                 justify={"space-between"}
                                 sx={{
                                     fontSize: large680 ? "14px" : "12px",
+                                    fontFamily: "Orbitron",
                                 }}
                             >
-                                <Text>Hignest Price</Text>
+                                <Text>Hignest Bid Price</Text>
                                 <Text>My Price</Text>
                             </Flex>
                             <Flex
