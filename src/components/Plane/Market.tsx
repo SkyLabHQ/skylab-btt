@@ -211,7 +211,7 @@ const Market = () => {
                         height: "0",
                         paddingBottom: large680
                             ? "calc(100% + 103px)"
-                            : "calc(100% + 59px)",
+                            : "calc(100% + 43px)",
                         backgroundSize: "contain",
                         backgroundPosition: "center",
                         background: "rgba(4, 4, 4, 0.80)",
@@ -368,7 +368,7 @@ const Market = () => {
                         <Box
                             sx={{
                                 background: "#2D240C",
-                                padding: large680 ? "24px 12px" : "12px 4px",
+                                padding: large680 ? "24px 12px" : "4px 4px",
                             }}
                         >
                             <Flex
@@ -378,7 +378,7 @@ const Market = () => {
                                     fontFamily: "Orbitron",
                                 }}
                             >
-                                <Text>Hignest Bid Price</Text>
+                                <Text>Highest Bid Price</Text>
                                 <Text>My Price</Text>
                             </Flex>
                             <Flex

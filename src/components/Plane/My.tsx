@@ -306,7 +306,7 @@ const My = () => {
                         <Box
                             sx={{
                                 background: "#2D240C",
-                                padding: large680 ? "24px 12px" : "12px 4px",
+                                padding: large680 ? "24px 12px" : "4px 4px",
                             }}
                         >
                             <Flex
@@ -315,7 +315,7 @@ const My = () => {
                                     fontSize: large680 ? "14px" : "12px",
                                 }}
                             >
-                                <Text>Hignest Bid Price</Text>
+                                <Text>Highest Bid Price</Text>
                             </Flex>
                             <Flex
                                 justify={"space-between"}
