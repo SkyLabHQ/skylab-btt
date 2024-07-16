@@ -205,7 +205,7 @@ const Market = () => {
                     position: "relative",
                 }}
             >
-                {false && (
+                {
                     <Box
                         sx={{
                             width: "100%",
@@ -263,7 +263,7 @@ const Market = () => {
                             </Text>
                         </Flex>
                     </Box>
-                )}
+                }
 
                 <Flex
                     align={"center"}
