@@ -17,12 +17,14 @@ import BotGame from "./pages/BotGame";
 import PlaneMarketLayout from "./components/Plane/Layout";
 import Market from "./components/Plane/Market";
 import My from "./components/Plane/My";
+import Point from "./pages/Point";
 
 const AppRoutes = (): ReactElement => {
     return (
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<TacToeMode />}></Route>
+                <Route path="/point" element={<Point />}></Route>
                 <Route path="/btt/match" element={<Match />}></Route>
                 <Route path="/btt/accept" element={<Accept />}></Route>
                 <Route path="/btt/game" element={<TacToe />}></Route>

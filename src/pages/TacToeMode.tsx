@@ -15,11 +15,7 @@ import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import {
-    getDefaultWithProvider,
-    getPlaneGameSigner,
-    savePlaneGamePrivateKey,
-} from "@/hooks/useSigner";
+import { getPlaneGameSigner, savePlaneGamePrivateKey } from "@/hooks/useSigner";
 import { bttFactoryIface } from "@/skyConstants/iface";
 import { useChainId } from "wagmi";
 import { ZERO_DATA } from "@/skyConstants";
@@ -27,7 +23,8 @@ import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import GameMp3 from "@/assets/game.mp3";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
 import MarketIcon from "@/components/TacToeMode/assets/market-icon.png";
-import { privateKeyToAccount } from "viem/accounts";
+import LeaderboardIcon from "@/components/TacToeMode/assets/leaderboard.png";
+
 import Nest from "@/components/Nest";
 import { ethers } from "ethers";
 
@@ -184,11 +181,32 @@ const TacToeMode = () => {
                                 justify={"space-between"}
                                 align={"flex-end"}
                             >
-                                <i
-                                    style={{
-                                        width: isPc ? "124px" : "75px",
+                                <Flex
+                                    flexDir={"column"}
+                                    align={"center"}
+                                    sx={{
+                                        marginTop: "10px",
+                                        cursor: "pointer",
                                     }}
-                                ></i>
+                                    onClick={() => {
+                                        navigate("/point");
+                                    }}
+                                >
+                                    <Image
+                                        src={LeaderboardIcon}
+                                        sx={{
+                                            width: isPc ? "100px" : "48px",
+                                        }}
+                                    ></Image>
+                                    <Text
+                                        sx={{
+                                            fontSize: isPc ? "20px" : "12px",
+                                            fontFamily: "Quantico",
+                                        }}
+                                    >
+                                        Pts Leaderboard{" "}
+                                    </Text>
+                                </Flex>
                                 <Box
                                     sx={{
                                         paddingBottom: isPc ? "12px" : "4px",
