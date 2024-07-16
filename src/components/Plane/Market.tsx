@@ -141,6 +141,10 @@ const Market = () => {
     };
 
     const handleMintPlane = async () => {
+        if (!address) {
+            toast("Please connect wallet");
+            return;
+        }
         try {
             await mercuryJarTournamentContract.simulate.mint([1], {
                 value: parseAmount("0.02"),
