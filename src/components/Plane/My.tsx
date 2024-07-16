@@ -50,12 +50,15 @@ const My = () => {
             p.push(multiMarketPlaceContract.getHighestBid(i));
         }
         const list = await multiProvider.all(p);
+        console.log(list, "list");
         sethighList(
             list.map((item) => {
                 return item.toString();
             }),
         );
     };
+
+    console.log(highList, "list");
 
     const getApprove = async () => {
         const [isApprovedForAll] = await multiProvider.all([
@@ -133,6 +136,8 @@ const My = () => {
         getApprove();
     }, [multiMercuryJarTournamentContract, multiProvider, address]);
 
+    console.log(myPlaneList, "myPlaneList");
+
     return (
         <Flex
             sx={{
@@ -146,8 +151,8 @@ const My = () => {
             }}
         >
             {myPlaneList.map((item, index) => {
-                const havePrice =
-                    highList[item.level - 1] !== "0" && !item.state;
+                const price = highList[item.level - 1];
+                const havePrice = price !== "0" && !item.state;
                 return (
                     <Box
                         key={index}
@@ -333,10 +338,7 @@ const My = () => {
                                         fontSize: large680 ? "30px" : "18px",
                                     }}
                                 >
-                                    {havePrice
-                                        ? formatAmount(highList[index])
-                                        : "--"}{" "}
-                                    ETH
+                                    {havePrice ? formatAmount(price) : "--"} ETH
                                 </Text>
                             </Flex>
                         </Box>
