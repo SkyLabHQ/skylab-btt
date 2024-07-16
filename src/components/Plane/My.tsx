@@ -199,7 +199,7 @@ const My = () => {
                                     <span
                                         style={{
                                             fontSize: large680
-                                                ? "32px"
+                                                ? "26px"
                                                 : "18px",
                                         }}
                                     >
