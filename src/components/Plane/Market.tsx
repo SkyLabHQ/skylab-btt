@@ -205,64 +205,65 @@ const Market = () => {
                     position: "relative",
                 }}
             >
-                <Box
-                    sx={{
-                        width: "100%",
-                        height: "0",
-                        paddingBottom: large680
-                            ? "calc(100% + 103px)"
-                            : "calc(100% + 43px)",
-                        backgroundSize: "contain",
-                        backgroundPosition: "center",
-                        background: "rgba(4, 4, 4, 0.80)",
-                        position: "relative",
-                    }}
-                >
-                    <Flex
-                        flexDir={"column"}
-                        align={"center"}
+                {false && (
+                    <Box
                         sx={{
                             width: "100%",
-                            height: "100%",
-                            position: "absolute",
-                            top: "30%",
-                            left: "0",
-                            fontFamily: "Orbitron",
+                            height: "0",
+                            paddingBottom: large680
+                                ? "calc(100% + 103px)"
+                                : "calc(100% + 43px)",
+                            backgroundSize: "contain",
+                            backgroundPosition: "center",
+                            background: "rgba(4, 4, 4, 0.80)",
+                            position: "relative",
                         }}
                     >
-                        <Box
+                        <Flex
+                            flexDir={"column"}
+                            align={"center"}
                             sx={{
-                                textAlign: "center",
-                                fontSize: large680 ? "24px" : "14px",
-                                fontWeight: 700,
+                                width: "100%",
+                                position: "absolute",
+                                top: "30%",
+                                left: "0",
+                                fontFamily: "Orbitron",
                             }}
                         >
-                            Buy Plane
-                        </Box>
-                        <Image
-                            src={A1Icon}
-                            sx={{
-                                width: "80%",
-                            }}
-                        ></Image>
-                        <Text
-                            sx={{
-                                fontSize: "16px",
-                                fontWeight: "bold",
-                                marginTop: "-10px",
-                            }}
-                        >
-                            Lvl.{" "}
-                            <span
-                                style={{
-                                    fontSize: "24px",
+                            <Box
+                                sx={{
+                                    textAlign: "center",
+                                    fontSize: large680 ? "24px" : "14px",
+                                    fontWeight: 700,
                                 }}
                             >
-                                1
-                            </span>{" "}
-                        </Text>
-                    </Flex>
-                </Box>
+                                Buy Plane
+                            </Box>
+                            <Image
+                                src={A1Icon}
+                                sx={{
+                                    width: "80%",
+                                }}
+                            ></Image>
+                            <Text
+                                sx={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    marginTop: "-10px",
+                                }}
+                            >
+                                Lvl.{" "}
+                                <span
+                                    style={{
+                                        fontSize: "24px",
+                                    }}
+                                >
+                                    1
+                                </span>{" "}
+                            </Text>
+                        </Flex>
+                    </Box>
+                )}
 
                 <Flex
                     align={"center"}
@@ -275,6 +276,11 @@ const Market = () => {
                         fontFamily: "Helvetica",
                         fontWeight: "bold",
                         cursor: "pointer",
+                        zIndex: 9999,
+                        position: "absolute",
+                        bottom: "0",
+                        left: "0",
+                        width: "100%",
                     }}
                     onClick={handleMintPlane}
                 >
