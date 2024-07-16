@@ -345,7 +345,7 @@ const Market = () => {
                                         ? "0px 24px 24px 0"
                                         : "0px 16px 16px 0",
                                     fontWeight: "bold",
-                                    fontSize: large680 ? "24px" : "14px",
+                                    fontSize: large680 ? "20px" : "14px",
                                 }}
                                 justify={"center"}
                                 align={"center"}

@@ -39,8 +39,14 @@ const My = () => {
     const [highList, sethighList] = useState(new Array(16).fill("0"));
 
     const myPlaneList = useMemo(() => {
-        return planeList.sort((a, b) => {
-            return b.points - a.points;
+        return planeList.sort((item1, item2) => {
+            if (item1.state === false && item2.state === true) {
+                return -1; // item1排在前
+            } else if (item1.state === true && item2.state === false) {
+                return 1; // item2排在前
+            } else {
+                return item2.point - item1.point; // 如果state相同，则根据point进行排序
+            }
         });
     }, [planeList]);
 
@@ -136,8 +142,6 @@ const My = () => {
         getApprove();
     }, [multiMercuryJarTournamentContract, multiProvider, address]);
 
-    console.log(myPlaneList, "myPlaneList");
-
     return (
         <Flex
             sx={{
@@ -184,7 +188,7 @@ const My = () => {
                                         ? "0px 24px 24px 0"
                                         : "0px 16px 16px 0",
                                     fontWeight: "bold",
-                                    fontSize: large680 ? "24px" : "14px",
+                                    fontSize: large680 ? "20px" : "14px",
                                     fontFamily: "Orbitron",
                                 }}
                                 justify={"center"}
