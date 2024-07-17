@@ -418,7 +418,7 @@ export const getPayMasterBurnerRetryContract = (contract: any, signer: any) => {
                         }
                     },
                     {
-                        retries: 1,
+                        retries: 2,
                     },
                 );
             },
