@@ -122,7 +122,7 @@ const My = () => {
             );
 
             const hash = await marketPlaceContract.write.sell([
-                mercuryJarTournamentAddress[chainId],
+                mercuryJarTournamentAddress[DEAFAULT_CHAINID],
                 tokenId,
             ]);
 
