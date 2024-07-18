@@ -37,7 +37,12 @@ const My = () => {
 
     const { planeList, handleGetUserPlane } = useUserInfo();
 
-    const [highList, sethighList] = useState(new Array(16).fill("0"));
+    const [highList, sethighList] = useState(
+        new Array(16).fill({
+            bidder: "",
+            price: "0",
+        }),
+    );
 
     const myPlaneList = useMemo(() => {
         return planeList.sort((item1, item2) => {
