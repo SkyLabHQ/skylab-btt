@@ -50,9 +50,13 @@ const Market = () => {
             p.push(multiMarketPlaceContract.getHighestBid(i));
         }
         const list = await multiProvider.all(p);
+        console.log(list, "list");
         sethighList(
             list.map((item) => {
-                return item.toString();
+                return {
+                    bidder: item[0],
+                    price: item[1].toString(),
+                };
             }),
         );
     };
@@ -407,9 +411,11 @@ const Market = () => {
                                         fontSize: large680 ? "30px" : "18px",
                                     }}
                                 >
-                                    {highList[index] === "0"
+                                    {highList[index].price === "0"
                                         ? "--"
-                                        : formatAmount(highList[index])}{" "}
+                                        : formatAmount(
+                                              highList[index].price,
+                                          )}{" "}
                                     ETH
                                 </Text>
                                 <Flex>
