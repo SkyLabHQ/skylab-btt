@@ -250,58 +250,6 @@ const PlayGame = ({
         setNextDrawWinner(nextDrawWinner);
     };
 
-    const handleRevealedBid = async () => {
-        try {
-            const localSalt = getGridCommited();
-            if (!localSalt) return;
-            const { salt, amount } = localSalt;
-            setRevealing(true);
-            await tacToeGameRetryWrite("revealBid", [amount, Number(salt)]);
-            onChangeGame("my", {
-                ...myGameInfo,
-                gameState: GameState.Revealed,
-            });
-            setRevealing(false);
-            setBidAmount(0);
-        } catch (e) {
-            setRevealing(false);
-            console.log(e);
-            toast(handleError(e, true));
-        }
-    };
-
-    const handleCallTimeOut = async () => {
-        const [myGameStateHex, opGameStateHex] = await multiProvider.all([
-            multiSkylabBidTacToeGameContract.gameStates(myInfo.address),
-            multiSkylabBidTacToeGameContract.gameStates(opInfo.address),
-        ]);
-
-        const myGameState = myGameStateHex.toNumber();
-        const opGameState = opGameStateHex.toNumber();
-
-        if (
-            myGameState === GameState.Unknown ||
-            opGameState === GameState.Unknown
-        ) {
-            return;
-        }
-
-        if (myGameState > GameState.Revealed) {
-            return;
-        }
-        if (myGameState < opGameState) {
-            return;
-        }
-
-        try {
-            await tacToeGameRetryWrite("claimTimeoutPenalty", []);
-            handleGetGameInfo();
-        } catch (e) {
-            console.log(e);
-            toast(handleError(e, true));
-        }
-    };
-
     const handleBid = useCallback(async () => {
         try {
             if (currentGrid < 0) return;
@@ -634,9 +582,9 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 myGameState={myGameInfo.gameState}
                                 opGameState={opGameInfo.gameState}
                                 showAnimateConfirm={showAnimateConfirm}
-                                canCallTimeout={canCallTimeout}
-                                onCallTimeout={handleCallTimeOut}
-                                onReveal={handleRevealedBid}
+                                canCallTimeout={false}
+                                onCallTimeout={() => {}}
+                                onReveal={() => {}}
                             ></MyInputBid>
                         </Box>
 
@@ -698,7 +646,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                     bidAmount={bidAmount}
                     onInputChange={handleBidAmount}
                     onConfirm={handleBid}
-                    onReveal={handleRevealedBid}
                     onSetMessage={handleSetMessage}
                     emoteIndex={emoteIndex}
                     messageIndex={messageIndex}

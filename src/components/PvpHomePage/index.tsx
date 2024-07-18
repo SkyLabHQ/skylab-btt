@@ -134,39 +134,9 @@ const PvpHomePage = () => {
         if (!pvpAddress) return;
         try {
             openLoading();
-            const password = Math.floor(Math.random() * 1000000);
-            localStorage.setItem("password", String(password));
-            const encodedPassword = ethersUtils.defaultAbiCoder.encode(
-                ["uint256"],
-                [password],
-            );
-            const hashedPassword = ethersUtils.keccak256(encodedPassword);
-            const receipt = await bttFactoryRetryPaymaster("createPvPRoom", [
-                [3, 3, 3, 100, 1, 0, false, 12 * 60 * 60],
-                hashedPassword,
-            ]);
 
-            const startPvpGameTopic0 =
-                bttFactoryIface.getEventTopic("StartBotGame");
-
-            const [gameAddress] = await multiProvider.all([
-                multiTestSkylabBidTacToeFactoryContract.gamePerPlayer(
-                    pvpAddress,
-                ),
-            ]);
-
-            await bindBurner({
-                user: initData.user,
-                burner: pvpAddress,
-            });
-
-            savePvpGamePrivateKey(gameAddress, privateKey);
-            const pvpPasswords = localStorage.getItem("pvpPasswords")
-                ? JSON.parse(localStorage.getItem("pvpPasswords"))
-                : {};
-            pvpPasswords[gameAddress] = password;
-            localStorage.setItem("pvpPasswords", JSON.stringify(pvpPasswords));
-            navigate(`/free/pvpMatch?gameAddress=${gameAddress}`);
+            // const gameId = createGame()
+            // navigate(`/free/pvpMatch?gameAddress=${gameAddress}`);
             closeLoading();
         } catch (e) {
             toast(handleError(e));

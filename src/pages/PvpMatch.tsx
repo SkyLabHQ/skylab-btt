@@ -15,50 +15,23 @@ import Nest from "@/components/Nest";
 import { MINI_APP_URL } from "@/skyConstants/tgConfig";
 import QuitModal from "@/components/BttComponents/QuitModal";
 import useSkyToast from "@/hooks/useSkyToast";
-import { useBttFactoryRetryPaymaster } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
 import ToolBar from "@/components/BttComponents/Toolbar";
-import {
-    useMultiProvider,
-    useMultiSkylabBidTacToeGameContract,
-} from "@/hooks/useMultiContract";
-import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { useSCWallet } from "@/hooks/useSCWallet";
-import { ZERO_DATA } from "@/skyConstants";
 import ArrowIcon from "@/assets/arrow.svg";
 
 const MatchPage = () => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const [gameAddress] = useState<string>(params.gameAddress);
-    const [myInfo, setMyInfo] = useState<any>({
-        burner: "",
-        address: "",
-        img: "",
-    });
-    const [opInfo, setOpInfo] = useState<any>({
-        burner: "",
-        address: "",
-        img: "",
-    });
-    const [privateKey, setPrivateKey] = useState<string>("");
-    const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(gameAddress);
-    const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
 
     const toast = useSkyToast();
     const navigate = useNavigate();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
-        privateKey,
-    });
-
     const handleQuit = async () => {
         try {
-            await bttFactoryRetryPaymaster("quitPvpRoom", []);
+            // await quit()
             navigate(`/free/pvpHome`);
         } catch (error) {
             toast(handleError(error));
@@ -66,17 +39,14 @@ const MatchPage = () => {
     };
 
     const shareUrl = useMemo(() => {
-        if (!pvpAddress || !gameAddress) return "";
+        if (!gameAddress) return "";
         try {
             const pvpPasswords =
                 JSON.parse(localStorage.getItem("pvpPasswords")) || {};
             const share_url =
                 "https://t.me/share/url?url=" +
                 encodeURIComponent(
-                    `${MINI_APP_URL}?startapp=accept-${pvpAddress.slice(
-                        0,
-                        6,
-                    )}-${pvpPasswords[gameAddress]}`,
+                    `${MINI_APP_URL}?startapp=accept-${pvpPasswords[gameAddress]}`,
                 ) +
                 "&text=" +
                 encodeURIComponent(
@@ -87,66 +57,13 @@ const MatchPage = () => {
             console.log(e);
             return "";
         }
-    }, [gameAddress, pvpAddress]);
+    }, [gameAddress]);
 
     const handleGetAllPlayerInfo = async () => {
-        let [playerAddress1, playerAddress2] = await multiProvider.all([
-            multiSkylabBidTacToeGameContract.player1(),
-            multiSkylabBidTacToeGameContract.player2(),
-        ]);
-
-        playerAddress1 = playerAddress1.toLocaleLowerCase();
-        playerAddress2 = playerAddress2.toLocaleLowerCase();
-
-        console.log("playerAddress1", playerAddress1);
-        console.log("playerAddress2", playerAddress2);
-        console.log("pvpAddress", pvpAddress);
-        if (playerAddress1 !== ZERO_DATA && playerAddress2 !== ZERO_DATA) {
-            if (playerAddress1 === pvpAddress) {
-                setMyInfo({
-                    address: playerAddress1,
-                });
-                setOpInfo({
-                    address: playerAddress2,
-                });
-            } else {
-                setMyInfo({
-                    address: playerAddress2,
-                });
-                setOpInfo({
-                    address: playerAddress1,
-                });
-            }
-
-            setTimeout(() => {
-                navigate(`/free/pvpGame?gameAddress=${gameAddress}`);
-            }, 2000);
-        } else if (playerAddress1 !== pvpAddress) {
-            navigate("/free/pvpHome");
-        }
+        // const gameInfo = await getGameInfo();
     };
 
     useEffect(() => {
-        try {
-            const gameAddress = params.gameAddress;
-            const pvpPrivateKeys = localStorage.getItem("pvpPrivateKeys")
-                ? JSON.parse(localStorage.getItem("pvpPrivateKeys"))
-                : {};
-            if (pvpPrivateKeys[gameAddress]) {
-                setPrivateKey(pvpPrivateKeys[gameAddress]);
-            } else {
-                navigate("/free/pvpHome");
-            }
-        } catch (e) {
-            console.log(e);
-            navigate("/free/pvpHome");
-        }
-    }, []);
-
-    useEffect(() => {
-        if (!multiSkylabBidTacToeGameContract || !multiProvider || !pvpAddress)
-            return;
-
         const timer = setInterval(() => {
             handleGetAllPlayerInfo();
         }, 3000);
@@ -154,13 +71,7 @@ const MatchPage = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [
-        multiSkylabBidTacToeGameContract,
-        multiProvider,
-        myInfo.address,
-        opInfo.address,
-        pvpAddress,
-    ]);
+    }, []);
 
     return (
         <Box
