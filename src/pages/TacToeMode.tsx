@@ -204,7 +204,7 @@ const TacToeMode = () => {
                                             fontFamily: "Quantico",
                                         }}
                                     >
-                                        Pts Leaderboard{" "}
+                                        Pts Leaderboard
                                     </Text>
                                 </Flex>
                                 <Box
