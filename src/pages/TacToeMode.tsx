@@ -195,7 +195,7 @@ const TacToeMode = () => {
                                     <Image
                                         src={LeaderboardIcon}
                                         sx={{
-                                            width: isPc ? "100px" : "48px",
+                                            width: isPc ? "100px" : "64px",
                                         }}
                                     ></Image>
                                     <Text
@@ -204,7 +204,7 @@ const TacToeMode = () => {
                                             fontFamily: "Quantico",
                                         }}
                                     >
-                                        Pts Leaderboard
+                                        Leaderboard
                                     </Text>
                                 </Flex>
                                 <Box
@@ -237,7 +237,7 @@ const TacToeMode = () => {
                                     <Image
                                         src={MarketIcon}
                                         sx={{
-                                            width: isPc ? "100px" : "48px",
+                                            width: isPc ? "100px" : "64px",
                                         }}
                                     ></Image>
                                     <Text

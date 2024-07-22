@@ -4,8 +4,11 @@ import React from "react";
 import LineBg from "@/assets/line.png";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
 import PointIcon from "@/assets/point.svg";
+import { BackWithText } from "@/components/Back";
+import { useNavigate } from "react-router-dom";
 
 const Point = () => {
+    const navigate = useNavigate();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Box
@@ -14,6 +17,20 @@ const Point = () => {
                 width: "100%",
             }}
         >
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: "20px",
+                    left: "20px",
+                }}
+            >
+                <BackWithText
+                    onClick={() => {
+                        navigate("/");
+                    }}
+                    textContent="Back"
+                ></BackWithText>
+            </Box>
             <Toolbar></Toolbar>
             <Box
                 sx={{
