@@ -129,6 +129,7 @@ const Point = () => {
                                             fontFamily: "Anton",
                                             fontSize: isPc ? "40px" : "20px",
                                             borderRight: "1px solid #1B1B1B",
+                                            fontWeight: 700,
                                         }}
                                     >
                                         {index + 1}

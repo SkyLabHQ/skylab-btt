@@ -2,6 +2,12 @@ import { css } from "@emotion/react";
 
 export const GlobalStyles = css`
     @font-face {
+        font-family: "Anton";
+        src: url("/ANTON.ttf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+    }
+    @font-face {
         font-family: "Helvetica";
         src: url("/Helvetica.ttf") format("opentype");
         font-weight: normal;
