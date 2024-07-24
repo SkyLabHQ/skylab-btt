@@ -10,28 +10,20 @@ import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
 import StatusProgress from "../BttComponents/StatusProgress";
+import PvpBottomInputBox from "../BttComponents/PvpBottomInputBox";
 
 const MLayout = ({
     inviteLink,
     handleQuitClick,
     handleShareTw,
-    nextDrawWinner,
     autoCommitTimeoutTime,
     bidAmount,
     showAnimateNumber,
     onInputChange,
     onConfirm,
-    onSetMessage,
-    emoteIndex,
-    messageIndex,
-    emoteLoading,
-    messageLoading,
     loading,
-    revealing,
     handleBoardClick,
     showAnimateConfirm,
-    onReveal,
-    onCallTimeout,
 }: any) => {
     const { isOpen: keyBoardIsOpen, onToggle: keyBoardOnToggle } =
         useDisclosure();
@@ -40,18 +32,7 @@ const MLayout = ({
 
     const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
         usePvpGameContext();
-    const myGameState = myGameInfo.gameState;
-
-    const canCallTimeout = useMemo(() => {
-        if (
-            autoCommitTimeoutTime === 0 &&
-            myGameInfo.gameState <= opGameInfo.gameState
-        ) {
-            return true;
-        }
-
-        return false;
-    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
+    const myIsBid = myGameInfo.isBid;
 
     return (
         <Box
@@ -79,15 +60,10 @@ const MLayout = ({
             >
                 <Flex align={"flex-end"}>
                     <MUserProfilePvp
-                        address={opInfo.address}
+                        address={""}
                         status="op"
                         mark={opInfo.mark}
                     ></MUserProfilePvp>
-                    <MMessage
-                        message={opGameInfo.message}
-                        emote={opGameInfo.emote}
-                        status={"op"}
-                    ></MMessage>
                 </Flex>
 
                 <MPvpBalance
@@ -104,10 +80,10 @@ const MLayout = ({
                     marginTop: "36px",
                 }}
             >
-                <StatusProgress
-                    myGameState={myGameInfo.gameState}
+                {/* <StatusProgress
+                    myIsBid={myGameInfo.gameState}
                     opGameState={opGameInfo.gameState}
-                ></StatusProgress>
+                ></StatusProgress> */}
                 <Box
                     sx={{
                         marginTop: "20px",
@@ -135,61 +111,19 @@ const MLayout = ({
                     }}
                 >
                     <Flex justify={"space-between"} align={"flex-end"}>
-                        {myGameInfo.gameState <= GameState.Revealed && (
-                            <Box
-                                sx={{
-                                    width: "84px",
-                                    position: "absolute",
-                                    left: "12px",
-                                    bottom: "20px",
-                                }}
-                            >
-                                <Timer
-                                    time1={autoCommitTimeoutTime}
-                                    time1Gray={
-                                        loading ||
-                                        revealing ||
-                                        (myGameInfo.gameState ===
-                                            GameState.Commited &&
-                                            opGameInfo.gameState ===
-                                                GameState.WaitingForBid) ||
-                                        myGameInfo.gameState ===
-                                            GameState.Revealed
-                                    }
-                                ></Timer>
-                                <Flex
-                                    onClick={() => {
-                                        if (canCallTimeout) {
-                                            onCallTimeout();
-                                        }
-                                    }}
-                                    sx={{
-                                        marginTop: "5px",
-                                        fontSize: "12px",
-                                        height: "30px",
-                                        width: "84px",
-                                        background: canCallTimeout
-                                            ? "transparent"
-                                            : "#787878",
-                                        borderRadius: "16px",
-                                        color: canCallTimeout
-                                            ? "#FDDC2D"
-                                            : "#555",
-                                        fontWeight: "bold",
-                                        cursor: canCallTimeout
-                                            ? "pointer"
-                                            : "not-allowed",
-                                        border: canCallTimeout
-                                            ? "1px solid #FDDC2D"
-                                            : "1px solid #787878",
-                                    }}
-                                    align={"center"}
-                                    justify={"center"}
-                                >
-                                    Call Timeout
-                                </Flex>
-                            </Box>
-                        )}
+                        <Box
+                            sx={{
+                                width: "84px",
+                                position: "absolute",
+                                left: "12px",
+                                bottom: "20px",
+                            }}
+                        >
+                            <Timer
+                                time1={autoCommitTimeoutTime}
+                                time1Gray={loading || myGameInfo.isBid}
+                            ></Timer>
+                        </Box>
                     </Flex>
                     <Flex
                         sx={{
@@ -200,24 +134,6 @@ const MLayout = ({
                         flexDir={"column"}
                         align={"flex-end"}
                     >
-                        <Flex align={"flex-end"}>
-                            <MMessage
-                                message={myGameInfo.message}
-                                emote={myGameInfo.emote}
-                                status={"my"}
-                                emoteIndex={emoteIndex}
-                                messageIndex={messageIndex}
-                                emoteLoading={emoteLoading}
-                                messageLoading={messageLoading}
-                            ></MMessage>
-
-                            <MUserProfilePvp
-                                status="my"
-                                address={myInfo.address}
-                                mark={myInfo.mark}
-                            ></MUserProfilePvp>
-                        </Flex>
-
                         <MPvpBalance
                             balance={myGameInfo.balance}
                             status="right"
@@ -225,15 +141,12 @@ const MLayout = ({
                         ></MPvpBalance>
                     </Flex>
                 </Box>
-                <BottomInputBox
+                <PvpBottomInputBox
                     showAnimateConfirm={showAnimateConfirm}
-                    onSetMessage={onSetMessage}
                     myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}
-                    myGameState={myGameState}
-                    opGameState={opGameInfo.gameState}
+                    myIsBid={myIsBid}
                     loading={loading}
-                    revealing={revealing}
                     onIuputAmount={(amount: number) => {
                         onInputChange(amount);
                     }}
@@ -260,8 +173,7 @@ const MLayout = ({
                         }
                     }}
                     onConfirm={onConfirm}
-                    onReveal={onReveal}
-                ></BottomInputBox>
+                ></PvpBottomInputBox>
             </Box>
         </Box>
     );

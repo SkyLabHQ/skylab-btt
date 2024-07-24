@@ -51,6 +51,19 @@ export enum GameState {
     LoseByGridCount = 11,
 }
 
+export enum PvpGameStatus {
+    NotStarted, //未开始
+    WaitingForPlayer2, //等待玩家2
+    QuitByPlayer1, //玩家1退出匹配
+    InProgress, //进行中
+    Player1WinByConnecting, //玩家1通过连线获胜
+    Player2WinByConnecting, //玩家2通过连线获胜
+    Player1WinBySurrender, //玩家1投降
+    Player2WinBySurrender, //玩家2投降
+    Player1WinByGridCount, //玩家1通过格子数获胜
+    Player2WinByGridCount, //玩家2通过格子数获胜
+}
+
 export enum MessageStatus {
     Unknown = 0,
     Sending = 1,
@@ -161,8 +174,8 @@ export interface GameInfo {
     balance: number;
     gameState: number;
     timeout: number;
-    message: number;
-    emote: number;
+    message?: number;
+    emote?: number;
 }
 
 const winEmoji = ["❤️", "👑", "🦋", "🌻", "🥳", "🤪", "😎", "🤭", "🤩"];

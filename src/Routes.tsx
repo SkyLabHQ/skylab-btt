@@ -18,6 +18,7 @@ import PlaneMarketLayout from "./components/Plane/Layout";
 import Market from "./components/Plane/Market";
 import My from "./components/Plane/My";
 import Point from "./pages/Point";
+import PvpLayout from "./components/PvpLayout";
 
 const AppRoutes = (): ReactElement => {
     return (
@@ -32,12 +33,18 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>
                 <Route path="/btt/live" element={<BttLiveGame />}></Route>
                 <Route path="/free" element={<FreeLayout />}>
+                    <Route path="/free/pvp" element={<PvpLayout />}>
+                        <Route path="/free/pvp/home" element={<PvpHome />} />
+                        <Route path="/free/pvp/match" element={<PvpMatch />} />
+                        <Route path="/free/pvp/game" element={<PvpRoom />} />
+                        <Route
+                            path="/free/pvp/accept"
+                            element={<Accept />}
+                        ></Route>
+                    </Route>
+
                     <Route path="/free/botHome" element={<StartBot />} />
                     <Route path="/free/botGame" element={<BotGame />} />
-                    <Route path="/free/pvpHome" element={<PvpHome />} />
-                    <Route path="/free/pvpMatch" element={<PvpMatch />} />
-                    <Route path="/free/pvpGame" element={<PvpRoom />} />
-                    <Route path="/free/accept" element={<Accept />}></Route>
                 </Route>
                 <Route path="/plane" element={<PlaneMarketLayout />}>
                     <Route path="/plane/market" element={<Market />}></Route>

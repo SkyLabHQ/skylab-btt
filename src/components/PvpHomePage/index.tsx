@@ -20,6 +20,7 @@ import BttIcon from "@/assets/btt-icon.png";
 import SoloIcon from "./assets/solo-icon.svg";
 import { bttFactoryIface } from "@/skyConstants/iface";
 import { savePvpGamePrivateKey } from "@/hooks/useSigner";
+import { startGame } from "@/api/pvpGame";
 
 const PlayButtonGroup = ({
     onPlayTournament,
@@ -116,27 +117,14 @@ const PlayButtonGroup = ({
 const PvpHomePage = () => {
     const toast = useSkyToast();
     const navigate = useNavigate();
-
-    const initData = useInitData();
     const { openLoading, closeLoading, isLoading } = useSubmitRequest();
-    const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-    const multiTestSkylabBidTacToeFactoryContract =
-        useMultiTestSkylabBidTacToeFactoryContract();
-    const [privateKey] = useState(ethers.Wallet.createRandom().privateKey);
-
-    const { sCWAddress: pvpAddress } = useSCWallet(privateKey);
-
-    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
-        privateKey,
-    });
-
     const handlePlay1V1 = async () => {
-        if (!pvpAddress) return;
         try {
             openLoading();
-
-            // const gameId = createGame()
-            // navigate(`/free/pvpMatch?gameAddress=${gameAddress}`);
+            const res = await startGame();
+            if (res.code === 200) {
+                navigate(`/free/pvp/match?gameId=${res.data.gameId}`);
+            }
             closeLoading();
         } catch (e) {
             toast(handleError(e));

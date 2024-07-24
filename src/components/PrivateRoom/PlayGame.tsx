@@ -7,49 +7,35 @@ import React, {
     useState,
 } from "react";
 import Board from "@/components/BttComponents/Board";
-import { useBttGameRetryPaymaster } from "@/hooks/useRetryContract";
-import { ethers } from "ethers";
-import {
-    useMultiProvider,
-    useMultiSkylabBidTacToeGameContract,
-} from "@/hooks/useMultiContract";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
-import {
-    useDeleteTokenIdCommited,
-    useGridCommited,
-} from "@/hooks/useTacToeStore";
-import { ZERO_DATA } from "@/skyConstants";
-import { usePvpGameContext } from "@/pages/PvpRoom";
+import { PvpGameInfo, usePvpGameContext } from "@/pages/PvpRoom";
 import { CHAIN_NAMES, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import UserProfile from "./UserProfile";
 import {
-    GameInfo,
     GameState,
-    MessageStatus,
-    UserMarkType,
     getWinState,
+    UserMarkType,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
-import { Message } from "./Message";
 import MLayout from "./MLayout";
-import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
-import Chat from "../BttComponents/Chat";
 import StatusProgress from "../BttComponents/StatusProgress";
-import { MyInputBid, OpInputBid } from "../BttComponents/UserCard";
 import { shortenAddressWithout0x } from "@/utils";
 import { MINI_APP_URL } from "@/skyConstants/tgConfig";
+import { getGameInfo } from "@/api/pvpGame";
+import { useInitData } from "@tma.js/sdk-react";
+import { PvpMyUserCard, PvpOpInputBid } from "../BttComponents/PvpUserCard";
 
 const PlayGame = ({
     onChangeGame,
 }: {
-    onChangeGame: (position: "my" | "op", info: GameInfo) => void;
+    onChangeGame: (position: "my" | "op", info: PvpGameInfo) => void;
 }) => {
+    const initData = useInitData();
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
-    const commitWorkerRef = useRef<Worker>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const [loading, setLoading] = useState<boolean>(false);
@@ -57,119 +43,52 @@ const PlayGame = ({
     const toast = useSkyToast();
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
-    const {
-        myGameInfo,
-        opGameInfo,
-        gameAddress,
-        myInfo,
-        opInfo,
-        list,
-        privateKey,
-        onList,
-        handleStepChange,
-    } = usePvpGameContext();
-    const canCallTimeout = useMemo(() => {
-        if (
-            autoCommitTimeoutTime === 0 &&
-            myGameInfo.gameState <= opGameInfo.gameState
-        ) {
-            return true;
-        }
+    const { myGameInfo, opGameInfo, gameId, myInfo, opInfo, list } =
+        usePvpGameContext();
 
-        return false;
-    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
-
-    const tacToeGameRetryWrite = useBttGameRetryPaymaster(gameAddress, {
-        privateKey,
-    });
-
-    const deleteTokenIdCommited = useDeleteTokenIdCommited(gameAddress);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
-    const [revealing, setRevealing] = useState<boolean>(false);
-    const { getGridCommited, addGridCommited } = useGridCommited(
-        gameAddress,
-        currentGrid,
-    );
     const [bidAmount, setBidAmount] = useState<number>(0);
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
-    const [messageLoading, setMessageLoading] = useState<MessageStatus>(
-        MessageStatus.Unknown,
-    );
-
-    const gameOver = useMemo(() => {
-        return myGameInfo.gameState > GameState.Revealed;
-    }, [myGameInfo.gameState]);
-
-    const multiProvider = useMultiProvider(TESTFLIGHT_CHAINID);
-
-    const [emoteLoading, setEmoteLoading] = useState<MessageStatus>(
-        MessageStatus.Unknown,
-    );
-
-    const [messageIndex, setMessageIndex] = useState<number>(0);
-    const [emoteIndex, setEmoteIndex] = useState<number>(0);
-    const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(gameAddress);
+    const [gameInfo, setGameInfo] = useState<any>(null);
 
     const inviteLink = useMemo(() => {
         return "";
     }, []);
 
     const handleGetGameInfo = async () => {
-        const [
-            resCurrentGrid,
-            boardGrids,
-            myBalance,
-            myGameState,
-            myRevealedBid,
-            myTimeout,
-            myMessage,
-            myEmote,
-            opBalance,
-            opGameState,
-            opRevealedBid,
-            opTimeout,
-            opMessage,
-            opEmote,
-            nextDrawWinner,
-        ] = await multiProvider.all([
-            multiSkylabBidTacToeGameContract.currentSelectedGrid(),
-            multiSkylabBidTacToeGameContract.getGrid(),
-            multiSkylabBidTacToeGameContract.balances(myInfo.address),
-            multiSkylabBidTacToeGameContract.gameStates(myInfo.address),
-            multiSkylabBidTacToeGameContract.getRevealedBids(myInfo.address),
-            multiSkylabBidTacToeGameContract.timeouts(myInfo.address),
-            multiSkylabBidTacToeGameContract.playerMessage(myInfo.address),
-            multiSkylabBidTacToeGameContract.playerEmote(myInfo.address),
-            multiSkylabBidTacToeGameContract.balances(opInfo.address),
-            multiSkylabBidTacToeGameContract.gameStates(opInfo.address),
-            multiSkylabBidTacToeGameContract.getRevealedBids(opInfo.address),
-            multiSkylabBidTacToeGameContract.timeouts(opInfo.address),
-            multiSkylabBidTacToeGameContract.playerMessage(opInfo.address),
-            multiSkylabBidTacToeGameContract.playerEmote(opInfo.address),
-            multiSkylabBidTacToeGameContract.nextDrawWinner(),
-        ]);
+        if (!gameId) return;
 
+        const res = await getGameInfo(Number(gameId));
+
+        if (res.code != 200) {
+            return;
+        }
+
+        const gameInfo = res.data.game;
+
+        const gridIndex = gameInfo.gridIndex;
         if (showAnimateNumber === -1) {
-            setShowAnimate(resCurrentGrid.toNumber());
-        } else if (resCurrentGrid.toNumber() !== currentGrid) {
+            setShowAnimate(gridIndex);
+        } else if (gridIndex !== currentGrid) {
             setShowAnimate(currentGrid);
         }
 
         const _list = JSON.parse(JSON.stringify(list));
-        const gameState = myGameState.toNumber();
+        const gameState = gameInfo.gameStatus;
+        const boardGrids = gameInfo.boards;
+        const isPlayer1 = initData.user.id == gameInfo.player1;
 
         for (let i = 0; i < boardGrids.length; i++) {
-            const winAddress = boardGrids[i].toLocaleLowerCase();
-            if (winAddress === ZERO_DATA) {
+            const winAddress = boardGrids[i].win;
+            if (winAddress === 0) {
                 _list[i].mark = UserMarkType.Empty;
             } else if (winAddress === myInfo.address) {
                 _list[i].mark = myInfo.mark;
             } else if (winAddress === opInfo.address) {
                 _list[i].mark = opInfo.mark;
             }
-            _list[i].myValue = myRevealedBid[i].toNumber();
-            _list[i].opValue = opRevealedBid[i].toNumber();
+            _list[i].myValue = boardGrids[i];
+            _list[i].opValue = boardGrids[i];
             _list[i].myMark = myInfo.mark;
             _list[i].opMark = opInfo.mark;
         }
@@ -180,7 +99,7 @@ const PlayGame = ({
                 GameState.Revealed,
             ].includes(gameState)
         ) {
-            _list[resCurrentGrid.toNumber()].mark = UserMarkType.Square;
+            _list[gridIndex].mark = UserMarkType.Square;
         }
 
         // game over result
@@ -230,71 +149,47 @@ const PlayGame = ({
                 }
             }
         }
-        setCurrentGrid(resCurrentGrid.toNumber());
-        onList(_list);
+        setCurrentGrid(gridIndex);
+        const currentBoard = boardGrids[gridIndex];
+
         onChangeGame("my", {
-            balance: myBalance.toNumber(),
-            gameState: myGameState.toNumber(),
-            timeout: myTimeout.toNumber(),
-            message: myMessage.toNumber(),
-            emote: myEmote.toNumber(),
+            balance: isPlayer1 ? gameInfo.balance1 : gameInfo.balance2,
+            isBid: isPlayer1 ? currentBoard.isBid1 : currentBoard.isBid2,
+            timeout: currentBoard.timeout,
         });
 
         onChangeGame("op", {
-            balance: opBalance.toNumber(),
-            gameState: opGameState.toNumber(),
-            timeout: opTimeout.toNumber(),
-            message: opMessage.toNumber(),
-            emote: opEmote.toNumber(),
+            balance: isPlayer1 ? gameInfo.balance2 : gameInfo.balance1,
+            isBid: isPlayer1 ? currentBoard.isBid2 : currentBoard.isBid1,
+            timeout: currentBoard.timeout,
         });
         setNextDrawWinner(nextDrawWinner);
     };
 
-    const handleBid = useCallback(async () => {
+    const handleBid = async () => {
         try {
             if (currentGrid < 0) return;
             if (loading) return;
-            if (myGameInfo.gameState !== GameState.WaitingForBid) return;
+            if (myGameInfo.isBid) return;
 
             setLoading(true);
-            const localSalt = getGridCommited();
-            const salt = localSalt?.salt
-                ? localSalt?.salt
-                : Math.floor(Math.random() * 9000000000000000) +
-                  1000000000000000;
-            if (!localSalt?.salt) {
-                addGridCommited(bidAmount, salt, false);
-            }
 
-            const hash = ethers.utils.solidityKeccak256(
-                ["uint256", "uint256"],
-                [String(bidAmount), String(salt)],
-            );
-            console.log(
-                `currentGrid: ${currentGrid} bidAmount: ${bidAmount}, salt: ${salt}, hash: ${hash}`,
-            );
+            console.log(`currentGrid: ${currentGrid} bidAmount: ${bidAmount} `);
 
-            await tacToeGameRetryWrite("commitBid", [hash]);
+            // await bid({
+            //     bidAmount
+            // })
             onChangeGame("my", {
                 ...myGameInfo,
-                gameState: GameState.Commited,
+                isBid: true,
             });
             setLoading(false);
-            addGridCommited(bidAmount, salt, true);
         } catch (e) {
             console.log(e);
             setLoading(false);
             toast(handleError(e, true));
         }
-    }, [
-        currentGrid,
-        loading,
-        myGameInfo,
-        addGridCommited,
-        bidAmount,
-        tacToeGameRetryWrite,
-        getGridCommited,
-    ]);
+    };
 
     const handleBoardClick = () => {
         setShowAnimateConfirm((number) => {
@@ -302,53 +197,9 @@ const PlayGame = ({
         });
     };
 
-    const handleSetMessage = async (
-        type: "setMessage" | "setEmote",
-        index: number,
-    ) => {
-        try {
-            if (type === "setMessage") {
-                if (messageLoading === MessageStatus.Sending) {
-                    return;
-                } else {
-                    setMessageLoading(MessageStatus.Sending);
-                    setMessageIndex(index);
-                }
-            }
-
-            if (type === "setEmote") {
-                if (emoteLoading === MessageStatus.Sending) {
-                    return;
-                } else {
-                    setEmoteLoading(MessageStatus.Sending);
-                    setEmoteIndex(index);
-                }
-            }
-
-            await tacToeGameRetryWrite(type, [index]);
-            if (type === "setMessage") {
-                setMessageLoading(MessageStatus.Sent);
-                setMessageIndex(index);
-            } else {
-                setEmoteLoading(MessageStatus.Sent);
-                setEmoteIndex(index);
-            }
-        } catch (e) {
-            console.log(e);
-            if (type === "setMessage") {
-                setMessageLoading(MessageStatus.Unknown);
-                setMessageIndex(index);
-            } else {
-                setEmoteLoading(MessageStatus.Unknown);
-                setEmoteIndex(index);
-            }
-            toast(handleError(e));
-        }
-    };
-
     const handleBidAmount = (value: number) => {
         if (loading) return;
-        if (myGameInfo.gameState !== GameState.WaitingForBid) return;
+        if (myGameInfo.isBid) return;
 
         if (value < 0) return;
         if (value > myGameInfo.balance) return;
@@ -361,9 +212,7 @@ const PlayGame = ({
         }
         try {
             setSurrenderLoading(true);
-            await tacToeGameRetryWrite("surrender", [], {
-                clearQueue: true,
-            });
+            // await  surrender()
             setSurrenderLoading(false);
         } catch (e) {
             setSurrenderLoading(false);
@@ -372,13 +221,8 @@ const PlayGame = ({
         }
     };
 
-    const handleGameOver = async () => {
-        deleteTokenIdCommited();
-        handleStepChange(2);
-    };
-
     const handleShareTw = () => {
-        const text = `${MINI_APP_URL}?startapp=live-${gameAddress}-${shortenAddressWithout0x(
+        const text = `${MINI_APP_URL}?startapp=live-${gameId}-${shortenAddressWithout0x(
             myInfo.burner,
         )}
 ⭕️❌⭕️❌Watch me play Bid tac toe and crush the opponent！⭕️❌⭕️❌
@@ -392,46 +236,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         );
     };
 
-    const handleCommitWorker = () => {
-        if (commitWorkerRef.current) {
-            commitWorkerRef.current.terminate();
-        }
-        if ((!myGameInfo.timeout && !opGameInfo.timeout) || !gameAddress) {
-            return;
-        }
-        commitWorkerRef.current = new Worker(
-            new URL("../../utils/timerWorker.ts", import.meta.url),
-        );
-        commitWorkerRef.current.onmessage = async (event) => {
-            const timeLeft = event.data;
-            setAutoCommitTimeoutTime(timeLeft);
-        };
-        const time = Math.max(myGameInfo.timeout, opGameInfo.timeout) * 1000;
-        const now = getNowSecondsTimestamp();
-        const remainTime = time - now;
-        if (remainTime > 0) {
-            commitWorkerRef.current.postMessage({
-                action: "start",
-                timeToCount: remainTime,
-            });
-        } else {
-            commitWorkerRef.current.postMessage({
-                action: "stop",
-            });
-        }
-    };
-
     useEffect(() => {
-        if (
-            !myInfo.address ||
-            !opInfo.address ||
-            !multiSkylabBidTacToeGameContract ||
-            !multiProvider ||
-            revealing
-        ) {
-            return;
-        }
-
         const timer = setInterval(() => {
             handleGetGameInfo();
         }, 3000);
@@ -439,46 +244,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         return () => {
             clearInterval(timer);
         };
-    }, [
-        myInfo.address,
-        opInfo.address,
-        multiSkylabBidTacToeGameContract,
-        multiProvider,
-        revealing,
-    ]);
-
-    useEffect(() => {
-        if (!gameOver) return;
-        handleGameOver();
-    }, [gameOver, deleteTokenIdCommited]);
-
-    useEffect(() => {
-        handleCommitWorker();
-    }, [myGameInfo.timeout, opGameInfo.timeout]);
-
-    useEffect(() => {
-        if (isPc) {
-            return;
-        }
-
-        const handleVisibilityChange = () => {
-            if (document.hidden) {
-                if (commitWorkerRef.current) {
-                    commitWorkerRef.current.terminate();
-                }
-            } else {
-                handleCommitWorker();
-            }
-        };
-        document.addEventListener("visibilitychange", handleVisibilityChange);
-
-        return () => {
-            document.removeEventListener(
-                "visibilitychange",
-                handleVisibilityChange,
-            );
-        };
-    }, [isPc]);
+    }, [gameId]);
 
     return (
         <Box
@@ -486,180 +252,22 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                 height: "100%",
             }}
         >
-            {isPc ? (
-                <Box
-                    sx={{
-                        padding: "1.4063vw 3.125vw",
-                        position: "relative",
-                        width: "100vw",
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <Flex flexDir={"column"} align={"center"}>
-                        <Box
-                            sx={{
-                                height: "90px",
-                            }}
-                        >
-                            {myGameInfo.gameState <= GameState.Revealed && (
-                                <Timer
-                                    time1={autoCommitTimeoutTime}
-                                    time1Gray={
-                                        loading ||
-                                        revealing ||
-                                        (myGameInfo.gameState ===
-                                            GameState.Commited &&
-                                            opGameInfo.gameState ===
-                                                GameState.WaitingForBid) ||
-                                        myGameInfo.gameState ===
-                                            GameState.Revealed
-                                    }
-                                ></Timer>
-                            )}
-                        </Box>
-
-                        <StatusProgress
-                            myGameState={myGameInfo.gameState}
-                            opGameState={opGameInfo.gameState}
-                        ></StatusProgress>
-                    </Flex>
-                    <ToolBar
-                        showLive={false}
-                        inviteLink={inviteLink}
-                        quitType="game"
-                        onQuitClick={() => {
-                            onOpen();
-                        }}
-                        handleShareTw={handleShareTw}
-                    ></ToolBar>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: "15.625vw",
-                            }}
-                        >
-                            <Flex>
-                                <UserProfile
-                                    status="my"
-                                    address={myInfo.address}
-                                    mark={myInfo.mark}
-                                    showAdvantageTip={
-                                        myInfo.address === nextDrawWinner
-                                    }
-                                ></UserProfile>
-                                <Box
-                                    sx={{
-                                        margin: "0.5208vw 0 0 0.5208vw",
-                                    }}
-                                >
-                                    <Message
-                                        message={myGameInfo.message}
-                                        emote={myGameInfo.emote}
-                                        messageLoading={messageLoading}
-                                        emoteLoading={emoteLoading}
-                                        status={"my"}
-                                        emoteIndex={emoteIndex}
-                                        messageIndex={messageIndex}
-                                    ></Message>
-                                </Box>
-                            </Flex>
-
-                            <MyInputBid
-                                loading={loading}
-                                revealing={revealing}
-                                balance={myGameInfo.balance}
-                                bidAmount={bidAmount}
-                                onInputChange={handleBidAmount}
-                                onConfirm={handleBid}
-                                myGameState={myGameInfo.gameState}
-                                opGameState={opGameInfo.gameState}
-                                showAnimateConfirm={showAnimateConfirm}
-                                canCallTimeout={false}
-                                onCallTimeout={() => {}}
-                                onReveal={() => {}}
-                            ></MyInputBid>
-                        </Box>
-
-                        <Box
-                            sx={{
-                                paddingTop: "1.5625vw",
-                            }}
-                        >
-                            <Board
-                                list={list}
-                                showAnimateNumber={showAnimateNumber}
-                            ></Board>
-                        </Box>
-                        <Flex
-                            sx={{
-                                width: "15.625vw",
-                            }}
-                            flexDir={"column"}
-                            alignItems={"flex-end"}
-                        >
-                            <Flex justify={"flex-end"}>
-                                <Box
-                                    sx={{
-                                        margin: "0.5208vw 0.5208vw 0 0",
-                                    }}
-                                >
-                                    <Message
-                                        message={opGameInfo.message}
-                                        emote={opGameInfo.emote}
-                                        status={"op"}
-                                    ></Message>
-                                </Box>
-
-                                <UserProfile
-                                    status="op"
-                                    address={opInfo.address}
-                                    mark={opInfo.mark}
-                                    showAdvantageTip={
-                                        opInfo.address === nextDrawWinner
-                                    }
-                                ></UserProfile>
-                            </Flex>
-
-                            <OpInputBid
-                                opGameState={opGameInfo.gameState}
-                                balance={opGameInfo.balance}
-                            ></OpInputBid>
-                        </Flex>
-                    </Box>
-                    <Chat onSetMessage={handleSetMessage}></Chat>
-                </Box>
-            ) : (
-                <MLayout
-                    inviteLink={inviteLink}
-                    handleShareTw={handleShareTw}
-                    nextDrawWinner={nextDrawWinner}
-                    autoCommitTimeoutTime={autoCommitTimeoutTime}
-                    showAnimateNumber={showAnimateNumber}
-                    bidAmount={bidAmount}
-                    onInputChange={handleBidAmount}
-                    onConfirm={handleBid}
-                    onSetMessage={handleSetMessage}
-                    emoteIndex={emoteIndex}
-                    messageIndex={messageIndex}
-                    messageLoading={messageLoading}
-                    emoteLoading={emoteLoading}
-                    handleQuitClick={() => {
-                        onOpen();
-                    }}
-                    loading={loading}
-                    revealing={revealing}
-                    handleBoardClick={handleBoardClick}
-                    showAnimateConfirm={showAnimateConfirm}
-                ></MLayout>
-            )}
+            <MLayout
+                inviteLink={inviteLink}
+                handleShareTw={handleShareTw}
+                nextDrawWinner={nextDrawWinner}
+                autoCommitTimeoutTime={autoCommitTimeoutTime}
+                showAnimateNumber={showAnimateNumber}
+                bidAmount={bidAmount}
+                onInputChange={handleBidAmount}
+                onConfirm={handleBid}
+                handleQuitClick={() => {
+                    onOpen();
+                }}
+                loading={loading}
+                handleBoardClick={handleBoardClick}
+                showAnimateConfirm={showAnimateConfirm}
+            ></MLayout>
             <QuitModal
                 onConfirm={handleQuit}
                 isOpen={isOpen}

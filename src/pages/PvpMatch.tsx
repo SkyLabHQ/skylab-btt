@@ -5,6 +5,8 @@ import {
     Image,
     useMediaQuery,
     useDisclosure,
+    useClipboard,
+    Button,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -18,11 +20,13 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import ToolBar from "@/components/BttComponents/Toolbar";
 import ArrowIcon from "@/assets/arrow.svg";
+import { getGameInfo, quitMatch } from "@/api/pvpGame";
 
 const MatchPage = () => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
-    const [gameAddress] = useState<string>(params.gameAddress);
+    const [gameId] = useState<string>(params.gameId);
+    const [gameInfo, setGameInfo] = useState<any>();
 
     const toast = useSkyToast();
     const navigate = useNavigate();
@@ -31,36 +35,52 @@ const MatchPage = () => {
 
     const handleQuit = async () => {
         try {
-            // await quit()
-            navigate(`/free/pvpHome`);
+            const res = await quitMatch({ gameId: Number(gameId) });
+            if (res.code == 200) {
+                navigate("/free/pvp/home");
+            }
         } catch (error) {
             toast(handleError(error));
         }
     };
+    const { onCopy } = useClipboard(
+        `${location.origin}/free/pvp/accept?gameId=${gameId}&outer2=true`,
+    );
 
     const shareUrl = useMemo(() => {
-        if (!gameAddress) return "";
-        try {
-            const pvpPasswords =
-                JSON.parse(localStorage.getItem("pvpPasswords")) || {};
-            const share_url =
-                "https://t.me/share/url?url=" +
-                encodeURIComponent(
-                    `${MINI_APP_URL}?startapp=accept-${pvpPasswords[gameAddress]}`,
-                ) +
-                "&text=" +
-                encodeURIComponent(
-                    "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. I invite you to play with me. Click here to accept my invite!",
-                );
-            return share_url;
-        } catch (e) {
-            console.log(e);
-            return "";
-        }
-    }, [gameAddress]);
+        const url = `${location.origin}/free/pvp/accept?gameId=${gameId}&outer2=true`;
+        return url;
+        // if (!gameAddress) return "";
+        // try {
+        //     const pvpPasswords =
+        //         JSON.parse(localStorage.getItem("pvpPasswords")) || {};
+        //     const share_url =
+        //         "https://t.me/share/url?url=" +
+        //         encodeURIComponent(
+        //             `${MINI_APP_URL}?startapp=accept-${pvpPasswords[gameAddress]}`,
+        //         ) +
+        //         "&text=" +
+        //         encodeURIComponent(
+        //             "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. I invite you to play with me. Click here to accept my invite!",
+        //         );
+        //     return share_url;
+        // } catch (e) {
+        //     console.log(e);
+        //     return "";
+        // }
+        return "";
+    }, [gameId]);
 
     const handleGetAllPlayerInfo = async () => {
-        // const gameInfo = await getGameInfo();
+        if (!gameId) return;
+
+        const gameInfo = await getGameInfo(Number(gameId));
+
+        if (gameInfo.code == 200) {
+            setGameInfo(gameInfo.data.game);
+        }
+
+        console.log(gameInfo, "gameInfo");
     };
 
     useEffect(() => {
@@ -71,7 +91,7 @@ const MatchPage = () => {
         return () => {
             clearInterval(timer);
         };
-    }, []);
+    }, [gameId]);
 
     return (
         <Box
@@ -129,6 +149,7 @@ const MatchPage = () => {
                                 marginTop: isPc ? "74px" : "20px",
                             }}
                         >
+                            <Button onClick={onCopy}>复制链接</Button>
                             <a href={shareUrl} target="_blank">
                                 <Flex
                                     justify={"center"}
@@ -162,29 +183,27 @@ const MatchPage = () => {
                                         ></Image>
                                         <Text>Invite Friend</Text>
                                     </Flex>
-                                    <Flex
-                                        align={"center"}
-                                        justify={"center"}
-                                        onClick={() => {
-                                            onOpen();
-                                        }}
-                                        sx={{
-                                            width: isPc ? "420px" : "180px",
-                                            height: isPc ? "55px" : "40px",
-                                            borderRadius: isPc
-                                                ? "18px"
-                                                : "12px",
-                                            border: "2px solid #FFF",
-                                            background: "#303030",
-                                            fontSize: isPc ? "24px" : "14px",
-                                            marginTop: isPc ? "60px" : "20px",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        <Text>Quit Match</Text>
-                                    </Flex>
                                 </Flex>
-                            </a>
+                            </a>{" "}
+                            <Flex
+                                align={"center"}
+                                justify={"center"}
+                                onClick={() => {
+                                    onOpen();
+                                }}
+                                sx={{
+                                    width: isPc ? "420px" : "180px",
+                                    height: isPc ? "55px" : "40px",
+                                    borderRadius: isPc ? "18px" : "12px",
+                                    border: "2px solid #FFF",
+                                    background: "#303030",
+                                    fontSize: isPc ? "24px" : "14px",
+                                    marginTop: isPc ? "60px" : "20px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <Text>Quit Match</Text>
+                            </Flex>
                         </Box>
                     </Flex>
                     <QuitModal
