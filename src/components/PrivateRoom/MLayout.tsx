@@ -34,8 +34,6 @@ const MLayout = ({
     const { myGameInfo, opGameInfo, list } = usePvpGameContext();
     const myIsBid = myGameInfo.isBid;
 
-    console.log(gameTimeout, "gameTimeout");
-
     const handleCommitWorker = () => {
         if (commitWorkerRef.current) {
             commitWorkerRef.current.terminate();

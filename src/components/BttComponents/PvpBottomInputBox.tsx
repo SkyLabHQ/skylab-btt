@@ -65,7 +65,6 @@ const PvpBottomInputBox = ({
     onIuputAmount?: (amount: number) => void;
     showAnimateConfirm?: number;
 }) => {
-    console.log(myIsBid, "myIsBid");
     const [commitButtonText, status] = useMemo(() => {
         if (loading) {
             return ["Committing", 0];

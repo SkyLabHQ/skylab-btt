@@ -208,13 +208,12 @@ const PvpRoom = () => {
                 gameId,
                 amount: bidAmount,
             });
+            setLoading(false);
             if (res.code == 200) {
                 const game = res.data.game;
                 setGameInfo(game);
                 setBidAmount(0);
             }
-
-            setLoading(false);
         } catch (e) {
             console.log(e);
             setLoading(false);

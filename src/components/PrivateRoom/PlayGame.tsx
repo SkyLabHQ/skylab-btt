@@ -56,8 +56,6 @@ const PlayGame = ({
 
     const handleShareTw = () => {};
 
-    console.log(loading, "loadingloadingloadingloadingloadingloadingloading");
-
     return (
         <Box
             style={{
