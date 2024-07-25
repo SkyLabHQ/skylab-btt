@@ -1,5 +1,5 @@
 import { usePvpGameContext } from "@/pages/PvpRoom";
-import { Box, Flex, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { MUserProfilePvp } from "./UserProfile";
 import { MPvpBalance } from "../BttComponents/MBalance";
@@ -25,12 +25,6 @@ const MLayout = ({
 }: any) => {
     const [time, setTime] = useState(0);
     const commitWorkerRef = useRef<Worker>(null);
-
-    const { isOpen: keyBoardIsOpen, onToggle: keyBoardOnToggle } =
-        useDisclosure();
-
-    const [inputMode, setInputMode] = useState<"message" | "keyboard">(null);
-
     const { myGameInfo, opGameInfo, list } = usePvpGameContext();
     const myIsBid = myGameInfo.isBid;
 
@@ -199,16 +193,6 @@ const MLayout = ({
                     loading={loading}
                     onIuputAmount={(amount: number) => {
                         onInputChange(amount);
-                    }}
-                    onInputAmountClick={() => {
-                        if (inputMode === "keyboard") {
-                            keyBoardOnToggle();
-                        } else {
-                            setInputMode("keyboard");
-                            if (!keyBoardIsOpen) {
-                                keyBoardOnToggle();
-                            }
-                        }
                     }}
                     onSubClick={() => {
                         if (Number(bidAmount) - 1 < 0) return;

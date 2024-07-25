@@ -7,18 +7,11 @@ import {
     SliderTrack,
     SliderFilledTrack,
     SliderThumb,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverBody,
-    useDisclosure,
     keyframes,
 } from "@chakra-ui/react";
-import React, { useMemo } from "react";
-import { MESSAGES } from "@/skyConstants/bttGameTypes";
+import { useMemo } from "react";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
 import SubIcon from "@/components/BttComponents/assets/sub.svg";
-import MessageIcon1 from "./assets/message-dot.svg";
 import ConfirmVideo from "@/assets/confirm.wav";
 
 const move = keyframes`
@@ -31,17 +24,6 @@ const move = keyframes`
     }
 `;
 
-const bt = keyframes`
-    0% {
-        color: #FDDC2D;
-    }
-    
-    100% {
-        color: #545454;
-    }
-
-`;
-
 const PvpBottomInputBox = ({
     myBalance,
     bidAmount,
@@ -50,7 +32,6 @@ const PvpBottomInputBox = ({
     onSubClick,
     onAddClick,
     onConfirm,
-    onInputAmountClick,
     onIuputAmount,
     showAnimateConfirm,
 }: {
@@ -61,7 +42,6 @@ const PvpBottomInputBox = ({
     onSubClick: () => void;
     onAddClick: () => void;
     onConfirm: () => void;
-    onInputAmountClick: () => void;
     onIuputAmount?: (amount: number) => void;
     showAnimateConfirm?: number;
 }) => {
@@ -111,9 +91,6 @@ const PvpBottomInputBox = ({
                         }}
                     ></Image>
                     <Box
-                        onClick={(e) => {
-                            onInputAmountClick();
-                        }}
                         sx={{
                             flex: 1,
                             textAlign: "center",

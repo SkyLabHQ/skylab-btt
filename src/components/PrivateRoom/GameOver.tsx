@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import Board from "@/components/BttComponents/Board";
 import { usePvpGameContext } from "@/pages/PvpRoom";
