@@ -2,7 +2,6 @@ import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { shortenAddress } from "@/utils";
 import { BackWithText } from "@/components/Back";
 import Nest from "@/components/Nest";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
@@ -15,7 +14,6 @@ import { getGameInfo, joinGame } from "@/api/pvpGame";
 const Accept = () => {
     const navigate = useNavigate();
     const toast = useSkyToast();
-    const [player1, setPlayer1] = useState<string>("");
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const { search } = useLocation();
@@ -58,8 +56,6 @@ const Accept = () => {
         if (gameInfo.code == 200) {
             setGameInfo(gameInfo.data.game);
         }
-
-        console.log(gameInfo, "gameInfo");
     };
 
     useEffect(() => {

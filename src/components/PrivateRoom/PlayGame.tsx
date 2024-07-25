@@ -7,24 +7,27 @@ import MLayout from "./MLayout";
 import QuitModal from "../BttComponents/QuitModal";
 
 const PlayGame = ({
+    bidAmount,
     currentRound,
     gameTimeout,
     loading,
     onBid,
     showAnimateNumber,
+    onBidAmount,
 }: {
+    bidAmount: number;
     currentRound: number;
     gameTimeout: number;
     loading: boolean;
-    onBid: (amount: number) => void;
+    onBid: () => void;
     showAnimateNumber: number;
+    onBidAmount: (value: number) => void;
 }) => {
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
     const toast = useSkyToast();
     const { myGameInfo } = usePvpGameContext();
-    const [bidAmount, setBidAmount] = useState<number>(0);
 
     const inviteLink = useMemo(() => {
         return "";
@@ -34,15 +37,6 @@ const PlayGame = ({
         setShowAnimateConfirm((number) => {
             return number + 1;
         });
-    };
-
-    const handleBidAmount = (value: number) => {
-        if (loading) return;
-        if (myGameInfo.isBid) return;
-
-        if (value < 0) return;
-        if (value > myGameInfo.balance) return;
-        setBidAmount(value);
     };
 
     const handleQuit = async () => {
@@ -77,10 +71,8 @@ const PlayGame = ({
                 gameTimeout={gameTimeout}
                 showAnimateNumber={showAnimateNumber}
                 bidAmount={bidAmount}
-                onInputChange={handleBidAmount}
-                onConfirm={() => {
-                    onBid(Number(bidAmount));
-                }}
+                onInputChange={onBidAmount}
+                onConfirm={onBid}
                 handleQuitClick={() => {
                     onOpen();
                 }}

@@ -48,26 +48,24 @@ const MatchPage = () => {
     );
 
     const shareUrl = useMemo(() => {
-        const url = `${location.origin}/free/pvp/accept?gameId=${gameId}&outer2=true`;
-        return url;
-        // if (!gameAddress) return "";
-        // try {
-        //     const pvpPasswords =
-        //         JSON.parse(localStorage.getItem("pvpPasswords")) || {};
-        //     const share_url =
-        //         "https://t.me/share/url?url=" +
-        //         encodeURIComponent(
-        //             `${MINI_APP_URL}?startapp=accept-${pvpPasswords[gameAddress]}`,
-        //         ) +
-        //         "&text=" +
-        //         encodeURIComponent(
-        //             "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. I invite you to play with me. Click here to accept my invite!",
-        //         );
-        //     return share_url;
-        // } catch (e) {
-        //     console.log(e);
-        //     return "";
-        // }
+        // const url = `${location.origin}/free/pvp/accept?gameId=${gameId}&outer2=true`;
+        // return url;
+        if (!gameId) return "";
+        try {
+            const share_url =
+                "https://t.me/share/url?url=" +
+                encodeURIComponent(
+                    `${MINI_APP_URL}?startapp=accept-${gameId}`,
+                ) +
+                "&text=" +
+                encodeURIComponent(
+                    "Bid Tac Toe is a super fun variant of the Tic Tac Toe game. I invite you to play with me. Click here to accept my invite!",
+                );
+            return share_url;
+        } catch (e) {
+            console.log(e);
+            return "";
+        }
         return "";
     }, [gameId]);
 
@@ -159,7 +157,7 @@ const MatchPage = () => {
                                 marginTop: isPc ? "74px" : "20px",
                             }}
                         >
-                            <Button onClick={onCopy}>复制链接</Button>
+                            {/* <Button onClick={onCopy}>复制链接</Button> */}
                             <a href={shareUrl} target="_blank">
                                 <Flex
                                     justify={"center"}

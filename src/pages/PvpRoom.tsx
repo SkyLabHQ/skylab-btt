@@ -57,6 +57,7 @@ const PvpRoom = () => {
     const [gameInfo, setGameInfo] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [currentRound, setCurrentRound] = useState<number>(0);
+    const [bidAmount, setBidAmount] = useState<number>(0);
 
     const [gameTimeout, setGameTimeout] = useState<number>(0);
 
@@ -87,6 +88,15 @@ const PvpRoom = () => {
             return;
         }
         setStep(step);
+    };
+
+    const handleBidAmount = (value: number) => {
+        if (loading) return;
+        if (myGameInfo.isBid) return;
+
+        if (value < 0) return;
+        if (value > myGameInfo.balance) return;
+        setBidAmount(value);
     };
 
     const handleChangeList = (list: any) => {
@@ -152,8 +162,6 @@ const PvpRoom = () => {
             _list[i].opMark = opGameInfo.mark;
         }
 
-        console.log(player1GameInfo, "player1GameInfo");
-
         if (PvpGameStatus.InProgress === player1GameInfo.gameState) {
             _list[resCurrentGrid].mark = UserMarkType.Square;
         }
@@ -178,7 +186,7 @@ const PvpRoom = () => {
         setGameInfo(gameInfo);
     };
 
-    const handleBid = async (amount: number) => {
+    const handleBid = async () => {
         try {
             if (currentGrid < 0) {
                 console.log("currentGrid is not valid");
@@ -195,14 +203,15 @@ const PvpRoom = () => {
 
             setLoading(true);
 
-            console.log(`currentGrid: ${currentGrid} bidAmount: ${amount} `);
+            console.log(`currentGrid: ${currentGrid} bidAmount: ${bidAmount} `);
             const res = await bid({
                 gameId,
-                amount,
+                amount: bidAmount,
             });
             if (res.code == 200) {
                 const game = res.data.game;
                 setGameInfo(game);
+                setBidAmount(0);
             }
 
             setLoading(false);
@@ -267,12 +276,14 @@ const PvpRoom = () => {
                 >
                     {step === 0 && (
                         <PlayGame
+                            bidAmount={bidAmount}
+                            onBidAmount={(value) => {
+                                handleBidAmount(value);
+                            }}
                             currentRound={currentRound}
                             gameTimeout={gameTimeout}
                             loading={loading}
-                            onBid={(amount: number) => {
-                                handleBid(amount);
-                            }}
+                            onBid={handleBid}
                             showAnimateNumber={showAnimateNumber}
                         ></PlayGame>
                     )}

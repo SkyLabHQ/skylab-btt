@@ -118,7 +118,7 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
     };
 
     const handleEndStep = () => {
-        setCurrentRound(gameInfo.gridIndex);
+        setCurrentRound(gameInfo.gridIndex + 1);
     };
 
     const handleShare = () => {};

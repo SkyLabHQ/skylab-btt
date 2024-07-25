@@ -6,8 +6,8 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const customRouters = [
     ["pvpHome"],
-    ["accept", "inviteCode", "password"],
-    ["pvpGame", "gameAddress"],
+    ["accept", "gameId"],
+    ["pvpGame", "gameId"],
     ["botHome"],
     ["botGame", "gameAddress"],
 ];
@@ -138,7 +138,7 @@ const PvpContent = () => {
                 const route = customRouters[routeIndex];
 
                 if (route && route.length === params.length) {
-                    let url = `/free/${customUrl[routeIndex]}`;
+                    let url = `/free${customUrl[routeIndex]}`;
                     for (let i = 1; i < params.length; i++) {
                         if (i === 1) {
                             url += "?";
