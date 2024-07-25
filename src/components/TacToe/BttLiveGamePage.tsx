@@ -28,12 +28,12 @@ import {
 import Timer from "../BttComponents/Timer";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
-import { MMessage } from "../PrivateRoom/Message";
 import MBalance from "../BttComponents/MBalance";
 import StartJourney from "../BttComponents/StartJourney";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { motion } from "framer-motion";
 import LoadingPage from "../LoadingPage";
+import { MMessage } from "../BttComponents/Message";
 
 const MBttLiveGame = ({
     autoCommitTimeoutTime,

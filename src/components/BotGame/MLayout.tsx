@@ -3,12 +3,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../BttComponents/Board";
-import { MMessage } from "@/components/PrivateRoom/Message";
 import { MUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
 import StatusProgress from "../BttComponents/StatusProgress";
+import { MMessage } from "../BttComponents/Message";
 
 const MLayout = ({
     myGameInfo,
