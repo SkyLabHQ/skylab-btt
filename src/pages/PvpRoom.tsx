@@ -7,51 +7,80 @@ import BttHelmet from "@/components/Helmet/BttHelmet";
 import PlayGame from "@/components/PrivateRoom/PlayGame";
 import {
     BoardItem,
-    GameInfo,
-    GameState,
     initBoard,
+    PvpGameStatus,
+    UserMarkType,
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
 import Nest from "@/components/Nest";
+import { bid, getGameInfo } from "@/api/pvpGame";
+import { useInitData } from "@tma.js/sdk-react";
+import useSkyToast from "@/hooks/useSkyToast";
+
+export enum PLayerStatus {
+    Player1,
+    Player2,
+}
 
 export interface PvpGameInfo {
+    tgId: number;
+    username: string;
     balance: number;
     isBid: boolean;
     timeout: number;
+    mark: UserMarkType;
+    winMark: UserMarkType;
+    playerStatus: PLayerStatus;
+    gameState: PvpGameStatus;
 }
 const PvpGameContext = createContext<{
     myGameInfo: PvpGameInfo;
     opGameInfo: PvpGameInfo;
     list: BoardItem[];
-    gameId: string;
+    gameId: number;
     step: number;
-    myInfo: any;
-    opInfo: any;
     handleStepChange: (step?: number) => void;
     onList: (list: BoardItem[]) => void;
 }>(null);
 export const usePvpGameContext = () => useContext(PvpGameContext);
 
 const PvpRoom = () => {
+    const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
+    const toast = useSkyToast();
+    const initData = useInitData();
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
     const { search } = useLocation();
     const [step, setStep] = useState<number>(0);
     const params = qs.parse(search) as any;
-    const [gameId] = useState<string>(params.gameId);
+    const [gameId] = useState<number>(params.gameId);
+    const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
+    const [currentGrid, setCurrentGrid] = useState<number>(-1);
+    const [gameInfo, setGameInfo] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [myGameInfo, setMyGameInfo] = useState<PvpGameInfo>({
+        tgId: 0,
+        username: "",
+        mark: UserMarkType.Empty,
+        winMark: UserMarkType.Empty,
         balance: 0,
         isBid: false,
         timeout: 0,
+        playerStatus: null,
+        gameState: PvpGameStatus.InProgress,
     });
     const [opGameInfo, setOpGameInfo] = useState<PvpGameInfo>({
+        tgId: 0,
+        username: "",
+        mark: UserMarkType.Empty,
+        winMark: UserMarkType.Empty,
         balance: 0,
         isBid: false,
         timeout: 0,
+        playerStatus: null,
+        gameState: PvpGameStatus.InProgress,
     });
-    const [myInfo, setMyInfo] = useState<any>({});
-    const [opInfo, setOpInfo] = useState<any>({});
 
     const handleStep = (step?: number) => {
         if (step === undefined) {
@@ -64,6 +93,156 @@ const PvpRoom = () => {
     const handleChangeList = (list: any) => {
         setList(list);
     };
+
+    const handleGameInfo = (gameInfo: any) => {
+        console.log(gameInfo, "gameInfogameInfogameInfo");
+        const gridIndex = gameInfo.gridIndex;
+        const gridOrder = gameInfo.gridOrder;
+        const resCurrentGrid = gridOrder[gridIndex];
+        console.log(resCurrentGrid, "resCurrentGridresCurrentGrid");
+
+        if (showAnimateNumber === -1) {
+            setShowAnimate(resCurrentGrid);
+        } else if (resCurrentGrid !== currentGrid) {
+            setShowAnimate(currentGrid);
+        }
+
+        const _list = JSON.parse(JSON.stringify(list));
+        const boardGrids = gameInfo.boards;
+        const isPlayer1 = initData.user.id == gameInfo.player1;
+
+        const player1GameInfo = {
+            balance: gameInfo.balance1,
+            isBid: boardGrids[resCurrentGrid].isBid1,
+            timeout: boardGrids[resCurrentGrid].timeout,
+            mark: UserMarkType.Circle,
+            winMark: UserMarkType.YellowCircle,
+            tgId: gameInfo.player1,
+            username: gameInfo.username1,
+            playerStatus: PLayerStatus.Player1,
+            gameState: gameInfo.gameStatus1,
+        };
+
+        const player2GameInfo = {
+            balance: gameInfo.balance2,
+            isBid: boardGrids[resCurrentGrid].isBid2,
+            timeout: boardGrids[resCurrentGrid].timeout,
+            mark: UserMarkType.Cross,
+            winMark: UserMarkType.YellowCross,
+            tgId: gameInfo.player2,
+            username: gameInfo.username2,
+            playerStatus: PLayerStatus.Player2,
+            gameState: gameInfo.gameStatus2,
+        };
+
+        const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
+        const opGameInfo = isPlayer1 ? player2GameInfo : player1GameInfo;
+
+        for (let i = 0; i < boardGrids.length; i++) {
+            const winAddress = boardGrids[i].win;
+            if (winAddress == 0) {
+                _list[i].mark = UserMarkType.Empty;
+            } else {
+                _list[i].mark =
+                    winAddress === 1 ? UserMarkType.Circle : UserMarkType.Cross;
+            }
+            _list[i].myValue = isPlayer1
+                ? boardGrids[i].bid1
+                : boardGrids[i].bid2;
+            _list[i].opValue = isPlayer1
+                ? boardGrids[i].bid2
+                : boardGrids[i].bid1;
+            _list[i].myMark = myGameInfo.mark;
+            _list[i].opMark = opGameInfo.mark;
+        }
+
+        console.log(player1GameInfo, "player1GameInfo");
+
+        if (PvpGameStatus.InProgress === player1GameInfo.gameState) {
+            _list[resCurrentGrid].mark = UserMarkType.Square;
+        }
+
+        setCurrentGrid(resCurrentGrid);
+        setMyGameInfo(myGameInfo);
+        setOpGameInfo(opGameInfo);
+        setNextDrawWinner(nextDrawWinner);
+        setList(_list);
+    };
+
+    const handleGetGameInfo = async () => {
+        if (!gameId) return;
+
+        const res = await getGameInfo(Number(gameId));
+
+        if (res.code != 200) {
+            return;
+        }
+
+        const gameInfo = res.data.game;
+        setGameInfo(gameInfo);
+    };
+
+    const handleBid = async (amount: number) => {
+        try {
+            if (currentGrid < 0) {
+                console.log("currentGrid is not valid");
+                return;
+            }
+            if (loading) {
+                console.log("loading");
+                return;
+            }
+            if (myGameInfo.isBid) {
+                console.log("isBid");
+                return;
+            }
+
+            setLoading(true);
+
+            console.log(`currentGrid: ${currentGrid} bidAmount: ${amount} `);
+            const res = await bid({
+                gameId,
+                amount,
+            });
+
+            if (res.code == 200) {
+                const game = res.data.game;
+                setGameInfo(game);
+            }
+
+            setLoading(false);
+        } catch (e) {
+            console.log(e);
+            setLoading(false);
+            toast(e + "");
+        }
+    };
+
+    useEffect(() => {
+        if (!gameId || myGameInfo.gameState !== PvpGameStatus.InProgress)
+            return;
+
+        const timer = setInterval(() => {
+            handleGetGameInfo();
+        }, 3000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [gameId, myGameInfo.gameState]);
+
+    useEffect(() => {
+        if (!gameInfo) {
+            return;
+        }
+        handleGameInfo(gameInfo);
+    }, [gameInfo]);
+
+    useEffect(() => {
+        if (myGameInfo.gameState > PvpGameStatus.InProgress) {
+            setStep(1);
+        }
+    }, [myGameInfo.gameState]);
 
     return (
         <Box
@@ -86,28 +265,28 @@ const PvpRoom = () => {
                         opGameInfo,
                         gameId,
                         step,
-                        myInfo,
-                        opInfo,
+
                         handleStepChange: handleStep,
                         onList: handleChangeList,
                     }}
                 >
                     {step === 0 && (
                         <PlayGame
-                            onChangeGame={(position, info) => {
-                                if (position === "my") {
-                                    setMyGameInfo(info);
-                                    return;
-                                }
-                                if (position === "op") {
-                                    setOpGameInfo(info);
-                                    return;
-                                }
+                            onBid={(amount: number) => {
+                                handleBid(amount);
                             }}
+                            nextDrawWinner={nextDrawWinner}
+                            showAnimateNumber={showAnimateNumber}
+                            gameState={myGameInfo.gameState}
+                            currentGrid={currentGrid}
                         ></PlayGame>
                     )}
-                    {/* {step === 1 && <GameOver></GameOver>} */}
-                    {/* {step === 2 && <ResultPlayBack></ResultPlayBack>} */}
+                    {step === 1 && (
+                        <GameOver gameState={myGameInfo.gameState}></GameOver>
+                    )}
+                    {step === 2 && (
+                        <ResultPlayBack gameInfo={gameInfo}></ResultPlayBack>
+                    )}
                 </PvpGameContext.Provider>
             </Box>
             <Nest />

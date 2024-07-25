@@ -26,6 +26,7 @@ import YellowCross1 from "@/components/TacToe/assets/yellow-x1.png";
 import BlackCircle1 from "@/components/TacToe/assets/black-o1.png";
 import BlackCross1 from "@/components/TacToe/assets/black-x1.png";
 import BlackBotX from "@/components/TacToe/assets/black-bot-x.png";
+import { PLayerStatus } from "@/pages/PvpRoom";
 
 export interface Info {
     burner: string;
@@ -56,12 +57,12 @@ export enum PvpGameStatus {
     WaitingForPlayer2, //等待玩家2
     QuitByPlayer1, //玩家1退出匹配
     InProgress, //进行中
-    Player1WinByConnecting, //玩家1通过连线获胜
-    Player2WinByConnecting, //玩家2通过连线获胜
-    Player1WinBySurrender, //玩家1投降
-    Player2WinBySurrender, //玩家2投降
-    Player1WinByGridCount, //玩家1通过格子数获胜
-    Player2WinByGridCount, //玩家2通过格子数获胜
+    WinByConnecting, //玩家1通过连线获胜
+    LoseByConnecting, //玩家2通过连线获胜
+    WinBySurrender, //玩家1投降
+    LoseBySurrender, //玩家2投降
+    WinByGridCount, //玩家1通过格子数获胜
+    LoseyGridCount, //玩家2通过格子数获胜
 }
 
 export enum MessageStatus {
@@ -76,6 +77,14 @@ export const getWinState = (gameState: GameState) => {
         GameState.WinByGridCount,
         GameState.WinBySurrender,
         GameState.WinByTimeout,
+    ].includes(gameState);
+};
+
+export const getPvpWinState = (gameState: PvpGameStatus) => {
+    return [
+        PvpGameStatus.WinByConnecting,
+        PvpGameStatus.WinBySurrender,
+        PvpGameStatus.WinByGridCount,
     ].includes(gameState);
 };
 

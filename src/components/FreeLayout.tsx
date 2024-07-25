@@ -5,12 +5,21 @@ import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const customRouters = [
-    ["botHome"],
     ["pvpHome"],
     ["accept", "inviteCode", "password"],
     ["pvpGame", "gameAddress"],
+    ["botHome"],
     ["botGame", "gameAddress"],
 ];
+
+const customUrl = [
+    ["/pvp/home"],
+    ["/pvp/accept"],
+    ["/pvp/game"],
+    ["/botHome"],
+    ["/botGame"],
+];
+
 const search = new URLSearchParams(window.location.search);
 
 if (search.get("outer1")) {
@@ -118,11 +127,18 @@ const PvpContent = () => {
             if (initData.startParam) {
                 const params = initData.startParam.split("-");
                 console.log(params, "params");
-                const route = customRouters.find(
+                const routeIndex = customRouters.findIndex(
                     (item) => item[0] === params[0],
                 );
+
+                if (routeIndex === -1) {
+                    return navigate("/free/pvp/home");
+                }
+
+                const route = customRouters[routeIndex];
+
                 if (route && route.length === params.length) {
-                    let url = `/free/${params[0]}`;
+                    let url = `/free/${customUrl[routeIndex]}`;
                     for (let i = 1; i < params.length; i++) {
                         if (i === 1) {
                             url += "?";
@@ -133,11 +149,10 @@ const PvpContent = () => {
                         url += `${route[i]}=${params[i]}`;
                     }
 
-                    console.log(url, "url");
                     navigate(url);
                 }
             } else {
-                navigate("/free/pvpHome");
+                navigate("/free/pvp/home");
             }
         }
     }, [pathname]);

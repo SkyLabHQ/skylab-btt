@@ -21,13 +21,13 @@ import { handleError } from "@/utils/error";
 import ToolBar from "@/components/BttComponents/Toolbar";
 import ArrowIcon from "@/assets/arrow.svg";
 import { getGameInfo, quitMatch } from "@/api/pvpGame";
+import { useInitData } from "@tma.js/sdk-react";
 
 const MatchPage = () => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const [gameId] = useState<string>(params.gameId);
-    const [gameInfo, setGameInfo] = useState<any>();
-
+    const initData = useInitData();
     const toast = useSkyToast();
     const navigate = useNavigate();
     const [isPc] = useMediaQuery("(min-width: 800px)");
@@ -77,13 +77,23 @@ const MatchPage = () => {
         const gameInfo = await getGameInfo(Number(gameId));
 
         if (gameInfo.code == 200) {
-            setGameInfo(gameInfo.data.game);
+            const game = gameInfo.data.game;
+            if (game.player1 != initData.user.id) {
+                navigate("/free/pvp/home");
+                return;
+            }
+
+            if (game.player1 && game.player2) {
+                navigate(`/free/pvp/game?gameId=${gameId}`);
+                return;
+            }
         }
 
         console.log(gameInfo, "gameInfo");
     };
 
     useEffect(() => {
+        if (!gameId || !initData.user.id) return;
         const timer = setInterval(() => {
             handleGetAllPlayerInfo();
         }, 3000);
@@ -91,7 +101,7 @@ const MatchPage = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [gameId]);
+    }, [gameId, initData]);
 
     return (
         <Box

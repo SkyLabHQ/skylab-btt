@@ -1,18 +1,15 @@
 import { usePvpGameContext } from "@/pages/PvpRoom";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import React, { useMemo, useState } from "react";
+import { useState } from "react";
 import { MUserProfilePvp } from "./UserProfile";
-import MBalance, { MPvpBalance } from "../BttComponents/MBalance";
-import { GameState } from "@/skyConstants/bttGameTypes";
+import { MPvpBalance } from "../BttComponents/MBalance";
 import Board from "../BttComponents/Board";
-import { MMessage } from "./Message";
 import Timer from "../BttComponents/Timer";
-import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
-import StatusProgress from "../BttComponents/StatusProgress";
 import PvpBottomInputBox from "../BttComponents/PvpBottomInputBox";
 
 const MLayout = ({
+    gameState,
     inviteLink,
     handleQuitClick,
     handleShareTw,
@@ -30,8 +27,7 @@ const MLayout = ({
 
     const [inputMode, setInputMode] = useState<"message" | "keyboard">(null);
 
-    const { myGameInfo, opGameInfo, myInfo, opInfo, list } =
-        usePvpGameContext();
+    const { myGameInfo, opGameInfo, list } = usePvpGameContext();
     const myIsBid = myGameInfo.isBid;
 
     return (
@@ -62,13 +58,13 @@ const MLayout = ({
                     <MUserProfilePvp
                         address={""}
                         status="op"
-                        mark={opInfo.mark}
+                        mark={opGameInfo.mark}
                     ></MUserProfilePvp>
                 </Flex>
 
                 <MPvpBalance
                     balance={opGameInfo.balance}
-                    mark={opInfo.mark}
+                    mark={opGameInfo.mark}
                 ></MPvpBalance>
             </Flex>
 
@@ -80,10 +76,6 @@ const MLayout = ({
                     marginTop: "36px",
                 }}
             >
-                {/* <StatusProgress
-                    myIsBid={myGameInfo.gameState}
-                    opGameState={opGameInfo.gameState}
-                ></StatusProgress> */}
                 <Box
                     sx={{
                         marginTop: "20px",
@@ -137,7 +129,7 @@ const MLayout = ({
                         <MPvpBalance
                             balance={myGameInfo.balance}
                             status="right"
-                            mark={myInfo.mark}
+                            mark={myGameInfo.mark}
                         ></MPvpBalance>
                     </Flex>
                 </Box>

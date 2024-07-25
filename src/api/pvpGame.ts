@@ -29,6 +29,16 @@ export const joinGame = async (data: { gameId: number }) => {
     return response.data;
 };
 
+export const bid = async (data: { gameId: number; amount: number }) => {
+    const jwtToken = sessionStorage.getItem("jwtToken");
+    const response = await api.post("/bid", data, {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`,
+        },
+    });
+    return response.data;
+};
+
 export const quitMatch = async (data: { gameId: number }) => {
     const jwtToken = sessionStorage.getItem("jwtToken");
     const response = await api.post("/quitMatch", data, {
