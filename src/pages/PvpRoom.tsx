@@ -1,9 +1,8 @@
 import { Box } from "@chakra-ui/react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import qs from "query-string";
 import BttHelmet from "@/components/Helmet/BttHelmet";
-
 import PlayGame from "@/components/PrivateRoom/PlayGame";
 import {
     BoardItem,
@@ -28,7 +27,6 @@ export interface PvpGameInfo {
     username: string;
     balance: number;
     isBid: boolean;
-    timeout: number;
     mark: UserMarkType;
     winMark: UserMarkType;
     playerStatus: PLayerStatus;
@@ -58,6 +56,9 @@ const PvpRoom = () => {
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [gameInfo, setGameInfo] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [currentRound, setCurrentRound] = useState<number>(0);
+
+    const [gameTimeout, setGameTimeout] = useState<number>(0);
 
     const [myGameInfo, setMyGameInfo] = useState<PvpGameInfo>({
         tgId: 0,
@@ -66,7 +67,6 @@ const PvpRoom = () => {
         winMark: UserMarkType.Empty,
         balance: 0,
         isBid: false,
-        timeout: 0,
         playerStatus: null,
         gameState: PvpGameStatus.InProgress,
     });
@@ -77,7 +77,6 @@ const PvpRoom = () => {
         winMark: UserMarkType.Empty,
         balance: 0,
         isBid: false,
-        timeout: 0,
         playerStatus: null,
         gameState: PvpGameStatus.InProgress,
     });
@@ -95,11 +94,9 @@ const PvpRoom = () => {
     };
 
     const handleGameInfo = (gameInfo: any) => {
-        console.log(gameInfo, "gameInfogameInfogameInfo");
         const gridIndex = gameInfo.gridIndex;
         const gridOrder = gameInfo.gridOrder;
         const resCurrentGrid = gridOrder[gridIndex];
-        console.log(resCurrentGrid, "resCurrentGridresCurrentGrid");
 
         if (showAnimateNumber === -1) {
             setShowAnimate(resCurrentGrid);
@@ -107,6 +104,7 @@ const PvpRoom = () => {
             setShowAnimate(currentGrid);
         }
 
+        setCurrentRound(gridIndex);
         const _list = JSON.parse(JSON.stringify(list));
         const boardGrids = gameInfo.boards;
         const isPlayer1 = initData.user.id == gameInfo.player1;
@@ -114,7 +112,6 @@ const PvpRoom = () => {
         const player1GameInfo = {
             balance: gameInfo.balance1,
             isBid: boardGrids[resCurrentGrid].isBid1,
-            timeout: boardGrids[resCurrentGrid].timeout,
             mark: UserMarkType.Circle,
             winMark: UserMarkType.YellowCircle,
             tgId: gameInfo.player1,
@@ -126,7 +123,6 @@ const PvpRoom = () => {
         const player2GameInfo = {
             balance: gameInfo.balance2,
             isBid: boardGrids[resCurrentGrid].isBid2,
-            timeout: boardGrids[resCurrentGrid].timeout,
             mark: UserMarkType.Cross,
             winMark: UserMarkType.YellowCross,
             tgId: gameInfo.player2,
@@ -134,7 +130,7 @@ const PvpRoom = () => {
             playerStatus: PLayerStatus.Player2,
             gameState: gameInfo.gameStatus2,
         };
-
+        setGameTimeout(boardGrids[resCurrentGrid].timeout);
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
         const opGameInfo = isPlayer1 ? player2GameInfo : player1GameInfo;
 
@@ -204,7 +200,6 @@ const PvpRoom = () => {
                 gameId,
                 amount,
             });
-
             if (res.code == 200) {
                 const game = res.data.game;
                 setGameInfo(game);
@@ -272,13 +267,13 @@ const PvpRoom = () => {
                 >
                     {step === 0 && (
                         <PlayGame
+                            currentRound={currentRound}
+                            gameTimeout={gameTimeout}
+                            loading={loading}
                             onBid={(amount: number) => {
                                 handleBid(amount);
                             }}
-                            nextDrawWinner={nextDrawWinner}
                             showAnimateNumber={showAnimateNumber}
-                            gameState={myGameInfo.gameState}
-                            currentGrid={currentGrid}
                         ></PlayGame>
                     )}
                     {step === 1 && (

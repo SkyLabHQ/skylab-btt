@@ -311,16 +311,11 @@ export const MUserProfileResult = ({
     level,
     address,
     img,
-    showUserIcon = true,
-    showAdvantageTip,
     position,
 }: {
     level?: number;
-    showUserIcon?: boolean;
     address?: string;
     img?: string;
-    showAdvantageTip?: boolean;
-    mark?: number;
     position?: "left" | "right";
 }) => {
     return (

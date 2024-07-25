@@ -1,19 +1,20 @@
 import { usePvpGameContext } from "@/pages/PvpRoom";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MUserProfilePvp } from "./UserProfile";
 import { MPvpBalance } from "../BttComponents/MBalance";
 import Board from "../BttComponents/Board";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import PvpBottomInputBox from "../BttComponents/PvpBottomInputBox";
+import getNowSecondsTimestamp from "@/utils/nowTime";
 
 const MLayout = ({
-    gameState,
+    currentRound,
+    gameTimeout,
     inviteLink,
     handleQuitClick,
     handleShareTw,
-    autoCommitTimeoutTime,
     bidAmount,
     showAnimateNumber,
     onInputChange,
@@ -22,6 +23,9 @@ const MLayout = ({
     handleBoardClick,
     showAnimateConfirm,
 }: any) => {
+    const [time, setTime] = useState(0);
+    const commitWorkerRef = useRef<Worker>(null);
+
     const { isOpen: keyBoardIsOpen, onToggle: keyBoardOnToggle } =
         useDisclosure();
 
@@ -29,6 +33,61 @@ const MLayout = ({
 
     const { myGameInfo, opGameInfo, list } = usePvpGameContext();
     const myIsBid = myGameInfo.isBid;
+
+    console.log(gameTimeout, "gameTimeout");
+
+    const handleCommitWorker = () => {
+        if (commitWorkerRef.current) {
+            commitWorkerRef.current.terminate();
+        }
+        if (!gameTimeout) {
+            return;
+        }
+        commitWorkerRef.current = new Worker(
+            new URL("../../utils/timerWorker.ts", import.meta.url),
+        );
+        commitWorkerRef.current.onmessage = async (event) => {
+            const timeLeft = event.data;
+            setTime(timeLeft);
+        };
+        const time = gameTimeout * 1000;
+        const now = getNowSecondsTimestamp();
+        const remainTime = time - now;
+        if (remainTime > 0) {
+            commitWorkerRef.current.postMessage({
+                action: "start",
+                timeToCount: remainTime,
+            });
+        } else {
+            commitWorkerRef.current.postMessage({
+                action: "stop",
+            });
+        }
+    };
+
+    useEffect(() => {
+        handleCommitWorker();
+    }, [gameTimeout]);
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (commitWorkerRef.current) {
+                    commitWorkerRef.current.terminate();
+                }
+            } else {
+                handleCommitWorker();
+            }
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange,
+            );
+        };
+    }, []);
 
     return (
         <Box
@@ -112,7 +171,8 @@ const MLayout = ({
                             }}
                         >
                             <Timer
-                                time1={autoCommitTimeoutTime}
+                                time1={time}
+                                allTime={currentRound === 0 ? 3 * 60 : 60}
                                 time1Gray={loading || myGameInfo.isBid}
                             ></Timer>
                         </Box>

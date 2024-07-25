@@ -1,13 +1,9 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
-    BoardItem,
-    GameState,
     PvpGameStatus,
     UserMarkType,
     getPvpWinState,
-    getShareEmoji,
-    getWinState,
     initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
@@ -22,120 +18,86 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
     const navigate = useNavigate();
     const UserMarkIcon = useBidIcon();
     const { myGameInfo, opGameInfo } = usePvpGameContext();
-    const [init, setInit] = useState(false);
-    const [allSelectedGrids, setAllSelectedGrids] = useState<any[]>([]);
+
     const [currentRound, setCurrentRound] = useState(0);
 
-    const [resultList, setResultList] = useState<BoardItem[]>(initBoard()); // init board
-
     const gameOver = useMemo(() => {
-        return currentRound === allSelectedGrids.length && init;
-    }, [currentRound, allSelectedGrids, init]);
+        return currentRound === gameInfo.gridIndex;
+    }, [currentRound, gameInfo]);
 
-    const [showList, myBalance, opBalance, myBid, opBid, myIsNextDrawWinner] =
-        useMemo(() => {
-            let myBalance = 100,
-                opBalance = 100;
-            const _list = initBoard();
-            const gridOrder = gameInfo.gridOrder;
-            const currentGrid = gridOrder[currentRound];
-            const boards = gameInfo.boards;
-            if (allSelectedGrids[currentRound] !== undefined) {
+    const [showList, myBalance, opBalance] = useMemo(() => {
+        let myBalance = 100,
+            opBalance = 100;
+        const _list = initBoard();
+        const gridOrder = gameInfo.gridOrder;
+        const currentGrid = gridOrder[currentRound];
+        const boards = gameInfo.boards;
+
+        for (let i = 0; i < currentRound; i++) {
+            const grid = gridOrder[i];
+            const winAddress = boards[grid].win;
+            _list[grid].mark =
+                winAddress === 1 ? UserMarkType.Circle : UserMarkType.Cross;
+            _list[grid].myMark = myGameInfo.mark;
+            _list[grid].opMark = opGameInfo.mark;
+            _list[grid].myValue =
+                myGameInfo.playerStatus === PLayerStatus.Player1
+                    ? boards[grid].bid1
+                    : boards[grid].bid2;
+            _list[grid].opValue =
+                opGameInfo.playerStatus === PLayerStatus.Player1
+                    ? boards[grid].bid1
+                    : boards[grid].bid2;
+            myBalance -= _list[grid].myValue;
+            opBalance -= _list[grid].opValue;
+
+            if (currentRound <= gameInfo.gridIndex) {
                 _list[currentGrid].mark = UserMarkType.Square;
             }
+        }
 
-            for (let i = 0; i < currentRound; i++) {
-                const winAddress = boards[i].win;
+        console.log(myBalance, opBalance, currentRound, "_list");
 
-                const grid = gridOrder[currentRound];
-                _list[grid].mark =
-                    winAddress === 1 ? UserMarkType.Circle : UserMarkType.Cross;
-                _list[grid].myMark = myGameInfo.mark;
-                _list[grid].opMark = opGameInfo.mark;
-                _list[grid].myValue =
-                    myGameInfo.playerStatus === PLayerStatus.Player1
-                        ? boards[grid].bid1
-                        : boards[grid].bid2;
-                _list[grid].opValue =
-                    opGameInfo.playerStatus === PLayerStatus.Player1
-                        ? boards[grid].bid1
-                        : boards[grid].bid2;
-                myBalance -= boards[grid].myValue;
-                opBalance -= boards[grid].opValue;
-            }
-            if (currentRound == 0) {
-                return [
-                    _list,
-                    myBalance,
-                    opBalance,
-                    undefined,
-                    undefined,
-                    true,
-                ];
-            }
+        if (currentRound == 0) {
+            return [_list, myBalance, opBalance, true];
+        }
 
-            if (currentRound === allSelectedGrids.length) {
-                const myGameState = myGameInfo.gameState;
-                const isMyWin = getPvpWinState(myGameState);
-                let beforeMark = isMyWin ? myGameInfo.mark : opGameInfo.mark;
-                let mark = isMyWin ? myGameInfo.winMark : opGameInfo.winMark;
+        if (currentRound - 1 === gameInfo.gridIndex) {
+            const myGameState = myGameInfo.gameState;
+            const isMyWin = getPvpWinState(myGameState);
+            let beforeMark = isMyWin ? myGameInfo.mark : opGameInfo.mark;
+            let mark = isMyWin ? myGameInfo.winMark : opGameInfo.winMark;
 
-                if (
-                    myGameState === PvpGameStatus.WinByConnecting ||
-                    myGameState === PvpGameStatus.LoseByConnecting
-                ) {
-                    for (let i = 0; i < winPatterns.length; i++) {
-                        const index0 = winPatterns[i][0];
-                        const index1 = winPatterns[i][1];
-                        const index2 = winPatterns[i][2];
-                        if (
-                            _list[index0].mark === beforeMark &&
-                            _list[index0].mark === _list[index1].mark &&
-                            _list[index0].mark === _list[index2].mark
-                        ) {
-                            _list[index0].mark = mark;
-                            _list[index1].mark = mark;
-                            _list[index2].mark = mark;
-                            break;
-                        }
+            if (
+                myGameState === PvpGameStatus.WinByConnecting ||
+                myGameState === PvpGameStatus.LoseByConnecting
+            ) {
+                for (let i = 0; i < winPatterns.length; i++) {
+                    const index0 = winPatterns[i][0];
+                    const index1 = winPatterns[i][1];
+                    const index2 = winPatterns[i][2];
+                    if (
+                        _list[index0].mark === beforeMark &&
+                        _list[index0].mark === _list[index1].mark &&
+                        _list[index0].mark === _list[index2].mark
+                    ) {
+                        _list[index0].mark = mark;
+                        _list[index1].mark = mark;
+                        _list[index2].mark = mark;
+                        break;
                     }
-                } else {
-                    for (let i = 0; i < _list.length; i++) {
-                        if (_list[i].mark === beforeMark) {
-                            _list[i].mark = mark;
-                        }
+                }
+            } else {
+                for (let i = 0; i < _list.length; i++) {
+                    if (_list[i].mark === beforeMark) {
+                        _list[i].mark = mark;
                     }
                 }
             }
+        }
 
-            const myBid =
-                currentRound === 0
-                    ? 0
-                    : _list[gridOrder[currentRound - 1]].myValue;
-            const opBid =
-                currentRound === 0
-                    ? 0
-                    : _list[gridOrder[currentRound - 1]].opValue;
-
-            let myIsNextDrawWinner = false;
-            myIsNextDrawWinner = boards[gridOrder[currentRound]].advantage;
-
-            return [
-                _list,
-                myBalance,
-                opBalance,
-                myBid,
-                opBid,
-                myIsNextDrawWinner,
-                gameInfo,
-            ];
-        }, [
-            allSelectedGrids,
-            currentRound,
-            resultList,
-            myGameInfo,
-            opGameInfo,
-        ]);
+        return [_list, myBalance, opBalance];
+    }, [currentRound, gameInfo, myGameInfo, opGameInfo]);
 
     const handlePreStep = () => {
         if (currentRound === 0) return;
@@ -144,7 +106,7 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
 
     const handleNextStep = () => {
         setCurrentRound((currentRound) => {
-            if (currentRound >= allSelectedGrids.length) {
+            if (currentRound >= gameInfo.gridIndex + 1) {
                 return currentRound;
             }
             return currentRound + 1;
@@ -156,7 +118,7 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
     };
 
     const handleEndStep = () => {
-        setCurrentRound(allSelectedGrids.length);
+        setCurrentRound(gameInfo.gridIndex);
     };
 
     const handleShare = () => {};
@@ -166,6 +128,8 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
             replace: true,
         });
     };
+
+    console.log(myBalance, opBalance, currentRound);
 
     return (
         <Box
@@ -181,11 +145,8 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
             <PrivateLobbyPlayBack
                 myBalance={myBalance}
                 opBalance={opBalance}
-                // myBid={myBid}
-                // opBid={opBid}
-                myIsNextDrawWinner={myIsNextDrawWinner}
                 currentRound={currentRound}
-                allSelectedGrids={allSelectedGrids}
+                allRound={gameInfo.gridIndex + 1}
                 myGameInfo={myGameInfo}
                 opGameInfo={opGameInfo}
                 showList={showList}
@@ -200,7 +161,7 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
             >
                 <PlayBackButton
                     showPre={currentRound > 0}
-                    showNext={currentRound < allSelectedGrids.length}
+                    showNext={currentRound < gameInfo.gridIndex + 1}
                     handleEndStep={handleEndStep}
                     handleNextStep={handleNextStep}
                     handlePreStep={handlePreStep}

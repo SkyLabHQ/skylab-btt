@@ -130,11 +130,8 @@ const MBttLiveGame = ({
                 >
                     <Flex>
                         <MUserProfileResult
-                            showUserIcon={false}
                             position="left"
                             img={opInfo.img}
-                            mark={opInfo.mark}
-                            showAdvantageTip={opInfo.burner === nextDrawWinner}
                             level={opInfo.level}
                         ></MUserProfileResult>
                         <MMessage
@@ -191,12 +188,7 @@ const MBttLiveGame = ({
                             <MUserProfileResult
                                 level={myInfo.level}
                                 position="right"
-                                showUserIcon={false}
-                                mark={myInfo.mark}
                                 img={myInfo.img}
-                                showAdvantageTip={
-                                    myInfo.address === nextDrawWinner
-                                }
                             ></MUserProfileResult>
                         </Flex>
                         <MBalance

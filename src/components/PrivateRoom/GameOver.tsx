@@ -1,11 +1,10 @@
 import React, { useMemo } from "react";
-import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import Board from "@/components/BttComponents/Board";
-import { PLayerStatus, usePvpGameContext } from "@/pages/PvpRoom";
+import { usePvpGameContext } from "@/pages/PvpRoom";
 import {
     getPvpWinState,
     PvpGameStatus,
-    UserMarkType,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import { MUserProfileResult } from "./UserProfile";
@@ -15,18 +14,13 @@ const GameOver = ({ gameState }: { gameState: PvpGameStatus }) => {
     const { myGameInfo, opGameInfo, list, handleStepChange } =
         usePvpGameContext();
 
-    const player1IsWin = getPvpWinState(gameState);
-
     const resultList = useMemo(() => {
         const _list = [...list];
 
-        let beforeMark = player1IsWin
-            ? UserMarkType.Circle
-            : UserMarkType.Cross;
-        let mark = player1IsWin
-            ? UserMarkType.YellowCircle
-            : UserMarkType.YellowCross;
-
+        const myGameState = myGameInfo.gameState;
+        const isMyWin = getPvpWinState(myGameState);
+        let beforeMark = isMyWin ? myGameInfo.mark : opGameInfo.mark;
+        let mark = isMyWin ? myGameInfo.winMark : opGameInfo.winMark;
         if (
             gameState === PvpGameStatus.WinByConnecting ||
             gameState === PvpGameStatus.LoseByConnecting
@@ -78,15 +72,13 @@ const GameOver = ({ gameState }: { gameState: PvpGameStatus }) => {
                 }}
                 flexDir={"column"}
             >
-                <MUserProfileResult
-                    position="left"
-                    mark={opGameInfo.mark}
-                ></MUserProfileResult>
+                <MUserProfileResult position="left"></MUserProfileResult>
                 <MBalance
                     balance={opGameInfo.balance}
                     mark={opGameInfo.mark}
                     showResult={true}
                     status="left"
+                    win={getPvpWinState(opGameInfo.gameState)}
                 ></MBalance>
             </Flex>
             <Flex
@@ -98,15 +90,13 @@ const GameOver = ({ gameState }: { gameState: PvpGameStatus }) => {
                 flexDir={"column"}
                 align={"flex-end"}
             >
-                <MUserProfileResult
-                    position="right"
-                    mark={myGameInfo.mark}
-                ></MUserProfileResult>
+                <MUserProfileResult position="right"></MUserProfileResult>
                 <MBalance
                     balance={myGameInfo.balance}
                     status="right"
                     mark={myGameInfo.mark}
                     showResult={true}
+                    win={getPvpWinState(myGameInfo.gameState)}
                 ></MBalance>
             </Flex>
 

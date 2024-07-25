@@ -244,7 +244,6 @@ const BttPlayBackContent = ({
                             position="left"
                             address={myInfo.address}
                             img={myInfo.img}
-                            mark={myInfo.mark}
                             level={myInfo.level}
                         ></MUserProfileResult>
                         <MBalance
@@ -258,7 +257,6 @@ const BttPlayBackContent = ({
                             position="right"
                             address={opInfo.address}
                             img={opInfo.img}
-                            mark={opInfo.mark}
                             level={opInfo.level}
                         ></MUserProfileResult>
 

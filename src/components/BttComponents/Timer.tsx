@@ -52,7 +52,16 @@ const BttTimer = ({
     );
 };
 
-const Timer = ({ time1, time1Gray }: { time1: number; time1Gray: boolean }) => {
+const Timer = ({
+    time1,
+    time1Gray,
+    allTime,
+}: {
+    time1: number;
+    time1Gray: boolean;
+    allTime?: number;
+}) => {
+    console.log(time1, "time1");
     const { hours, minutes, seconds } = useMemo(() => {
         let hours: string | number = Math.floor(time1 / 3600000);
         if (hours < 10) {
@@ -81,7 +90,10 @@ const Timer = ({ time1, time1Gray }: { time1: number; time1Gray: boolean }) => {
             }}
         >
             <BttTimer
-                width={(time1 / 1000 / TwelveHours) * 100 + "%"}
+                width={
+                    (time1 / 1000 / (allTime ? allTime : TwelveHours)) * 100 +
+                    "%"
+                }
                 time={`${hours}:${minutes}:${seconds}`}
                 gray={time1Gray}
             ></BttTimer>

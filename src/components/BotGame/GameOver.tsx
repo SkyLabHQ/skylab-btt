@@ -100,9 +100,7 @@ const GameOver = ({
                     address={""}
                     position="left"
                     img={opInfo.img}
-                    mark={opInfo.mark}
                     level={opInfo.level}
-                    showUserIcon={false}
                 ></MUserProfileResult>
                 <MBalance
                     balance={opGameInfo.balance}
@@ -126,9 +124,7 @@ const GameOver = ({
                     position="right"
                     address={""}
                     img={myInfo.img}
-                    mark={myInfo.mark}
                     level={myInfo.level}
-                    showUserIcon={false}
                 ></MUserProfileResult>
                 <MBalance
                     balance={myGameInfo.balance}

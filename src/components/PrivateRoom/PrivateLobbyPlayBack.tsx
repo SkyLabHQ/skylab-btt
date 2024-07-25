@@ -1,12 +1,7 @@
-import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
-import Logo from "@/assets/logo.svg";
-import BttIcon from "@/assets/btt-icon.png";
-import XIcon from "@/components/TacToe/assets/x.svg";
+import { Box, Flex } from "@chakra-ui/react";
 import Board from "../BttComponents/Board";
-import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
-import EarthIcon from "@/components/TacToe/assets/earth.svg";
-import UserProfile, { MUserProfileResult } from "./UserProfile";
-import { BoardItem, GameInfo } from "@/skyConstants/bttGameTypes";
+import { MUserProfileResult } from "./UserProfile";
+import { BoardItem } from "@/skyConstants/bttGameTypes";
 import RoundInfo from "../BttComponents/RoundInfo";
 import MBalance from "../BttComponents/MBalance";
 import { PvpGameInfo } from "@/pages/PvpRoom";
@@ -14,18 +9,16 @@ import { PvpGameInfo } from "@/pages/PvpRoom";
 const PrivateLobbyPlayBack = ({
     myBalance,
     opBalance,
-    myIsNextDrawWinner,
     currentRound,
-    allSelectedGrids,
+    allRound,
     showList,
     myGameInfo,
     opGameInfo,
 }: {
     myBalance: number;
     opBalance: number;
-    myIsNextDrawWinner: boolean;
     currentRound: number;
-    allSelectedGrids: BoardItem[];
+    allRound: number;
     myGameInfo: PvpGameInfo;
     opGameInfo: PvpGameInfo;
     showList: BoardItem[];
@@ -59,7 +52,6 @@ const PrivateLobbyPlayBack = ({
                             <MUserProfileResult
                                 address={""}
                                 position="left"
-                                mark={myGameInfo.mark}
                             ></MUserProfileResult>
                         </Box>
 
@@ -82,8 +74,6 @@ const PrivateLobbyPlayBack = ({
                             <MUserProfileResult
                                 address={""}
                                 position="right"
-                                mark={opGameInfo.mark}
-                                showAdvantageTip={!myIsNextDrawWinner}
                             ></MUserProfileResult>
                         </Box>
 
@@ -104,7 +94,7 @@ const PrivateLobbyPlayBack = ({
                     <Board list={showList}></Board>
                     <RoundInfo
                         currentRound={currentRound}
-                        allRound={allSelectedGrids.length}
+                        allRound={allRound}
                     ></RoundInfo>
                 </Flex>
             </Box>
