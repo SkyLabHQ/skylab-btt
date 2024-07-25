@@ -89,6 +89,7 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
 
 const ConnectWalletBt = () => {
     const { handleLogin } = useUserInfo();
+    const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <Flex
             sx={{
@@ -103,13 +104,14 @@ const ConnectWalletBt = () => {
                 <Image
                     src={TipIcon}
                     sx={{
+                        width: isPc ? "18px" : "10px",
                         marginRight: "4px",
                     }}
                 ></Image>
                 <Text
                     sx={{
                         color: "#F2D861",
-                        fontSize: "20px",
+                        fontSize: isPc ? "20px" : "14px",
                         fontFamily: "Quantico",
                     }}
                 >
@@ -119,13 +121,13 @@ const ConnectWalletBt = () => {
             <Flex
                 onClick={handleLogin}
                 sx={{
-                    width: "288px",
-                    height: "62px",
+                    width: isPc ? "288px" : "200px",
+                    height: isPc ? "62px" : "40px",
                     background: "#f2d861",
                     borderRadius: "20px",
                     color: "#1B1B1B",
                     fontFamily: "Orbitron",
-                    fontSize: "28px",
+                    fontSize: isPc ? "28px" : "14px",
                     fontWeight: "bold",
                     marginTop: "16px",
                     cursor: "pointer",

@@ -50,9 +50,13 @@ const Market = () => {
             p.push(multiMarketPlaceContract.getHighestBid(i));
         }
         const list = await multiProvider.all(p);
+        console.log(list, "list");
         sethighList(
             list.map((item) => {
-                return item.toString();
+                return {
+                    bidder: item[0],
+                    price: item[1].toString(),
+                };
             }),
         );
     };
@@ -209,65 +213,63 @@ const Market = () => {
                     position: "relative",
                 }}
             >
-                {
-                    <Box
+                <Box
+                    sx={{
+                        width: "100%",
+                        height: "0",
+                        paddingBottom: large680
+                            ? "calc(100% + 103px)"
+                            : "calc(100% + 43px)",
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        background: "rgba(4, 4, 4, 0.80)",
+                        position: "relative",
+                    }}
+                >
+                    <Flex
+                        flexDir={"column"}
+                        align={"center"}
                         sx={{
                             width: "100%",
-                            height: "0",
-                            paddingBottom: large680
-                                ? "calc(100% + 103px)"
-                                : "calc(100% + 43px)",
-                            backgroundSize: "contain",
-                            backgroundPosition: "center",
-                            background: "rgba(4, 4, 4, 0.80)",
-                            position: "relative",
+                            position: "absolute",
+                            top: "30%",
+                            left: "0",
+                            fontFamily: "Orbitron",
                         }}
                     >
-                        <Flex
-                            flexDir={"column"}
-                            align={"center"}
+                        <Box
                             sx={{
-                                width: "100%",
-                                position: "absolute",
-                                top: "30%",
-                                left: "0",
-                                fontFamily: "Orbitron",
+                                textAlign: "center",
+                                fontSize: large680 ? "24px" : "14px",
+                                fontWeight: 700,
                             }}
                         >
-                            <Box
-                                sx={{
-                                    textAlign: "center",
-                                    fontSize: large680 ? "24px" : "14px",
-                                    fontWeight: 700,
+                            Buy Plane
+                        </Box>
+                        <Image
+                            src={A1Icon}
+                            sx={{
+                                width: "80%",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                fontSize: "16px",
+                                fontWeight: "bold",
+                                marginTop: "-10px",
+                            }}
+                        >
+                            Lvl.{" "}
+                            <span
+                                style={{
+                                    fontSize: "24px",
                                 }}
                             >
-                                Buy Plane
-                            </Box>
-                            <Image
-                                src={A1Icon}
-                                sx={{
-                                    width: "80%",
-                                }}
-                            ></Image>
-                            <Text
-                                sx={{
-                                    fontSize: "16px",
-                                    fontWeight: "bold",
-                                    marginTop: "-10px",
-                                }}
-                            >
-                                Lvl.{" "}
-                                <span
-                                    style={{
-                                        fontSize: "24px",
-                                    }}
-                                >
-                                    1
-                                </span>{" "}
-                            </Text>
-                        </Flex>
-                    </Box>
-                }
+                                1
+                            </span>{" "}
+                        </Text>
+                    </Flex>
+                </Box>
 
                 <Flex
                     align={"center"}
@@ -407,9 +409,11 @@ const Market = () => {
                                         fontSize: large680 ? "30px" : "18px",
                                     }}
                                 >
-                                    {highList[index] === "0"
+                                    {highList[index].price === "0"
                                         ? "--"
-                                        : formatAmount(highList[index])}{" "}
+                                        : formatAmount(
+                                              highList[index].price,
+                                          )}{" "}
                                     ETH
                                 </Text>
                                 <Flex>
@@ -539,11 +543,23 @@ const Market = () => {
                                             value={inputAmount[index]}
                                             sx={{}}
                                             onChange={(e) => {
+                                                let value = e.target.value;
+                                                const regex = /^\d*\.?\d+$/;
+                                                const isValid =
+                                                    regex.test(value);
+                                                if (!isValid) {
+                                                    const formattedInput =
+                                                        value.replace(
+                                                            /[^0-9.]/g,
+                                                            "",
+                                                        );
+                                                    value = formattedInput;
+                                                }
+
                                                 const _inputAmount = [
                                                     ...inputAmount,
                                                 ];
-                                                _inputAmount[index] =
-                                                    e.target.value;
+                                                _inputAmount[index] = value;
                                                 setInputAmount(_inputAmount);
                                             }}
                                         ></Input>

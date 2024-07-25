@@ -17,6 +17,7 @@ import { formatAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { useUserInfo } from "@/contexts/UserInfo";
+import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 
 const My = () => {
     const [isApproved, setIsApproved] = useState(false);
@@ -36,7 +37,12 @@ const My = () => {
 
     const { planeList, handleGetUserPlane } = useUserInfo();
 
-    const [highList, sethighList] = useState(new Array(16).fill("0"));
+    const [highList, sethighList] = useState(
+        new Array(16).fill({
+            bidder: "",
+            price: "0",
+        }),
+    );
 
     const myPlaneList = useMemo(() => {
         return planeList.sort((item1, item2) => {
@@ -45,10 +51,12 @@ const My = () => {
             } else if (item1.state === true && item2.state === false) {
                 return 1; // item2排在前
             } else {
-                return item2.point - item1.point; // 如果state相同，则根据point进行排序
+                return item2.points - item1.points; // 如果state相同，则根据point进行排序
             }
         });
     }, [planeList]);
+
+    console.log(myPlaneList, "myPlaneList");
 
     const getHighPrice = async () => {
         const p = [];
@@ -56,10 +64,12 @@ const My = () => {
             p.push(multiMarketPlaceContract.getHighestBid(i));
         }
         const list = await multiProvider.all(p);
-        console.log(list, "list");
         sethighList(
             list.map((item) => {
-                return item.toString();
+                return {
+                    bidder: item[0],
+                    price: item[1].toString(),
+                };
             }),
         );
     };
@@ -102,14 +112,17 @@ const My = () => {
             }
 
             await marketPlaceContract.simulate.sell(
-                [mercuryJarTournamentAddress[chainId], tokenId],
+                [
+                    mercuryJarTournamentAddress[DEAFAULT_CHAINID] as string,
+                    tokenId,
+                ],
                 {
                     account: address,
                 },
             );
 
             const hash = await marketPlaceContract.write.sell([
-                mercuryJarTournamentAddress[chainId],
+                mercuryJarTournamentAddress[DEAFAULT_CHAINID],
                 tokenId,
             ]);
 
@@ -155,8 +168,16 @@ const My = () => {
             }}
         >
             {myPlaneList.map((item, index) => {
-                const price = highList[item.level - 1];
-                const havePrice = price !== "0" && !item.state;
+                const bidder =
+                    highList[item.level - 1].bidder.toLocaleLowerCase();
+                const price = highList[item.level - 1].price;
+                const havePrice = price !== "0";
+
+                const showMyBid =
+                    bidder === address.toLocaleLowerCase() && price !== "0";
+
+                const canSell = item.state === false && havePrice && !showMyBid;
+
                 return (
                     <Box
                         key={index}
@@ -319,12 +340,34 @@ const My = () => {
                             }}
                         >
                             <Flex
-                                justify={"space-between"}
                                 sx={{
                                     fontSize: large680 ? "14px" : "12px",
                                 }}
+                                align={"center"}
                             >
-                                <Text>Highest Bid Price</Text>
+                                <Text
+                                    sx={{
+                                        marginRight: "6px",
+                                    }}
+                                >
+                                    Highest Bid Price
+                                </Text>
+                                {showMyBid && (
+                                    <Text
+                                        sx={{
+                                            color: "#7CFD2D",
+                                            textAlign: "center",
+                                            fontFamily: "Quantico",
+                                            fontSize: large680
+                                                ? "12px"
+                                                : "10px",
+                                            fontStyle: "normal",
+                                            fontWeight: 700,
+                                        }}
+                                    >
+                                        My Bid
+                                    </Text>
+                                )}
                             </Flex>
                             <Flex
                                 justify={"space-between"}
@@ -349,24 +392,24 @@ const My = () => {
 
                         <Flex
                             onClick={() => {
-                                if (!havePrice) return;
+                                if (!canSell) return;
                                 handleSell(item.tokenId);
                             }}
                             align={"center"}
                             justify={"center"}
                             sx={{
                                 height: large680 ? "50px" : "28px",
-                                background: havePrice ? "#F2D861" : "#1e1e1e",
+                                background: canSell ? "#F2D861" : "#1e1e1e",
                                 fontSize: large680 ? "18px" : "14px",
-                                color: havePrice ? "#1b1b1b" : "#7a7a7a",
+                                color: canSell ? "#1b1b1b" : "#7a7a7a",
                                 fontFamily: "Orbitron",
                                 fontWeight: "bold",
-                                border: havePrice
+                                border: canSell
                                     ? "1px solid #F2D861"
                                     : "1px solid #1e1e1e",
                                 borderRadius: "0 0 14px 14px",
                                 position: "relative",
-                                cursor: havePrice ? "pointer" : "not-allowed",
+                                cursor: canSell ? "pointer" : "not-allowed",
                             }}
                         >
                             Sell

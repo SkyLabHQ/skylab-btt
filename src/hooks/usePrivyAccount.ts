@@ -4,22 +4,18 @@ import { baseSepolia } from "viem/chains";
 import { createWalletClient, custom } from "viem";
 
 const usePrivyAccounts = () => {
-    const { wallets } = useWallets();
-    const { user, ready } = usePrivy();
+    const { ready, wallets } = useWallets();
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
 
     useEffect(() => {
         const handleGetSigner = async () => {
-            const userAddress = user.wallet.address;
-            const wallet = wallets.find(
-                (wallet) => wallet.address === userAddress,
-            );
-            if (!wallet) {
+            if (wallets.length === 0) {
                 setAddress("");
                 setSigner(null);
                 return;
             }
+            const wallet = wallets[0];
             setAddress(wallet.address);
             const provider = await wallet.getEthereumProvider();
             const walletClient = createWalletClient({
@@ -31,13 +27,13 @@ const usePrivyAccounts = () => {
             setSigner(walletClient);
         };
 
-        if (wallets.length === 0 || !user || !ready) {
+        if (wallets.length === 0 || !ready) {
             setAddress("");
             setSigner(null);
             return;
         }
         handleGetSigner();
-    }, [wallets, user, ready]);
+    }, [wallets, ready]);
 
     return {
         signer,
