@@ -8,9 +8,11 @@ import {
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { login } from "@/api";
+import useSkyToast from "@/hooks/useSkyToast";
 
 const PvpLayout = () => {
     const launchParams = useLaunchParams();
+    const toast = useSkyToast();
 
     const handleLogin = async () => {
         const { initDataRaw } = launchParams;
@@ -18,6 +20,8 @@ const PvpLayout = () => {
         if (res.code === 200) {
             const jwtToken = res.data.jwtToken;
             sessionStorage.setItem("jwtToken", jwtToken);
+        } else {
+            toast(res.message);
         }
     };
 

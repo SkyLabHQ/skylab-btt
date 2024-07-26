@@ -122,9 +122,7 @@ const PvpHomePage = () => {
         try {
             openLoading();
             const res = await startGame();
-            if (res.code === 200) {
-                navigate(`/free/pvp/match?gameId=${res.data.gameId}`);
-            }
+            navigate(`/free/pvp/match?gameId=${res.data.gameId}`);
             closeLoading();
         } catch (e) {
             toast(handleError(e));
