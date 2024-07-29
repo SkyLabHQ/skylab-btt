@@ -21,8 +21,8 @@ if (search.get("outer1")) {
             "user",
             JSON.stringify({
                 id: 888888888,
-                first_name: "88888",
-                last_name: "88888",
+                first_name: "1test1",
+                last_name: "1test1",
                 username: "888888",
                 language_code: "en",
                 is_premium: true,
@@ -68,8 +68,8 @@ if (search.get("outer2")) {
             "user",
             JSON.stringify({
                 id: 77777777,
-                first_name: "77777",
-                last_name: "7777",
+                first_name: "2test2",
+                last_name: "2test2",
                 username: "77777",
                 language_code: "en",
                 is_premium: true,
