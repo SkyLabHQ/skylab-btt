@@ -64,8 +64,8 @@ const Accept = ({
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    fontSize: "20px",
-                    width: "168px",
+                    fontSize: "14px",
+                    width: "180px",
                     height: "40px",
                     borderRadius: "12px",
                     border: "2px solid #fff",
@@ -81,13 +81,13 @@ const Accept = ({
                 justify={"center"}
                 align={"center"}
                 sx={{
-                    fontSize: "20px",
-                    width: "168px",
+                    width: "180px",
                     height: "40px",
                     borderRadius: "12px",
-                    border: "2px solid #fff",
-                    marginTop: "20px",
+                    border: "2px solid #FFF",
                     background: "#303030",
+                    fontSize: "14px",
+                    marginTop: "20px",
                     cursor: "pointer",
                 }}
             >
