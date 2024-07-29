@@ -13,7 +13,7 @@ import {
 import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
 import Nest from "@/components/Nest";
-import { bid, getGameInfo, joinGame } from "@/api/pvpGame";
+import { bid, getGameInfo, joinGame, surrender } from "@/api/pvpGame";
 import { useInitData } from "@tma.js/sdk-react";
 import useSkyToast from "@/hooks/useSkyToast";
 import PvpMatch from "@/components/PrivateRoom/PvpMatch";
@@ -249,6 +249,21 @@ const PvpRoom = () => {
         }
     };
 
+    const handleQuit = async () => {
+        try {
+            const res = await surrender({
+                gameId: Number(gameId),
+            });
+
+            if (res.code === 200) {
+                setGameInfo(res.data.game);
+            }
+        } catch (e) {
+            console.log(e);
+            toast(e + "");
+        }
+    };
+
     useEffect(() => {
         if (
             !gameId ||
@@ -276,12 +291,7 @@ const PvpRoom = () => {
     }, [gameInfo]);
 
     useEffect(() => {
-        console.log(
-            gameInfo.player1,
-            gameInfo.player2,
-            initData.user.id,
-            "gameInfo",
-        );
+        console.log("gameInfo", gameInfo);
 
         if (!gameInfo.player1 || !initData.user.id) return;
         if (!gameInfo.player2) {
@@ -355,6 +365,7 @@ const PvpRoom = () => {
                                 loading={loading}
                                 onBid={handleBid}
                                 showAnimateNumber={showAnimateNumber}
+                                handleQuit={handleQuit}
                             ></PlayGame>
                         )}
                         {step === 3 && (

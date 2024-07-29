@@ -1,8 +1,5 @@
 import { Box, useDisclosure } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
-import useSkyToast from "@/hooks/useSkyToast";
-import { handleError } from "@/utils/error";
-import { usePvpGameContext } from "@/pages/PvpRoom";
 import MLayout from "./MLayout";
 import QuitModal from "../BttComponents/QuitModal";
 
@@ -14,6 +11,7 @@ const PlayGame = ({
     onBid,
     showAnimateNumber,
     onBidAmount,
+    handleQuit,
 }: {
     bidAmount: number;
     currentRound: number;
@@ -22,11 +20,10 @@ const PlayGame = ({
     onBid: () => void;
     showAnimateNumber: number;
     onBidAmount: (value: number) => void;
+    handleQuit: () => void;
 }) => {
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
-    const toast = useSkyToast();
 
     const inviteLink = useMemo(() => {
         return "";
@@ -36,21 +33,6 @@ const PlayGame = ({
         setShowAnimateConfirm((number) => {
             return number + 1;
         });
-    };
-
-    const handleQuit = async () => {
-        if (surrenderLoading) {
-            return;
-        }
-        try {
-            setSurrenderLoading(true);
-            // await  surrender()
-            setSurrenderLoading(false);
-        } catch (e) {
-            setSurrenderLoading(false);
-            console.log(e);
-            toast(handleError(e, true));
-        }
     };
 
     const handleShareTw = () => {};
