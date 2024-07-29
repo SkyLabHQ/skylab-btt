@@ -59,6 +59,16 @@ export const surrender = async (data: { gameId: number }) => {
     return response.data;
 };
 
+export const getPoint = async () => {
+    const jwtToken = sessionStorage.getItem("jwtToken");
+    const response = await api.get(`/point`, {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`,
+        },
+    });
+    return response.data;
+};
+
 export const getGameInfo = async (gameId: number) => {
     const jwtToken = sessionStorage.getItem("jwtToken");
     const response = await api.get(`/gameInfo?gameId=${gameId}`, {
