@@ -275,8 +275,6 @@ const PvpRoom = () => {
         handleGameInfo(gameInfo);
     }, [gameInfo]);
 
-    console.log(gameInfo, "gameInfo");
-
     useEffect(() => {
         console.log(
             gameInfo.player1,

@@ -127,7 +127,7 @@ const MLayout = ({
                 <Timer
                     time1={time}
                     allTime={currentRound === 0 ? 3 * 60 : 60}
-                    time1Gray={loading || myGameInfo.isBid}
+                    time1Gray={myGameInfo.isBid}
                 ></Timer>
             </Box>
             <Flex
