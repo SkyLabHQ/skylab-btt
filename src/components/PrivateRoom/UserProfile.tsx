@@ -232,11 +232,11 @@ export const MUserProfileResult = ({
 };
 
 export const MUserProfilePvp = ({
-    address,
+    nickname,
     status,
     mark,
 }: {
-    address?: string;
+    nickname?: string;
     mark?: number;
     status?: "my" | "op";
 }) => {
@@ -246,15 +246,15 @@ export const MUserProfilePvp = ({
                 margin: status === "my" ? "0 0 0 10px" : "0 10px 0 0",
 
                 "&>img": {
-                    width: "12px",
-                    height: "12px",
+                    width: "10px",
+                    height: "10px",
                     margin: "4px",
                 },
             }}
             align={"center"}
             justify={"center"}
         >
-            {address && status !== "my" && (
+            {nickname && status !== "my" && (
                 <Text
                     sx={{
                         fontSize: "12px",
@@ -262,7 +262,7 @@ export const MUserProfilePvp = ({
                         color: "#fff",
                     }}
                 >
-                    {shortenAddress(address, 4, 4)}
+                    {nickname}
                 </Text>
             )}
             {mark === UserMarkType.Circle && (
@@ -274,7 +274,7 @@ export const MUserProfilePvp = ({
             {mark === UserMarkType.BotX && (
                 <Image src={UserMarkIcon.BotX}></Image>
             )}
-            {address && status === "my" && (
+            {nickname && status === "my" && (
                 <Text
                     sx={{
                         fontSize: "12px",
@@ -282,7 +282,7 @@ export const MUserProfilePvp = ({
                         color: "#fff",
                     }}
                 >
-                    {shortenAddress(address, 4, 4)}
+                    {nickname}
                 </Text>
             )}
         </Flex>

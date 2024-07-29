@@ -13,9 +13,12 @@ import {
 import GameOver from "@/components/PrivateRoom/GameOver";
 import ResultPlayBack from "@/components/PrivateRoom/ResultPlayBack";
 import Nest from "@/components/Nest";
-import { bid, getGameInfo } from "@/api/pvpGame";
+import { bid, getGameInfo, joinGame } from "@/api/pvpGame";
 import { useInitData } from "@tma.js/sdk-react";
 import useSkyToast from "@/hooks/useSkyToast";
+import PvpMatch from "@/components/PrivateRoom/PvpMatch";
+import Accept from "@/components/PrivateRoom/Accept";
+import LoadingPage from "@/components/LoadingPage";
 
 export enum PLayerStatus {
     Player1,
@@ -24,7 +27,7 @@ export enum PLayerStatus {
 
 export interface PvpGameInfo {
     tgId: number;
-    username: string;
+    nickname: string;
     balance: number;
     isBid: boolean;
     mark: UserMarkType;
@@ -47,6 +50,7 @@ const PvpRoom = () => {
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
     const toast = useSkyToast();
     const initData = useInitData();
+    const [init, setInit] = useState<boolean>(false);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
     const { search } = useLocation();
     const [step, setStep] = useState<number>(0);
@@ -54,7 +58,17 @@ const PvpRoom = () => {
     const [gameId] = useState<number>(params.gameId);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
-    const [gameInfo, setGameInfo] = useState<any>(null);
+    const [gameInfo, setGameInfo] = useState<any>({
+        player1: 0,
+        player2: 0,
+        balance1: 0,
+        balance2: 0,
+        gameStatus1: PvpGameStatus.InProgress,
+        gameStatus2: PvpGameStatus.InProgress,
+        boards: [],
+        nickname1: "",
+        nickname2: "",
+    });
     const [loading, setLoading] = useState<boolean>(false);
     const [currentRound, setCurrentRound] = useState<number>(0);
     const [bidAmount, setBidAmount] = useState<number>(0);
@@ -63,7 +77,7 @@ const PvpRoom = () => {
 
     const [myGameInfo, setMyGameInfo] = useState<PvpGameInfo>({
         tgId: 0,
-        username: "",
+        nickname: "",
         mark: UserMarkType.Empty,
         winMark: UserMarkType.Empty,
         balance: 0,
@@ -73,7 +87,7 @@ const PvpRoom = () => {
     });
     const [opGameInfo, setOpGameInfo] = useState<PvpGameInfo>({
         tgId: 0,
-        username: "",
+        nickname: "",
         mark: UserMarkType.Empty,
         winMark: UserMarkType.Empty,
         balance: 0,
@@ -97,6 +111,17 @@ const PvpRoom = () => {
         if (value < 0) return;
         if (value > myGameInfo.balance) return;
         setBidAmount(value);
+    };
+
+    const handleJoinGame = async () => {
+        try {
+            const res = await joinGame({ gameId: Number(gameId) });
+            if (res.code === 200) {
+                setGameInfo(res.data.game);
+            }
+        } catch (e) {
+            toast(e + "");
+        }
     };
 
     const handleChangeList = (list: any) => {
@@ -125,7 +150,7 @@ const PvpRoom = () => {
             mark: UserMarkType.Circle,
             winMark: UserMarkType.YellowCircle,
             tgId: gameInfo.player1,
-            username: gameInfo.username1,
+            nickname: gameInfo.nickname1,
             playerStatus: PLayerStatus.Player1,
             gameState: gameInfo.gameStatus1,
         };
@@ -136,7 +161,7 @@ const PvpRoom = () => {
             mark: UserMarkType.Cross,
             winMark: UserMarkType.YellowCross,
             tgId: gameInfo.player2,
-            username: gameInfo.username2,
+            nickname: gameInfo.nickname2,
             playerStatus: PLayerStatus.Player2,
             gameState: gameInfo.gameStatus2,
         };
@@ -184,6 +209,9 @@ const PvpRoom = () => {
 
         const gameInfo = res.data.game;
         setGameInfo(gameInfo);
+        if (!init) {
+            setInit(true);
+        }
     };
 
     const handleBid = async () => {
@@ -222,8 +250,14 @@ const PvpRoom = () => {
     };
 
     useEffect(() => {
-        if (!gameId || myGameInfo.gameState !== PvpGameStatus.InProgress)
+        if (
+            !gameId ||
+            myGameInfo.gameState !== PvpGameStatus.InProgress ||
+            !initData.user.id
+        )
             return;
+
+        handleGetGameInfo();
 
         const timer = setInterval(() => {
             handleGetGameInfo();
@@ -232,20 +266,52 @@ const PvpRoom = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [gameId, myGameInfo.gameState]);
+    }, [gameId, myGameInfo.gameState, initData.user.id]);
 
     useEffect(() => {
-        if (!gameInfo) {
+        if (!gameInfo.player1 || !gameInfo.player2) {
             return;
         }
         handleGameInfo(gameInfo);
     }, [gameInfo]);
 
+    console.log(gameInfo, "gameInfo");
+
     useEffect(() => {
-        if (myGameInfo.gameState > PvpGameStatus.InProgress) {
-            setStep(1);
+        console.log(
+            gameInfo.player1,
+            gameInfo.player2,
+            initData.user.id,
+            "gameInfo",
+        );
+
+        if (!gameInfo.player1 || !initData.user.id) return;
+        if (!gameInfo.player2) {
+            if (gameInfo.player1 == initData.user.id) {
+                // match with myself
+                setStep(0);
+            } else {
+                // join to match
+                setStep(1);
+            }
+            return;
         }
-    }, [myGameInfo.gameState]);
+
+        if (gameInfo.gameStatus1 === PvpGameStatus.InProgress) {
+            setStep(2);
+            return;
+        }
+
+        if (gameInfo.gameStatus1 > PvpGameStatus.InProgress) {
+            setStep(3);
+            return;
+        }
+    }, [
+        gameInfo.gameStatus1,
+        gameInfo.player1,
+        gameInfo.player2,
+        initData.user.id,
+    ]);
 
     return (
         <Box
@@ -254,46 +320,61 @@ const PvpRoom = () => {
             }}
         >
             <BttHelmet></BttHelmet>
-            <Box
-                sx={{
-                    height: "100%",
-                    fontFamily: "Quantico",
-                    width: "100%",
-                }}
-            >
-                <PvpGameContext.Provider
-                    value={{
-                        list,
-                        myGameInfo,
-                        opGameInfo,
-                        gameId,
-                        step,
-
-                        handleStepChange: handleStep,
-                        onList: handleChangeList,
+            {init ? (
+                <Box
+                    sx={{
+                        height: "100%",
+                        fontFamily: "Quantico",
+                        width: "100%",
                     }}
                 >
-                    {step === 0 && (
-                        <PlayGame
-                            bidAmount={bidAmount}
-                            onBidAmount={(value) => {
-                                handleBidAmount(value);
-                            }}
-                            currentRound={currentRound}
-                            gameTimeout={gameTimeout}
-                            loading={loading}
-                            onBid={handleBid}
-                            showAnimateNumber={showAnimateNumber}
-                        ></PlayGame>
-                    )}
-                    {step === 1 && (
-                        <GameOver gameState={myGameInfo.gameState}></GameOver>
-                    )}
-                    {step === 2 && (
-                        <ResultPlayBack gameInfo={gameInfo}></ResultPlayBack>
-                    )}
-                </PvpGameContext.Provider>
-            </Box>
+                    <PvpGameContext.Provider
+                        value={{
+                            list,
+                            myGameInfo,
+                            opGameInfo,
+                            gameId,
+                            step,
+                            handleStepChange: handleStep,
+                            onList: handleChangeList,
+                        }}
+                    >
+                        {step === 0 && <PvpMatch></PvpMatch>}
+                        {step === 1 && (
+                            <Accept
+                                gameInfo={gameInfo}
+                                handleJoinGame={handleJoinGame}
+                            ></Accept>
+                        )}
+                        {step === 2 && (
+                            <PlayGame
+                                bidAmount={bidAmount}
+                                onBidAmount={(value) => {
+                                    handleBidAmount(value);
+                                }}
+                                currentRound={currentRound}
+                                gameTimeout={gameTimeout}
+                                loading={loading}
+                                onBid={handleBid}
+                                showAnimateNumber={showAnimateNumber}
+                            ></PlayGame>
+                        )}
+                        {step === 3 && (
+                            <GameOver
+                                gameState={myGameInfo.gameState}
+                            ></GameOver>
+                        )}
+                        {step === 4 && (
+                            <ResultPlayBack
+                                gameInfo={gameInfo}
+                            ></ResultPlayBack>
+                        )}
+                    </PvpGameContext.Provider>
+                </Box>
+            ) : (
+                <LoadingPage></LoadingPage>
+            )}
+
             <Nest />
         </Box>
     );

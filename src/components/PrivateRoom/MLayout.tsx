@@ -107,7 +107,7 @@ const MLayout = ({
             >
                 <Flex align={"flex-end"}>
                     <MUserProfilePvp
-                        address={""}
+                        nickname={opGameInfo.nickname}
                         status="op"
                         mark={opGameInfo.mark}
                     ></MUserProfilePvp>
@@ -118,7 +118,18 @@ const MLayout = ({
                     mark={opGameInfo.mark}
                 ></MPvpBalance>
             </Flex>
-
+            <Box
+                sx={{
+                    width: "270px",
+                    margin: "0 auto",
+                }}
+            >
+                <Timer
+                    time1={time}
+                    allTime={currentRound === 0 ? 3 * 60 : 60}
+                    time1Gray={loading || myGameInfo.isBid}
+                ></Timer>
+            </Box>
             <Flex
                 align={"center"}
                 justify={"center"}
@@ -153,22 +164,6 @@ const MLayout = ({
                         position: "relative",
                     }}
                 >
-                    <Flex justify={"space-between"} align={"flex-end"}>
-                        <Box
-                            sx={{
-                                width: "84px",
-                                position: "absolute",
-                                left: "12px",
-                                bottom: "20px",
-                            }}
-                        >
-                            <Timer
-                                time1={time}
-                                allTime={currentRound === 0 ? 3 * 60 : 60}
-                                time1Gray={loading || myGameInfo.isBid}
-                            ></Timer>
-                        </Box>
-                    </Flex>
                     <Flex
                         sx={{
                             position: "absolute",
@@ -178,6 +173,11 @@ const MLayout = ({
                         flexDir={"column"}
                         align={"flex-end"}
                     >
+                        <MUserProfilePvp
+                            nickname={myGameInfo.nickname}
+                            status="my"
+                            mark={myGameInfo.mark}
+                        ></MUserProfilePvp>
                         <MPvpBalance
                             balance={myGameInfo.balance}
                             status="right"

@@ -50,6 +50,11 @@ export const quitMatch = async (data: { gameId: number }) => {
 };
 
 export const getGameInfo = async (gameId: number) => {
-    const response = await api.get(`/gameInfo?gameId=${gameId}`);
+    const jwtToken = sessionStorage.getItem("jwtToken");
+    const response = await api.get(`/gameInfo?gameId=${gameId}`, {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`,
+        },
+    });
     return response.data;
 };

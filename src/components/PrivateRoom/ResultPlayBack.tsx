@@ -11,19 +11,15 @@ import { PLayerStatus, usePvpGameContext } from "@/pages/PvpRoom";
 import PrivateLobbyPlayBack from "./PrivateLobbyPlayBack";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "./ShareButton";
-import useBidIcon from "@/hooks/useBidIcon";
 import { useNavigate } from "react-router-dom";
 
 const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
     const navigate = useNavigate();
-    const UserMarkIcon = useBidIcon();
     const { myGameInfo, opGameInfo } = usePvpGameContext();
 
-    const [currentRound, setCurrentRound] = useState(0);
-
-    const gameOver = useMemo(() => {
-        return currentRound === gameInfo.gridIndex;
-    }, [currentRound, gameInfo]);
+    const [currentRound, setCurrentRound] = useState<number>(
+        gameInfo.gridIndex + 1,
+    );
 
     const [showList, myBalance, opBalance] = useMemo(() => {
         let myBalance = 100,

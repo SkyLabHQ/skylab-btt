@@ -66,6 +66,11 @@ const PvpBottomInputBox = ({
         >
             <Box
                 sx={{
+                    flex: 1,
+                }}
+            ></Box>
+            <Box
+                sx={{
                     width: "160px",
                 }}
             >

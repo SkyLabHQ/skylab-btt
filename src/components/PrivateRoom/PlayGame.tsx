@@ -27,7 +27,6 @@ const PlayGame = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
     const toast = useSkyToast();
-    const { myGameInfo } = usePvpGameContext();
 
     const inviteLink = useMemo(() => {
         return "";

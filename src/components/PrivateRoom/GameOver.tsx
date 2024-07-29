@@ -60,7 +60,7 @@ const GameOver = ({ gameState }: { gameState: PvpGameStatus }) => {
                 height: "100%",
             }}
             onClick={() => {
-                handleStepChange(2);
+                handleStepChange(4);
             }}
         >
             <Flex

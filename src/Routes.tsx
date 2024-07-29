@@ -8,10 +8,8 @@ import BttPlayBack from "./pages/BttPlayBack";
 import BttLiveGame from "./pages/BttLiveGame";
 import PvpRoom from "./pages/PvpRoom";
 import Match from "./pages/Match";
-import Accept from "./pages/Accept";
 import PvpHome from "./pages/PvpHome";
 import FreeLayout from "./components/FreeLayout";
-import PvpMatch from "./pages/PvpMatch";
 import StartBot from "./pages/StartBot";
 import BotGame from "./pages/BotGame";
 import PlaneMarketLayout from "./components/Plane/Layout";
@@ -27,7 +25,6 @@ const AppRoutes = (): ReactElement => {
                 <Route index path="/" element={<TacToeMode />}></Route>
                 <Route path="/point" element={<Point />}></Route>
                 <Route path="/btt/match" element={<Match />}></Route>
-                <Route path="/btt/accept" element={<Accept />}></Route>
                 <Route path="/btt/game" element={<TacToe />}></Route>
                 <Route path="/btt/history" element={<BttHistory />}></Route>
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>
@@ -35,12 +32,7 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/free" element={<FreeLayout />}>
                     <Route path="/free/pvp" element={<PvpLayout />}>
                         <Route path="/free/pvp/home" element={<PvpHome />} />
-                        <Route path="/free/pvp/match" element={<PvpMatch />} />
                         <Route path="/free/pvp/game" element={<PvpRoom />} />
-                        <Route
-                            path="/free/pvp/accept"
-                            element={<Accept />}
-                        ></Route>
                     </Route>
 
                     <Route path="/free/botHome" element={<StartBot />} />
