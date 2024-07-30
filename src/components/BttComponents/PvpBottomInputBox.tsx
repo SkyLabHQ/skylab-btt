@@ -62,29 +62,24 @@ const PvpBottomInputBox = ({
                 position: "relative",
             }}
             justify={"space-between"}
-            align={"center"}
+            // align={"center"}
         >
             <Box
                 sx={{
                     flex: 1,
                 }}
-            ></Box>
-            <Box
-                sx={{
-                    width: "160px",
-                }}
             >
                 <Flex
                     sx={{
-                        height: "24px",
+                        height: "30px",
                         width: "184px",
                         position: "absolute",
-                        top: "-15px",
-                        left: "50%",
+                        top: "-30px",
+                        left: "0%",
                         background: "#787878",
-                        borderRadius: "16px 16px 0 0",
+                        borderRadius: "24px 24px 0 0",
                         padding: "0px 12px",
-                        transform: "translateX(-50%)",
+                        // transform: "translateX(-50%)",
                     }}
                     justify={"space-between"}
                 >
@@ -170,6 +165,7 @@ const PvpBottomInputBox = ({
             <Flex
                 sx={{
                     flex: 1,
+                    paddingTop: "16px",
                 }}
                 justify={"flex-end"}
             >
