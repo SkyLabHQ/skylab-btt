@@ -13,7 +13,7 @@ import { useChainId } from "wagmi";
 import { getContract } from "@/utils/contractHelpers";
 import usePrivyAccounts from "./usePrivyAccount";
 
-type ChainIdToAddressMap = { [chainId in ChainId]?: string };
+type ChainIdToAddressMap = { [chainId: number]: string };
 
 export const skylabTestFlightAddress: ChainIdToAddressMap = {
     [ChainId.BASE]: "0x93d9a16e4D67D9471C65c3c8B8B40621d380f24f",

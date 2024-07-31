@@ -49,7 +49,7 @@ export const BURNER_RPC_URLS = {
         "https://base-mainnet.g.alchemy.com/v2/eeIqX9BroszId4tnmaeDlBAIH0KAvCgz",
     ],
     [ChainId.SEPOLIA]: [
-        "https://base-sepolia.g.alchemy.com/v2/Po63cIaqf7U_j1Q7Z0mUB3lOwaF8Sn3D",
+        "https://base-sepolia.g.alchemy.com/v2/Q6YWEpiws-mRhOWWoWNJ1w_fItDjhmqe",
     ],
 };
 

@@ -8,6 +8,7 @@ import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.jso
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
 import MARKETPLACE_ABI from "@/skyConstants/abis/MarketPlace.json";
+import LOYALTY_ABI from "@/skyConstants/abis/LoyaltyPoints.json";
 
 import qs from "query-string";
 import { ChainId, TESTFLIGHT_CHAINID, randomRpc } from "@/utils/web3Utils";
@@ -128,6 +129,11 @@ export const useMultiMercuryJarTournamentContract = () => {
 export const useMultiMarketPlaceContract = () => {
     const chainId = useChainId();
     return useContract(marketPlaceAddress[chainId], MARKETPLACE_ABI);
+};
+
+export const useMultiPointContract = () => {
+    const chainId = useChainId();
+    return useContract(marketPlaceAddress[chainId], LOYALTY_ABI);
 };
 
 export const useMultiProvider = (chainId: number) => {

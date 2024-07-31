@@ -48,14 +48,14 @@
         "name": "lastPlayTime",
         "inputs": [
             {
-                "name": "player",
+                "name": "",
                 "type": "address",
                 "internalType": "address"
             }
         ],
         "outputs": [
             {
-                "name": "lastPlayTime",
+                "name": "",
                 "type": "uint256",
                 "internalType": "uint256"
             }
@@ -67,14 +67,14 @@
         "name": "loyaltyPoints",
         "inputs": [
             {
-                "name": "player",
+                "name": "",
                 "type": "address",
                 "internalType": "address"
             }
         ],
         "outputs": [
             {
-                "name": "point",
+                "name": "",
                 "type": "uint256",
                 "internalType": "uint256"
             }
@@ -86,14 +86,14 @@
         "name": "onlineStreak",
         "inputs": [
             {
-                "name": "player",
+                "name": "",
                 "type": "address",
                 "internalType": "address"
             }
         ],
         "outputs": [
             {
-                "name": "onlineStreak",
+                "name": "",
                 "type": "uint256",
                 "internalType": "uint256"
             }
@@ -120,6 +120,24 @@
     },
     {
         "type": "function",
+        "name": "pointList",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address[]",
+                "internalType": "address[]"
+            },
+            {
+                "name": "",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "transferAdmin",
         "inputs": [
             {
@@ -130,5 +148,43 @@
         ],
         "outputs": [],
         "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "userExists",
+        "inputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "userList",
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
     }
 ]
