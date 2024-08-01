@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import PlayGame from "@/components/PrivateRoom/PlayGame";
@@ -48,6 +48,7 @@ const PvpGameContext = createContext<{
 export const usePvpGameContext = () => useContext(PvpGameContext);
 
 const PvpRoom = () => {
+    const navigate = useNavigate();
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
     const toast = useSkyToast();
     const initData = useInitData();
@@ -297,6 +298,11 @@ const PvpRoom = () => {
         console.log("gameInfo", gameInfo);
 
         if (!gameInfo.player1 || !initData.user.id) return;
+        if (gameInfo.gameStatus1 === PvpGameStatus.QuitByPlayer1) {
+            navigate("/free/pvp/home");
+            return;
+        }
+
         if (!gameInfo.player2) {
             if (gameInfo.player1 == initData.user.id) {
                 // match with myself
@@ -324,7 +330,7 @@ const PvpRoom = () => {
         initData.user.id,
     ]);
 
-    console.log(myGameInfo, "数据-----");
+    console.log(gameInfo.gameStatus1, "数据-----");
 
     return (
         <Box
