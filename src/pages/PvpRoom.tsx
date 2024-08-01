@@ -59,7 +59,6 @@ const PvpRoom = () => {
     const params = qs.parse(search) as any;
     const [gameId] = useState<number>(params.gameId);
     const [invited] = useState<string>(params.invited);
-    console.log(invited, "invited");
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [gameInfo, setGameInfo] = useState<any>({

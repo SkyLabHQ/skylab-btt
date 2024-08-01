@@ -130,7 +130,7 @@ const PvpContent = () => {
 
                 const route = customRouters[routeIndex];
 
-                if (route && route.length === params.length) {
+                if (route) {
                     let url = `/free${customUrl[routeIndex]}`;
                     for (let i = 1; i < params.length; i++) {
                         if (i === 1) {
