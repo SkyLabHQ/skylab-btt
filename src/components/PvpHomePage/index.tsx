@@ -105,6 +105,7 @@ const PlayButtonGroup = ({
 };
 
 const PvpHomePage = () => {
+    const [show, setShow] = useState(false);
     const toast = useSkyToast();
     const navigate = useNavigate();
     const { openLoading, closeLoading } = useSubmitRequest();
@@ -169,6 +170,9 @@ const PvpHomePage = () => {
                     fontFamily: "Quantico",
                     fontSize: "16px",
                 }}
+                onClick={() => {
+                    setShow(!show);
+                }}
                 align={"center"}
                 justify={"center"}
             >
@@ -204,6 +208,8 @@ const PvpHomePage = () => {
                     color: "#1E1E1E",
                     fontFamily: "Quantico",
                     fontSize: "12px",
+                    opacity: show ? 1 : 0,
+                    transition: "opacity 0.3s",
                 }}
             >
                 <Text>Invite new friend to play: +100</Text>

@@ -6,75 +6,36 @@ export const login = async (initData: any) => {
 };
 
 export const startGame = async () => {
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const response = await api.post(
-        "/startGame",
-        {},
-        {
-            headers: {
-                Authorization: `Bearer ${jwtToken}`,
-            },
-        },
-    );
+    const response = await api.post("/startGame", {});
     return response.data;
 };
 
 export const joinGame = async (data: { gameId: number }) => {
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const response = await api.post("/joinGame", data, {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`,
-        },
-    });
+    const response = await api.post("/joinGame", data);
     return response.data;
 };
 
 export const bid = async (data: { gameId: number; amount: number }) => {
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const response = await api.post("/bid", data, {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`,
-        },
-    });
+    const response = await api.post("/bid", data);
     return response.data;
 };
 
 export const quitMatch = async (data: { gameId: number }) => {
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const response = await api.post("/quitMatch", data, {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`,
-        },
-    });
+    const response = await api.post("/quitMatch", data);
     return response.data;
 };
 
 export const surrender = async (data: { gameId: number }) => {
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const response = await api.post("/surrender", data, {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`,
-        },
-    });
+    const response = await api.post("/surrender", data);
     return response.data;
 };
 
 export const getPoint = async () => {
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const response = await api.get(`/point`, {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`,
-        },
-    });
+    const response = await api.get(`/point`);
     return response.data;
 };
 
 export const getGameInfo = async (gameId: number) => {
-    const jwtToken = sessionStorage.getItem("jwtToken");
-    const response = await api.get(`/gameInfo?gameId=${gameId}`, {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`,
-        },
-    });
+    const response = await api.get(`/gameInfo?gameId=${gameId}`);
     return response.data;
 };

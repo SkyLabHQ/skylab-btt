@@ -20,9 +20,9 @@ if (search.get("outer1")) {
         [
             "user",
             JSON.stringify({
-                id: 888888888,
-                first_name: "1test1",
-                last_name: "1test1",
+                id: 111111,
+                first_name: "dqdq",
+                last_name: "1tedqdqst1",
                 username: "888888",
                 language_code: "en",
                 is_premium: true,
