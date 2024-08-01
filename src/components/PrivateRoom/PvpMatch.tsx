@@ -22,6 +22,7 @@ const MatchPage = () => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const [gameId] = useState<string>(params.gameId);
+
     const toast = useSkyToast();
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure();

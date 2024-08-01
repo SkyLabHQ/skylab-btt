@@ -6,12 +6,12 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const customRouters = [
     ["pvpHome"],
-    ["pvpGame", "gameId"],
+    ["pvpGame", "gameId", "invited"],
     ["botHome"],
     ["botGame", "gameAddress"],
 ];
 
-const customUrl = [["/pvp/home"], ["/pvp/game"], ["/botHome"], ["/botGame"]];
+const customUrl = ["/pvp/home", "/pvp/game", "/botHome", "/botGame"];
 
 const search = new URLSearchParams(window.location.search);
 

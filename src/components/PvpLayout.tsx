@@ -32,7 +32,6 @@ const LoadingPage = () => {
                 fontSize: "24px",
                 fontStyle: "normal",
                 fontWeight: 700,
-                // paddingTop: "50%",
             }}
         >
             <Text

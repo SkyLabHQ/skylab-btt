@@ -19,6 +19,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import PvpMatch from "@/components/PrivateRoom/PvpMatch";
 import Accept from "@/components/PrivateRoom/Accept";
 import LoadingPage from "@/components/LoadingPage";
+import Invited from "@/components/PrivateRoom/Invited";
 
 export enum PLayerStatus {
     Player1,
@@ -56,6 +57,8 @@ const PvpRoom = () => {
     const [step, setStep] = useState<number>(0);
     const params = qs.parse(search) as any;
     const [gameId] = useState<number>(params.gameId);
+    const [invited] = useState<string>(params.invited);
+    console.log(invited, "invited");
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [gameInfo, setGameInfo] = useState<any>({
@@ -321,6 +324,8 @@ const PvpRoom = () => {
         initData.user.id,
     ]);
 
+    console.log(myGameInfo, "数据-----");
+
     return (
         <Box
             sx={{
@@ -347,7 +352,12 @@ const PvpRoom = () => {
                             onList: handleChangeList,
                         }}
                     >
-                        {step === 0 && <PvpMatch></PvpMatch>}
+                        {step === 0 &&
+                            (invited == "true" ? (
+                                <Invited myGameInfo={myGameInfo}></Invited>
+                            ) : (
+                                <PvpMatch></PvpMatch>
+                            ))}
                         {step === 1 && (
                             <Accept
                                 gameInfo={gameInfo}
