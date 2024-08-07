@@ -4,6 +4,7 @@ import {
     PvpGameStatus,
     UserMarkType,
     getPvpWinState,
+    getShareEmoji,
     initBoard,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
@@ -51,8 +52,6 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
                 _list[currentGrid].mark = UserMarkType.Square;
             }
         }
-
-        console.log(myBalance, opBalance, currentRound, "_list");
 
         if (currentRound == 0) {
             return [_list, myBalance, opBalance, true];
@@ -117,15 +116,35 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
         setCurrentRound(gameInfo.gridIndex + 1);
     };
 
-    const handleShare = () => {};
+    const handleShare = () => {
+        const text = getShareEmoji(
+            myGameInfo.mark,
+            showList,
+            getPvpWinState(myGameInfo.gameState),
+        );
+
+        const url = `${window.location.origin}`;
+
+        const des = `Btt is a fully on-chain cryptoeconomic game of deduction and psychology`;
+
+        const value = `${text}
+
+${url}
+
+${des}`;
+        console.log(value, "value");
+        window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                value,
+            )}`,
+        );
+    };
 
     const handleTextClick = async () => {
         navigate("/free/pvp/home", {
             replace: true,
         });
     };
-
-    console.log(myBalance, opBalance, currentRound);
 
     return (
         <Box

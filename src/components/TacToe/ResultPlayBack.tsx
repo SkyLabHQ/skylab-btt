@@ -258,11 +258,7 @@ const ResultPage = () => {
 
     useEffect(() => {
         handleGetGameInfo();
-    }, [
-        ethcallProvider,
-        multiSkylabBidTacToeGameContract,
-        multiSkylabBidTacToeFactoryContract,
-    ]);
+    }, [multiSkylabBidTacToeGameContract, multiSkylabBidTacToeFactoryContract]);
 
     const handleShare = () => {
         const text = getShareEmoji(

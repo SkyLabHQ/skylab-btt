@@ -224,7 +224,7 @@ export const getShareEmoji = (
         }
     }
 
-    const border = `${mark}                             ${mark}`;
+    const border = `${mark}                               ${mark}`;
 
     return `${mark}${mark}${emojiList.join("")}${mark}${mark}
 ${border}
