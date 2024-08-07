@@ -15,7 +15,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 const inviteFriends = `
 ${window.location.origin}
 
-Btt is a fully on-chain cryptoeconomic game of deduction and psychology 
+A fully on-chain cryptoeconomic game of deduction and psychology 
 `;
 
 const ShareButtons = ({

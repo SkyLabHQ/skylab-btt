@@ -78,7 +78,6 @@ const PvpLayout = () => {
         if (res.code === 200) {
             const jwtToken = res.data.jwtToken;
             sessionStorage.setItem("jwtToken", jwtToken);
-
             setTimeout(() => {
                 setInit(true);
             }, 1500);

@@ -123,9 +123,9 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
             getPvpWinState(myGameInfo.gameState),
         );
 
-        const url = `${window.location.origin}`;
+        const url = `https://t.me/BidTacToeBot/btt?startapp=pvpHome`;
 
-        const des = `Btt is a fully on-chain cryptoeconomic game of deduction and psychology`;
+        const des = `A fully on-chain cryptoeconomic game of deduction and psychology`;
 
         const value = `${text}
 

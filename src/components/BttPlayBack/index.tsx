@@ -413,7 +413,7 @@ const BttPlayBackPage = () => {
         );
         const url = `${window.location.origin}`;
 
-        const des = `Btt is a fully on-chain cryptoeconomic game of deduction and psychology`;
+        const des = `A fully on-chain cryptoeconomic game of deduction and psychology`;
 
         const value = `${text}
 
