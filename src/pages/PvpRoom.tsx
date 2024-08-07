@@ -329,8 +329,6 @@ const PvpRoom = () => {
         initData.user.id,
     ]);
 
-    console.log(gameInfo.gameStatus1, "数据-----");
-
     return (
         <Box
             sx={{
