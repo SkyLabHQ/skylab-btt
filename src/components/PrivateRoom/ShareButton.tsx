@@ -128,43 +128,6 @@ const ShareButtons = ({
                     </Flex>
                 )}
             </SimpleGrid>
-            {showText && (
-                <Flex
-                    justify={"center"}
-                    sx={{
-                        position: "absolute",
-                        right: "50px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                    }}
-                >
-                    <Flex
-                        onClick={handleTextClick}
-                        sx={{
-                            justifyContent: "flex-end",
-                            alignItems: "center",
-                            cursor: "pointer",
-                        }}
-                    >
-                        <Text
-                            sx={{
-                                fontSize: "1.25vw",
-                                textDecorationLine: "underline",
-                                maxWidth: "150px",
-                                textAlign: "center",
-                            }}
-                        >
-                            {text}
-                        </Text>
-                        <Image
-                            src={RightArrow}
-                            sx={{
-                                width: "1.25vw",
-                            }}
-                        ></Image>
-                    </Flex>
-                </Flex>
-            )}
         </Box>
     );
 };

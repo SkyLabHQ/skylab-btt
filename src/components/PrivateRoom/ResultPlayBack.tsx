@@ -132,11 +132,9 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
 ${url}
 
 ${des}`;
-        console.log(value, "value");
-        window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                value,
-            )}`,
+
+        window.Telegram.WebApp.openLink(
+            `https://x.com/intent/post?text=${encodeURIComponent(value)}`,
         );
     };
 

@@ -278,9 +278,7 @@ ${url}
 ${des}`;
 
         window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                value,
-            )}`,
+            `https://x.com/intent/post?text=${encodeURIComponent(value)}`,
         );
     };
 

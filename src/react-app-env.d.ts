@@ -8,6 +8,7 @@ interface Window {
         on?: (...args: any[]) => void;
         removeListener?: (...args: any[]) => void;
     };
+    Telegram: any;
     web3?: unknown;
 }
 

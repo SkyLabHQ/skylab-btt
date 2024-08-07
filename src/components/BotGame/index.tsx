@@ -137,7 +137,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
 (Twitter)@skylabHQ`;
 
         window.open(
-            `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+            `https://x.com/intent/post?text=${encodeURIComponent(text)}`,
         );
     };
 
