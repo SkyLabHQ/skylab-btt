@@ -9,8 +9,12 @@ export const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        const token = sessionStorage.getItem("jwtToken");
-
+        let token = "";
+        if (config.url.startsWith("/pvp")) {
+            token = sessionStorage.getItem("jwtToken");
+        } else if (config.url.startsWith("/plane")) {
+            token = sessionStorage.getItem("accessToken");
+        }
         token && (config.headers.Authorization = `Bearer ${token}`);
         return config;
     },
@@ -29,11 +33,6 @@ api.interceptors.response.use(
         return Promise.reject(error);
     },
 );
-
-export const login = async (initData: any) => {
-    const response = await api.post("/login", initData);
-    return response.data;
-};
 
 export const bindBurner = async (data: any) => {
     const response = await api.post("/bindBurner", data);

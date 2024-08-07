@@ -27,6 +27,7 @@ import LeaderboardIcon from "@/components/TacToeMode/assets/leaderboard.png";
 
 import Nest from "@/components/Nest";
 import { ethers } from "ethers";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
 
 const gameAudio = new Audio(GameMp3);
 

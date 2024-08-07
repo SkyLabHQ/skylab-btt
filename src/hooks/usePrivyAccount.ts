@@ -5,6 +5,7 @@ import { createWalletClient, custom } from "viem";
 
 const usePrivyAccounts = () => {
     const { ready, wallets } = useWallets();
+    const { user } = usePrivy();
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
 
@@ -15,8 +16,11 @@ const usePrivyAccounts = () => {
                 setSigner(null);
                 return;
             }
-            const wallet = wallets[0];
-            setAddress(wallet.address);
+            setAddress(user.wallet.address);
+            const wallet = wallets.find((item) => {
+                return item.address === user.wallet.address;
+            });
+
             const provider = await wallet.getEthereumProvider();
             const walletClient = createWalletClient({
                 chain: baseSepolia,
@@ -27,13 +31,13 @@ const usePrivyAccounts = () => {
             setSigner(walletClient);
         };
 
-        if (wallets.length === 0 || !ready) {
+        if (wallets.length === 0 || !ready || !user) {
             setAddress("");
             setSigner(null);
             return;
         }
         handleGetSigner();
-    }, [wallets, ready]);
+    }, [wallets, ready, user]);
 
     return {
         signer,

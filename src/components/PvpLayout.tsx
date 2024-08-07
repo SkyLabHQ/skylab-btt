@@ -1,7 +1,7 @@
 import { useLaunchParams } from "@tma.js/sdk-react";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { login } from "@/api";
+import { login } from "@/api/pvpGame";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Box, Flex, Text, Image, keyframes } from "@chakra-ui/react";
 import HummerIcon from "@/assets/hummer.svg";

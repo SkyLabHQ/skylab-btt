@@ -10,6 +10,7 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Click1Wav from "@/assets/click1.wav";
 import UserIcon from "@/assets/user-icon.png";
 import PilotBorder from "@/assets/pilot-border.png";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 
 const audio = new Audio(Click1Wav);
 
@@ -17,8 +18,12 @@ export const Toolbar = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const { onUserInfoOpen } = useUserInfo();
+    const { user } = usePrivy();
     const { address } = usePrivyAccounts();
+    const { wallets } = useWallets();
     const { handleLogin } = useUserInfo();
+
+    console.log(user, wallets, address, "address");
 
     return (
         <Box

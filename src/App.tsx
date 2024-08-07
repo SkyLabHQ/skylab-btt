@@ -6,9 +6,10 @@ import useSkyToast from "./hooks/useSkyToast";
 import Service from "./pages/Service";
 import AddToHome from "./pages/AddToHome";
 import TermPage from "./components/TermPage";
-import { useUserInfo } from "./contexts/UserInfo";
+import { UserInfoProvider, useUserInfo } from "./contexts/UserInfo";
 import CloseIcon from "@/assets/close.svg";
 import qs from "query-string";
+import { getAccessToken, usePrivy } from "@privy-io/react-auth";
 
 const themeColorList = [
     {
@@ -48,7 +49,8 @@ const App = (): ReactElement => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { blockOpen, handleBlock } = useUserInfo();
+    // TODO
+    // const { blockOpen, handleBlock } = useUserInfo();
 
     const handleEnter = () => {
         if (checked) {
@@ -143,7 +145,9 @@ const App = (): ReactElement => {
                 position: "relative",
             }}
         >
-            <Outlet></Outlet>
+            <UserInfoProvider>
+                <Outlet></Outlet>
+            </UserInfoProvider>
             {/* {showTerm && <TermPage onContinue={handleContinue}></TermPage>}
             {!showTerm && (
                 <>

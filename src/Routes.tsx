@@ -29,19 +29,19 @@ const AppRoutes = (): ReactElement => {
                 <Route path="/btt/history" element={<BttHistory />}></Route>
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>
                 <Route path="/btt/live" element={<BttLiveGame />}></Route>
-                <Route path="/free" element={<FreeLayout />}>
-                    <Route path="/free/pvp" element={<PvpLayout />}>
-                        <Route path="/free/pvp/home" element={<PvpHome />} />
-                        <Route path="/free/pvp/game" element={<PvpRoom />} />
-                    </Route>
-
-                    <Route path="/free/botHome" element={<StartBot />} />
-                    <Route path="/free/botGame" element={<BotGame />} />
-                </Route>
                 <Route path="/plane" element={<PlaneMarketLayout />}>
                     <Route path="/plane/market" element={<Market />}></Route>
                     <Route path="/plane/my" element={<My />}></Route>
                 </Route>
+            </Route>
+            <Route path="/free" element={<FreeLayout />}>
+                <Route path="/free/pvp" element={<PvpLayout />}>
+                    <Route path="/free/pvp/home" element={<PvpHome />} />
+                    <Route path="/free/pvp/game" element={<PvpRoom />} />
+                </Route>
+
+                <Route path="/free/botHome" element={<StartBot />} />
+                <Route path="/free/botGame" element={<BotGame />} />
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>

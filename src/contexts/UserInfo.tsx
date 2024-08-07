@@ -16,6 +16,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { useLocation } from "react-router-dom";
 import Click1Wav from "@/assets/click1.wav";
 import { usePrivy } from "@privy-io/react-auth";
+
 const audio = new Audio(Click1Wav);
 
 const UserInfoContext = createContext<{
@@ -44,7 +45,10 @@ export const UserInfoProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const { ready, login, user, connectWallet } = usePrivy();
+    const { ready, user, login, connectWallet, authenticated, logout } =
+        usePrivy();
+    const { getAccessToken } = usePrivy();
+
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
@@ -62,9 +66,10 @@ export const UserInfoProvider = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [accessTokenInit, setAccessTokenInit] = useState(false);
     const toast = useSkyToast();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         audio.play();
         if (!ready) {
             toast("Please wait for the wallet to be ready");
@@ -75,6 +80,7 @@ export const UserInfoProvider = ({
             connectWallet();
             return;
         }
+
         login();
     };
 
@@ -233,6 +239,18 @@ export const UserInfoProvider = ({
             handleGetUserPaper();
         }
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
+
+    useEffect(() => {
+        if (!user) {
+            setAccessTokenInit(false);
+            sessionStorage.removeItem("accessToken");
+            return;
+        }
+        getAccessToken().then((accessToken: string) => {
+            setAccessTokenInit(true);
+            sessionStorage.setItem("accessToken", accessToken);
+        });
+    }, [user]);
 
     return (
         <UserInfoContext.Provider
