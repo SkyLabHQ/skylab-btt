@@ -8,7 +8,6 @@ import {
     PopoverTrigger,
     Text,
 } from "@chakra-ui/react";
-import React from "react";
 import GoldIcon from "@/assets/gold.svg";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import AdvantageIcon from "@/assets/advantage-icon.svg";

@@ -282,7 +282,7 @@ const ResultPage = ({
             getWinState(myGameInfo.gameState),
         );
 
-        const url = `${window.location.origin}`;
+        const url = `https://t.me/BidTacToeBot/btt?startapp=botHome`;
 
         const des = `A fully on-chain cryptoeconomic game of deduction and psychology`;
 
