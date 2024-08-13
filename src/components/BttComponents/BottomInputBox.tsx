@@ -7,18 +7,12 @@ import {
     SliderTrack,
     SliderFilledTrack,
     SliderThumb,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverBody,
-    useDisclosure,
     keyframes,
 } from "@chakra-ui/react";
 import React, { useMemo } from "react";
-import { GameState, MESSAGES } from "@/skyConstants/bttGameTypes";
+import { GameState } from "@/skyConstants/bttGameTypes";
 import AddIcon from "@/components/BttComponents/assets/add.svg";
 import SubIcon from "@/components/BttComponents/assets/sub.svg";
-import MessageIcon1 from "./assets/message-dot.svg";
 import ConfirmVideo from "@/assets/confirm.wav";
 
 const move = keyframes`
@@ -52,8 +46,6 @@ const BottomInputBox = ({
     onSubClick,
     onAddClick,
     onConfirm,
-    onSetMessage,
-    onInputAmountClick,
     onIuputAmount,
     showAnimateConfirm,
     onReveal,
@@ -67,18 +59,10 @@ const BottomInputBox = ({
     onSubClick: () => void;
     onAddClick: () => void;
     onConfirm: () => void;
-    onInputAmountClick: () => void;
     onIuputAmount?: (amount: number) => void;
-    onSetMessage?: (
-        type: "setMessage" | "setEmote",
-        emoteIndex?: number,
-    ) => void;
     showAnimateConfirm?: number;
     onReveal?: () => void;
 }) => {
-    const [selectMessageIndex, setSelectMessageIndex] = React.useState(-1);
-    const { onOpen, onClose, isOpen } = useDisclosure();
-
     const [commitButtonText, status] = useMemo(() => {
         if (myGameState === GameState.WaitingForBid) {
             return loading ? ["Committing", 0] : ["Commit", 1];
@@ -112,102 +96,6 @@ const BottomInputBox = ({
             justify={"space-between"}
             align={"center"}
         >
-            <Popover
-                gutter={38}
-                arrowSize={20}
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-            >
-                <PopoverTrigger>
-                    <Box
-                        sx={{
-                            flex: 1,
-                        }}
-                    >
-                        <Image
-                            tabIndex={0}
-                            role="button"
-                            src={MessageIcon1}
-                            sx={{
-                                width: "32px",
-                            }}
-                        ></Image>
-                    </Box>
-                </PopoverTrigger>
-                <PopoverContent
-                    width={"220px"}
-                    sx={{
-                        height: "75px",
-                        border: "none",
-                        borderRadius: "10px",
-                        background: "#ffffffe6 !important",
-                    }}
-                >
-                    <PopoverBody
-                        sx={{
-                            color: "#303030",
-                            padding: 0,
-                            border: "none",
-                            position: "relative",
-                            overflow: "hidden",
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                overflowY: "auto",
-                                height: "100%",
-                            }}
-                        >
-                            {MESSAGES.map((message, index) => {
-                                return (
-                                    <Flex
-                                        onClick={() => {
-                                            onSetMessage(
-                                                "setMessage",
-                                                index + 1,
-                                            );
-                                            setSelectMessageIndex(index);
-                                            onClose();
-                                        }}
-                                        key={index + 1}
-                                        sx={{
-                                            paddingLeft: "20px",
-                                            fontSize: "12px",
-                                            width: "100%",
-                                            height: "28px",
-                                            color:
-                                                selectMessageIndex === index
-                                                    ? "#fff"
-                                                    : "#303030",
-                                            background:
-                                                selectMessageIndex === index &&
-                                                "#00000059",
-                                            fontFamily: "Quantico",
-                                        }}
-                                        align={"center"}
-                                    >
-                                        {message}
-                                    </Flex>
-                                );
-                            })}
-                        </Box>
-                    </PopoverBody>
-                    <Box
-                        sx={{
-                            height: "0",
-                            width: "0",
-                            borderTop: "10px solid #ffffffe6",
-                            borderRight: "10px solid transparent",
-                            borderBottom: "10px solid transparent",
-                            borderLeft: "10px solid transparent",
-                            position: "absolute",
-                            left: "20px",
-                            bottom: "-20px",
-                        }}
-                    ></Box>
-                </PopoverContent>
-            </Popover>
             <Box
                 sx={{
                     width: "160px",
@@ -235,9 +123,6 @@ const BottomInputBox = ({
                         }}
                     ></Image>
                     <Box
-                        onClick={(e) => {
-                            onInputAmountClick();
-                        }}
                         sx={{
                             flex: 1,
                             textAlign: "center",

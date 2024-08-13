@@ -63,8 +63,8 @@ const RootContent = () => {
                     logo: "https://pub-dc971f65d0aa41d18c1839f8ab426dcb.r2.dev/privy.png",
                 },
                 loginMethods: isMBrowser
-                    ? ["email", "wallet"]
-                    : ["email", "wallet", "discord", "twitter"],
+                    ? ["email", "wallet", "telegram"]
+                    : ["email", "wallet", "discord", "twitter", "telegram"],
                 embeddedWallets: {
                     createOnLogin: "users-without-wallets",
                     requireUserPasswordOnCreate: false,

@@ -1,179 +1,16 @@
 import { Box, Image, Flex, SimpleGrid } from "@chakra-ui/react";
-import React from "react";
-import { EMOTES, MERCS, MESSAGES } from "@/skyConstants/bttGameTypes";
-import MessageActiveIcon from "./assets/message-active.svg";
-import MessageIcon from "./assets/message.svg";
-import EmoteActiveIcon from "./assets/emote-active.svg";
-import EmoteIcon from "./assets/emote.svg";
 import KeyDeleteIcon from "./assets/key-delete.svg";
-
-const ChatMessage = ({
-    onSetMessage,
-}: {
-    onSetMessage: (
-        type: "setMessage" | "setEmote",
-        emoteIndex?: number,
-    ) => void;
-}) => {
-    const [active, setActive] = React.useState("message");
-
-    const handleChangeActive = (type: string) => {
-        setActive(type);
-    };
-    return (
-        <Flex height={"100%"}>
-            <Box
-                sx={{
-                    paddingLeft: "12px",
-                }}
-            >
-                <Flex
-                    align={"center"}
-                    justify={"center"}
-                    flexDirection={"column"}
-                    sx={{
-                        height: "54px",
-                    }}
-                >
-                    <Image
-                        src={
-                            active === "message"
-                                ? MessageActiveIcon
-                                : MessageIcon
-                        }
-                        sx={{
-                            marginRight: "0.5208vw",
-                            cursor: "pointer",
-                            width: "40px",
-                        }}
-                        onClick={() => handleChangeActive("message")}
-                    />
-                </Flex>
-                <Flex
-                    align={"center"}
-                    justify={"center"}
-                    flexDirection={"column"}
-                    sx={{
-                        height: "54px",
-                    }}
-                >
-                    <Image
-                        src={active === "emote" ? EmoteActiveIcon : EmoteIcon}
-                        sx={{
-                            cursor: "pointer",
-                            width: "40px",
-                        }}
-                        onClick={() => handleChangeActive("emote")}
-                    />
-                </Flex>
-            </Box>
-            <Box
-                sx={{
-                    paddingTop: "20px",
-                    height: "100px",
-                    overflow: "auto",
-                    flex: 1,
-                }}
-            >
-                <SimpleGrid
-                    margin={"0 auto"}
-                    width={"180px"}
-                    columns={active === "message" ? 1 : 5}
-                    spacingY={"4px"}
-                >
-                    {active === "message" &&
-                        MESSAGES.map((message, index) => {
-                            return (
-                                <Flex
-                                    onClick={() => {
-                                        onSetMessage("setMessage", index + 1);
-                                    }}
-                                    key={index + 1}
-                                    sx={{
-                                        border: "2px solid #d9d9d9",
-                                        borderRadius: "10px",
-                                        paddingLeft: "5px",
-                                        fontSize: "12px",
-                                        width: "210px",
-                                        height: "28px",
-                                    }}
-                                    align={"center"}
-                                >
-                                    {message}
-                                </Flex>
-                            );
-                        })}
-                    {active === "emote" && (
-                        <>
-                            {MERCS.map((message, index) => {
-                                return (
-                                    <Image
-                                        key={index}
-                                        src={message}
-                                        onClick={() => {
-                                            onSetMessage("setEmote", index + 1);
-                                        }}
-                                        sx={{
-                                            width: "30px",
-                                            height: "30px",
-                                            cursor: "pointer",
-                                            marginRight: "0.4167vw",
-                                            border: "2px solid #d9d9d9",
-                                            borderRadius: "8px",
-                                        }}
-                                    ></Image>
-                                );
-                            })}
-                            {EMOTES.map((message, index) => {
-                                return (
-                                    <Box
-                                        onClick={() => {
-                                            onSetMessage(
-                                                "setEmote",
-                                                MERCS.length + index + 1,
-                                            );
-                                        }}
-                                        key={index + MERCS.length}
-                                        sx={{
-                                            border: "2px solid #d9d9d9",
-                                            borderRadius: "8px",
-                                            width: "30px",
-                                            height: "30px",
-                                            lineHeight: "30px",
-                                            cursor: "pointer",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            fontSize: "16px",
-                                        }}
-                                    >
-                                        {message}
-                                    </Box>
-                                );
-                            })}
-                        </>
-                    )}
-                </SimpleGrid>
-            </Box>
-        </Flex>
-    );
-};
 
 const BottomKeyBoard = ({
     inputMode,
     open,
     onNumberClick,
     onDeleteClick,
-    onSetMessage,
 }: {
-    inputMode: "keyboard" | "message";
+    inputMode: "keyboard";
     open: boolean;
     onNumberClick: (value: string) => void;
     onDeleteClick: () => void;
-    onSetMessage: (
-        type: "setMessage" | "setEmote",
-        emoteIndex?: number,
-    ) => void;
 }) => {
     return (
         <Box
@@ -222,10 +59,6 @@ const BottomKeyBoard = ({
                         }}
                     ></Image>
                 </SimpleGrid>
-            )}
-
-            {inputMode === "message" && (
-                <ChatMessage onSetMessage={onSetMessage}></ChatMessage>
             )}
         </Box>
     );

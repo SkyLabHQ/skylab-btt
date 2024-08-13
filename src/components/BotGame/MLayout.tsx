@@ -1,5 +1,5 @@
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MBalance from "../BttComponents/MBalance";
 import { GameState } from "@/skyConstants/bttGameTypes";
 import Board from "../BttComponents/Board";
@@ -8,7 +8,6 @@ import Timer from "../BttComponents/Timer";
 import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
 import StatusProgress from "../BttComponents/StatusProgress";
-import { MMessage } from "../BttComponents/Message";
 
 const MLayout = ({
     myGameInfo,
@@ -26,16 +25,10 @@ const MLayout = ({
     onInputChange,
     onConfirm,
     onReveal,
-    onSetMessage,
-    emoteIndex,
-    messageIndex,
-    emoteLoading,
-    messageLoading,
     loading,
     revealing,
     handleBoardClick,
     showAnimateConfirm,
-    onCallTimeout,
 }: any) => {
     const { isOpen, onOpen, onClose } = useDisclosure({
         defaultIsOpen: true,
@@ -47,25 +40,7 @@ const MLayout = ({
     const { isOpen: keyBoardIsOpen, onToggle: keyBoardOnToggle } =
         useDisclosure();
 
-    const [inputMode, setInputMode] = useState<"message" | "keyboard">(null);
     const myGameState = myGameInfo.gameState;
-
-    const canCallTimeout = useMemo(() => {
-        if (
-            autoCommitTimeoutTime === 0 &&
-            myGameInfo.gameState <= opGameInfo.gameState
-        ) {
-            return true;
-        }
-
-        return false;
-    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
-
-    useEffect(() => {
-        if (messageLoading || emoteLoading) {
-            onClose();
-        }
-    }, [messageLoading, emoteLoading]);
 
     return (
         <Box
@@ -103,13 +78,6 @@ const MLayout = ({
                         }}
                         level={opInfo.level}
                     ></MUserProfile>
-                    {!opIsOpen && (
-                        <MMessage
-                            message={opGameInfo.message}
-                            emote={opGameInfo.emote}
-                            status={"op"}
-                        ></MMessage>
-                    )}
                 </Flex>
                 <MBalance
                     balance={opGameInfo.balance}
@@ -181,37 +149,6 @@ const MLayout = ({
                                             GameState.Revealed
                                     }
                                 ></Timer>
-                                <Flex
-                                    onClick={() => {
-                                        if (canCallTimeout) {
-                                            onCallTimeout();
-                                        }
-                                    }}
-                                    sx={{
-                                        marginTop: "5px",
-                                        fontSize: "12px",
-                                        height: "30px",
-                                        width: "84px",
-                                        background: canCallTimeout
-                                            ? "transparent"
-                                            : "#787878",
-                                        borderRadius: "16px",
-                                        color: canCallTimeout
-                                            ? "#FDDC2D"
-                                            : "#555",
-                                        fontWeight: "bold",
-                                        cursor: canCallTimeout
-                                            ? "pointer"
-                                            : "not-allowed",
-                                        border: canCallTimeout
-                                            ? "1px solid #FDDC2D"
-                                            : "1px solid #787878",
-                                    }}
-                                    align={"center"}
-                                    justify={"center"}
-                                >
-                                    Call Timeout
-                                </Flex>
                             </Box>
                         )}
                     </Flex>
@@ -225,17 +162,6 @@ const MLayout = ({
                         align={"flex-end"}
                     >
                         <Flex align={"flex-end"}>
-                            {!isOpen && (
-                                <MMessage
-                                    message={myGameInfo.message}
-                                    emote={myGameInfo.emote}
-                                    status={"my"}
-                                    emoteIndex={emoteIndex}
-                                    messageIndex={messageIndex}
-                                    emoteLoading={emoteLoading}
-                                    messageLoading={messageLoading}
-                                ></MMessage>
-                            )}
                             <MUserProfile
                                 status="my"
                                 address={myInfo.address}
@@ -265,7 +191,6 @@ const MLayout = ({
                 </Box>
                 <BottomInputBox
                     showAnimateConfirm={showAnimateConfirm}
-                    onSetMessage={onSetMessage}
                     myBalance={myGameInfo.balance}
                     bidAmount={bidAmount}
                     myGameState={myGameState}
@@ -273,16 +198,6 @@ const MLayout = ({
                     loading={loading}
                     onIuputAmount={(amount: number) => {
                         onInputChange(amount);
-                    }}
-                    onInputAmountClick={() => {
-                        if (inputMode === "keyboard") {
-                            keyBoardOnToggle();
-                        } else {
-                            setInputMode("keyboard");
-                            if (!keyBoardIsOpen) {
-                                keyBoardOnToggle();
-                            }
-                        }
                     }}
                     onSubClick={() => {
                         if (Number(bidAmount) - 1 < 0) return;

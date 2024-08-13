@@ -15,12 +15,7 @@ import {
     useDeleteTokenIdCommited,
     useGridCommited,
 } from "@/hooks/useTacToeStore";
-import {
-    GameInfo,
-    GameState,
-    Info,
-    MessageStatus,
-} from "@/skyConstants/bttGameTypes";
+import { GameInfo, GameState, Info } from "@/skyConstants/bttGameTypes";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
 import MLayout from "./MLayout";
@@ -69,15 +64,8 @@ const TacToePage = ({
     const [revealing, setRevealing] = useState<boolean>(false);
     const [bidAmount, setBidAmount] = useState<number>(0);
     const [surrenderLoading, setSurrenderLoading] = useState<boolean>(false);
-    const [messageLoading, setMessageLoading] = useState<MessageStatus>(
-        MessageStatus.Unknown,
-    );
+
     const botGameSigner = getBotGameSigner(gameAddress);
-    const [emoteLoading, setEmoteLoading] = useState<MessageStatus>(
-        MessageStatus.Unknown,
-    );
-    const [messageIndex, setMessageIndex] = useState<number>(0);
-    const [emoteIndex, setEmoteIndex] = useState<number>(0);
 
     const { getGridCommited, addGridCommited } = useGridCommited(
         tokenId,
@@ -95,17 +83,6 @@ const TacToePage = ({
     const ethcallProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const [loading, setLoading] = useState<boolean>(false);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
-
-    const canCallTimeout = useMemo(() => {
-        if (
-            autoCommitTimeoutTime === 0 &&
-            myGameInfo.gameState <= opGameInfo.gameState
-        ) {
-            return true;
-        }
-
-        return false;
-    }, [autoCommitTimeoutTime, myGameInfo.gameState, opGameInfo.gameState]);
 
     const inviteLink = useMemo(() => {
         if (!gameAddress) return "";
@@ -138,32 +115,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         window.open(
             `https://x.com/intent/post?text=${encodeURIComponent(text)}`,
         );
-    };
-
-    const handleCallTimeOut = async () => {
-        const [myGameStateHex, opGameStateHex] = await ethcallProvider.all([
-            multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
-            multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
-        ]);
-
-        const myGameState = myGameStateHex.toNumber();
-        const opGameState = opGameStateHex.toNumber();
-
-        if (
-            myGameState === GameState.Unknown ||
-            opGameState === GameState.Unknown
-        ) {
-            return;
-        }
-
-        if (myGameState > GameState.Revealed) {
-            return;
-        }
-        if (myGameState < opGameState) {
-            return;
-        }
-
-        handleQuit();
     };
 
     const handleBidAmount = (value: number) => {
@@ -250,50 +201,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
         if (myGameInfo.gameState <= GameState.Revealed) return;
         deleteTokenIdCommited();
         onStep(1);
-    };
-
-    const handleSetMessage = async (
-        type: "setMessage" | "setEmote",
-        index: number,
-    ) => {
-        try {
-            if (type === "setMessage") {
-                if (messageLoading === MessageStatus.Sending) {
-                    return;
-                } else {
-                    setMessageLoading(MessageStatus.Sending);
-                    setMessageIndex(index);
-                }
-            }
-
-            if (type === "setEmote") {
-                if (emoteLoading === MessageStatus.Sending) {
-                    return;
-                } else {
-                    setEmoteLoading(MessageStatus.Sending);
-                    setEmoteIndex(index);
-                }
-            }
-
-            await tacToeGameRetryPaymaster(type, [index], {});
-            if (type === "setMessage") {
-                setMessageLoading(MessageStatus.Sent);
-                setMessageIndex(index);
-            } else {
-                setEmoteLoading(MessageStatus.Sent);
-                setEmoteIndex(index);
-            }
-        } catch (e) {
-            console.log(e);
-            if (type === "setMessage") {
-                setMessageLoading(MessageStatus.Unknown);
-                setMessageIndex(index);
-            } else {
-                setEmoteLoading(MessageStatus.Unknown);
-                setEmoteIndex(index);
-            }
-            toast(handleError(e));
-        }
     };
 
     const handleQuit = async () => {
@@ -449,18 +356,12 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                             <MyUserCard
                                 loading={loading}
                                 revealing={revealing}
-                                messageLoading={messageLoading}
-                                emoteLoading={emoteLoading}
                                 showAdvantageTip={
                                     myInfo.burner === nextDrawWinner
                                 }
                                 myGameState={myGameInfo.gameState}
                                 opGameState={opGameInfo.gameState}
-                                message={myGameInfo.message}
-                                emote={myGameInfo.emote}
                                 level={myInfo.level}
-                                messageIndex={messageIndex}
-                                emoteIndex={emoteIndex}
                                 markIcon={myInfo.mark}
                                 address={myInfo.address}
                                 balance={myGameInfo.balance}
@@ -468,10 +369,8 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                 onConfirm={handleBid}
                                 onReveal={handleRevealedBid}
                                 onInputChange={handleBidAmount}
-                                onCallTimeout={handleCallTimeOut}
                                 planeUrl={myInfo.img}
                                 showAnimateConfirm={showAnimateConfirm}
-                                canCallTimeout={canCallTimeout}
                             ></MyUserCard>
                         </Box>
 
@@ -493,8 +392,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                                     opInfo.burner === nextDrawWinner
                                 }
                                 opGameState={opGameInfo.gameState}
-                                message={opGameInfo.message}
-                                emote={opGameInfo.emote}
                                 address={opInfo.address}
                                 balance={opGameInfo?.balance}
                                 bidAmount={
@@ -522,12 +419,7 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                     bidAmount={bidAmount}
                     onInputChange={handleBidAmount}
                     onConfirm={handleBid}
-                    onSetMessage={handleSetMessage}
                     onReveal={handleRevealedBid}
-                    emoteIndex={emoteIndex}
-                    messageIndex={messageIndex}
-                    messageLoading={messageLoading}
-                    emoteLoading={emoteLoading}
                     handleQuitClick={() => {
                         onOpen();
                     }}
@@ -535,7 +427,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                     revealing={revealing}
                     handleBoardClick={handleBoardClick}
                     showAnimateConfirm={showAnimateConfirm}
-                    onCallTimeout={handleCallTimeOut}
                 ></MLayout>
             )}
 

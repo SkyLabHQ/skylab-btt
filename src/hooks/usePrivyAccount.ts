@@ -6,6 +6,7 @@ import { createWalletClient, custom } from "viem";
 const usePrivyAccounts = () => {
     const { wallets } = useWallets();
     const { user, ready } = usePrivy();
+
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
 
@@ -36,6 +37,7 @@ const usePrivyAccounts = () => {
 
             setSigner(walletClient);
         };
+        console.log(user, wallets);
 
         if (wallets.length === 0 || !ready || !user) {
             setAddress("");

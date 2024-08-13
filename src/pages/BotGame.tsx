@@ -61,16 +61,12 @@ const BotGame = () => {
         balance: 0,
         gameState: GameState.Unknown,
         timeout: 0,
-        message: 0,
-        emote: 0,
     });
 
     const [opGameInfo, setOpGameInfo] = useState<GameInfo>({
         balance: 0,
         gameState: GameState.Unknown,
         timeout: 0,
-        message: 0,
-        emote: 0,
     });
 
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
@@ -177,14 +173,12 @@ const BotGame = () => {
                 myGameState,
                 myRevealedBid,
                 myTimeout,
-                myMessage,
-                myEmote,
+
                 opBalance,
                 opGameState,
                 opRevealedBid,
                 opTimeout,
-                opMessage,
-                opEmote,
+
                 nextDrawWinner,
             ] = await multiProvider.all([
                 multiSkylabBidTacToeGameContract.currentSelectedGrid(),
@@ -193,14 +187,10 @@ const BotGame = () => {
                 multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
                 multiSkylabBidTacToeGameContract.getRevealedBids(myInfo.burner),
                 multiSkylabBidTacToeGameContract.timeouts(myInfo.burner),
-                multiSkylabBidTacToeGameContract.playerMessage(myInfo.burner),
-                multiSkylabBidTacToeGameContract.playerEmote(myInfo.burner),
                 multiSkylabBidTacToeGameContract.balances(opInfo.burner),
                 multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
                 multiSkylabBidTacToeGameContract.getRevealedBids(opInfo.burner),
                 multiSkylabBidTacToeGameContract.timeouts(opInfo.burner),
-                multiSkylabBidTacToeGameContract.playerMessage(opInfo.burner),
-                multiSkylabBidTacToeGameContract.playerEmote(opInfo.burner),
                 multiSkylabBidTacToeGameContract.nextDrawWinner(),
             ]);
 
@@ -287,16 +277,12 @@ const BotGame = () => {
                 balance: myBalance.toNumber(),
                 gameState: myGameState.toNumber(),
                 timeout: myTimeout.toNumber(),
-                message: myMessage.toNumber(),
-                emote: myEmote.toNumber(),
             });
 
             onChangeGame("op", {
                 balance: opBalance.toNumber(),
                 gameState: opGameState.toNumber(),
                 timeout: opTimeout.toNumber(),
-                message: opMessage.toNumber(),
-                emote: opEmote.toNumber(),
             });
             setNextDrawWinner(nextDrawWinner);
             if (!initRef.current) {

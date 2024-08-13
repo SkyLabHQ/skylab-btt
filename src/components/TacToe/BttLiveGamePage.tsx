@@ -33,7 +33,6 @@ import StartJourney from "../BttComponents/StartJourney";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { motion } from "framer-motion";
 import LoadingPage from "../LoadingPage";
-import { MMessage } from "../BttComponents/Message";
 
 const MBttLiveGame = ({
     autoCommitTimeoutTime,
@@ -134,11 +133,6 @@ const MBttLiveGame = ({
                             img={opInfo.img}
                             level={opInfo.level}
                         ></MUserProfileResult>
-                        <MMessage
-                            message={opGameInfo.message}
-                            emote={opGameInfo.emote}
-                            status={"op"}
-                        ></MMessage>
                     </Flex>
                     <MBalance
                         balance={opGameInfo.balance}
@@ -180,11 +174,6 @@ const MBttLiveGame = ({
                         align={"flex-end"}
                     >
                         <Flex>
-                            <MMessage
-                                message={myGameInfo.message}
-                                emote={myGameInfo.emote}
-                                status={"my"}
-                            ></MMessage>
                             <MUserProfileResult
                                 level={myInfo.level}
                                 position="right"
@@ -262,15 +251,11 @@ const BttLiveGamePage = () => {
         balance: 0,
         gameState: GameState.Unknown,
         timeout: 0,
-        message: 0,
-        emote: 0,
     });
     const [opGameInfo, setOpGameInfo] = useState<GameInfo>({
         balance: 0,
         gameState: GameState.Unknown,
         timeout: 0,
-        message: 0,
-        emote: 0,
     });
     const [myInfo, setMyInfo] = useState<Info>({
         address: "",
@@ -342,14 +327,12 @@ const BttLiveGamePage = () => {
             myGameState,
             myRevealedBid,
             myTimeout,
-            myMessage,
-            myEmote,
+
             opBalance,
             opGameState,
             opRevealedBid,
             opTimeout,
-            opMessage,
-            opEmote,
+
             nextDrawWinner,
         ] = await ethcallProvider.all([
             multiSkylabBidTacToeGameContract.currentSelectedGrid(),
@@ -358,14 +341,10 @@ const BttLiveGamePage = () => {
             multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
             multiSkylabBidTacToeGameContract.getRevealedBids(myInfo.burner),
             multiSkylabBidTacToeGameContract.timeouts(myInfo.burner),
-            multiSkylabBidTacToeGameContract.playerMessage(myInfo.burner),
-            multiSkylabBidTacToeGameContract.playerEmote(myInfo.burner),
             multiSkylabBidTacToeGameContract.balances(opInfo.burner),
             multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
             multiSkylabBidTacToeGameContract.getRevealedBids(opInfo.burner),
             multiSkylabBidTacToeGameContract.timeouts(opInfo.burner),
-            multiSkylabBidTacToeGameContract.playerMessage(opInfo.burner),
-            multiSkylabBidTacToeGameContract.playerEmote(opInfo.burner),
             multiSkylabBidTacToeGameContract.nextDrawWinner(),
         ]);
 
@@ -461,15 +440,11 @@ const BttLiveGamePage = () => {
             balance: myBalance.toNumber(),
             gameState: myGameState.toNumber(),
             timeout: myTimeout.toNumber(),
-            message: myMessage.toNumber(),
-            emote: myEmote.toNumber(),
         });
         setOpGameInfo({
             balance: opBalance.toNumber(),
             gameState: opGameState.toNumber(),
             timeout: opTimeout.toNumber(),
-            message: opMessage.toNumber(),
-            emote: opEmote.toNumber(),
         });
 
         setNextDrawWinner(nextDrawWinner);
@@ -705,8 +680,6 @@ const BttLiveGamePage = () => {
                             }}
                         >
                             <UserCard
-                                message={myGameInfo.message}
-                                emote={myGameInfo.emote}
                                 level={myInfo.level}
                                 markIcon={myMark}
                                 gameState={myGameInfo.gameState}
@@ -732,8 +705,6 @@ const BttLiveGamePage = () => {
                                 </Box>
                             </Box>
                             <UserCard
-                                message={opGameInfo.message}
-                                emote={opGameInfo.emote}
                                 level={opInfo.level}
                                 markIcon={opMark}
                                 status="op"

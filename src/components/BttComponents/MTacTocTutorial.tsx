@@ -514,7 +514,6 @@ const MTacToeTutorial = ({}) => {
                             onSubClick={() => {}}
                             onAddClick={() => {}}
                             onConfirm={() => {}}
-                            onInputAmountClick={() => {}}
                         ></BottomInputBox>
                     </Box>
                     <Box

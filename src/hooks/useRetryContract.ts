@@ -6,8 +6,6 @@ import PQueue from "p-queue";
 const MethodPriority = {
     commitBid: 10,
     revealBid: 10,
-    setMessage: 0,
-    setEmote: 0,
     claimTimeoutPenalty: 100,
     surrender: 10,
 };

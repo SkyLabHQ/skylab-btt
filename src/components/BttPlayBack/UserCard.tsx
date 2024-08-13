@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
 import GoldIcon from "@/components/TacToe/assets/gold.svg";
 import Plane1 from "@/assets/aviations/a1.png";
-import { AdvantageTip, Message } from "../BttComponents/UserCard";
+import { AdvantageTip } from "../BttComponents/UserCard";
 import {
     GameState,
     UserMarkType,
@@ -16,16 +16,12 @@ interface UserCardProps {
     balance: number;
     bidAmount: number;
     showAdvantageTip?: boolean;
-    emote?: number;
     level: number;
-    message?: number;
     status?: "my" | "op";
     planeUrl?: string;
 }
 
 export const UserCard = ({
-    message,
-    emote,
     level,
     markIcon,
     balance,
@@ -59,13 +55,7 @@ export const UserCard = ({
                         top: "50%",
                         transform: "translateY(-50%)",
                     }}
-                >
-                    <Message
-                        message={message}
-                        emote={emote}
-                        status={status}
-                    ></Message>
-                </Box>
+                ></Box>
 
                 <Image
                     sx={{

@@ -254,6 +254,10 @@ const TacToe = () => {
     };
 
     useEffect(() => {
+        console.log("gameId", gameId);
+        console.log("myGameInfo.gameState", myGameInfo.gameState);
+        console.log("address", address);
+
         if (
             !gameId ||
             myGameInfo.gameState !== Game2Status.InProgress ||

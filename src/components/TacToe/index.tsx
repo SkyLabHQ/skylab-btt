@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/BttComponents/Board";
 import { useGameContext } from "@/pages/TacToe";
 import useSkyToast from "@/hooks/useSkyToast";
-import { GameState } from "@/skyConstants/bttGameTypes";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
 import MLayout from "./MLayout";
@@ -147,10 +146,6 @@ const TacToePage = ({
                         height: "100vh",
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent:
-                            myGameInfo.gameState <= GameState.Revealed
-                                ? "space-between"
-                                : "flex-start",
                     }}
                     onClick={() => {
                         myGameInfo.gameState > 3 && handleStepChange(2);
@@ -181,6 +176,7 @@ const TacToePage = ({
                         sx={{
                             display: "flex",
                             justifyContent: "space-between",
+                            marginTop: "10vh",
                         }}
                     >
                         <Box

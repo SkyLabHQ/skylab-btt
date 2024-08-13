@@ -45,9 +45,16 @@ export const UserInfoProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const { ready, user, login, connectWallet, authenticated, logout } =
-        usePrivy();
-    const { getAccessToken } = usePrivy();
+    const {
+        ready,
+        user,
+        login,
+        connectWallet,
+        linkWallet,
+        authenticated,
+        getAccessToken,
+        logout,
+    } = usePrivy();
 
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -75,9 +82,10 @@ export const UserInfoProvider = ({
             toast("Please wait for the wallet to be ready");
             return;
         }
+        console.log(user, "user");
 
         if (user && user.wallet.walletClientType !== "privy") {
-            connectWallet();
+            linkWallet();
             return;
         }
 

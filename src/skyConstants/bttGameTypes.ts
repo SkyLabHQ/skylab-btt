@@ -65,12 +65,6 @@ export enum Game2Status {
     LoseyGridCount, //玩家2通过格子数获胜
 }
 
-export enum MessageStatus {
-    Unknown = 0,
-    Sending = 1,
-    Sent = 2,
-}
-
 export const getWinState = (gameState: GameState) => {
     return [
         GameState.WinByConnecting,
@@ -97,14 +91,6 @@ export const winPatterns = [
     [2, 5, 8], // 竖排
     [0, 4, 8],
     [2, 4, 6], // 对角线
-];
-
-export const MESSAGES = [
-    "I really need the grid.",
-    "I do not want this grid.",
-    "I would bid really high.",
-    "I would bid really low.",
-    "I have so many ways to win.",
 ];
 
 export const MERCS = [
@@ -183,8 +169,6 @@ export interface GameInfo {
     balance: number;
     gameState: number;
     timeout: number;
-    message?: number;
-    emote?: number;
 }
 
 const winEmoji = ["❤️", "👑", "🦋", "🌻", "🥳", "🤪", "😎", "🤭", "🤩"];

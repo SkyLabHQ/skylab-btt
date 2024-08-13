@@ -59,15 +59,11 @@ const BttPlayBackPage = () => {
         gameState: GameState.Unknown,
         balance: 0,
         timeout: 0,
-        message: 0,
-        emote: 0,
     });
     const [opGameInfo, setOpGameInfo] = useState({
         gameState: GameState.Unknown,
         balance: 0,
         timeout: 0,
-        message: 0,
-        emote: 0,
     });
     const [opInfo, setOpInfo] = useState<Info>({
         burner: "",
@@ -210,16 +206,12 @@ const BttPlayBackPage = () => {
         setMyGameInfo({
             balance: 0,
             timeout: 0,
-            message: 0,
-            emote: 0,
             gameState: myGameState,
         });
 
         setOpGameInfo({
             balance: 0,
             timeout: 0,
-            message: 0,
-            emote: 0,
             gameState: opGameState,
         });
 

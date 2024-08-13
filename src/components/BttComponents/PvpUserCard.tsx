@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from "react";
-import { shortenAddress } from "@/utils";
 import AdvantageIcon from "./assets/advantage-icon.svg";
 import { motion } from "framer-motion";
 import {
@@ -10,7 +9,6 @@ import {
     PopoverTrigger,
     PopoverContent,
     PopoverBody,
-    useClipboard,
     NumberInput,
     NumberInputField,
     keyframes,
@@ -21,21 +19,10 @@ import GoldIcon from "./assets/gold.png";
 import AddIcon from "./assets/add-icon.svg";
 import SubIcon from "./assets/sub-icon.svg";
 import DotIcon from "./assets/dot3.svg";
-import UnlockIcon from "./assets/unlock.svg";
 import LockIcon from "./assets/lock.svg";
-import Plane1 from "@/assets/aviations/a1.png";
-import useSkyToast from "@/hooks/useSkyToast";
 import { useCountUp } from "react-countup";
 import ConfirmVideo from "@/assets/confirm.wav";
-import { ClockIcon } from "@/components/Icon/index";
-import {
-    EMOTES,
-    GameState,
-    MERCS,
-    MESSAGES,
-    MessageStatus,
-    UserMarkType,
-} from "@/skyConstants/bttGameTypes";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import useBidIcon from "@/hooks/useBidIcon";
 
 const move = keyframes`
