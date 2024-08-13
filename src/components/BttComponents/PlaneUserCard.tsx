@@ -21,13 +21,11 @@ import GoldIcon from "./assets/gold.png";
 import AddIcon from "./assets/add-icon.svg";
 import SubIcon from "./assets/sub-icon.svg";
 import DotIcon from "./assets/dot3.svg";
-import UnlockIcon from "./assets/unlock.svg";
-import LockIcon from "./assets/lock.svg";
 import Plane1 from "@/assets/aviations/a1.png";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useCountUp } from "react-countup";
 import ConfirmVideo from "@/assets/confirm.wav";
-import { GameState, UserMarkType } from "@/skyConstants/bttGameTypes";
+import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import useBidIcon from "@/hooks/useBidIcon";
 
 const move = keyframes`
@@ -49,16 +47,16 @@ const MyBid = ({
     loading,
     balance,
     bidAmount,
-    myGameState,
+    myIsBid,
     onInputChange,
     onConfirm,
     showAnimateConfirm,
 }: {
+    myIsBid: boolean;
     showTutorialStep?: boolean;
     loading: boolean;
     balance: number;
     bidAmount: number;
-    myGameState: number;
     showAnimateConfirm?: number;
     onInputChange?: (value: number) => void;
     onConfirm: () => void;
@@ -171,10 +169,7 @@ const MyBid = ({
                             } 0.5s linear alternate`}
                         >
                             <NumberInput
-                                isDisabled={
-                                    loading ||
-                                    myGameState !== GameState.WaitingForBid
-                                }
+                                isDisabled={loading || myIsBid}
                                 variant="unstyled"
                                 max={balance}
                                 min={0}
@@ -235,13 +230,7 @@ const MyBid = ({
     );
 };
 
-export const OpBid = ({
-    opGameState,
-    balance,
-}: {
-    opGameState: number;
-    balance: number;
-}) => {
+export const OpBid = ({ balance }: { balance: number }) => {
     return (
         <Box>
             <Box sx={{ marginTop: "1.25vw", display: "flex" }}>
@@ -260,43 +249,23 @@ export const OpBid = ({
                             width: "6.25vw",
                         }}
                     >
-                        {opGameState === GameState.WaitingForBid && (
-                            <motion.div
-                                animate={{
-                                    opacity: [0, 1, 0],
-                                }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    repeatType: "reverse",
-                                }}
-                            >
-                                <Image
-                                    src={DotIcon}
-                                    sx={{
-                                        width: "4.0417vw",
-                                    }}
-                                ></Image>
-                            </motion.div>
-                        )}
-
-                        {opGameState === GameState.Commited && (
+                        <motion.div
+                            animate={{
+                                opacity: [0, 1, 0],
+                            }}
+                            transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                repeatType: "reverse",
+                            }}
+                        >
                             <Image
-                                src={LockIcon}
+                                src={DotIcon}
                                 sx={{
-                                    width: "2.0417vw",
+                                    width: "4.0417vw",
                                 }}
                             ></Image>
-                        )}
-
-                        {opGameState === GameState.Revealed && (
-                            <Image
-                                src={UnlockIcon}
-                                sx={{
-                                    width: "2.0417vw",
-                                }}
-                            ></Image>
-                        )}
+                        </motion.div>
                     </Box>
                 </Box>
                 <Box sx={{ flex: 1 }}>
@@ -328,10 +297,10 @@ export const OpBid = ({
 };
 
 interface UserCardProps {
+    myIsBid: boolean;
     showTutorialStep?: boolean;
     showAnimateConfirm?: number;
     loading?: boolean;
-    revealing?: boolean;
     markIcon: UserMarkType;
     address: string;
     balance: number;
@@ -339,11 +308,9 @@ interface UserCardProps {
     showAdvantageTip?: boolean;
     level?: number;
     myGameState?: number;
-    opGameState?: number;
     planeUrl?: string;
     onConfirm?: () => void;
     onInputChange?: (value: number) => void;
-    onReveal?: () => void;
 }
 
 export const AdvantageTip = ({
@@ -450,58 +417,34 @@ export const AdvantageTip = ({
 export const MyInputBid = ({
     showTutorialStep,
     loading,
-    revealing,
+    myIsBid,
     balance,
     bidAmount,
-    myGameState,
-    opGameState,
     onInputChange,
     onConfirm,
-    onReveal,
     showAnimateConfirm,
 }: {
     showTutorialStep?: boolean;
     loading: boolean;
-    revealing: boolean;
+    myIsBid: boolean;
     balance: number;
     bidAmount: number;
-    myGameState: number;
-    opGameState: number;
     showAnimateConfirm?: number;
     onInputChange?: (value: number) => void;
     onConfirm: () => void;
-    onReveal: () => void;
 }) => {
     const [commitButtonText, status] = useMemo(() => {
-        if (myGameState === GameState.WaitingForBid) {
-            return loading ? ["Committing", 0] : ["Commit", 1];
-        } else if (myGameState === GameState.Commited) {
-            if (opGameState === GameState.WaitingForBid) {
-                return ["Committed", 0];
-            } else if (
-                opGameState === GameState.Commited ||
-                opGameState === GameState.Revealed
-            ) {
-                if (revealing) {
-                    return ["Revealing", 0];
-                } else {
-                    return ["Reveal", 2];
-                }
-            }
-        } else if (myGameState === GameState.Revealed) {
-            return ["Revealed", 0];
+        if (loading) {
+            return ["Committing", 0];
         }
-        return ["Commit", 0];
-    }, [loading, revealing, myGameState, opGameState]);
+
+        return myIsBid ? ["Committed", 0] : ["Commit", 1];
+    }, [loading, myIsBid]);
 
     const handleSumbit = async () => {
         const audio = new Audio(ConfirmVideo);
         audio.play();
-        if (status === 1) {
-            onConfirm();
-        } else if (status === 2) {
-            onReveal();
-        }
+        onConfirm();
     };
     return (
         <Box
@@ -542,7 +485,7 @@ export const MyInputBid = ({
                     bidAmount={bidAmount}
                     onInputChange={onInputChange}
                     onConfirm={handleSumbit}
-                    myGameState={myGameState}
+                    myIsBid={myIsBid}
                     showAnimateConfirm={showAnimateConfirm}
                 ></MyBid>
             </Box>
@@ -571,13 +514,7 @@ export const MyInputBid = ({
     );
 };
 
-export const OpInputBid = ({
-    opGameState,
-    balance,
-}: {
-    opGameState: GameState;
-    balance: number;
-}) => {
+export const OpInputBid = ({ balance }: { balance: number }) => {
     return (
         <Box
             sx={{
@@ -610,28 +547,26 @@ export const OpInputBid = ({
                         backgroundSize: "100% 100%",
                     }}
                 ></Box>
-                <OpBid opGameState={opGameState} balance={balance}></OpBid>
+                <OpBid balance={balance}></OpBid>
             </Box>
         </Box>
     );
 };
 
 export const MyUserCard = ({
+    myIsBid,
     showTutorialStep,
     level,
     loading,
-    revealing,
     markIcon,
     address,
     balance,
     bidAmount,
     showAdvantageTip,
     myGameState,
-    opGameState,
     planeUrl = Plane1,
     onConfirm,
     onInputChange,
-    onReveal,
     showAnimateConfirm,
 }: UserCardProps) => {
     const { onCopy } = useClipboard(address ?? "");
@@ -701,17 +636,14 @@ export const MyUserCard = ({
                 ></Image>
             </Text>
             <MyInputBid
+                myIsBid={myIsBid}
                 showTutorialStep={showTutorialStep}
                 loading={loading}
                 balance={balance}
                 bidAmount={bidAmount}
                 onInputChange={onInputChange}
                 onConfirm={onConfirm}
-                myGameState={myGameState}
-                opGameState={opGameState}
                 showAnimateConfirm={showAnimateConfirm}
-                revealing={revealing}
-                onReveal={onReveal}
             ></MyInputBid>
         </Box>
     );
@@ -722,7 +654,6 @@ export const OpUserCard = ({
     markIcon,
     address,
     balance,
-    opGameState,
     showAdvantageTip,
     planeUrl = Plane1,
 }: UserCardProps) => {
@@ -789,10 +720,7 @@ export const OpUserCard = ({
                     }}
                 ></Image>
             </Text>
-            <OpInputBid
-                opGameState={opGameState}
-                balance={balance}
-            ></OpInputBid>
+            <OpInputBid balance={balance}></OpInputBid>
         </Box>
     );
 };

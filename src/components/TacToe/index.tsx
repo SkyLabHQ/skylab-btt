@@ -1,14 +1,13 @@
-import { MyUserCard, OpUserCard } from "@/components/BttComponents/UserCard";
 import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/BttComponents/Board";
 import { useGameContext } from "@/pages/TacToe";
-import useSkyToast from "@/hooks/useSkyToast";
 import getNowSecondsTimestamp from "@/utils/nowTime";
 import QuitModal from "../BttComponents/QuitModal";
 import MLayout from "./MLayout";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
+import { MyUserCard, OpUserCard } from "../BttComponents/PlaneUserCard";
 
 const TacToePage = ({
     bidAmount,
@@ -30,10 +29,8 @@ const TacToePage = ({
     handleQuit: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const toast = useSkyToast();
     const [time, setTime] = useState(0);
-    const { myGameInfo, opGameInfo, list, gameId, handleStepChange } =
-        useGameContext();
+    const { myGameInfo, opGameInfo, list, handleStepChange } = useGameContext();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -131,6 +128,8 @@ const TacToePage = ({
         };
     }, [isPc]);
 
+    console.log(myGameInfo, "myGameInfo");
+
     return (
         <Box
             sx={{
@@ -185,10 +184,10 @@ const TacToePage = ({
                             }}
                         >
                             <MyUserCard
+                                myIsBid={myGameInfo.isBid}
                                 loading={loading}
                                 showAdvantageTip={false}
                                 myGameState={myGameInfo.gameState}
-                                opGameState={opGameInfo.gameState}
                                 markIcon={myGameInfo.mark}
                                 address={myGameInfo.address}
                                 balance={myGameInfo.balance}
@@ -212,9 +211,9 @@ const TacToePage = ({
                             }}
                         >
                             <OpUserCard
+                                myIsBid={myGameInfo.isBid}
                                 markIcon={opGameInfo.mark}
                                 showAdvantageTip={false}
-                                opGameState={opGameInfo.gameState}
                                 address={opGameInfo.address}
                                 balance={opGameInfo?.balance}
                                 bidAmount={0}

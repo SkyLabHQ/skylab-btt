@@ -1,14 +1,3 @@
-import Merc1 from "./emotes/1.png";
-import Merc2 from "./emotes/2.png";
-import Merc3 from "./emotes/3.png";
-import Merc4 from "./emotes/4.png";
-import Merc5 from "./emotes/5.png";
-import Merc6 from "./emotes/6.png";
-import Merc7 from "./emotes/7.png";
-import Merc8 from "./emotes/8.png";
-import Merc9 from "./emotes/9.png";
-import Merc10 from "./emotes/10.png";
-
 import Robot from "@/components/BttComponents/assets/robot.png";
 import CircleIcon from "@/components/TacToe/assets/circle.svg";
 import CrossIcon from "@/components/TacToe/assets/x.svg";
@@ -26,7 +15,6 @@ import YellowCross1 from "@/components/TacToe/assets/yellow-x1.png";
 import BlackCircle1 from "@/components/TacToe/assets/black-o1.png";
 import BlackCross1 from "@/components/TacToe/assets/black-x1.png";
 import BlackBotX from "@/components/TacToe/assets/black-bot-x.png";
-import { PLayerStatus } from "@/pages/PvpRoom";
 
 export interface Info {
     burner: string;
@@ -91,19 +79,6 @@ export const winPatterns = [
     [2, 5, 8], // 竖排
     [0, 4, 8],
     [2, 4, 6], // 对角线
-];
-
-export const MERCS = [
-    Merc1,
-    Merc2,
-    Merc3,
-    Merc4,
-    Merc5,
-    Merc6,
-    Merc7,
-    Merc8,
-    Merc9,
-    Merc10,
 ];
 
 export const EMOTES = ["🥱", "🤔", "🤯", "😭", "🥺", "🤩", "🥳"];

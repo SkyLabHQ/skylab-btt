@@ -12,16 +12,14 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import PlayBackButton from "../BttPlayBack/PlayBackButton";
 import ShareButtons from "../PrivateRoom/ShareButton";
-import { useChainId } from "wagmi";
 import { PLayerStatus } from "@/pages/PvpRoom";
 import TournamentPlayBack from "../PrivateRoom/TournamentPlayBack";
 
 const ResultPage = ({ gameInfo }: { gameInfo: any }) => {
     const { myGameInfo, opGameInfo, handleStepChange } = useGameContext();
-    const chainid = useChainId();
-    const [currentRound, setCurrentRound] = useState(0);
-
-    const [resultList, setResultList] = useState<BoardItem[]>(initBoard()); // init board
+    const [currentRound, setCurrentRound] = useState<number>(
+        gameInfo.gridIndex + 1,
+    );
 
     const [showList, myBalance, opBalance] = useMemo(() => {
         let myBalance = 100,
@@ -120,7 +118,7 @@ const ResultPage = ({ gameInfo }: { gameInfo: any }) => {
     const handleShare = () => {
         const text = getShareEmoji(
             myGameInfo.mark,
-            resultList,
+            showList,
             getPvpWinState(myGameInfo.gameState),
         );
 

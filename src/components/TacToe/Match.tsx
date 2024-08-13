@@ -159,7 +159,6 @@ export const MatchPage = () => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const [gameId] = useState<string>(params.gameId);
-    const [init, setInit] = useState<boolean>(false);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useSkyToast();

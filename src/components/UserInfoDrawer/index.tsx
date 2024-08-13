@@ -21,10 +21,7 @@ import DownArrowIcon from "./assets/down-arrow.png";
 import { usePrivy } from "@privy-io/react-auth";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { shortenAddress } from "@/utils";
-import PaperIcon from "./assets/paper.png";
-import GrayArrow from "./assets/gray-arrow.svg";
 import Blackrrow from "./assets/black-arrow.svg";
-import { aviationImg } from "@/utils/aviationImg";
 import NoPlane from "./assets/no-plane.png";
 import DiscordIcon from "./assets/discord.png";
 import TwIcon from "./assets/twitter.png";
@@ -37,7 +34,6 @@ import BiddingGif from "@/assets/bidding.gif";
 import TgIcon from "./assets/tg-icon.svg";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import PilotBorder from "@/assets/pilot-border.png";
-import WalletIcon from "@/assets/wallet-icon.png";
 import UserIcon from "@/assets/user-icon.png";
 
 const UserInfo = ({
@@ -119,7 +115,12 @@ const UserInfo = ({
                             cursor: "pointer",
                         }}
                         onClick={() => {
-                            window.open(`${TG_URL}?start=${address}`, "_blank");
+                            const accessToken =
+                                localStorage.getItem("privi:token");
+                            window.open(
+                                `${TG_URL}?start=${accessToken}`,
+                                "_blank",
+                            );
                         }}
                         align={"center"}
                         justify={"center"}

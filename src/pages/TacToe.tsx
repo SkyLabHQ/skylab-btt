@@ -54,8 +54,6 @@ const TacToe = () => {
     const [step, setStep] = useState<number>(0);
     const params = qs.parse(search) as any;
     const [gameId] = useState<number>(params.gameId);
-
-    const [invited] = useState<string>(params.invited);
     const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
     const [currentGrid, setCurrentGrid] = useState<number>(-1);
     const [gameInfo, setGameInfo] = useState<any>({
@@ -131,7 +129,8 @@ const TacToe = () => {
         setCurrentRound(gridIndex);
         const _list = JSON.parse(JSON.stringify(list));
         const boardGrids = gameInfo.boards;
-        const isPlayer1 = address.toLocaleLowerCase() == gameInfo.player1;
+        const isPlayer1 =
+            address.toLocaleLowerCase() == gameInfo.player1.toLocaleLowerCase();
 
         const player1GameInfo = {
             address: gameInfo.player1,
@@ -176,6 +175,7 @@ const TacToe = () => {
             _list[i].opMark = opGameInfo.mark;
         }
 
+        console.log("---------", _list, "------------");
         if (Game2Status.InProgress === player1GameInfo.gameState) {
             _list[resCurrentGrid].mark = UserMarkType.Square;
         }
@@ -254,10 +254,6 @@ const TacToe = () => {
     };
 
     useEffect(() => {
-        console.log("gameId", gameId);
-        console.log("myGameInfo.gameState", myGameInfo.gameState);
-        console.log("address", address);
-
         if (
             !gameId ||
             myGameInfo.gameState !== Game2Status.InProgress ||
@@ -284,30 +280,30 @@ const TacToe = () => {
     }, [gameInfo]);
 
     useEffect(() => {
+        console.log(gameInfo, "gameInfo");
         if (!gameInfo.player1 || !address) return;
         if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
-            navigate("/free/pvp/home");
+            navigate("/");
             return;
         }
 
         if (!gameInfo.player2) {
-            if (gameInfo.player1 == address.toLocaleLowerCase()) {
-                // match with myself
+            if (
+                gameInfo.player1.toLocaleLowerCase() ==
+                address.toLocaleLowerCase()
+            ) {
                 setStep(0);
-            } else {
-                // join to match
-                setStep(1);
             }
             return;
         }
 
         if (gameInfo.gameStatus1 === Game2Status.InProgress) {
-            setStep(2);
+            setStep(1);
             return;
         }
 
         if (gameInfo.gameStatus1 > Game2Status.InProgress) {
-            setStep(3);
+            setStep(2);
             return;
         }
     }, [gameInfo.gameStatus1, gameInfo.player1, gameInfo.player2, address]);

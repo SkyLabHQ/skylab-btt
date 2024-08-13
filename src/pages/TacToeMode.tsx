@@ -36,8 +36,9 @@ const TacToeMode = () => {
             });
             if (res.code === 200) {
                 navigate("/btt/game?gameId=" + res.data.game.id);
+            } else {
+                toast(res.message);
             }
-            console.log(res, "res");
         } catch (e) {
             closeLoading();
             console.log(e);

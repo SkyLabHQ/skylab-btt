@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import Board from "@/components/BttComponents/Board";
-import { Game2Status, getPvpWinState } from "@/skyConstants/bttGameTypes";
+import {
+    Game2Status,
+    getPvpWinState,
+    winPatterns,
+} from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 import { useGameContext } from "@/pages/TacToe";
@@ -12,6 +16,42 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
     const { myGameInfo, opGameInfo, list, handleStepChange } = useGameContext();
 
     const isMyWin = getPvpWinState(gameState);
+    const resultList = useMemo(() => {
+        const _list = [...list];
+
+        const myGameState = myGameInfo.gameState;
+        const isMyWin = getPvpWinState(myGameState);
+        let beforeMark = isMyWin ? myGameInfo.mark : opGameInfo.mark;
+        let mark = isMyWin ? myGameInfo.winMark : opGameInfo.winMark;
+        if (
+            gameState === Game2Status.WinByConnecting ||
+            gameState === Game2Status.LoseByConnecting
+        ) {
+            for (let i = 0; i < winPatterns.length; i++) {
+                const index0 = winPatterns[i][0];
+                const index1 = winPatterns[i][1];
+                const index2 = winPatterns[i][2];
+                if (
+                    _list[index0].mark === beforeMark &&
+                    _list[index0].mark === _list[index1].mark &&
+                    _list[index0].mark === _list[index2].mark
+                ) {
+                    _list[index0].mark = mark;
+                    _list[index1].mark = mark;
+                    _list[index2].mark = mark;
+                    break;
+                }
+            }
+        } else {
+            for (let i = 0; i < _list.length; i++) {
+                if (_list[i].mark === beforeMark) {
+                    _list[i].mark = mark;
+                }
+            }
+        }
+
+        return _list;
+    }, [list]);
 
     return isPc ? (
         <Flex
@@ -42,7 +82,7 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
                     paddingTop: "1.5625vw",
                 }}
             >
-                <Board list={list}></Board>
+                <Board list={resultList}></Board>
                 <Text
                     sx={{
                         textAlign: "center",

@@ -45,16 +45,7 @@ export const UserInfoProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const {
-        ready,
-        user,
-        login,
-        connectWallet,
-        linkWallet,
-        authenticated,
-        getAccessToken,
-        logout,
-    } = usePrivy();
+    const { ready, user, login, linkWallet } = usePrivy();
 
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -73,7 +64,6 @@ export const UserInfoProvider = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [accessTokenInit, setAccessTokenInit] = useState(false);
     const toast = useSkyToast();
 
     const handleLogin = async () => {
@@ -247,18 +237,6 @@ export const UserInfoProvider = ({
             handleGetUserPaper();
         }
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
-
-    useEffect(() => {
-        if (!user) {
-            setAccessTokenInit(false);
-            sessionStorage.removeItem("accessToken");
-            return;
-        }
-        getAccessToken().then((accessToken: string) => {
-            setAccessTokenInit(true);
-            sessionStorage.setItem("accessToken", accessToken);
-        });
-    }, [user]);
 
     return (
         <UserInfoContext.Provider
