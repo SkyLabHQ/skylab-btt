@@ -9,7 +9,6 @@ import TermPage from "./components/TermPage";
 import { UserInfoProvider, useUserInfo } from "./contexts/UserInfo";
 import CloseIcon from "@/assets/close.svg";
 import qs from "query-string";
-import { getAccessToken, usePrivy } from "@privy-io/react-auth";
 
 const themeColorList = [
     {

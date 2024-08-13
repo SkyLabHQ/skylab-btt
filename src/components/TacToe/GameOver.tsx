@@ -1,18 +1,17 @@
 import React from "react";
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import Board from "@/components/BttComponents/Board";
-import { getWinState } from "@/skyConstants/bttGameTypes";
+import { Game2Status, getPvpWinState } from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
-import { GameType, useGameContext } from "@/pages/TacToe";
+import { useGameContext } from "@/pages/TacToe";
 import ResultUserCard from "../BttComponents/ResultUserCard";
 
-const GameOver = () => {
+const GameOver = ({ gameState }: { gameState: Game2Status }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { myInfo, opInfo, myGameInfo, opGameInfo, list, onStep, gameType } =
-        useGameContext();
+    const { myGameInfo, opGameInfo, list, handleStepChange } = useGameContext();
 
-    const isMyWin = getWinState(myGameInfo.gameState);
+    const isMyWin = getPvpWinState(gameState);
 
     return isPc ? (
         <Flex
@@ -25,7 +24,7 @@ const GameOver = () => {
                 justifyContent: "space-between",
             }}
             onClick={() => {
-                onStep();
+                handleStepChange();
             }}
         >
             <Box
@@ -33,10 +32,10 @@ const GameOver = () => {
                     width: "15.625vw",
                 }}
             >
-                <ResultUserCard
+                {/* <ResultUserCard
                     win={isMyWin}
                     userInfo={myInfo}
-                ></ResultUserCard>
+                ></ResultUserCard> */}
             </Box>
             <Box
                 sx={{
@@ -59,10 +58,10 @@ const GameOver = () => {
                     width: "15.625vw",
                 }}
             >
-                <ResultUserCard
+                {/* <ResultUserCard
                     win={!isMyWin}
                     userInfo={opInfo}
-                ></ResultUserCard>
+                ></ResultUserCard> */}
             </Box>
         </Flex>
     ) : (
@@ -74,7 +73,7 @@ const GameOver = () => {
                 height: "100%",
             }}
             onClick={() => {
-                onStep();
+                handleStepChange();
             }}
         >
             <Flex
@@ -88,16 +87,14 @@ const GameOver = () => {
                 flexDir={"column"}
             >
                 <MUserProfileResult
-                    address={
-                        gameType === GameType.HumanWithBot ? "" : opInfo.address
-                    }
+                    address={opGameInfo.address}
                     position="left"
-                    img={opInfo.img}
-                    level={opInfo.level}
+                    img={""}
+                    level={1}
                 ></MUserProfileResult>
                 <MBalance
                     balance={opGameInfo.balance}
-                    mark={opInfo.mark}
+                    mark={opGameInfo.mark}
                     showResult={true}
                     win={!isMyWin}
                     status="left"
@@ -115,16 +112,14 @@ const GameOver = () => {
             >
                 <MUserProfileResult
                     position="right"
-                    address={
-                        gameType === GameType.HumanWithBot ? "" : myInfo.address
-                    }
-                    img={myInfo.img}
-                    level={myInfo.level}
+                    address={myGameInfo.address}
+                    img={""}
+                    level={1}
                 ></MUserProfileResult>
                 <MBalance
                     balance={myGameInfo.balance}
                     status="right"
-                    mark={myInfo.mark}
+                    mark={myGameInfo.mark}
                     showResult={true}
                     win={isMyWin}
                 ></MBalance>

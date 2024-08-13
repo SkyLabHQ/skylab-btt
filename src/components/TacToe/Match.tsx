@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Box,
     Flex,
@@ -7,36 +7,22 @@ import {
     useDisclosure,
     useMediaQuery,
 } from "@chakra-ui/react";
-import { useGameContext } from "@/pages/Match";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
-import { getMetadataImg } from "@/utils/ipfsImg";
-import {
-    useMultiProvider,
-    useMultiSkylabBidTacToeFactoryContract,
-    useMultiSkylabBidTacToeGameContract,
-    useMultiMercuryBaseContract,
-} from "@/hooks/useMultiContract";
-import { botAddress } from "@/hooks/useContract";
 import QuitModal from "@/components/BttComponents/QuitModal";
-import { getPlaneGameSigner } from "@/hooks/useSigner";
-import { ZERO_DATA } from "@/skyConstants";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { handleError } from "@/utils/error";
-import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
 import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
 import DotLoading from "../Loading/DotLoading";
-import PlayWithBot from "./assets/playbot.png";
-import { useSubmitRequest } from "@/contexts/SubmitRequest";
-import { bttFactoryIface } from "@/skyConstants/iface";
 import ArrowIcon from "./assets/arrow-up.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import { Info, UserMarkType } from "@/skyConstants/bttGameTypes";
-import { useChainId } from "wagmi";
+import { quitMatch } from "@/api/tournament";
+import qs from "query-string";
+import { useGameContext } from "@/pages/TacToe";
 
 const randomText = [
     ["*When the game starts, ", "you have 12 hours to make each move"],
@@ -46,7 +32,7 @@ const randomText = [
     ],
 ];
 
-const PlaneImg = ({ detail, flip }: { detail: Info; flip?: boolean }) => {
+const PlaneImg = ({ detail, flip }: { detail: any; flip?: boolean }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     return (
         <>
@@ -169,254 +155,27 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
     );
 };
 
-export const MatchPage = ({
-    onChangeInfo,
-}: {
-    onChangeInfo: (position: "my" | "op", info: Info) => void;
-}) => {
-    const chainId = useChainId();
-    const [gameAddress, setGameAddress] = useState("");
-    const { isLoading, openLoading, closeLoading } = useSubmitRequest();
+export const MatchPage = () => {
+    const { search } = useLocation();
+    const params = qs.parse(search) as any;
+    const [gameId] = useState<string>(params.gameId);
+    const [init, setInit] = useState<boolean>(false);
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [showPlayWithBot, setShowPlayWithBot] = useState(false);
-    const navigate = useNavigate();
     const toast = useSkyToast();
-    const { myInfo, opInfo, tokenId, avaitionAddress, handleGetGas } =
-        useGameContext();
-
-    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
-    const planeSinger = getPlaneGameSigner(tokenId);
-    const multiProvider = useMultiProvider(chainId);
-
-    const multiMercuryBaseContract = useMultiMercuryBaseContract(chainId);
-    const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(gameAddress);
-    const multiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(chainId);
-
-    const handleGetHuamnAndHumanInfo = async (
-        playerAddress1: string,
-        playerAddress2: string,
-    ) => {
-        const [tokenId1, tokenId2] = await multiProvider.all([
-            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                playerAddress1,
-            ),
-            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                playerAddress2,
-            ),
-        ]);
-        const [account1, level1, mtadata1, account2, level2, mtadata2] =
-            await multiProvider.all([
-                multiMercuryBaseContract.ownerOf(tokenId1),
-                multiMercuryBaseContract.aviationLevels(tokenId1),
-                multiMercuryBaseContract.tokenURI(tokenId1),
-                multiMercuryBaseContract.ownerOf(tokenId2),
-                multiMercuryBaseContract.aviationLevels(tokenId2),
-                multiMercuryBaseContract.tokenURI(tokenId2),
-            ]);
-
-        const player1Info = {
-            burner: playerAddress1,
-            address: account1,
-            level: level1.toNumber(),
-            img: getMetadataImg(mtadata1),
-            mark: UserMarkType.Circle,
-        };
-        const player2Info = {
-            burner: playerAddress2,
-            address: account2,
-            level: level2.toNumber(),
-            img: getMetadataImg(mtadata2),
-            mark: UserMarkType.Cross,
-        };
-
-        if (player1Info.burner === planeSinger.address) {
-            onChangeInfo("my", { ...player1Info });
-            onChangeInfo("op", { ...player2Info });
-        } else {
-            onChangeInfo("my", { ...player2Info });
-            onChangeInfo("op", { ...player1Info });
-        }
-        setTimeout(() => {
-            const url = `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`;
-            navigate(url);
-        }, 1500);
-    };
-
-    const handleGetAllPlayerInfo = async () => {
-        const [playerAddress1, playerAddress2] = await multiProvider.all([
-            multiSkylabBidTacToeGameContract.player1(),
-            multiSkylabBidTacToeGameContract.player2(),
-        ]);
-
-        console.log("playerAddress1", playerAddress1);
-        console.log("playerAddress2", playerAddress2);
-        handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
-    };
-
-    // get my and op info
-    const handleGetGameInfo = async () => {
-        try {
-            let operateAddress = planeSinger.address;
-
-            const [gameAddress, defaultGameQueue] = await multiProvider.all([
-                multiSkylabBidTacToeFactoryContract.gamePerPlayer(
-                    operateAddress,
-                ),
-                multiSkylabBidTacToeFactoryContract.defaultGameQueue(
-                    avaitionAddress,
-                ),
-            ]);
-
-            if (gameAddress === ZERO_DATA) {
-                if (operateAddress !== defaultGameQueue) {
-                    navigate("/");
-                    return;
-                }
-
-                const [account, level, mtadata, point, joinDefaultQueueTime] =
-                    await multiProvider.all([
-                        multiMercuryBaseContract.ownerOf(tokenId),
-                        multiMercuryBaseContract.aviationLevels(tokenId),
-                        multiMercuryBaseContract.tokenURI(tokenId),
-                        multiMercuryBaseContract.aviationPoints(tokenId),
-                        multiSkylabBidTacToeFactoryContract.joinDefaultQueueTime(
-                            avaitionAddress,
-                            operateAddress,
-                        ),
-                    ]);
-
-                const current = Math.floor(new Date().getTime() / 1000);
-
-                if (Number(joinDefaultQueueTime.toString()) + 45 <= current) {
-                    setShowPlayWithBot(true);
-                } else {
-                    setShowPlayWithBot(false);
-                }
-
-                onChangeInfo("my", {
-                    burner: operateAddress,
-                    address: account,
-                    level: level.toNumber(),
-                    point: point.toNumber(),
-                    img: getMetadataImg(mtadata),
-                    mark: UserMarkType.Empty,
-                });
-                onChangeInfo("op", {
-                    burner: "",
-                    address: "",
-                    level: 0,
-                    point: 0,
-                    img: "",
-                    mark: UserMarkType.Empty,
-                });
-            } else {
-                setShowPlayWithBot(false);
-                setGameAddress(gameAddress);
-            }
-        } catch (e: any) {
-            console.log(e);
-            navigate("/");
-        }
-    };
-
-    const handlePlayWithBot = async () => {
-        try {
-            openLoading();
-            const createBotGameReceipt = await tacToeFactoryRetryWrite(
-                "playWithBotAfterDefaultQueueTimer",
-                [avaitionAddress, botAddress[chainId]],
-                {
-                    gasLimit: 1550000,
-                    signer: planeSinger.privateKey,
-                },
-            );
-            const startBotGameTopic0 =
-                bttFactoryIface.getEventTopic("StartBotGame");
-
-            const startBotGameLog = createBotGameReceipt.logs.find(
-                (item: any) => {
-                    return item.topics[0] === startBotGameTopic0;
-                },
-            );
-
-            const startBotGameData = bttFactoryIface.parseLog({
-                data: startBotGameLog.data,
-                topics: startBotGameLog.topics,
-            });
-
-            navigate(
-                `/btt/game?gameAddress=${startBotGameData.args.gameAddress}&tokenId=${tokenId}`,
-            );
-            closeLoading();
-        } catch (error) {
-            console.log(error);
-            closeLoading();
-            toast(handleError(error));
-        }
-    };
+    const { myGameInfo, opGameInfo } = useGameContext();
 
     const handleQuit = async () => {
         try {
-            await tacToeFactoryRetryWrite("withdrawFromQueue", [], {
-                gasLimit: 250000,
-                signer: planeSinger.privateKey,
+            await quitMatch({
+                gameId: Number(gameId),
             });
-            const url = `/btt?tokenId=${tokenId}`;
-            handleGetGas();
-            navigate(url);
             onClose();
         } catch (error) {
             console.log(error);
             toast(handleError(error));
         }
     };
-
-    useEffect(() => {
-        if (
-            !multiProvider ||
-            !multiMercuryBaseContract ||
-            !multiSkylabBidTacToeGameContract ||
-            !multiSkylabBidTacToeFactoryContract
-        )
-            return;
-
-        handleGetAllPlayerInfo();
-    }, [
-        multiProvider,
-        multiMercuryBaseContract,
-        multiSkylabBidTacToeGameContract,
-        multiSkylabBidTacToeFactoryContract,
-    ]);
-
-    useEffect(() => {
-        if (
-            !tokenId ||
-            !planeSinger ||
-            !multiSkylabBidTacToeFactoryContract ||
-            !multiProvider ||
-            isLoading
-        ) {
-            return;
-        }
-
-        const timer = setInterval(() => {
-            handleGetGameInfo();
-        }, 3000);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, [
-        multiProvider,
-        tokenId,
-        planeSinger,
-        multiMercuryBaseContract,
-        multiSkylabBidTacToeFactoryContract,
-        isLoading,
-    ]);
 
     return (
         <Box
@@ -507,7 +266,7 @@ export const MatchPage = ({
                     marginTop: "1vh",
                 }}
             >
-                <PlaneImg detail={myInfo}></PlaneImg>
+                <PlaneImg detail={myGameInfo}></PlaneImg>
                 <Text
                     sx={{
                         fontSize: isPc ? "32px" : "20px",
@@ -516,26 +275,14 @@ export const MatchPage = ({
                 >
                     VS
                 </Text>
-                <PlaneImg detail={opInfo} flip={true}></PlaneImg>
+                <PlaneImg detail={opGameInfo} flip={true}></PlaneImg>
             </Box>
             <StopMatch
                 onClick={() => {
                     onOpen();
                 }}
             ></StopMatch>
-            {showPlayWithBot && (
-                <Image
-                    onClick={handlePlayWithBot}
-                    src={PlayWithBot}
-                    sx={{
-                        position: "absolute",
-                        right: 0,
-                        bottom: 0,
-                        cursor: "pointer",
-                        width: isPc ? "300px" : "120px",
-                    }}
-                ></Image>
-            )}
+
             <QuitModal
                 onConfirm={handleQuit}
                 isOpen={isOpen}

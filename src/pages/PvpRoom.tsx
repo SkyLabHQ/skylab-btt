@@ -7,7 +7,7 @@ import PlayGame from "@/components/PrivateRoom/PlayGame";
 import {
     BoardItem,
     initBoard,
-    PvpGameStatus,
+    Game2Status,
     UserMarkType,
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/PrivateRoom/GameOver";
@@ -34,7 +34,7 @@ export interface PvpGameInfo {
     mark: UserMarkType;
     winMark: UserMarkType;
     playerStatus: PLayerStatus;
-    gameState: PvpGameStatus;
+    gameState: Game2Status;
 }
 const PvpGameContext = createContext<{
     myGameInfo: PvpGameInfo;
@@ -66,8 +66,8 @@ const PvpRoom = () => {
         player2: 0,
         balance1: 0,
         balance2: 0,
-        gameStatus1: PvpGameStatus.InProgress,
-        gameStatus2: PvpGameStatus.InProgress,
+        gameStatus1: Game2Status.InProgress,
+        gameStatus2: Game2Status.InProgress,
         boards: [],
         nickname1: "",
         nickname2: "",
@@ -86,7 +86,7 @@ const PvpRoom = () => {
         balance: 0,
         isBid: false,
         playerStatus: null,
-        gameState: PvpGameStatus.InProgress,
+        gameState: Game2Status.InProgress,
     });
     const [opGameInfo, setOpGameInfo] = useState<PvpGameInfo>({
         tgId: 0,
@@ -96,7 +96,7 @@ const PvpRoom = () => {
         balance: 0,
         isBid: false,
         playerStatus: null,
-        gameState: PvpGameStatus.InProgress,
+        gameState: Game2Status.InProgress,
     });
 
     const handleStep = (step?: number) => {
@@ -190,7 +190,7 @@ const PvpRoom = () => {
             _list[i].opMark = opGameInfo.mark;
         }
 
-        if (PvpGameStatus.InProgress === player1GameInfo.gameState) {
+        if (Game2Status.InProgress === player1GameInfo.gameState) {
             _list[resCurrentGrid].mark = UserMarkType.Square;
         }
 
@@ -270,7 +270,7 @@ const PvpRoom = () => {
     useEffect(() => {
         if (
             !gameId ||
-            myGameInfo.gameState !== PvpGameStatus.InProgress ||
+            myGameInfo.gameState !== Game2Status.InProgress ||
             !initData.user.id
         )
             return;
@@ -294,10 +294,8 @@ const PvpRoom = () => {
     }, [gameInfo]);
 
     useEffect(() => {
-        console.log("gameInfo", gameInfo);
-
         if (!gameInfo.player1 || !initData.user.id) return;
-        if (gameInfo.gameStatus1 === PvpGameStatus.QuitByPlayer1) {
+        if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
             navigate("/free/pvp/home");
             return;
         }
@@ -313,12 +311,12 @@ const PvpRoom = () => {
             return;
         }
 
-        if (gameInfo.gameStatus1 === PvpGameStatus.InProgress) {
+        if (gameInfo.gameStatus1 === Game2Status.InProgress) {
             setStep(2);
             return;
         }
 
-        if (gameInfo.gameStatus1 > PvpGameStatus.InProgress) {
+        if (gameInfo.gameStatus1 > Game2Status.InProgress) {
             setStep(3);
             return;
         }
@@ -396,7 +394,6 @@ const PvpRoom = () => {
             ) : (
                 <LoadingPage></LoadingPage>
             )}
-
             <Nest />
         </Box>
     );

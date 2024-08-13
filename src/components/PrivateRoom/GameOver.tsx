@@ -4,13 +4,13 @@ import Board from "@/components/BttComponents/Board";
 import { usePvpGameContext } from "@/pages/PvpRoom";
 import {
     getPvpWinState,
-    PvpGameStatus,
+    Game2Status,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import { MUserProfileResult } from "./UserProfile";
 import MBalance from "../BttComponents/MBalance";
 
-const GameOver = ({ gameState }: { gameState: PvpGameStatus }) => {
+const GameOver = ({ gameState }: { gameState: Game2Status }) => {
     const { myGameInfo, opGameInfo, list, handleStepChange } =
         usePvpGameContext();
 
@@ -22,8 +22,8 @@ const GameOver = ({ gameState }: { gameState: PvpGameStatus }) => {
         let beforeMark = isMyWin ? myGameInfo.mark : opGameInfo.mark;
         let mark = isMyWin ? myGameInfo.winMark : opGameInfo.winMark;
         if (
-            gameState === PvpGameStatus.WinByConnecting ||
-            gameState === PvpGameStatus.LoseByConnecting
+            gameState === Game2Status.WinByConnecting ||
+            gameState === Game2Status.LoseByConnecting
         ) {
             for (let i = 0; i < winPatterns.length; i++) {
                 const index0 = winPatterns[i][0];

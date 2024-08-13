@@ -37,13 +37,8 @@ const MatchPage = () => {
             toast(handleError(error));
         }
     };
-    const { onCopy } = useClipboard(
-        `${location.origin}/free/pvp/accept?gameId=${gameId}&outer2=true`,
-    );
 
     const shareUrl = useMemo(() => {
-        // const url = `${location.origin}/free/pvp/accept?gameId=${gameId}&outer2=true`;
-        // return url;
         if (!gameId) return "";
         try {
             const share_url =
@@ -112,7 +107,6 @@ const MatchPage = () => {
                             marginTop: "20px",
                         }}
                     >
-                        {/* <Button onClick={onCopy}>复制链接</Button> */}
                         <a href={shareUrl} target="_blank">
                             <Flex
                                 justify={"center"}

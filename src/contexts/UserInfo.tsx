@@ -247,7 +247,6 @@ export const UserInfoProvider = ({
             return;
         }
         getAccessToken().then((accessToken: string) => {
-            console.log(accessToken, "accessToken");
             setAccessTokenInit(true);
             sessionStorage.setItem("accessToken", accessToken);
         });

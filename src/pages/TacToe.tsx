@@ -1,153 +1,101 @@
 import { Box } from "@chakra-ui/react";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import "@reactour/popover/dist/index.css"; // arrow css
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import { getPlaneGameSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import SettlementPage from "@/components/TacToe/SettlementPage";
 import BttHelmet from "@/components/Helmet/BttHelmet";
-import { useChainId } from "wagmi";
-import { getViemClients } from "@/utils/viem";
-import { botAddress, mercuryJarTournamentAddress } from "@/hooks/useContract";
 import {
     BoardItem,
-    GameInfo,
-    GameState,
-    Info,
-    RobotImg,
+    Game2Status,
     UserMarkType,
-    getWinState,
     initBoard,
-    winPatterns,
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/TacToe/GameOver";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import LoadingPage from "@/components/LoadingPage";
-import {
-    useMultiMercuryBaseContract,
-    useMultiProvider,
-    useMultiSkylabBidTacToeFactoryContract,
-    useMultiSkylabBidTacToeGameContract,
-} from "@/hooks/useMultiContract";
-import { getMetadataImg } from "@/utils/ipfsImg";
-import { ZERO_DATA } from "@/skyConstants";
 import Nest from "@/components/Nest";
-import { privateKeyToAccount } from "viem/accounts";
-import { CHAINS } from "@/skyConstants/chains";
-import { createWalletClient, http } from "viem";
+import { bid, getGameInfo, surrender } from "@/api/tournament";
+import { PLayerStatus } from "./PvpRoom";
+import useSkyToast from "@/hooks/useSkyToast";
+import Match from "@/components/TacToe/Match";
 
-export interface MyNewInfo {
-    level: number;
-    point: number;
-    img?: string;
+export interface TournamentGameInfo {
+    address: string;
+    userId: string;
+    balance: number;
+    isBid: boolean;
+    mark: UserMarkType;
+    winMark: UserMarkType;
+    playerStatus: PLayerStatus;
+    gameState: Game2Status;
 }
-
-export enum GameType {
-    Unkown,
-    HumanWithHuman,
-    HumanWithBot,
-}
-
 const GameContext = createContext<{
-    gameType: GameType;
+    myGameInfo: TournamentGameInfo;
+    opGameInfo: TournamentGameInfo;
     list: BoardItem[];
-    tokenId: number;
-    myNewInfo: MyNewInfo;
-    myInfo: Info;
-    opInfo: Info;
-    myGameInfo: GameInfo;
-    opGameInfo: GameInfo;
-    gameAddress: string;
-    avaitionAddress: string;
-    mileages: {
-        winMileage: number;
-        loseMileage: number;
-    };
-    points: {
-        winPoint: number;
-        losePoint: number;
-    };
-    onStep: (step?: number) => void;
-    handleGetGas: () => void;
+    gameId: number;
+    step: number;
+    handleStepChange: (step?: number) => void;
+    onList: (list: BoardItem[]) => void;
 }>(null);
 export const useGameContext = () => useContext(GameContext);
 
 const TacToe = () => {
-    const navitate = useNavigate();
-    const chainId = useChainId();
+    const navigate = useNavigate();
+    const toast = useSkyToast();
     const { address } = usePrivyAccounts();
-    const [gameType, setGameType] = useState<GameType>(GameType.Unkown);
-    const [mileages, setMileages] = useState<{
-        winMileage: number;
-        loseMileage: number;
-    }>({
-        winMileage: 0,
-        loseMileage: 0,
-    });
-
-    const [points, setPoints] = useState<{
-        winPoint: number;
-        losePoint: number;
-    }>({
-        winPoint: 0,
-        losePoint: 0,
-    });
-
-    const { search } = useLocation();
-    const params = qs.parse(search) as any;
-    const multiProvider = useMultiProvider(chainId);
-    const [myNewInfo, setMyNewInfo] = useState<MyNewInfo>(null); // if game over update my info
-    const avaitionAddress = mercuryJarTournamentAddress[chainId];
-    const [myInfo, setMyInfo] = useState<Info>({
-        burner: "",
-        address: "",
-        level: 0,
-        point: 0,
-        img: "",
-        mark: UserMarkType.Empty,
-    });
-    const [opInfo, setOpInfo] = useState<Info>({
-        burner: "",
-        address: "",
-        level: 0,
-        point: 0,
-        img: "",
-        mark: UserMarkType.Empty,
-    });
-    const [tokenId] = useState<number>(params.tokenId);
-    const initRef = useRef<boolean>(false);
-    const planeAccount = getPlaneGameSigner(tokenId);
-
-    const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
-    const [myGameInfo, setMyGameInfo] = useState<GameInfo>({
-        balance: 0,
-        gameState: GameState.Unknown,
-        timeout: 0,
-        message: 0,
-        emote: 0,
-    });
-
-    const [opGameInfo, setOpGameInfo] = useState<GameInfo>({
-        balance: 0,
-        gameState: GameState.Unknown,
-        timeout: 0,
-        message: 0,
-        emote: 0,
-    });
-
-    const [gameAddress] = useState<string>(params.gameAddress);
-
-    const [currentGrid, setCurrentGrid] = useState<number>(-1);
-    const [step, setStep] = useState(0);
-    const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
-    const multiMercuryBaseContract = useMultiMercuryBaseContract(chainId);
-    const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(gameAddress);
-    const multiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(chainId);
+    const [init, setInit] = useState<boolean>(false);
+    const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
+    const { search } = useLocation();
+    const [step, setStep] = useState<number>(0);
+    const params = qs.parse(search) as any;
+    const [gameId] = useState<number>(params.gameId);
+
+    const [invited] = useState<string>(params.invited);
+    const [showAnimateNumber, setShowAnimate] = useState<number>(-1);
+    const [currentGrid, setCurrentGrid] = useState<number>(-1);
+    const [gameInfo, setGameInfo] = useState<any>({
+        player1: 0,
+        player2: 0,
+        balance1: 0,
+        balance2: 0,
+        gameStatus1: Game2Status.InProgress,
+        gameStatus2: Game2Status.InProgress,
+        boards: [],
+        nickname1: "",
+        nickname2: "",
+    });
+    const [loading, setLoading] = useState<boolean>(false);
+    const [currentRound, setCurrentRound] = useState<number>(0);
+    const [bidAmount, setBidAmount] = useState<number>(0);
+
+    const [gameTimeout, setGameTimeout] = useState<number>(0);
+
+    const [myGameInfo, setMyGameInfo] = useState<TournamentGameInfo>({
+        address: "",
+        userId: "",
+        mark: UserMarkType.Empty,
+        winMark: UserMarkType.Empty,
+        balance: 0,
+        isBid: false,
+        playerStatus: null,
+        gameState: Game2Status.InProgress,
+    });
+    const [opGameInfo, setOpGameInfo] = useState<TournamentGameInfo>({
+        address: "",
+        userId: "",
+        mark: UserMarkType.Empty,
+        winMark: UserMarkType.Empty,
+        balance: 0,
+        isBid: false,
+        playerStatus: null,
+        gameState: Game2Status.InProgress,
+    });
+
     const handleStep = (step?: number) => {
         if (step === undefined) {
             setStep((step) => step + 1);
@@ -156,418 +104,209 @@ const TacToe = () => {
         setStep(step);
     };
 
-    const handleGetGas = async () => {
-        console.log("start transfer gas");
-        const publicClient: any = getViemClients({ chainId: chainId });
-        const balance = await publicClient.getBalance({
-            address: planeAccount.address,
-        });
-        const gasPrice = await publicClient.getGasPrice();
-        const fasterGasPrice = (gasPrice * BigInt(110)) / BigInt(100);
-        const gasFee = fasterGasPrice * BigInt(21000);
-        const l1Fees = BigInt(100000000000000);
+    const handleBidAmount = (value: number) => {
+        if (loading) return;
+        if (myGameInfo.isBid) return;
 
-        if (balance - l1Fees < gasFee) {
-            return;
+        if (value < 0) return;
+        if (value > myGameInfo.balance) return;
+        setBidAmount(value);
+    };
+
+    const handleChangeList = (list: any) => {
+        setList(list);
+    };
+
+    const handleGameInfo = (gameInfo: any) => {
+        const gridIndex = gameInfo.gridIndex;
+        const gridOrder = gameInfo.gridOrder;
+        const resCurrentGrid = gridOrder[gridIndex];
+
+        if (showAnimateNumber === -1) {
+            setShowAnimate(resCurrentGrid);
+        } else if (resCurrentGrid !== currentGrid) {
+            setShowAnimate(currentGrid);
         }
 
-        const value = balance - gasFee - l1Fees;
-        const account = privateKeyToAccount(
-            planeAccount.privateKey as `0x${string}`,
-        );
-        const signerClient: any = createWalletClient({
-            account,
-            chain: CHAINS.find((item) => {
-                return item.id === chainId;
-            }),
-            transport: http(),
-        });
-        const transferResult = await signerClient.sendTransaction({
-            to: address,
-            value: value,
-            gasLimit: 21000,
-            gasPrice: fasterGasPrice,
-        });
+        setCurrentRound(gridIndex);
+        const _list = JSON.parse(JSON.stringify(list));
+        const boardGrids = gameInfo.boards;
+        const isPlayer1 = address.toLocaleLowerCase() == gameInfo.player1;
 
-        console.log("transfer remain balance", transferResult);
-    };
-
-    const handleGetHuamnAndBotInfo = async (
-        playerAddress1: string,
-        playerAddress2: string,
-    ) => {
-        const [tokenId1] = await multiProvider.all([
-            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                playerAddress1,
-            ),
-        ]);
-
-        const [
-            account1,
-            level1,
-            mtadata1,
-            point1,
-            player1Move,
-            [player1WinMileage, player1LoseMileage],
-        ] = await multiProvider.all([
-            multiMercuryBaseContract.ownerOf(tokenId1),
-            multiMercuryBaseContract.aviationLevels(tokenId1),
-            multiMercuryBaseContract.tokenURI(tokenId1),
-            multiMercuryBaseContract.aviationPoints(tokenId1),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId1),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId1),
-        ]);
-
-        let burnerAddress = planeAccount.address;
-
-        if (playerAddress1 !== burnerAddress) {
-            navitate("/");
-            return;
-        }
-
-        const player1Info = {
-            burner: playerAddress1,
-            address: account1,
-            point: point1.toNumber(),
-            level: level1.toNumber(),
-            img: getMetadataImg(mtadata1),
-        };
-        const botInfo = {
-            burner: playerAddress2,
-            address: playerAddress2,
-            point: point1.toNumber(),
-            level: level1.toNumber(),
-            img: RobotImg,
-            isBot: true,
-        };
-        onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
-        onChangeInfo("op", { ...botInfo, mark: UserMarkType.BotX });
-        onChangePoint(player1Move.toNumber(), player1Move.toNumber());
-        onChangeMileage(
-            player1WinMileage.toNumber(),
-            player1LoseMileage.toNumber(),
-        );
-        onGameType(GameType.HumanWithBot);
-    };
-
-    const onChangeGame = (position: "my" | "op", info: GameInfo) => {
-        if (position === "my") {
-            setMyGameInfo(info);
-            return;
-        }
-        if (position === "op") {
-            setOpGameInfo(info);
-            return;
-        }
-    };
-
-    const onGameType = (gameType: GameType) => {
-        setGameType(gameType);
-    };
-
-    const onChangeMileage = (winMileage: number, loseMileage: number) => {
-        setMileages({
-            winMileage,
-            loseMileage,
-        });
-    };
-
-    const onChangePoint = (winPoint: number, losePoint: number) => {
-        setPoints({
-            winPoint,
-            losePoint,
-        });
-    };
-
-    const onChangeInfo = (position: "my" | "op", info: Info) => {
-        if (position === "my") {
-            setMyInfo(info);
-            return;
-        }
-        if (position === "op") {
-            setOpInfo(info);
-            return;
-        }
-    };
-
-    const handleGetHuamnAndHumanInfo = async (
-        playerAddress1: string,
-        playerAddress2: string,
-    ) => {
-        const [tokenId1, tokenId2] = await multiProvider.all([
-            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                playerAddress1,
-            ),
-            multiSkylabBidTacToeFactoryContract.burnerAddressToTokenId(
-                playerAddress2,
-            ),
-        ]);
-
-        const [
-            account1,
-            level1,
-            mtadata1,
-            point1,
-            account2,
-            level2,
-            mtadata2,
-            point2,
-            player1Move,
-            player2Move,
-            [player1WinMileage, player1LoseMileage],
-            [player2WinMileage, player2LoseMileage],
-        ] = await multiProvider.all([
-            multiMercuryBaseContract.ownerOf(tokenId1),
-            multiMercuryBaseContract.aviationLevels(tokenId1),
-            multiMercuryBaseContract.tokenURI(tokenId1),
-            multiMercuryBaseContract.aviationPoints(tokenId1),
-            multiMercuryBaseContract.ownerOf(tokenId2),
-            multiMercuryBaseContract.aviationLevels(tokenId2),
-            multiMercuryBaseContract.tokenURI(tokenId2),
-            multiMercuryBaseContract.aviationPoints(tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId1, tokenId2),
-            multiMercuryBaseContract.estimatePointsToMove(tokenId2, tokenId1),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId1, tokenId2),
-            multiMercuryBaseContract.estimateMileageToGain(tokenId2, tokenId1),
-        ]);
-
-        const player1Info = {
-            burner: playerAddress1,
-            address: account1,
-            point: point1.toNumber(),
-            level: level1.toNumber(),
-            img: getMetadataImg(mtadata1),
-        };
-        const player2Info = {
-            burner: playerAddress2,
-            address: account2,
-            point: point2.toNumber(),
-            level: level2.toNumber(),
-            img: getMetadataImg(mtadata2),
+        const player1GameInfo = {
+            address: gameInfo.player1,
+            userId: gameInfo.userId1,
+            balance: gameInfo.balance1,
+            isBid: boardGrids[resCurrentGrid].isBid1,
+            mark: UserMarkType.Circle,
+            winMark: UserMarkType.YellowCircle,
+            playerStatus: PLayerStatus.Player1,
+            gameState: gameInfo.gameStatus1,
         };
 
-        if (player1Info.burner === planeAccount.address) {
-            onChangePoint(player1Move.toNumber(), player2Move.toNumber());
-            onChangeMileage(
-                player1WinMileage.toNumber(),
-                player1LoseMileage.toNumber(),
-            );
-            onChangeInfo("my", { ...player1Info, mark: UserMarkType.Circle });
-            onChangeInfo("op", { ...player2Info, mark: UserMarkType.Cross });
-        } else if (player2Info.burner === planeAccount.address) {
-            onChangeMileage(
-                player2WinMileage.toNumber(),
-                player2LoseMileage.toNumber(),
-            );
-            onChangePoint(player2Move.toNumber(), player1Move.toNumber());
-            onChangeInfo("my", { ...player2Info, mark: UserMarkType.Cross });
-            onChangeInfo("op", { ...player1Info, mark: UserMarkType.Circle });
-        } else {
-            navitate("/");
-            return;
-        }
-        onGameType(GameType.HumanWithHuman);
-    };
+        const player2GameInfo = {
+            address: gameInfo.player2,
+            userId: gameInfo.userId2,
+            balance: gameInfo.balance2,
+            isBid: boardGrids[resCurrentGrid].isBid2,
+            mark: UserMarkType.Cross,
+            winMark: UserMarkType.YellowCross,
+            playerStatus: PLayerStatus.Player2,
+            gameState: gameInfo.gameStatus2,
+        };
+        setGameTimeout(boardGrids[resCurrentGrid].timeout);
+        const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
+        const opGameInfo = isPlayer1 ? player2GameInfo : player1GameInfo;
 
-    const handleGetAllPlayerInfo = async () => {
-        try {
-            const [playerAddress1, playerAddress2] = await multiProvider.all([
-                multiSkylabBidTacToeGameContract.player1(),
-                multiSkylabBidTacToeGameContract.player2(),
-            ]);
-
-            console.log("playerAddress1", playerAddress1);
-            console.log("playerAddress2", playerAddress2);
-
-            if (playerAddress2 === botAddress[chainId]) {
-                handleGetHuamnAndBotInfo(playerAddress1, playerAddress2);
+        for (let i = 0; i < boardGrids.length; i++) {
+            const winAddress = boardGrids[i].win;
+            if (winAddress == 0) {
+                _list[i].mark = UserMarkType.Empty;
             } else {
-                handleGetHuamnAndHumanInfo(playerAddress1, playerAddress2);
+                _list[i].mark =
+                    winAddress === 1 ? UserMarkType.Circle : UserMarkType.Cross;
             }
-        } catch (e) {
-            console.log(e);
-            navitate("/");
+            _list[i].myValue = isPlayer1
+                ? boardGrids[i].bid1
+                : boardGrids[i].bid2;
+            _list[i].opValue = isPlayer1
+                ? boardGrids[i].bid2
+                : boardGrids[i].bid1;
+            _list[i].myMark = myGameInfo.mark;
+            _list[i].opMark = opGameInfo.mark;
         }
+
+        if (Game2Status.InProgress === player1GameInfo.gameState) {
+            _list[resCurrentGrid].mark = UserMarkType.Square;
+        }
+
+        setCurrentGrid(resCurrentGrid);
+        setMyGameInfo(myGameInfo);
+        setOpGameInfo(opGameInfo);
+        setNextDrawWinner(nextDrawWinner);
+        setList(_list);
     };
 
     const handleGetGameInfo = async () => {
+        if (!gameId) return;
+
+        const res = await getGameInfo(Number(gameId));
+
+        if (res.code != 200) {
+            return;
+        }
+
+        const gameInfo = res.data.game;
+        setGameInfo(gameInfo);
+        if (!init) {
+            setInit(true);
+        }
+    };
+
+    const handleBid = async () => {
         try {
-            const [
-                resCurrentGrid,
-                boardGrids,
-                myBalance,
-                myGameState,
-                myRevealedBid,
-                myTimeout,
-                myMessage,
-                myEmote,
-                opBalance,
-                opGameState,
-                opRevealedBid,
-                opTimeout,
-                opMessage,
-                opEmote,
-                nextDrawWinner,
-            ] = await multiProvider.all([
-                multiSkylabBidTacToeGameContract.currentSelectedGrid(),
-                multiSkylabBidTacToeGameContract.getGrid(),
-                multiSkylabBidTacToeGameContract.balances(myInfo.burner),
-                multiSkylabBidTacToeGameContract.gameStates(myInfo.burner),
-                multiSkylabBidTacToeGameContract.getRevealedBids(myInfo.burner),
-                multiSkylabBidTacToeGameContract.timeouts(myInfo.burner),
-                multiSkylabBidTacToeGameContract.playerMessage(myInfo.burner),
-                multiSkylabBidTacToeGameContract.playerEmote(myInfo.burner),
-                multiSkylabBidTacToeGameContract.balances(opInfo.burner),
-                multiSkylabBidTacToeGameContract.gameStates(opInfo.burner),
-                multiSkylabBidTacToeGameContract.getRevealedBids(opInfo.burner),
-                multiSkylabBidTacToeGameContract.timeouts(opInfo.burner),
-                multiSkylabBidTacToeGameContract.playerMessage(opInfo.burner),
-                multiSkylabBidTacToeGameContract.playerEmote(opInfo.burner),
-                multiSkylabBidTacToeGameContract.nextDrawWinner(),
-            ]);
-
-            if (showAnimateNumber === -1) {
-                setShowAnimate(resCurrentGrid.toNumber());
-            } else if (resCurrentGrid.toNumber() !== currentGrid) {
-                setShowAnimate(currentGrid);
+            if (currentGrid < 0) {
+                console.log("currentGrid is not valid");
+                return;
             }
-            const _list = JSON.parse(JSON.stringify(list));
-            const gameState = myGameState.toNumber();
-            for (let i = 0; i < boardGrids.length; i++) {
-                if (boardGrids[i] === ZERO_DATA) {
-                    _list[i].mark = UserMarkType.Empty;
-                } else if (boardGrids[i] === myInfo.burner) {
-                    _list[i].mark = myInfo.mark;
-                } else if (boardGrids[i] === opInfo.burner) {
-                    _list[i].mark = opInfo.mark;
-                }
-                _list[i].myValue = myRevealedBid[i].toNumber();
-                _list[i].opValue = opRevealedBid[i].toNumber();
-                _list[i].myMark = myInfo.mark;
-                _list[i].opMark = opInfo.mark;
+            if (loading) {
+                console.log("loading");
+                return;
             }
-            if (
-                [
-                    GameState.WaitingForBid,
-                    GameState.Commited,
-                    GameState.Revealed,
-                ].includes(gameState)
-            ) {
-                _list[resCurrentGrid.toNumber()].mark = UserMarkType.Square;
+            if (myGameInfo.isBid) {
+                console.log("isBid");
+                return;
             }
 
-            // game over result
-            if (gameState > GameState.Revealed) {
-                const myIsWin = getWinState(gameState);
-                const burner = myIsWin ? myInfo.burner : opInfo.burner;
-                let mark;
-                if (myIsWin) {
-                    mark =
-                        myInfo.mark === UserMarkType.Circle
-                            ? UserMarkType.YellowCircle
-                            : myInfo.mark === UserMarkType.Cross
-                            ? UserMarkType.YellowCross
-                            : UserMarkType.YellowBotX;
-                } else {
-                    mark =
-                        opInfo.mark === UserMarkType.Circle
-                            ? UserMarkType.YellowCircle
-                            : opInfo.mark === UserMarkType.Cross
-                            ? UserMarkType.YellowCross
-                            : UserMarkType.YellowBotX;
-                }
-                if (
-                    gameState === GameState.WinByConnecting ||
-                    gameState === GameState.LoseByConnecting
-                ) {
-                    for (let i = 0; i < winPatterns.length; i++) {
-                        const index0 = winPatterns[i][0];
-                        const index1 = winPatterns[i][1];
-                        const index2 = winPatterns[i][2];
-                        if (
-                            boardGrids[index0] === burner &&
-                            boardGrids[index1] === burner &&
-                            boardGrids[index2] === burner
-                        ) {
-                            _list[index0].mark = mark;
-                            _list[index1].mark = mark;
-                            _list[index2].mark = mark;
-                            break;
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < boardGrids.length; i++) {
-                        if (boardGrids[i] === burner) {
-                            _list[i].mark = mark;
-                        }
-                    }
-                }
-            }
-            setCurrentGrid(resCurrentGrid.toNumber());
-            setList(_list);
-            onChangeGame("my", {
-                balance: myBalance.toNumber(),
-                gameState: myGameState.toNumber(),
-                timeout: myTimeout.toNumber(),
-                message: myMessage.toNumber(),
-                emote: myEmote.toNumber(),
+            setLoading(true);
+
+            console.log(`currentGrid: ${currentGrid} bidAmount: ${bidAmount} `);
+            const res = await bid({
+                gameId,
+                amount: bidAmount,
             });
-
-            onChangeGame("op", {
-                balance: opBalance.toNumber(),
-                gameState: opGameState.toNumber(),
-                timeout: opTimeout.toNumber(),
-                message: opMessage.toNumber(),
-                emote: opEmote.toNumber(),
-            });
-            setNextDrawWinner(nextDrawWinner);
-            if (!initRef.current) {
-                initRef.current = true;
+            setLoading(false);
+            if (res.code == 200) {
+                const game = res.data.game;
+                setGameInfo(game);
+                setBidAmount(0);
             }
         } catch (e) {
             console.log(e);
+            setLoading(false);
+            toast(e + "");
+        }
+    };
+
+    const handleQuit = async () => {
+        try {
+            const res = await surrender({
+                gameId: Number(gameId),
+            });
+
+            if (res.code === 200) {
+                setGameInfo(res.data.game);
+            }
+        } catch (e) {
+            console.log(e);
+            toast(e + "");
         }
     };
 
     useEffect(() => {
         if (
-            !multiProvider ||
-            !multiSkylabBidTacToeGameContract ||
-            !multiSkylabBidTacToeFactoryContract
-        ) {
-            return;
-        }
-
-        handleGetAllPlayerInfo();
-    }, [
-        multiProvider,
-        multiSkylabBidTacToeGameContract,
-        multiSkylabBidTacToeFactoryContract,
-    ]);
-
-    useEffect(() => {
-        if (
-            !multiSkylabBidTacToeGameContract ||
-            !multiProvider ||
-            !myInfo.burner ||
-            !opInfo.burner ||
-            step !== 0
+            !gameId ||
+            myGameInfo.gameState !== Game2Status.InProgress ||
+            !address
         )
             return;
+
+        handleGetGameInfo();
 
         const timer = setInterval(() => {
             handleGetGameInfo();
         }, 3000);
+
         return () => {
             clearInterval(timer);
         };
-    }, [
-        multiSkylabBidTacToeGameContract,
-        multiProvider,
-        myInfo.burner,
-        opInfo.burner,
-        step,
-    ]);
+    }, [gameId, myGameInfo.gameState, address]);
+
+    useEffect(() => {
+        if (!gameInfo.player1 || !gameInfo.player2) {
+            return;
+        }
+        handleGameInfo(gameInfo);
+    }, [gameInfo]);
+
+    useEffect(() => {
+        if (!gameInfo.player1 || !address) return;
+        if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
+            navigate("/free/pvp/home");
+            return;
+        }
+
+        if (!gameInfo.player2) {
+            if (gameInfo.player1 == address.toLocaleLowerCase()) {
+                // match with myself
+                setStep(0);
+            } else {
+                // join to match
+                setStep(1);
+            }
+            return;
+        }
+
+        if (gameInfo.gameStatus1 === Game2Status.InProgress) {
+            setStep(2);
+            return;
+        }
+
+        if (gameInfo.gameStatus1 > Game2Status.InProgress) {
+            setStep(3);
+            return;
+        }
+    }, [gameInfo.gameStatus1, gameInfo.player1, gameInfo.player2, address]);
 
     return (
         <Box
@@ -576,9 +315,7 @@ const TacToe = () => {
             }}
         >
             <BttHelmet></BttHelmet>
-            {!initRef.current ? (
-                <LoadingPage></LoadingPage>
-            ) : (
+            {init ? (
                 <Box
                     sx={{
                         height: "100%",
@@ -588,20 +325,13 @@ const TacToe = () => {
                 >
                     <GameContext.Provider
                         value={{
-                            gameType,
-                            myInfo,
-                            opInfo,
-                            myNewInfo,
-                            tokenId,
+                            list,
                             myGameInfo,
                             opGameInfo,
-                            list,
-                            gameAddress,
-                            mileages,
-                            points,
-                            avaitionAddress,
-                            onStep: handleStep,
-                            handleGetGas: handleGetGas,
+                            gameId,
+                            step,
+                            handleStepChange: handleStep,
+                            onList: handleChangeList,
                         }}
                     >
                         <Box
@@ -609,24 +339,37 @@ const TacToe = () => {
                                 height: "100%",
                             }}
                         >
-                            {step === 0 && (
+                            {step === 0 && <Match></Match>}
+                            {step === 1 && (
                                 <TacToePage
                                     showAnimateNumber={showAnimateNumber}
-                                    currentGrid={currentGrid}
-                                    nextDrawWinner={nextDrawWinner}
-                                    handleGetGameInfo={handleGetGameInfo}
-                                    onChangeGame={onChangeGame}
-                                    onChangeNewInfo={(info: MyNewInfo) => {
-                                        setMyNewInfo(info);
+                                    bidAmount={bidAmount}
+                                    onBidAmount={(value: number) => {
+                                        handleBidAmount(value);
                                     }}
+                                    currentRound={currentRound}
+                                    gameTimeout={gameTimeout}
+                                    loading={loading}
+                                    onBid={handleBid}
+                                    handleQuit={handleQuit}
                                 ></TacToePage>
                             )}
-                            {step === 1 && <GameOver></GameOver>}
-                            {step === 2 && <ResultPlayBack></ResultPlayBack>}
-                            {step === 3 && <SettlementPage></SettlementPage>}
+                            {step === 2 && (
+                                <GameOver
+                                    gameState={myGameInfo.gameState}
+                                ></GameOver>
+                            )}
+                            {step === 3 && (
+                                <ResultPlayBack
+                                    gameInfo={gameInfo}
+                                ></ResultPlayBack>
+                            )}
+                            {/* {step === 3 && <SettlementPage></SettlementPage>} */}
                         </Box>
                     </GameContext.Provider>
                 </Box>
+            ) : (
+                <LoadingPage></LoadingPage>
             )}
 
             <Nest />

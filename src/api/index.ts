@@ -12,7 +12,7 @@ api.interceptors.request.use(
         let token = "";
         if (config.url.startsWith("/pvp")) {
             token = sessionStorage.getItem("jwtToken");
-        } else if (config.url.startsWith("/plane")) {
+        } else if (config.url.startsWith("/tournament")) {
             token = sessionStorage.getItem("accessToken");
         }
         token && (config.headers.Authorization = `Bearer ${token}`);

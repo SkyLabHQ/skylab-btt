@@ -52,7 +52,7 @@ export enum GameState {
     LoseByGridCount = 11,
 }
 
-export enum PvpGameStatus {
+export enum Game2Status {
     NotStarted, //未开始
     WaitingForPlayer2, //等待玩家2
     QuitByPlayer1, //玩家1退出匹配
@@ -80,11 +80,11 @@ export const getWinState = (gameState: GameState) => {
     ].includes(gameState);
 };
 
-export const getPvpWinState = (gameState: PvpGameStatus) => {
+export const getPvpWinState = (gameState: Game2Status) => {
     return [
-        PvpGameStatus.WinByConnecting,
-        PvpGameStatus.WinBySurrender,
-        PvpGameStatus.WinByGridCount,
+        Game2Status.WinByConnecting,
+        Game2Status.WinBySurrender,
+        Game2Status.WinByGridCount,
     ].includes(gameState);
 };
 

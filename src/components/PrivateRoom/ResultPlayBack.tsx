@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
-    PvpGameStatus,
+    Game2Status,
     UserMarkType,
     getPvpWinState,
     getShareEmoji,
@@ -64,8 +64,8 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
             let mark = isMyWin ? myGameInfo.winMark : opGameInfo.winMark;
 
             if (
-                myGameState === PvpGameStatus.WinByConnecting ||
-                myGameState === PvpGameStatus.LoseByConnecting
+                myGameState === Game2Status.WinByConnecting ||
+                myGameState === Game2Status.LoseByConnecting
             ) {
                 for (let i = 0; i < winPatterns.length; i++) {
                     const index0 = winPatterns[i][0];

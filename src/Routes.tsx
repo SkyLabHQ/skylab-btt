@@ -7,7 +7,6 @@ import BttHistory from "./pages/BttHistory";
 import BttPlayBack from "./pages/BttPlayBack";
 import BttLiveGame from "./pages/BttLiveGame";
 import PvpRoom from "./pages/PvpRoom";
-import Match from "./pages/Match";
 import PvpHome from "./pages/PvpHome";
 import FreeLayout from "./components/FreeLayout";
 import StartBot from "./pages/StartBot";
@@ -24,7 +23,6 @@ const AppRoutes = (): ReactElement => {
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<TacToeMode />}></Route>
                 <Route path="/point" element={<Point />}></Route>
-                <Route path="/btt/match" element={<Match />}></Route>
                 <Route path="/btt/game" element={<TacToe />}></Route>
                 <Route path="/btt/history" element={<BttHistory />}></Route>
                 <Route path="/btt/playback" element={<BttPlayBack />}></Route>

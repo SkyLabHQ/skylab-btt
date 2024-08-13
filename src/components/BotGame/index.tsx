@@ -27,7 +27,6 @@ import MLayout from "./MLayout";
 import { CHAIN_NAMES, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
-import Chat from "../BttComponents/Chat";
 import { shortenAddressWithout0x } from "@/utils";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { getBotGameSigner } from "@/hooks/useSigner";
@@ -507,7 +506,6 @@ Bid tac toe, a fully on-chain PvP game of psychology and strategy, on ${
                             ></OpUserCard>
                         </Box>
                     </Box>
-                    <Chat onSetMessage={handleSetMessage}></Chat>
                 </Box>
             ) : (
                 <MLayout

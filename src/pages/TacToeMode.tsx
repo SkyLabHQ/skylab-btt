@@ -1,24 +1,12 @@
-import { useCheckBurnerBalanceAndApprove } from "@/hooks/useBurnerWallet";
 import { Box, Text, useMediaQuery, Flex, Image } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useBidTacToeFactoryRetry } from "@/hooks/useRetryContract";
 import { handleError } from "@/utils/error";
-import { mercuryJarTournamentAddress } from "@/hooks/useContract";
 import BttHelmet from "@/components/Helmet/BttHelmet";
-import {
-    useMultiProvider,
-    useMultiSkylabBidTacToeFactoryContract,
-} from "@/hooks/useMultiContract";
-import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
-import { getPlaneGameSigner, savePlaneGamePrivateKey } from "@/hooks/useSigner";
-import { bttFactoryIface } from "@/skyConstants/iface";
-import { useChainId } from "wagmi";
-import { ZERO_DATA } from "@/skyConstants";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import GameMp3 from "@/assets/game.mp3";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
@@ -26,8 +14,7 @@ import MarketIcon from "@/components/TacToeMode/assets/market-icon.png";
 import LeaderboardIcon from "@/components/TacToeMode/assets/leaderboard.png";
 
 import Nest from "@/components/Nest";
-import { ethers } from "ethers";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import { startGame } from "@/api/tournament";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -36,91 +23,21 @@ const TacToeMode = () => {
     const { openLoading, closeLoading } = useSubmitRequest();
 
     const navigate = useNavigate();
-    const chainId = useChainId();
     const [selectPlane, setSelectPlane] = useState<any>({});
 
-    const checkBurnerBalanceAndApprove = useCheckBurnerBalanceAndApprove();
-
     const toast = useSkyToast();
-
-    const multiProvider = useMultiProvider(chainId);
-    const tacToeFactoryRetryWrite = useBidTacToeFactoryRetry();
-    const multiSkylabBidTacToeFactoryContract =
-        useMultiSkylabBidTacToeFactoryContract(DEAFAULT_CHAINID);
 
     const handleTournament = async () => {
         const tokenId = selectPlane?.tokenId;
 
         try {
-            if (selectPlane.state) {
-                const account = getPlaneGameSigner(tokenId);
-                if (!account) {
-                    return;
-                }
-                const [gameAddress, defaultGameQueue] = await multiProvider.all(
-                    [
-                        multiSkylabBidTacToeFactoryContract.gamePerPlayer(
-                            account.address,
-                        ),
-                        multiSkylabBidTacToeFactoryContract.defaultGameQueue(
-                            mercuryJarTournamentAddress[DEAFAULT_CHAINID],
-                        ),
-                    ],
-                );
-
-                if (gameAddress !== ZERO_DATA) {
-                    navigate(
-                        `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`,
-                    );
-                    return;
-                }
-
-                if (defaultGameQueue === account.address) {
-                    navigate(`/btt/match?tokenId=${tokenId}`);
-                    return;
-                }
-            }
-
-            openLoading();
-            let account = getPlaneGameSigner(tokenId);
-            if (!account) {
-                account = ethers.Wallet.createRandom();
-            }
-            await checkBurnerBalanceAndApprove(
-                mercuryJarTournamentAddress[chainId],
+            const res = await startGame({
                 tokenId,
-                account.address,
-            );
-
-            const createGameReceipt = await tacToeFactoryRetryWrite(
-                "createOrJoinDefault",
-                [],
-                {
-                    gasLimit: 1000000,
-                    signer: account.privateKey,
-                },
-            );
-            const startGameTopic0 = bttFactoryIface.getEventTopic("StartGame");
-            const startGameLog = createGameReceipt.logs.find((item: any) => {
-                return item.topics[0] === startGameTopic0;
             });
-
-            savePlaneGamePrivateKey(tokenId, account.privateKey);
-            if (startGameLog) {
-                const startGameData = bttFactoryIface.parseLog({
-                    data: startGameLog.data,
-                    topics: startGameLog.topics,
-                });
-                const gameAddress = startGameData.args.gameAddress;
-                const url = `/btt/game?gameAddress=${gameAddress}&tokenId=${tokenId}`;
-                closeLoading();
-                navigate(url);
-                return;
+            if (res.code === 200) {
+                navigate("/btt/game?gameId=" + res.data.game.id);
             }
-
-            closeLoading();
-            const url = `/btt/match?tokenId=${tokenId}`;
-            navigate(url);
+            console.log(res, "res");
         } catch (e) {
             closeLoading();
             console.log(e);

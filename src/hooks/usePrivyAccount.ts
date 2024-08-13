@@ -4,8 +4,8 @@ import { baseSepolia } from "viem/chains";
 import { createWalletClient, custom } from "viem";
 
 const usePrivyAccounts = () => {
-    const { ready, wallets } = useWallets();
-    const { user } = usePrivy();
+    const { wallets } = useWallets();
+    const { user, ready } = usePrivy();
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
 
@@ -16,10 +16,16 @@ const usePrivyAccounts = () => {
                 setSigner(null);
                 return;
             }
-            setAddress(user.wallet.address);
+
             const wallet = wallets.find((item) => {
                 return item.address === user.wallet.address;
             });
+
+            if (!wallet) {
+                return;
+            }
+
+            setAddress(user.wallet.address);
 
             const provider = await wallet.getEthereumProvider();
             const walletClient = createWalletClient({
