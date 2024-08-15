@@ -21,12 +21,14 @@ import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { usePublicClient } from "wagmi";
 import { handleError } from "@/utils/error";
+import { usePrivy } from "@privy-io/react-auth";
 
 const gameAudio = new Audio(GameMp3);
 
 const TacToeMode = () => {
     const publicClient = usePublicClient();
     const { address } = usePrivyAccounts();
+    const { user } = usePrivy();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { openLoading, closeLoading } = useSubmitRequest();
     const skylabBidTacToeContract = useSkylabBidTacToeContract();
@@ -38,29 +40,51 @@ const TacToeMode = () => {
 
     const handleTournament = async () => {
         const tokenId = selectPlane?.tokenId;
+        let lock = false;
+        if (selectPlane.state && selectPlane.gameId) {
+            navigate("/btt/game?gameId=" + selectPlane.gameId);
+            return;
+        }
 
-        try {
-            if (selectPlane.state) {
-                if (selectPlane.gameId) {
-                    navigate("/btt/game?gameId=" + selectPlane.gameId);
-                    return;
-                }
+        if (!selectPlane.state) {
+            try {
+                openLoading();
+
+                await skylabBidTacToeContract.simulate.approveForGame(
+                    [
+                        address,
+                        tokenId,
+                        mercuryJarTournamentAddress[DEAFAULT_CHAINID],
+                    ],
+                    {
+                        account: address,
+                    },
+                );
+                const hash = await skylabBidTacToeContract.write.approveForGame(
+                    [
+                        address,
+                        tokenId,
+                        mercuryJarTournamentAddress[DEAFAULT_CHAINID],
+                    ],
+                );
+
+                // @ts-ignore
+                await publicClient.waitForTransactionReceipt({
+                    hash,
+                });
+
+                lock = true;
+            } catch (e: any) {
+                console.log(e);
+                closeLoading();
+                toast(handleError(e));
             }
+        } else {
+            lock = true;
+        }
 
-            openLoading();
-            const hash = await skylabBidTacToeContract.write.approveForGame([
-                address,
-                tokenId,
-                mercuryJarTournamentAddress[DEAFAULT_CHAINID],
-            ]);
-
-            // @ts-ignore
-            await publicClient.waitForTransactionReceipt({
-                hash,
-            });
-        } catch (e: any) {
-            closeLoading();
-            toast(handleError(e));
+        if (!lock) {
+            return;
         }
 
         try {

@@ -23,6 +23,7 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { quitMatch } from "@/api/tournament";
 import qs from "query-string";
 import { useGameContext } from "@/pages/TacToe";
+import { aviationImg } from "@/utils/aviationImg";
 
 const randomText = [
     ["*When the game starts, ", "you have 12 hours to make each move"],
@@ -43,7 +44,7 @@ const PlaneImg = ({ detail, flip }: { detail: any; flip?: boolean }) => {
                     }}
                 >
                     <Image
-                        src={detail?.img}
+                        src={aviationImg(detail.level)}
                         sx={{
                             width: isPc ? "280px" : "136px",
                             transform: flip ? "scaleX(-1)" : "",
@@ -163,6 +164,8 @@ export const MatchPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useSkyToast();
     const { myGameInfo, opGameInfo } = useGameContext();
+
+    console.log(myGameInfo, "myGameInfo");
 
     const handleQuit = async () => {
         try {

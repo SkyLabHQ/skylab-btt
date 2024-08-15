@@ -1,4 +1,3 @@
-import React from "react";
 import {
     Text,
     Img,
@@ -13,7 +12,6 @@ import {
 import CloseIcon from "@/assets/icon-close.svg";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
-import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 const QuitModal = ({
     onConfirm,
@@ -26,20 +24,15 @@ const QuitModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const { isLoading, openLoading, closeLoading } = useSubmitRequest();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
 
     const handleConfirm = async () => {
-        if (isLoading) return;
-
         try {
-            openLoading();
-            await onConfirm();
-            closeLoading();
+            onConfirm();
             onClose();
         } catch (e) {
-            closeLoading();
+            onClose();
             console.log(e);
             toast(handleError(e, true));
         }

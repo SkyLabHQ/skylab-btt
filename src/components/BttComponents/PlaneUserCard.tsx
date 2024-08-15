@@ -44,7 +44,6 @@ const move = keyframes`
 
 const MyBid = ({
     showTutorialStep,
-    loading,
     balance,
     bidAmount,
     myIsBid,
@@ -54,7 +53,6 @@ const MyBid = ({
 }: {
     myIsBid: boolean;
     showTutorialStep?: boolean;
-    loading: boolean;
     balance: number;
     bidAmount: number;
     showAnimateConfirm?: number;
@@ -165,11 +163,11 @@ const MyBid = ({
                                 animationIterationCount: "2",
                             }}
                             animation={`${
-                                showAnimateConfirm !== 0 && !loading ? move : ""
+                                showAnimateConfirm !== 0 ? move : ""
                             } 0.5s linear alternate`}
                         >
                             <NumberInput
-                                isDisabled={loading || myIsBid}
+                                isDisabled={myIsBid}
                                 variant="unstyled"
                                 max={balance}
                                 min={0}
@@ -300,7 +298,6 @@ interface UserCardProps {
     myIsBid: boolean;
     showTutorialStep?: boolean;
     showAnimateConfirm?: number;
-    loading?: boolean;
     markIcon: UserMarkType;
     address: string;
     balance: number;
@@ -416,7 +413,6 @@ export const AdvantageTip = ({
 
 export const MyInputBid = ({
     showTutorialStep,
-    loading,
     myIsBid,
     balance,
     bidAmount,
@@ -425,7 +421,6 @@ export const MyInputBid = ({
     showAnimateConfirm,
 }: {
     showTutorialStep?: boolean;
-    loading: boolean;
     myIsBid: boolean;
     balance: number;
     bidAmount: number;
@@ -434,12 +429,8 @@ export const MyInputBid = ({
     onConfirm: () => void;
 }) => {
     const [commitButtonText, status] = useMemo(() => {
-        if (loading) {
-            return ["Committing", 0];
-        }
-
         return myIsBid ? ["Committed", 0] : ["Commit", 1];
-    }, [loading, myIsBid]);
+    }, [myIsBid]);
 
     const handleSumbit = async () => {
         const audio = new Audio(ConfirmVideo);
@@ -480,7 +471,6 @@ export const MyInputBid = ({
                 ></Box>
                 <MyBid
                     showTutorialStep={showTutorialStep}
-                    loading={loading}
                     balance={balance}
                     bidAmount={bidAmount}
                     onInputChange={onInputChange}
@@ -557,7 +547,6 @@ export const MyUserCard = ({
     myIsBid,
     showTutorialStep,
     level,
-    loading,
     markIcon,
     address,
     balance,
@@ -638,7 +627,6 @@ export const MyUserCard = ({
             <MyInputBid
                 myIsBid={myIsBid}
                 showTutorialStep={showTutorialStep}
-                loading={loading}
                 balance={balance}
                 bidAmount={bidAmount}
                 onInputChange={onInputChange}

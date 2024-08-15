@@ -31,6 +31,9 @@ export interface TournamentGameInfo {
     winMark: UserMarkType;
     playerStatus: PLayerStatus;
     gameState: Game2Status;
+    level: number;
+    point: number;
+    photo: string;
 }
 const GameContext = createContext<{
     myGameInfo: TournamentGameInfo;
@@ -82,6 +85,9 @@ const TacToe = () => {
         isBid: false,
         playerStatus: null,
         gameState: Game2Status.InProgress,
+        level: 0,
+        point: 0,
+        photo: "",
     });
     const [opGameInfo, setOpGameInfo] = useState<TournamentGameInfo>({
         address: "",
@@ -92,6 +98,9 @@ const TacToe = () => {
         isBid: false,
         playerStatus: null,
         gameState: Game2Status.InProgress,
+        level: 0,
+        point: 0,
+        photo: "",
     });
 
     const handleStep = (step?: number) => {
@@ -116,7 +125,7 @@ const TacToe = () => {
     };
 
     const handleGameInfo = (gameInfo: any) => {
-        const gridIndex = gameInfo.gridIndex;
+        const gridIndex = gameInfo.gridIndex == 9 ? 8 : gameInfo.gridIndex;
         const gridOrder = gameInfo.gridOrder;
         const resCurrentGrid = gridOrder[gridIndex];
 
@@ -141,6 +150,9 @@ const TacToe = () => {
             winMark: UserMarkType.YellowCircle,
             playerStatus: PLayerStatus.Player1,
             gameState: gameInfo.gameStatus1,
+            level: gameInfo.level1,
+            point: gameInfo.point1,
+            photo: gameInfo.user1TgInfo?.photo,
         };
 
         const player2GameInfo = {
@@ -152,6 +164,9 @@ const TacToe = () => {
             winMark: UserMarkType.YellowCross,
             playerStatus: PLayerStatus.Player2,
             gameState: gameInfo.gameStatus2,
+            level: gameInfo.level2,
+            point: gameInfo.point2,
+            photo: gameInfo.user2TgInfo?.photo,
         };
         setGameTimeout(boardGrids[resCurrentGrid].timeout);
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
@@ -175,7 +190,6 @@ const TacToe = () => {
             _list[i].opMark = opGameInfo.mark;
         }
 
-        console.log("---------", _list, "------------");
         if (Game2Status.InProgress === player1GameInfo.gameState) {
             _list[resCurrentGrid].mark = UserMarkType.Square;
         }
@@ -221,6 +235,8 @@ const TacToe = () => {
                 amount: bidAmount,
             });
             setLoading(false);
+
+            console.log(res.data.game, "res.data.game");
             const game = res.data.game;
             setGameInfo(game);
             setBidAmount(0);
@@ -244,7 +260,8 @@ const TacToe = () => {
     useEffect(() => {
         if (
             !gameId ||
-            myGameInfo.gameState !== Game2Status.InProgress ||
+            (myGameInfo.gameState !== Game2Status.InProgress &&
+                myGameInfo.gameState !== Game2Status.WaitingForPlayer2) ||
             !address
         )
             return;
@@ -253,7 +270,7 @@ const TacToe = () => {
 
         const timer = setInterval(() => {
             handleGetGameInfo();
-        }, 3000);
+        }, 10000);
 
         return () => {
             clearInterval(timer);
@@ -261,7 +278,7 @@ const TacToe = () => {
     }, [gameId, myGameInfo.gameState, address]);
 
     useEffect(() => {
-        if (!gameInfo.player1 || !gameInfo.player2) {
+        if (!gameInfo.player1) {
             return;
         }
         handleGameInfo(gameInfo);
@@ -294,7 +311,7 @@ const TacToe = () => {
             return;
         }
     }, [gameInfo.gameStatus1, gameInfo.player1, gameInfo.player2, address]);
-    console.log(init, "initinit");
+
     return (
         <Box
             sx={{

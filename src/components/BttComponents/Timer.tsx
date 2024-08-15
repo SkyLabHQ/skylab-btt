@@ -13,7 +13,6 @@ const Timer = ({
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
 
-    console.log(time1, "time1");
     const { minutes, seconds } = useMemo(() => {
         let minutes: string | number = Math.floor((time1 / 60000) % 60);
         if (minutes < 10) {

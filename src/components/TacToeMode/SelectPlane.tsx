@@ -317,7 +317,7 @@ const MyPlane = ({
                                                                 : "3px",
                                                         }}
                                                     >
-                                                        {detail.gameId && (
+                                                        {!!detail.gameId && (
                                                             <Box
                                                                 sx={{
                                                                     width: isPc

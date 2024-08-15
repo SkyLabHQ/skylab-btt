@@ -18,7 +18,7 @@ import TournamentPlayBack from "../PrivateRoom/TournamentPlayBack";
 const ResultPage = ({ gameInfo }: { gameInfo: any }) => {
     const { myGameInfo, opGameInfo, handleStepChange } = useGameContext();
     const [currentRound, setCurrentRound] = useState<number>(
-        gameInfo.gridIndex + 1,
+        gameInfo.gridIndex,
     );
 
     const [showList, myBalance, opBalance] = useMemo(() => {
@@ -47,16 +47,19 @@ const ResultPage = ({ gameInfo }: { gameInfo: any }) => {
             myBalance -= _list[grid].myValue;
             opBalance -= _list[grid].opValue;
 
-            if (currentRound <= gameInfo.gridIndex) {
+            if (currentRound < gameInfo.gridIndex) {
                 _list[currentGrid].mark = UserMarkType.Square;
             }
         }
 
         if (currentRound == 0) {
-            return [_list, myBalance, opBalance, true];
+            if (gameInfo.gridIndex != 0) {
+                _list[currentGrid].mark = UserMarkType.Square;
+                return [_list, myBalance, opBalance, true];
+            }
         }
 
-        if (currentRound - 1 === gameInfo.gridIndex) {
+        if (currentRound === gameInfo.gridIndex) {
             const myGameState = myGameInfo.gameState;
             const isMyWin = getPvpWinState(myGameState);
             let beforeMark = isMyWin ? myGameInfo.mark : opGameInfo.mark;
@@ -112,7 +115,7 @@ const ResultPage = ({ gameInfo }: { gameInfo: any }) => {
     };
 
     const handleEndStep = () => {
-        setCurrentRound(gameInfo.gridIndex + 1);
+        setCurrentRound(gameInfo.gridIndex);
     };
 
     const handleShare = () => {
@@ -156,7 +159,7 @@ ${des}`;
                 myBalance={myBalance}
                 opBalance={opBalance}
                 currentRound={currentRound}
-                allRound={gameInfo.gridIndex + 1}
+                allRound={gameInfo.gridIndex}
                 myGameInfo={myGameInfo}
                 opGameInfo={opGameInfo}
                 showList={showList}
@@ -172,7 +175,7 @@ ${des}`;
             >
                 <PlayBackButton
                     showPre={currentRound > 0}
-                    showNext={currentRound < gameInfo.gridIndex + 1}
+                    showNext={currentRound < gameInfo.gridIndex}
                     handleEndStep={handleEndStep}
                     handleNextStep={handleNextStep}
                     handlePreStep={handlePreStep}

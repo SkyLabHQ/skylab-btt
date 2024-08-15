@@ -128,8 +128,6 @@ const TacToePage = ({
         };
     }, [isPc]);
 
-    console.log(myGameInfo, "myGameInfo");
-
     return (
         <Box
             sx={{
@@ -185,7 +183,6 @@ const TacToePage = ({
                         >
                             <MyUserCard
                                 myIsBid={myGameInfo.isBid}
-                                loading={loading}
                                 showAdvantageTip={false}
                                 myGameState={myGameInfo.gameState}
                                 markIcon={myGameInfo.mark}
