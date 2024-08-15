@@ -119,11 +119,9 @@ const PvpRoom = () => {
     const handleJoinGame = async () => {
         try {
             const res = await joinGame({ gameId: Number(gameId) });
-            if (res.code === 200) {
-                setGameInfo(res.data.game);
-            }
-        } catch (e) {
-            toast(e + "");
+            setGameInfo(res.data.game);
+        } catch (e: any) {
+            toast(e.message);
         }
     };
 
@@ -205,11 +203,6 @@ const PvpRoom = () => {
         if (!gameId) return;
 
         const res = await getGameInfo(Number(gameId));
-
-        if (res.code != 200) {
-            return;
-        }
-
         const gameInfo = res.data.game;
         setGameInfo(gameInfo);
         if (!init) {
@@ -240,15 +233,13 @@ const PvpRoom = () => {
                 amount: bidAmount,
             });
             setLoading(false);
-            if (res.code == 200) {
-                const game = res.data.game;
-                setGameInfo(game);
-                setBidAmount(0);
-            }
-        } catch (e) {
+            const game = res.data.game;
+            setGameInfo(game);
+            setBidAmount(0);
+        } catch (e: any) {
             console.log(e);
             setLoading(false);
-            toast(e + "");
+            toast(e.message);
         }
     };
 
@@ -258,12 +249,9 @@ const PvpRoom = () => {
                 gameId: Number(gameId),
             });
 
-            if (res.code === 200) {
-                setGameInfo(res.data.game);
-            }
-        } catch (e) {
-            console.log(e);
-            toast(e + "");
+            setGameInfo(res.data.game);
+        } catch (e: any) {
+            toast(e.message);
         }
     };
 

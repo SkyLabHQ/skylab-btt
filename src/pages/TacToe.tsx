@@ -191,11 +191,6 @@ const TacToe = () => {
         if (!gameId) return;
 
         const res = await getGameInfo(Number(gameId));
-
-        if (res.code != 200) {
-            return;
-        }
-
         const gameInfo = res.data.game;
         setGameInfo(gameInfo);
         if (!init) {
@@ -226,15 +221,12 @@ const TacToe = () => {
                 amount: bidAmount,
             });
             setLoading(false);
-            if (res.code == 200) {
-                const game = res.data.game;
-                setGameInfo(game);
-                setBidAmount(0);
-            }
-        } catch (e) {
-            console.log(e);
+            const game = res.data.game;
+            setGameInfo(game);
+            setBidAmount(0);
+        } catch (e: any) {
             setLoading(false);
-            toast(e + "");
+            toast(e.message);
         }
     };
 
@@ -243,13 +235,9 @@ const TacToe = () => {
             const res = await surrender({
                 gameId: Number(gameId),
             });
-
-            if (res.code === 200) {
-                setGameInfo(res.data.game);
-            }
-        } catch (e) {
-            console.log(e);
-            toast(e + "");
+            setGameInfo(res.data.game);
+        } catch (e: any) {
+            toast(e.message);
         }
     };
 
@@ -280,7 +268,6 @@ const TacToe = () => {
     }, [gameInfo]);
 
     useEffect(() => {
-        console.log(gameInfo, "gameInfo");
         if (!gameInfo.player1 || !address) return;
         if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
             navigate("/");
@@ -307,7 +294,7 @@ const TacToe = () => {
             return;
         }
     }, [gameInfo.gameStatus1, gameInfo.player1, gameInfo.player2, address]);
-
+    console.log(init, "initinit");
     return (
         <Box
             sx={{

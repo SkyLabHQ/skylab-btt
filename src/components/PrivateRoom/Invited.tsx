@@ -40,12 +40,10 @@ const Invited = ({ myGameInfo }: { myGameInfo: PvpGameInfo }) => {
 
     const handleQuit = async () => {
         try {
-            const res = await quitMatch({ gameId: Number(gameId) });
-            if (res.code == 200) {
-                navigate("/free/pvp/home");
-            }
-        } catch (error) {
-            toast(handleError(error));
+            await quitMatch({ gameId: Number(gameId) });
+            navigate("/free/pvp/home");
+        } catch (e: any) {
+            toast(e.message);
         }
     };
 

@@ -124,9 +124,7 @@ const PvpHomePage = () => {
 
     const handleGetPoint = async () => {
         const res = await getPoint();
-        if (res.code === 200) {
-            setPoint(res.data.point);
-        }
+        setPoint(res.data.point);
     };
 
     useEffect(() => {

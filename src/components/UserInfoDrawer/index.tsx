@@ -35,6 +35,7 @@ import TgIcon from "./assets/tg-icon.svg";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import PilotBorder from "@/assets/pilot-border.png";
 import UserIcon from "@/assets/user-icon.png";
+import { storeAccessToken } from "@/api/tournament";
 
 const UserInfo = ({
     userName,
@@ -114,13 +115,18 @@ const UserInfo = ({
                             marginTop: "15px",
                             cursor: "pointer",
                         }}
-                        onClick={() => {
-                            const accessToken =
-                                localStorage.getItem("privi:token");
-                            window.open(
-                                `${TG_URL}?start=${accessToken}`,
-                                "_blank",
-                            );
+                        onClick={async () => {
+                            try {
+                                const res = await storeAccessToken();
+                                const shortAccessToken =
+                                    res.data.shortAccessToken;
+                                window.open(
+                                    `${TG_URL}?start=${shortAccessToken}`,
+                                    "_blank",
+                                );
+                            } catch (e: any) {
+                                toast(e.message);
+                            }
                         }}
                         align={"center"}
                         justify={"center"}

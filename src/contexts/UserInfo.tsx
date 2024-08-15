@@ -16,6 +16,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { useLocation } from "react-router-dom";
 import Click1Wav from "@/assets/click1.wav";
 import { usePrivy } from "@privy-io/react-auth";
+import { getTokensGame } from "@/api/tournament";
 
 const audio = new Audio(Click1Wav);
 
@@ -46,7 +47,6 @@ export const UserInfoProvider = ({
     children: React.ReactNode;
 }) => {
     const { ready, user, login, linkWallet } = usePrivy();
-
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
@@ -122,6 +122,13 @@ export const UserInfoProvider = ({
         }
 
         const tokenIds = await multiProvider.all(p);
+        const res = await getTokensGame({
+            tokens: tokenIds.map((item) => {
+                return item.toString();
+            }),
+        });
+
+        const tokensGame = res.data.tokensGame;
 
         const p2: any = [];
         tokenIds.forEach((item) => {
@@ -140,6 +147,12 @@ export const UserInfoProvider = ({
             const level = levelItem.level;
             const nextPoints = levelItem.maxPoints;
             const prePoints = levelItem.minPoints;
+            const inGame = tokensGame.find((item1: any) => {
+                return (
+                    item1.tokenId1 === Number(item.toString()) ||
+                    item1.tokenId2 === Number(item.toString())
+                );
+            });
             return {
                 tokenId: item.toString(),
                 points,
@@ -148,8 +161,11 @@ export const UserInfoProvider = ({
                 nextPoints,
                 prePoints,
                 state,
+                gameId: inGame ? inGame.id : 0,
             };
         });
+
+        console.log(tokensGame, "tokensGame");
 
         setPlaneInit(true);
         setPlaneList(planeList);

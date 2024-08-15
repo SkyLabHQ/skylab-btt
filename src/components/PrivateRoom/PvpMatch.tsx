@@ -1,11 +1,4 @@
-import {
-    Box,
-    Flex,
-    Text,
-    Image,
-    useDisclosure,
-    useClipboard,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, Image, useDisclosure } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
@@ -13,7 +6,6 @@ import UserIcon from "@/assets/user1.svg";
 import { MINI_APP_URL } from "@/skyConstants/tgConfig";
 import QuitModal from "@/components/BttComponents/QuitModal";
 import useSkyToast from "@/hooks/useSkyToast";
-import { handleError } from "@/utils/error";
 import ToolBar from "@/components/BttComponents/Toolbar";
 import ArrowIcon from "@/assets/arrow.svg";
 import { quitMatch } from "@/api/pvpGame";
@@ -29,12 +21,10 @@ const MatchPage = () => {
 
     const handleQuit = async () => {
         try {
-            const res = await quitMatch({ gameId: Number(gameId) });
-            if (res.code == 200) {
-                navigate("/free/pvp/home");
-            }
-        } catch (error) {
-            toast(handleError(error));
+            await quitMatch({ gameId: Number(gameId) });
+            navigate("/free/pvp/home");
+        } catch (e: any) {
+            toast(e.message);
         }
     };
 

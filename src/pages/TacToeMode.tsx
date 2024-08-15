@@ -1,7 +1,6 @@
 import { Box, Text, useMediaQuery, Flex, Image } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleError } from "@/utils/error";
 import BttHelmet from "@/components/Helmet/BttHelmet";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
@@ -12,15 +11,25 @@ import GameMp3 from "@/assets/game.mp3";
 import SelectPlane from "@/components/TacToeMode/SelectPlane";
 import MarketIcon from "@/components/TacToeMode/assets/market-icon.png";
 import LeaderboardIcon from "@/components/TacToeMode/assets/leaderboard.png";
-
 import Nest from "@/components/Nest";
 import { startGame } from "@/api/tournament";
+import {
+    mercuryJarTournamentAddress,
+    useSkylabBidTacToeContract,
+} from "@/hooks/useContract";
+import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
+import usePrivyAccounts from "@/hooks/usePrivyAccount";
+import { usePublicClient } from "wagmi";
+import { handleError } from "@/utils/error";
 
 const gameAudio = new Audio(GameMp3);
 
 const TacToeMode = () => {
+    const publicClient = usePublicClient();
+    const { address } = usePrivyAccounts();
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { openLoading, closeLoading } = useSubmitRequest();
+    const skylabBidTacToeContract = useSkylabBidTacToeContract();
 
     const navigate = useNavigate();
     const [selectPlane, setSelectPlane] = useState<any>({});
@@ -31,18 +40,38 @@ const TacToeMode = () => {
         const tokenId = selectPlane?.tokenId;
 
         try {
+            if (selectPlane.state) {
+                if (selectPlane.gameId) {
+                    navigate("/btt/game?gameId=" + selectPlane.gameId);
+                    return;
+                }
+            }
+
+            openLoading();
+            const hash = await skylabBidTacToeContract.write.approveForGame([
+                address,
+                tokenId,
+                mercuryJarTournamentAddress[DEAFAULT_CHAINID],
+            ]);
+
+            // @ts-ignore
+            await publicClient.waitForTransactionReceipt({
+                hash,
+            });
+        } catch (e: any) {
+            closeLoading();
+            toast(handleError(e));
+        }
+
+        try {
             const res = await startGame({
                 tokenId,
             });
-            if (res.code === 200) {
-                navigate("/btt/game?gameId=" + res.data.game.id);
-            } else {
-                toast(res.message);
-            }
-        } catch (e) {
             closeLoading();
-            console.log(e);
-            toast(handleError(e));
+            navigate("/btt/game?gameId=" + res.data.game.id);
+        } catch (e: any) {
+            closeLoading();
+            toast(e.message);
         }
     };
 

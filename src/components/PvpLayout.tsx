@@ -74,15 +74,15 @@ const PvpLayout = () => {
 
     const handleLogin = async () => {
         const { initDataRaw } = launchParams;
-        const res = await login({ initDataRaw });
-        if (res.code === 200) {
+        try {
+            const res = await login({ initDataRaw });
             const jwtToken = res.data.jwtToken;
             sessionStorage.setItem("jwtToken", jwtToken);
             setTimeout(() => {
                 setInit(true);
             }, 1500);
-        } else {
-            toast(res.message);
+        } catch (e: any) {
+            toast(e.message);
         }
     };
 
