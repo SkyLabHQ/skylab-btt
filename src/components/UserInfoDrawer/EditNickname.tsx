@@ -85,7 +85,6 @@ const EditNickname = ({
                         }}
                     ></Image>
                 </Flex>
-                <UserInfo></UserInfo>
                 <Box
                     sx={{
                         paddingTop: isPc ? "30px" : "15px",

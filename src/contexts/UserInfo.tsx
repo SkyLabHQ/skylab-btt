@@ -255,10 +255,6 @@ export const UserInfoProvider = ({
     }, []);
 
     useEffect(() => {
-        if (!multiMercuryJarTournamentContract || !multiProvider || !address) {
-            return;
-        }
-
         if (whiteList.includes(pathname)) {
             handleGetUserPaper();
         }

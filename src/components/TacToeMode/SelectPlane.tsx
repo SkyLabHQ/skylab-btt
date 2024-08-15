@@ -159,8 +159,6 @@ const MyPlane = ({
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const publicClient = usePublicClient();
 
-    console.log(planeList, "planeList");
-
     const handleMintPlane = async () => {
         try {
             const hash = await mercuryJarTournamentContract.write.mint([1], {

@@ -27,7 +27,6 @@ const usePrivyAccounts = () => {
             }
 
             setAddress(user.wallet.address);
-
             const provider = await wallet.getEthereumProvider();
             const walletClient = createWalletClient({
                 chain: baseSepolia,
@@ -37,7 +36,6 @@ const usePrivyAccounts = () => {
 
             setSigner(walletClient);
         };
-        console.log(user, wallets);
 
         if (wallets.length === 0 || !ready || !user) {
             setAddress("");

@@ -76,15 +76,13 @@ const RootContent = () => {
                 <Global styles={GlobalStyles} />
                 <BrowserRouter>
                     <WagmiConfig config={config}>
-                        <UserInfoProvider>
-                            <SubmitRequestProvider>
-                                <Fragment>
-                                    <HelmetProvider>
-                                        <AppRoutes />
-                                    </HelmetProvider>
-                                </Fragment>
-                            </SubmitRequestProvider>
-                        </UserInfoProvider>
+                        <SubmitRequestProvider>
+                            <Fragment>
+                                <HelmetProvider>
+                                    <AppRoutes />
+                                </HelmetProvider>
+                            </Fragment>
+                        </SubmitRequestProvider>
                     </WagmiConfig>
                 </BrowserRouter>
             </ChakraProvider>
