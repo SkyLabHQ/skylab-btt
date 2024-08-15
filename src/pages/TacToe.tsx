@@ -270,7 +270,7 @@ const TacToe = () => {
 
         const timer = setInterval(() => {
             handleGetGameInfo();
-        }, 10000);
+        }, 3000);
 
         return () => {
             clearInterval(timer);
