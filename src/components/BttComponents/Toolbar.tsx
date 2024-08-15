@@ -22,7 +22,7 @@ const ToolBar = ({
     onQuitClick: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { handleToggleType } = useUserInfo();
+    // const { handleToggleType } = useUserInfo();
 
     const {
         isOpen: keyBoardOpen,
@@ -53,7 +53,7 @@ const ToolBar = ({
                 gap: isPc ? "16px" : "8px",
             }}
         >
-            <Image
+            {/* <Image
                 onClick={handleToggleType}
                 src={SkinIcon}
                 sx={{
@@ -61,7 +61,7 @@ const ToolBar = ({
                     width: isPc ? "48px" : "40px",
                     cursor: "pointer",
                 }}
-            ></Image>
+            ></Image> */}
             {isPc && (
                 <KeyBoard
                     onToggle={() => {
