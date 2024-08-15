@@ -7,6 +7,7 @@ import BidTacToeTutorial from "./BidTacToeTutorial";
 import Click1Wav from "@/assets/click1.wav";
 import { useUserInfo } from "@/contexts/UserInfo";
 import SkinIcon from "@/components/BttComponents/assets/skin.png";
+import { useBidIconContext } from "@/contexts/BidIcon";
 const audio = new Audio(Click1Wav);
 const ToolBar = ({
     showLive = true,
@@ -22,7 +23,7 @@ const ToolBar = ({
     onQuitClick: () => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
-    // const { handleToggleType } = useUserInfo();
+    const { handleToggleType } = useBidIconContext();
 
     const {
         isOpen: keyBoardOpen,
@@ -53,7 +54,7 @@ const ToolBar = ({
                 gap: isPc ? "16px" : "8px",
             }}
         >
-            {/* <Image
+            <Image
                 onClick={handleToggleType}
                 src={SkinIcon}
                 sx={{
@@ -61,7 +62,7 @@ const ToolBar = ({
                     width: isPc ? "48px" : "40px",
                     cursor: "pointer",
                 }}
-            ></Image> */}
+            ></Image>
             {isPc && (
                 <KeyBoard
                     onToggle={() => {

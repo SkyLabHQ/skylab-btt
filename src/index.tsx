@@ -19,7 +19,7 @@ import { base, baseSepolia } from "viem/chains";
 import { SubmitRequestProvider } from "./contexts/SubmitRequest";
 import { PrivyProvider } from "@privy-io/react-auth";
 import logoIcon from "./assets/tournament.jpg";
-import { UserInfoProvider } from "./contexts/UserInfo";
+import { BidIconProvider } from "./contexts/BidIcon";
 
 const chains =
     process.env.REACT_APP_ENV === "development" ? [baseSepolia] : [baseSepolia];
@@ -77,11 +77,13 @@ const RootContent = () => {
                 <BrowserRouter>
                     <WagmiConfig config={config}>
                         <SubmitRequestProvider>
-                            <Fragment>
-                                <HelmetProvider>
-                                    <AppRoutes />
-                                </HelmetProvider>
-                            </Fragment>
+                            <BidIconProvider>
+                                <Fragment>
+                                    <HelmetProvider>
+                                        <AppRoutes />
+                                    </HelmetProvider>
+                                </Fragment>
+                            </BidIconProvider>
                         </SubmitRequestProvider>
                     </WagmiConfig>
                 </BrowserRouter>

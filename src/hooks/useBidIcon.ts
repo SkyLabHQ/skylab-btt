@@ -1,9 +1,9 @@
-import { useUserInfo } from "@/contexts/UserInfo";
 import { useMemo } from "react";
 import { UserMarkIcon, UserMarkIcon1 } from "@/skyConstants/bttGameTypes";
+import { useBidIconContext } from "@/contexts/BidIcon";
 
 const useBidIcon = () => {
-    const { bidIconType } = useUserInfo();
+    const { bidIconType } = useBidIconContext();
 
     const MarkIcon = useMemo(() => {
         if (bidIconType === "0") {

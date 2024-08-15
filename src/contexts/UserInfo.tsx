@@ -27,13 +27,11 @@ const UserInfoContext = createContext<{
     onUserInfoClose: () => void;
     blockOpen: boolean;
     isBlock: boolean;
-    bidIconType: string;
     userName: string;
     planeList: any[];
     planeInit: boolean;
     userNameInit: boolean;
     handleBlock: (block: boolean) => void;
-    handleToggleType: () => void;
     handleGetUserPaper: () => void;
     handleLogin: () => void;
     handleGetUserPlane: () => void;
@@ -46,7 +44,7 @@ export const UserInfoProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const { ready, user, login, linkWallet } = usePrivy();
+    const { ready, user, login, linkWallet, getAccessToken } = usePrivy();
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
@@ -58,7 +56,6 @@ export const UserInfoProvider = ({
     const { address } = usePrivyAccounts();
     const [isBlock, setIsBlock] = useState(false);
     const [blockOpen, setIsBlockOpen] = useState(false);
-    const [bidIconType, setBidIconType] = useState("0");
     const [userName, setUserName] = useState("");
     const [userNameInit, setUserNameInit] = useState(false);
     const [planeList, setPlaneList] = useState([] as any[]);
@@ -84,16 +81,6 @@ export const UserInfoProvider = ({
 
     const handleBlock = (block: boolean) => {
         setIsBlockOpen(block);
-    };
-
-    const handleToggleType = () => {
-        if (bidIconType === "0") {
-            setBidIconType("1");
-            localStorage.setItem("bidIconType", "1");
-        } else {
-            setBidIconType("0");
-            localStorage.setItem("bidIconType", "0");
-        }
     };
 
     const handleGetUserPaper = async () => {
@@ -240,11 +227,6 @@ export const UserInfoProvider = ({
     };
 
     useEffect(() => {
-        const _bidIconType = localStorage.getItem("bidIconType");
-        if (_bidIconType && bidIconType !== _bidIconType) {
-            setBidIconType("1");
-        }
-
         axios.get("https://ipapi.co/json/").then(async (res: any) => {
             if (res.data.country_code === "US") {
                 setIsBlock(true);
@@ -269,8 +251,6 @@ export const UserInfoProvider = ({
                 blockOpen,
                 isBlock,
                 handleBlock,
-                bidIconType,
-                handleToggleType,
                 userName,
                 planeList,
                 planeInit,
