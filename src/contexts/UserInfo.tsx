@@ -104,72 +104,78 @@ export const UserInfoProvider = ({
         if (loading) {
             return;
         }
-        setLoading(true);
-        const [planeBalance, userName] = await multiProvider.all([
-            multiMercuryJarTournamentContract.balanceOf(address),
-            multiMercuryJarTournamentContract.userName(address),
-        ]);
-        setUserName(userName);
-        setUserNameInit(true);
-        const p = [];
-        for (let i = 0; i < Number(planeBalance.toString()); i++) {
-            p.push(
-                multiMercuryJarTournamentContract.tokenOfOwnerByIndex(
-                    address,
-                    i,
-                ),
-            );
-        }
 
-        const tokenIds = await multiProvider.all(p);
-        const res = await getTokensGame({
-            tokens: tokenIds.map((item) => {
-                return item.toString();
-            }),
-        });
+        try {
+            setLoading(true);
+            const [planeBalance, userName] = await multiProvider.all([
+                multiMercuryJarTournamentContract.balanceOf(address),
+                multiMercuryJarTournamentContract.userName(address),
+            ]);
+            setUserName(userName);
+            setUserNameInit(true);
+            const p = [];
+            for (let i = 0; i < Number(planeBalance.toString()); i++) {
+                p.push(
+                    multiMercuryJarTournamentContract.tokenOfOwnerByIndex(
+                        address,
+                        i,
+                    ),
+                );
+            }
 
-        const tokensGame = res.data.tokensGame;
-
-        const p2: any = [];
-        tokenIds.forEach((item) => {
-            p2.push(multiMercuryJarTournamentContract.aviationPoints(item));
-            p2.push(multiMercuryJarTournamentContract.isAviationLocked(item));
-        });
-
-        const levels = await multiProvider.all(p2);
-
-        const planeList = tokenIds.map((item, index) => {
-            const points = Number(levels[index * 2].toString());
-            const levelItem = levelRanges.find((item) => {
-                return points < item.maxPoints && points >= item.minPoints;
+            const tokenIds = await multiProvider.all(p);
+            const res = await getTokensGame({
+                tokens: tokenIds.map((item) => {
+                    return item.toString();
+                }),
             });
-            const state = levels[index * 2 + 1];
-            const level = levelItem.level;
-            const nextPoints = levelItem.maxPoints;
-            const prePoints = levelItem.minPoints;
-            const inGame = tokensGame.find((item1: any) => {
-                return (
-                    item1.tokenId1 === Number(item.toString()) ||
-                    item1.tokenId2 === Number(item.toString())
+
+            const tokensGame = res.data.tokensGame;
+
+            const p2: any = [];
+            tokenIds.forEach((item) => {
+                p2.push(multiMercuryJarTournamentContract.aviationPoints(item));
+                p2.push(
+                    multiMercuryJarTournamentContract.isAviationLocked(item),
                 );
             });
-            return {
-                tokenId: item.toString(),
-                points,
-                level: level,
-                img: aviationImg(level),
-                nextPoints,
-                prePoints,
-                state,
-                gameId: inGame ? inGame.id : 0,
-            };
-        });
 
-        console.log(tokensGame, "tokensGame");
+            const levels = await multiProvider.all(p2);
 
-        setPlaneInit(true);
-        setPlaneList(planeList);
-        setLoading(false);
+            const planeList = tokenIds.map((item, index) => {
+                const points = Number(levels[index * 2].toString());
+                const levelItem = levelRanges.find((item) => {
+                    return points < item.maxPoints && points >= item.minPoints;
+                });
+                const state = levels[index * 2 + 1];
+                const level = levelItem.level;
+                const nextPoints = levelItem.maxPoints;
+                const prePoints = levelItem.minPoints;
+                const inGame = tokensGame.find((item1: any) => {
+                    return (
+                        item1.tokenId1 === Number(item.toString()) ||
+                        item1.tokenId2 === Number(item.toString())
+                    );
+                });
+                return {
+                    tokenId: item.toString(),
+                    points,
+                    level: level,
+                    img: aviationImg(level),
+                    nextPoints,
+                    prePoints,
+                    state,
+                    gameId: inGame ? inGame.id : 0,
+                };
+            });
+
+            setPlaneInit(true);
+            setPlaneList(planeList);
+            setLoading(false);
+        } catch (e) {
+            setLoading(false);
+            setPlaneInit(true);
+        }
     };
 
     const handleSetUserName = async (name: string) => {
@@ -249,6 +255,10 @@ export const UserInfoProvider = ({
     }, []);
 
     useEffect(() => {
+        if (!multiMercuryJarTournamentContract || !multiProvider || !address) {
+            return;
+        }
+
         if (whiteList.includes(pathname)) {
             handleGetUserPaper();
         }
