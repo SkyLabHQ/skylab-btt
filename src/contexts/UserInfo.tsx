@@ -234,10 +234,6 @@ export const UserInfoProvider = ({
                 setIsBlock(false);
             }
         });
-
-        getAccessToken().then((res) => {
-            console.log(res, "res");
-        });
     }, []);
 
     useEffect(() => {
@@ -245,6 +241,22 @@ export const UserInfoProvider = ({
             handleGetUserPaper();
         }
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
+
+    // 定时获取token 防止token过期
+    useEffect(() => {
+        const timer = setInterval(() => {
+            getAccessToken().then((res) => {
+                const localAc = localStorage.getItem("privy:token");
+                if (localAc !== res) {
+                    localStorage.setItem("token", res);
+                }
+            });
+        }, 1000 * 60);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
 
     return (
         <UserInfoContext.Provider
