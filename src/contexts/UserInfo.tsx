@@ -234,6 +234,10 @@ export const UserInfoProvider = ({
                 setIsBlock(false);
             }
         });
+
+        getAccessToken().then((res) => {
+            console.log(res, "res");
+        });
     }, []);
 
     useEffect(() => {

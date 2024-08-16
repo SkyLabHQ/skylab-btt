@@ -21,6 +21,7 @@ import { bid, getGameInfo, surrender } from "@/api/tournament";
 import { PLayerStatus } from "./PvpRoom";
 import useSkyToast from "@/hooks/useSkyToast";
 import Match from "@/components/TacToe/Match";
+import { getLevel } from "@/utils/level";
 
 export interface TournamentGameInfo {
     address: string;
@@ -33,6 +34,8 @@ export interface TournamentGameInfo {
     gameState: Game2Status;
     level: number;
     point: number;
+    overLevel: number;
+    overPoint: number;
     photo: string;
 }
 const GameContext = createContext<{
@@ -86,7 +89,9 @@ const TacToe = () => {
         playerStatus: null,
         gameState: Game2Status.InProgress,
         level: 0,
+        overPoint: 0,
         point: 0,
+        overLevel: 0,
         photo: "",
     });
     const [opGameInfo, setOpGameInfo] = useState<TournamentGameInfo>({
@@ -100,6 +105,8 @@ const TacToe = () => {
         gameState: Game2Status.InProgress,
         level: 0,
         point: 0,
+        overPoint: 0,
+        overLevel: 0,
         photo: "",
     });
 
@@ -150,8 +157,10 @@ const TacToe = () => {
             winMark: UserMarkType.YellowCircle,
             playerStatus: PLayerStatus.Player1,
             gameState: gameInfo.gameStatus1,
-            level: gameInfo.level1,
+            level: getLevel(gameInfo.point1),
             point: gameInfo.point1,
+            overPoint: gameInfo.overPoint1,
+            overLevel: getLevel(gameInfo.overPoint1),
             photo: gameInfo.user1TgInfo?.photo,
         };
 
@@ -164,8 +173,10 @@ const TacToe = () => {
             winMark: UserMarkType.YellowCross,
             playerStatus: PLayerStatus.Player2,
             gameState: gameInfo.gameStatus2,
-            level: gameInfo.level2,
+            level: getLevel(gameInfo.point2),
             point: gameInfo.point2,
+            overPoint: gameInfo.overPoint2,
+            overLevel: getLevel(gameInfo.overPoint2),
             photo: gameInfo.user2TgInfo?.photo,
         };
         setGameTimeout(boardGrids[resCurrentGrid].timeout);
@@ -368,7 +379,7 @@ const TacToe = () => {
                                     gameInfo={gameInfo}
                                 ></ResultPlayBack>
                             )}
-                            {/* {step === 3 && <SettlementPage></SettlementPage>} */}
+                            {step === 4 && <SettlementPage></SettlementPage>}
                         </Box>
                     </GameContext.Provider>
                 </Box>

@@ -1,405 +1,662 @@
-import { Box, Image, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useEffect, useMemo } from "react";
-import Bg from "./assets/settlement-bg.png";
 import GardenIcon from "./assets/garden-icon.png";
-import BackIcon from "./assets/back-arrow-home.svg";
 import { useNavigate } from "react-router-dom";
-// import { MyNewInfo, useGameContext } from "@/pages/TacToe";
-import UpIcon from "./assets/up-icon.svg";
-import DownIcon from "./assets/down-icon.svg";
-import Loading from "../Loading";
+import UpIcon from "./assets/level-arrow.png";
+import DownIcon from "./assets/level-down-arrow.png";
+
 import { aviationImg } from "@/utils/aviationImg";
-import { GameState, Info } from "@/skyConstants/bttGameTypes";
+import { getPvpWinState } from "@/skyConstants/bttGameTypes";
 import { motion, useAnimation } from "framer-motion";
 import { levelRanges } from "@/utils/level";
+import { TournamentGameInfo, useGameContext } from "@/pages/TacToe";
+import { ReactComponent as XpUpIcon } from "./assets/xp-up.svg";
+import LevelUpBg from "./assets/level-up.png";
+import LevelDownBg from "./assets/level-down.png";
 
-// function generateProgressLevels(startPoints: number, endPoints: number) {
-//     const startLevelItem = levelRanges.find((item, index) => {
-//         return startPoints >= item.minPoints && startPoints < item.maxPoints;
-//     });
+function generateProgressLevels(startPoints: number, endPoints: number) {
+    const startLevelItem = levelRanges.find((item, index) => {
+        return startPoints >= item.minPoints && startPoints < item.maxPoints;
+    });
 
-//     const endLevelItem = levelRanges.find((item, index) => {
-//         return endPoints >= item.minPoints && endPoints < item.maxPoints;
-//     });
+    const endLevelItem = levelRanges.find((item, index) => {
+        return endPoints >= item.minPoints && endPoints < item.maxPoints;
+    });
 
-//     const startRange =
-//         (startPoints - startLevelItem.minPoints) /
-//         (startLevelItem.maxPoints - startLevelItem.minPoints);
+    const startRange =
+        (startPoints - startLevelItem.minPoints) /
+        (startLevelItem.maxPoints - startLevelItem.minPoints);
 
-//     const endRange =
-//         (endPoints - endLevelItem.minPoints) /
-//         (endLevelItem.maxPoints - endLevelItem.minPoints);
-//     // 如果是升级的
-//     if (endPoints > startPoints) {
-//         if (endLevelItem.level === startLevelItem.level) {
-//             return [[startRange, endRange]];
-//         } else {
-//             const progressArray = [[startRange, 1]];
+    const endRange =
+        (endPoints - endLevelItem.minPoints) /
+        (endLevelItem.maxPoints - endLevelItem.minPoints);
+    // 如果是升级的
+    if (endPoints > startPoints) {
+        if (endLevelItem.level === startLevelItem.level) {
+            return [[startRange, endRange]];
+        } else {
+            const progressArray = [[startRange, 1]];
 
-//             for (
-//                 let i = startLevelItem.level + 1;
-//                 i < endLevelItem.level;
-//                 i++
-//             ) {
-//                 progressArray.push([0, 1]);
-//             }
+            for (
+                let i = startLevelItem.level + 1;
+                i < endLevelItem.level;
+                i++
+            ) {
+                progressArray.push([0, 1]);
+            }
 
-//             progressArray.push([0, endRange]);
+            if (endLevelItem.minPoints !== endPoints) {
+                progressArray.push([0, endRange]);
+            }
 
-//             return progressArray;
-//         }
-//     } else {
-//         if (endLevelItem.level === startLevelItem.level) {
-//             return [[endRange, startRange]];
-//         } else {
-//             const progressArray = [[startRange, 0]];
+            return progressArray;
+        }
+    } else {
+        if (endLevelItem.level === startLevelItem.level) {
+            return [[startRange, endRange]];
+        } else {
+            const progressArray = [[startRange, 0]];
 
-//             for (
-//                 let i = startLevelItem.level - 1;
-//                 i > endLevelItem.level;
-//                 i--
-//             ) {
-//                 progressArray.push([1, 0]);
-//             }
+            for (
+                let i = startLevelItem.level - 1;
+                i > endLevelItem.level;
+                i--
+            ) {
+                progressArray.push([0, 1]);
+            }
 
-//             progressArray.push([1, endRange]);
-//             return progressArray;
-//         }
-//     }
-// }
+            if (endLevelItem.minPoints !== endPoints) {
+                progressArray.push([1, endRange]);
+            }
 
-// const WinResult = ({
-//     myInfo,
-//     myNewInfo,
-//     progressArray,
-// }: {
-//     myInfo: Info;
-//     myNewInfo: MyNewInfo;
-//     progressArray: number[][];
-// }) => {
-//     const [isPc] = useMediaQuery("(min-width: 800px)");
+            return progressArray;
+        }
+    }
+}
 
-//     const [highlight, rightPlaneImg, rightPlaneLevel] = useMemo(() => {
-//         if (myNewInfo.level === myInfo.level) {
-//             return [false, aviationImg(myInfo.level + 1), myInfo.level + 1];
-//         } else if (myNewInfo.level > myInfo.level) {
-//             return [
-//                 true,
-//                 myNewInfo.img ? myNewInfo.img : aviationImg(myNewInfo.level),
-//                 myNewInfo.level,
-//             ];
-//         }
-//     }, [myNewInfo.level, myInfo.level]);
+const WinResult = ({
+    myInfo,
+    progressArray,
+}: {
+    myInfo: TournamentGameInfo;
+    progressArray: number[][];
+}) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
 
-//     const clickAnimate = useAnimation();
+    const [rightPlaneImg, rightPlaneLevel, nextLevelXp] = useMemo(() => {
+        let nextLevelXp = 0;
+        const levelItem = levelRanges.find((item, index) => {
+            return (
+                myInfo.overPoint >= item.minPoints &&
+                myInfo.overPoint < item.maxPoints
+            );
+        });
 
-//     useEffect(() => {
-//         const handleUp = async () => {
-//             for (let i = 0; i < progressArray.length; i++) {
-//                 await clickAnimate.set({
-//                     width: progressArray[i][0] * 100 + "%",
-//                 });
-//                 await clickAnimate.start({
-//                     width: progressArray[i][1] * 100 + "%",
-//                     transition: {
-//                         duration: 1,
-//                     },
-//                 });
-//             }
-//         };
-//         handleUp();
-//     }, []);
+        if (levelItem) {
+            nextLevelXp = levelItem.maxPoints - myInfo.overPoint;
+        }
 
-//     return (
-//         <Box>
-//             <Text
-//                 sx={{
-//                     fontSize: isPc ? "2.5vw" : "28px",
-//                     fontWeight: "bold",
-//                     textAlign: "center",
-//                     color: "#FDDC2D",
-//                 }}
-//             >
-//                 YOU WIN
-//             </Text>
-//             <Box
-//                 sx={{
-//                     display: "flex",
-//                     alignItems: "center",
-//                     justifyContent: "center",
-//                 }}
-//             >
-//                 <Box>
-//                     <Image
-//                         src={aviationImg(myInfo.level)}
-//                         sx={{
-//                             width: isPc ? "15.625vw" : "100px",
-//                             height: isPc ? "15.625vw" : "100px",
-//                             opacity: highlight ? "0.5" : "1",
-//                         }}
-//                     ></Image>
-//                     <Text
-//                         sx={{
-//                             fontSize: isPc ? "1.875vw" : "20px",
-//                             textAlign: "center",
-//                         }}
-//                     >
-//                         Lvl.{myInfo.level}
-//                     </Text>
-//                 </Box>
+        if (myInfo.overLevel === myInfo.level) {
+            return [
+                aviationImg(myInfo.level + 1),
+                myInfo.level + 1,
+                nextLevelXp,
+            ];
+        } else if (myInfo.overLevel > myInfo.level) {
+            return [
+                aviationImg(myInfo.overLevel),
+                myInfo.overLevel,
+                nextLevelXp,
+            ];
+        }
+    }, [myInfo]);
 
-//                 <Image
-//                     src={UpIcon}
-//                     sx={{
-//                         width: isPc ? "40px" : "20px",
-//                         margin: isPc ? "0 4.1667vw" : "20px",
-//                     }}
-//                 ></Image>
-//                 <Box>
-//                     <Image
-//                         src={rightPlaneImg}
-//                         sx={{
-//                             width: isPc ? "15.625vw" : "100px",
-//                             height: isPc ? "15.625vw" : "100px",
-//                             opacity: highlight ? "1" : "0.5",
-//                         }}
-//                     ></Image>
-//                     <Text
-//                         sx={{
-//                             fontSize: isPc ? "1.875vw" : "20px",
-//                             textAlign: "center",
-//                         }}
-//                     >
-//                         Lvl.{rightPlaneLevel}
-//                     </Text>
-//                 </Box>
-//             </Box>
-//             <Box
-//                 sx={{
-//                     width: isPc ? "34.6354vw" : "100%",
-//                     margin: "0 auto",
-//                 }}
-//             >
-//                 <Text
-//                     sx={{
-//                         textAlign: "right",
-//                         fontSize: isPc ? "1.25vw" : "12px",
-//                     }}
-//                 >
-//                     {myInfo.point} pt{"   "}
-//                     <span style={{ color: "rgba(253, 220, 45, 1)" }}>
-//                         + {myNewInfo.point - myInfo.point} pt
-//                     </span>{" "}
-//                     / {myNewInfo.point} pt
-//                 </Text>
-//                 <Box
-//                     sx={{
-//                         height: isPc ? "1.7188vw" : "15px",
-//                         border: isPc ? "0.1042vw solid #FFF" : "2px solid #fff",
-//                         borderRadius: isPc ? "1.0417vw" : "10px",
-//                         padding: isPc ? "0.3125vw" : "2px",
-//                     }}
-//                 >
-//                     <motion.div
-//                         style={{
-//                             height: "100%",
-//                             background: "#fff",
-//                             borderRadius: isPc ? "1.0417vw" : "10px",
-//                         }}
-//                         initial={{ width: "0%" }}
-//                         animate={clickAnimate}
-//                     ></motion.div>
-//                 </Box>
-//             </Box>
-//         </Box>
-//     );
-// };
+    const clickAnimate = useAnimation();
 
-// const LoseResult = ({
-//     myInfo,
-//     myNewInfo,
-//     progressArray,
-// }: {
-//     myInfo: Info;
-//     myNewInfo: MyNewInfo;
-//     progressArray: number[][];
-// }) => {
-//     const [isPc] = useMediaQuery("(min-width: 800px)");
-//     const clickAnimate = useAnimation();
+    useEffect(() => {
+        const handleUp = async () => {
+            for (let i = 0; i < progressArray.length; i++) {
+                await clickAnimate.set({
+                    width: progressArray[i][0] * 100 + "%",
+                });
+                await clickAnimate.start({
+                    width: progressArray[i][1] * 100 + "%",
+                    transition: {
+                        duration: 1,
+                    },
+                });
+            }
+        };
+        handleUp();
+    }, []);
 
-//     useEffect(() => {
-//         const handleUp = async () => {
-//             for (let i = 0; i < progressArray.length; i++) {
-//                 await clickAnimate.set({
-//                     width: progressArray[i][0] * 100 + "%",
-//                 });
-//                 await clickAnimate.start({
-//                     width: progressArray[i][1] * 100 + "%",
-//                     transition: {
-//                         duration: 1,
-//                     },
-//                 });
-//             }
-//         };
-//         handleUp();
-//     }, []);
-//     return (
-//         <Box>
-//             <Text
-//                 sx={{
-//                     fontSize: isPc ? "2.5vw" : "28px",
-//                     fontWeight: "bold",
-//                     textAlign: "center",
-//                 }}
-//             >
-//                 YOU LOSE
-//             </Text>
-//             <Box
-//                 sx={{
-//                     display: "flex",
-//                     alignItems: "center",
-//                     justifyContent: "center",
-//                 }}
-//             >
-//                 <Box>
-//                     <Image
-//                         src={
-//                             myNewInfo.img
-//                                 ? myNewInfo.img
-//                                 : aviationImg(myNewInfo.level)
-//                         }
-//                         sx={{
-//                             width: isPc ? "15.625vw" : "100px",
-//                             height: isPc ? "15.625vw" : "100px",
-//                         }}
-//                     ></Image>
-//                     <Text
-//                         sx={{
-//                             fontSize: isPc ? "1.875vw" : "20px",
-//                             textAlign: "center",
-//                         }}
-//                     >
-//                         Lvl.{myNewInfo.level}
-//                     </Text>
-//                 </Box>
-//                 <Image
-//                     src={DownIcon}
-//                     sx={{
-//                         width: isPc ? "40px" : "20px",
-//                         margin: isPc ? "0 4.1667vw" : "20px",
-//                     }}
-//                 ></Image>
-//                 <Box>
-//                     <Image
-//                         src={myInfo.img}
-//                         sx={{
-//                             width: isPc ? "15.625vw" : "100px",
-//                             height: isPc ? "15.625vw" : "100px",
-//                             opacity: "0.5",
-//                         }}
-//                     ></Image>
-//                     <Text
-//                         sx={{
-//                             fontSize: isPc ? "1.875vw" : "20px",
-//                             textAlign: "center",
-//                         }}
-//                     >
-//                         Lvl.{myInfo.level}
-//                     </Text>
-//                 </Box>
-//             </Box>
-//             <Box
-//                 sx={{
-//                     width: isPc ? "34.6354vw" : "100%",
-//                     margin: "0 auto",
-//                 }}
-//             >
-//                 <Text
-//                     sx={{
-//                         textAlign: "right",
-//                         fontSize: isPc ? "1.25vw" : "12px",
-//                     }}
-//                 >
-//                     {myInfo.point} pt{"   "}
-//                     <span style={{ color: "rgba(253, 220, 45, 1)" }}>
-//                         - {myInfo.point - myNewInfo.point} pt
-//                     </span>{" "}
-//                     / {myNewInfo.point} pt
-//                 </Text>
-//                 <Box
-//                     sx={{
-//                         height: isPc ? "1.7188vw" : "15px",
-//                         border: isPc ? "0.1042vw solid #FFF" : "2px solid #fff",
-//                         borderRadius: isPc ? "1.0417vw" : "10px",
-//                         padding: isPc ? "0.3125vw" : "2px",
-//                     }}
-//                 >
-//                     <motion.div
-//                         style={{
-//                             height: "100%",
-//                             background: "#fff",
-//                             borderRadius: isPc ? "1.0417vw" : "10px",
-//                         }}
-//                         animate={clickAnimate}
-//                     ></motion.div>
-//                 </Box>
-//             </Box>
-//         </Box>
-//     );
-// };
+    return (
+        <Box>
+            <Text
+                sx={{
+                    fontSize: isPc ? "48px" : "28px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    color: "#FDDC2D",
+                }}
+            >
+                YOU WIN
+            </Text>
+            <Text
+                sx={{
+                    color: "#FDDC2D",
+                    textAlign: "center",
+                    fontFamily: "Orbitron",
+                    fontSize: "20px",
+                    marginTop: "20px",
+                }}
+            >
+                You become the active plane in Lvl.{myInfo.overLevel}
+            </Text>
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                <Box
+                    sx={{
+                        position: "relative",
+                    }}
+                >
+                    <Image
+                        src={aviationImg(myInfo.level)}
+                        sx={{
+                            width: isPc ? "220px" : "100px",
+                            height: isPc ? "220px" : "100px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "36px" : "20px",
+                            textAlign: "center",
+                            position: "absolute",
+                            bottom: "10%",
+                            width: "100%",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                        }}
+                    >
+                        Lvl.{myInfo.level}
+                    </Text>
+                </Box>
+
+                <Image
+                    src={UpIcon}
+                    sx={{
+                        width: isPc ? "80px" : "40px",
+                    }}
+                ></Image>
+                <Box
+                    sx={{
+                        backgroundImage: `url(${LevelUpBg})`,
+                        backgroundSize: "100% ",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center 40%",
+                        position: "relative",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            color: "#FDDC2D",
+                            textAlign: "center",
+                            fontSize: "24px",
+                            fontWeight: 700,
+                            position: "absolute",
+                            fontFamily: "Orbitron",
+                            top: "10%",
+                            width: "100%",
+                        }}
+                    >
+                        Level Up!
+                    </Text>
+                    <Image
+                        src={rightPlaneImg}
+                        sx={{
+                            width: isPc ? "220px" : "100px",
+                            height: isPc ? "220px" : "100px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "36px" : "20px",
+                            textAlign: "center",
+                            position: "absolute",
+                            bottom: "10%",
+                            width: "100%",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                        }}
+                    >
+                        Lvl.{rightPlaneLevel}
+                    </Text>
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    width: isPc ? "652px" : "100%",
+                    margin: "0 auto",
+                }}
+            >
+                <Box
+                    sx={{
+                        position: "relative",
+                        marginTop: "20px",
+                        lineHeight: 1,
+                    }}
+                >
+                    <Flex
+                        sx={{
+                            position: "absolute",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            top: "-44px",
+                            fontSize: "40px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                            color: "#FDDC2D",
+                            verticalAlign: "bottom",
+                        }}
+                        align={"flex-end"}
+                    >
+                        <span
+                            style={{
+                                fontSize: isPc ? "24px" : "12px",
+                                fontWeight: 700,
+                                marginRight: "4px",
+                                color: "#fff",
+                                verticalAlign: "bottom",
+                            }}
+                        >
+                            {myInfo.point}
+                        </span>
+                        <XpUpIcon
+                            color="#fff"
+                            style={{
+                                marginRight: "18px",
+                                width: "28px",
+                                marginBottom: "1px",
+                            }}
+                        ></XpUpIcon>
+                        <span
+                            style={{
+                                marginRight: "4px",
+                            }}
+                        >
+                            +{myInfo.overPoint - myInfo.point}
+                        </span>
+                        <XpUpIcon
+                            style={{
+                                width: "35px",
+                                marginBottom: "6px",
+                            }}
+                        ></XpUpIcon>
+                    </Flex>
+
+                    <Flex
+                        justify={"flex-end"}
+                        align={"flex-end"}
+                        sx={{
+                            position: "absolute",
+                            right: "0%",
+                            top: "-34px",
+                            fontSize: "40px",
+                            fontStyle: "normal",
+                        }}
+                    >
+                        <Text
+                            sx={{
+                                textAlign: "right",
+                                fontSize: "24px",
+                            }}
+                        >
+                            NextLevel:{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                }}
+                            >
+                                {nextLevelXp}
+                            </span>
+                        </Text>
+                        <XpUpIcon
+                            style={{
+                                color: "#FDDC2D",
+                                width: "28px",
+                                marginBottom: "1px",
+                                marginLeft: "4px",
+                            }}
+                        ></XpUpIcon>
+                    </Flex>
+                </Box>
+
+                <Box
+                    sx={{
+                        height: isPc ? "33px" : "15px",
+                        border: isPc ? "1px solid #FFF" : "2px solid #fff",
+                        borderRadius: isPc ? "20px" : "10px",
+                        padding: isPc ? "6px" : "2px",
+                    }}
+                >
+                    <motion.div
+                        style={{
+                            height: "100%",
+                            background: "#FDDC2D",
+                            borderRadius: isPc ? "20px" : "10px",
+                        }}
+                        initial={{ width: "0%" }}
+                        animate={clickAnimate}
+                    ></motion.div>
+                </Box>
+            </Box>
+        </Box>
+    );
+};
+
+const LoseResult = ({
+    myInfo,
+    progressArray,
+}: {
+    myInfo: TournamentGameInfo;
+    progressArray: number[][];
+}) => {
+    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const clickAnimate = useAnimation();
+    const [leftPlaneImg, leftPlaneLevel, nextLevelXp] = useMemo(() => {
+        let nextLevelXp = 0;
+        const levelItem = levelRanges.find((item, index) => {
+            return (
+                myInfo.overPoint >= item.minPoints &&
+                myInfo.overPoint < item.maxPoints
+            );
+        });
+
+        if (levelItem) {
+            nextLevelXp = levelItem.maxPoints - myInfo.overPoint;
+        }
+
+        if (myInfo.overLevel === myInfo.level) {
+            return [
+                aviationImg(myInfo.level - 1),
+                myInfo.level - 1,
+                nextLevelXp,
+            ];
+        } else if (myInfo.overLevel < myInfo.level) {
+            return [
+                aviationImg(myInfo.overLevel),
+                myInfo.overLevel,
+                nextLevelXp,
+            ];
+        }
+    }, [myInfo]);
+    useEffect(() => {
+        const handleUp = async () => {
+            for (let i = 0; i < progressArray.length; i++) {
+                await clickAnimate.set({
+                    width: progressArray[i][0] * 100 + "%",
+                });
+                await clickAnimate.start({
+                    width: progressArray[i][1] * 100 + "%",
+                    transition: {
+                        duration: 1,
+                    },
+                });
+            }
+        };
+        handleUp();
+    }, []);
+    return (
+        <Box sx={{}}>
+            <Text
+                sx={{
+                    fontSize: isPc ? "48px" : "28px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    fontFamily: "Orbitron",
+                    color: "#BCBBBE",
+                }}
+            >
+                YOU LOSE
+            </Text>
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                <Box
+                    sx={{
+                        position: "relative",
+                        backgroundImage: `url(${LevelDownBg})`,
+                        backgroundSize: "100% ",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center 40%",
+                    }}
+                >
+                    {" "}
+                    <Text
+                        sx={{
+                            color: "#888",
+                            textAlign: "center",
+                            fontSize: "24px",
+                            fontWeight: 700,
+                            position: "absolute",
+                            fontFamily: "Orbitron",
+                            top: "10%",
+                            width: "100%",
+                        }}
+                    >
+                        Level Down...{" "}
+                    </Text>
+                    <Image
+                        src={leftPlaneImg}
+                        sx={{
+                            width: isPc ? "220px" : "100px",
+                            height: isPc ? "220px" : "100px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "36px" : "20px",
+                            textAlign: "center",
+                            position: "absolute",
+                            bottom: "10%",
+                            width: "100%",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                        }}
+                    >
+                        Lvl.{leftPlaneLevel}{" "}
+                    </Text>
+                </Box>
+
+                <Image
+                    src={DownIcon}
+                    sx={{
+                        width: isPc ? "80px" : "40px",
+                    }}
+                ></Image>
+                <Box
+                    sx={{
+                        position: "relative",
+                    }}
+                >
+                    <Image
+                        src={aviationImg(myInfo.level)}
+                        sx={{
+                            width: isPc ? "220px" : "100px",
+                            height: isPc ? "220px" : "100px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: isPc ? "36px" : "20px",
+                            textAlign: "center",
+                            position: "absolute",
+                            bottom: "10%",
+                            width: "100%",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                        }}
+                    >
+                        Lvl.{myInfo.level}
+                    </Text>
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    width: isPc ? "652px" : "100%",
+                    margin: "0 auto",
+                }}
+            >
+                <Box
+                    sx={{
+                        position: "relative",
+                        marginTop: "20px",
+                        lineHeight: 1,
+                    }}
+                >
+                    <Flex
+                        sx={{
+                            position: "absolute",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            top: "-44px",
+                            fontSize: "40px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                            color: "#FDDC2D",
+                            verticalAlign: "bottom",
+                        }}
+                        align={"flex-end"}
+                    >
+                        <span
+                            style={{
+                                fontSize: isPc ? "24px" : "12px",
+                                fontWeight: 700,
+                                marginRight: "4px",
+                                color: "#fff",
+                                verticalAlign: "bottom",
+                            }}
+                        >
+                            {myInfo.point}
+                        </span>
+                        <XpUpIcon
+                            color="#fff"
+                            style={{
+                                marginRight: "18px",
+                                width: "28px",
+                                marginBottom: "1px",
+                            }}
+                        ></XpUpIcon>
+                        <span
+                            style={{
+                                marginRight: "4px",
+                                color: "#CA4040",
+                            }}
+                        >
+                            {myInfo.overPoint - myInfo.point}
+                        </span>
+                        <XpUpIcon
+                            style={{
+                                width: "35px",
+                                marginBottom: "6px",
+                                color: "#CA4040",
+                            }}
+                        ></XpUpIcon>
+                    </Flex>
+
+                    <Flex
+                        justify={"flex-end"}
+                        align={"flex-end"}
+                        sx={{
+                            position: "absolute",
+                            right: "0%",
+                            top: "-34px",
+                            fontSize: "40px",
+                            fontStyle: "normal",
+                        }}
+                    >
+                        <Text
+                            sx={{
+                                textAlign: "right",
+                                fontSize: "24px",
+                            }}
+                        >
+                            NextLevel:{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                }}
+                            >
+                                {nextLevelXp}
+                            </span>
+                        </Text>
+                        <XpUpIcon
+                            style={{
+                                color: "#FDDC2D",
+                                width: "28px",
+                                marginBottom: "1px",
+                                marginLeft: "4px",
+                            }}
+                        ></XpUpIcon>
+                    </Flex>
+                </Box>
+                <Box
+                    sx={{
+                        height: isPc ? "33px" : "15px",
+                        border: isPc ? "1px solid #FFF" : "2px solid #fff",
+                        borderRadius: isPc ? "20px" : "10px",
+                        padding: isPc ? "6px" : "2px",
+                    }}
+                >
+                    <motion.div
+                        style={{
+                            height: "100%",
+                            background: "#FDDC2D",
+                            borderRadius: isPc ? "20px" : "10px",
+                        }}
+                        initial={{ width: "0%" }}
+                        animate={clickAnimate}
+                    ></motion.div>
+                </Box>
+            </Box>
+        </Box>
+    );
+};
 
 const SettlementPage = ({}) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    // const { myGameInfo, myInfo, myNewInfo, mileages } = useGameContext();
+    const { myGameInfo } = useGameContext();
 
-    // const myInfo: any = {
-    //     level: 1,
-    //     point: 1,
-    //     img: "",
-    //     burner: "",
-    // };
-
-    // const myNewInfo = {
-    //     level: 2,
-    //     point: 3,
-    //     img: "",
-    //     burner: "",
-    // };
-
-    // const win = useMemo(() => {
-    //     return [
-    //         GameState.WinByConnecting,
-    //         GameState.WinBySurrender,
-    //         GameState.WinByTimeout,
-    //         GameState.WinByGridCount,
-    //     ].includes(myGameInfo.gameState);
-    // }, [myGameInfo.gameState]);
-
-    // const progressArray = useMemo(() => {
-    //     if (!myInfo || !myNewInfo) {
-    //         return [];
-    //     }
-
-    //     return generateProgressLevels(myInfo.point, myNewInfo.point);
-    // }, [myInfo, myNewInfo]);
+    const progressArray = useMemo(() => {
+        return generateProgressLevels(myGameInfo.point, myGameInfo.overPoint);
+    }, [myGameInfo]);
 
     return (
         <Box
+            onClick={() => {
+                navigate("/");
+            }}
             sx={{
-                width: "100vw",
+                width: "100%",
                 height: "100%",
-                background: `url(${Bg}) no-repeat center center`,
-                backgroundSize: "cover",
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "column",
-                justifyContent: "center",
-                fontFamily: "Orbitron",
-                padding: "0 20px",
+                fontFamily: "Quantico",
+                padding: "200px",
             }}
         >
-            {/* <Box
+            <Box
                 sx={{
                     display: "flex",
                     position: "absolute",
@@ -416,19 +673,13 @@ const SettlementPage = ({}) => {
                     }
                     sx={{
                         display: "flex",
-                        marginRight: isPc ? "1.0417vw" : "10px",
+                        marginRight: isPc ? "20.0006px" : "10px",
                     }}
                 >
                     <Image
                         src={GardenIcon}
                         sx={{
-                            width: isPc ? "5.4167vw" : "50px",
-                        }}
-                    ></Image>
-                    <Image
-                        src={BackIcon}
-                        sx={{
-                            width: isPc ? "2.6563vw" : "32px",
+                            width: isPc ? "104.0006px" : "50px",
                         }}
                     ></Image>
                 </Box>
@@ -439,48 +690,30 @@ const SettlementPage = ({}) => {
                     position: "relative",
                 }}
             >
-                {myNewInfo ? (
-                    <>
-                        {win ? (
-                            <WinResult
-                                myInfo={myInfo}
-                                myNewInfo={myNewInfo}
-                                progressArray={progressArray}
-                            ></WinResult>
-                        ) : (
-                            <LoseResult
-                                myInfo={myInfo}
-                                myNewInfo={myNewInfo}
-                                progressArray={progressArray}
-                            ></LoseResult>
-                        )}
-
-                        <Box
-                            sx={{
-                                border: "3px solid #f2d861",
-                                color: "#f2d861",
-                                width: isPc ? "11.4583vw" : "240px",
-                                height: isPc ? "3.2292vw" : "50px",
-                                cursor: "pointer",
-                                borderRadius: isPc ? "0.8333vw" : "16px",
-                                fontSize: isPc ? "1.4583vw" : "20px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontWeight: "bold",
-                                margin: isPc ? "1vh auto 0" : "20px auto 0",
-                            }}
-                            onClick={() => {
-                                navigate("/");
-                            }}
-                        >
-                            Continue
-                        </Box>
-                    </>
+                {getPvpWinState(myGameInfo.gameState) ? (
+                    <WinResult
+                        myInfo={myGameInfo}
+                        progressArray={progressArray}
+                    ></WinResult>
                 ) : (
-                    <Loading></Loading>
+                    <LoseResult
+                        myInfo={myGameInfo}
+                        progressArray={progressArray}
+                    ></LoseResult>
                 )}
-            </Box> */}
+            </Box>
+            <Text
+                sx={{
+                    color: "#FDDC2D",
+                    textAlign: "center",
+                    fontFamily: "Quantico",
+                    fontSize: "20px",
+                    fontWeight: 700,
+                    marginTop: "90px",
+                }}
+            >
+                Press any key to continue
+            </Text>
         </Box>
     );
 };
