@@ -1,4 +1,4 @@
-import { useLaunchParams } from "@tma.js/sdk-react";
+import { useInitData, useLaunchParams } from "@tma.js/sdk-react";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { login } from "@/api/pvpGame";
@@ -68,6 +68,7 @@ const LoadingPage = () => {
 };
 
 const PvpLayout = () => {
+    const initData = useInitData();
     const launchParams = useLaunchParams();
     const toast = useSkyToast();
     const [init, setInit] = useState(false);
@@ -87,8 +88,11 @@ const PvpLayout = () => {
     };
 
     useEffect(() => {
+        if (!initData.user) {
+            return;
+        }
         handleLogin();
-    }, []);
+    }, [initData.user]);
 
     return (
         <Box
