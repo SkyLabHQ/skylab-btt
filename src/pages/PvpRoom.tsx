@@ -258,7 +258,8 @@ const PvpRoom = () => {
     useEffect(() => {
         if (
             !gameId ||
-            myGameInfo.gameState !== Game2Status.InProgress ||
+            (myGameInfo.gameState !== Game2Status.InProgress &&
+                myGameInfo.gameState !== Game2Status.WaitingForPlayer2) ||
             !initData.user.id
         )
             return;
@@ -275,7 +276,7 @@ const PvpRoom = () => {
     }, [gameId, myGameInfo.gameState, initData.user.id]);
 
     useEffect(() => {
-        if (!gameInfo.player1 || !gameInfo.player2) {
+        if (!gameInfo.player1) {
             return;
         }
         handleGameInfo(gameInfo);
