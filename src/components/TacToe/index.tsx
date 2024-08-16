@@ -137,7 +137,7 @@ const TacToePage = ({
             {isPc ? (
                 <Box
                     sx={{
-                        padding: "1.4063vw 3.125vw",
+                        padding: "27px 60px",
                         position: "relative",
                         width: "100vw",
                         height: "100vh",
@@ -176,21 +176,15 @@ const TacToePage = ({
                             marginTop: "10vh",
                         }}
                     >
-                        <Box
-                            sx={{
-                                width: "15.625vw",
-                            }}
-                        >
-                            <MyUserCard
-                                showAdvantageTip={false}
-                                markIcon={myGameInfo.mark}
-                                bidAmount={bidAmount}
-                                onInputChange={onBidAmount}
-                                onConfirm={onBid}
-                                showAnimateConfirm={showAnimateConfirm}
-                                userGameInfo={myGameInfo}
-                            ></MyUserCard>
-                        </Box>
+                        <MyUserCard
+                            showAdvantageTip={false}
+                            markIcon={myGameInfo.mark}
+                            bidAmount={bidAmount}
+                            onInputChange={onBidAmount}
+                            onConfirm={onBid}
+                            showAnimateConfirm={showAnimateConfirm}
+                            userGameInfo={myGameInfo}
+                        ></MyUserCard>
 
                         <Box onClick={handleBoardClick}>
                             <Board

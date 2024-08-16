@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import {
     Box,
     Image,
@@ -333,6 +333,7 @@ export const OpUserCard = ({ markIcon, userGameInfo }: UserCardProps) => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-end",
+                width: "240px",
             }}
         >
             <Box
