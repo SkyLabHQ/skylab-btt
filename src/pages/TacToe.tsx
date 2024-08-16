@@ -36,7 +36,8 @@ export interface TournamentGameInfo {
     point: number;
     overLevel: number;
     overPoint: number;
-    photo: string;
+    photo?: string;
+    username?: string;
 }
 const GameContext = createContext<{
     myGameInfo: TournamentGameInfo;
@@ -162,6 +163,7 @@ const TacToe = () => {
             overPoint: gameInfo.overPoint1,
             overLevel: getLevel(gameInfo.overPoint1),
             photo: gameInfo.user1TgInfo?.photo,
+            username: gameInfo.user1TgInfo?.username,
         };
 
         const player2GameInfo = {
@@ -178,6 +180,7 @@ const TacToe = () => {
             overPoint: gameInfo.overPoint2,
             overLevel: getLevel(gameInfo.overPoint2),
             photo: gameInfo.user2TgInfo?.photo,
+            username: gameInfo.user2TgInfo?.username,
         };
         setGameTimeout(boardGrids[resCurrentGrid].timeout);
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;

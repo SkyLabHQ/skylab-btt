@@ -42,7 +42,7 @@ const Timer = ({
             >
                 <Text
                     sx={{
-                        fontSize: isPc ? "1.25vw" : "16px",
+                        fontSize: isPc ? "24px" : "16px",
                         color: time1Gray ? "#616161" : "#fddc2d",
                         textAlign: "center",
                     }}
@@ -55,13 +55,13 @@ const Timer = ({
                             ? "3px solid #616161"
                             : "3px solid #FFFFFF",
                         borderWidth: isPc ? "3px" : "2px",
-                        width: isPc ? "21.4583vw" : "100%",
+                        width: isPc ? "550px" : "100%",
                         background: "transparent",
-                        height: isPc ? "1.25vw" : "12px",
+                        height: isPc ? "24px" : "12px",
                         display: "flex",
                         justifyContent: "flex-end",
-                        padding: isPc ? "0.1042vw" : "1px",
-                        borderRadius: isPc ? "0.5208vw" : "8px",
+                        padding: isPc ? "2px" : "1px",
+                        borderRadius: isPc ? "10px" : "8px",
                     }}
                 >
                     <Box
@@ -73,7 +73,7 @@ const Timer = ({
                                     100 +
                                 "%",
                             background: time1Gray ? "#616161" : "#fddc2d",
-                            borderRadius: isPc ? "0.5208vw" : "8px",
+                            borderRadius: isPc ? "10px" : "8px",
                         }}
                     ></Box>
                 </Box>

@@ -258,6 +258,26 @@ export const UserInfoProvider = ({
         };
     }, []);
 
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (!document.hidden) {
+                getAccessToken().then((res) => {
+                    const localAc = localStorage.getItem("privy:token");
+                    if (localAc !== res) {
+                        localStorage.setItem("token", res);
+                    }
+                });
+            }
+        };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => {
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange,
+            );
+        };
+    }, []);
+
     return (
         <UserInfoContext.Provider
             value={{

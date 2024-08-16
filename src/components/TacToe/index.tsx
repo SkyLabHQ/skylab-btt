@@ -182,17 +182,13 @@ const TacToePage = ({
                             }}
                         >
                             <MyUserCard
-                                myIsBid={myGameInfo.isBid}
                                 showAdvantageTip={false}
-                                myGameState={myGameInfo.gameState}
                                 markIcon={myGameInfo.mark}
-                                address={myGameInfo.address}
-                                balance={myGameInfo.balance}
                                 bidAmount={bidAmount}
                                 onInputChange={onBidAmount}
                                 onConfirm={onBid}
-                                planeUrl={""}
                                 showAnimateConfirm={showAnimateConfirm}
+                                userGameInfo={myGameInfo}
                             ></MyUserCard>
                         </Box>
 
@@ -202,21 +198,11 @@ const TacToePage = ({
                                 showAnimateNumber={showAnimateNumber}
                             ></Board>
                         </Box>
-                        <Box
-                            sx={{
-                                width: "15.625vw",
-                            }}
-                        >
-                            <OpUserCard
-                                myIsBid={myGameInfo.isBid}
-                                markIcon={opGameInfo.mark}
-                                showAdvantageTip={false}
-                                address={opGameInfo.address}
-                                balance={opGameInfo?.balance}
-                                bidAmount={0}
-                                planeUrl={""}
-                            ></OpUserCard>
-                        </Box>
+                        <OpUserCard
+                            userGameInfo={myGameInfo}
+                            markIcon={opGameInfo.mark}
+                            showAdvantageTip={false}
+                        ></OpUserCard>
                     </Box>
                 </Box>
             ) : (

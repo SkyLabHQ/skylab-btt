@@ -230,8 +230,8 @@ const Board = ({
                 background: `url(${BaseGrid})`,
                 backgroundSize: "100% 100%",
             }}
-            w={isPc ? "26.0938vw" : "240px"}
-            h={isPc ? "26.0938vw" : "240px"}
+            w={isPc ? "550px" : "240px"}
+            h={isPc ? "550px" : "240px"}
         >
             <Grid
                 templateColumns="repeat(3, 1fr)"

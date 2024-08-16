@@ -1,32 +1,26 @@
 import React, { useEffect, useMemo } from "react";
-import { shortenAddress } from "@/utils";
-import AdvantageIcon from "./assets/advantage-icon.svg";
-import { motion } from "framer-motion";
 import {
     Box,
     Image,
     Text,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverBody,
     useClipboard,
     NumberInput,
     NumberInputField,
     keyframes,
     Flex,
+    SliderThumb,
+    SliderFilledTrack,
+    SliderTrack,
+    Slider,
 } from "@chakra-ui/react";
-import CopyIcon from "./assets/copy-icon.svg";
-import GoldIcon from "./assets/gold.png";
+import GoldIcon from "./assets/gold-icon.svg";
 import AddIcon from "./assets/add-icon.svg";
 import SubIcon from "./assets/sub-icon.svg";
-import DotIcon from "./assets/dot3.svg";
-import Plane1 from "@/assets/aviations/a1.png";
-import useSkyToast from "@/hooks/useSkyToast";
-import { useCountUp } from "react-countup";
 import ConfirmVideo from "@/assets/confirm.wav";
 import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import useBidIcon from "@/hooks/useBidIcon";
+import { TournamentGameInfo } from "@/pages/TacToe";
+import { aviationImg } from "@/utils/aviationImg";
 
 const move = keyframes`
     0% {
@@ -42,377 +36,18 @@ const move = keyframes`
     }
 `;
 
-const MyBid = ({
-    showTutorialStep,
-    balance,
-    bidAmount,
-    myIsBid,
-    onInputChange,
-    onConfirm,
-    showAnimateConfirm,
-}: {
-    myIsBid: boolean;
-    showTutorialStep?: boolean;
-    balance: number;
-    bidAmount: number;
-    showAnimateConfirm?: number;
-    onInputChange?: (value: number) => void;
-    onConfirm: () => void;
-}) => {
-    const countUpRef = React.useRef(null);
-    const { update } = useCountUp({
-        ref: countUpRef,
-        end: balance,
-        duration: 1,
-        prefix: "/ ",
-    });
-
-    useEffect(() => {
-        update(balance);
-    }, [balance]);
-
-    useEffect(() => {
-        const keyboardListener = (event: KeyboardEvent) => {
-            const key = event.key;
-            event.shiftKey && key === "Enter";
-            switch (key) {
-                case "ArrowUp":
-                    onInputChange?.(bidAmount + 1);
-                    break;
-
-                case "ArrowDown": {
-                    onInputChange?.(bidAmount - 1);
-                    break;
-                }
-            }
-
-            if (event.shiftKey && key === "Enter") {
-                onConfirm();
-            }
-        };
-        document.addEventListener("keydown", keyboardListener);
-        return () => {
-            document.removeEventListener("keydown", keyboardListener);
-        };
-    }, [onConfirm, bidAmount]);
-
-    return (
-        <Box
-            className={
-                showTutorialStep
-                    ? "btt-first-step btt-second-step btt-third-step"
-                    : ""
-            }
-        >
-            <Box
-                sx={{
-                    marginTop: "1.25vw",
-                    display: "flex",
-                }}
-            >
-                <Box>
-                    <Text sx={{ fontSize: "0.8333vw" }}>Bid</Text>
-                    <Box
-                        sx={{
-                            position: "relative",
-                        }}
-                    >
-                        <Image
-                            src={SubIcon}
-                            sx={{
-                                position: "absolute",
-                                left: "-1.5625vw",
-                                top: "50%",
-                                transform: "translateY(-50%)",
-                                cursor: "pointer",
-                                width: "1.25vw",
-                            }}
-                            onClick={() => {
-                                if (bidAmount - 1 < 0) return;
-
-                                onInputChange(bidAmount - 1);
-                            }}
-                        ></Image>
-                        <Image
-                            src={AddIcon}
-                            onClick={() => {
-                                if (bidAmount + 1 > balance) return;
-
-                                onInputChange(bidAmount + 1);
-                            }}
-                            sx={{
-                                position: "absolute",
-                                right: "-1.5625vw",
-                                top: "50%",
-                                transform: "translateY(-50%)",
-                                cursor: "pointer",
-                                width: "1.25vw",
-                            }}
-                        ></Image>
-                        <Box
-                            key={showAnimateConfirm + ""}
-                            sx={{
-                                height: "2.2917vw",
-                                width: "6.25vw",
-                                borderRadius: "0.9375vw",
-                                overflow: "hidden",
-                                border: "3px solid #fff",
-                                background: "rgba(255, 255, 255, 0.40)",
-                                display: "flex",
-                                alignItems: "center",
-                                animationIterationCount: "2",
-                            }}
-                            animation={`${
-                                showAnimateConfirm !== 0 ? move : ""
-                            } 0.5s linear alternate`}
-                        >
-                            <NumberInput
-                                isDisabled={myIsBid}
-                                variant="unstyled"
-                                max={balance}
-                                min={0}
-                                value={bidAmount}
-                                sx={{
-                                    "& input": {
-                                        color: "#fff",
-                                        lineHeight: "1",
-                                        padding: 0,
-                                        fontSize: "1.6667vw",
-                                        width: "100%",
-                                        textAlign: "center",
-                                        background: "#616161",
-                                    },
-                                }}
-                                onChange={(e) => {
-                                    if (Number(e) > balance) {
-                                        onInputChange(balance);
-                                        return;
-                                    }
-                                    onInputChange(Number(e));
-                                }}
-                            >
-                                <NumberInputField />
-                            </NumberInput>
-                        </Box>
-                    </Box>
-                </Box>
-
-                <Box
-                    style={{
-                        marginLeft: "1.5625vw",
-                        flex: 1,
-                    }}
-                >
-                    <Text
-                        sx={{
-                            fontSize: "0.8333vw",
-                            textAlign: "right",
-                            flex: 1,
-                            color: "#bcbbbe",
-                        }}
-                    >
-                        Remaining
-                    </Text>
-                    <Box
-                        ref={countUpRef}
-                        sx={{
-                            fontSize: "1.6667vw",
-                            textAlign: "right",
-                            flex: 1,
-                            color: "#bcbbbe",
-                        }}
-                    ></Box>
-                </Box>
-            </Box>
-        </Box>
-    );
-};
-
-export const OpBid = ({ balance }: { balance: number }) => {
-    return (
-        <Box>
-            <Box sx={{ marginTop: "1.25vw", display: "flex" }}>
-                <Box>
-                    <Text sx={{ fontSize: "0.8333vw" }}>Bid</Text>
-                    <Box
-                        sx={{
-                            height: "2.2917vw",
-                            background: "#4a4a4a",
-                            borderRadius: "0.9375vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            color: "#000000",
-                            fontSize: "1.6667vw",
-                            width: "6.25vw",
-                        }}
-                    >
-                        <motion.div
-                            animate={{
-                                opacity: [0, 1, 0],
-                            }}
-                            transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                repeatType: "reverse",
-                            }}
-                        >
-                            <Image
-                                src={DotIcon}
-                                sx={{
-                                    width: "4.0417vw",
-                                }}
-                            ></Image>
-                        </motion.div>
-                    </Box>
-                </Box>
-                <Box sx={{ flex: 1 }}>
-                    <Text
-                        sx={{
-                            fontSize: "0.8333vw",
-                            textAlign: "right",
-                            flex: 1,
-                            color: "#bcbbbe",
-                        }}
-                    >
-                        Remaining
-                    </Text>
-                    <Text
-                        sx={{
-                            fontSize: "1.6667vw",
-                            textAlign: "right",
-                            margin: "0vw 0 0 0.5208vw",
-                            flex: 1,
-                            color: "#bcbbbe",
-                        }}
-                    >
-                        / {balance}
-                    </Text>
-                </Box>
-            </Box>
-        </Box>
-    );
-};
-
 interface UserCardProps {
-    myIsBid: boolean;
-    showTutorialStep?: boolean;
+    userGameInfo: TournamentGameInfo;
     showAnimateConfirm?: number;
     markIcon: UserMarkType;
-    address: string;
-    balance: number;
-    bidAmount: number;
+    bidAmount?: number;
     showAdvantageTip?: boolean;
-    level?: number;
-    myGameState?: number;
     planeUrl?: string;
     onConfirm?: () => void;
     onInputChange?: (value: number) => void;
 }
 
-export const AdvantageTip = ({
-    direction,
-    markIcon,
-    showAdvantageTip,
-}: {
-    direction: "right" | "left";
-    markIcon: UserMarkType;
-    showAdvantageTip: boolean;
-}) => {
-    const MarkIcon = useBidIcon();
-
-    return (
-        <Box
-            sx={{
-                width: "fit-content",
-                marginTop: "1.5625vw",
-            }}
-        >
-            <Popover placement={direction}>
-                <Image
-                    width={"1.875vw"}
-                    height={"1.875vw"}
-                    src={
-                        markIcon === UserMarkType.Circle
-                            ? MarkIcon.Circle
-                            : markIcon === UserMarkType.BotX
-                            ? MarkIcon.BotX
-                            : MarkIcon.Cross
-                    }
-                ></Image>
-
-                <PopoverTrigger>
-                    <Box
-                        sx={{
-                            position: "relative",
-                        }}
-                    >
-                        {showAdvantageTip && (
-                            <Image
-                                src={AdvantageIcon}
-                                sx={{
-                                    position: "absolute",
-                                    top: "-2.8646vw",
-                                    right:
-                                        direction === "right"
-                                            ? "-1.3021vw"
-                                            : "1.5625vw",
-                                    cursor: "pointer",
-                                }}
-                            ></Image>
-                        )}
-                    </Box>
-                </PopoverTrigger>
-                <PopoverContent
-                    sx={{
-                        background: "#D9D9D9",
-                        borderRadius: "0.5208vw",
-                        border: "none",
-                        color: "#000",
-                        textAlign: "center",
-                        "&:focus": {
-                            outline: "none !important",
-                            boxShadow: "none !important",
-                        },
-                    }}
-                >
-                    <PopoverBody
-                        sx={{
-                            textAlign: "left",
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: "0.8333vw",
-                            }}
-                        >
-                            <span style={{ fontWeight: 600 }}>
-                                [Draw Advantage]
-                            </span>
-                            If your next bid equals to your opponent,
-                            {direction === "left"
-                                ? "your opponent will win the grid"
-                                : "your will win the grid."}
-                        </Text>
-                        <Text
-                            style={{
-                                fontSize: "0.7292vw",
-                                marginTop: "1.0417vw",
-                            }}
-                        >
-                            Draw advantage belongs to loser of the previous
-                            grid. The first draw advantage of each game is given
-                            randomly.
-                        </Text>
-                    </PopoverBody>
-                </PopoverContent>
-            </Popover>
-        </Box>
-    );
-};
-
 export const MyInputBid = ({
-    showTutorialStep,
     myIsBid,
     balance,
     bidAmount,
@@ -420,7 +55,6 @@ export const MyInputBid = ({
     onConfirm,
     showAnimateConfirm,
 }: {
-    showTutorialStep?: boolean;
     myIsBid: boolean;
     balance: number;
     bidAmount: number;
@@ -440,53 +74,142 @@ export const MyInputBid = ({
     return (
         <Box
             sx={{
-                marginTop: "1.5625vw",
+                width: "240px",
             }}
         >
             <Box
                 sx={{
                     background: "#787878",
-                    borderRadius: "1.0417vw",
-                    height: "6.3542vw",
-                    padding: "0.3646vw 0.8333vw 0.625vw 1.9792vw",
+                    borderRadius: "20px",
+                    padding: "12px 25px 12px 25px",
                     position: "relative",
-                    border: "1px solid #fff",
+                    height: "105px",
                 }}
             >
-                <Box
+                <Flex
                     sx={{
-                        width: "8.6979vw",
-                        height: "3.75vw",
-                        display: "flex",
-                        alignItems: "center",
-                        borderRadius: "1.3542vw",
-                        paddingLeft: "0.7292vw",
-                        position: "absolute",
-                        left: "50%",
-                        top: "0",
-                        transform: "translate(-50%,-50%)",
-                        background: `url(${GoldIcon})`,
-                        backgroundSize: "100% 100%",
+                        position: "relative",
                     }}
-                ></Box>
-                <MyBid
-                    showTutorialStep={showTutorialStep}
-                    balance={balance}
-                    bidAmount={bidAmount}
-                    onInputChange={onInputChange}
-                    onConfirm={handleSumbit}
-                    myIsBid={myIsBid}
-                    showAnimateConfirm={showAnimateConfirm}
-                ></MyBid>
+                    align={"center"}
+                >
+                    <Image
+                        src={SubIcon}
+                        sx={{
+                            cursor: "pointer",
+                            width: "24px",
+                        }}
+                        onClick={() => {
+                            if (bidAmount - 1 < 0) return;
+
+                            onInputChange(bidAmount - 1);
+                        }}
+                    ></Image>
+                    <Box
+                        key={showAnimateConfirm + ""}
+                        sx={{
+                            height: "44px",
+                            flex: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            animationIterationCount: "2",
+                        }}
+                        animation={`${
+                            showAnimateConfirm !== 0 ? move : ""
+                        } 0.5s linear alternate`}
+                    >
+                        <NumberInput
+                            isDisabled={myIsBid}
+                            variant="unstyled"
+                            max={balance}
+                            min={0}
+                            value={bidAmount}
+                            sx={{
+                                "& input": {
+                                    color: "#fff",
+                                    lineHeight: "1",
+                                    padding: 0,
+                                    fontSize: "32px",
+                                    width: "100%",
+                                    textAlign: "center",
+                                    background: "transparent",
+                                },
+                            }}
+                            onChange={(e) => {
+                                if (Number(e) > balance) {
+                                    onInputChange(balance);
+                                    return;
+                                }
+                                onInputChange(Number(e));
+                            }}
+                        >
+                            <NumberInputField />
+                        </NumberInput>
+                    </Box>
+                    <Image
+                        src={AddIcon}
+                        onClick={() => {
+                            if (bidAmount + 1 > balance) return;
+
+                            onInputChange(bidAmount + 1);
+                        }}
+                        sx={{
+                            cursor: "pointer",
+                            width: "24px",
+                        }}
+                    ></Image>
+                </Flex>
+                <Slider
+                    key={balance}
+                    value={Number(bidAmount)}
+                    onChange={(e) => {
+                        onInputChange(e);
+                    }}
+                    max={balance}
+                    min={0}
+                >
+                    <SliderTrack
+                        key={showAnimateConfirm + ""}
+                        bg="#545454"
+                        height={"10px"}
+                        borderRadius={"10px"}
+                        sx={{
+                            padding: "0 20px",
+                            animationIterationCount: "2",
+                        }}
+                        animation={`${
+                            showAnimateConfirm !== 0 ? move : ""
+                        } 0.5s linear alternate`}
+                    >
+                        <SliderFilledTrack bg="transparent" />
+                    </SliderTrack>
+                    <SliderThumb
+                        sx={{
+                            width: "8px",
+                            height: "26px !important",
+                            borderRadius: "100px",
+                            border: "none",
+                            background:
+                                "linear-gradient(180deg, rgba(253, 220, 45, 0) 0%, rgba(253, 220, 45, 1) 49.24%, rgba(253, 220, 45, 0) 100%)",
+                            outline: "none",
+                            boxShadow: "none !important",
+                            "&:focus-visible": {
+                                boxShadow: "none",
+                            },
+                            "&:active": {
+                                transform: "translateY(-50%) !important",
+                            },
+                        }}
+                    ></SliderThumb>
+                </Slider>
             </Box>
             <Flex flexDir={"column"} align={"center"}>
                 <Flex
                     onClick={handleSumbit}
                     sx={{
-                        marginTop: "0.5208vw",
-                        fontSize: "0.8333vw",
-                        height: "2.2917vw",
-                        width: "6.25vw",
+                        marginTop: "10px",
+                        fontSize: "16px",
+                        height: "44px",
+                        width: "120px",
                         background: status === 0 ? "transparent" : "#FDDC2D",
                         borderRadius: "16px",
                         color: status === 0 ? "#414141" : "#1b1b1b",
@@ -504,62 +227,16 @@ export const MyInputBid = ({
     );
 };
 
-export const OpInputBid = ({ balance }: { balance: number }) => {
-    return (
-        <Box
-            sx={{
-                marginTop: "1.5625vw",
-            }}
-        >
-            <Box
-                sx={{
-                    background: "#787878",
-                    borderRadius: "1.0417vw",
-                    height: "6.3542vw",
-                    padding: "0.3646vw 0.8333vw 0.625vw 0.7813vw",
-                    position: "relative",
-                    border: "1px solid #fff",
-                }}
-            >
-                <Box
-                    sx={{
-                        width: "8.6979vw",
-                        height: "3.75vw",
-                        display: "flex",
-                        alignItems: "center",
-                        borderRadius: "1.3542vw",
-                        paddingLeft: "0.7292vw",
-                        position: "absolute",
-                        left: "50%",
-                        top: "0",
-                        transform: "translate(-50%,-50%)",
-                        background: `url(${GoldIcon})`,
-                        backgroundSize: "100% 100%",
-                    }}
-                ></Box>
-                <OpBid balance={balance}></OpBid>
-            </Box>
-        </Box>
-    );
-};
-
 export const MyUserCard = ({
-    myIsBid,
-    showTutorialStep,
-    level,
+    userGameInfo,
     markIcon,
-    address,
-    balance,
     bidAmount,
-    showAdvantageTip,
-    myGameState,
-    planeUrl = Plane1,
     onConfirm,
     onInputChange,
     showAnimateConfirm,
 }: UserCardProps) => {
-    const { onCopy } = useClipboard(address ?? "");
-    const toast = useSkyToast();
+    const { onCopy } = useClipboard(userGameInfo.address);
+    const MarkIcon = useBidIcon();
 
     return (
         <Box
@@ -572,62 +249,71 @@ export const MyUserCard = ({
             <Box
                 sx={{
                     position: "relative",
+                    width: "144px",
                 }}
             >
-                <Box
+                <Image
                     sx={{
-                        width: "6.9792vw",
-                        height: "6.9792vw",
+                        width: "100%",
                     }}
-                >
-                    <Image
-                        sx={{
-                            width: "6.9792vw",
-                        }}
-                        src={planeUrl}
-                    ></Image>
-                </Box>
-
+                    src={aviationImg(userGameInfo.level)}
+                ></Image>
                 <Text
                     sx={{
-                        fontSize: "0.8333vw",
-                        fontWeight: "bold",
+                        position: "absolute",
+                        bottom: "0px",
+                        fontFamily: "Orbitron",
+                        fontSize: "24px",
                     }}
                 >
-                    Level {level}
+                    Level {userGameInfo.level}
                 </Text>
             </Box>
-            <AdvantageTip
-                direction="right"
-                markIcon={markIcon}
-                showAdvantageTip={showAdvantageTip}
-            ></AdvantageTip>
-            <Text
+            <Flex
+                align={"center"}
                 sx={{
-                    fontSize: "0.8333vw",
-                    cursor: "pointer",
-                    marginTop: "0.3125vw",
-                }}
-                onClick={() => {
-                    onCopy();
-                    toast("Copy address success");
+                    marginTop: "20px",
                 }}
             >
-                {shortenAddress(address, 5, 4)}
                 <Image
-                    src={CopyIcon}
                     sx={{
-                        width: "0.8333vw",
-                        marginLeft: "0.5208vw",
-                        display: "inline-block",
-                        verticalAlign: "middle",
+                        width: "52px",
+                        height: "52px",
+                        flexShrink: 0,
+                        borderRadius: "50%",
+                        border: "1px solid #FFF",
+                        marginRight: "10px",
                     }}
+                    src={userGameInfo.photo}
                 ></Image>
-            </Text>
+                <Text>@{userGameInfo.username}</Text>
+            </Flex>
+            <Flex align={"center"}>
+                <Image src={GoldIcon}></Image>
+                <Text
+                    sx={{
+                        fontFamily: "Quantico",
+                        fontSize: "40px",
+                        marginRight: "10px",
+                    }}
+                >
+                    {userGameInfo.balance}
+                </Text>
+                <Image
+                    width={"24px"}
+                    height={"24px"}
+                    src={
+                        markIcon === UserMarkType.Circle
+                            ? MarkIcon.Circle
+                            : markIcon === UserMarkType.BotX
+                            ? MarkIcon.BotX
+                            : MarkIcon.Cross
+                    }
+                ></Image>
+            </Flex>
             <MyInputBid
-                myIsBid={myIsBid}
-                showTutorialStep={showTutorialStep}
-                balance={balance}
+                myIsBid={userGameInfo.isBid}
+                balance={userGameInfo.balance}
                 bidAmount={bidAmount}
                 onInputChange={onInputChange}
                 onConfirm={onConfirm}
@@ -637,15 +323,9 @@ export const MyUserCard = ({
     );
 };
 
-export const OpUserCard = ({
-    level,
-    markIcon,
-    address,
-    balance,
-    showAdvantageTip,
-    planeUrl = Plane1,
-}: UserCardProps) => {
-    const { onCopy } = useClipboard(address ?? "");
+export const OpUserCard = ({ markIcon, userGameInfo }: UserCardProps) => {
+    const MarkIcon = useBidIcon();
+    const { onCopy } = useClipboard(userGameInfo.address ?? "");
 
     return (
         <Box
@@ -658,57 +338,74 @@ export const OpUserCard = ({
             <Box
                 sx={{
                     position: "relative",
+                    width: "144px",
                 }}
             >
-                <Box
+                <Image
                     sx={{
-                        width: "6.9792vw",
-                        height: "6.9792vw",
+                        width: "100%",
+                        transform: "scaleX(-1)",
                     }}
-                >
-                    <Image
-                        sx={{
-                            width: "6.9792vw",
-                            transform: "scaleX(-1)",
-                        }}
-                        src={planeUrl}
-                    ></Image>
-                </Box>
+                    src={aviationImg(userGameInfo.level)}
+                ></Image>
                 <Text
                     sx={{
-                        fontSize: "0.8333vw",
-                        textAlign: "right",
-                        fontWeight: "bold",
+                        position: "absolute",
+                        bottom: "0px",
+                        fontFamily: "Orbitron",
+                        fontSize: "24px",
+                        right: "0",
                     }}
                 >
-                    Level {level}
+                    Level {userGameInfo.level}
                 </Text>
             </Box>
-            <AdvantageTip
-                direction="left"
-                markIcon={markIcon}
-                showAdvantageTip={showAdvantageTip}
-            ></AdvantageTip>
-            <Text
+            <Flex
+                align={"center"}
                 sx={{
-                    fontSize: "0.8333vw",
-                    cursor: "pointer",
-                    marginTop: "0.3125vw",
+                    marginTop: "20px",
                 }}
-                onClick={onCopy}
             >
-                {shortenAddress(address, 5, 4)}
+                <Text>@{userGameInfo.username}</Text>
                 <Image
-                    src={CopyIcon}
                     sx={{
-                        width: "0.8333vw",
-                        marginLeft: "0.5208vw",
-                        display: "inline-block",
-                        verticalAlign: "middle",
+                        width: "52px",
+                        height: "52px",
+                        flexShrink: 0,
+                        borderRadius: "50%",
+                        border: "1px solid #FFF",
+                        marginLeft: "10px",
+                    }}
+                    src={userGameInfo.photo}
+                ></Image>
+            </Flex>
+            <Flex align={"center"}>
+                <Image
+                    width={"24px"}
+                    height={"24px"}
+                    src={
+                        markIcon === UserMarkType.Circle
+                            ? MarkIcon.Circle
+                            : markIcon === UserMarkType.BotX
+                            ? MarkIcon.BotX
+                            : MarkIcon.Cross
+                    }
+                ></Image>
+                <Image
+                    src={GoldIcon}
+                    sx={{
+                        marginLeft: "10px",
                     }}
                 ></Image>
-            </Text>
-            <OpInputBid balance={balance}></OpInputBid>
+                <Text
+                    sx={{
+                        fontFamily: "Quantico",
+                        fontSize: "40px",
+                    }}
+                >
+                    {userGameInfo.balance}
+                </Text>
+            </Flex>
         </Box>
     );
 };
