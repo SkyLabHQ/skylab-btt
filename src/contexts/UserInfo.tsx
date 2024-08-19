@@ -69,7 +69,6 @@ export const UserInfoProvider = ({
             toast("Please wait for the wallet to be ready");
             return;
         }
-        console.log(user, "user");
 
         if (user && user.wallet.walletClientType !== "privy") {
             linkWallet();
@@ -277,6 +276,8 @@ export const UserInfoProvider = ({
             );
         };
     }, []);
+
+    console.log(user, "user");
 
     return (
         <UserInfoContext.Provider

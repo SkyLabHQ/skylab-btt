@@ -1,5 +1,4 @@
 import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import BttIcon from "@/assets/btt-icon.png";
 import RightArrow from "@/components/TacToe/assets/right-arrow.svg";
