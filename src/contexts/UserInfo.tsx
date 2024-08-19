@@ -271,7 +271,10 @@ export const UserInfoProvider = ({
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
 
     useEffect(() => {
-        if (user && user.wallet.walletClientType === "privy" && user.telegram) {
+        if (!user) {
+            return;
+        }
+        if (user.wallet.walletClientType === "privy" && user.telegram) {
             handleAutoBindTelegram();
         } else {
             handleGetUserTgInfo();
