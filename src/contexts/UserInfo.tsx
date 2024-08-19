@@ -17,6 +17,7 @@ import { useLocation } from "react-router-dom";
 import Click1Wav from "@/assets/click1.wav";
 import { usePrivy } from "@privy-io/react-auth";
 import { getTokensGame } from "@/api/tournament";
+import { bindTelegram, getUserTgInfo } from "@/api/user";
 
 const audio = new Audio(Click1Wav);
 
@@ -61,6 +62,13 @@ export const UserInfoProvider = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [tgInfo, setTgInfo] = useState({
+        tgId: "",
+        firstName: "",
+        lastName: "",
+        username: "",
+        photoUrl: "",
+    });
     const toast = useSkyToast();
 
     const handleLogin = async () => {
@@ -225,6 +233,27 @@ export const UserInfoProvider = ({
         setPlaneList(planeList);
     };
 
+    const handleAutoBindTelegram = async () => {
+        try {
+            const res = await bindTelegram({
+                ...user.telegram,
+                address: user.wallet.address,
+            });
+            setTgInfo(res.data.userTgInfo);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const handleGetUserTgInfo = async () => {
+        try {
+            const res = await getUserTgInfo();
+            setTgInfo(res.data.userTgInfo);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     useEffect(() => {
         axios.get("https://ipapi.co/json/").then(async (res: any) => {
             if (res.data.country_code === "US") {
@@ -240,6 +269,14 @@ export const UserInfoProvider = ({
             handleGetUserPaper();
         }
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
+
+    useEffect(() => {
+        if (user && user.wallet.walletClientType === "privy" && user.telegram) {
+            handleAutoBindTelegram();
+        } else {
+            handleGetUserTgInfo();
+        }
+    }, [user]);
 
     // 定时获取token 防止token过期
     useEffect(() => {
@@ -276,8 +313,6 @@ export const UserInfoProvider = ({
             );
         };
     }, []);
-
-    console.log(user, "user");
 
     return (
         <UserInfoContext.Provider
