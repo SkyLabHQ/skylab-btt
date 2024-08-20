@@ -164,8 +164,8 @@ const TacToePage = ({
                     </Flex>
                     <ToolBar
                         inviteLink={inviteLink}
-                        handleShareTw={handleShareTw}
                         quitType="game"
+                        showShare={false}
                         onQuitClick={() => {
                             onOpen();
                         }}

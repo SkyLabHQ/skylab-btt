@@ -12,9 +12,7 @@ import getNowSecondsTimestamp from "@/utils/nowTime";
 const MLayout = ({
     currentRound,
     gameTimeout,
-    inviteLink,
     handleQuitClick,
-    handleShareTw,
     bidAmount,
     showAnimateNumber,
     onInputChange,
@@ -91,9 +89,8 @@ const MLayout = ({
         >
             <ToolBar
                 showLive={false}
-                inviteLink={inviteLink}
                 quitType="game"
-                handleShareTw={handleShareTw}
+                showShare={false}
                 onQuitClick={handleQuitClick}
             ></ToolBar>
             <Flex

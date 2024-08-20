@@ -11,12 +11,14 @@ import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 const audio = new Audio(Click1Wav);
 const ToolBar = ({
     showLive = true,
+    showShare = true,
     inviteLink,
     handleShareTw,
     quitType,
     onQuitClick,
 }: {
     showLive?: boolean;
+    showShare?: boolean;
     inviteLink?: string;
     handleShareTw?: () => void;
     quitType?: "wait" | "game";
@@ -74,7 +76,7 @@ const ToolBar = ({
                 ></KeyBoard>
             )}
 
-            {quitType === "game" && (
+            {quitType === "game" && showShare && (
                 <ToolShare
                     showLive={showLive}
                     inviteLink={inviteLink}

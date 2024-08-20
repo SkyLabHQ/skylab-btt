@@ -45,8 +45,6 @@ const PlayGame = ({
         >
             <MLayout
                 currentRound={currentRound}
-                inviteLink={inviteLink}
-                handleShareTw={handleShareTw}
                 gameTimeout={gameTimeout}
                 showAnimateNumber={showAnimateNumber}
                 bidAmount={bidAmount}

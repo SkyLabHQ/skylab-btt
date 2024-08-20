@@ -46,7 +46,7 @@ export const MOpUserProfile = ({
                         ? `@${userGameInfo.username}`
                         : `${shortenAddress(userGameInfo.address)}`}
                 </Text>
-                <Flex>
+                <Flex align={"center"}>
                     <Image
                         src={GoldIcon}
                         sx={{
@@ -69,6 +69,7 @@ export const MOpUserProfile = ({
                         }
                         sx={{
                             width: "16px",
+                            height: "16px",
                         }}
                     ></Image>
                 </Flex>
@@ -103,7 +104,7 @@ export const MMyUserProfile = ({
                         ? `@${userGameInfo.username}`
                         : `${shortenAddress(userGameInfo.address)}`}
                 </Text>
-                <Flex>
+                <Flex align={"center"}>
                     <Image
                         src={
                             userGameInfo.mark === UserMarkType.Circle
@@ -112,6 +113,7 @@ export const MMyUserProfile = ({
                         }
                         sx={{
                             width: "16px",
+                            height: "16px",
                         }}
                     ></Image>
                     <Image
