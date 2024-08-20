@@ -14,6 +14,7 @@ import { ReactComponent as XpUpIcon } from "./assets/xp-up.svg";
 import LevelUpBg from "./assets/level-up.png";
 import LevelDownBg from "./assets/level-down.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import { BackWithText } from "../Back";
 
 function generateProgressLevels(startPoints: number, endPoints: number) {
     const startLevelItem = levelRanges.find((item, index) => {
@@ -695,29 +696,19 @@ const SettlementPage = ({}) => {
                 sx={{
                     display: "flex",
                     position: "absolute",
-                    left: "0",
-                    top: "0",
+                    left: "12px",
+                    top: "12px",
                     cursor: "pointer",
                 }}
             >
-                <Box
+                <BackWithText
+                    textContent="Back"
                     onClick={() =>
                         navigate("/", {
                             replace: true,
                         })
                     }
-                    sx={{
-                        display: "flex",
-                        marginRight: isPc ? "20px" : "10px",
-                    }}
-                >
-                    <Image
-                        src={GardenIcon}
-                        sx={{
-                            width: isPc ? "104px" : "50px",
-                        }}
-                    ></Image>
-                </Box>
+                ></BackWithText>
             </Box>
 
             <Box

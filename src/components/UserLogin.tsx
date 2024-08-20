@@ -3,8 +3,7 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { Box, Flex, Image } from "@chakra-ui/react";
 import Click1Wav from "@/assets/click1.wav";
 import { shortenAddress } from "@/utils";
-import UserIcon from "@/assets/user-icon.png";
-import PilotBorder from "@/assets/pilot-border.png";
+import PilotBorder from "@/assets/avatar-border.svg";
 import WalletIcon from "@/assets/wallet-icon.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
@@ -15,6 +14,7 @@ const UserLogin = () => {
     const { onUserInfoOpen } = useUserInfo();
     const { address } = usePrivyAccounts();
     const { handleLogin } = useUserInfo();
+    const { tgInfo } = useUserInfo();
     return (
         <Box
             sx={{
@@ -35,7 +35,7 @@ const UserLogin = () => {
                         justify={"flex-end"}
                         align={"center"}
                     >
-                        <Box
+                        <Flex
                             sx={{
                                 background: `url(${PilotBorder}) no-repeat`,
                                 backgroundSize: "cover",
@@ -44,16 +44,19 @@ const UserLogin = () => {
                                 left: "-4px",
                                 transform: "translate(0%, -50%)",
                                 zIndex: 99,
+                                width: "48px",
+                                height: "48px",
+                                padding: "2px",
                             }}
                         >
                             <Image
-                                src={UserIcon}
+                                src={tgInfo.photoUrl}
                                 sx={{
-                                    width: "56px",
-                                    height: "56px",
+                                    width: "100%",
+                                    height: "100%",
                                 }}
                             ></Image>
-                        </Box>
+                        </Flex>
                         <Box
                             sx={{
                                 width: "184px",
@@ -72,7 +75,7 @@ const UserLogin = () => {
                         </Box>
                     </Flex>
                 ) : (
-                    <Box
+                    <Flex
                         onClick={() => {
                             audio.play();
                             onUserInfoOpen();
@@ -80,16 +83,21 @@ const UserLogin = () => {
                         sx={{
                             background: `url(${PilotBorder}) no-repeat`,
                             backgroundSize: "cover",
+                            width: "32px",
+                            height: "32px",
+                            padding: "2px",
                         }}
+                        justify={"center"}
+                        align={"center"}
                     >
                         <Image
-                            src={UserIcon}
+                            src={tgInfo.photoUrl}
                             sx={{
-                                width: isPc ? "48px" : "40px",
-                                height: isPc ? "48px" : "40px",
+                                width: "100%",
+                                height: "100%",
                             }}
                         ></Image>
-                    </Box>
+                    </Flex>
                 )
             ) : (
                 <Image

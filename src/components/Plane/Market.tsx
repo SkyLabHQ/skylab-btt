@@ -282,7 +282,7 @@ const Market = () => {
                         color: "#1b1b1b",
                         fontWeight: "bold",
                         cursor: "pointer",
-                        zIndex: 9999,
+                        zIndex: 999,
                         position: "absolute",
                         bottom: "0",
                         left: "0",
@@ -406,7 +406,7 @@ const Market = () => {
                             >
                                 <Text
                                     sx={{
-                                        fontSize: large680 ? "30px" : "18px",
+                                        fontSize: large680 ? "30px" : "16px",
                                     }}
                                 >
                                     {highList[index].price === "0"
@@ -424,7 +424,9 @@ const Market = () => {
                                             }}
                                             src={DeleteIcon}
                                             sx={{
-                                                width: "16px",
+                                                width: large680
+                                                    ? "16px"
+                                                    : "12px",
                                                 marginRight: "4px",
                                                 cursor: "pointer",
                                             }}

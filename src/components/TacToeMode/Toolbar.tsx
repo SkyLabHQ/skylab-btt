@@ -8,9 +8,7 @@ import { shortenAddress } from "@/utils";
 import { useUserInfo } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Click1Wav from "@/assets/click1.wav";
-import UserIcon from "@/assets/user-icon.png";
 import PilotBorder from "@/assets/pilot-border.png";
-import { avatarImg } from "@/utils/avatars";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const audio = new Audio(Click1Wav);
@@ -93,7 +91,7 @@ export const Toolbar = () => {
                             </Box>
                         </Flex>
                     ) : (
-                        <Box
+                        <Flex
                             onClick={() => {
                                 audio.play();
                                 onUserInfoOpen();
@@ -101,16 +99,20 @@ export const Toolbar = () => {
                             sx={{
                                 background: `url(${PilotBorder}) no-repeat`,
                                 backgroundSize: "cover",
+                                width: "40px",
+                                height: "40px",
                             }}
+                            justify={"center"}
+                            align={"center"}
                         >
                             <Image
-                                src={UserIcon}
+                                src={tgInfo.photoUrl}
                                 sx={{
-                                    width: isPc ? "48px" : "40px",
-                                    height: isPc ? "48px" : "40px",
+                                    width: "32px",
+                                    height: "32px",
                                 }}
                             ></Image>
-                        </Box>
+                        </Flex>
                     )
                 ) : (
                     <Image

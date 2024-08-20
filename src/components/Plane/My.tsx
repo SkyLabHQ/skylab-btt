@@ -382,7 +382,7 @@ const My = () => {
                             >
                                 <Text
                                     sx={{
-                                        fontSize: large680 ? "30px" : "18px",
+                                        fontSize: large680 ? "30px" : "16px",
                                     }}
                                 >
                                     {havePrice ? formatAmount(price) : "--"} ETH
