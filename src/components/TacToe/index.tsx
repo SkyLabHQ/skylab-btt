@@ -213,6 +213,7 @@ const TacToePage = ({
                     loading={loading}
                     handleBoardClick={handleBoardClick}
                     showAnimateConfirm={showAnimateConfirm}
+                    time={time}
                 ></MLayout>
             )}
 

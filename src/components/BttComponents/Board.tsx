@@ -265,14 +265,14 @@ const Board = ({
                     ? "550px"
                     : isGreaterThan800
                     ? "360px"
-                    : "240px"
+                    : "270px"
             }
             h={
                 isGreaterThan1300
                     ? "550px"
                     : isGreaterThan800
                     ? "360px"
-                    : "240px"
+                    : "270px"
             }
         >
             <Grid

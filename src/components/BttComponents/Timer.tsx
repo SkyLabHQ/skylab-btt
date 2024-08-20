@@ -60,7 +60,7 @@ const Timer = ({
                             ? "550px"
                             : isGreaterThan800
                             ? "360px"
-                            : "100%",
+                            : "260px",
                         background: "transparent",
                         height: isGreaterThan800 ? "24px" : "12px",
                         display: "flex",

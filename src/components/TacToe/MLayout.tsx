@@ -1,12 +1,8 @@
-import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
-import MBalance from "../BttComponents/MBalance";
-import { GameState } from "@/skyConstants/bttGameTypes";
+import { Box, Flex } from "@chakra-ui/react";
 import Board from "../BttComponents/Board";
 import { useGameContext } from "@/pages/TacToe";
-import { MUserProfile } from "../PrivateRoom/UserProfile";
+import { MMyUserProfile, MOpUserProfile } from "../PrivateRoom/UserProfile";
 import Timer from "../BttComponents/Timer";
-import BottomInputBox from "../BttComponents/BottomInputBox";
 import ToolBar from "../BttComponents/Toolbar";
 import PvpBottomInputBox from "../BttComponents/PvpBottomInputBox";
 
@@ -16,24 +12,14 @@ const MLayout = ({
     inviteLink,
     handleQuitClick,
     handleShareTw,
-    nextDrawWinner,
-    autoCommitTimeoutTime,
     bidAmount,
     showAnimateNumber,
     onInputChange,
     onConfirm,
-
     loading,
     handleBoardClick,
     showAnimateConfirm,
 }: any) => {
-    const { isOpen, onOpen, onClose } = useDisclosure({
-        defaultIsOpen: true,
-    });
-    const { isOpen: opIsOpen, onToggle: opOnToggle } = useDisclosure({
-        defaultIsOpen: true,
-    });
-
     const { myGameInfo, opGameInfo, list } = useGameContext();
     const myIsBid = myGameInfo.isBid;
 
@@ -51,44 +37,29 @@ const MLayout = ({
                 handleShareTw={handleShareTw}
                 onQuitClick={handleQuitClick}
             ></ToolBar>
-            <Flex
+            <Box
                 sx={{
                     position: "absolute",
                     top: "12px",
-                    left: 0,
-                    alignItems: "flex-start",
+                    left: "6px",
                 }}
-                flexDir={"column"}
             >
-                <Flex align={"flex-end"}>
-                    <MUserProfile
-                        status="op"
-                        address={opGameInfo.address}
-                        img={""}
-                        mark={opGameInfo.mark}
-                        showAdvantageTip={opGameInfo.address === nextDrawWinner}
-                        open={opIsOpen}
-                        onClick={() => {
-                            opOnToggle();
-                        }}
-                        level={1}
-                    ></MUserProfile>
-                </Flex>
-                <MBalance
-                    balance={opGameInfo.balance}
-                    mark={opGameInfo.mark}
-                    status="left"
-                ></MBalance>
-            </Flex>
+                <MOpUserProfile userGameInfo={opGameInfo}></MOpUserProfile>
+            </Box>
 
             <Flex
                 align={"center"}
                 justify={"center"}
                 flexDir={"column"}
                 sx={{
-                    marginTop: "36px",
+                    marginTop: "16px",
                 }}
             >
+                <Timer
+                    time1={time}
+                    allTime={currentRound === 0 ? 3 * 60 : 60}
+                    time1Gray={myGameInfo.isBid}
+                ></Timer>
                 <Box
                     sx={{
                         marginTop: "20px",
@@ -117,59 +88,18 @@ const MLayout = ({
                         position: "relative",
                     }}
                 >
-                    <Flex justify={"space-between"} align={"flex-end"}>
-                        {myGameInfo.gameState <= GameState.Revealed && (
-                            <Box
-                                sx={{
-                                    width: "84px",
-                                    position: "absolute",
-                                    left: "12px",
-                                    bottom: "20px",
-                                }}
-                            >
-                                <Timer
-                                    time1={time}
-                                    allTime={currentRound === 0 ? 3 * 60 : 60}
-                                    time1Gray={myGameInfo.isBid}
-                                ></Timer>
-                            </Box>
-                        )}
-                    </Flex>
                     <Flex
                         sx={{
                             position: "absolute",
-                            bottom: "16px",
-                            right: 0,
+                            bottom: "0px",
+                            right: "6px",
                         }}
                         flexDir={"column"}
                         align={"flex-end"}
                     >
-                        <Flex align={"flex-end"}>
-                            <MUserProfile
-                                status="my"
-                                address={myGameInfo.address}
-                                img={""}
-                                mark={myGameInfo.mark}
-                                showAdvantageTip={
-                                    myGameInfo.address === nextDrawWinner
-                                }
-                                open={isOpen}
-                                onClick={() => {
-                                    if (isOpen) {
-                                        onClose();
-                                    } else {
-                                        onOpen();
-                                    }
-                                }}
-                                level={1}
-                            ></MUserProfile>
-                        </Flex>
-
-                        <MBalance
-                            balance={myGameInfo.balance}
-                            status="right"
-                            mark={myGameInfo.mark}
-                        ></MBalance>
+                        <MMyUserProfile
+                            userGameInfo={myGameInfo}
+                        ></MMyUserProfile>
                     </Flex>
                 </Box>
                 <PvpBottomInputBox
