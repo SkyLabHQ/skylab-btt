@@ -153,10 +153,6 @@ const TacToe = () => {
         const boardGrids = gameInfo.boards;
         const isPlayer1 =
             address.toLocaleLowerCase() == gameInfo.player1.toLocaleLowerCase();
-
-        console.log(address.toLocaleLowerCase(), "address");
-        console.log(gameInfo.player1.toLocaleLowerCase(), "gameInfo.player1");
-
         const player1GameInfo = {
             address: gameInfo.player1,
             userId: gameInfo.userId1,
@@ -247,9 +243,6 @@ const TacToe = () => {
         }
     };
 
-    console.log(myGameInfo, "-----");
-    console.log(opGameInfo, "+++++");
-
     const handleGetGameInfo = async () => {
         if (!gameId) return;
 
@@ -284,8 +277,6 @@ const TacToe = () => {
                 amount: bidAmount,
             });
             setLoading(false);
-
-            console.log(res.data.game, "res.data.game");
             const game = res.data.game;
             setGameInfo(game);
             setBidAmount(0);

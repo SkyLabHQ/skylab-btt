@@ -24,15 +24,15 @@ function generateProgressLevels(startPoints: number, endPoints: number) {
         return endPoints >= item.minPoints && endPoints < item.maxPoints;
     });
 
-    const startRange =
-        (startPoints - startLevelItem.minPoints) /
-        (startLevelItem.maxPoints - startLevelItem.minPoints);
-
-    const endRange =
-        (endPoints - endLevelItem.minPoints) /
-        (endLevelItem.maxPoints - endLevelItem.minPoints);
     // 如果是升级的
     if (endPoints > startPoints) {
+        const startRange =
+            (startPoints - startLevelItem.minPoints) /
+            (startLevelItem.maxPoints - startLevelItem.minPoints);
+
+        const endRange =
+            (endPoints - endLevelItem.minPoints) /
+            (endLevelItem.maxPoints - endLevelItem.minPoints);
         if (endLevelItem.level === startLevelItem.level) {
             return [[startRange, endRange]];
         } else {
@@ -53,17 +53,24 @@ function generateProgressLevels(startPoints: number, endPoints: number) {
             return progressArray;
         }
     } else {
+        const startRange =
+            (startPoints - startLevelItem.minPoints) /
+            (startLevelItem.maxPoints - startLevelItem.minPoints);
+
+        const endRange =
+            (endPoints - endLevelItem.minPoints) /
+            (endLevelItem.maxPoints - endLevelItem.minPoints);
         if (endLevelItem.level === startLevelItem.level) {
             return [[startRange, endRange]];
         } else {
-            const progressArray = [[startRange, 0]];
+            const progressArray = [[startRange == 0 ? 1 : startRange, 0]];
 
             for (
                 let i = startLevelItem.level - 1;
                 i > endLevelItem.level;
                 i--
             ) {
-                progressArray.push([0, 1]);
+                progressArray.push([1, 0]);
             }
 
             if (endLevelItem.minPoints !== endPoints) {
@@ -139,21 +146,24 @@ const WinResult = ({
                     fontWeight: "bold",
                     textAlign: "center",
                     color: "#FDDC2D",
+                    fontFamily: "Orbitron",
                 }}
             >
                 YOU WIN
             </Text>
-            <Text
-                sx={{
-                    color: "#FDDC2D",
-                    textAlign: "center",
-                    fontFamily: "Orbitron",
-                    fontSize: "20px",
-                    marginTop: "20px",
-                }}
-            >
-                You become the active plane in Lvl.{myInfo.overLevel}
-            </Text>
+            {myInfo.overLevel > myInfo.level && (
+                <Text
+                    sx={{
+                        color: "#FDDC2D",
+                        textAlign: "center",
+                        fontFamily: "Orbitron",
+                        fontSize: isPc ? "20px" : "12px",
+                        marginTop: "20px",
+                    }}
+                >
+                    You become the active plane in Lvl.{myInfo.overLevel}
+                </Text>
+            )}
             <Box
                 sx={{
                     display: "flex",
@@ -207,7 +217,7 @@ const WinResult = ({
                         sx={{
                             color: "#FDDC2D",
                             textAlign: "center",
-                            fontSize: "24px",
+                            fontSize: isPc ? "24px" : "12px",
                             fontWeight: 700,
                             position: "absolute",
                             fontFamily: "Orbitron",
@@ -257,8 +267,8 @@ const WinResult = ({
                             position: "absolute",
                             left: "50%",
                             transform: "translateX(-50%)",
-                            top: "-44px",
-                            fontSize: "40px",
+                            top: isPc ? "-44px" : "-24px",
+                            fontSize: isPc ? "40px" : "20px",
                             fontStyle: "normal",
                             fontWeight: 700,
                             color: "#FDDC2D",
@@ -266,55 +276,66 @@ const WinResult = ({
                         }}
                         align={"flex-end"}
                     >
-                        <span
-                            style={{
-                                fontSize: isPc ? "24px" : "12px",
-                                fontWeight: 700,
-                                marginRight: "4px",
-                                color: "#fff",
-                                verticalAlign: "bottom",
+                        <Box
+                            sx={{
+                                marginBottom: isPc ? "8px" : "4px",
                             }}
                         >
-                            {myInfo.point}
-                        </span>
-                        <XpUpIcon
-                            color="#fff"
-                            style={{
-                                marginRight: "18px",
-                                width: "28px",
-                                marginBottom: "1px",
-                            }}
-                        ></XpUpIcon>
-                        <span
-                            style={{
-                                marginRight: "4px",
+                            <span
+                                style={{
+                                    fontSize: isPc ? "24px" : "12px",
+                                    fontWeight: 700,
+                                    marginRight: "4px",
+                                    color: "#fff",
+                                    verticalAlign: "bottom",
+                                }}
+                            >
+                                {myInfo.point}
+                            </span>
+                            <XpUpIcon
+                                color="#fff"
+                                style={{
+                                    marginRight: "18px",
+                                    width: isPc ? "28px" : "14px",
+                                    height: isPc ? "22px" : "11px",
+                                    display: "inline-block",
+                                }}
+                            ></XpUpIcon>
+                        </Box>
+                        <Box
+                            sx={{
+                                marginBottom: isPc ? "6px" : "3px",
                             }}
                         >
-                            +{myInfo.overPoint - myInfo.point}
-                        </span>
-                        <XpUpIcon
-                            style={{
-                                width: "35px",
-                                marginBottom: "6px",
-                            }}
-                        ></XpUpIcon>
+                            <span
+                                style={{
+                                    marginRight: "4px",
+                                }}
+                            >
+                                +{myInfo.overPoint - myInfo.point}
+                            </span>
+                            <XpUpIcon
+                                style={{
+                                    width: isPc ? "35px" : "16px",
+                                    height: isPc ? "28px" : "14px",
+                                    display: "inline-block",
+                                }}
+                            ></XpUpIcon>
+                        </Box>
                     </Flex>
 
-                    <Flex
-                        justify={"flex-end"}
-                        align={"flex-end"}
+                    <Box
                         sx={{
                             position: "absolute",
                             right: "0%",
-                            top: "-34px",
-                            fontSize: "40px",
+                            top: isPc ? "-44px" : "-24px",
+                            fontSize: isPc ? "40px" : "20px",
                             fontStyle: "normal",
                         }}
                     >
-                        <Text
-                            sx={{
-                                textAlign: "right",
-                                fontSize: "24px",
+                        <span
+                            style={{
+                                fontSize: isPc ? "24px" : "12px",
                             }}
                         >
                             NextLevel:{" "}
@@ -325,18 +346,18 @@ const WinResult = ({
                             >
                                 {nextLevelXp}
                             </span>
-                        </Text>
+                        </span>
                         <XpUpIcon
                             style={{
                                 color: "#FDDC2D",
-                                width: "28px",
-                                marginBottom: "1px",
+                                width: isPc ? "28px" : "14px",
+                                height: isPc ? "22px" : "11px",
                                 marginLeft: "4px",
+                                display: "inline-block",
                             }}
                         ></XpUpIcon>
-                    </Flex>
+                    </Box>
                 </Box>
-
                 <Box
                     sx={{
                         height: isPc ? "33px" : "15px",
@@ -396,6 +417,9 @@ const LoseResult = ({
             ];
         }
     }, [myInfo]);
+
+    console.log(progressArray, "progressArray");
+
     useEffect(() => {
         const handleUp = async () => {
             for (let i = 0; i < progressArray.length; i++) {
@@ -441,12 +465,11 @@ const LoseResult = ({
                         backgroundPosition: "center 40%",
                     }}
                 >
-                    {" "}
                     <Text
                         sx={{
                             color: "#888",
                             textAlign: "center",
-                            fontSize: "24px",
+                            fontSize: isPc ? "24px" : "12px",
                             fontWeight: 700,
                             position: "absolute",
                             fontFamily: "Orbitron",
@@ -513,7 +536,6 @@ const LoseResult = ({
             </Box>
             <Box
                 sx={{
-                    width: isPc ? "652px" : "100%",
                     margin: "0 auto",
                 }}
             >
@@ -529,8 +551,8 @@ const LoseResult = ({
                             position: "absolute",
                             left: "50%",
                             transform: "translateX(-50%)",
-                            top: "-44px",
-                            fontSize: "40px",
+                            top: isPc ? "-44px" : "-24px",
+                            fontSize: isPc ? "40px" : "20px",
                             fontStyle: "normal",
                             fontWeight: 700,
                             color: "#FDDC2D",
@@ -538,57 +560,68 @@ const LoseResult = ({
                         }}
                         align={"flex-end"}
                     >
-                        <span
-                            style={{
-                                fontSize: isPc ? "24px" : "12px",
-                                fontWeight: 700,
-                                marginRight: "4px",
-                                color: "#fff",
-                                verticalAlign: "bottom",
+                        <Box
+                            sx={{
+                                marginBottom: isPc ? "8px" : "4px",
                             }}
                         >
-                            {myInfo.point}
-                        </span>
-                        <XpUpIcon
-                            color="#fff"
-                            style={{
-                                marginRight: "18px",
-                                width: "28px",
-                                marginBottom: "1px",
-                            }}
-                        ></XpUpIcon>
-                        <span
-                            style={{
-                                marginRight: "4px",
-                                color: "#CA4040",
+                            <span
+                                style={{
+                                    fontSize: isPc ? "24px" : "12px",
+                                    fontWeight: 700,
+                                    marginRight: "4px",
+                                    color: "#fff",
+                                    verticalAlign: "bottom",
+                                }}
+                            >
+                                {myInfo.point}
+                            </span>
+                            <XpUpIcon
+                                color="#fff"
+                                style={{
+                                    marginRight: "18px",
+                                    width: isPc ? "28px" : "14px",
+                                    height: isPc ? "22px" : "11px",
+                                    display: "inline-block",
+                                }}
+                            ></XpUpIcon>
+                        </Box>
+                        <Box
+                            sx={{
+                                marginBottom: isPc ? "6px" : "3px",
                             }}
                         >
-                            {myInfo.overPoint - myInfo.point}
-                        </span>
-                        <XpUpIcon
-                            style={{
-                                width: "35px",
-                                marginBottom: "6px",
-                                color: "#CA4040",
-                            }}
-                        ></XpUpIcon>
+                            <span
+                                style={{
+                                    marginRight: "4px",
+                                    color: "#CA4040",
+                                }}
+                            >
+                                {myInfo.overPoint - myInfo.point}
+                            </span>
+                            <XpUpIcon
+                                style={{
+                                    width: isPc ? "35px" : "16px",
+                                    height: isPc ? "28px" : "14px",
+                                    color: "#CA4040",
+                                    display: "inline-block",
+                                }}
+                            ></XpUpIcon>
+                        </Box>
                     </Flex>
 
-                    <Flex
-                        justify={"flex-end"}
-                        align={"flex-end"}
+                    <Box
                         sx={{
                             position: "absolute",
                             right: "0%",
-                            top: "-34px",
-                            fontSize: "40px",
+                            top: isPc ? "-44px" : "-24px",
+                            fontSize: isPc ? "40px" : "20px",
                             fontStyle: "normal",
                         }}
                     >
-                        <Text
-                            sx={{
-                                textAlign: "right",
-                                fontSize: "24px",
+                        <span
+                            style={{
+                                fontSize: isPc ? "24px" : "12px",
                             }}
                         >
                             NextLevel:{" "}
@@ -599,16 +632,17 @@ const LoseResult = ({
                             >
                                 {nextLevelXp}
                             </span>
-                        </Text>
+                        </span>
                         <XpUpIcon
                             style={{
                                 color: "#FDDC2D",
-                                width: "28px",
-                                marginBottom: "1px",
+                                width: isPc ? "28px" : "14px",
+                                height: isPc ? "22px" : "11px",
                                 marginLeft: "4px",
+                                display: "inline-block",
                             }}
                         ></XpUpIcon>
-                    </Flex>
+                    </Box>
                 </Box>
                 <Box
                     sx={{
@@ -654,7 +688,7 @@ const SettlementPage = ({}) => {
                 alignItems: "center",
                 flexDirection: "column",
                 fontFamily: "Quantico",
-                padding: "200px",
+                padding: "200px 20px 0",
             }}
         >
             <Box
@@ -674,13 +708,13 @@ const SettlementPage = ({}) => {
                     }
                     sx={{
                         display: "flex",
-                        marginRight: isPc ? "20.0006px" : "10px",
+                        marginRight: isPc ? "20px" : "10px",
                     }}
                 >
                     <Image
                         src={GardenIcon}
                         sx={{
-                            width: isPc ? "104.0006px" : "50px",
+                            width: isPc ? "104px" : "50px",
                         }}
                     ></Image>
                 </Box>
@@ -689,6 +723,7 @@ const SettlementPage = ({}) => {
             <Box
                 sx={{
                     position: "relative",
+                    width: isPc ? "652px" : "100%",
                 }}
             >
                 {getPvpWinState(myGameInfo.gameState) ? (
@@ -708,7 +743,7 @@ const SettlementPage = ({}) => {
                     color: "#FDDC2D",
                     textAlign: "center",
                     fontFamily: "Quantico",
-                    fontSize: "20px",
+                    fontSize: isPc ? "20px" : "12px",
                     fontWeight: 700,
                     marginTop: "90px",
                 }}
