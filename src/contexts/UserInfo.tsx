@@ -288,7 +288,7 @@ export const UserInfoProvider = ({
             return;
         }
 
-        if (user.wallet.walletClientType === "privy" && user.telegram) {
+        if (user?.wallet?.walletClientType === "privy" && user?.telegram) {
             handleAutoBindTelegram();
         } else {
             handleGetUserTgInfo();
