@@ -14,10 +14,7 @@ const queue = new PQueue({
     concurrency: 1,
 });
 
-import {
-    useSkylabBidTacToeContract,
-    useTestflightContract,
-} from "./useContract";
+import { useTestflightContract } from "./useContract";
 import {
     calculateGasMargin,
     getRandomProvider,
@@ -26,7 +23,6 @@ import {
 import NonceManager from "@/utils/nonceManager";
 import { getSCWallet } from "./useSCWallet";
 import {
-    useBurnerSkylabBidTacToeContract,
     useBurnerSkylabBidTacToeGameContract,
     useTestSkylabBidTacToeContract,
 } from "./useBurnerContract";
@@ -426,25 +422,6 @@ export const getPayMasterBurnerRetryContract = (contract: any, signer: any) => {
         );
         return result;
     };
-};
-
-export const useBidTacToeFactoryRetry = () => {
-    const contract = useSkylabBidTacToeContract();
-    const tacToeFactoryRetryWrite = useBurnerRetryContract(contract);
-
-    return tacToeFactoryRetryWrite;
-};
-
-export const useTestflightRetryContract = () => {
-    const contract = useTestflightContract();
-    const contractWrite = useBurnerRetryContract(contract);
-    return contractWrite;
-};
-
-export const useBttFactoryRetry = (testflight: boolean, signer?: any) => {
-    const contract = useBurnerSkylabBidTacToeContract(testflight);
-    const contractWrite = useBurnerRetryContract(contract, signer);
-    return contractWrite;
 };
 
 export const useTestflightRetryPaymaster = (signer: any) => {

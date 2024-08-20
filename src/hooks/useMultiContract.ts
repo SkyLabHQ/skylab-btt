@@ -1,18 +1,13 @@
 import { useMemo } from "react";
-import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { AddressZero } from "@ethersproject/constants";
 import SKYLABTESSTFLIGHT_ABI from "@/skyConstants/abis/SkylabTestFlight.json";
 import { Contract, Provider, setMulticallAddress } from "ethers-multicall";
-import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
 import MARKETPLACE_ABI from "@/skyConstants/abis/MarketPlace.json";
 import LOYALTY_ABI from "@/skyConstants/abis/LoyaltyPoints.json";
-
-import qs from "query-string";
 import { ChainId, TESTFLIGHT_CHAINID, randomRpc } from "@/utils/web3Utils";
-import { useLocation } from "react-router-dom";
 import {
     skylabBidTacToeAddress,
     skylabTestFlightAddress,
@@ -51,45 +46,6 @@ export function getContract(address: string, ABI: any): Contract {
 
     return new Contract(address, ABI);
 }
-// account is optional
-export function getProviderOrSigner(
-    library: Web3Provider,
-    account?: string,
-): Web3Provider | JsonRpcSigner {
-    return account ? getSigner(library, account) : library;
-}
-// account is not optional
-export function getSigner(
-    library: Web3Provider,
-    account: string,
-): JsonRpcSigner {
-    return library.getSigner(account).connectUnchecked();
-}
-
-export const useMultiMercuryTouramentContract = (propChainId?: number) => {
-    const activeChainId = useChainId();
-    const chainId = propChainId || activeChainId;
-
-    return useContract(
-        mercuryJarTournamentAddress[chainId],
-        SKYLABTOURNAMENT_ABI,
-    );
-};
-
-export const useMultiMercuryBaseContract = (propChainId?: number) => {
-    const activeChainId = useChainId();
-    const chainId = propChainId || activeChainId;
-    const { search } = useLocation();
-    const params = qs.parse(search) as any;
-    const istest = params.testflight === "true";
-    return useContract(
-        chainId &&
-            (istest
-                ? skylabTestFlightAddress[chainId]
-                : mercuryJarTournamentAddress[chainId]),
-        istest ? SKYLABTESSTFLIGHT_ABI : SKYLABTOURNAMENT_ABI,
-    );
-};
 
 export const useMultiMercuryBaseContractTest = () => {
     return useContract(
@@ -143,10 +99,4 @@ export const useMultiProvider = (chainId: number) => {
         const provider = new ethers.providers.JsonRpcProvider(rpcList[0]);
         return new Provider(provider as any, chainId);
     }, [chainId]);
-};
-
-export const getMultiProvider = (chainId: number) => {
-    const rpcList = randomRpc[chainId];
-    const provider = new ethers.providers.JsonRpcProvider(rpcList[0]);
-    return new Provider(provider, chainId);
 };

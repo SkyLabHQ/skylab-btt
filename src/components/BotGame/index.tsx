@@ -4,10 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/BttComponents/Board";
 import { useBttGameRetryPaymaster } from "@/hooks/useRetryContract";
 import { ethers } from "ethers";
-import {
-    useMultiProvider,
-    useMultiSkylabBidTacToeGameContract,
-} from "@/hooks/useMultiContract";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import {
@@ -78,10 +74,6 @@ const TacToePage = ({
         privateKey: botGameSigner?.privateKey,
     });
     const deleteTokenIdCommited = useDeleteTokenIdCommited(tokenId);
-    const multiSkylabBidTacToeGameContract =
-        useMultiSkylabBidTacToeGameContract(gameAddress);
-
-    const ethcallProvider = useMultiProvider(TESTFLIGHT_CHAINID);
     const [loading, setLoading] = useState<boolean>(false);
     const [autoCommitTimeoutTime, setAutoCommitTimeoutTime] = useState(0);
 

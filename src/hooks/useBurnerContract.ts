@@ -25,15 +25,6 @@ function useContract(address: any, abi: any) {
     }, [address, abi, chainId]);
 }
 
-export const useBurnerSkylabBidTacToeContract = (istest: boolean = false) => {
-    const activeChainId = useChainId();
-    const chainId = istest ? TESTFLIGHT_CHAINID : activeChainId;
-    return useContract(
-        skylabBidTacToeAddress[istest ? chainId : TESTFLIGHT_CHAINID],
-        SKYLABBIDTACTOE_ABI,
-    );
-};
-
 export const useTestSkylabBidTacToeContract = () => {
     const chainId = TESTFLIGHT_CHAINID;
     return useContract(skylabBidTacToeAddress[chainId], SKYLABBIDTACTOE_ABI);
