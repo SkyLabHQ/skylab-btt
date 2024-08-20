@@ -3,15 +3,13 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import UserInfoDrawer from "@/components/UserInfoDrawer";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import axios from "axios";
-import { useMercuryJarTournamentContract } from "@/hooks/useContract";
-import { useChainId, usePublicClient } from "wagmi";
+import { useChainId } from "wagmi";
 import {
     useMultiMercuryJarTournamentContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
 import { levelRanges } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
-import { handleError } from "@/utils/error";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useLocation } from "react-router-dom";
 import Click1Wav from "@/assets/click1.wav";
@@ -37,10 +35,8 @@ const UserInfoContext = createContext<{
     onUserInfoClose: () => void;
     blockOpen: boolean;
     isBlock: boolean;
-    userName: string;
     planeList: any[];
     planeInit: boolean;
-    userNameInit: boolean;
     handleBlock: (block: boolean) => void;
     handleGetUserPaper: () => void;
     handleLogin: () => void;
@@ -58,8 +54,6 @@ export const UserInfoProvider = ({
         usePrivy();
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const publicClient = usePublicClient();
     const chainId = useChainId();
     const multiProvider = useMultiProvider(chainId);
     const multiMercuryJarTournamentContract =
@@ -67,8 +61,6 @@ export const UserInfoProvider = ({
     const { address } = usePrivyAccounts();
     const [isBlock, setIsBlock] = useState(false);
     const [blockOpen, setIsBlockOpen] = useState(false);
-    const [userName, setUserName] = useState("");
-    const [userNameInit, setUserNameInit] = useState(false);
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -111,12 +103,9 @@ export const UserInfoProvider = ({
 
         try {
             setLoading(true);
-            const [planeBalance, userName] = await multiProvider.all([
+            const [planeBalance] = await multiProvider.all([
                 multiMercuryJarTournamentContract.balanceOf(address),
-                multiMercuryJarTournamentContract.userName(address),
             ]);
-            setUserName(userName);
-            setUserNameInit(true);
             const p = [];
             for (let i = 0; i < Number(planeBalance.toString()); i++) {
                 p.push(
@@ -179,21 +168,6 @@ export const UserInfoProvider = ({
         } catch (e) {
             setLoading(false);
             setPlaneInit(true);
-        }
-    };
-
-    const handleSetUserName = async (name: string) => {
-        try {
-            const hash =
-                await mercuryJarTournamentContract.write.registerUserName([
-                    name,
-                ]);
-
-            // @ts-ignore
-            await publicClient.waitForTransactionReceipt({ hash });
-            setUserName(name);
-        } catch (e) {
-            toast(handleError(e));
         }
     };
 
@@ -341,10 +315,8 @@ export const UserInfoProvider = ({
                 blockOpen,
                 isBlock,
                 handleBlock,
-                userName,
                 planeList,
                 planeInit,
-                userNameInit,
                 handleGetUserPaper,
                 handleGetUserPlane,
                 handleLogin,
@@ -358,7 +330,6 @@ export const UserInfoProvider = ({
             >
                 {children}
                 <UserInfoDrawer
-                    onUserNameChange={handleSetUserName}
                     isOpen={isOpen}
                     onClose={onClose}
                 ></UserInfoDrawer>

@@ -149,6 +149,9 @@ const TacToe = () => {
         const isPlayer1 =
             address.toLocaleLowerCase() == gameInfo.player1.toLocaleLowerCase();
 
+        console.log(address.toLocaleLowerCase(), "address");
+        console.log(gameInfo.player1.toLocaleLowerCase(), "gameInfo.player1");
+
         const player1GameInfo = {
             address: gameInfo.player1,
             userId: gameInfo.userId1,
@@ -184,7 +187,7 @@ const TacToe = () => {
         };
         setGameTimeout(boardGrids[resCurrentGrid].timeout);
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
-        const opGameInfo = isPlayer1 ? player2GameInfo : player1GameInfo;
+        const opGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
 
         for (let i = 0; i < boardGrids.length; i++) {
             const winAddress = boardGrids[i].win;

@@ -436,7 +436,7 @@ const MyPlane = ({
                                                             }}
                                                         >
                                                             {detail.nextPoints}
-                                                            pt
+                                                            xp
                                                         </span>
                                                     </Text>
                                                 </Flex>

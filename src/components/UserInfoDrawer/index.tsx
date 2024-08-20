@@ -10,10 +10,7 @@ import {
     SimpleGrid,
     useClipboard,
     useMediaQuery,
-    SkeletonCircle,
-    Skeleton,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import CopyIcon from "@/assets/copy-icon.svg";
 import QuitIcon from "./assets/quit.png";
 import RightArrowIcon from "./assets/right-arrow.svg";
@@ -25,169 +22,158 @@ import Blackrrow from "./assets/black-arrow.svg";
 import NoPlane from "./assets/no-plane.png";
 import DiscordIcon from "./assets/discord.png";
 import TwIcon from "./assets/twitter.png";
-import EditNickname from "./EditNickname";
 import useSkyToast from "@/hooks/useSkyToast";
 import PlaneBg from "./assets/plane-bg.png";
-import SetNameIcon from "./assets/setName.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
 import TgIcon from "./assets/tg-icon.svg";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import PilotBorder from "@/assets/pilot-border.png";
-import UserIcon from "@/assets/user-icon.png";
 import { storeAccessToken } from "@/api/tournament";
+import ExportIcon from "./assets/export-icon.svg";
+import { avatarImg } from "@/utils/avatars";
 
-const UserInfo = ({
-    userName,
-    userNameInit,
-}: {
-    userName: string;
-    userNameInit: boolean;
-}) => {
-    const { user } = usePrivy();
+const UserInfo = () => {
+    const { user, exportWallet } = usePrivy();
     const { address } = usePrivyAccounts();
     const toast = useSkyToast();
     const { onCopy } = useClipboard(address);
+    const { tgInfo } = useUserInfo();
 
     return (
         <Flex flexDir={"column"} align={"center"}>
-            {userNameInit ? (
-                <Flex flexDir={"column"} align={"center"}>
-                    <Flex
-                        sx={{
-                            marginTop: "8px",
-                        }}
-                        align={"center"}
-                    >
-                        {user?.discord && (
-                            <Image
-                                src={DiscordIcon}
-                                sx={{
-                                    width: "16px",
-                                    marginRight: "4px",
-                                }}
-                            ></Image>
-                        )}
-                        {user?.twitter && (
-                            <Image
-                                src={TwIcon}
-                                sx={{
-                                    width: "16px",
-                                    marginRight: "4px",
-                                }}
-                            ></Image>
-                        )}
-                        <Flex
+            <Flex flexDir={"column"} align={"center"}>
+                <Flex
+                    sx={{
+                        marginTop: "8px",
+                    }}
+                    align={"center"}
+                >
+                    {user?.discord && (
+                        <Image
+                            src={DiscordIcon}
                             sx={{
-                                fontSize: "14px",
-                                color: "#F2D861",
+                                width: "16px",
+                                marginRight: "4px",
                             }}
-                            onClick={() => {
-                                onCopy();
-                                toast("Address copied");
+                        ></Image>
+                    )}
+                    {user?.twitter && (
+                        <Image
+                            src={TwIcon}
+                            sx={{
+                                width: "16px",
+                                marginRight: "4px",
                             }}
-                        >
-                            <Text
-                                sx={{
-                                    fontSize: "14px",
-                                    marginRight: "11px",
-                                }}
-                            >
-                                {userName
-                                    ? userName
-                                    : `${shortenAddress(address, 4, 4)}`}
-                            </Text>
-                            <Image
-                                src={CopyIcon}
-                                sx={{
-                                    width: "14px",
-                                }}
-                            ></Image>
-                        </Flex>
-                    </Flex>
+                        ></Image>
+                    )}
                     <Flex
                         sx={{
-                            borderRadius: "12px",
-                            background: "#F2D861",
-                            height: "40px",
-                            width: "180px",
-                            paddingLeft: "8px",
-                            marginTop: "15px",
-                            cursor: "pointer",
+                            fontSize: "14px",
+                            color: "#F2D861",
                         }}
-                        onClick={async () => {
-                            try {
-                                const res = await storeAccessToken();
-                                const shortAccessToken =
-                                    res.data.shortAccessToken;
-                                window.open(
-                                    `${TG_URL}?start=${shortAccessToken}`,
-                                    "_blank",
-                                );
-                            } catch (e: any) {
-                                toast(e.message);
-                            }
+                        onClick={() => {
+                            onCopy();
+                            toast("Address copied");
                         }}
-                        align={"center"}
-                        justify={"center"}
                     >
                         <Text
                             sx={{
-                                fontSize: "12px",
-                                color: "#1b1b1b",
-                                marginRight: "5px",
+                                fontSize: "14px",
+                                marginRight: "11px",
                             }}
                         >
-                            Link to TG
+                            {`${shortenAddress(address, 4, 4)}`}
                         </Text>
                         <Image
-                            src={Blackrrow}
+                            src={CopyIcon}
                             sx={{
-                                marginRight: "15px",
-                            }}
-                        ></Image>
-                        <Image
-                            src={TgIcon}
-                            sx={{
-                                width: "28px",
-                                maxWidth: "28px",
+                                width: "14px",
                             }}
                         ></Image>
                     </Flex>
                 </Flex>
-            ) : (
-                <Box
+                <Flex
                     sx={{
-                        marginTop: "8px",
+                        borderRadius: "12px",
+                        background: "#F2D861",
+                        height: "40px",
+                        width: "180px",
+                        paddingLeft: "8px",
+                        marginTop: "15px",
+                        cursor: "pointer",
                     }}
+                    onClick={async () => {
+                        try {
+                            const res = await storeAccessToken();
+                            const shortAccessToken = res.data.shortAccessToken;
+                            window.open(
+                                `${TG_URL}?start=${shortAccessToken}`,
+                                "_blank",
+                            );
+                        } catch (e: any) {
+                            toast(e.message);
+                        }
+                    }}
+                    align={"center"}
+                    justify={"center"}
                 >
-                    <Flex align={"center"}>
-                        <SkeletonCircle
-                            size="5"
-                            startColor="#FDDC2D"
-                            endColor="#fff"
-                            sx={{
-                                marginRight: "10px",
-                            }}
-                        />
-                        <Skeleton
-                            startColor="#FDDC2D"
-                            endColor="#fff"
-                            height="10px"
-                            width={"100px"}
-                        />
-                    </Flex>
-                    <Skeleton
-                        startColor="#FDDC2D"
-                        endColor="#fff"
-                        height="10px"
-                        width={"100%"}
+                    <Text
                         sx={{
-                            marginTop: "8px",
+                            fontSize: "12px",
+                            color: "#1b1b1b",
+                            marginRight: "5px",
                         }}
-                    />
-                </Box>
-            )}
+                    >
+                        Link to TG
+                    </Text>
+                    <Image
+                        src={Blackrrow}
+                        sx={{
+                            marginRight: "15px",
+                        }}
+                    ></Image>
+                    <Image
+                        src={TgIcon}
+                        sx={{
+                            width: "28px",
+                            maxWidth: "28px",
+                        }}
+                    ></Image>
+                </Flex>
+                <Flex
+                    sx={{
+                        borderRadius: "12px",
+                        background: "#F2D861",
+                        height: "40px",
+                        width: "180px",
+                        paddingLeft: "8px",
+                        marginTop: "15px",
+                        cursor: "pointer",
+                    }}
+                    onClick={async () => {
+                        exportWallet();
+                    }}
+                    align={"center"}
+                    justify={"center"}
+                >
+                    <Image
+                        src={ExportIcon}
+                        sx={{
+                            marginRight: "4px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: "12px",
+                            color: "#1b1b1b",
+                            marginRight: "5px",
+                        }}
+                    >
+                        Export Embedded Wallet{" "}
+                    </Text>
+                </Flex>
+            </Flex>
         </Flex>
     );
 };
@@ -368,21 +354,16 @@ const MyPlane = ({
 const UserInfoDrawer = ({
     onClose,
     isOpen,
-    onUserNameChange,
 }: {
     isOpen: boolean;
     onClose: () => void;
-    onUserNameChange: (name: string) => void;
 }) => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
-    const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称
-    const { planeInit, planeList, userName, userNameInit, tgInfo } =
-        useUserInfo();
+    const { address } = usePrivyAccounts();
+    const { planeInit, planeList, tgInfo } = useUserInfo();
 
-    const handleChangeMode = (mode: number) => {
-        setCurrentMode(mode);
-    };
+    console.log(tgInfo, "tgInfo");
 
     return (
         <Drawer
@@ -429,78 +410,55 @@ const UserInfoDrawer = ({
                         </Flex>
                     )}
 
-                    {currentMode === 0 && (
-                        <Box>
-                            <Flex
-                                justify={"flex-end"}
-                                align={"center"}
-                                sx={{
-                                    height: "30px",
-                                }}
-                            >
-                                <Image
-                                    src={SetNameIcon}
-                                    sx={{
-                                        width: "24px",
-                                        marginRight: "12px",
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={() => {
-                                        handleChangeMode(1);
-                                    }}
-                                ></Image>
-                                <Image
-                                    onClick={async () => {
-                                        await logout();
-                                        onClose();
-                                    }}
-                                    src={QuitIcon}
-                                    sx={{
-                                        width: "24px",
-                                        cursor: "pointer",
-                                    }}
-                                ></Image>
-                            </Flex>
-                            <Flex
-                                sx={{
-                                    width: "80px",
-                                    height: "80px",
-                                    background: `url(${PilotBorder}) no-repeat`,
-                                    backgroundSize: "cover",
-                                    margin: "0 auto",
-                                }}
-                                align={"center"}
-                                justify={"center"}
-                            >
-                                <Image
-                                    src={UserIcon}
-                                    sx={{
-                                        width: "56px",
-                                        height: "56px",
-                                    }}
-                                ></Image>
-                            </Flex>
-                            <UserInfo
-                                userName={userName}
-                                userNameInit={userNameInit}
-                            ></UserInfo>
-
-                            <MyPlane
-                                planeList={planeList}
-                                planeInit={planeInit}
-                            ></MyPlane>
-                        </Box>
-                    )}
-                    {currentMode === 1 && (
-                        <EditNickname
-                            onSetUserName={(userName: string) => {
-                                onUserNameChange(userName);
+                    <Box>
+                        <Flex
+                            justify={"flex-end"}
+                            align={"center"}
+                            sx={{
+                                height: "30px",
                             }}
-                            onChangeMode={(mode: number) => {
-                                handleChangeMode(mode);
+                        >
+                            <Image
+                                onClick={async () => {
+                                    await logout();
+                                    onClose();
+                                }}
+                                src={QuitIcon}
+                                sx={{
+                                    width: "24px",
+                                    cursor: "pointer",
+                                }}
+                            ></Image>
+                        </Flex>
+                        <Flex
+                            sx={{
+                                width: "80px",
+                                height: "80px",
+                                background: `url(${PilotBorder}) no-repeat`,
+                                backgroundSize: "cover",
+                                margin: "0 auto",
                             }}
-                        ></EditNickname>
-                    )}
+                            align={"center"}
+                            justify={"center"}
+                        >
+                            <Image
+                                src={
+                                    tgInfo.photoUrl
+                                        ? tgInfo.photoUrl
+                                        : avatarImg(address)
+                                }
+                                sx={{
+                                    width: "56px",
+                                    height: "56px",
+                                }}
+                            ></Image>
+                        </Flex>
+                        <UserInfo></UserInfo>
+                        <MyPlane
+                            planeList={planeList}
+                            planeInit={planeInit}
+                        ></MyPlane>
+                    </Box>
                 </DrawerBody>
             </DrawerContent>
         </Drawer>

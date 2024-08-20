@@ -1,22 +1,6 @@
-import {
-    Box,
-    Button,
-    Flex,
-    Image,
-    SimpleGrid,
-    Text,
-    useClipboard,
-} from "@chakra-ui/react";
-import InviteIcon from "@/components/TacToe/assets/invite-icon.svg";
+import { Box, Button, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import RightArrow from "./assets/arrow-right.svg";
-import useSkyToast from "@/hooks/useSkyToast";
-
-const inviteFriends = `
-${window.location.origin}
-
-A fully on-chain cryptoeconomic game of deduction and psychology 
-`;
 
 const ShareButtons = ({
     text = "Back to 1v1",
@@ -29,9 +13,6 @@ const ShareButtons = ({
     handleTextClick?: () => void;
     showText?: boolean;
 }) => {
-    const toast = useSkyToast();
-    const { onCopy } = useClipboard(inviteFriends);
-
     return (
         <Box
             sx={{
@@ -66,22 +47,6 @@ const ShareButtons = ({
                     >
                         <Image
                             src={TwLogo}
-                            sx={{
-                                width: "16px",
-                            }}
-                        ></Image>
-                    </Button>
-                </Flex>
-                <Flex justify={"center"}>
-                    <Button
-                        variant={"outline"}
-                        onClick={async (e) => {
-                            onCopy();
-                            toast("Copy link success!");
-                        }}
-                    >
-                        <Image
-                            src={InviteIcon}
                             sx={{
                                 width: "16px",
                             }}

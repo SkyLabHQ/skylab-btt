@@ -10,13 +10,14 @@ import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Click1Wav from "@/assets/click1.wav";
 import UserIcon from "@/assets/user-icon.png";
 import PilotBorder from "@/assets/pilot-border.png";
+import { avatarImg } from "@/utils/avatars";
 
 const audio = new Audio(Click1Wav);
 
 export const Toolbar = () => {
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const { onUserInfoOpen } = useUserInfo();
+    const { onUserInfoOpen, tgInfo } = useUserInfo();
     const { address } = usePrivyAccounts();
     const { handleLogin } = useUserInfo();
 
@@ -50,7 +51,7 @@ export const Toolbar = () => {
                             justify={"flex-end"}
                             align={"center"}
                         >
-                            <Box
+                            <Flex
                                 sx={{
                                     background: `url(${PilotBorder}) no-repeat`,
                                     backgroundSize: "cover",
@@ -59,16 +60,24 @@ export const Toolbar = () => {
                                     left: "0px",
                                     transform: "translate(0%, -50%)",
                                     zIndex: 99,
+                                    width: "52px",
+                                    height: "52px",
                                 }}
+                                justify={"center"}
+                                align={"center"}
                             >
                                 <Image
-                                    src={UserIcon}
+                                    src={
+                                        tgInfo.photoUrl
+                                            ? tgInfo.photoUrl
+                                            : avatarImg(address)
+                                    }
                                     sx={{
-                                        width: "52px",
-                                        height: "52px",
+                                        width: "40px",
+                                        height: "40px",
                                     }}
                                 ></Image>
-                            </Box>
+                            </Flex>
                             <Box
                                 sx={{
                                     width: "184px",
@@ -135,6 +144,7 @@ export const Toolbar = () => {
                     sx={{
                         width: isPc ? "48px" : "40px",
                         height: isPc ? "48px" : "40px",
+                        cursor: "pointer",
                     }}
                     src={BulbIcon}
                 ></Image>
