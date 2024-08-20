@@ -12,8 +12,8 @@ const Timer = ({
     time1Gray: boolean;
     allTime?: number;
 }) => {
-    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-
+    const [isGreaterThan1300] = useSkyMediaQuery("(min-width: 1300px)");
+    const [isGreaterThan800] = useSkyMediaQuery("(min-width: 800px)");
     const { minutes, seconds } = useMemo(() => {
         let minutes: string | number = Math.floor((time1 / 60000) % 60);
         if (minutes < 10) {
@@ -43,7 +43,7 @@ const Timer = ({
             >
                 <Text
                     sx={{
-                        fontSize: isPc ? "24px" : "16px",
+                        fontSize: isGreaterThan800 ? "24px" : "16px",
                         color: time1Gray ? "#616161" : "#fddc2d",
                         textAlign: "center",
                     }}
@@ -55,14 +55,18 @@ const Timer = ({
                         border: time1Gray
                             ? "3px solid #616161"
                             : "3px solid #FFFFFF",
-                        borderWidth: isPc ? "3px" : "2px",
-                        width: isPc ? "550px" : "100%",
+                        borderWidth: isGreaterThan800 ? "3px" : "2px",
+                        width: isGreaterThan1300
+                            ? "550px"
+                            : isGreaterThan800
+                            ? "360px"
+                            : "100%",
                         background: "transparent",
-                        height: isPc ? "24px" : "12px",
+                        height: isGreaterThan800 ? "24px" : "12px",
                         display: "flex",
                         justifyContent: "flex-end",
-                        padding: isPc ? "2px" : "1px",
-                        borderRadius: isPc ? "10px" : "8px",
+                        padding: isGreaterThan800 ? "2px" : "1px",
+                        borderRadius: isGreaterThan800 ? "10px" : "8px",
                     }}
                 >
                     <Box
@@ -74,7 +78,7 @@ const Timer = ({
                                     100 +
                                 "%",
                             background: time1Gray ? "#616161" : "#fddc2d",
-                            borderRadius: isPc ? "10px" : "8px",
+                            borderRadius: isGreaterThan800 ? "10px" : "8px",
                         }}
                     ></Box>
                 </Box>

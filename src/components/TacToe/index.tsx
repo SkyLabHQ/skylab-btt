@@ -138,7 +138,7 @@ const TacToePage = ({
             {isPc ? (
                 <Box
                     sx={{
-                        padding: "27px 60px",
+                        padding: "80px 48px 0",
                         position: "relative",
                         width: "100vw",
                         height: "100vh",
@@ -179,7 +179,6 @@ const TacToePage = ({
                     >
                         <MyUserCard
                             showAdvantageTip={false}
-                            markIcon={myGameInfo.mark}
                             bidAmount={bidAmount}
                             onInputChange={onBidAmount}
                             onConfirm={onBid}
@@ -194,8 +193,7 @@ const TacToePage = ({
                             ></Board>
                         </Box>
                         <OpUserCard
-                            userGameInfo={myGameInfo}
-                            markIcon={opGameInfo.mark}
+                            userGameInfo={opGameInfo}
                             showAdvantageTip={false}
                         ></OpUserCard>
                     </Box>

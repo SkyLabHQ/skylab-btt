@@ -442,11 +442,7 @@ const UserInfoDrawer = ({
                             justify={"center"}
                         >
                             <Image
-                                src={
-                                    tgInfo.photoUrl
-                                        ? tgInfo.photoUrl
-                                        : avatarImg(address)
-                                }
+                                src={tgInfo.photoUrl}
                                 sx={{
                                     width: "56px",
                                     height: "56px",

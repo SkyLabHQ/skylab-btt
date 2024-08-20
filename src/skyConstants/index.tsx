@@ -7,12 +7,7 @@ export const GlobalStyles = css`
         font-weight: normal;
         font-style: normal;
     }
-    @font-face {
-        font-family: "Helvetica";
-        src: url("/Helvetica.ttf") format("opentype");
-        font-weight: normal;
-        font-style: normal;
-    }
+
     @font-face {
         font-family: "Neoneon";
         src: url("/Neoneon.otf") format("opentype");

@@ -280,7 +280,6 @@ const Market = () => {
                         background: "#F2D861",
                         fontSize: large680 ? "18px" : "14px",
                         color: "#1b1b1b",
-                        fontFamily: "Helvetica",
                         fontWeight: "bold",
                         cursor: "pointer",
                         zIndex: 9999,

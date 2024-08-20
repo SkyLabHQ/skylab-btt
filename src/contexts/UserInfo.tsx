@@ -16,6 +16,7 @@ import Click1Wav from "@/assets/click1.wav";
 import { usePrivy } from "@privy-io/react-auth";
 import { getTokensGame } from "@/api/tournament";
 import { bindTelegram, getUserTgInfo } from "@/api/user";
+import { avatarImg } from "@/utils/avatars";
 
 const audio = new Audio(Click1Wav);
 
@@ -223,8 +224,14 @@ export const UserInfoProvider = ({
                 ...user.telegram,
                 address: user.wallet.address,
             });
+            const info = {
+                ...res.data.userTgInfo,
+                photoUrl: res.data.userTgInfo.photoUrl
+                    ? res.data.userTgInfo.photoUrl
+                    : avatarImg(user.wallet.address),
+            };
 
-            setTgInfo(res.data.userTgInfo);
+            setTgInfo(info);
         } catch (e) {
             console.log(e);
         }
@@ -233,7 +240,14 @@ export const UserInfoProvider = ({
     const handleGetUserTgInfo = async () => {
         try {
             const res = await getUserTgInfo();
-            setTgInfo(res.data.userTgInfo);
+            const info = {
+                ...res.data.userTgInfo,
+                photoUrl: res.data.userTgInfo.photoUrl
+                    ? res.data.userTgInfo.photoUrl
+                    : avatarImg(user.wallet.address),
+            };
+
+            setTgInfo(info);
         } catch (e) {
             console.log(e);
         }

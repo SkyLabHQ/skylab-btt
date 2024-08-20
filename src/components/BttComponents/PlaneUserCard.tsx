@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
     Box,
     Image,
@@ -21,6 +21,7 @@ import { UserMarkType } from "@/skyConstants/bttGameTypes";
 import useBidIcon from "@/hooks/useBidIcon";
 import { TournamentGameInfo } from "@/pages/TacToe";
 import { aviationImg } from "@/utils/aviationImg";
+import { shortenAddress } from "@/utils";
 
 const move = keyframes`
     0% {
@@ -39,10 +40,8 @@ const move = keyframes`
 interface UserCardProps {
     userGameInfo: TournamentGameInfo;
     showAnimateConfirm?: number;
-    markIcon: UserMarkType;
     bidAmount?: number;
     showAdvantageTip?: boolean;
-    planeUrl?: string;
     onConfirm?: () => void;
     onInputChange?: (value: number) => void;
 }
@@ -71,6 +70,32 @@ export const MyInputBid = ({
         audio.play();
         onConfirm();
     };
+
+    useEffect(() => {
+        const keyboardListener = (event: KeyboardEvent) => {
+            const key = event.key;
+            event.shiftKey && key === "Enter";
+            switch (key) {
+                case "ArrowRight":
+                    onInputChange?.(bidAmount + 1);
+                    break;
+
+                case "ArrowLeft": {
+                    onInputChange?.(bidAmount - 1);
+                    break;
+                }
+            }
+
+            if (event.shiftKey && key === "Enter") {
+                onConfirm();
+            }
+        };
+        document.addEventListener("keydown", keyboardListener);
+        return () => {
+            document.removeEventListener("keydown", keyboardListener);
+        };
+    }, [onConfirm, bidAmount]);
+
     return (
         <Box
             sx={{
@@ -96,7 +121,7 @@ export const MyInputBid = ({
                         src={SubIcon}
                         sx={{
                             cursor: "pointer",
-                            width: "24px",
+                            width: "22px",
                         }}
                         onClick={() => {
                             if (bidAmount - 1 < 0) return;
@@ -154,11 +179,12 @@ export const MyInputBid = ({
                         }}
                         sx={{
                             cursor: "pointer",
-                            width: "24px",
+                            width: "22px",
                         }}
                     ></Image>
                 </Flex>
                 <Slider
+                    focusThumbOnChange={false}
                     key={balance}
                     value={Number(bidAmount)}
                     onChange={(e) => {
@@ -229,7 +255,6 @@ export const MyInputBid = ({
 
 export const MyUserCard = ({
     userGameInfo,
-    markIcon,
     bidAmount,
     onConfirm,
     onInputChange,
@@ -284,9 +309,13 @@ export const MyUserCard = ({
                         border: "1px solid #FFF",
                         marginRight: "10px",
                     }}
-                    src={userGameInfo.photo}
+                    src={userGameInfo.photoUrl}
                 ></Image>
-                <Text>@{userGameInfo.username}</Text>
+                <Text>
+                    {userGameInfo.username
+                        ? `@${userGameInfo.username}`
+                        : shortenAddress(userGameInfo.address)}
+                </Text>
             </Flex>
             <Flex align={"center"}>
                 <Image src={GoldIcon}></Image>
@@ -303,10 +332,8 @@ export const MyUserCard = ({
                     width={"24px"}
                     height={"24px"}
                     src={
-                        markIcon === UserMarkType.Circle
+                        userGameInfo.mark === UserMarkType.Circle
                             ? MarkIcon.Circle
-                            : markIcon === UserMarkType.BotX
-                            ? MarkIcon.BotX
                             : MarkIcon.Cross
                     }
                 ></Image>
@@ -323,7 +350,7 @@ export const MyUserCard = ({
     );
 };
 
-export const OpUserCard = ({ markIcon, userGameInfo }: UserCardProps) => {
+export const OpUserCard = ({ userGameInfo }: UserCardProps) => {
     const MarkIcon = useBidIcon();
     const { onCopy } = useClipboard(userGameInfo.address ?? "");
 
@@ -367,7 +394,11 @@ export const OpUserCard = ({ markIcon, userGameInfo }: UserCardProps) => {
                     marginTop: "20px",
                 }}
             >
-                <Text>@{userGameInfo.username}</Text>
+                <Text>
+                    {userGameInfo.username
+                        ? `@${userGameInfo.username}`
+                        : shortenAddress(userGameInfo.address)}
+                </Text>
                 <Image
                     sx={{
                         width: "52px",
@@ -377,7 +408,7 @@ export const OpUserCard = ({ markIcon, userGameInfo }: UserCardProps) => {
                         border: "1px solid #FFF",
                         marginLeft: "10px",
                     }}
-                    src={userGameInfo.photo}
+                    src={userGameInfo.photoUrl}
                 ></Image>
             </Flex>
             <Flex align={"center"}>
@@ -385,10 +416,8 @@ export const OpUserCard = ({ markIcon, userGameInfo }: UserCardProps) => {
                     width={"24px"}
                     height={"24px"}
                     src={
-                        markIcon === UserMarkType.Circle
+                        userGameInfo.mark === UserMarkType.Circle
                             ? MarkIcon.Circle
-                            : markIcon === UserMarkType.BotX
-                            ? MarkIcon.BotX
                             : MarkIcon.Cross
                     }
                 ></Image>

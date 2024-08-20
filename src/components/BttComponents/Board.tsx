@@ -41,8 +41,8 @@ export const BoardGrid = ({
     showAnimate,
 }: BoardItem) => {
     const MarkIcon = useBidIcon();
-    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-
+    const [isGreaterThan1300] = useSkyMediaQuery("(min-width: 1300px)");
+    const [isGreaterThan800] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <GridItem
             sx={{
@@ -73,34 +73,55 @@ export const BoardGrid = ({
                                 alignItems: "center",
                                 justifyContent: "space-between",
                                 width: "100%",
-                                padding: isPc ? "0 10px" : "0 3px",
-                                fontSize: isPc ? "16px" : "10px",
+                                padding: isGreaterThan800 ? "0 10px" : "0 3px",
+                                fontSize: isGreaterThan1300
+                                    ? "16px"
+                                    : isGreaterThan800
+                                    ? "13px"
+                                    : "10px",
                                 "& img": {
-                                    width: isPc ? "15px" : "8px",
-                                    height: isPc ? "15px" : "8px",
+                                    width: isGreaterThan1300
+                                        ? "15px"
+                                        : isGreaterThan800
+                                        ? "12px"
+                                        : "8px",
+                                    height: isGreaterThan1300
+                                        ? "15px"
+                                        : isGreaterThan800
+                                        ? "12px"
+                                        : "8px",
                                 },
                                 "& >div": {
-                                    width: isPc ? "64px" : "30px",
-                                    height: isPc ? "18px" : "10px",
+                                    width: isGreaterThan1300
+                                        ? "64px"
+                                        : isGreaterThan800
+                                        ? "48px"
+                                        : "30px",
+                                    height: isGreaterThan1300
+                                        ? "18px"
+                                        : isGreaterThan800
+                                        ? "14px"
+                                        : "10px",
                                     background: "#D9D9D9",
-                                    borderRadius: isPc ? "18px" : "4px",
+                                    borderRadius: isGreaterThan800
+                                        ? "18px"
+                                        : "4px",
                                     color: "#000000",
                                 },
                             }}
                         >
-                            <Box
+                            <Flex
                                 sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    padding: isPc ? "0 4px" : "0 2px",
+                                    padding: isGreaterThan800
+                                        ? "0 4px"
+                                        : "0 2px",
                                 }}
+                                justify={"space-between"}
+                                align={"center"}
                             >
                                 <Image
                                     width={"10px"}
                                     height={"10px"}
-                                    sx={{
-                                        marginRight: isPc ? "10px" : "2px",
-                                    }}
                                     src={
                                         myMark === UserMarkType.Circle
                                             ? MarkIcon.BlackCircle
@@ -108,20 +129,24 @@ export const BoardGrid = ({
                                     }
                                 ></Image>
                                 <Box>{myValue}</Box>
-                            </Box>
+                            </Flex>
 
-                            <Box
+                            <Flex
                                 sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    padding: isPc ? "0 4px" : "0 2px",
+                                    padding: isGreaterThan800
+                                        ? "0 4px"
+                                        : "0 2px",
                                 }}
+                                justify={"space-between"}
+                                align={"center"}
                             >
                                 <Image
                                     width={"10px"}
                                     height={"10px"}
                                     sx={{
-                                        marginRight: isPc ? "10px" : "2px",
+                                        marginRight: isGreaterThan800
+                                            ? "10px"
+                                            : "2px",
                                     }}
                                     src={
                                         opMark === UserMarkType.Circle
@@ -132,7 +157,7 @@ export const BoardGrid = ({
                                     }
                                 ></Image>
                                 <Box>{opValue}</Box>
-                            </Box>
+                            </Flex>
                         </Box>
                     )}
                 {mark === UserMarkType.Square && (
@@ -140,7 +165,7 @@ export const BoardGrid = ({
                         width={"70%"}
                         height={"70%"}
                         sx={{
-                            borderRadius: isPc ? "12px" : "6px",
+                            borderRadius: isGreaterThan800 ? "12px" : "6px",
                             background: `linear-gradient(0deg, transparent 6px, #FFF 6px) repeat-y,
                                         linear-gradient(0deg, transparent 50%, #FFF  0) repeat-y,
                                         linear-gradient(90deg, transparent 50%, #FFF  0) repeat-x,
@@ -149,7 +174,11 @@ export const BoardGrid = ({
                                 "2px 12px, 2px 12px, 12px 2px, 12px 2px",
                             backgroundPosition: "0 0, 100% 0, 0 0, 0 100%",
                             color: "#FDDC2D",
-                            fontSize: isPc ? "16px" : "10px",
+                            fontSize: isGreaterThan1300
+                                ? "16px"
+                                : isGreaterThan800
+                                ? "12px"
+                                : "10px",
                             fontWeight: 700,
                         }}
                         animation={`${move2} 1s infinite linear`}
@@ -224,9 +253,7 @@ const Board = ({
     showAnimateNumber?: number;
 }) => {
     const [isGreaterThan1300] = useSkyMediaQuery("(min-width: 1300px)");
-    const [isBetween800And1300] = useSkyMediaQuery(
-        "(min-width: 800px) and (max-width: 1300px)",
-    );
+    const [isGreaterThan800] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
@@ -236,15 +263,15 @@ const Board = ({
             w={
                 isGreaterThan1300
                     ? "550px"
-                    : isBetween800And1300
-                    ? "400"
+                    : isGreaterThan800
+                    ? "360px"
                     : "240px"
             }
             h={
                 isGreaterThan1300
                     ? "550px"
-                    : isBetween800And1300
-                    ? "400"
+                    : isGreaterThan800
+                    ? "360px"
                     : "240px"
             }
         >

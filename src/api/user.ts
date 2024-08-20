@@ -11,7 +11,7 @@ export const bindTelegram = async (data: {
     firstName?: string;
     lastName?: string;
     username?: string;
-    photo?: string;
+    photoUrl?: string;
 }) => {
     const response = await api.post("/user/bindTelegram", data);
     return response.data;

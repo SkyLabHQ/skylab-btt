@@ -64,7 +64,6 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
                         fontSize: isPc ? "20px" : "14px",
                         textAlign: "right",
                         fontWeight: 900,
-                        fontFamily: "Helvetica",
                         marginRight: isPc ? "10px" : "6px",
                     }}
                 >

@@ -22,6 +22,7 @@ import { PLayerStatus } from "./PvpRoom";
 import useSkyToast from "@/hooks/useSkyToast";
 import Match from "@/components/TacToe/Match";
 import { getLevel } from "@/utils/level";
+import { avatarImg } from "@/utils/avatars";
 
 export interface TournamentGameInfo {
     address: string;
@@ -36,7 +37,7 @@ export interface TournamentGameInfo {
     point: number;
     overLevel: number;
     overPoint: number;
-    photo?: string;
+    photoUrl?: string;
     username?: string;
 }
 const GameContext = createContext<{
@@ -93,7 +94,7 @@ const TacToe = () => {
         overPoint: 0,
         point: 0,
         overLevel: 0,
-        photo: "",
+        photoUrl: "",
     });
     const [opGameInfo, setOpGameInfo] = useState<TournamentGameInfo>({
         address: "",
@@ -108,7 +109,7 @@ const TacToe = () => {
         point: 0,
         overPoint: 0,
         overLevel: 0,
-        photo: "",
+        photoUrl: "",
     });
 
     const handleStep = (step?: number) => {
@@ -133,6 +134,10 @@ const TacToe = () => {
     };
 
     const handleGameInfo = (gameInfo: any) => {
+        if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
+            navigate("/");
+            return;
+        }
         const gridIndex = gameInfo.gridIndex == 9 ? 8 : gameInfo.gridIndex;
         const gridOrder = gameInfo.gridOrder;
         const resCurrentGrid = gridOrder[gridIndex];
@@ -165,7 +170,9 @@ const TacToe = () => {
             point: gameInfo.point1,
             overPoint: gameInfo.overPoint1,
             overLevel: getLevel(gameInfo.overPoint1),
-            photo: gameInfo.user1TgInfo?.photo,
+            photoUrl: gameInfo.user1TgInfo?.photoUrl
+                ? gameInfo.user1TgInfo?.photoUrl
+                : avatarImg(gameInfo.player1),
             username: gameInfo.user1TgInfo?.username,
         };
 
@@ -182,12 +189,26 @@ const TacToe = () => {
             point: gameInfo.point2,
             overPoint: gameInfo.overPoint2,
             overLevel: getLevel(gameInfo.overPoint2),
-            photo: gameInfo.user2TgInfo?.photo,
+            photoUrl: gameInfo.user2TgInfo?.photoUrl
+                ? gameInfo.user2TgInfo?.photoUrl
+                : gameInfo.player2
+                ? avatarImg(gameInfo.player2)
+                : "",
             username: gameInfo.user2TgInfo?.username,
         };
-        setGameTimeout(boardGrids[resCurrentGrid].timeout);
+
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
         const opGameInfo = isPlayer1 ? player2GameInfo : player1GameInfo;
+        if (gameInfo.gameStatus1 === Game2Status.WaitingForPlayer2) {
+            if (isPlayer1) {
+                setMyGameInfo(player1GameInfo);
+            } else {
+                navigate("/");
+            }
+            return;
+        }
+
+        setGameTimeout(boardGrids[resCurrentGrid].timeout);
 
         for (let i = 0; i < boardGrids.length; i++) {
             const winAddress = boardGrids[i].win;
@@ -216,10 +237,18 @@ const TacToe = () => {
         setOpGameInfo(opGameInfo);
         setNextDrawWinner(nextDrawWinner);
         setList(_list);
+        if (gameInfo.gameStatus1 === Game2Status.InProgress) {
+            setStep(1);
+        }
+
+        if (gameInfo.gameStatus1 > Game2Status.InProgress) {
+            setStep(2);
+            return;
+        }
     };
 
-    console.log(myGameInfo, "myGameInfomyGameInfomyGameInfomyGameInfo");
-    console.log(opGameInfo, "opGameInfoopGameInfoopGameInfoopGameInfo");
+    console.log(myGameInfo, "-----");
+    console.log(opGameInfo, "+++++");
 
     const handleGetGameInfo = async () => {
         if (!gameId) return;
@@ -287,7 +316,6 @@ const TacToe = () => {
             return;
 
         handleGetGameInfo();
-
         const timer = setInterval(() => {
             handleGetGameInfo();
         }, 3000);
@@ -298,39 +326,11 @@ const TacToe = () => {
     }, [gameId, myGameInfo.gameState, address]);
 
     useEffect(() => {
-        if (!gameInfo.player1) {
+        if (!gameInfo.player1 || !address) {
             return;
         }
         handleGameInfo(gameInfo);
-    }, [gameInfo]);
-
-    useEffect(() => {
-        if (!gameInfo.player1 || !address) return;
-        if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
-            navigate("/");
-            return;
-        }
-
-        if (!gameInfo.player2) {
-            if (
-                gameInfo.player1.toLocaleLowerCase() ==
-                address.toLocaleLowerCase()
-            ) {
-                setStep(0);
-            }
-            return;
-        }
-
-        if (gameInfo.gameStatus1 === Game2Status.InProgress) {
-            setStep(1);
-            return;
-        }
-
-        if (gameInfo.gameStatus1 > Game2Status.InProgress) {
-            setStep(2);
-            return;
-        }
-    }, [gameInfo.gameStatus1, gameInfo.player1, gameInfo.player2, address]);
+    }, [gameInfo, address]);
 
     return (
         <Box

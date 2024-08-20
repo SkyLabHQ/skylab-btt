@@ -68,11 +68,7 @@ export const Toolbar = () => {
                                 align={"center"}
                             >
                                 <Image
-                                    src={
-                                        tgInfo.photoUrl
-                                            ? tgInfo.photoUrl
-                                            : avatarImg(address)
-                                    }
+                                    src={tgInfo.photoUrl}
                                     sx={{
                                         width: "40px",
                                         height: "40px",
