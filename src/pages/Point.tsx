@@ -1,5 +1,5 @@
 import Nest from "@/components/Nest";
-import { Box, Flex, Text, useMediaQuery, Image } from "@chakra-ui/react";
+import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import LineBg from "@/assets/line.png";
 import { Toolbar } from "@/components/TacToeMode/Toolbar";
@@ -12,10 +12,11 @@ import {
 } from "@/hooks/useMultiContract";
 import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import { shortenAddress } from "@/utils";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const Point = () => {
     const navigate = useNavigate();
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const multiProvider = useMultiProvider(DEAFAULT_CHAINID);
     const multiPointContract = useMultiPointContract();
     const [list, setList] = React.useState([]);

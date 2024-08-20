@@ -1,8 +1,9 @@
-import { Flex, useMediaQuery } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import DotLoading from "../Loading/DotLoading";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const text = [
     "Spicing up pixels",
@@ -58,7 +59,7 @@ function shuffleArray(array: string[]) {
 const randomText = shuffleArray(text);
 
 const LoadingText = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Swiper
             style={{

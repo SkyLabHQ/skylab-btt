@@ -1,4 +1,4 @@
-import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/BttComponents/Board";
 import { useGameContext } from "@/pages/TacToe";
@@ -8,6 +8,7 @@ import MLayout from "./MLayout";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
 import { MyUserCard, OpUserCard } from "../BttComponents/PlaneUserCard";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const TacToePage = ({
     bidAmount,
@@ -28,7 +29,7 @@ const TacToePage = ({
     onBidAmount: (value: number) => void;
     handleQuit: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [time, setTime] = useState(0);
     const { myGameInfo, opGameInfo, list, handleStepChange } = useGameContext();
 

@@ -1,5 +1,5 @@
 import { MyUserCard, OpUserCard } from "@/components/BttComponents/UserCard";
-import { Box, Flex, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Board from "@/components/BttComponents/Board";
 import { useBttGameRetryPaymaster } from "@/hooks/useRetryContract";
@@ -25,6 +25,7 @@ import ToolBar from "../BttComponents/Toolbar";
 import { shortenAddressWithout0x } from "@/utils";
 import StatusProgress from "../BttComponents/StatusProgress";
 import { getBotGameSigner } from "@/hooks/useSigner";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 interface TacToeProps {
     showAnimateNumber: number;
@@ -56,7 +57,7 @@ const TacToePage = ({
     list,
     onStep,
 }: TacToeProps) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const commitWorkerRef = useRef<Worker>(null);

@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-    Box,
-    Flex,
-    Image,
-    Text,
-    useDisclosure,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useDisclosure } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import LoadingIcon from "@/assets/loading.svg";
 import QuitModal from "@/components/BttComponents/QuitModal";
@@ -20,10 +13,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import { quitMatch } from "@/api/tournament";
+import { quitMatch, storeAccessToken } from "@/api/tournament";
 import qs from "query-string";
 import { useGameContext } from "@/pages/TacToe";
 import { aviationImg } from "@/utils/aviationImg";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const randomText = [
     ["*When the game starts, ", "you have 12 hours to make each move"],
@@ -34,10 +28,10 @@ const randomText = [
 ];
 
 const PlaneImg = ({ detail, flip }: { detail: any; flip?: boolean }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <>
-            {detail?.level ? (
+            {detail?.address ? (
                 <Box
                     sx={{
                         position: "relative",
@@ -83,8 +77,8 @@ const PlaneImg = ({ detail, flip }: { detail: any; flip?: boolean }) => {
 };
 
 const StopMatch = ({ onClick }: { onClick: () => void }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-    const { address } = usePrivyAccounts();
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+    const toast = useSkyToast();
 
     return (
         <Box
@@ -112,8 +106,17 @@ const StopMatch = ({ onClick }: { onClick: () => void }) => {
                 Quit Matching
             </Flex>
             <Flex
-                onClick={() => {
-                    window.open(`${TG_URL}?start=${address}`, "_blank");
+                onClick={async () => {
+                    try {
+                        const res = await storeAccessToken();
+                        const shortAccessToken = res.data.shortAccessToken;
+                        window.open(
+                            `${TG_URL}?start=${shortAccessToken}`,
+                            "_blank",
+                        );
+                    } catch (e: any) {
+                        toast(e.message);
+                    }
                 }}
                 align={"center"}
                 justify={"center"}
@@ -160,7 +163,7 @@ export const MatchPage = () => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
     const [gameId] = useState<string>(params.gameId);
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useSkyToast();
     const { myGameInfo, opGameInfo } = useGameContext();

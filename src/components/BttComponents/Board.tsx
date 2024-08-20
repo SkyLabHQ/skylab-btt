@@ -6,11 +6,11 @@ import {
     keyframes,
     Text,
     Image,
-    useMediaQuery,
 } from "@chakra-ui/react";
 import BaseGrid from "./assets/base-grid.svg";
 import { BoardItem, UserMarkType } from "@/skyConstants/bttGameTypes";
 import useBidIcon from "@/hooks/useBidIcon";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const move = keyframes`
     0% {
@@ -41,7 +41,8 @@ export const BoardGrid = ({
     showAnimate,
 }: BoardItem) => {
     const MarkIcon = useBidIcon();
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
     return (
         <GridItem
             sx={{
@@ -72,17 +73,17 @@ export const BoardGrid = ({
                                 alignItems: "center",
                                 justifyContent: "space-between",
                                 width: "100%",
-                                padding: isPc ? "0 0.5208vw" : "0 3px",
-                                fontSize: isPc ? "0.8333vw" : "10px",
+                                padding: isPc ? "0 10px" : "0 3px",
+                                fontSize: isPc ? "16px" : "10px",
                                 "& img": {
-                                    width: isPc ? "0.7813vw" : "8px",
-                                    height: isPc ? "0.7813vw" : "8px",
+                                    width: isPc ? "15px" : "8px",
+                                    height: isPc ? "15px" : "8px",
                                 },
                                 "& >div": {
-                                    width: isPc ? "3.3333vw" : "30px",
-                                    height: isPc ? "0.9375vw" : "10px",
+                                    width: isPc ? "64px" : "30px",
+                                    height: isPc ? "18px" : "10px",
                                     background: "#D9D9D9",
-                                    borderRadius: isPc ? "0.9375vw" : "4px",
+                                    borderRadius: isPc ? "18px" : "4px",
                                     color: "#000000",
                                 },
                             }}
@@ -91,14 +92,14 @@ export const BoardGrid = ({
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
-                                    padding: isPc ? "0 0.2083vw" : "0 2px",
+                                    padding: isPc ? "0 4px" : "0 2px",
                                 }}
                             >
                                 <Image
                                     width={"10px"}
                                     height={"10px"}
                                     sx={{
-                                        marginRight: isPc ? "0.5208vw" : "2px",
+                                        marginRight: isPc ? "10px" : "2px",
                                     }}
                                     src={
                                         myMark === UserMarkType.Circle
@@ -113,14 +114,14 @@ export const BoardGrid = ({
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
-                                    padding: isPc ? "0 0.2083vw" : "0 2px",
+                                    padding: isPc ? "0 4px" : "0 2px",
                                 }}
                             >
                                 <Image
                                     width={"10px"}
                                     height={"10px"}
                                     sx={{
-                                        marginRight: isPc ? "0.5208vw" : "2px",
+                                        marginRight: isPc ? "10px" : "2px",
                                     }}
                                     src={
                                         opMark === UserMarkType.Circle
@@ -148,7 +149,7 @@ export const BoardGrid = ({
                                 "2px 12px, 2px 12px, 12px 2px, 12px 2px",
                             backgroundPosition: "0 0, 100% 0, 0 0, 0 100%",
                             color: "#FDDC2D",
-                            fontSize: isPc ? "0.8333vw" : "10px",
+                            fontSize: isPc ? "16px" : "10px",
                             fontWeight: 700,
                         }}
                         animation={`${move2} 1s infinite linear`}
@@ -222,16 +223,30 @@ const Board = ({
     list: BoardItem[];
     showAnimateNumber?: number;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-
+    const [isGreaterThan1300] = useSkyMediaQuery("(min-width: 1300px)");
+    const [isBetween800And1300] = useSkyMediaQuery(
+        "(min-width: 800px) and (max-width: 1300px)",
+    );
     return (
         <Box
             sx={{
                 background: `url(${BaseGrid})`,
                 backgroundSize: "100% 100%",
             }}
-            w={isPc ? "550px" : "240px"}
-            h={isPc ? "550px" : "240px"}
+            w={
+                isGreaterThan1300
+                    ? "550px"
+                    : isBetween800And1300
+                    ? "400"
+                    : "240px"
+            }
+            h={
+                isGreaterThan1300
+                    ? "550px"
+                    : isBetween800And1300
+                    ? "400"
+                    : "240px"
+            }
         >
             <Grid
                 templateColumns="repeat(3, 1fr)"

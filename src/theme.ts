@@ -1,4 +1,9 @@
-import { ThemeConfig, extendTheme } from "@chakra-ui/react";
+import {
+    ThemeComponents,
+    ThemeConfig,
+    extendTheme,
+    extendBaseTheme,
+} from "@chakra-ui/react";
 
 const config: ThemeConfig = {
     initialColorMode: "dark",
@@ -9,7 +14,7 @@ const fonts = {
     body: "Quantico",
     heading: "Orbitron",
     mono: "Quantico",
-}
+};
 
 // TO-DO: fix fonyts and add colors
 const overrides = { config, fonts };

@@ -1,13 +1,14 @@
-import { Box, Image, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Image, Flex, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import BackIcon from "./assets/back.svg";
 import LogoIcon from "./assets/logo.svg";
 import UserLogin from "../UserLogin";
 import CartIcon from "./assets/cart.svg";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const Header = () => {
-    const [large680] = useMediaQuery("(min-width: 680px)");
+    const [large680] = useSkyMediaQuery("(min-width: 680px)");
 
     const navigate = useNavigate();
     return (
@@ -74,7 +75,7 @@ const navList = [
 ];
 
 const NavBar = () => {
-    const [large680] = useMediaQuery("(min-width: 680px)");
+    const [large680] = useSkyMediaQuery("(min-width: 680px)");
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
@@ -156,10 +157,10 @@ const NavBar = () => {
 };
 
 const PlaneMarketLayout = () => {
-    const [large1700] = useMediaQuery("(min-width: 1700px)");
-    const [large1360] = useMediaQuery("(min-width: 1360px)");
-    const [large1020] = useMediaQuery("(min-width: 1020px)");
-    const [large680] = useMediaQuery("(min-width: 680px)");
+    const [large1700] = useSkyMediaQuery("(min-width: 1700px)");
+    const [large1360] = useSkyMediaQuery("(min-width: 1360px)");
+    const [large1020] = useSkyMediaQuery("(min-width: 1020px)");
+    const [large680] = useSkyMediaQuery("(min-width: 680px)");
 
     return (
         <Box

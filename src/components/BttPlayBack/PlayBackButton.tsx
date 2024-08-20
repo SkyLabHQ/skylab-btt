@@ -3,7 +3,8 @@ import StartIcon from "./assets/start.svg";
 import PreStepIcon from "./assets/pre-step.svg";
 import NextStepIcon from "./assets/next-step.svg";
 import EndIcon from "./assets/end.svg";
-import { Flex, Image, SimpleGrid, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Image, SimpleGrid } from "@chakra-ui/react";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const PlayBackButton = ({
     showPre,
@@ -20,7 +21,7 @@ const PlayBackButton = ({
     handleNextStep: () => void;
     handleEndStep: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     useEffect(() => {
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;

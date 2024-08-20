@@ -1,5 +1,5 @@
 import "swiper/css/bundle";
-import { Box, useMediaQuery, Image, Flex } from "@chakra-ui/react";
+import { Box, Image, Flex } from "@chakra-ui/react";
 import { ReactElement, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useSkyToast from "./hooks/useSkyToast";
@@ -9,6 +9,7 @@ import TermPage from "./components/TermPage";
 import { UserInfoProvider, useUserInfo } from "./contexts/UserInfo";
 import CloseIcon from "@/assets/close.svg";
 import qs from "query-string";
+import useSkyMediaQuery from "./hooks/useSkyMediaQuery";
 
 const themeColorList = [
     {
@@ -40,7 +41,7 @@ const themeColorList = [
 const App = (): ReactElement => {
     const { search } = useLocation();
     const params = qs.parse(search) as any;
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [type, setType] = useState(-1);
     const toast = useSkyToast();
     const [checked, setChecked] = useState(false);

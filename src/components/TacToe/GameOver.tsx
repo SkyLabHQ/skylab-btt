@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import Board from "@/components/BttComponents/Board";
 import {
     Game2Status,
@@ -10,9 +10,10 @@ import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 import { useGameContext } from "@/pages/TacToe";
 import ResultUserCard from "../BttComponents/ResultUserCard";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const GameOver = ({ gameState }: { gameState: Game2Status }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { myGameInfo, opGameInfo, list, handleStepChange } = useGameContext();
 
     const isMyWin = getPvpWinState(gameState);

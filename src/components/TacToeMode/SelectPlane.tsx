@@ -1,11 +1,4 @@
-import {
-    Box,
-    Flex,
-    Image,
-    SimpleGrid,
-    Text,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import TipIcon from "./assets/tip.svg";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import BiddingGif from "@/assets/bidding.gif";
@@ -18,9 +11,10 @@ import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { usePublicClient } from "wagmi";
 import Level1Plane from "@/assets/aviations/a1.png";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     return (
         <Flex
@@ -89,7 +83,7 @@ const MintPlane = ({ handleMintPlane }: { handleMintPlane: () => void }) => {
 
 const ConnectWalletBt = () => {
     const { handleLogin } = useUserInfo();
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Flex
             sx={{
@@ -149,7 +143,7 @@ const MyPlane = ({
     onSelectPlane: (plane: any) => void;
 }) => {
     const toast = useSkyToast();
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { address } = usePrivyAccounts();
     const {
         planeList,

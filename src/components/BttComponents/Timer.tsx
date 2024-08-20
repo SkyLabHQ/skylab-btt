@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import { Box, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { TwelveHours } from "@/skyConstants/bttGameTypes";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const Timer = ({
     time1,
@@ -11,7 +12,7 @@ const Timer = ({
     time1Gray: boolean;
     allTime?: number;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     const { minutes, seconds } = useMemo(() => {
         let minutes: string | number = Math.floor((time1 / 60000) % 60);

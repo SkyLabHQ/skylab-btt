@@ -187,7 +187,7 @@ const TacToe = () => {
         };
         setGameTimeout(boardGrids[resCurrentGrid].timeout);
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
-        const opGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
+        const opGameInfo = isPlayer1 ? player2GameInfo : player1GameInfo;
 
         for (let i = 0; i < boardGrids.length; i++) {
             const winAddress = boardGrids[i].win;
@@ -217,6 +217,9 @@ const TacToe = () => {
         setNextDrawWinner(nextDrawWinner);
         setList(_list);
     };
+
+    console.log(myGameInfo, "myGameInfomyGameInfomyGameInfomyGameInfo");
+    console.log(opGameInfo, "opGameInfoopGameInfoopGameInfoopGameInfo");
 
     const handleGetGameInfo = async () => {
         if (!gameId) return;

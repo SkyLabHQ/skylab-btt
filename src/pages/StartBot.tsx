@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Flex, useMediaQuery, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import LineBg from "@/assets/line.png";
 import ButtonBg from "@/assets/bt-bg.png";
 import BttIcon from "@/assets/btt-icon.png";
@@ -25,6 +25,7 @@ import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import { saveBotGamePrivateKey } from "@/hooks/useSigner";
 import { bindBurner } from "@/api";
 import { useInitData } from "@tma.js/sdk-react";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const PlayButtonGroup = () => {
     const initData = useInitData();
@@ -99,7 +100,7 @@ const PlayButtonGroup = () => {
             closeLoading();
         }
     };
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{

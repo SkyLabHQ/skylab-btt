@@ -1,14 +1,8 @@
-import {
-    Box,
-    Text,
-    Image,
-    useMediaQuery,
-    Flex,
-    BoxProps,
-} from "@chakra-ui/react";
+import { Box, Text, Image, Flex, BoxProps } from "@chakra-ui/react";
 import HumanPlane from "./assets/human-plane.png";
 import LineBg from "./assets/line.png";
 import styled from "@emotion/styled";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 export const GrayButtonStyle = styled(Box)`
     text-align: center;
@@ -49,7 +43,7 @@ export const PlayButtonGroup = ({
     tournamentDisabled: boolean;
     onPlayTournament: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Box>
             <Box

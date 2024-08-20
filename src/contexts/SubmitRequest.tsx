@@ -1,7 +1,8 @@
-import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import React, { createContext, useContext, useState } from "react";
 import EnterLoadingIcon from "@/assets/enter-loading.gif";
 import LoadingText from "@/components/BttComponents/LoadingText";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 const SubmitRequestContext = createContext<{
     isLoading: boolean;
     openLoading: () => void;
@@ -13,7 +14,7 @@ export const SubmitRequestProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [isLoading, setIsLoading] = useState(false);
 
     const openLoading = () => {

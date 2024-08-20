@@ -223,6 +223,7 @@ export const UserInfoProvider = ({
                 ...user.telegram,
                 address: user.wallet.address,
             });
+
             setTgInfo(res.data.userTgInfo);
         } catch (e) {
             console.log(e);
@@ -238,15 +239,15 @@ export const UserInfoProvider = ({
         }
     };
 
-    useEffect(() => {
-        axios.get("https://ipapi.co/json/").then(async (res: any) => {
-            if (res.data.country_code === "US") {
-                setIsBlock(true);
-            } else {
-                setIsBlock(false);
-            }
-        });
-    }, []);
+    // useEffect(() => {
+    //     axios.get("https://ipapi.co/json/").then(async (res: any) => {
+    //         if (res.data.country_code === "US") {
+    //             setIsBlock(true);
+    //         } else {
+    //             setIsBlock(false);
+    //         }
+    //     });
+    // }, []);
 
     useEffect(() => {
         if (whiteList.includes(pathname)) {

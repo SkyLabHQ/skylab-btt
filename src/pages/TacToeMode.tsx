@@ -1,4 +1,4 @@
-import { Box, Text, useMediaQuery, Flex, Image } from "@chakra-ui/react";
+import { Box, Text, Flex, Image } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BttHelmet from "@/components/Helmet/BttHelmet";
@@ -21,15 +21,15 @@ import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { usePublicClient } from "wagmi";
 import { handleError } from "@/utils/error";
-import { usePrivy } from "@privy-io/react-auth";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const gameAudio = new Audio(GameMp3);
 
 const TacToeMode = () => {
     const publicClient = usePublicClient();
     const { address } = usePrivyAccounts();
-    const { user } = usePrivy();
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)", {});
+
     const { openLoading, closeLoading } = useSubmitRequest();
     const skylabBidTacToeContract = useSkylabBidTacToeContract();
 

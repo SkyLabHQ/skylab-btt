@@ -1,12 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
-import {
-    Box,
-    ChakraProvider,
-    ColorModeScript,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
 import { BrowserRouter } from "react-router-dom";
 import { WagmiConfig, createConfig } from "wagmi";
@@ -20,6 +15,7 @@ import { SubmitRequestProvider } from "./contexts/SubmitRequest";
 import { PrivyProvider } from "@privy-io/react-auth";
 import logoIcon from "./assets/tournament.jpg";
 import { BidIconProvider } from "./contexts/BidIcon";
+import useSkyMediaQuery from "./hooks/useSkyMediaQuery";
 
 const chains =
     process.env.REACT_APP_ENV === "development" ? [baseSepolia] : [baseSepolia];
@@ -39,7 +35,7 @@ const config = createConfig(
 );
 
 const RootContent = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [isMBrowser, setIsMBrowser] = useState(false);
 
     useEffect(() => {

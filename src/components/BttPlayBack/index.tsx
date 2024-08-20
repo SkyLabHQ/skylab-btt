@@ -1,4 +1,4 @@
-import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BackIcon from "@/components/TacToe/assets/back-arrow.svg";
@@ -28,7 +28,6 @@ import StartJourney from "../BttComponents/StartJourney";
 import LoadingPage from "../LoadingPage";
 
 const BttPlayBackPage = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
 
     const [onlyShow, setOnlyShow] = useState(false);

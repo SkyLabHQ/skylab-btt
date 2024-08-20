@@ -1,13 +1,13 @@
-import { Box, Image, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { Box, Image, useDisclosure } from "@chakra-ui/react";
 import TutorialIcon from "@/components/BttComponents/assets/tutorial-icon.svg";
 import KeyBoard from "../BttComponents/KeyBoard";
 import QuitIcon from "@/components/BttComponents/assets/quit.png";
 import { ToolShare } from "../BttComponents/ToolShare";
 import BidTacToeTutorial from "./BidTacToeTutorial";
 import Click1Wav from "@/assets/click1.wav";
-import { useUserInfo } from "@/contexts/UserInfo";
 import SkinIcon from "@/components/BttComponents/assets/skin.png";
 import { useBidIconContext } from "@/contexts/BidIcon";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 const audio = new Audio(Click1Wav);
 const ToolBar = ({
     showLive = true,
@@ -22,7 +22,7 @@ const ToolBar = ({
     quitType?: "wait" | "game";
     onQuitClick: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { handleToggleType } = useBidIconContext();
 
     const {

@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useMemo } from "react";
 import GardenIcon from "./assets/garden-icon.png";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import { TournamentGameInfo, useGameContext } from "@/pages/TacToe";
 import { ReactComponent as XpUpIcon } from "./assets/xp-up.svg";
 import LevelUpBg from "./assets/level-up.png";
 import LevelDownBg from "./assets/level-down.png";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 function generateProgressLevels(startPoints: number, endPoints: number) {
     const startLevelItem = levelRanges.find((item, index) => {
@@ -81,7 +82,7 @@ const WinResult = ({
     myInfo: TournamentGameInfo;
     progressArray: number[][];
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     const [rightPlaneImg, rightPlaneLevel, nextLevelXp] = useMemo(() => {
         let nextLevelXp = 0;
@@ -366,7 +367,7 @@ const LoseResult = ({
     myInfo: TournamentGameInfo;
     progressArray: number[][];
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const clickAnimate = useAnimation();
     const [leftPlaneImg, leftPlaneLevel, nextLevelXp] = useMemo(() => {
         let nextLevelXp = 0;
@@ -633,7 +634,7 @@ const LoseResult = ({
 };
 
 const SettlementPage = ({}) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const { myGameInfo } = useGameContext();
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, useMediaQuery, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import LineBg from "@/assets/line.png";
 import ButtonBg from "@/assets/bt-bg.png";
 import { useNavigate } from "react-router-dom";
@@ -11,13 +11,14 @@ import SoloIcon from "./assets/solo-icon.svg";
 import { getPoint, startGame } from "@/api/pvpGame";
 import IIcon from "./assets/i.svg";
 import TIcon from "./assets/t.svg";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const PlayButtonGroup = ({
     onPlayTournament,
 }: {
     onPlayTournament: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{

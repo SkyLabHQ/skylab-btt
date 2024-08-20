@@ -8,15 +8,15 @@ import {
     PopoverContent,
     PopoverTrigger,
     Text,
-    useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import KeyboardIcon from "./assets/keyboard.svg";
 import UpArrowIcon from "./assets/up-arrow.svg";
 import DownArrowIcon from "./assets/down-arrow.svg";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const KeyItem = ({ children }: { children: React.ReactNode }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     return (
         <Box
@@ -41,7 +41,7 @@ const KeyItem = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Content = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <PopoverContent
             sx={{
@@ -167,7 +167,7 @@ const KeyBoard = ({
     onToggle: () => void;
     onClose: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     return (
         <Box>

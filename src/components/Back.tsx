@@ -1,10 +1,11 @@
 import React from "react";
 import BackIcon from "@/assets/back-arrow.svg";
 import BackIcon1 from "@/assets/back.svg";
-import { Flex, Image, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Image } from "@chakra-ui/react";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const Back = ({ onClick }: { onClick?: () => void }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Flex flexDir={"column"} align={"center"} onClick={onClick}>
             <Image
@@ -25,7 +26,7 @@ export const BackWithText = ({
     onClick?: () => void;
     textContent: React.ReactNode;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Flex
             flexDir={"column"}

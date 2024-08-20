@@ -1,4 +1,5 @@
-import { Box, Text, useMediaQuery } from "@chakra-ui/react";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 
 const RoundInfo = ({
@@ -8,7 +9,7 @@ const RoundInfo = ({
     currentRound: number;
     allRound: number;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{

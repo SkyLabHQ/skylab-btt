@@ -1,19 +1,17 @@
 import { useUserInfo } from "@/contexts/UserInfo";
 import usePrivyAccounts from "@/hooks/usePrivyAccount";
-import { Box, Flex, useMediaQuery, Image } from "@chakra-ui/react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import Click1Wav from "@/assets/click1.wav";
 import { shortenAddress } from "@/utils";
 import UserIcon from "@/assets/user-icon.png";
 import PilotBorder from "@/assets/pilot-border.png";
 import WalletIcon from "@/assets/wallet-icon.png";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const audio = new Audio(Click1Wav);
 
 const UserLogin = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
-    const navigate = useNavigate();
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { onUserInfoOpen } = useUserInfo();
     const { address } = usePrivyAccounts();
     const { handleLogin } = useUserInfo();

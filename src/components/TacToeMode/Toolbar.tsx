@@ -1,4 +1,4 @@
-import { Box, Flex, Image, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import BidTacToeTutorial from "@/components/BttComponents/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
 import PlayBackIcon from "./assets/playback-icon.svg";
@@ -11,11 +11,12 @@ import Click1Wav from "@/assets/click1.wav";
 import UserIcon from "@/assets/user-icon.png";
 import PilotBorder from "@/assets/pilot-border.png";
 import { avatarImg } from "@/utils/avatars";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const audio = new Audio(Click1Wav);
 
 export const Toolbar = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const { onUserInfoOpen, tgInfo } = useUserInfo();
     const { address } = usePrivyAccounts();

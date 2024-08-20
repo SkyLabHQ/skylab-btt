@@ -8,13 +8,12 @@ import {
     PopoverTrigger,
     Text,
     useClipboard,
-    useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
 import ShareIcon from "./assets/share.png";
 import LinkIcon from "./assets/link.svg";
 import TwIcon from "./assets/tw.svg";
 import useSkyToast from "@/hooks/useSkyToast";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 export const ToolShare = ({
     showLive = true,
@@ -31,7 +30,7 @@ export const ToolShare = ({
     onClose: () => void;
     handleShareTw?: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
     const { onCopy } = useClipboard(inviteLink);
     const handleCopyLink = () => {

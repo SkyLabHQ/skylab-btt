@@ -1,5 +1,5 @@
 import { aviationImg } from "@/utils/aviationImg";
-import { Box, Image, Flex, Text, useMediaQuery, Input } from "@chakra-ui/react";
+import { Box, Image, Flex, Text, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Bg from "./assets/card-bg.png";
 import {
@@ -21,6 +21,7 @@ import DeleteIcon from "./assets/delete.svg";
 import { useUserInfo } from "@/contexts/UserInfo";
 import ETHIcon from "./assets/eth.svg";
 import A1Icon from "./assets/a1.svg";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const planeList = new Array(16).fill("").map((_, index) => {
     return { img: aviationImg(index + 1), level: index + 1 };
@@ -41,7 +42,7 @@ const Market = () => {
     const multiProvider = useMultiProvider(chainId);
     const multiMarketPlaceContract = useMultiMarketPlaceContract();
     const marketPlaceContract = useMarketPlaceContract();
-    const [large680] = useMediaQuery("(min-width: 680px)");
+    const [large680] = useSkyMediaQuery("(min-width: 680px)");
     const [highList, sethighList] = useState(new Array(16).fill("0"));
     const [myPrice, setMyPrice] = useState(new Array(16).fill("0"));
     const getMarketPlaceList = async () => {
@@ -150,10 +151,10 @@ const Market = () => {
             return;
         }
         try {
-            await mercuryJarTournamentContract.simulate.mint([1], {
-                value: parseAmount("0.02"),
-                account: address,
-            });
+            // await mercuryJarTournamentContract.simulate.mint([1], {
+            //     value: parseAmount("0.02"),
+            //     account: address,
+            // });
             const hash = await mercuryJarTournamentContract.write.mint([1], {
                 value: parseAmount("0.02"),
             });

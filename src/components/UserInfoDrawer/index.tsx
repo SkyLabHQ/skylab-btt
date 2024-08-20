@@ -9,7 +9,6 @@ import {
     Flex,
     SimpleGrid,
     useClipboard,
-    useMediaQuery,
 } from "@chakra-ui/react";
 import CopyIcon from "@/assets/copy-icon.svg";
 import QuitIcon from "./assets/quit.png";
@@ -32,6 +31,7 @@ import PilotBorder from "@/assets/pilot-border.png";
 import { storeAccessToken } from "@/api/tournament";
 import ExportIcon from "./assets/export-icon.svg";
 import { avatarImg } from "@/utils/avatars";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const UserInfo = () => {
     const { user, exportWallet } = usePrivy();
@@ -358,7 +358,7 @@ const UserInfoDrawer = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
     const { address } = usePrivyAccounts();
     const { planeInit, planeList, tgInfo } = useUserInfo();

@@ -1,9 +1,10 @@
-import { Flex, Image, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Image } from "@chakra-ui/react";
 import BiddingIcon from "@/assets/bidding.gif";
 import LoadingText from "./BttComponents/LoadingText";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const LoadingPage = () => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Flex
             sx={{

@@ -7,11 +7,11 @@ import {
     ModalContent,
     ModalFooter,
     ModalOverlay,
-    useMediaQuery,
 } from "@chakra-ui/react";
 import CloseIcon from "@/assets/icon-close.svg";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const QuitModal = ({
     onConfirm,
@@ -24,7 +24,7 @@ const QuitModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const toast = useSkyToast();
 
     const handleConfirm = async () => {

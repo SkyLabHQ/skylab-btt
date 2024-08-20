@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import Logo from "@/assets/logo.svg";
 import BttIcon from "@/assets/btt-icon.png";
 import XIcon from "@/components/TacToe/assets/x.svg";
@@ -16,6 +16,7 @@ import {
 } from "@/skyConstants/bttGameTypes";
 import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const BttPlayBackContent = ({
     myInfo,
@@ -50,7 +51,7 @@ const BttPlayBackContent = ({
     opGameInfo: GameInfo;
     showList: BoardItem[];
 }) => {
-    const [isPc] = useMediaQuery("(min-width: 800px)");
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     return isPc ? (
         <Box
