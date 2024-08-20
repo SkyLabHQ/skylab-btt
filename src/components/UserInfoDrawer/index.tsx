@@ -377,7 +377,8 @@ const UserInfoDrawer = ({
     const [isPc] = useMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
     const [currentMode, setCurrentMode] = useState(0); // 0展示用户信息 1设置昵称
-    const { planeInit, planeList, userName, userNameInit } = useUserInfo();
+    const { planeInit, planeList, userName, userNameInit, tgInfo } =
+        useUserInfo();
 
     const handleChangeMode = (mode: number) => {
         setCurrentMode(mode);
@@ -442,6 +443,7 @@ const UserInfoDrawer = ({
                                     sx={{
                                         width: "24px",
                                         marginRight: "12px",
+                                        cursor: "pointer",
                                     }}
                                     onClick={() => {
                                         handleChangeMode(1);
@@ -455,6 +457,7 @@ const UserInfoDrawer = ({
                                     src={QuitIcon}
                                     sx={{
                                         width: "24px",
+                                        cursor: "pointer",
                                     }}
                                 ></Image>
                             </Flex>

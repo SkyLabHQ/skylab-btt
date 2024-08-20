@@ -167,26 +167,6 @@ const Invited = ({ myGameInfo }: { myGameInfo: PvpGameInfo }) => {
                                 </Text>
                             </Box>
                         </Flex>
-
-                        <Flex
-                            align={"center"}
-                            justify={"center"}
-                            onClick={() => {
-                                onOpen();
-                            }}
-                            sx={{
-                                width: "180px",
-                                height: "40px",
-                                borderRadius: "12px",
-                                border: "2px solid #FFF",
-                                background: "#303030",
-                                fontSize: "14px",
-                                margin: "60px auto 0",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <Text>Cancle</Text>
-                        </Flex>
                     </Box>
                 </Flex>
                 <QuitModal

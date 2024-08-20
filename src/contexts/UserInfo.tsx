@@ -21,8 +21,17 @@ import { bindTelegram, getUserTgInfo } from "@/api/user";
 
 const audio = new Audio(Click1Wav);
 
+interface TgInfo {
+    tgId: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    photoUrl: string;
+}
+
 const UserInfoContext = createContext<{
     loading: boolean;
+    tgInfo: TgInfo;
     isUserInfoOpen: boolean;
     onUserInfoOpen: () => void;
     onUserInfoClose: () => void;
@@ -45,7 +54,8 @@ export const UserInfoProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const { ready, user, login, linkWallet, getAccessToken } = usePrivy();
+    const { ready, user, login, linkWallet, getAccessToken, authenticated } =
+        usePrivy();
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
@@ -271,15 +281,19 @@ export const UserInfoProvider = ({
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
 
     useEffect(() => {
+        if (!address) {
+            return;
+        }
         if (!user) {
             return;
         }
+
         if (user.wallet.walletClientType === "privy" && user.telegram) {
             handleAutoBindTelegram();
         } else {
             handleGetUserTgInfo();
         }
-    }, [user]);
+    }, [address]);
 
     // 定时获取token 防止token过期
     useEffect(() => {
@@ -320,6 +334,7 @@ export const UserInfoProvider = ({
     return (
         <UserInfoContext.Provider
             value={{
+                tgInfo,
                 isUserInfoOpen: isOpen,
                 onUserInfoOpen: onOpen,
                 onUserInfoClose: onClose,
