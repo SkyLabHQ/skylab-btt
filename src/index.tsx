@@ -48,43 +48,22 @@ const RootContent = () => {
         }
     }, [isPc]);
     return (
-        <PrivyProvider
-            appId="clt24409l0clp3488rr6vgpwh"
-            config={{
-                defaultChain: baseSepolia,
-                appearance: {
-                    accentColor: "#6A6FF5",
-                    theme: "#FFFFFF",
-                    showWalletLoginFirst: false,
-                    logo: "https://pub-dc971f65d0aa41d18c1839f8ab426dcb.r2.dev/privy.png",
-                },
-                loginMethods: isMBrowser
-                    ? ["email", "wallet", "telegram"]
-                    : ["email", "wallet", "discord", "twitter", "telegram"],
-                embeddedWallets: {
-                    createOnLogin: "users-without-wallets",
-                    requireUserPasswordOnCreate: false,
-                },
-                mfa: { noPromptOnMfaRequired: false },
-            }}
-        >
-            <ChakraProvider theme={theme}>
-                <Global styles={GlobalStyles} />
-                <BrowserRouter>
-                    <WagmiConfig config={config}>
-                        <SubmitRequestProvider>
-                            <BidIconProvider>
-                                <Fragment>
-                                    <HelmetProvider>
-                                        <AppRoutes />
-                                    </HelmetProvider>
-                                </Fragment>
-                            </BidIconProvider>
-                        </SubmitRequestProvider>
-                    </WagmiConfig>
-                </BrowserRouter>
-            </ChakraProvider>
-        </PrivyProvider>
+        <ChakraProvider theme={theme}>
+            <Global styles={GlobalStyles} />
+            <BrowserRouter>
+                <WagmiConfig config={config}>
+                    <SubmitRequestProvider>
+                        <BidIconProvider>
+                            <Fragment>
+                                <HelmetProvider>
+                                    <AppRoutes />
+                                </HelmetProvider>
+                            </Fragment>
+                        </BidIconProvider>
+                    </SubmitRequestProvider>
+                </WagmiConfig>
+            </BrowserRouter>
+        </ChakraProvider>
     );
 };
 

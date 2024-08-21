@@ -10,6 +10,8 @@ import { UserInfoProvider, useUserInfo } from "./contexts/UserInfo";
 import CloseIcon from "@/assets/close.svg";
 import qs from "query-string";
 import useSkyMediaQuery from "./hooks/useSkyMediaQuery";
+import { PrivyProvider } from "@privy-io/react-auth";
+import { base, baseSepolia } from "viem/chains";
 
 const themeColorList = [
     {
@@ -135,20 +137,52 @@ const App = (): ReactElement => {
     //     }
     // }, [showTerm]);
 
+    const [isMBrowser, setIsMBrowser] = useState(false);
+
+    useEffect(() => {
+        // 手机浏览器模式
+        if (!window.matchMedia("(display-mode: standalone)").matches && !isPc) {
+            setIsMBrowser(true);
+            return;
+        } else {
+            setIsMBrowser(false);
+        }
+    }, [isPc]);
+
     return (
         // TO-DO: use color mode when implementing light/dark
-        <Box
-            minH="100%"
-            color="white"
-            height={"100%"}
-            sx={{
-                position: "relative",
+        <PrivyProvider
+            appId="clt24409l0clp3488rr6vgpwh"
+            config={{
+                defaultChain: baseSepolia,
+                appearance: {
+                    accentColor: "#6A6FF5",
+                    theme: "#FFFFFF",
+                    showWalletLoginFirst: false,
+                    logo: "https://pub-dc971f65d0aa41d18c1839f8ab426dcb.r2.dev/privy.png",
+                },
+                loginMethods: isMBrowser
+                    ? ["email", "wallet"]
+                    : ["email", "wallet", "discord", "twitter"],
+                embeddedWallets: {
+                    createOnLogin: "users-without-wallets",
+                    requireUserPasswordOnCreate: false,
+                },
+                mfa: { noPromptOnMfaRequired: false },
             }}
         >
-            <UserInfoProvider>
-                <Outlet></Outlet>
-            </UserInfoProvider>
-            {/* {showTerm && <TermPage onContinue={handleContinue}></TermPage>}
+            <Box
+                minH="100%"
+                color="white"
+                height={"100%"}
+                sx={{
+                    position: "relative",
+                }}
+            >
+                <UserInfoProvider>
+                    <Outlet></Outlet>
+                </UserInfoProvider>
+                {/* {showTerm && <TermPage onContinue={handleContinue}></TermPage>}
             {!showTerm && (
                 <>
                     {type === 0 && <Outlet />}
@@ -218,7 +252,8 @@ const App = (): ReactElement => {
                     ></Image>
                 </Flex>
             )} */}
-        </Box>
+            </Box>
+        </PrivyProvider>
     );
 };
 
