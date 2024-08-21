@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 import QuitModal from "@/components/BttComponents/QuitModal";
 import useSkyToast from "@/hooks/useSkyToast";
-import { handleError } from "@/utils/error";
 import ToolBar from "@/components/BttComponents/Toolbar";
 import { quitMatch } from "@/api/pvpGame";
 import DotLoading from "../Loading/DotLoading";
@@ -101,16 +100,16 @@ const Invited = ({ myGameInfo }: { myGameInfo: PvpGameInfo }) => {
                             }}
                         >
                             <Box>
-                                <Box
+                                <Image
+                                    src={myGameInfo.photoUrl}
                                     sx={{
                                         borderRadius: "50%",
                                         width: "60px",
                                         height: "60px",
                                         border: "1px solid #FFF",
+                                        overflow: "hidden",
                                     }}
-                                >
-                                    <Image src={myGameInfo.photoUrl}></Image>
-                                </Box>
+                                ></Image>
                                 <Text
                                     sx={{
                                         fontSize: "16px",
