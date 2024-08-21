@@ -25,17 +25,11 @@ const PlayGame = ({
     const [showAnimateConfirm, setShowAnimateConfirm] = useState(0);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const inviteLink = useMemo(() => {
-        return "";
-    }, []);
-
     const handleBoardClick = () => {
         setShowAnimateConfirm((number) => {
             return number + 1;
         });
     };
-
-    const handleShareTw = () => {};
 
     return (
         <Box

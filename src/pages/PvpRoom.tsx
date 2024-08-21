@@ -20,6 +20,7 @@ import PvpMatch from "@/components/PrivateRoom/PvpMatch";
 import Accept from "@/components/PrivateRoom/Accept";
 import LoadingPage from "@/components/LoadingPage";
 import Invited from "@/components/PrivateRoom/Invited";
+import { avatarImg } from "@/utils/avatars";
 
 export enum PLayerStatus {
     Player1,
@@ -35,6 +36,7 @@ export interface PvpGameInfo {
     winMark: UserMarkType;
     playerStatus: PLayerStatus;
     gameState: Game2Status;
+    photoUrl?: string;
 }
 const PvpGameContext = createContext<{
     myGameInfo: PvpGameInfo;
@@ -154,6 +156,9 @@ const PvpRoom = () => {
             nickname: gameInfo.nickname1,
             playerStatus: PLayerStatus.Player1,
             gameState: gameInfo.gameStatus1,
+            photoUrl: gameInfo.photoUrl1
+                ? gameInfo.photoUrl1
+                : avatarImg(gameInfo.player1),
         };
 
         const player2GameInfo = {
@@ -165,6 +170,11 @@ const PvpRoom = () => {
             nickname: gameInfo.nickname2,
             playerStatus: PLayerStatus.Player2,
             gameState: gameInfo.gameStatus2,
+            photoUrl: gameInfo.photoUrl2
+                ? gameInfo.photoUrl2
+                : gameInfo.player2
+                ? avatarImg(gameInfo.player2)
+                : "",
         };
         setGameTimeout(boardGrids[resCurrentGrid].timeout);
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;

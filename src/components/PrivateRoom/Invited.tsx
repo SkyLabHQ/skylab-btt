@@ -109,13 +109,7 @@ const Invited = ({ myGameInfo }: { myGameInfo: PvpGameInfo }) => {
                                         border: "1px solid #FFF",
                                     }}
                                 >
-                                    <Image
-                                        src={
-                                            avatars[
-                                                myGameInfo.tgId % avatars.length
-                                            ]
-                                        }
-                                    ></Image>
+                                    <Image src={myGameInfo.photoUrl}></Image>
                                 </Box>
                                 <Text
                                     sx={{

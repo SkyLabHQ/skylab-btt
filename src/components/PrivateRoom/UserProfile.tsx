@@ -77,6 +77,7 @@ export const MOpUserProfile = ({
         </Flex>
     );
 };
+
 export const MMyUserProfile = ({
     userGameInfo,
 }: {
@@ -376,10 +377,12 @@ export const MUserProfilePvp = ({
     nickname,
     status,
     mark,
+    photo,
 }: {
     nickname?: string;
     mark?: number;
     status?: "my" | "op";
+    photo?: string;
 }) => {
     return (
         <Flex
