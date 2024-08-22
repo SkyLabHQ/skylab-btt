@@ -55,8 +55,6 @@ const My = () => {
         });
     }, [planeList]);
 
-    console.log(myPlaneList, "myPlaneList");
-
     const getHighPrice = async () => {
         const p = [];
         for (let i = 1; i <= 16; i++) {

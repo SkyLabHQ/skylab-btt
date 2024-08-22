@@ -8,7 +8,6 @@ import LevelDownIcon from "@/assets/level-down.svg";
 import dayjs from "dayjs";
 import PlayBackIcon from "@/assets/playback-icon.svg";
 import { shortenAddressWithout0x } from "@/utils";
-import BttHelmet from "@/components/Helmet/BttHelmet";
 import { BackWithText } from "@/components/Back";
 import EmptyIcon from "@/assets/empty.svg";
 
@@ -203,7 +202,6 @@ const BttHistory = () => {
                 background: "#303030",
             }}
         >
-            <BttHelmet></BttHelmet>
             <Box
                 sx={{
                     position: "absolute",

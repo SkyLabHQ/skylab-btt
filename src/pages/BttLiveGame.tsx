@@ -1,4 +1,3 @@
-import BttHelmet from "@/components/Helmet/BttHelmet";
 import Nest from "@/components/Nest";
 import BttLiveGamePage from "@/components/TacToe/BttLiveGamePage";
 import { Box } from "@chakra-ui/react";
@@ -11,7 +10,6 @@ const BttLiveGame = () => {
                 height: "100%",
             }}
         >
-            <BttHelmet></BttHelmet>
             <BttLiveGamePage></BttLiveGamePage>
             <Nest />
         </Box>

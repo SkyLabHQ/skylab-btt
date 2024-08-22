@@ -2,7 +2,6 @@ import { Box } from "@chakra-ui/react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
-import BttHelmet from "@/components/Helmet/BttHelmet";
 import PlayGame from "@/components/PrivateRoom/PlayGame";
 import {
     BoardItem,
@@ -332,7 +331,6 @@ const PvpRoom = () => {
                 height: "100%",
             }}
         >
-            <BttHelmet></BttHelmet>
             {init ? (
                 <Box
                     sx={{

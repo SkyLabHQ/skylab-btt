@@ -1,7 +1,6 @@
 import { Box, Text, Flex, Image } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BttHelmet from "@/components/Helmet/BttHelmet";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -105,7 +104,6 @@ const TacToeMode = () => {
                 height: "100%",
             }}
         >
-            <BttHelmet></BttHelmet>
             <Box
                 sx={{
                     display: "flex",

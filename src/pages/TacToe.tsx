@@ -6,7 +6,6 @@ import qs from "query-string";
 import ResultPlayBack from "@/components/TacToe/ResultPlayBack";
 import TacToePage from "@/components/TacToe";
 import SettlementPage from "@/components/TacToe/SettlementPage";
-import BttHelmet from "@/components/Helmet/BttHelmet";
 import {
     BoardItem,
     Game2Status,
@@ -329,7 +328,6 @@ const TacToe = () => {
                 height: "100%",
             }}
         >
-            <BttHelmet></BttHelmet>
             {init ? (
                 <Box
                     sx={{

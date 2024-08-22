@@ -6,7 +6,6 @@ import qs from "query-string";
 import { getBotGameSigner } from "@/hooks/useSigner";
 import ResultPlayBack from "@/components/BotGame/ResultPlayBack";
 import TacToePage from "@/components/BotGame";
-import BttHelmet from "@/components/Helmet/BttHelmet";
 import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import {
     BoardItem,
@@ -341,7 +340,6 @@ const BotGame = () => {
                 height: "100%",
             }}
         >
-            <BttHelmet></BttHelmet>
             {!initRef.current ? (
                 <LoadingPage></LoadingPage>
             ) : (

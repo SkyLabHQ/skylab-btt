@@ -15,6 +15,7 @@ import { SubmitRequestProvider } from "./contexts/SubmitRequest";
 import logoIcon from "./assets/tournament.jpg";
 import { BidIconProvider } from "./contexts/BidIcon";
 import useSkyMediaQuery from "./hooks/useSkyMediaQuery";
+import BttHelmet from "./components/Helmet/BttHelmet";
 
 const chains =
     process.env.REACT_APP_ENV === "development" ? [baseSepolia] : [baseSepolia];
@@ -56,6 +57,7 @@ const RootContent = () => {
                             <Fragment>
                                 <HelmetProvider>
                                     <AppRoutes />
+                                    <BttHelmet></BttHelmet>
                                 </HelmetProvider>
                             </Fragment>
                         </BidIconProvider>
