@@ -1,11 +1,3 @@
-import axios from "axios";
-const handleIpfsUrl = (url: string) => {
-    if (url.startsWith("ipfs://")) {
-        return `https://ipfs.io/ipfs/${url.slice(7)}`;
-    }
-    return url;
-};
-
 export const getMetadataImg = (basedata: string) => {
     const jsonString = window.atob(basedata.substr(basedata.indexOf(",") + 1));
     const jsonObject = JSON.parse(jsonString);
@@ -15,4 +7,4 @@ export const getMetadataImg = (basedata: string) => {
     }
     return url;
 };
-export default handleIpfsUrl;
+export default null;

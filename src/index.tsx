@@ -12,7 +12,6 @@ import theme from "./theme";
 import { HelmetProvider } from "react-helmet-async";
 import { base, baseSepolia } from "viem/chains";
 import { SubmitRequestProvider } from "./contexts/SubmitRequest";
-import { PrivyProvider } from "@privy-io/react-auth";
 import logoIcon from "./assets/tournament.jpg";
 import { BidIconProvider } from "./contexts/BidIcon";
 import useSkyMediaQuery from "./hooks/useSkyMediaQuery";
