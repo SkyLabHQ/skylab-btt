@@ -7,27 +7,9 @@ import useSkyToast from "@/hooks/useSkyToast";
 import ToolBar from "@/components/BttComponents/Toolbar";
 import { quitMatch } from "@/api/pvpGame";
 import DotLoading from "../Loading/DotLoading";
-import Avatar1 from "./assets/avatar1.png";
-import Avatar2 from "./assets/avatar2.png";
-import Avatar3 from "./assets/avatar3.png";
-import Avatar4 from "./assets/avatar4.png";
-import Avatar5 from "./assets/avatar5.png";
-import Avatar6 from "./assets/avatar6.png";
-import Avatar7 from "./assets/avatar7.png";
-import Avatar8 from "./assets/avatar8.png";
 import { PvpGameInfo } from "@/pages/PvpRoom";
 import SoloIcon from "@/assets/solo-icon.svg";
-
-const avatars = [
-    Avatar1,
-    Avatar2,
-    Avatar3,
-    Avatar4,
-    Avatar5,
-    Avatar6,
-    Avatar7,
-    Avatar8,
-];
+import { avatarImg } from "@/utils/avatars";
 
 const Invited = ({ myGameInfo }: { myGameInfo: PvpGameInfo }) => {
     const { search } = useLocation();
@@ -139,11 +121,7 @@ const Invited = ({ myGameInfo }: { myGameInfo: PvpGameInfo }) => {
                                     }}
                                 >
                                     <Image
-                                        src={
-                                            avatars[
-                                                Number(gameId) % avatars.length
-                                            ]
-                                        }
+                                        src={avatarImg(String(gameId))}
                                     ></Image>
                                 </Box>
                                 <Text
