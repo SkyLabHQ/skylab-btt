@@ -213,8 +213,13 @@ const MyPlane = ({
                             : "calc(100% - 100px)",
                         paddingBottom: "20px",
                         overflow: "auto",
-                        "&::-webkit-scrollbar-thumb": {
+
+                        "&:hover::-webkit-scrollbar-thumb": {
                             background: "#8C8C8C",
+                        },
+
+                        "&::-webkit-scrollbar-thumb": {
+                            background: "transparent",
                             margin: "10px",
                             borderRadius: "10px",
                         },
