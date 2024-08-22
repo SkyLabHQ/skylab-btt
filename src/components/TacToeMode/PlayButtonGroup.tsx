@@ -121,6 +121,11 @@ export const PlayButtonGroup = ({
                         cursor: tournamentDisabled
                             ? "not-allowed !important"
                             : "cursor",
+
+                        "&:hover": {
+                            transform: !tournamentDisabled && "scale(1.1)",
+                            transition: "all 0.1s",
+                        },
                     }}
                 >
                     <Image

@@ -263,6 +263,9 @@ const MyPlane = ({
                                 <SimpleGrid
                                     columns={isPc ? 4 : 3}
                                     spacingY={"20px"}
+                                    sx={{
+                                        overflowX: "hidden",
+                                    }}
                                 >
                                     {planeList.map(
                                         (detail: any, index: number) => {
@@ -360,6 +363,12 @@ const MyPlane = ({
                                                                 top: "50%",
                                                                 transform:
                                                                     "translate(-50%,-50%)",
+                                                                "&:hover": {
+                                                                    transform:
+                                                                        "translate(-50%,-50%) scale(1.2)",
+                                                                    transition:
+                                                                        "all 0.1s",
+                                                                },
                                                             }}
                                                         ></Image>
                                                     </Box>

@@ -166,6 +166,10 @@ const TacToeMode = () => {
                                         src={LeaderboardIcon}
                                         sx={{
                                             width: isPc ? "100px" : "64px",
+                                            "&:hover": {
+                                                transform: "scale(1.1)",
+                                                transition: "all 0.1s",
+                                            },
                                         }}
                                     ></Image>
                                     <Text
@@ -208,6 +212,10 @@ const TacToeMode = () => {
                                         src={MarketIcon}
                                         sx={{
                                             width: isPc ? "100px" : "64px",
+                                            "&:hover": {
+                                                transform: "scale(1.1)",
+                                                transition: "all 0.1s",
+                                            },
                                         }}
                                     ></Image>
                                     <Text
