@@ -112,9 +112,6 @@ if (search.get("outer2")) {
 const PvpContent = () => {
     const navigate = useNavigate();
     const initData = useInitData();
-
-    console.log(initData?.user, "initData");
-
     const { pathname } = useLocation();
 
     useEffect(() => {

@@ -12,7 +12,6 @@ import ArrowIcon from "./assets/arrow-up.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import { TG_URL } from "@/skyConstants/tgConfig";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { quitMatch, storeAccessToken } from "@/api/tournament";
 import qs from "query-string";
 import { useGameContext } from "@/pages/TacToe";

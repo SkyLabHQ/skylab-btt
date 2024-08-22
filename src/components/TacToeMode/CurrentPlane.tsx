@@ -1,12 +1,10 @@
 import { Box, Text, Image, Flex } from "@chakra-ui/react";
 import PlaneBorder from "./assets/plane-border.png";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import NoPlane from "./assets/no-plane.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 
 const CurrentPlane = ({ selectPlane }: { selectPlane: any }) => {
-    const { address } = usePrivyAccounts();
-    const { handleLogin } = useUserInfo();
+    const { handleLogin, address } = useUserInfo();
 
     return (
         <Box onClick={() => {}}>

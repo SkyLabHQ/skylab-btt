@@ -14,7 +14,6 @@ import {
     initBoard,
 } from "@/skyConstants/bttGameTypes";
 import GameOver from "@/components/TacToe/GameOver";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import LoadingPage from "@/components/LoadingPage";
 import Nest from "@/components/Nest";
 import { bid, getGameInfo, surrender } from "@/api/tournament";
@@ -23,6 +22,7 @@ import useSkyToast from "@/hooks/useSkyToast";
 import Match from "@/components/TacToe/Match";
 import { getLevel } from "@/utils/level";
 import { avatarImg } from "@/utils/avatars";
+import { useUserInfo } from "@/contexts/UserInfo";
 
 export interface TournamentGameInfo {
     address: string;
@@ -54,7 +54,7 @@ export const useGameContext = () => useContext(GameContext);
 const TacToe = () => {
     const navigate = useNavigate();
     const toast = useSkyToast();
-    const { address } = usePrivyAccounts();
+    const { address } = useUserInfo();
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
     const [init, setInit] = useState<boolean>(false);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board

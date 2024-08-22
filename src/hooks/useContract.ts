@@ -11,7 +11,7 @@ import { ChainId, TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
 import { useLocation } from "react-router-dom";
 import { useChainId } from "wagmi";
 import { getContract } from "@/utils/contractHelpers";
-import usePrivyAccounts from "./usePrivyAccount";
+import { useUserInfo } from "@/contexts/UserInfo";
 
 type ChainIdToAddressMap = { [chainId: number]: string };
 
@@ -46,7 +46,7 @@ export const marketPlaceAddress: ChainIdToAddressMap = {
 
 function useContract(address: any, abi: any) {
     const chainId = useChainId();
-    const { signer } = usePrivyAccounts();
+    const { signer } = useUserInfo();
 
     return useMemo(() => {
         if (!address || !abi) return null;

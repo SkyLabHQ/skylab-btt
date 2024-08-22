@@ -1,7 +1,6 @@
 import { Box, useDisclosure } from "@chakra-ui/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import UserInfoDrawer from "@/components/UserInfoDrawer";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import axios from "axios";
 import { useChainId } from "wagmi";
 import {
@@ -13,10 +12,12 @@ import { aviationImg } from "@/utils/aviationImg";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useLocation } from "react-router-dom";
 import Click1Wav from "@/assets/click1.wav";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { getTokensGame } from "@/api/tournament";
 import { bindTelegram, getUserTgInfo } from "@/api/user";
 import { avatarImg } from "@/utils/avatars";
+import { createWalletClient, custom } from "viem";
+import { baseSepolia } from "viem/chains";
 
 const audio = new Audio(Click1Wav);
 
@@ -38,6 +39,8 @@ const UserInfoContext = createContext<{
     isBlock: boolean;
     planeList: any[];
     planeInit: boolean;
+    signer: any;
+    address: string;
     handleBlock: (block: boolean) => void;
     handleGetUserPaper: () => void;
     handleLogin: () => void;
@@ -53,18 +56,22 @@ export const UserInfoProvider = ({
 }) => {
     const { ready, user, login, linkWallet, getAccessToken, authenticated } =
         usePrivy();
+    const { wallets } = useWallets();
+    const [walletAddress, setWalletAddress] = useState("");
+    const [address, setAddress] = useState("");
+    const [signer, setSigner] = useState(null);
     const { pathname } = useLocation();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const chainId = useChainId();
     const multiProvider = useMultiProvider(chainId);
     const multiMercuryJarTournamentContract =
         useMultiMercuryJarTournamentContract();
-    const { address } = usePrivyAccounts();
     const [isBlock, setIsBlock] = useState(false);
     const [blockOpen, setIsBlockOpen] = useState(false);
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [init, setInit] = useState(false);
     const [tgInfo, setTgInfo] = useState({
         tgId: "",
         firstName: "",
@@ -234,6 +241,8 @@ export const UserInfoProvider = ({
             setTgInfo(info);
         } catch (e) {
             console.log(e);
+        } finally {
+            setAddress(walletAddress);
         }
     };
 
@@ -250,6 +259,8 @@ export const UserInfoProvider = ({
             setTgInfo(info);
         } catch (e) {
             console.log(e);
+        } finally {
+            setAddress(walletAddress);
         }
     };
 
@@ -270,7 +281,7 @@ export const UserInfoProvider = ({
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
 
     useEffect(() => {
-        if (!address) {
+        if (!walletAddress) {
             return;
         }
         if (!user) {
@@ -282,7 +293,7 @@ export const UserInfoProvider = ({
         } else {
             handleGetUserTgInfo();
         }
-    }, [address]);
+    }, [walletAddress]);
 
     // 定时获取token 防止token过期
     useEffect(() => {
@@ -320,6 +331,41 @@ export const UserInfoProvider = ({
         };
     }, []);
 
+    useEffect(() => {
+        const handleGetSigner = async () => {
+            if (wallets.length === 0) {
+                setWalletAddress("");
+                setSigner(null);
+                return;
+            }
+
+            const wallet = wallets.find((item) => {
+                return item.address === user.wallet.address;
+            });
+
+            if (!wallet) {
+                return;
+            }
+
+            setWalletAddress(user.wallet.address);
+            const provider = await wallet.getEthereumProvider();
+            const walletClient = createWalletClient({
+                chain: baseSepolia,
+                transport: custom(provider),
+                account: wallet.address as `0x${string}`,
+            });
+
+            setSigner(walletClient);
+        };
+
+        if (wallets.length === 0 || !ready || !user) {
+            setWalletAddress("");
+            setSigner(null);
+            return;
+        }
+        handleGetSigner();
+    }, [wallets, ready, user]);
+
     return (
         <UserInfoContext.Provider
             value={{
@@ -336,6 +382,8 @@ export const UserInfoProvider = ({
                 handleGetUserPlane,
                 handleLogin,
                 loading,
+                signer,
+                address,
             }}
         >
             <Box

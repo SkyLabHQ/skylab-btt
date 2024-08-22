@@ -11,7 +11,6 @@ import {
     useMarketPlaceContract,
     useMercuryJarTournamentContract,
 } from "@/hooks/useContract";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import ConfirmIcon from "./assets/confirm.svg";
 import CancelIcon from "./assets/cancel.svg";
 import { formatAmount, parseAmount } from "@/utils/formatBalance";
@@ -35,9 +34,8 @@ const Market = () => {
         new Array(16).fill("0") as string[],
     );
 
-    const { handleGetUserPlane } = useUserInfo();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const { address } = usePrivyAccounts();
+    const { address, handleGetUserPlane } = useUserInfo();
     const chainId = useChainId();
     const multiProvider = useMultiProvider(chainId);
     const multiMarketPlaceContract = useMultiMarketPlaceContract();

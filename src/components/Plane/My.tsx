@@ -12,7 +12,6 @@ import {
     useMarketPlaceContract,
     useMercuryJarTournamentContract,
 } from "@/hooks/useContract";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { formatAmount } from "@/utils/formatBalance";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
@@ -23,7 +22,7 @@ const My = () => {
     const [isApproved, setIsApproved] = useState(false);
     const publicClient = usePublicClient();
     const toast = useSkyToast();
-    const { address } = usePrivyAccounts();
+    const { address } = useUserInfo();
     const chainId = useChainId();
     const multiProvider = useMultiProvider(chainId);
     const multiMarketPlaceContract = useMultiMarketPlaceContract();

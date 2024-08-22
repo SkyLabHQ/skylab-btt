@@ -1,5 +1,4 @@
 import { useUserInfo } from "@/contexts/UserInfo";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { Box, Flex, Image } from "@chakra-ui/react";
 import Click1Wav from "@/assets/click1.wav";
 import { shortenAddress } from "@/utils";
@@ -11,10 +10,7 @@ const audio = new Audio(Click1Wav);
 
 const UserLogin = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const { onUserInfoOpen } = useUserInfo();
-    const { address } = usePrivyAccounts();
-    const { handleLogin } = useUserInfo();
-    const { tgInfo } = useUserInfo();
+    const { handleLogin, address, tgInfo, onUserInfoOpen } = useUserInfo();
     return (
         <Box
             sx={{

@@ -18,16 +18,16 @@ import {
     useSkylabBidTacToeContract,
 } from "@/hooks/useContract";
 import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { usePublicClient } from "wagmi";
 import { handleError } from "@/utils/error";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import { useUserInfo } from "@/contexts/UserInfo";
 
 const gameAudio = new Audio(GameMp3);
 
 const TacToeMode = () => {
     const publicClient = usePublicClient();
-    const { address } = usePrivyAccounts();
+    const { address } = useUserInfo();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)", {});
 
     const { openLoading, closeLoading } = useSubmitRequest();

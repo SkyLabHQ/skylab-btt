@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
 import { useChainId } from "wagmi";
-import usePrivyAccounts from "./usePrivyAccount";
+import { useUserInfo } from "@/contexts/UserInfo";
 
 export const useGridCommited = (tokenId: number | string, grid: number) => {
     const chainId = useChainId();
@@ -144,7 +144,7 @@ export const useAddBttTransaction = (tokenId: number) => {
 
 export const useAllBttTransaction = () => {
     const chainId = useChainId();
-    const { address } = usePrivyAccounts();
+    const { address } = useUserInfo();
 
     return useMemo(() => {
         if (!chainId || !address) {

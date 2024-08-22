@@ -1,6 +1,5 @@
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import TipIcon from "./assets/tip.svg";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import BiddingGif from "@/assets/bidding.gif";
 import PlaneBgSelect from "./assets/plane-bg-select.png";
 import PlaneBg from "@/assets/plane-bg.png";
@@ -143,8 +142,8 @@ const MyPlane = ({
 }) => {
     const toast = useSkyToast();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const { address } = usePrivyAccounts();
     const {
+        address,
         planeList,
         handleGetUserPaper,
         loading: planetLoading,
@@ -471,7 +470,7 @@ const SelectPlane = ({
     selectPlane: any;
     onSelectPlane: (plane: any) => void;
 }) => {
-    const { address } = usePrivyAccounts();
+    const { address } = useUserInfo();
     return (
         <Box
             sx={{

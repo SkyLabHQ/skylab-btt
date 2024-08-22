@@ -6,7 +6,6 @@ import WalletIcon from "./assets/wallet-icon.png";
 import { useNavigate } from "react-router-dom";
 import { shortenAddress } from "@/utils";
 import { useUserInfo } from "@/contexts/UserInfo";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import Click1Wav from "@/assets/click1.wav";
 import PilotBorder from "@/assets/pilot-border.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
@@ -16,9 +15,7 @@ const audio = new Audio(Click1Wav);
 export const Toolbar = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
-    const { onUserInfoOpen, tgInfo } = useUserInfo();
-    const { address } = usePrivyAccounts();
-    const { handleLogin } = useUserInfo();
+    const { onUserInfoOpen, tgInfo, handleLogin, address } = useUserInfo();
 
     return (
         <Box

@@ -15,7 +15,6 @@ import QuitIcon from "./assets/quit.png";
 import RightArrowIcon from "./assets/right-arrow.svg";
 import DownArrowIcon from "./assets/down-arrow.png";
 import { usePrivy } from "@privy-io/react-auth";
-import usePrivyAccounts from "@/hooks/usePrivyAccount";
 import { shortenAddress } from "@/utils";
 import Blackrrow from "./assets/black-arrow.svg";
 import NoPlane from "./assets/no-plane.png";
@@ -35,10 +34,9 @@ import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const UserInfo = () => {
     const { user, exportWallet } = usePrivy();
-    const { address } = usePrivyAccounts();
     const toast = useSkyToast();
+    const { tgInfo, address } = useUserInfo();
     const { onCopy } = useClipboard(address);
-    const { tgInfo } = useUserInfo();
 
     return (
         <Flex flexDir={"column"} align={"center"}>
@@ -360,10 +358,7 @@ const UserInfoDrawer = ({
 }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
-    const { address } = usePrivyAccounts();
     const { planeInit, planeList, tgInfo } = useUserInfo();
-
-    console.log(tgInfo, "tgInfo");
 
     return (
         <Drawer
