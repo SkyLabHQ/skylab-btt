@@ -56,8 +56,11 @@ export const UserInfoProvider = ({
 }) => {
     const { ready, user, login, linkWallet, getAccessToken, authenticated } =
         usePrivy();
+
     const { wallets } = useWallets();
     const [walletAddress, setWalletAddress] = useState("");
+    console.log(user, "user");
+    console.log(walletAddress, "walletAddress");
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
     const { pathname } = useLocation();
@@ -71,7 +74,6 @@ export const UserInfoProvider = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [init, setInit] = useState(false);
     const [tgInfo, setTgInfo] = useState({
         tgId: "",
         firstName: "",
@@ -300,8 +302,9 @@ export const UserInfoProvider = ({
         const timer = setInterval(() => {
             getAccessToken().then((res) => {
                 const localAc = localStorage.getItem("privy:token");
+                const resAc = `"${res}"`;
                 if (localAc !== res) {
-                    localStorage.setItem("token", res);
+                    localStorage.setItem("privy:token", resAc);
                 }
             });
         }, 1000 * 60);
@@ -316,8 +319,9 @@ export const UserInfoProvider = ({
             if (!document.hidden) {
                 getAccessToken().then((res) => {
                     const localAc = localStorage.getItem("privy:token");
+                    const resAc = `"${res}"`;
                     if (localAc !== res) {
-                        localStorage.setItem("token", res);
+                        localStorage.setItem("privy:token", resAc);
                     }
                 });
             }
@@ -335,6 +339,7 @@ export const UserInfoProvider = ({
         const handleGetSigner = async () => {
             if (wallets.length === 0) {
                 setWalletAddress("");
+                setAddress("");
                 setSigner(null);
                 return;
             }
@@ -358,13 +363,14 @@ export const UserInfoProvider = ({
             setSigner(walletClient);
         };
 
-        if (wallets.length === 0 || !ready || !user) {
+        if (wallets.length === 0 || !ready || !user || !authenticated) {
             setWalletAddress("");
+            setAddress("");
             setSigner(null);
             return;
         }
         handleGetSigner();
-    }, [wallets, ready, user]);
+    }, [wallets, ready, user, authenticated]);
 
     return (
         <UserInfoContext.Provider

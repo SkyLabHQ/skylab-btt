@@ -94,7 +94,7 @@ const TacToeMode = () => {
             navigate("/btt/game?gameId=" + res.data.game.id);
         } catch (e: any) {
             closeLoading();
-            toast(e.message);
+            toast(e.data.message);
         }
     };
 

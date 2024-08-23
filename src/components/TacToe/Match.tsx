@@ -9,22 +9,12 @@ import ToolBar from "../BttComponents/Toolbar";
 import useSkyToast from "@/hooks/useSkyToast";
 import DotLoading from "../Loading/DotLoading";
 import ArrowIcon from "./assets/arrow-up.svg";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import { quitMatch, storeAccessToken } from "@/api/tournament";
 import qs from "query-string";
 import { useGameContext } from "@/pages/TacToe";
 import { aviationImg } from "@/utils/aviationImg";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
-
-const randomText = [
-    ["*When the game starts, ", "you have 12 hours to make each move"],
-    [
-        "* Link wallet with Bid Tac Toe telegram bot to ",
-        "receive game status notification",
-    ],
-];
 
 const PlaneImg = ({ detail, flip }: { detail: any; flip?: boolean }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
@@ -221,48 +211,6 @@ export const MatchPage = () => {
                     fontSize={isPc ? "28px" : "20px"}
                 ></DotLoading>
             </Box>
-            <Swiper
-                style={{
-                    width: "100%",
-                    position: "relative",
-                    marginTop: "16px",
-                }}
-                modules={[Autoplay]}
-                autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                }}
-            >
-                {randomText.map((item, index) => {
-                    return (
-                        <SwiperSlide
-                            key={index}
-                            style={{
-                                background: "transparent",
-                                textAlign: "center",
-                                color: "#FDDC2D",
-                            }}
-                        >
-                            <Box>
-                                {item.map((item1, index1) => {
-                                    return (
-                                        <Text
-                                            sx={{
-                                                fontSize: isPc
-                                                    ? "16px"
-                                                    : "12px",
-                                            }}
-                                            key={index1}
-                                        >
-                                            {item1}
-                                        </Text>
-                                    );
-                                })}
-                            </Box>
-                        </SwiperSlide>
-                    );
-                })}
-            </Swiper>
             <Box
                 sx={{
                     display: "flex",

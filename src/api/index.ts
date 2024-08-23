@@ -36,7 +36,7 @@ api.interceptors.response.use(
     (error) => {
         if (error.response.status === 401) {
         }
-        return Promise.reject(error);
+        return Promise.reject(error.response);
     },
 );
 

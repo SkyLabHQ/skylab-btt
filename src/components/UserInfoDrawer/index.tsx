@@ -139,38 +139,40 @@ const UserInfo = () => {
                         }}
                     ></Image>
                 </Flex>
-                <Flex
-                    sx={{
-                        borderRadius: "12px",
-                        background: "#F2D861",
-                        height: "40px",
-                        width: "180px",
-                        paddingLeft: "8px",
-                        marginTop: "15px",
-                        cursor: "pointer",
-                    }}
-                    onClick={async () => {
-                        exportWallet();
-                    }}
-                    align={"center"}
-                    justify={"center"}
-                >
-                    <Image
-                        src={ExportIcon}
+                {user?.wallet?.walletClientType === "privy" && (
+                    <Flex
                         sx={{
-                            marginRight: "4px",
+                            borderRadius: "12px",
+                            background: "#F2D861",
+                            height: "40px",
+                            width: "180px",
+                            paddingLeft: "8px",
+                            marginTop: "15px",
+                            cursor: "pointer",
                         }}
-                    ></Image>
-                    <Text
-                        sx={{
-                            fontSize: "12px",
-                            color: "#1b1b1b",
-                            marginRight: "5px",
+                        onClick={async () => {
+                            exportWallet();
                         }}
+                        align={"center"}
+                        justify={"center"}
                     >
-                        Export Embedded Wallet{" "}
-                    </Text>
-                </Flex>
+                        <Image
+                            src={ExportIcon}
+                            sx={{
+                                marginRight: "4px",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                fontSize: "12px",
+                                color: "#1b1b1b",
+                                marginRight: "5px",
+                            }}
+                        >
+                            Export Embedded Wallet{" "}
+                        </Text>
+                    </Flex>
+                )}
             </Flex>
         </Flex>
     );
