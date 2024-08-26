@@ -443,6 +443,7 @@ const UserInfoDrawer = ({
                                 sx={{
                                     width: "56px",
                                     height: "56px",
+                                    borderRadius: "50%",
                                 }}
                             ></Image>
                         </Flex>

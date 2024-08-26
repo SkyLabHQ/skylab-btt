@@ -65,8 +65,9 @@ export const Toolbar = () => {
                                 <Image
                                     src={tgInfo.photoUrl}
                                     sx={{
-                                        width: "40px",
-                                        height: "40px",
+                                        width: "42px",
+                                        height: "42px",
+                                        borderRadius: "50%",
                                     }}
                                 ></Image>
                             </Flex>
@@ -107,6 +108,7 @@ export const Toolbar = () => {
                                 sx={{
                                     width: "32px",
                                     height: "32px",
+                                    borderRadius: "50%",
                                 }}
                             ></Image>
                         </Flex>
