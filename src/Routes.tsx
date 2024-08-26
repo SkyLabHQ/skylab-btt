@@ -16,12 +16,14 @@ import Market from "./components/Plane/Market";
 import My from "./components/Plane/My";
 import Point from "./pages/Point";
 import PvpLayout from "./components/PvpLayout";
+import Introduce from "./pages/Introduce";
 
 const AppRoutes = (): ReactElement => {
     return (
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<TacToeMode />}></Route>
+                <Route index path="/introduce" element={<Introduce />}></Route>
                 <Route path="/point" element={<Point />}></Route>
                 <Route path="/btt/game" element={<TacToe />}></Route>
                 <Route path="/btt/history" element={<BttHistory />}></Route>

@@ -1,106 +1,26 @@
-import { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import LineBg from "@/assets/line.png";
 import ButtonBg from "@/assets/bt-bg.png";
 import BttIcon from "@/assets/btt-icon.png";
 import BotIcon from "@/assets/bot-icon.svg";
 import Nest from "@/components/Nest";
-import { botAddress, skylabTestFlightAddress } from "@/hooks/useContract";
-import { TESTFLIGHT_CHAINID } from "@/utils/web3Utils";
-import { handleError } from "@/utils/error";
-import useSkyToast from "@/hooks/useSkyToast";
-import {
-    useBttFactoryRetryPaymaster,
-    useTestflightRetryPaymaster,
-} from "@/hooks/useRetryContract";
-import { ethers } from "ethers";
-import { useSCWallet } from "@/hooks/useSCWallet";
-import {
-    bttFactoryIface,
-    erc721iface,
-    topic0Transfer,
-} from "@/skyConstants/iface";
-import { useNavigate } from "react-router-dom";
-import { useSubmitRequest } from "@/contexts/SubmitRequest";
-import { saveBotGamePrivateKey } from "@/hooks/useSigner";
-import { bindBurner } from "@/api";
-import { useInitData } from "@tma.js/sdk-react";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const PlayButtonGroup = () => {
-    const initData = useInitData();
-    console.log(initData, "initData");
-    const { closeLoading, openLoading } = useSubmitRequest();
-    const navigate = useNavigate();
-    const toast = useSkyToast();
-    const [privateKey] = useState<string>(
-        ethers.Wallet.createRandom().privateKey,
-    );
-    const { sCWAddress: botAccount } = useSCWallet(privateKey);
-    const testflightRetryPaymaster = useTestflightRetryPaymaster({
-        privateKey,
-    });
-
-    const bttFactoryRetryPaymaster = useBttFactoryRetryPaymaster({
-        privateKey,
-    });
-
-    const handleMintPlayTest = async () => {
-        if (!botAccount) {
-            return;
-        }
-        try {
-            openLoading();
-            const receipt = await testflightRetryPaymaster("playTestMint", []);
-            const transferLog = receipt.logs.find((item: any) => {
-                return item.topics[0] === topic0Transfer;
-            });
-            const transferData = erc721iface.parseLog({
-                data: transferLog.data,
-                topics: transferLog.topics,
-            });
-            const tokenId = transferData.args.tokenId.toNumber();
-            await bttFactoryRetryPaymaster("approveForGame", [
-                botAccount,
-                tokenId,
-                skylabTestFlightAddress[TESTFLIGHT_CHAINID],
-            ]);
-
-            await bindBurner({
-                user: initData.user,
-                burner: botAccount,
-            });
-            const createBotGameReceipt = await bttFactoryRetryPaymaster(
-                "createBotGame",
-                [botAddress[TESTFLIGHT_CHAINID]],
-            );
-
-            const startBotGameTopic0 =
-                bttFactoryIface.getEventTopic("StartBotGame");
-
-            const startBotGameLog = createBotGameReceipt.logs.find(
-                (item: any) => {
-                    return item.topics[0] === startBotGameTopic0;
-                },
-            );
-
-            const startBotGameData = bttFactoryIface.parseLog({
-                data: startBotGameLog.data,
-                topics: startBotGameLog.topics,
-            });
-
-            const gameAddress = startBotGameData.args.gameAddress;
-            saveBotGamePrivateKey(gameAddress, privateKey);
-            const url = `/free/botGame?gameAddress=${startBotGameData.args.gameAddress}`;
-            closeLoading();
-            navigate(url);
-        } catch (error) {
-            console.log(error);
-            toast(handleError(error, true));
-            closeLoading();
-        }
-    };
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
+    const handleStartBot = async () => {
+        // try {
+        //     openLoading();
+        //     const res = await startGame();
+        //     navigate(`/free/pvp/game?gameId=${res.data.gameId}`);
+        //     closeLoading();
+        // } catch (e) {
+        //     toast(handleError(e));
+        //     closeLoading();
+        // }
+    };
+
     return (
         <Box
             sx={{
@@ -150,7 +70,7 @@ const PlayButtonGroup = () => {
                 </Flex>
                 <Flex
                     align={"center"}
-                    onClick={handleMintPlayTest}
+                    onClick={handleStartBot}
                     alignItems={"center"}
                     justify={"center"}
                     sx={{

@@ -9,7 +9,7 @@ import {
 import MBalance from "../BttComponents/MBalance";
 import { MUserProfileResult } from "../PrivateRoom/UserProfile";
 import { useGameContext } from "@/pages/TacToe";
-import ResultUserCard from "../BttComponents/ResultUserCard";
+import { OpResultCard, ResultCard } from "../BttComponents/ResultUserCard";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const GameOver = ({ gameState }: { gameState: Game2Status }) => {
@@ -57,7 +57,7 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
     return isPc ? (
         <Flex
             sx={{
-                padding: "6vw 3.125vw",
+                padding: "115px 60px",
                 position: "relative",
                 width: "100vw",
                 height: "100vh",
@@ -70,25 +70,22 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
         >
             <Box
                 sx={{
-                    width: "15.625vw",
+                    width: "300px",
                 }}
             >
-                {/* <ResultUserCard
-                    win={isMyWin}
-                    userInfo={myInfo}
-                ></ResultUserCard> */}
+                <ResultCard win={isMyWin} userInfo={myGameInfo}></ResultCard>
             </Box>
             <Box
                 sx={{
-                    paddingTop: "1.5625vw",
+                    paddingTop: "30px",
                 }}
             >
                 <Board list={resultList}></Board>
                 <Text
                     sx={{
                         textAlign: "center",
-                        fontSize: "1.25vw",
-                        marginTop: "1.5625vw",
+                        fontSize: "24px",
+                        marginTop: "30px",
                     }}
                 >
                     Tap anywhere to continue
@@ -96,13 +93,13 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
             </Box>
             <Box
                 sx={{
-                    width: "15.625vw",
+                    width: "300px",
                 }}
             >
-                {/* <ResultUserCard
+                <OpResultCard
                     win={!isMyWin}
-                    userInfo={opInfo}
-                ></ResultUserCard> */}
+                    userInfo={opGameInfo}
+                ></OpResultCard>
             </Box>
         </Flex>
     ) : (

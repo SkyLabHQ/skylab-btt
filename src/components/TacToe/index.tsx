@@ -200,6 +200,7 @@ const TacToePage = ({
                 </Box>
             ) : (
                 <MLayout
+                    currentRound={currentRound}
                     inviteLink={inviteLink}
                     handleShareTw={handleShareTw}
                     autoCommitTimeoutTime={autoCommitTimeoutTime}
