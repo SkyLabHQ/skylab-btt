@@ -8,6 +8,7 @@ import { TournamentGameInfo } from "@/pages/TacToe";
 import { aviationImg } from "@/utils/aviationImg";
 import useBidIcon from "@/hooks/useBidIcon";
 import GoldIcon from "@/components/BttComponents/assets/gold-icon.svg";
+import { PvpGameInfo } from "@/pages/PvpRoom";
 
 export const MOpUserProfile = ({
     userGameInfo,
@@ -51,12 +52,70 @@ export const MOpUserProfile = ({
                         src={GoldIcon}
                         sx={{
                             width: "22px",
-                            margin: "0 4px",
                         }}
                     ></Image>
                     <Text
                         sx={{
                             fontSize: "20px",
+                            margin: "0 4px",
+                        }}
+                    >
+                        {userGameInfo.balance}
+                    </Text>
+                    <Image
+                        src={
+                            userGameInfo.mark === UserMarkType.Circle
+                                ? MarkIcon.Circle
+                                : MarkIcon.Cross
+                        }
+                        sx={{
+                            width: "16px",
+                            height: "16px",
+                        }}
+                    ></Image>
+                </Flex>
+            </Flex>
+        </Flex>
+    );
+};
+
+export const MOpPvpUserProfile = ({
+    userGameInfo,
+}: {
+    userGameInfo: PvpGameInfo;
+}) => {
+    const MarkIcon = useBidIcon();
+    return (
+        <Flex align={"center"}>
+            <Image
+                src={userGameInfo.photoUrl}
+                sx={{
+                    width: "52px",
+                    height: "52px",
+                    borderRadius: "50%",
+                    marginRight: "4px",
+                    border: "1px solid #fff",
+                }}
+            ></Image>
+            <Flex flexDir={"column"}>
+                <Text
+                    sx={{
+                        fontSize: "12px",
+                    }}
+                >
+                    @{userGameInfo.username}
+                </Text>
+                <Flex align={"center"}>
+                    <Image
+                        src={GoldIcon}
+                        sx={{
+                            width: "22px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: "20px",
+                            margin: "0 4px",
                         }}
                     >
                         {userGameInfo.balance}
@@ -104,6 +163,64 @@ export const MMyUserProfile = ({
                     {userGameInfo.username
                         ? `@${userGameInfo.username}`
                         : `${shortenAddress(userGameInfo.address)}`}
+                </Text>
+                <Flex align={"center"}>
+                    <Image
+                        src={
+                            userGameInfo.mark === UserMarkType.Circle
+                                ? MarkIcon.Circle
+                                : MarkIcon.Cross
+                        }
+                        sx={{
+                            width: "16px",
+                            height: "16px",
+                        }}
+                    ></Image>
+                    <Image
+                        src={GoldIcon}
+                        sx={{
+                            width: "22px",
+                            margin: "0 4px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: "20px",
+                        }}
+                    >
+                        {userGameInfo.balance}
+                    </Text>
+                </Flex>
+            </Flex>
+            <Image
+                src={userGameInfo.photoUrl}
+                sx={{
+                    width: "52px",
+                    height: "52px",
+                    borderRadius: "50%",
+                    marginLeft: "4px",
+                    border: "1px solid #fff",
+                }}
+            ></Image>
+        </Flex>
+    );
+};
+
+export const MMyPvpUserProfile = ({
+    userGameInfo,
+}: {
+    userGameInfo: PvpGameInfo;
+}) => {
+    const MarkIcon = useBidIcon();
+    return (
+        <Flex align={"flex-end"}>
+            <Flex flexDir={"column"} align={"flex-end"}>
+                <Text
+                    sx={{
+                        fontSize: "12px",
+                    }}
+                >
+                    @{userGameInfo.username}
                 </Text>
                 <Flex align={"center"}>
                     <Image

@@ -123,7 +123,7 @@ export const Toolbar = () => {
                     ></Image>
                 )}
             </Box>
-            <Image
+            {/* <Image
                 src={PlayBackIcon}
                 sx={{
                     width: isPc ? "48px" : "40px",
@@ -134,7 +134,7 @@ export const Toolbar = () => {
                     audio.play();
                     navigate("/btt/history");
                 }}
-            ></Image>
+            ></Image> */}
             <BidTacToeTutorial>
                 <Image
                     sx={{

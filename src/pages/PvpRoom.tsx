@@ -28,7 +28,7 @@ export enum PLayerStatus {
 
 export interface PvpGameInfo {
     tgId: number;
-    nickname: string;
+    username: string;
     balance: number;
     isBid: boolean;
     mark: UserMarkType;
@@ -70,8 +70,6 @@ const PvpRoom = () => {
         gameStatus1: Game2Status.InProgress,
         gameStatus2: Game2Status.InProgress,
         boards: [],
-        nickname1: "",
-        nickname2: "",
     });
     const [loading, setLoading] = useState<boolean>(false);
     const [currentRound, setCurrentRound] = useState<number>(0);
@@ -81,7 +79,7 @@ const PvpRoom = () => {
 
     const [myGameInfo, setMyGameInfo] = useState<PvpGameInfo>({
         tgId: 0,
-        nickname: "",
+        username: "",
         mark: UserMarkType.Empty,
         winMark: UserMarkType.Empty,
         balance: 0,
@@ -91,7 +89,7 @@ const PvpRoom = () => {
     });
     const [opGameInfo, setOpGameInfo] = useState<PvpGameInfo>({
         tgId: 0,
-        nickname: "",
+        username: "",
         mark: UserMarkType.Empty,
         winMark: UserMarkType.Empty,
         balance: 0,
@@ -155,9 +153,10 @@ const PvpRoom = () => {
             nickname: gameInfo.nickname1,
             playerStatus: PLayerStatus.Player1,
             gameState: gameInfo.gameStatus1,
-            photoUrl: gameInfo.photoUrl1
-                ? gameInfo.photoUrl1
+            photoUrl: gameInfo.user1TgInfo?.photoUrl
+                ? gameInfo.user1TgInfo?.photoUrl
                 : avatarImg(gameInfo.player1),
+            username: gameInfo.user1TgInfo?.username,
         };
 
         const player2GameInfo = {
@@ -169,11 +168,12 @@ const PvpRoom = () => {
             nickname: gameInfo.nickname2,
             playerStatus: PLayerStatus.Player2,
             gameState: gameInfo.gameStatus2,
-            photoUrl: gameInfo.photoUrl2
-                ? gameInfo.photoUrl2
+            photoUrl: gameInfo.user2TgInfo?.photoUrl
+                ? gameInfo.user2TgInfo?.photoUrl
                 : gameInfo.player2
                 ? avatarImg(gameInfo.player2)
                 : "",
+            username: gameInfo.user2TgInfo?.username,
         };
         setGameTimeout(boardGrids[resCurrentGrid].timeout);
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;
@@ -218,6 +218,8 @@ const PvpRoom = () => {
             setInit(true);
         }
     };
+
+    console.log(myGameInfo.username, "我的");
 
     const handleBid = async () => {
         try {

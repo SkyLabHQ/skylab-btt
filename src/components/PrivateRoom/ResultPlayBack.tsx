@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
     Game2Status,
     UserMarkType,
@@ -19,7 +19,7 @@ const ResultPlayBack = ({ gameInfo }: { gameInfo: any }) => {
     const { myGameInfo, opGameInfo } = usePvpGameContext();
 
     const [currentRound, setCurrentRound] = useState<number>(
-        gameInfo.gridIndex + 1,
+        gameInfo.gridIndex,
     );
 
     const [showList, myBalance, opBalance] = useMemo(() => {
@@ -162,7 +162,7 @@ ${des}`;
                 myBalance={myBalance}
                 opBalance={opBalance}
                 currentRound={currentRound}
-                allRound={gameInfo.gridIndex + 1}
+                allRound={gameInfo.gridIndex}
                 myGameInfo={myGameInfo}
                 opGameInfo={opGameInfo}
                 showList={showList}

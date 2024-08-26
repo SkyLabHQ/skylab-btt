@@ -1,8 +1,7 @@
 import { usePvpGameContext } from "@/pages/PvpRoom";
 import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import { MUserProfilePvp } from "./UserProfile";
-import { MPvpBalance } from "../BttComponents/MBalance";
+import { MMyPvpUserProfile, MOpPvpUserProfile } from "./UserProfile";
 import Board from "../BttComponents/Board";
 import Timer from "../BttComponents/Timer";
 import ToolBar from "../BttComponents/Toolbar";
@@ -103,17 +102,10 @@ const MLayout = ({
                 flexDir={"column"}
             >
                 <Flex align={"flex-end"}>
-                    <MUserProfilePvp
-                        nickname={opGameInfo.nickname}
-                        status="op"
-                        mark={opGameInfo.mark}
-                    ></MUserProfilePvp>
+                    <MOpPvpUserProfile
+                        userGameInfo={opGameInfo}
+                    ></MOpPvpUserProfile>
                 </Flex>
-
-                <MPvpBalance
-                    balance={opGameInfo.balance}
-                    mark={opGameInfo.mark}
-                ></MPvpBalance>
             </Flex>
             <Box
                 sx={{
@@ -170,16 +162,9 @@ const MLayout = ({
                         flexDir={"column"}
                         align={"flex-end"}
                     >
-                        <MUserProfilePvp
-                            nickname={myGameInfo.nickname}
-                            status="my"
-                            mark={myGameInfo.mark}
-                        ></MUserProfilePvp>
-                        <MPvpBalance
-                            balance={myGameInfo.balance}
-                            status="right"
-                            mark={myGameInfo.mark}
-                        ></MPvpBalance>
+                        <MMyPvpUserProfile
+                            userGameInfo={myGameInfo}
+                        ></MMyPvpUserProfile>
                     </Flex>
                 </Box>
                 <PvpBottomInputBox
