@@ -50,38 +50,6 @@ const Info = () => {
                 margin: "0 auto",
             }}
         >
-            <Flex
-                sx={{
-                    fontSize: "32px",
-                    gap: "60px",
-                }}
-                justify={"center"}
-            >
-                <Flex
-                    sx={{
-                        width: "400px",
-                        height: "96px",
-                        background: "#161616",
-                        cursor: "pointer",
-                    }}
-                    align={"center"}
-                    justify={"center"}
-                >
-                    Rules
-                </Flex>
-                <Flex
-                    sx={{
-                        width: "400px",
-                        height: "96px",
-                        background: "#161616",
-                        cursor: "pointer",
-                    }}
-                    align={"center"}
-                    justify={"center"}
-                >
-                    Schedule
-                </Flex>
-            </Flex>
             <Box
                 sx={{
                     color: "#646464",

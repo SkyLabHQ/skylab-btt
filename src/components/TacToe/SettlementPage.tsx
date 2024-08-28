@@ -419,8 +419,6 @@ const LoseResult = ({
         }
     }, [myInfo]);
 
-    console.log(progressArray, "progressArray");
-
     useEffect(() => {
         const handleUp = async () => {
             for (let i = 0; i < progressArray.length; i++) {

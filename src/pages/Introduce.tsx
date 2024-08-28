@@ -7,7 +7,9 @@ import Quan4 from "@/components/Introduce/assets/quan-4.png";
 import Quan5 from "@/components/Introduce/assets/quan-5.png";
 import Quan6 from "@/components/Introduce/assets/quan-6.png";
 import { useState } from "react";
-import Info from "@/components/Introduce/Info";
+import Rule from "@/components/Introduce/Rule";
+import IntroduceContent from "@/components/Introduce/IntroduceContent";
+import Schedule from "@/components/Introduce/Schedule";
 
 const quanList = [
     {
@@ -63,72 +65,42 @@ const move1 = keyframes`
 `;
 
 const Introduce = () => {
-    const [addCount, setAddCount] = useState(0);
+    const [mode, setMode] = useState("default");
+
+    const handleChangeMode = (mode: string) => {
+        setMode(mode);
+    };
 
     return (
         <Box
             sx={{
                 fontFamily: "Orbitron",
-                padding: "0 20px",
+                // padding: "0 20px",
                 background: "#1B1B1B",
+                // minHeight: "100vh",
             }}
         >
-            <Box
-                sx={{
-                    width: "100%",
-                    height: "100vh",
-                    position: "relative",
-                    overflow: "hidden",
-                    "& *": {
-                        transition: "all 0.5s, width 1s",
-                    },
-                }}
-            >
-                {quanList.map((item, index) => {
-                    return (
-                        <Image
-                            src={item.img}
-                            key={index}
-                            sx={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                width:
-                                    addCount > index
-                                        ? item.activeWidth
-                                        : item.width,
-                                // display: addCount > index ? "block" : "none",
-                                opacity: addCount > index ? 1 : 0,
-                            }}
-                            animation={`${
-                                index % 2 == 0 ? move : move1
-                            } 20s linear infinite`}
-                        ></Image>
-                    );
-                })}
-                <Image
-                    onClick={() => {
-                        if (addCount >= quanList.length) {
-                            setAddCount(0);
-                            return;
-                        }
-                        setAddCount(addCount + 1);
+            {mode === "default" && (
+                <IntroduceContent
+                    onModeChange={(mode: string) => {
+                        handleChangeMode(mode);
                     }}
-                    src={CircleGif}
-                    sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: "26%",
-                        zIndex: 10,
-                        cursor: "pointer",
+                ></IntroduceContent>
+            )}
+            {mode === "rules" && (
+                <Rule
+                    onModeChange={(mode: string) => {
+                        handleChangeMode(mode);
                     }}
-                ></Image>
-            </Box>
-
-            <Info></Info>
+                ></Rule>
+            )}
+            {mode === "schedule" && (
+                <Schedule
+                    onModeChange={(mode: string) => {
+                        handleChangeMode(mode);
+                    }}
+                ></Schedule>
+            )}
         </Box>
     );
 };

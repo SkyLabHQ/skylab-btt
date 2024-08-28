@@ -49,7 +49,6 @@ const Market = () => {
             p.push(multiMarketPlaceContract.getHighestBid(i));
         }
         const list = await multiProvider.all(p);
-        console.log(list, "list");
         sethighList(
             list.map((item) => {
                 return {

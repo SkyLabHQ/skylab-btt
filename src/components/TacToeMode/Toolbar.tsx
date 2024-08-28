@@ -49,8 +49,10 @@ export const Toolbar = () => {
                         >
                             <Flex
                                 sx={{
-                                    background: `url(${PilotBorder}) no-repeat`,
-                                    backgroundSize: "cover",
+                                    background: `url(${PilotBorder}) ,url(${tgInfo.photoUrl})`,
+                                    backgroundSize: "cover, 42px 42px",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "center, center",
                                     position: "absolute",
                                     top: "50%",
                                     left: "0px",
@@ -61,16 +63,7 @@ export const Toolbar = () => {
                                 }}
                                 justify={"center"}
                                 align={"center"}
-                            >
-                                <Image
-                                    src={tgInfo.photoUrl}
-                                    sx={{
-                                        width: "42px",
-                                        height: "42px",
-                                        borderRadius: "50%",
-                                    }}
-                                ></Image>
-                            </Flex>
+                            ></Flex>
                             <Box
                                 sx={{
                                     width: "184px",

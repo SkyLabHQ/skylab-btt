@@ -59,8 +59,6 @@ export const UserInfoProvider = ({
 
     const { wallets } = useWallets();
     const [walletAddress, setWalletAddress] = useState("");
-    console.log(user, "user");
-    console.log(walletAddress, "walletAddress");
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
     const { pathname } = useLocation();
@@ -251,6 +249,8 @@ export const UserInfoProvider = ({
     const handleGetUserTgInfo = async () => {
         try {
             const res = await getUserTgInfo();
+
+            console.log(res.data, "res.data.");
             const info = {
                 ...res.data.userTgInfo,
                 photoUrl: res.data.userTgInfo.photoUrl

@@ -71,8 +71,6 @@ const My = () => {
         );
     };
 
-    console.log(highList, "list");
-
     const getApprove = async () => {
         const [isApprovedForAll] = await multiProvider.all([
             multiMercuryJarTournamentContract.isApprovedForAll(
