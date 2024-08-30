@@ -110,7 +110,7 @@ const UserInfo = () => {
                                 "_blank",
                             );
                         } catch (e: any) {
-                            toast(e.message);
+                            toast(e.data.message);
                         }
                     }}
                     align={"center"}

@@ -281,7 +281,7 @@ const TacToe = () => {
             setBidAmount(0);
         } catch (e: any) {
             setLoading(false);
-            toast(e.message);
+            toast(e.data.message);
         }
     };
 
@@ -292,7 +292,7 @@ const TacToe = () => {
             });
             setGameInfo(res.data.game);
         } catch (e: any) {
-            toast(e.message);
+            toast(e.data.message);
         }
     };
 

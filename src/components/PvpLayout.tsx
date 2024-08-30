@@ -83,7 +83,8 @@ const PvpLayout = () => {
                 setInit(true);
             }, 1500);
         } catch (e: any) {
-            toast(e.message);
+            console.log(e);
+            toast(e.data.message);
         }
     };
 

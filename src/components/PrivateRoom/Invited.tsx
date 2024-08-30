@@ -24,7 +24,7 @@ const Invited = ({ myGameInfo }: { myGameInfo: PvpGameInfo }) => {
             await quitMatch({ gameId: Number(gameId) });
             navigate("/free/pvp/home");
         } catch (e: any) {
-            toast(e.message);
+            toast(e.data.message);
         }
     };
 

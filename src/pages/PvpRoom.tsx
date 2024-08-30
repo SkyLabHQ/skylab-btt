@@ -120,7 +120,7 @@ const PvpRoom = () => {
             const res = await joinGame({ gameId: Number(gameId) });
             setGameInfo(res.data.game);
         } catch (e: any) {
-            toast(e.message);
+            toast(e.data.message);
         }
     };
 
@@ -250,7 +250,7 @@ const PvpRoom = () => {
         } catch (e: any) {
             console.log(e);
             setLoading(false);
-            toast(e.message);
+            toast(e.data.message);
         }
     };
 
@@ -262,7 +262,7 @@ const PvpRoom = () => {
 
             setGameInfo(res.data.game);
         } catch (e: any) {
-            toast(e.message);
+            toast(e.data.message);
         }
     };
 
