@@ -37,7 +37,7 @@ const Schedule = ({
             const key = event.key;
             console.log(key);
             if (key === "Escape") {
-                onModeChange("default");
+                onModeChange("");
             }
         };
         document.addEventListener("keydown", keyboardListener);
@@ -48,7 +48,6 @@ const Schedule = ({
     return (
         <Box
             sx={{
-                padding: "200px 0",
                 maxWidth: "1574px",
                 width: "100%",
                 margin: "0 auto",

@@ -1,106 +1,142 @@
-import { Box, Image, keyframes, Text, Flex } from "@chakra-ui/react";
-import CircleGif from "@/components/Introduce/assets/circle.gif";
-import Quan1 from "@/components/Introduce/assets/quan-1.png";
-import Quan2 from "@/components/Introduce/assets/quan-2.png";
-import Quan3 from "@/components/Introduce/assets/quan-3.png";
-import Quan4 from "@/components/Introduce/assets/quan-4.png";
-import Quan5 from "@/components/Introduce/assets/quan-5.png";
-import Quan6 from "@/components/Introduce/assets/quan-6.png";
-import { useState } from "react";
+import {
+    Box,
+    Image,
+    keyframes,
+    Text,
+    Flex,
+    Modal,
+    ModalContent,
+    useDisclosure,
+    ModalOverlay,
+} from "@chakra-ui/react";
+import { createRef, useState } from "react";
 import Rule from "@/components/Introduce/Rule";
 import IntroduceContent from "@/components/Introduce/IntroduceContent";
 import Schedule from "@/components/Introduce/Schedule";
-
-const quanList = [
-    {
-        img: Quan1,
-        width: "32%",
-        activeWidth: "37%",
-    },
-    {
-        img: Quan2,
-        width: "40%",
-        activeWidth: "47%",
-    },
-    {
-        img: Quan3,
-        width: "50%",
-        activeWidth: "57%",
-    },
-    {
-        img: Quan4,
-        width: "60%",
-        activeWidth: "67%",
-    },
-    {
-        img: Quan5,
-        width: "70%",
-        activeWidth: "77%",
-    },
-    {
-        img: Quan6,
-        width: "80%",
-        activeWidth: "87%",
-    },
-];
-
-const move = keyframes`
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-`;
-
-const move1 = keyframes`
-    0% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-
-    100% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-`;
+import CVideo from "@/components/Introduce/assets/c.mp4";
+import WVideo from "@/components/Introduce/assets/w.mp4";
 
 const Introduce = () => {
-    const [mode, setMode] = useState("default");
+    const cRef = createRef<HTMLVideoElement>();
+    const wRef = createRef<HTMLVideoElement>();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [wMode, setWMode] = useState(false);
+
+    const [mode, setMode] = useState("");
+
+    const handleChangeWMode = () => {
+        if (wMode) {
+            if (cRef.current) {
+                cRef.current.play();
+                wRef.current?.play();
+            }
+
+            setWMode(false);
+        } else {
+            console.log("wRef.c", wRef.current);
+            if (wRef.current) {
+                wRef.current.pause();
+                cRef.current?.pause();
+            }
+
+            setWMode(true);
+        }
+    };
 
     const handleChangeMode = (mode: string) => {
         setMode(mode);
+
+        if (mode) {
+            onOpen();
+        } else {
+            onClose();
+        }
     };
 
     return (
         <Box
             sx={{
                 fontFamily: "Orbitron",
-                // padding: "0 20px",
-                background: "#1B1B1B",
-                // minHeight: "100vh",
+                position: "relative",
+                background: "#1b1b1b",
             }}
         >
-            {mode === "default" && (
-                <IntroduceContent
-                    onModeChange={(mode: string) => {
-                        handleChangeMode(mode);
+            <video
+                autoPlay
+                loop
+                muted
+                style={{
+                    width: "100%",
+                    left: 0,
+                    top: 0,
+                    objectFit: "cover",
+                    position: "absolute",
+                    opacity: wMode ? 0 : 1,
+                    mixBlendMode: "screen",
+                }}
+                ref={cRef}
+            >
+                <source src={CVideo} type="video/mp4" />
+            </video>
+            <video
+                autoPlay
+                loop
+                muted
+                style={{
+                    width: "100%",
+                    left: 0,
+                    top: 0,
+                    objectFit: "cover",
+                    position: "absolute",
+                    opacity: wMode ? 1 : 0,
+                    mixBlendMode: "screen",
+                }}
+                ref={wRef}
+            >
+                <source src={WVideo} type="video/mp4" />
+            </video>
+
+            <IntroduceContent
+                onModeChange={(mode: string) => {
+                    handleChangeMode(mode);
+                }}
+            ></IntroduceContent>
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                size={"full"}
+                autoFocus={false}
+            >
+                <ModalOverlay
+                    bg="rgba(0, 0, 0, 0.8)"
+                    sx={{
+                        backdropFilter: "blur(10px)",
                     }}
-                ></IntroduceContent>
-            )}
-            {mode === "rules" && (
-                <Rule
-                    onModeChange={(mode: string) => {
-                        handleChangeMode(mode);
+                />
+                <ModalContent
+                    sx={{
+                        background: "transparent",
+                        overflow: "auto",
+                        padding: "200px 20px 0",
                     }}
-                ></Rule>
-            )}
-            {mode === "schedule" && (
-                <Schedule
-                    onModeChange={(mode: string) => {
-                        handleChangeMode(mode);
-                    }}
-                ></Schedule>
-            )}
+                >
+                    {mode === "rules" && (
+                        <Rule
+                            onModeChange={(mode: string) => {
+                                handleChangeMode(mode);
+                            }}
+                        ></Rule>
+                    )}
+                    {mode === "schedule" && (
+                        <Schedule
+                            onModeChange={(mode: string) => {
+                                handleChangeMode(mode);
+                            }}
+                        ></Schedule>
+                    )}
+                </ModalContent>
+            </Modal>
         </Box>
     );
 };

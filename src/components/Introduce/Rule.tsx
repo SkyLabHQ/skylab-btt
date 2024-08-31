@@ -132,7 +132,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
             const key = event.key;
             console.log(key);
             if (key === "Escape") {
-                onModeChange("default");
+                onModeChange("");
             }
         };
         document.addEventListener("keydown", keyboardListener);
@@ -143,7 +143,6 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
     return (
         <Box
             sx={{
-                padding: "200px 0",
                 maxWidth: "1574px",
                 width: "100%",
                 margin: "0 auto",
@@ -154,7 +153,6 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     position: "relative",
                 }}
             >
-                {" "}
                 <Flex
                     onClick={() => {
                         onModeChange("default");
@@ -201,7 +199,13 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 >
                     Rules
                 </Text>
-                <Flex justify={"center"} align={"flex-end"}>
+                <Flex
+                    justify={"center"}
+                    align={"flex-end"}
+                    sx={{
+                        gap: "50px",
+                    }}
+                >
                     {navList.map((item, index) => {
                         const ActiveIcon = item.activeIcon;
                         const Icon = item.icon;
@@ -214,7 +218,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                 sx={{
                                     "&:hover": {
                                         svg: {
-                                            color: "blue",
+                                            color: "#fff",
                                             transition: "all 0.3s",
                                         },
                                     },

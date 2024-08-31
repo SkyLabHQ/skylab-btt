@@ -7,8 +7,49 @@ import Quan4 from "@/components/Introduce/assets/quan-4.png";
 import Quan5 from "@/components/Introduce/assets/quan-5.png";
 import Quan6 from "@/components/Introduce/assets/quan-6.png";
 import { useState } from "react";
-import Info from "@/components/Introduce/Info";
+import OnIcon from "@/components/Introduce/assets/on-icon.svg";
+import UpIcon from "@/components/Introduce/assets/up-icon.svg";
 
+import Info from "@/components/Introduce/Info";
+import Light from "@/components/Introduce/assets/light.svg";
+import LightC from "@/components/Introduce/assets/light-c.svg";
+
+const OnButton = ({ onClick }: { onClick?: () => void }) => {
+    return (
+        <Flex
+            onClick={onClick}
+            align={"center"}
+            sx={{
+                width: "290px",
+                height: "76px",
+                borderRadius: "12px",
+                border: "2px solid #FFF",
+                padding: "8px",
+            }}
+            justify={"space-between"}
+        >
+            <Image src={OnIcon}></Image>
+            <Flex align={"center"} justify={"center"}>
+                <Image src={UpIcon}></Image>
+                <Text>+ </Text>
+                <Text>/</Text>
+            </Flex>
+
+            <Text
+                sx={{
+                    fontSize: "36px",
+                    fontStyle: "normal",
+                    fontWeight: 700,
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                }}
+            >
+                ON
+            </Text>
+        </Flex>
+    );
+};
 const quanList = [
     {
         img: Quan1,
@@ -69,7 +110,6 @@ const IntroduceContent = ({
     const [addCount, setAddCount] = useState(0);
 
     const handleDownTo0 = (addCount: number) => {
-        console.log(addCount, "---");
         if (addCount > 0) {
             setTimeout(() => {
                 setAddCount((_addCount) => {
@@ -80,16 +120,17 @@ const IntroduceContent = ({
         }
     };
     return (
-        <Box
+        <Flex
             sx={{
                 width: "100%",
-                background: "#1B1B1B",
             }}
+            flexDir={"column"}
+            align={"center"}
         >
             <Box
                 sx={{
                     width: "100%",
-                    height: "100vh",
+                    height: "100vw",
                     position: "relative",
                     overflow: "hidden",
                     "& *": {
@@ -138,7 +179,30 @@ const IntroduceContent = ({
                         cursor: "pointer",
                     }}
                 ></Image>
+                <Flex
+                    sx={{
+                        position: "absolute",
+                        top: "65%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                    }}
+                    flexDir={"column"}
+                    align={"center"}
+                >
+                    <Image src={Light} sx={{}}></Image>
+                    <Image
+                        src={LightC}
+                        sx={{
+                            marginTop: "-100px",
+                        }}
+                    ></Image>
+                </Flex>
             </Box>
+            <OnButton
+                onClick={() => {
+                    // onModeChange();
+                }}
+            ></OnButton>
             <Flex
                 sx={{
                     fontSize: "32px",
@@ -179,7 +243,7 @@ const IntroduceContent = ({
                 </Flex>
             </Flex>
             <Info></Info>
-        </Box>
+        </Flex>
     );
 };
 
