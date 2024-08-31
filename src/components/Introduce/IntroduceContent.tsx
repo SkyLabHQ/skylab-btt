@@ -25,6 +25,7 @@ const OnButton = ({ onClick }: { onClick?: () => void }) => {
                 borderRadius: "12px",
                 border: "2px solid #FFF",
                 padding: "8px",
+                cursor: "pointer",
             }}
             justify={"space-between"}
         >
@@ -103,9 +104,11 @@ const move1 = keyframes`
     }
 `;
 const IntroduceContent = ({
+    onThemeChange,
     onModeChange,
 }: {
     onModeChange: (mode: string) => void;
+    onThemeChange: () => void;
 }) => {
     const [addCount, setAddCount] = useState(0);
 
@@ -182,25 +185,31 @@ const IntroduceContent = ({
                 <Flex
                     sx={{
                         position: "absolute",
-                        top: "65%",
+                        top: "62%",
                         left: "50%",
                         transform: "translateX(-50%)",
                     }}
                     flexDir={"column"}
                     align={"center"}
                 >
-                    <Image src={Light} sx={{}}></Image>
+                    <Image
+                        src={Light}
+                        sx={{
+                            width: "80%",
+                        }}
+                    ></Image>
                     <Image
                         src={LightC}
                         sx={{
-                            marginTop: "-100px",
+                            marginTop: "-4vw",
+                            width: "40%",
                         }}
                     ></Image>
                 </Flex>
             </Box>
             <OnButton
                 onClick={() => {
-                    // onModeChange();
+                    onThemeChange();
                 }}
             ></OnButton>
             <Flex

@@ -34,7 +34,6 @@ const Introduce = () => {
 
             setWMode(false);
         } else {
-            console.log("wRef.c", wRef.current);
             if (wRef.current) {
                 wRef.current.pause();
                 cRef.current?.pause();
@@ -101,6 +100,7 @@ const Introduce = () => {
                 onModeChange={(mode: string) => {
                     handleChangeMode(mode);
                 }}
+                onThemeChange={handleChangeWMode}
             ></IntroduceContent>
             <Modal
                 isOpen={isOpen}

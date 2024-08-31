@@ -224,17 +224,6 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                     },
                                 }}
                             >
-                                {/* <Image
-                                 
-                                    src={}
-                                    sx={{
-                                        width: "110px",
-                                        height: "auto",
-                                        display: "block",
-                                        margin: "0 auto",
-                                        cursor: "pointer",
-                                    }}
-                                ></Image> */}
                                 {activeIndex === index ? (
                                     <ActiveIcon></ActiveIcon>
                                 ) : (
