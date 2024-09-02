@@ -356,7 +356,6 @@ const My = () => {
                                             fontSize: large680
                                                 ? "12px"
                                                 : "10px",
-                                            fontStyle: "normal",
                                             fontWeight: 700,
                                         }}
                                     >

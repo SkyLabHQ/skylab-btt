@@ -9,7 +9,7 @@ import {
     useDisclosure,
     ModalOverlay,
 } from "@chakra-ui/react";
-import { createRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import Rule from "@/components/Introduce/Rule";
 import IntroduceContent from "@/components/Introduce/IntroduceContent";
 import Schedule from "@/components/Introduce/Schedule";
@@ -56,6 +56,20 @@ const Introduce = () => {
             onClose();
         }
     };
+
+    useEffect(() => {
+        const keyboardListener = (event: KeyboardEvent) => {
+            const key = event.key;
+            console.log(key);
+            if (key === "Escape") {
+                handleChangeMode("");
+            }
+        };
+        document.addEventListener("keydown", keyboardListener);
+        return () => {
+            document.removeEventListener("keydown", keyboardListener);
+        };
+    }, []);
 
     return (
         <Box
@@ -123,6 +137,7 @@ const Introduce = () => {
                         background: "transparent",
                         overflow: "auto",
                         padding: "200px 20px 0",
+                        fontFamily: "Orbitron",
                     }}
                 >
                     {mode === "rules" && (

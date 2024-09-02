@@ -270,7 +270,7 @@ const WinResult = ({
                             transform: "translateX(-50%)",
                             top: isPc ? "-44px" : "-24px",
                             fontSize: isPc ? "40px" : "20px",
-                            fontStyle: "normal",
+
                             fontWeight: 700,
                             color: "#FDDC2D",
                             verticalAlign: "bottom",
@@ -331,7 +331,6 @@ const WinResult = ({
                             right: "0%",
                             top: isPc ? "-44px" : "-24px",
                             fontSize: isPc ? "40px" : "20px",
-                            fontStyle: "normal",
                         }}
                     >
                         <span
@@ -552,7 +551,7 @@ const LoseResult = ({
                             transform: "translateX(-50%)",
                             top: isPc ? "-44px" : "-24px",
                             fontSize: isPc ? "40px" : "20px",
-                            fontStyle: "normal",
+
                             fontWeight: 700,
                             color: "#FDDC2D",
                             verticalAlign: "bottom",
@@ -615,7 +614,6 @@ const LoseResult = ({
                             right: "0%",
                             top: isPc ? "-44px" : "-24px",
                             fontSize: isPc ? "40px" : "20px",
-                            fontStyle: "normal",
                         }}
                     >
                         <span

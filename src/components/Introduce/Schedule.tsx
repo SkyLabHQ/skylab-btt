@@ -32,19 +32,6 @@ const Schedule = ({
 }: {
     onModeChange: (mode: string) => void;
 }) => {
-    useEffect(() => {
-        const keyboardListener = (event: KeyboardEvent) => {
-            const key = event.key;
-            console.log(key);
-            if (key === "Escape") {
-                onModeChange("");
-            }
-        };
-        document.addEventListener("keydown", keyboardListener);
-        return () => {
-            document.removeEventListener("keydown", keyboardListener);
-        };
-    }, []);
     return (
         <Box
             sx={{
@@ -58,10 +45,9 @@ const Schedule = ({
                     position: "relative",
                 }}
             >
-                {" "}
                 <Flex
                     onClick={() => {
-                        onModeChange("default");
+                        onModeChange("");
                     }}
                     sx={{
                         position: "absolute",
@@ -85,7 +71,7 @@ const Schedule = ({
                             textAlign: "center",
                             fontFamily: "Orbitron",
                             fontSize: "30px",
-                            fontStyle: "normal",
+
                             fontWeight: 400,
                         }}
                     >
@@ -99,7 +85,7 @@ const Schedule = ({
                         textShadow: "#FFD000",
                         fontFamily: "Orbitron",
                         fontSize: "64px",
-                        fontStyle: "normal",
+
                         fontWeight: 700,
                     }}
                 >
@@ -140,7 +126,7 @@ const Schedule = ({
                                             textAlign: "center",
                                             fontFamily: "Orbitron",
                                             fontSize: "40px",
-                                            fontStyle: "normal",
+
                                             fontWeight: 700,
                                         }}
                                     >
@@ -149,7 +135,7 @@ const Schedule = ({
                                     <Text
                                         sx={{
                                             fontSize: "30px",
-                                            fontStyle: "normal",
+
                                             fontWeight: 400,
                                             lineHeight: "50px",
                                             marginTop: "20px",

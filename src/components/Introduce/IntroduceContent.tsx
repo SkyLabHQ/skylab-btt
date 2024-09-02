@@ -12,6 +12,10 @@ import UpIcon from "@/components/Introduce/assets/up-icon.svg";
 import Info from "@/components/Introduce/Info";
 import Light from "@/components/Introduce/assets/light.svg";
 import LightC from "@/components/Introduce/assets/light-c.svg";
+import { BlackButton } from "./Button";
+import ShiftAIcon from "./assets/shifta.png";
+import OnTextIcon from "./assets/ON.svg";
+import ShiftEIcon from "./assets/shifte.png";
 
 const OnButton = ({ onClick }: { onClick?: () => void }) => {
     return (
@@ -29,24 +33,19 @@ const OnButton = ({ onClick }: { onClick?: () => void }) => {
             justify={"space-between"}
         >
             <Image src={OnIcon}></Image>
-            <Flex align={"center"} justify={"center"}>
-                <Image src={UpIcon}></Image>
-                <Text>+ </Text>
-                <Text>/</Text>
-            </Flex>
-
-            <Text
+            <Image
+                src={ShiftAIcon}
                 sx={{
-                    fontSize: "36px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                    width: "100px",
                 }}
-            >
-                ON
-            </Text>
+            ></Image>
+
+            <Image
+                src={OnTextIcon}
+                sx={{
+                    width: "64px",
+                }}
+            ></Image>
         </Flex>
     );
 };
@@ -219,36 +218,42 @@ const IntroduceContent = ({
                 }}
                 justify={"center"}
             >
-                <Flex
-                    sx={{
-                        width: "400px",
-                        height: "96px",
-                        background: "#161616",
-                        cursor: "pointer",
-                    }}
-                    align={"center"}
-                    justify={"center"}
+                <BlackButton
                     onClick={() => {
                         onModeChange("rules");
                     }}
-                >
-                    Rules
-                </Flex>
-                <Flex
                     sx={{
                         width: "400px",
                         height: "96px",
-                        background: "#161616",
-                        cursor: "pointer",
                     }}
-                    align={"center"}
-                    justify={"center"}
+                >
+                    <Image
+                        src={ShiftEIcon}
+                        sx={{
+                            width: "100px",
+                            marginRight: "20px",
+                        }}
+                    ></Image>
+                    <Text> Rules</Text>
+                </BlackButton>
+                <BlackButton
                     onClick={() => {
                         onModeChange("schedule");
                     }}
+                    sx={{
+                        width: "400px",
+                        height: "96px",
+                    }}
                 >
-                    Schedule
-                </Flex>
+                    <Image
+                        src={ShiftEIcon}
+                        sx={{
+                            width: "100px",
+                            marginRight: "20px",
+                        }}
+                    ></Image>
+                    <Text>Schedule</Text>
+                </BlackButton>
             </Flex>
             <Info></Info>
         </Flex>

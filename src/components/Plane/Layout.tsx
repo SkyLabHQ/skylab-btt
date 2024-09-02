@@ -105,7 +105,6 @@ const NavBar = () => {
                     sx={{
                         fontFamily: "Orbitron",
                         fontSize: large680 ? "50px" : "22px",
-                        fontStyle: "normal",
                         fontWeight: "bold",
                     }}
                 >

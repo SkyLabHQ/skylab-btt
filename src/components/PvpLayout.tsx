@@ -30,7 +30,6 @@ const LoadingPage = () => {
                 backgroundPosition: "0 66px ",
                 color: "#000",
                 fontSize: "24px",
-                fontStyle: "normal",
                 fontWeight: 700,
             }}
         >
@@ -38,7 +37,6 @@ const LoadingPage = () => {
                 sx={{
                     marginTop: "300px",
                     fontSize: "24px",
-                    fontStyle: "normal",
                     fontWeight: 700,
                 }}
             >

@@ -3,149 +3,71 @@ import { useEffect, useState } from "react";
 import CloseIcon from "./assets/close.svg";
 import CircleGif from "@/components/Introduce/assets/circle.gif";
 import RBg from "./assets/r-bg.png";
-import { ReactComponent as An1Icon } from "./assets/an-1.svg";
-import { ReactComponent as An2Icon } from "./assets/an-2.svg";
-import { ReactComponent as An3Icon } from "./assets/an-3.svg";
-import { ReactComponent as An4Icon } from "./assets/an-4.svg";
-import { ReactComponent as An5Icon } from "./assets/an-5.svg";
+import An1Icon from "./assets/an-1.svg";
+import An2Icon from "./assets/an-2.svg";
+import An3Icon from "./assets/an-3.svg";
+import An4Icon from "./assets/an-4.svg";
+import An5Icon from "./assets/an-5.svg";
 
-import { ReactComponent as n1Icon } from "./assets/n-1.svg";
-import { ReactComponent as n2Icon } from "./assets/n-2.svg";
-import { ReactComponent as n3Icon } from "./assets/n-3.svg";
-import { ReactComponent as n4Icon } from "./assets/n-4.svg";
-import { ReactComponent as n5Icon } from "./assets/n-5.svg";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper";
-import RedIcon from "./assets/red.png";
+import n1Icon from "./assets/n-1.svg";
+import n2Icon from "./assets/n-2.svg";
+import n3Icon from "./assets/n-3.svg";
+import n4Icon from "./assets/n-4.svg";
+import n5Icon from "./assets/n-5.svg";
+
+import H1Icon from "./assets/h-1.png";
+import H2Icon from "./assets/h-2.png";
+import H3Icon from "./assets/h-3.png";
+import H4Icon from "./assets/h-4.png";
+import H5Icon from "./assets/h-5.png";
+
+import { ReactComponent as BackIcon } from "./assets/back.svg";
+import { ReactComponent as NextIcon } from "./assets/con.svg";
+import { BlackButton } from "./Button";
+import RuleContent0 from "./RuleContent0";
+import RuleContent1 from "./RuleContent1";
+import RuleContent2 from "./RuleContent2";
+import RuleContent3 from "./RuleContent3";
+import RuleContent4 from "./RuleContent4";
 
 const navList = [
     {
         icon: n1Icon,
+        hIcon: H1Icon,
         activeIcon: An1Icon,
     },
     {
         icon: n2Icon,
+        hIcon: H2Icon,
         activeIcon: An2Icon,
     },
     {
         icon: n3Icon,
+        hIcon: H3Icon,
         activeIcon: An3Icon,
     },
     {
         icon: n4Icon,
+        hIcon: H4Icon,
         activeIcon: An4Icon,
     },
     {
         icon: n5Icon,
+        hIcon: H5Icon,
         activeIcon: An5Icon,
     },
 ];
 
-const Content0 = () => {
-    const [activeIndex, setActiveIndex] = useState(1);
-    console.log(activeIndex, "activeIndex");
-    return (
-        <Box>
-            <Box
-                sx={{
-                    height: "515px",
-                    background: `url(${RBg}) no-repeat center center`,
-                }}
-            >
-                <Text
-                    sx={{
-                        fontSize: "40px",
-                        fontStyle: "normal",
-                        fontWeight: 700,
-                        textAlign: "center",
-                    }}
-                >
-                    Welcome, Pilots
-                </Text>
-                <Box
-                    sx={{
-                        width: "900px",
-                        margin: "0 auto",
-                    }}
-                >
-                    <Swiper
-                        initialSlide={activeIndex}
-                        style={{
-                            position: "relative",
-                            marginTop: "16px",
-                        }}
-                        onSlideChange={(swiper) => {
-                            setActiveIndex(swiper.activeIndex);
-                        }}
-                        // spaceBetween={50}
-                        centeredSlides={true}
-                        slidesPerView={5}
-                        modules={[Autoplay]}
-                        autoplay={{
-                            delay: 2000,
-                            disableOnInteraction: false,
-                        }}
-                    >
-                        {[1, 2, 3, 4, 5, 6, 6, 2, 13, 14].map((item, index) => {
-                            return (
-                                <SwiperSlide
-                                    key={index}
-                                    style={{
-                                        // color: "#fff",
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    <Flex flexDir={"column"} align={"center"}>
-                                        <Image
-                                            src={RedIcon}
-                                            sx={{
-                                                width:
-                                                    activeIndex === index
-                                                        ? "180px"
-                                                        : Math.abs(
-                                                              activeIndex -
-                                                                  index,
-                                                          ) === 1
-                                                        ? "150px"
-                                                        : "110px",
-                                            }}
-                                        ></Image>
-                                    </Flex>
-                                </SwiperSlide>
-                            );
-                        })}
-                    </Swiper>
-                </Box>
-            </Box>
-        </Box>
-    );
-};
-
-const Content1 = () => {
-    return <Box></Box>;
-};
-
 const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
     const [activeIndex, setActiveIndex] = useState(0);
-    useEffect(() => {
-        const keyboardListener = (event: KeyboardEvent) => {
-            const key = event.key;
-            console.log(key);
-            if (key === "Escape") {
-                onModeChange("");
-            }
-        };
-        document.addEventListener("keydown", keyboardListener);
-        return () => {
-            document.removeEventListener("keydown", keyboardListener);
-        };
-    }, []);
+
     return (
         <Box
             sx={{
                 maxWidth: "1574px",
                 width: "100%",
                 margin: "0 auto",
+                padding: "200px 0",
             }}
         >
             <Box
@@ -155,7 +77,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
             >
                 <Flex
                     onClick={() => {
-                        onModeChange("default");
+                        onModeChange("");
                     }}
                     sx={{
                         position: "absolute",
@@ -179,7 +101,6 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                             textAlign: "center",
                             fontFamily: "Orbitron",
                             fontSize: "30px",
-                            fontStyle: "normal",
                             fontWeight: 400,
                         }}
                     >
@@ -193,7 +114,6 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                         textShadow: "#FFD000",
                         fontFamily: "Orbitron",
                         fontSize: "64px",
-                        fontStyle: "normal",
                         fontWeight: 700,
                     }}
                 >
@@ -208,28 +128,50 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 >
                     {navList.map((item, index) => {
                         const ActiveIcon = item.activeIcon;
+                        const HoverIcon = item.hIcon;
                         const Icon = item.icon;
                         return (
-                            <Box
+                            <Flex
                                 key={index}
                                 onClick={() => {
                                     setActiveIndex(index);
                                 }}
+                                flexDir={"column"}
+                                justify={"flex-end"}
                                 sx={{
+                                    cursor: "pointer",
+                                    width: "110px",
+                                    height: "82px",
                                     "&:hover": {
-                                        svg: {
-                                            color: "#fff",
-                                            transition: "all 0.3s",
+                                        "& img": {
+                                            width: "110px",
+                                        },
+                                        "& img:nth-child(1)": {
+                                            display:
+                                                activeIndex !== index && "none",
+                                        },
+                                        "& img:nth-child(2)": {
+                                            display:
+                                                activeIndex !== index &&
+                                                "block",
                                         },
                                     },
                                 }}
                             >
-                                {activeIndex === index ? (
-                                    <ActiveIcon></ActiveIcon>
-                                ) : (
-                                    <Icon></Icon>
-                                )}
-                            </Box>
+                                <Image
+                                    src={
+                                        activeIndex === index
+                                            ? ActiveIcon
+                                            : Icon
+                                    }
+                                ></Image>
+                                <Image
+                                    src={HoverIcon}
+                                    sx={{
+                                        display: "none",
+                                    }}
+                                ></Image>
+                            </Flex>
                         );
                     })}
                 </Flex>
@@ -238,8 +180,44 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                         marginTop: "30px",
                     }}
                 >
-                    {activeIndex === 0 && <Content0></Content0>}
+                    {activeIndex === 0 && <RuleContent0></RuleContent0>}
+                    {activeIndex === 1 && <RuleContent1></RuleContent1>}
+                    {activeIndex === 2 && <RuleContent2></RuleContent2>}
+                    {activeIndex === 3 && <RuleContent3></RuleContent3>}
+                    {activeIndex === 4 && <RuleContent4></RuleContent4>}
                 </Box>
+                <Flex
+                    sx={{
+                        marginTop: "85px",
+                    }}
+                    justify={"flex-end"}
+                >
+                    <BlackButton
+                        sx={{
+                            width: "235px",
+                            height: "68px",
+                            marginRight: "60px",
+                            background: "transparent !important",
+                        }}
+                    >
+                        <BackIcon
+                            style={{
+                                marginRight: "24px",
+                            }}
+                        ></BackIcon>
+                        <Text>Back</Text>
+                    </BlackButton>
+                    <BlackButton
+                        sx={{
+                            width: "306px",
+                            height: "68px",
+                            background: "transparent !important",
+                        }}
+                    >
+                        <NextIcon style={{ marginRight: "24px" }}></NextIcon>
+                        <Text>Continue</Text>
+                    </BlackButton>
+                </Flex>
             </Box>
         </Box>
     );
