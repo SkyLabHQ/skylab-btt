@@ -55,7 +55,7 @@ const Info = () => {
                     color: "#646464",
                     lineHeight: "70px",
                     fontSize: "32px",
-                    // letterSpacing: "4px",
+                    letterSpacing: "4px",
                     marginTop: "200px",
                 }}
             >
@@ -63,10 +63,10 @@ const Info = () => {
                     return (
                         <Box
                             sx={{
-                                animationDelay: `${index * 1.5}s`,
-                                marginBottom: "40px",
+                                animationDelay: `${index * 2.5}s`,
+                                marginBottom: "30px",
                             }}
-                            animation={`${colorKeyframes} 10.5s linear infinite`}
+                            animation={`${colorKeyframes} 15s linear infinite`}
                             key={index}
                         >
                             {item}
