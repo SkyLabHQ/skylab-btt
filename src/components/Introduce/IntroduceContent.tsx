@@ -174,7 +174,7 @@ const IntroduceContent = ({
             <Box
                 sx={{
                     width: "100%",
-                    height: "100vw",
+                    height: "100vh",
                     position: "relative",
                     overflow: "hidden",
                     "& *": {

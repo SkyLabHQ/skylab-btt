@@ -1,5 +1,4 @@
-import { Box, Flex, Text, Image } from "@chakra-ui/react";
-
+import { Box, Text } from "@chakra-ui/react";
 import LevelVideo from "./assets/level.mp4";
 import DownVideo from "./assets/down.mp4";
 
