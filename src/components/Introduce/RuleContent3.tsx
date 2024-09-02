@@ -29,15 +29,10 @@ const CircleContent = ({ text }: { text: React.ReactNode }) => {
 const RuleContent3 = () => {
     return (
         <Box>
-            <Box
-                sx={{
-                    height: "515px",
-                }}
-            >
+            <Box>
                 <Text
                     sx={{
-                        fontSize: "40px",
-
+                        fontSize: "30px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -58,7 +53,7 @@ const RuleContent3 = () => {
             </Box>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
                     lineHeight: "50px",
                     marginTop: "16px",
                 }}
@@ -143,7 +138,7 @@ const RuleContent3 = () => {
             <Text
                 sx={{
                     marginTop: "54px",
-                    fontSize: "30px",
+                    fontSize: "20px",
                 }}
             >
                 Z can be changed be it can only go up.{" "}
@@ -159,7 +154,7 @@ const RuleContent3 = () => {
             <Text
                 sx={{
                     marginTop: "62px",
-                    fontSize: "30px",
+                    fontSize: "20px",
                 }}
             >
                 All of the above only matters when your league wins. So, degens,{" "}

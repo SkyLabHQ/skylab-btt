@@ -64,7 +64,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
     return (
         <Box
             sx={{
-                maxWidth: "1574px",
+                maxWidth: "800px",
                 width: "100%",
                 margin: "0 auto",
             }}
@@ -81,7 +81,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     sx={{
                         position: "absolute",
                         right: "0",
-                        top: "20px",
+                        top: "0px",
                         cursor: "pointer",
                     }}
                     align={"center"}
@@ -90,8 +90,8 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     <Image
                         src={CloseIcon}
                         sx={{
-                            width: "36px",
-                            height: "36px",
+                            width: "20px",
+                            height: "20px",
                         }}
                     ></Image>
                     <Text
@@ -99,7 +99,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                             color: "#FFF",
                             textAlign: "center",
                             fontFamily: "Orbitron",
-                            fontSize: "30px",
+                            fontSize: "18px",
                             fontWeight: 400,
                         }}
                     >
@@ -112,7 +112,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                         textAlign: "center",
                         textShadow: "#FFD000",
                         fontFamily: "Orbitron",
-                        fontSize: "64px",
+                        fontSize: "34px",
                         fontWeight: 700,
                     }}
                 >
@@ -123,6 +123,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     align={"flex-end"}
                     sx={{
                         gap: "50px",
+                        marginTop: "100px",
                     }}
                 >
                     {navList.map((item, index) => {
@@ -139,8 +140,8 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                 justify={"flex-end"}
                                 sx={{
                                     cursor: "pointer",
-                                    width: "110px",
-                                    height: "82px",
+                                    width: "55px",
+                                    height: "40px",
                                     "&:hover": {
                                         "& img": {
                                             width: "110px",
@@ -187,7 +188,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 </Box>
                 <Flex
                     sx={{
-                        marginTop: "85px",
+                        marginTop: "35px",
                     }}
                     justify={"flex-end"}
                 >
@@ -197,8 +198,8 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                 setActiveIndex(activeIndex - 1);
                             }}
                             sx={{
-                                width: "235px",
-                                height: "68px",
+                                width: "250px",
+                                height: "60px",
                                 marginRight: "60px",
                                 background: "transparent !important",
                             }}
@@ -214,8 +215,8 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     {activeIndex !== 4 && (
                         <BlackButton
                             sx={{
-                                width: "306px",
-                                height: "68px",
+                                width: "250px",
+                                height: "60px",
                                 background: "transparent !important",
                             }}
                             onClick={() => {

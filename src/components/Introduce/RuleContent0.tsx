@@ -6,15 +6,10 @@ import DownVideo from "./assets/down.mp4";
 const RuleContent0 = () => {
     return (
         <Box>
-            <Box
-                sx={{
-                    height: "515px",
-                }}
-            >
+            <Box>
                 <Text
                     sx={{
-                        fontSize: "40px",
-
+                        fontSize: "30px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -35,10 +30,9 @@ const RuleContent0 = () => {
             </Box>
             <Text
                 sx={{
-                    fontSize: "30px",
-
-                    lineHeight: "50px",
-                    marginTop: "16px",
+                    fontSize: "20px",
+                    lineHeight: "40px",
+                    marginTop: "30px",
                 }}
             >
                 The War of Influence is a massive multiplayer on-chain social
@@ -65,8 +59,7 @@ const RuleContent0 = () => {
             </video>
             <Text
                 sx={{
-                    fontSize: "30px",
-
+                    fontSize: "20px",
                     lineHeight: "50px",
                     marginTop: "16px",
                 }}

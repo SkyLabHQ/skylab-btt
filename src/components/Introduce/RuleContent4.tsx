@@ -5,14 +5,10 @@ import NewcomerVideo from "./assets/newcomer.mp4";
 const RuleContent4 = () => {
     return (
         <Box>
-            <Box
-                sx={{
-                    height: "515px",
-                }}
-            >
+            <Box>
                 <Text
                     sx={{
-                        fontSize: "40px",
+                        fontSize: "30px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -33,7 +29,7 @@ const RuleContent4 = () => {
             </Box>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
                     lineHeight: "50px",
                     marginTop: "32px",
                 }}
@@ -49,7 +45,7 @@ const RuleContent4 = () => {
             </Text>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
 
                     lineHeight: "50px",
                     marginTop: "16px",

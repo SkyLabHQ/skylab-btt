@@ -6,15 +6,10 @@ import PaperVideo from "./assets/paper.mp4";
 const RuleContent1 = () => {
     return (
         <Box>
-            <Box
-                sx={{
-                    height: "515px",
-                }}
-            >
+            <Box>
                 <Text
                     sx={{
-                        fontSize: "40px",
-
+                        fontSize: "30px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -35,7 +30,7 @@ const RuleContent1 = () => {
             </Box>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
 
                     lineHeight: "50px",
                     marginTop: "16px",
@@ -57,7 +52,7 @@ const RuleContent1 = () => {
             </video>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
 
                     lineHeight: "50px",
                     marginTop: "16px",
@@ -78,7 +73,7 @@ const RuleContent1 = () => {
             </Text>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
                     marginTop: "36px",
                 }}
             >

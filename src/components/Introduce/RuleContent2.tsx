@@ -5,15 +5,10 @@ import GameVideo from "./assets/up.mp4";
 const RuleContent2 = () => {
     return (
         <Box>
-            <Box
-                sx={{
-                    height: "515px",
-                }}
-            >
+            <Box>
                 <Text
                     sx={{
-                        fontSize: "40px",
-
+                        fontSize: "30px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -34,7 +29,7 @@ const RuleContent2 = () => {
             </Box>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
 
                     lineHeight: "50px",
                     marginTop: "16px",
@@ -51,7 +46,7 @@ const RuleContent2 = () => {
             </Text>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
 
                     lineHeight: "50px",
                     marginTop: "16px",
@@ -68,7 +63,7 @@ const RuleContent2 = () => {
             </Text>
             <Text
                 sx={{
-                    fontSize: "30px",
+                    fontSize: "20px",
 
                     lineHeight: "50px",
                     marginTop: "16px",
