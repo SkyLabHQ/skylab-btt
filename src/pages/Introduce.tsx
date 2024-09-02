@@ -28,6 +28,8 @@ const Introduce = () => {
     const handleChangeWMode = () => {
         if (wMode) {
             if (cRef.current) {
+                const currentTime = cRef.current.currentTime;
+                wRef.current.currentTime = currentTime;
                 cRef.current.play();
                 wRef.current?.play();
             }
@@ -35,6 +37,8 @@ const Introduce = () => {
             setWMode(false);
         } else {
             if (wRef.current) {
+                const currentTime = cRef.current.currentTime;
+                wRef.current.currentTime = currentTime;
                 wRef.current.pause();
                 cRef.current?.pause();
             }
