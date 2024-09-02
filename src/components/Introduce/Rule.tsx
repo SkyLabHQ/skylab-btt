@@ -22,7 +22,7 @@ import H4Icon from "./assets/h-4.png";
 import H5Icon from "./assets/h-5.png";
 
 import { ReactComponent as BackIcon } from "./assets/back.svg";
-import { ReactComponent as NextIcon } from "./assets/con.svg";
+import { ReactComponent as NextIcon } from "./assets/enter.svg";
 import { BlackButton } from "./Button";
 import RuleContent0 from "./RuleContent0";
 import RuleContent1 from "./RuleContent1";
@@ -192,31 +192,43 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     }}
                     justify={"flex-end"}
                 >
-                    <BlackButton
-                        sx={{
-                            width: "235px",
-                            height: "68px",
-                            marginRight: "60px",
-                            background: "transparent !important",
-                        }}
-                    >
-                        <BackIcon
-                            style={{
-                                marginRight: "24px",
+                    {activeIndex !== 0 && (
+                        <BlackButton
+                            onClick={() => {
+                                setActiveIndex(activeIndex - 1);
                             }}
-                        ></BackIcon>
-                        <Text>Back</Text>
-                    </BlackButton>
-                    <BlackButton
-                        sx={{
-                            width: "306px",
-                            height: "68px",
-                            background: "transparent !important",
-                        }}
-                    >
-                        <NextIcon style={{ marginRight: "24px" }}></NextIcon>
-                        <Text>Continue</Text>
-                    </BlackButton>
+                            sx={{
+                                width: "235px",
+                                height: "68px",
+                                marginRight: "60px",
+                                background: "transparent !important",
+                            }}
+                        >
+                            <BackIcon
+                                style={{
+                                    marginRight: "24px",
+                                }}
+                            ></BackIcon>
+                            <Text>Back</Text>
+                        </BlackButton>
+                    )}
+                    {activeIndex !== 4 && (
+                        <BlackButton
+                            sx={{
+                                width: "306px",
+                                height: "68px",
+                                background: "transparent !important",
+                            }}
+                            onClick={() => {
+                                setActiveIndex(activeIndex + 1);
+                            }}
+                        >
+                            <NextIcon
+                                style={{ marginRight: "24px" }}
+                            ></NextIcon>
+                            <Text>Continue</Text>
+                        </BlackButton>
+                    )}
                 </Flex>
             </Box>
         </Box>

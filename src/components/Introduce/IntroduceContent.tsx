@@ -8,14 +8,14 @@ import Quan5 from "@/components/Introduce/assets/quan-5.png";
 import Quan6 from "@/components/Introduce/assets/quan-6.png";
 import { useState } from "react";
 import OnIcon from "@/components/Introduce/assets/on-icon.svg";
-import UpIcon from "@/components/Introduce/assets/up-icon.svg";
 import Info from "@/components/Introduce/Info";
-import Light from "@/components/Introduce/assets/light.svg";
+import Light from "@/components/Introduce/assets/light.png";
 import LightC from "@/components/Introduce/assets/light-c.svg";
 import { BlackButton } from "./Button";
-import ShiftAIcon from "./assets/shifta.png";
+import { ReactComponent as ShiftAIcon } from "./assets/shifta.svg";
 import OnTextIcon from "./assets/ON.svg";
-import ShiftEIcon from "./assets/shifte.png";
+import { ReactComponent as ShiftEIcon } from "./assets/shifte.svg";
+import { ReactComponent as NextIcon } from "./assets/enter.svg";
 
 const OnButton = ({ onClick }: { onClick?: () => void }) => {
     return (
@@ -33,13 +33,11 @@ const OnButton = ({ onClick }: { onClick?: () => void }) => {
             justify={"space-between"}
         >
             <Image src={OnIcon}></Image>
-            <Image
-                src={ShiftAIcon}
-                sx={{
+            <ShiftAIcon
+                style={{
                     width: "100px",
                 }}
-            ></Image>
-
+            ></ShiftAIcon>
             <Image
                 src={OnTextIcon}
                 sx={{
@@ -213,8 +211,8 @@ const IntroduceContent = ({
             <Flex
                 sx={{
                     fontSize: "32px",
-                    gap: "60px",
-                    marginTop: "40px",
+                    gap: "100px",
+                    marginTop: "90px",
                 }}
                 justify={"center"}
             >
@@ -227,13 +225,12 @@ const IntroduceContent = ({
                         height: "96px",
                     }}
                 >
-                    <Image
-                        src={ShiftEIcon}
-                        sx={{
-                            width: "100px",
+                    <NextIcon
+                        style={{
+                            width: "30px",
                             marginRight: "20px",
                         }}
-                    ></Image>
+                    ></NextIcon>
                     <Text> Rules</Text>
                 </BlackButton>
                 <BlackButton
@@ -245,13 +242,12 @@ const IntroduceContent = ({
                         height: "96px",
                     }}
                 >
-                    <Image
-                        src={ShiftEIcon}
-                        sx={{
+                    <ShiftEIcon
+                        style={{
                             width: "100px",
                             marginRight: "20px",
                         }}
-                    ></Image>
+                    ></ShiftEIcon>
                     <Text>Schedule</Text>
                 </BlackButton>
             </Flex>
