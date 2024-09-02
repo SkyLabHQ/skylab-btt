@@ -54,8 +54,8 @@ const Info = () => {
                 sx={{
                     color: "#646464",
                     lineHeight: "70px",
-                    fontSize: "38px",
-                    letterSpacing: "4px",
+                    fontSize: "32px",
+                    // letterSpacing: "4px",
                     marginTop: "200px",
                 }}
             >

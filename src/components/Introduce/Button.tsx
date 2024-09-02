@@ -5,7 +5,7 @@ import { ReactComponent as RBorder } from "./assets/r-border.svg";
 
 const BlackButtonStyle = styled(Button)`
     background-color: #161616;
-    font-size: 32px;
+    font-size: 18px;
     font-weight: 700;
     font-family: Orbitron;
     display: flex;

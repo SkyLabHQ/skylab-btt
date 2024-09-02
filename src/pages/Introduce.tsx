@@ -26,6 +26,7 @@ const Introduce = () => {
     const [mode, setMode] = useState("");
 
     const handleChangeWMode = () => {
+        console.log("进来", wMode);
         if (wMode) {
             if (cRef.current) {
                 const currentTime = cRef.current.currentTime;
@@ -60,16 +61,23 @@ const Introduce = () => {
     useEffect(() => {
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
+
             console.log(key);
-            if (key === "Escape") {
+            if (event.shiftKey && key === "Enter") {
+                handleChangeMode("schedule");
+            } else if (event.shiftKey && key === "ArrowUp") {
+                handleChangeWMode();
+            } else if (key === "Escape") {
                 handleChangeMode("");
+            } else if (key === "Enter") {
+                handleChangeMode("rules");
             }
         };
         document.addEventListener("keydown", keyboardListener);
         return () => {
             document.removeEventListener("keydown", keyboardListener);
         };
-    }, []);
+    }, [wMode]);
 
     return (
         <Box
@@ -115,6 +123,7 @@ const Introduce = () => {
             </video>
 
             <IntroduceContent
+                wMode={wMode}
                 onModeChange={(mode: string) => {
                     handleChangeMode(mode);
                 }}

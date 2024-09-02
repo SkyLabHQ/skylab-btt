@@ -16,6 +16,8 @@ import { ReactComponent as ShiftAIcon } from "./assets/shifta.svg";
 import OnTextIcon from "./assets/ON.svg";
 import { ReactComponent as ShiftEIcon } from "./assets/shifte.svg";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
+import OffIcon from "@/components/Introduce/assets/off-icon.svg";
+import OffTextIcon from "@/components/Introduce/assets/OFF.svg";
 
 const OnButton = ({ onClick }: { onClick?: () => void }) => {
     return (
@@ -23,25 +25,66 @@ const OnButton = ({ onClick }: { onClick?: () => void }) => {
             onClick={onClick}
             align={"center"}
             sx={{
-                width: "290px",
-                height: "76px",
+                width: "182px",
+                height: "48px",
                 borderRadius: "12px",
                 border: "2px solid #FFF",
-                padding: "8px",
+                padding: "6px",
                 cursor: "pointer",
             }}
             justify={"space-between"}
         >
-            <Image src={OnIcon}></Image>
+            <Image
+                src={OnIcon}
+                sx={{
+                    width: "36px",
+                }}
+            ></Image>
             <ShiftAIcon
                 style={{
-                    width: "100px",
+                    width: "60px",
                 }}
             ></ShiftAIcon>
             <Image
                 src={OnTextIcon}
                 sx={{
-                    width: "64px",
+                    width: "40px",
+                }}
+            ></Image>
+        </Flex>
+    );
+};
+
+const OffButton = ({ onClick }: { onClick?: () => void }) => {
+    return (
+        <Flex
+            onClick={onClick}
+            align={"center"}
+            sx={{
+                width: "182px",
+                height: "48px",
+                borderRadius: "12px",
+                border: "2px solid #FFF",
+                padding: "6px",
+                cursor: "pointer",
+            }}
+            justify={"space-between"}
+        >
+            <ShiftAIcon
+                style={{
+                    width: "60px",
+                }}
+            ></ShiftAIcon>
+            <Image
+                src={OffTextIcon}
+                sx={{
+                    width: "40px",
+                }}
+            ></Image>
+            <Image
+                src={OffIcon}
+                sx={{
+                    width: "36px",
                 }}
             ></Image>
         </Flex>
@@ -100,9 +143,11 @@ const move1 = keyframes`
     }
 `;
 const IntroduceContent = ({
+    wMode,
     onThemeChange,
     onModeChange,
 }: {
+    wMode: boolean;
     onModeChange: (mode: string) => void;
     onThemeChange: () => void;
 }) => {
@@ -181,7 +226,7 @@ const IntroduceContent = ({
                 <Flex
                     sx={{
                         position: "absolute",
-                        top: "62%",
+                        top: "50%",
                         left: "50%",
                         transform: "translateX(-50%)",
                     }}
@@ -201,18 +246,33 @@ const IntroduceContent = ({
                             width: "40%",
                         }}
                     ></Image>
+                    <Box
+                        sx={{
+                            marginTop: "80px",
+                        }}
+                    >
+                        {!wMode ? (
+                            <OnButton
+                                onClick={() => {
+                                    onThemeChange();
+                                }}
+                            ></OnButton>
+                        ) : (
+                            <OffButton
+                                onClick={() => {
+                                    onThemeChange();
+                                }}
+                            ></OffButton>
+                        )}
+                    </Box>
                 </Flex>
             </Box>
-            <OnButton
-                onClick={() => {
-                    onThemeChange();
-                }}
-            ></OnButton>
+
             <Flex
                 sx={{
                     fontSize: "32px",
                     gap: "100px",
-                    marginTop: "90px",
+                    marginTop: "2.6042vw",
                 }}
                 justify={"center"}
             >
@@ -221,34 +281,46 @@ const IntroduceContent = ({
                         onModeChange("rules");
                     }}
                     sx={{
-                        width: "400px",
-                        height: "96px",
+                        width: "250px",
+                        height: "60px",
                     }}
                 >
                     <NextIcon
                         style={{
-                            width: "30px",
+                            width: "18px",
                             marginRight: "20px",
                         }}
                     ></NextIcon>
-                    <Text> Rules</Text>
+                    <Text
+                        sx={{
+                            fontSize: "18px",
+                        }}
+                    >
+                        Rules
+                    </Text>
                 </BlackButton>
                 <BlackButton
                     onClick={() => {
                         onModeChange("schedule");
                     }}
                     sx={{
-                        width: "400px",
-                        height: "96px",
+                        width: "250px",
+                        height: "60px",
                     }}
                 >
                     <ShiftEIcon
                         style={{
-                            width: "100px",
+                            width: "60px",
                             marginRight: "20px",
                         }}
                     ></ShiftEIcon>
-                    <Text>Schedule</Text>
+                    <Text
+                        sx={{
+                            fontSize: "18px",
+                        }}
+                    >
+                        Schedule
+                    </Text>
                 </BlackButton>
             </Flex>
             <Info></Info>
