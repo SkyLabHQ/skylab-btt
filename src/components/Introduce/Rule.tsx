@@ -28,6 +28,9 @@ import RuleContent2 from "./RuleContent2";
 import RuleContent3 from "./RuleContent3";
 import RuleContent4 from "./RuleContent4";
 
+import { ReactComponent as LArrowIcon } from "./assets/l-arrow.svg";
+import { ReactComponent as RArrowIcon } from "./assets/r-arrow.svg";
+
 const navList = [
     {
         icon: n1Icon,
@@ -138,8 +141,44 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     sx={{
                         gap: "50px",
                         marginTop: "100px",
+                        position: "relative",
                     }}
                 >
+                    <LArrowIcon
+                        style={{
+                            width: "12px",
+                            position: "absolute",
+                            left: "0",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: activeIndex === 0 && "#646464",
+                            cursor:
+                                activeIndex === 0 ? "not-allowed" : "pointer",
+                        }}
+                        onClick={() => {
+                            if (activeIndex !== 0) {
+                                setActiveIndex(activeIndex - 1);
+                            }
+                        }}
+                    ></LArrowIcon>
+                    <RArrowIcon
+                        style={{
+                            width: "12px",
+                            position: "absolute",
+                            right: "0",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: activeIndex === 4 && "#646464",
+                            cursor:
+                                activeIndex === 4 ? "not-allowed" : "pointer",
+                        }}
+                        onClick={() => {
+                            if (activeIndex !== 4) {
+                                setActiveIndex(activeIndex + 1);
+                            }
+                        }}
+                    ></RArrowIcon>
+
                     {navList.map((item, index) => {
                         const ActiveIcon = item.activeIcon;
                         const HoverIcon = item.hIcon;
