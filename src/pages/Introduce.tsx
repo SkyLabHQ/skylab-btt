@@ -135,6 +135,7 @@ const Introduce = () => {
                 onClose={onClose}
                 size={"full"}
                 autoFocus={false}
+                onEsc={() => {}}
             >
                 <ModalOverlay
                     bg="rgba(0, 0, 0, 0.8)"

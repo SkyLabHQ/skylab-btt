@@ -11,7 +11,7 @@ const list = [
     },
     {
         title: "Act II: Outbreak",
-        des: "League leaders emerge. Paper pre-sale begins. The countdown to the game begins. The War of Influence is about to start. Get ready for the clash.",
+        des: "Game starts. Paper folding and Paper Plane minting begins. Timers start ticking and Bid Tac Toe Battles begins.",
     },
     {
         title: "Act III: Escalation",
@@ -32,10 +32,22 @@ const Schedule = ({
 }: {
     onModeChange: (mode: string) => void;
 }) => {
+    useEffect(() => {
+        const keyboardListener = (event: KeyboardEvent) => {
+            const key = event.key;
+            if (key === "Escape") {
+                onModeChange("");
+            }
+        };
+        document.addEventListener("keydown", keyboardListener);
+        return () => {
+            document.removeEventListener("keydown", keyboardListener);
+        };
+    }, []);
     return (
         <Box
             sx={{
-                maxWidth: "1574px",
+                maxWidth: "800px",
                 width: "100%",
                 margin: "0 auto",
             }}
@@ -52,7 +64,7 @@ const Schedule = ({
                     sx={{
                         position: "absolute",
                         right: "0",
-                        top: "20px",
+                        top: "0px",
                         cursor: "pointer",
                     }}
                     align={"center"}
@@ -61,8 +73,8 @@ const Schedule = ({
                     <Image
                         src={CloseIcon}
                         sx={{
-                            width: "36px",
-                            height: "36px",
+                            width: "20px",
+                            height: "20px",
                         }}
                     ></Image>
                     <Text
@@ -70,8 +82,7 @@ const Schedule = ({
                             color: "#FFF",
                             textAlign: "center",
                             fontFamily: "Orbitron",
-                            fontSize: "30px",
-
+                            fontSize: "18px",
                             fontWeight: 400,
                         }}
                     >
@@ -83,9 +94,7 @@ const Schedule = ({
                         color: "#F2D861",
                         textAlign: "center",
                         textShadow: "#FFD000",
-                        fontFamily: "Orbitron",
-                        fontSize: "64px",
-
+                        fontSize: "34px",
                         fontWeight: 700,
                     }}
                 >
@@ -108,37 +117,36 @@ const Schedule = ({
                                 <Image
                                     src={CircleGif}
                                     sx={{
-                                        width: "120px",
-                                        height: "120px",
+                                        width: "80px",
+                                        height: "80px",
                                     }}
                                 ></Image>
                                 <Box
                                     sx={{
                                         width: "100%",
-                                        height: "287px",
+                                        height: "160px",
                                         background: `url(${SBg})`,
                                         backgroundSize: "100% 100%",
-                                        padding: "0 50px",
+                                        padding: "0 32px",
                                     }}
                                 >
                                     <Text
                                         sx={{
                                             textAlign: "center",
                                             fontFamily: "Orbitron",
-                                            fontSize: "40px",
-
+                                            fontSize: "30px",
                                             fontWeight: 700,
+                                            lineHeight: "80px",
                                         }}
                                     >
                                         {item.title}
                                     </Text>
                                     <Text
                                         sx={{
-                                            fontSize: "30px",
-
+                                            fontSize: "18px",
                                             fontWeight: 400,
-                                            lineHeight: "50px",
-                                            marginTop: "20px",
+                                            lineHeight: "30px",
+                                            marginTop: "0px",
                                         }}
                                     >
                                         {item.des}
