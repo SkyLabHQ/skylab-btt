@@ -1,8 +1,6 @@
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import CloseIcon from "./assets/close.svg";
-import CircleGif from "@/components/Introduce/assets/circle.gif";
-import RBg from "./assets/r-bg.png";
 import An1Icon from "./assets/an-1.svg";
 import An2Icon from "./assets/an-2.svg";
 import An3Icon from "./assets/an-3.svg";
@@ -61,6 +59,22 @@ const navList = [
 const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
+    useEffect(() => {
+        const keyboardListener = (event: KeyboardEvent) => {
+            const key = event.key;
+            if (key === "Enter" && activeIndex !== 4) {
+                setActiveIndex(activeIndex + 1);
+            } else if (key === "Backspace" && activeIndex !== 0) {
+                setActiveIndex(activeIndex - 1);
+            } else if (key === "Escape") {
+                onModeChange("");
+            }
+        };
+        document.addEventListener("keydown", keyboardListener);
+        return () => {
+            document.removeEventListener("keydown", keyboardListener);
+        };
+    }, [activeIndex]);
     return (
         <Box
             sx={{
@@ -198,7 +212,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                 setActiveIndex(activeIndex - 1);
                             }}
                             sx={{
-                                width: "250px",
+                                width: "235px",
                                 height: "60px",
                                 marginRight: "60px",
                                 background: "transparent !important",
@@ -207,6 +221,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                             <BackIcon
                                 style={{
                                     marginRight: "24px",
+                                    width: "18px",
                                 }}
                             ></BackIcon>
                             <Text>Back</Text>
@@ -215,7 +230,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     {activeIndex !== 4 && (
                         <BlackButton
                             sx={{
-                                width: "250px",
+                                width: "235px",
                                 height: "60px",
                                 background: "transparent !important",
                             }}
@@ -224,7 +239,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                             }}
                         >
                             <NextIcon
-                                style={{ marginRight: "24px" }}
+                                style={{ marginRight: "24px", width: "18px" }}
                             ></NextIcon>
                             <Text>Continue</Text>
                         </BlackButton>

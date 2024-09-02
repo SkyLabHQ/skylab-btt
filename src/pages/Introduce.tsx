@@ -60,15 +60,16 @@ const Introduce = () => {
 
     useEffect(() => {
         const keyboardListener = (event: KeyboardEvent) => {
-            const key = event.key;
+            console.log(mode, "mode");
+            if (mode) {
+                return;
+            }
 
-            console.log(key);
+            const key = event.key;
             if (event.shiftKey && key === "Enter") {
                 handleChangeMode("schedule");
             } else if (event.shiftKey && key === "ArrowUp") {
                 handleChangeWMode();
-            } else if (key === "Escape") {
-                handleChangeMode("");
             } else if (key === "Enter") {
                 handleChangeMode("rules");
             }
@@ -77,7 +78,7 @@ const Introduce = () => {
         return () => {
             document.removeEventListener("keydown", keyboardListener);
         };
-    }, [wMode]);
+    }, [wMode, mode]);
 
     return (
         <Box
