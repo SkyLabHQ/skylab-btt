@@ -174,7 +174,7 @@ const IntroduceContent = ({
             <Box
                 sx={{
                     width: "100%",
-                    height: "100vh",
+                    height: "100vw",
                     position: "relative",
                     overflow: "hidden",
                     "& *": {
@@ -189,7 +189,7 @@ const IntroduceContent = ({
                             key={index}
                             sx={{
                                 position: "absolute",
-                                top: "50%",
+                                top: "50vh",
                                 left: "50%",
                                 transform: "translate(-50%, -50%)",
                                 width:
@@ -215,7 +215,7 @@ const IntroduceContent = ({
                     src={CircleGif}
                     sx={{
                         position: "absolute",
-                        top: "50%",
+                        top: "50vh",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
                         width: "26%",
@@ -226,7 +226,7 @@ const IntroduceContent = ({
                 <Flex
                     sx={{
                         position: "absolute",
-                        top: "50%",
+                        top: "50vh",
                         left: "50%",
                         transform: "translateX(-50%)",
                     }}
