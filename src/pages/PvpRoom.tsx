@@ -129,7 +129,7 @@ const PvpRoom = () => {
     };
 
     const handleGameInfo = (gameInfo: any) => {
-        const gridIndex = gameInfo.gridIndex;
+        const gridIndex = gameInfo.gridIndex == 9 ? 8 : gameInfo.gridIndex;
         const gridOrder = gameInfo.gridOrder;
         const resCurrentGrid = gridOrder[gridIndex];
 

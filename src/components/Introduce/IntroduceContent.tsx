@@ -9,7 +9,6 @@ import Quan6 from "@/components/Introduce/assets/quan-6.png";
 import { useState } from "react";
 import OnIcon from "@/components/Introduce/assets/on-icon.svg";
 import UpIcon from "@/components/Introduce/assets/up-icon.svg";
-
 import Info from "@/components/Introduce/Info";
 import Light from "@/components/Introduce/assets/light.svg";
 import LightC from "@/components/Introduce/assets/light-c.svg";

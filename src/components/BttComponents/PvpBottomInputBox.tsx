@@ -88,6 +88,7 @@ const PvpBottomInputBox = ({
                         src={SubIcon}
                         sx={{
                             width: "16px",
+                            cursor: "pointer",
                         }}
                     ></Image>
                     <Box
@@ -111,6 +112,7 @@ const PvpBottomInputBox = ({
                         src={AddIcon}
                         sx={{
                             width: "16px",
+                            cursor: "pointer",
                         }}
                     ></Image>
                 </Flex>
