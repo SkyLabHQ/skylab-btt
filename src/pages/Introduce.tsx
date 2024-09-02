@@ -136,7 +136,7 @@ const Introduce = () => {
                     sx={{
                         background: "transparent",
                         overflow: "auto",
-                        padding: "200px 20px 0",
+                        padding: "100px 20px 100px",
                         fontFamily: "Orbitron",
                     }}
                 >

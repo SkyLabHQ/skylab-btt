@@ -67,7 +67,6 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 maxWidth: "1574px",
                 width: "100%",
                 margin: "0 auto",
-                padding: "200px 0",
             }}
         >
             <Box
