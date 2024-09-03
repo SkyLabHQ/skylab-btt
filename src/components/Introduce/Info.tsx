@@ -63,14 +63,32 @@ const Info = () => {
                 {rules.map((item, index) => {
                     return (
                         <Box
-                            sx={{
-                                animationDelay: `${index * 2.5}s`,
-                                marginBottom: "30px",
-                            }}
-                            animation={`${colorKeyframes} 15s linear infinite`}
                             key={index}
+                            sx={{
+                                position: "relative",
+                            }}
                         >
-                            {item}
+                            <Box
+                                sx={{
+                                    animationDelay: `${index * 2.5}s`,
+                                    marginBottom: "30px",
+                                }}
+                                animation={`${colorKeyframes} 15s linear infinite`}
+                                key={index}
+                            >
+                                {item}
+                            </Box>
+                            {/* <Box
+                                sx={{
+                                    background: "transparent",
+                                    backdropFilter: "blur(10px)",
+                                    position: "absolute",
+                                    left: "0",
+                                    top: "0",
+                                    width: "100%",
+                                    height: "100%",
+                                }}
+                            ></Box> */}
                         </Box>
                     );
                 })}

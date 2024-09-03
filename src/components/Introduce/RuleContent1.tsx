@@ -1,7 +1,7 @@
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 
 import UpVideo from "./assets/up.mp4";
-import PaperVideo from "./assets/paper.mp4";
+import NewcomerVideo from "./assets/newcomer.mp4";
 import RuleWrap from "./RuleWrap";
 
 const RuleContent1 = () => {
@@ -70,7 +70,7 @@ const RuleContent1 = () => {
                     margin: "20px auto",
                 }}
             >
-                <source src={PaperVideo} type="video/mp4" />
+                <source src={NewcomerVideo} type="video/mp4" />
             </video>
             <RuleWrap
                 sx={{

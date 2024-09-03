@@ -263,8 +263,8 @@ const IntroduceContent = ({
                     <Image
                         src={LightC}
                         sx={{
-                            marginTop: "-4vw",
-                            width: "40%",
+                            marginTop: "-2vw",
+                            width: "20%",
                         }}
                     ></Image>
                 </Flex>
