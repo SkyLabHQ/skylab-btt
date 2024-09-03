@@ -16,7 +16,7 @@ import Lock from "@/components/Introduce/Lock";
 const Introduce = () => {
     const [init, setInit] = useState(true);
     const cRef = createRef<HTMLVideoElement>();
-    // const wRef = createRef<HTMLVideoElement>();
+    const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [wMode, setWMode] = useState(false);
@@ -27,13 +27,19 @@ const Introduce = () => {
 
     const handleChangeWMode = () => {
         if (wMode) {
-            cRef.current?.pause();
+            if (wRef.current) {
+                const currentTime = cRef.current.currentTime;
+                wRef.current.currentTime = currentTime;
+                wRef.current.pause();
+                cRef.current?.pause();
+            }
             setWMode(false);
         } else {
             if (cRef.current) {
-                // wRef.current.currentTime = currentTime;
+                const currentTime = wRef.current.currentTime;
+                wRef.current.currentTime = currentTime;
                 cRef.current.play();
-                // wRef.current?.play();
+                wRef.current?.play();
             }
 
             setWMode(true);
@@ -95,7 +101,7 @@ const Introduce = () => {
             >
                 <source src={CVideo} type="video/mp4" />
             </video>
-            {/* <video
+            <video
                 autoPlay
                 loop
                 muted
@@ -105,13 +111,13 @@ const Introduce = () => {
                     top: 0,
                     objectFit: "cover",
                     position: "absolute",
-                    opacity: wMode ? 1 : 0,
+                    opacity: wMode ? 0 : 1,
                     mixBlendMode: "screen",
                 }}
                 ref={wRef}
             >
                 <source src={WVideo} type="video/mp4" />
-            </video> */}
+            </video>
 
             <IntroduceContent
                 wMode={wMode}
