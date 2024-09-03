@@ -18,6 +18,8 @@ import { ReactComponent as ShiftEIcon } from "./assets/shifte.svg";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
 import OffIcon from "@/components/Introduce/assets/off-icon.svg";
 import OffTextIcon from "@/components/Introduce/assets/OFF.svg";
+import TitleOnIcon from "./assets/Title-On.png";
+import TitleOffIcon from "./assets/Title-Off.png";
 
 const OnButton = ({ onClick }: { onClick?: () => void }) => {
     return (
@@ -210,27 +212,63 @@ const IntroduceContent = ({
                     })}
                 </Box>
 
-                <Image
-                    onClick={() => {
-                        if (addCount >= quanList.length) {
-                            handleDownTo0(addCount);
-                            return;
-                        }
-                        setAddCount(addCount + 1);
-                    }}
-                    src={CircleGif}
+                <Box
                     sx={{
                         position: "absolute",
                         top: "50%",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
                         width: "26%",
-                        zIndex: 10,
-                        cursor: "pointer",
                         aspectRatio: 1,
-                        display: wMode ? "none" : "block",
                     }}
-                ></Image>
+                >
+                    <Image
+                        onClick={() => {
+                            if (addCount >= quanList.length) {
+                                handleDownTo0(addCount);
+                                return;
+                            }
+                            setAddCount(addCount + 1);
+                        }}
+                        src={CircleGif}
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: "100%",
+                            zIndex: 10,
+                            cursor: "pointer",
+                            height: "100%",
+                            display: wMode ? "none" : "block",
+                        }}
+                    ></Image>
+                    <Box
+                        sx={{
+                            // position: "absolute",
+                            textAlign: "center",
+                            fontSize: "40px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                            paddingTop: "4.5417vw",
+                            opacity: wMode ? 0 : 1,
+                            transition: "all 0.1s",
+                        }}
+                    >
+                        ENTER
+                    </Box>
+                    <Image
+                        src={wMode ? TitleOffIcon : TitleOnIcon}
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: "100%",
+                        }}
+                    ></Image>
+                </Box>
+
                 <Box
                     sx={{
                         marginTop: "80px",
