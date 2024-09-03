@@ -14,7 +14,7 @@ import WVideo from "@/components/Introduce/assets/w.mp4";
 import Lock from "@/components/Introduce/Lock";
 
 const Introduce = () => {
-    const [init, setInit] = useState(true);
+    const [init, setInit] = useState(false);
     const cRef = createRef<HTMLVideoElement>();
     const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -162,13 +162,13 @@ const Introduce = () => {
                     )}
                 </ModalContent>
             </Modal>
-            {/* {!init && (
+            {!init && (
                 <Lock
                     onChangeInit={() => {
                         setInit(true);
                     }}
                 ></Lock>
-            )} */}
+            )}
         </Box>
     );
 };
