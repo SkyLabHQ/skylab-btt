@@ -180,28 +180,36 @@ const IntroduceContent = ({
                     },
                 }}
             >
-                {quanList.map((item, index) => {
-                    return (
-                        <Image
-                            src={item.img}
-                            key={index}
-                            sx={{
-                                position: "absolute",
-                                top: "50vh",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                width:
-                                    addCount > index
-                                        ? item.activeWidth
-                                        : item.width,
-                                opacity: addCount > index ? 1 : 0,
-                            }}
-                            animation={`${
-                                index % 2 == 0 ? move : move1
-                            } 20s linear infinite`}
-                        ></Image>
-                    );
-                })}
+                <Box
+                    sx={{
+                        display: wMode ? "none" : "block",
+                    }}
+                >
+                    {" "}
+                    {quanList.map((item, index) => {
+                        return (
+                            <Image
+                                src={item.img}
+                                key={index}
+                                sx={{
+                                    position: "absolute",
+                                    top: "50vh",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    width:
+                                        addCount > index
+                                            ? item.activeWidth
+                                            : item.width,
+                                    opacity: addCount > index ? 1 : 0,
+                                }}
+                                animation={`${
+                                    index % 2 == 0 ? move : move1
+                                } 20s linear infinite`}
+                            ></Image>
+                        );
+                    })}
+                </Box>
+
                 <Image
                     onClick={() => {
                         if (addCount >= quanList.length) {
@@ -220,7 +228,7 @@ const IntroduceContent = ({
                         zIndex: 10,
                         cursor: "pointer",
                         aspectRatio: 1,
-                        opacity: wMode ? 0 : 1,
+                        display: wMode ? "none" : "block",
                     }}
                 ></Image>
                 <Box
