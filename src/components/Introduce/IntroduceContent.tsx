@@ -220,6 +220,7 @@ const IntroduceContent = ({
                         transform: "translate(-50%, -50%)",
                         width: "26%",
                         aspectRatio: 1,
+                        zIndex: 1,
                     }}
                 >
                     <Image

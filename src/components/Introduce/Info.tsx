@@ -41,6 +41,21 @@ const colorKeyframes = keyframes`
     }
 `;
 
+const bgKeyframes = keyframes`
+    0% {
+        background-filter: blur(0px);
+    }
+    
+
+    28.6% {
+        color: #646464;
+    }
+    
+    100% {
+        color: #646464;
+    }
+`;
+
 const Info = () => {
     return (
         <Box
@@ -57,7 +72,7 @@ const Info = () => {
                     lineHeight: "28px",
                     fontSize: "20px",
                     letterSpacing: "4px",
-                    marginTop: "200px",
+                    marginTop: "40px",
                 }}
             >
                 {rules.map((item, index) => {
@@ -78,17 +93,17 @@ const Info = () => {
                             >
                                 {item}
                             </Box>
-                            {/* <Box
+                            <Box
                                 sx={{
                                     background: "transparent",
-                                    backdropFilter: "blur(10px)",
                                     position: "absolute",
                                     left: "0",
                                     top: "0",
                                     width: "100%",
                                     height: "100%",
+                                    transition: "all 0s",
                                 }}
-                            ></Box> */}
+                            ></Box>
                         </Box>
                     );
                 })}
