@@ -102,7 +102,6 @@ const Introduce = () => {
                 <source src={CVideo} type="video/mp4" />
             </video>
             <video
-                autoPlay
                 loop
                 muted
                 style={{
