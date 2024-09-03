@@ -110,7 +110,7 @@ const Introduce = () => {
                     top: 0,
                     objectFit: "cover",
                     position: "absolute",
-                    opacity: wMode ? 0 : 0.3,
+                    opacity: wMode ? 0 : 0.5,
                     mixBlendMode: "screen",
                 }}
                 ref={wRef}

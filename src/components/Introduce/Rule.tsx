@@ -231,6 +231,12 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 <Box
                     sx={{
                         marginTop: "30px",
+                        "& video": {
+                            border: "1px solid transparent",
+                        },
+                        "& video:hover": {
+                            border: "1px solid #ffffff99",
+                        },
                     }}
                 >
                     {activeIndex === 0 && <RuleContent0></RuleContent0>}
