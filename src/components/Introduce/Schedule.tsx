@@ -2,6 +2,8 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { useEffect } from "react";
 import CloseIcon from "./assets/close.svg";
 import CircleGif from "@/components/Introduce/assets/circle.gif";
+import CircleYGif from "@/components/Introduce/assets/circle-y.gif";
+
 import SBg from "./assets/s-bg.png";
 
 const list = [
@@ -113,14 +115,35 @@ const Schedule = ({
                                 sx={{
                                     marginBottom: "40px",
                                 }}
+                                key={index}
                             >
-                                <Image
-                                    src={CircleGif}
+                                <Box
                                     sx={{
                                         width: "80px",
                                         height: "80px",
+                                        "&:hover img:nth-child(1)": {
+                                            display: "none",
+                                        },
+                                        "&:hover img:nth-child(2)": {
+                                            display: "block",
+                                        },
                                     }}
-                                ></Image>
+                                >
+                                    <Image
+                                        src={CircleGif}
+                                        sx={{
+                                            width: "100%",
+                                        }}
+                                    ></Image>
+                                    <Image
+                                        src={CircleYGif}
+                                        sx={{
+                                            width: "100%",
+                                            display: "none",
+                                        }}
+                                    ></Image>
+                                </Box>
+
                                 <Box
                                     sx={{
                                         width: "100%",
