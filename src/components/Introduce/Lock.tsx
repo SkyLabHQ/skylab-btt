@@ -1,14 +1,11 @@
 import useSkyToast from "@/hooks/useSkyToast";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { ReactComponent as LBorder } from "./assets/l-border.svg";
-import { ReactComponent as RBorder } from "./assets/r-border.svg";
 import RuleWrap from "./RuleWrap";
 import { BlackButton } from "./Button";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
 
 const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
-    const [inputValue, setInputValue] = useState();
     const codeRef = [
         useRef(null),
         useRef(null),
@@ -104,6 +101,7 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                 background: "rgba(0, 0, 0, 0.24)",
                 backdropFilter: "blur(50px)",
                 zIndex: 10,
+                fontFamily: "Orbitron",
             }}
             flexDir={"column"}
             align={"center"}
@@ -123,8 +121,7 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
 
             <RuleWrap
                 sx={{
-                    background: "rgba(0, 0, 0, 0.20) !important",
-
+                    backgroundColor: "rgba(0, 0, 0, 0.20) !important",
                     width: "436px",
                     height: "95px",
                     position: "relative",
