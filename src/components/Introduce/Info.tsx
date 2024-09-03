@@ -48,6 +48,7 @@ const Info = () => {
                 maxWidth: "1344px",
                 width: "100%",
                 margin: "0 auto",
+                paddingBottom: "40px",
             }}
         >
             <Box

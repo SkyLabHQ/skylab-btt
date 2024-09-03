@@ -1,6 +1,7 @@
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 
 import NewcomerVideo from "./assets/newcomer.mp4";
+import RuleWrap from "./RuleWrap";
 
 const RuleContent4 = () => {
     return (
@@ -8,7 +9,7 @@ const RuleContent4 = () => {
             <Box>
                 <Text
                     sx={{
-                        fontSize: "30px",
+                        fontSize: "24px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -21,38 +22,40 @@ const RuleContent4 = () => {
                     muted
                     style={{
                         width: "100%",
+                        maxWidth: "600px",
                         margin: "20px auto",
                     }}
                 >
                     <source src={NewcomerVideo} type="video/mp4" />
                 </video>
             </Box>
-            <Text
-                sx={{
-                    fontSize: "20px",
-                    lineHeight: "50px",
-                    marginTop: "32px",
-                }}
-            >
-                For each level up,{" "}
-                <span
-                    style={{
-                        fontWeight: 700,
+            <RuleWrap>
+                <Text
+                    sx={{
+                        fontSize: "12px",
+                        lineHeight: "25px",
                     }}
                 >
-                    minimum xp requirements and timer starting point doubles.
-                </span>
-            </Text>
-            <Text
-                sx={{
-                    fontSize: "20px",
-
-                    lineHeight: "50px",
-                    marginTop: "16px",
-                }}
-            >
-                perhaps so has the worth of your plane in the marketplace :)
-            </Text>
+                    For each level up,{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            textDecoration: "underline",
+                        }}
+                    >
+                        minimum xp requirements and timer starting point
+                        doubles.
+                    </span>
+                </Text>
+                <Text
+                    sx={{
+                        marginTop: "16px",
+                    }}
+                >
+                    perhaps so has the worth of your plane in the marketplace 😊
+                </Text>
+            </RuleWrap>
         </Box>
     );
 };

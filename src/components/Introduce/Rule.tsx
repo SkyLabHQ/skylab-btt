@@ -253,7 +253,6 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                             sx={{
                                 width: "235px",
                                 height: "60px",
-                                marginRight: "60px",
                                 background: "transparent !important",
                             }}
                         >
@@ -272,6 +271,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                 width: "235px",
                                 height: "60px",
                                 background: "transparent !important",
+                                marginLeft: "60px",
                             }}
                             onClick={() => {
                                 setActiveIndex(activeIndex + 1);
