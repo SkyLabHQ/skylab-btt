@@ -53,8 +53,8 @@ const Info = () => {
             <Box
                 sx={{
                     color: "#646464",
-                    lineHeight: "70px",
-                    fontSize: "32px",
+                    lineHeight: "28px",
+                    fontSize: "20px",
                     letterSpacing: "4px",
                     marginTop: "200px",
                 }}

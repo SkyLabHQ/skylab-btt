@@ -75,11 +75,11 @@ const MyBid = ({
             const key = event.key;
             event.shiftKey && key === "Enter";
             switch (key) {
-                case "ArrowUp":
+                case "ArrowRight":
                     onInputChange?.(bidAmount + 1);
                     break;
 
-                case "ArrowDown": {
+                case "ArrowLeft": {
                     onInputChange?.(bidAmount - 1);
                     break;
                 }
@@ -565,66 +565,6 @@ export const PvpOpInputBid = ({
                 ></Box>
                 <OpBid opIsBid={opIsBid} balance={balance}></OpBid>
             </Box>
-        </Box>
-    );
-};
-
-export const PvpMyUserCard = ({
-    showTutorialStep,
-    loading,
-    balance,
-    bidAmount,
-    myIsBid,
-    onConfirm,
-    onInputChange,
-    showAnimateConfirm,
-}: UserCardProps) => {
-    return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-            }}
-        >
-            <Box
-                sx={{
-                    position: "relative",
-                }}
-            ></Box>
-
-            <Text
-                sx={{
-                    fontSize: "0.8333vw",
-                    cursor: "pointer",
-                    marginTop: "0.3125vw",
-                }}
-                onClick={() => {
-                    // onCopy();
-                    // toast("Copy address success");
-                }}
-            >
-                用户1
-                <Image
-                    src={CopyIcon}
-                    sx={{
-                        width: "0.8333vw",
-                        marginLeft: "0.5208vw",
-                        display: "inline-block",
-                        verticalAlign: "middle",
-                    }}
-                ></Image>
-            </Text>
-            <MyInputBid
-                showTutorialStep={showTutorialStep}
-                loading={loading}
-                balance={balance}
-                bidAmount={bidAmount}
-                onInputChange={onInputChange}
-                onConfirm={onConfirm}
-                myIsBid={myIsBid}
-                showAnimateConfirm={showAnimateConfirm}
-            ></MyInputBid>
         </Box>
     );
 };

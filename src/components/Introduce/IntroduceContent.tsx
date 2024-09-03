@@ -27,7 +27,6 @@ const OnButton = ({ onClick }: { onClick?: () => void }) => {
             sx={{
                 width: "182px",
                 height: "48px",
-                borderRadius: "12px",
                 border: "2px solid #FFF",
                 padding: "6px",
                 cursor: "pointer",
@@ -63,7 +62,6 @@ const OffButton = ({ onClick }: { onClick?: () => void }) => {
             sx={{
                 width: "182px",
                 height: "48px",
-                borderRadius: "12px",
                 border: "2px solid #FFF",
                 padding: "6px",
                 cursor: "pointer",
@@ -93,33 +91,33 @@ const OffButton = ({ onClick }: { onClick?: () => void }) => {
 const quanList = [
     {
         img: Quan1,
-        width: "32%",
-        activeWidth: "37%",
+        width: "30%",
+        activeWidth: "36%",
     },
     {
         img: Quan2,
-        width: "40%",
-        activeWidth: "47%",
+        width: "38%",
+        activeWidth: "44%",
     },
     {
         img: Quan3,
-        width: "50%",
-        activeWidth: "57%",
+        width: "46%",
+        activeWidth: "52%",
     },
     {
         img: Quan4,
-        width: "60%",
-        activeWidth: "67%",
+        width: "54%",
+        activeWidth: "60%",
     },
     {
         img: Quan5,
-        width: "70%",
-        activeWidth: "77%",
+        width: "62%",
+        activeWidth: "68%",
     },
     {
         img: Quan6,
-        width: "80%",
-        activeWidth: "87%",
+        width: "70%",
+        activeWidth: "76%",
     },
 ];
 
@@ -174,7 +172,7 @@ const IntroduceContent = ({
             <Box
                 sx={{
                     width: "100%",
-                    height: "100vw",
+                    height: "100vh",
                     position: "relative",
                     overflow: "hidden",
                     "& *": {
@@ -215,18 +213,41 @@ const IntroduceContent = ({
                     src={CircleGif}
                     sx={{
                         position: "absolute",
-                        top: "50vh",
+                        top: "50%",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
                         width: "26%",
                         zIndex: 10,
                         cursor: "pointer",
+                        aspectRatio: 1,
                     }}
                 ></Image>
+                <Box
+                    sx={{
+                        marginTop: "80px",
+                        position: "absolute",
+                        right: "55px",
+                        top: "55px",
+                    }}
+                >
+                    {!wMode ? (
+                        <OnButton
+                            onClick={() => {
+                                onThemeChange();
+                            }}
+                        ></OnButton>
+                    ) : (
+                        <OffButton
+                            onClick={() => {
+                                onThemeChange();
+                            }}
+                        ></OffButton>
+                    )}
+                </Box>
                 <Flex
                     sx={{
                         position: "absolute",
-                        top: "50vh",
+                        top: "50%",
                         left: "50%",
                         transform: "translateX(-50%)",
                     }}
@@ -246,25 +267,6 @@ const IntroduceContent = ({
                             width: "40%",
                         }}
                     ></Image>
-                    <Box
-                        sx={{
-                            marginTop: "80px",
-                        }}
-                    >
-                        {!wMode ? (
-                            <OnButton
-                                onClick={() => {
-                                    onThemeChange();
-                                }}
-                            ></OnButton>
-                        ) : (
-                            <OffButton
-                                onClick={() => {
-                                    onThemeChange();
-                                }}
-                            ></OffButton>
-                        )}
-                    </Box>
                 </Flex>
             </Box>
 
@@ -272,7 +274,7 @@ const IntroduceContent = ({
                 sx={{
                     fontSize: "32px",
                     gap: "100px",
-                    marginTop: "2.6042vw",
+                    marginTop: "3vw",
                 }}
                 justify={"center"}
             >

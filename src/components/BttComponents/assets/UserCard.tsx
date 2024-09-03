@@ -80,11 +80,11 @@ const MyBid = ({
             const key = event.key;
             event.shiftKey && key === "Enter";
             switch (key) {
-                case "ArrowUp":
+                case "ArrowRight":
                     onInputChange?.(bidAmount + 1);
                     break;
 
-                case "ArrowDown": {
+                case "ArrowLeft": {
                     onInputChange?.(bidAmount - 1);
                     break;
                 }

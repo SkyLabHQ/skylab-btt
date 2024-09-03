@@ -1,9 +1,5 @@
 import {
     Box,
-    Image,
-    keyframes,
-    Text,
-    Flex,
     Modal,
     ModalContent,
     useDisclosure,
@@ -15,33 +11,29 @@ import IntroduceContent from "@/components/Introduce/IntroduceContent";
 import Schedule from "@/components/Introduce/Schedule";
 import CVideo from "@/components/Introduce/assets/c.mp4";
 import WVideo from "@/components/Introduce/assets/w.mp4";
+import Lock from "@/components/Introduce/Lock";
 
 const Introduce = () => {
+    const [init, setInit] = useState(true);
     const cRef = createRef<HTMLVideoElement>();
-    const wRef = createRef<HTMLVideoElement>();
+    // const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [wMode, setWMode] = useState(false);
 
     const [mode, setMode] = useState("");
 
-    const handleChangeWMode = () => {
-        console.log("进来", wMode);
-        if (wMode) {
-            if (cRef.current) {
-                const currentTime = cRef.current.currentTime;
-                wRef.current.currentTime = currentTime;
-                cRef.current.play();
-                wRef.current?.play();
-            }
+    console.log(wMode, "wMode");
 
+    const handleChangeWMode = () => {
+        if (wMode) {
+            cRef.current?.pause();
             setWMode(false);
         } else {
-            if (wRef.current) {
-                const currentTime = cRef.current.currentTime;
-                wRef.current.currentTime = currentTime;
-                wRef.current.pause();
-                cRef.current?.pause();
+            if (cRef.current) {
+                // wRef.current.currentTime = currentTime;
+                cRef.current.play();
+                // wRef.current?.play();
             }
 
             setWMode(true);
@@ -59,12 +51,10 @@ const Introduce = () => {
     };
 
     useEffect(() => {
+        if (mode || !init) {
+            return;
+        }
         const keyboardListener = (event: KeyboardEvent) => {
-            console.log(mode, "mode");
-            if (mode) {
-                return;
-            }
-
             const key = event.key;
             if (event.shiftKey && key === "Enter") {
                 handleChangeMode("schedule");
@@ -78,7 +68,7 @@ const Introduce = () => {
         return () => {
             document.removeEventListener("keydown", keyboardListener);
         };
-    }, [wMode, mode]);
+    }, [wMode, mode, init]);
 
     return (
         <Box
@@ -98,14 +88,14 @@ const Introduce = () => {
                     top: 0,
                     objectFit: "cover",
                     position: "absolute",
-                    opacity: wMode ? 0 : 1,
+                    opacity: wMode ? 1 : 0,
                     mixBlendMode: "screen",
                 }}
                 ref={cRef}
             >
                 <source src={CVideo} type="video/mp4" />
             </video>
-            <video
+            {/* <video
                 autoPlay
                 loop
                 muted
@@ -121,7 +111,7 @@ const Introduce = () => {
                 ref={wRef}
             >
                 <source src={WVideo} type="video/mp4" />
-            </video>
+            </video> */}
 
             <IntroduceContent
                 wMode={wMode}
@@ -167,6 +157,13 @@ const Introduce = () => {
                     )}
                 </ModalContent>
             </Modal>
+            {/* {!init && (
+                <Lock
+                    onChangeInit={() => {
+                        setInit(true);
+                    }}
+                ></Lock>
+            )} */}
         </Box>
     );
 };
