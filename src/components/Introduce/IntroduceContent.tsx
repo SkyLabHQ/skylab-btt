@@ -247,7 +247,7 @@ const IntroduceContent = ({
                         sx={{
                             // position: "absolute",
                             textAlign: "center",
-                            fontSize: "40px",
+                            fontSize: "2.0833vw",
                             fontStyle: "normal",
                             fontWeight: 700,
                             paddingTop: "4.5417vw",
