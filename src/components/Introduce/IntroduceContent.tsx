@@ -220,6 +220,7 @@ const IntroduceContent = ({
                         zIndex: 10,
                         cursor: "pointer",
                         aspectRatio: 1,
+                        opacity: wMode ? 0 : 1,
                     }}
                 ></Image>
                 <Box
@@ -250,6 +251,7 @@ const IntroduceContent = ({
                         top: "50%",
                         left: "50%",
                         transform: "translateX(-50%)",
+                        opacity: wMode ? 0 : 1,
                     }}
                     flexDir={"column"}
                     align={"center"}
@@ -257,14 +259,16 @@ const IntroduceContent = ({
                     <Image
                         src={Light}
                         sx={{
-                            width: "80%",
+                            width: "60%",
+                            marginTop: "1vw",
                         }}
                     ></Image>
                     <Image
                         src={LightC}
                         sx={{
-                            marginTop: "-2vw",
-                            width: "20%",
+                            marginTop: "-1vw",
+                            width: "7%",
+                            opacity: 0.5,
                         }}
                     ></Image>
                 </Flex>
