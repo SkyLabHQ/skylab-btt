@@ -1,4 +1,3 @@
-import useSkyToast from "@/hooks/useSkyToast";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import RuleWrap from "./RuleWrap";
@@ -6,6 +5,7 @@ import { BlackButton } from "./Button";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
 
 const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
+    const [show, setShow] = useState(false);
     const codeRef = [
         useRef(null),
         useRef(null),
@@ -33,7 +33,6 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
             }
         }
     };
-    const toast = useSkyToast();
 
     const handleConfirm = () => {
         let code = "";
@@ -41,10 +40,15 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
             code += codeRef[i].current.value;
         }
 
+        if (code.length < 5) return;
+
         if (code.toLocaleLowerCase() === "mmosg") {
             onChangeInit();
         } else {
-            toast("Password error");
+            setShow(true);
+            setTimeout(() => {
+                setShow(false);
+            }, 3000);
         }
     };
 
@@ -119,6 +123,18 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                 Enter Password
             </Text>
 
+            <Text
+                sx={{
+                    color: "#D40000",
+                    textAlign: "center",
+                    fontSize: "18px",
+                    fontWeight: 700,
+                    marginTop: "4px",
+                    opacity: show ? 1 : 0,
+                }}
+            >
+                Incorrect Password!
+            </Text>
             <RuleWrap
                 sx={{
                     backgroundColor: "rgba(0, 0, 0, 0.20) !important",
@@ -127,7 +143,7 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                     position: "relative",
                     display: "flex",
                     justifyContent: "space-between",
-                    marginTop: "33px",
+                    marginTop: "12px",
                 }}
             >
                 {codeRef.map((item, index) => {
@@ -179,7 +195,7 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                 <NextIcon
                     style={{ marginRight: "24px", width: "18px" }}
                 ></NextIcon>
-                <Text>Continue</Text>
+                <Text>Confirm</Text>
             </BlackButton>
         </Flex>
     );
