@@ -173,7 +173,6 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                     width: "250px",
                     height: "60px",
                     marginTop: "20px",
-                    // background: "transparent !important",
                     background: "rgba(0, 0, 0, 0.20) !important",
                 }}
             >

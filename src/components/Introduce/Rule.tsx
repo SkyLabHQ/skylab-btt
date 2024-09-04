@@ -20,7 +20,7 @@ import H4Icon from "./assets/h-4.png";
 import H5Icon from "./assets/h-5.png";
 
 import { ReactComponent as BackIcon } from "./assets/back.svg";
-import { ReactComponent as NextIcon } from "./assets/enter.svg";
+import { ReactComponent as NextIcon } from "./assets/next.svg";
 import { BlackButton } from "./Button";
 import RuleContent0 from "./RuleContent0";
 import RuleContent1 from "./RuleContent1";
@@ -56,7 +56,8 @@ export const BottomButton = ({
                     sx={{
                         width: "235px",
                         height: "60px",
-                        background: "transparent !important",
+                        background: "rgba(0, 0, 0, 0.20) !important",
+                        borderRadius: "12px",
                     }}
                 >
                     <BackIcon
@@ -73,17 +74,18 @@ export const BottomButton = ({
                     sx={{
                         width: "235px",
                         height: "60px",
-                        background: "transparent !important",
+                        background: "rgba(0, 0, 0, 0.20) !important",
                         marginLeft: "60px",
+                        borderRadius: "12px",
                     }}
                     onClick={() => {
                         onChangeActiveIndex(activeIndex + 1);
                     }}
                 >
-                    <NextIcon
-                        style={{ marginRight: "24px", width: "18px" }}
-                    ></NextIcon>
                     <Text>Next</Text>
+                    <NextIcon
+                        style={{ marginLeft: "24px", width: "18px" }}
+                    ></NextIcon>
                 </BlackButton>
             )}
         </Flex>

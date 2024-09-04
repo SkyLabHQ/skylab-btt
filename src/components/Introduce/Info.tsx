@@ -1,25 +1,75 @@
 import { Box, Flex, keyframes, Text } from "@chakra-ui/react";
 const rules = [
     <Text>
-        In Crypto,<br></br>Attention is limited. Most hot things eventually die
-        down.
+        In Crypto,<br></br>{" "}
+        <span
+            style={{
+                textDecorationLine: "underline",
+                fontSize: "20px",
+            }}
+        >
+            Attention is limited.
+        </span>{" "}
+        Most hot things eventually die down.
     </Text>,
     <Text>
         When your favorite hot thing fades, forgotten and abandoned by everyone
-        else, you are heartbroken.
+        else,{" "}
+        <span
+            style={{
+                textDecorationLine: "underline",
+                fontSize: "20px",
+            }}
+        >
+            {" "}
+            you are heartbroken.
+        </span>
     </Text>,
-    <Text>Of course. We’ve all been there.</Text>,
+    <Text>
+        Of course.{" "}
+        <span
+            style={{
+                textDecorationLine: "underline",
+                fontSize: "20px",
+            }}
+        >
+            We’ve all been there.
+        </span>{" "}
+    </Text>,
     <Text>
         If people tend to forget, in a world where everything fights to be
-        remembered, why isn’t there something that’s designed to be forgotten?
+        remembered,
+        <span
+            style={{
+                textDecorationLine: "underline",
+                fontSize: "20px",
+            }}
+        >
+            why isn’t there something that’s designed to be forgotten?
+        </span>
     </Text>,
     <Text>
-        So, we create this social game – that you’ll wish would die down.{" "}
+        So, we create{" "}
+        <span
+            style={{
+                textDecorationLine: "underline",
+                fontSize: "20px",
+            }}
+        >
+            this social game – that you’ll wish would die down.
+        </span>{" "}
         <br></br>Oops. Not just you wish its dying. Everyone does.
     </Text>,
     <Text>
-        Because when everyone else forgets, you and your league, shall take it
-        all.
+        Because{" "}
+        <span
+            style={{
+                textDecorationLine: "underline",
+                fontSize: "20px",
+            }}
+        >
+            when everyone else forgets, you and your league, shall take it all.
+        </span>{" "}
     </Text>,
 ];
 
@@ -81,6 +131,7 @@ const Info = () => {
                             key={index}
                             sx={{
                                 position: "relative",
+                                fontSize: "14px",
                             }}
                         >
                             <Box
@@ -89,7 +140,6 @@ const Info = () => {
                                     marginBottom: "30px",
                                     opacity: 0.1,
                                     textShadow: "0 0 10px #FFF",
-                                    // color: "#000",
                                 }}
                                 animation={`${colorKeyframes} 15s linear infinite`}
                                 key={index}
