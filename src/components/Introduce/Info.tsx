@@ -1,4 +1,4 @@
-import { Box, Flex, keyframes, Text } from "@chakra-ui/react";
+import { Box, keyframes, Text } from "@chakra-ui/react";
 const rules = [
     <Text>
         In Crypto,<br></br>{" "}

@@ -22,38 +22,88 @@ import TitleOnIcon from "./assets/Title-On.png";
 import TitleOffIcon from "./assets/Title-Off.png";
 import TitleOnLIcon from "./assets/Title-Off-L.png";
 
-const OnButton = ({ onClick }: { onClick?: () => void }) => {
+const OnButton = ({
+    wMode,
+    onClick,
+}: {
+    wMode: boolean;
+    onClick?: () => void;
+}) => {
     return (
-        <Flex
-            onClick={onClick}
-            align={"center"}
-            sx={{
-                width: "182px",
-                height: "48px",
-                border: "2px solid #FFF",
-                padding: "6px",
-                cursor: "pointer",
-            }}
-            justify={"space-between"}
-        >
-            <Image
-                src={OnIcon}
+        <Box>
+            <Box
+                onClick={onClick}
                 sx={{
-                    width: "36px",
+                    width: "124px",
+                    height: "48px",
+                    border: "2px solid",
+                    borderImage: wMode
+                        ? "#fff 1"
+                        : "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
+                    padding: "4px",
+                    cursor: "pointer",
+                    overflow: "hidden",
                 }}
-            ></Image>
-            <ShiftAIcon
-                style={{
-                    width: "60px",
-                }}
-            ></ShiftAIcon>
-            <Image
-                src={OnTextIcon}
-                sx={{
-                    width: "40px",
-                }}
-            ></Image>
-        </Flex>
+            >
+                <Flex
+                    sx={{
+                        width: "160px",
+                        position: "relative",
+                        left: wMode ? "0" : "-48px",
+                        transition: "all 0.5s",
+                    }}
+                >
+                    <Image
+                        src={OnIcon}
+                        sx={{
+                            width: "36px",
+                        }}
+                    ></Image>
+                    <ShiftAIcon
+                        style={{
+                            width: "60px",
+                            margin: "0 16px",
+                        }}
+                    ></ShiftAIcon>
+                    <Image
+                        src={OffIcon}
+                        sx={{
+                            width: "36px",
+                        }}
+                    ></Image>
+                </Flex>
+            </Box>{" "}
+            {wMode ? (
+                <Text
+                    sx={{
+                        color: "#FFF",
+                        fontSize: "14px",
+                        textAlign: "center",
+                        marginTop: "8px",
+                    }}
+                >
+                    Monochrome
+                </Text>
+            ) : (
+                <Text
+                    sx={{
+                        color: "#FFF",
+                        fontSize: "14px",
+                        textAlign: "center",
+                        marginTop: "8px",
+                        fontWeight: 700,
+                        letterSpacing: "2px",
+                        backgroundImage:
+                            "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
+                        backgroundClip: "text",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                    }}
+                >
+                    Color
+                </Text>
+            )}
+        </Box>
     );
 };
 
@@ -82,15 +132,10 @@ const OffButton = ({ onClick }: { onClick?: () => void }) => {
                     width: "40px",
                 }}
             ></Image>
-            <Image
-                src={OffIcon}
-                sx={{
-                    width: "36px",
-                }}
-            ></Image>
         </Flex>
     );
 };
+
 const quanList = [
     {
         img: Quan1,
@@ -293,7 +338,13 @@ const IntroduceContent = ({
                         top: "24px",
                     }}
                 >
-                    {!wMode ? (
+                    <OnButton
+                        wMode={wMode}
+                        onClick={() => {
+                            onThemeChange();
+                        }}
+                    ></OnButton>
+                    {/* {!wMode ? (
                         <OnButton
                             onClick={() => {
                                 onThemeChange();
@@ -305,7 +356,7 @@ const IntroduceContent = ({
                                 onThemeChange();
                             }}
                         ></OffButton>
-                    )}
+                    )} */}
                 </Box>
                 <Flex
                     sx={{
