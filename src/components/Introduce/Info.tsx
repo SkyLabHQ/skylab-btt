@@ -26,33 +26,26 @@ const rules = [
 const colorKeyframes = keyframes`
     0% {
         color: #646464;
-    }
+        opacity: 0.1;
+        text-shadow: 0 0 10px #fff;
+     }
     
     14.3% {
         color: #FFF;
+        opacity: 1;
+        text-shadow: none;
     }
 
     28.6% {
         color: #646464;
+        opacity: 0.1;        
+        text-shadow: 0 0 10px #fff;
     }
     
     100% {
         color: #646464;
-    }
-`;
-
-const bgKeyframes = keyframes`
-    0% {
-        background-filter: blur(0px);
-    }
-    
-
-    28.6% {
-        color: #646464;
-    }
-    
-    100% {
-        color: #646464;
+        opacity: 0.1;
+        text-shadow: 0 0 10px #fff;
     }
 `;
 
@@ -75,6 +68,13 @@ const Info = () => {
                     marginTop: "40px",
                 }}
             >
+                <Box
+                    sx={{
+                        color: "rgba(255,255,255,0)",
+                    }}
+                >
+                    测试
+                </Box>
                 {rules.map((item, index) => {
                     return (
                         <Box
@@ -87,6 +87,9 @@ const Info = () => {
                                 sx={{
                                     animationDelay: `${index * 2.5}s`,
                                     marginBottom: "30px",
+                                    opacity: 0.1,
+                                    textShadow: "0 0 10px #FFF",
+                                    // color: "#000",
                                 }}
                                 animation={`${colorKeyframes} 15s linear infinite`}
                                 key={index}

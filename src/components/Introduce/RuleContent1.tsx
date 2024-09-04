@@ -1,6 +1,6 @@
-import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 
-import UpVideo from "./assets/up.mp4";
+import PaperVideo from "./assets/paper.mp4";
 import NewcomerVideo from "./assets/newcomer.mp4";
 import RuleWrap from "./RuleWrap";
 import { BottomButton } from "./Rule";
@@ -32,7 +32,7 @@ const RuleContent1 = ({
                         margin: "20px auto",
                     }}
                 >
-                    <source src={UpVideo} type="video/mp4" />
+                    <source src={PaperVideo} type="video/mp4" />
                 </video>
             </Box>
             <RuleWrap

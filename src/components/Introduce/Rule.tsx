@@ -302,7 +302,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                     border: "1px solid transparent",
                                 },
                                 "& video:hover": {
-                                    border: "1px solid #ffffff99",
+                                    border: "1px solid #ffffff",
                                 },
                             }}
                         >

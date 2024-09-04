@@ -272,10 +272,9 @@ const IntroduceContent = ({
 
                 <Box
                     sx={{
-                        marginTop: "80px",
                         position: "absolute",
-                        right: "55px",
-                        top: "55px",
+                        right: "24px",
+                        top: "24px",
                     }}
                 >
                     {!wMode ? (
