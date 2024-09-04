@@ -135,12 +135,12 @@ const Info = () => {
                         >
                             <Box
                                 sx={{
-                                    animationDelay: `${index * 2.5}s`,
+                                    animationDelay: `${index * 4}s`,
                                     marginBottom: "30px",
                                     opacity: 0.1,
                                     textShadow: "0 0 10px #FFF",
                                 }}
-                                animation={`${colorKeyframes} 15s linear infinite`}
+                                animation={`${colorKeyframes} 24s linear infinite`}
                                 key={index}
                             >
                                 {item}
