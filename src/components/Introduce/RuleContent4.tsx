@@ -2,8 +2,13 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 
 import PaperVideo from "./assets/paper.mp4";
 import RuleWrap from "./RuleWrap";
+import { BottomButton } from "./Rule";
 
-const RuleContent4 = () => {
+const RuleContent4 = ({
+    onChangeActiveIndex,
+}: {
+    onChangeActiveIndex: (activeIndex: number) => void;
+}) => {
     return (
         <Box>
             <Box>
@@ -56,6 +61,12 @@ const RuleContent4 = () => {
                     perhaps so has the worth of your plane in the marketplace 😊
                 </Text>
             </RuleWrap>
+            <BottomButton
+                activeIndex={4}
+                onChangeActiveIndex={(activeIndex: number) => {
+                    onChangeActiveIndex(activeIndex);
+                }}
+            ></BottomButton>
         </Box>
     );
 };

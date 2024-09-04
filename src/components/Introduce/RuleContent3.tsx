@@ -3,6 +3,7 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import RewardVideo from "./assets/reward.mp4";
 import CIcon from "./assets/c-icon.svg";
 import RuleWrap from "./RuleWrap";
+import { BottomButton } from "./Rule";
 
 const CircleContent = ({ text }: { text: React.ReactNode }) => {
     return (
@@ -28,7 +29,11 @@ const CircleContent = ({ text }: { text: React.ReactNode }) => {
     );
 };
 
-const RuleContent3 = () => {
+const RuleContent3 = ({
+    onChangeActiveIndex,
+}: {
+    onChangeActiveIndex: (activeIndex: number) => void;
+}) => {
     return (
         <Box>
             <Box>
@@ -183,6 +188,12 @@ const RuleContent3 = () => {
                     </span>
                 </Text>
             </RuleWrap>
+            <BottomButton
+                activeIndex={3}
+                onChangeActiveIndex={(activeIndex: number) => {
+                    onChangeActiveIndex(activeIndex);
+                }}
+            ></BottomButton>
         </Box>
     );
 };

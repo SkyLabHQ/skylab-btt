@@ -2,8 +2,13 @@ import { Box, Text } from "@chakra-ui/react";
 import LevelVideo from "./assets/level.mp4";
 import DownVideo from "./assets/down.mp4";
 import RuleWrap from "./RuleWrap";
+import { BottomButton } from "./Rule";
 
-const RuleContent0 = () => {
+const RuleContent0 = ({
+    onChangeActiveIndex,
+}: {
+    onChangeActiveIndex: (activeIndex: number) => void;
+}) => {
     return (
         <Box>
             <Box>
@@ -89,6 +94,12 @@ const RuleContent0 = () => {
                     *deducting a 10% operational fee
                 </Text>
             </RuleWrap>
+            <BottomButton
+                activeIndex={0}
+                onChangeActiveIndex={(activeIndex: number) => {
+                    onChangeActiveIndex(activeIndex);
+                }}
+            ></BottomButton>
         </Box>
     );
 };

@@ -57,14 +57,11 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                 handleConfirm();
             }
         };
-        document.addEventListener("keydown", keyboardListener);
 
-        document.addEventListener("paste", function (event) {
-            // 阻止默认的粘贴行为
+        const handlePaste = (event: ClipboardEvent) => {
             event.preventDefault();
-            // 获取剪贴板数据
-            var clipboardData = event.clipboardData;
-            var pastedData = clipboardData.getData("Text");
+            const clipboardData = event.clipboardData;
+            const pastedData = clipboardData.getData("Text");
             let j = 0;
 
             for (let i = 0; i < Math.min(5, pastedData.length); i++) {
@@ -74,11 +71,14 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                     codeRef[i].current.value = pastedData[j++].toUpperCase();
                 }
             }
-            // 打印粘贴的内容
-        });
+        };
+
+        document.addEventListener("paste", handlePaste);
+        document.addEventListener("keydown", keyboardListener);
 
         return () => {
             document.removeEventListener("keydown", keyboardListener);
+            document.removeEventListener("paste", handlePaste);
         };
     }, []);
 

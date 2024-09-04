@@ -12,9 +12,10 @@ import Schedule from "@/components/Introduce/Schedule";
 import CVideo from "@/components/Introduce/assets/c.mp4";
 import WVideo from "@/components/Introduce/assets/w.mp4";
 import Lock from "@/components/Introduce/Lock";
+import { SwitchTransition, CSSTransition } from "react-transition-group";
 
 const Introduce = () => {
-    const [init, setInit] = useState(false);
+    const [init, setInit] = useState(true);
     const cRef = createRef<HTMLVideoElement>();
     const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -62,9 +63,10 @@ const Introduce = () => {
         }
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
+            console.log(key, "key");
             if (event.shiftKey && key === "Enter") {
                 handleChangeMode("schedule");
-            } else if (event.shiftKey && key === "ArrowUp") {
+            } else if (event.shiftKey && key === "?") {
                 handleChangeWMode();
             } else if (key === "Enter") {
                 handleChangeMode("rules");

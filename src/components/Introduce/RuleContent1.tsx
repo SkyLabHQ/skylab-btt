@@ -3,8 +3,13 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import UpVideo from "./assets/up.mp4";
 import NewcomerVideo from "./assets/newcomer.mp4";
 import RuleWrap from "./RuleWrap";
+import { BottomButton } from "./Rule";
 
-const RuleContent1 = () => {
+const RuleContent1 = ({
+    onChangeActiveIndex,
+}: {
+    onChangeActiveIndex: (activeIndex: number) => void;
+}) => {
     return (
         <Box>
             <Box>
@@ -114,6 +119,12 @@ const RuleContent1 = () => {
                     </span>{" "}
                 </Text>
             </RuleWrap>
+            <BottomButton
+                activeIndex={1}
+                onChangeActiveIndex={(activeIndex: number) => {
+                    onChangeActiveIndex(activeIndex);
+                }}
+            ></BottomButton>
         </Box>
     );
 };
