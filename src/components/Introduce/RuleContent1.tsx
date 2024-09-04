@@ -47,6 +47,7 @@ const RuleContent1 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         with 1 xp
@@ -57,6 +58,7 @@ const RuleContent1 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         {" "}
@@ -91,6 +93,7 @@ const RuleContent1 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         It becomes the newcomer to the next level and resets the
@@ -112,6 +115,7 @@ const RuleContent1 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         {" "}

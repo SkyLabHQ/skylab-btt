@@ -48,6 +48,7 @@ const RuleContent4 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         minimum xp requirements and timer starting point

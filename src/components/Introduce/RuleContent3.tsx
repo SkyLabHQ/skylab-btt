@@ -73,6 +73,7 @@ const RuleContent3 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         three parameters of a league.
@@ -97,6 +98,9 @@ const RuleContent3 = ({
                                 <span
                                     style={{
                                         fontWeight: 700,
+                                        color: "#F2D861",
+                                        textDecoration: "underline",
+                                        fontSize: "14px",
                                     }}
                                 >
                                     0%~10%
@@ -117,6 +121,7 @@ const RuleContent3 = ({
                                 <span
                                     style={{
                                         fontWeight: 700,
+                                        fontSize: "14px",
                                     }}
                                 >
                                     10%~20%
@@ -128,7 +133,6 @@ const RuleContent3 = ({
                         text={
                             <Text
                                 sx={{
-                                    fontSize: "14px",
                                     lineHeight: "25px",
                                     fontWeight: 400,
                                 }}
@@ -139,6 +143,9 @@ const RuleContent3 = ({
                                 <span
                                     style={{
                                         fontWeight: 700,
+                                        color: "#F2D861",
+                                        textDecoration: "underline",
+                                        fontSize: "14px",
                                     }}
                                 >
                                     {" "}
@@ -161,6 +168,7 @@ const RuleContent3 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         The pot is distributed pro-rata based on the winning
@@ -181,6 +189,7 @@ const RuleContent3 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         join the league with the strongest community uniting

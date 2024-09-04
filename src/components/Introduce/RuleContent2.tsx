@@ -46,6 +46,7 @@ const RuleContent2 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         Each game takes ~3min.
@@ -62,6 +63,7 @@ const RuleContent2 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         blind-bid for each grid to occupy three grids in a row.
@@ -78,6 +80,7 @@ const RuleContent2 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         xp.
@@ -88,6 +91,7 @@ const RuleContent2 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         xp.
@@ -97,6 +101,7 @@ const RuleContent2 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         The only exception being level 1 paper plane - the stake

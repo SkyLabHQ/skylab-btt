@@ -47,6 +47,7 @@ const RuleContent0 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         8 leagues, 16 levels of planes, and 16 countdown timers
@@ -75,6 +76,7 @@ const RuleContent0 = ({
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
+                            fontSize: "14px",
                         }}
                     >
                         when ANY timer counts to zero, make sure your league
