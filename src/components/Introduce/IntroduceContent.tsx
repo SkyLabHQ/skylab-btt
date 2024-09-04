@@ -20,6 +20,7 @@ import OffIcon from "@/components/Introduce/assets/off-icon.svg";
 import OffTextIcon from "@/components/Introduce/assets/OFF.svg";
 import TitleOnIcon from "./assets/Title-On.png";
 import TitleOffIcon from "./assets/Title-Off.png";
+import TitleOnLIcon from "./assets/Title-Off-L.png";
 
 const OnButton = ({ onClick }: { onClick?: () => void }) => {
     return (
@@ -187,7 +188,6 @@ const IntroduceContent = ({
                         display: wMode ? "none" : "block",
                     }}
                 >
-                    {" "}
                     {quanList.map((item, index) => {
                         return (
                             <Image
@@ -221,16 +221,17 @@ const IntroduceContent = ({
                         width: "26%",
                         aspectRatio: 1,
                         zIndex: 1,
+                        cursor: "pointer",
+                    }}
+                    onClick={() => {
+                        if (addCount >= quanList.length) {
+                            handleDownTo0(addCount);
+                            return;
+                        }
+                        setAddCount(addCount + 1);
                     }}
                 >
                     <Image
-                        onClick={() => {
-                            if (addCount >= quanList.length) {
-                                handleDownTo0(addCount);
-                                return;
-                            }
-                            setAddCount(addCount + 1);
-                        }}
                         src={CircleGif}
                         sx={{
                             position: "absolute",
@@ -238,36 +239,51 @@ const IntroduceContent = ({
                             left: "50%",
                             transform: "translate(-50%, -50%)",
                             width: "100%",
-                            zIndex: 10,
                             cursor: "pointer",
                             height: "100%",
                             display: wMode ? "none" : "block",
                         }}
                     ></Image>
-                    <Box
-                        sx={{
-                            // position: "absolute",
-                            textAlign: "center",
-                            fontSize: "2.0833vw",
-                            fontStyle: "normal",
-                            fontWeight: 700,
-                            paddingTop: "4.5417vw",
-                            opacity: wMode ? 0 : 1,
-                            transition: "all 0.1s",
-                        }}
-                    >
-                        ENTER
-                    </Box>
-                    <Image
-                        src={wMode ? TitleOffIcon : TitleOnIcon}
-                        sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: "100%",
-                        }}
-                    ></Image>
+                    {wMode && (
+                        <Image
+                            src={TitleOffIcon}
+                            sx={{
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                width: "100%",
+                            }}
+                        ></Image>
+                    )}
+                    {!wMode && (
+                        <Box
+                            sx={{
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                width: "100%",
+                                zIndex: 11,
+                                "&:hover ": {
+                                    "& img:nth-child(1)": {
+                                        display: "none",
+                                    },
+                                    "& img:nth-child(2)": {
+                                        display: "block",
+                                    },
+                                },
+                            }}
+                        >
+                            <Image src={TitleOnIcon}></Image>
+                            <Image
+                                src={TitleOnLIcon}
+                                sx={{
+                                    display: "none",
+                                }}
+                            ></Image>
+                        </Box>
+                    )}
                 </Box>
 
                 <Box

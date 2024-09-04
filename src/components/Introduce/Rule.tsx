@@ -83,7 +83,7 @@ export const BottomButton = ({
                     <NextIcon
                         style={{ marginRight: "24px", width: "18px" }}
                     ></NextIcon>
-                    <Text>Continue</Text>
+                    <Text>Next</Text>
                 </BlackButton>
             )}
         </Flex>
@@ -121,14 +121,18 @@ const navList = [
 const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
+    const handleActiveIndex = (index: number) => {
+        setActiveIndex(index);
+    };
+
     useEffect(() => {
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
             console.log(key, "key");
             if (key === "Enter" && activeIndex !== 4) {
-                setActiveIndex(activeIndex + 1);
+                handleActiveIndex(activeIndex + 1);
             } else if (key === "ArrowLeft" && activeIndex !== 0) {
-                setActiveIndex(activeIndex - 1);
+                handleActiveIndex(activeIndex - 1);
             } else if (key === "Escape") {
                 onModeChange("");
             }
@@ -144,217 +148,195 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 maxWidth: "800px",
                 width: "100%",
                 margin: "0 auto",
-                height: "100%",
+                position: "relative",
             }}
         >
-            <Box
-                sx={{
-                    position: "relative",
+            <Flex
+                onClick={() => {
+                    onModeChange("");
                 }}
+                sx={{
+                    position: "absolute",
+                    right: "0",
+                    top: "0px",
+                    cursor: "pointer",
+                }}
+                align={"center"}
+                flexDir={"column"}
             >
-                <Flex
-                    onClick={() => {
-                        onModeChange("");
-                    }}
+                <Image
+                    src={CloseIcon}
                     sx={{
-                        position: "absolute",
-                        right: "0",
-                        top: "0px",
-                        cursor: "pointer",
+                        width: "20px",
+                        height: "20px",
                     }}
-                    align={"center"}
-                    flexDir={"column"}
-                >
-                    <Image
-                        src={CloseIcon}
-                        sx={{
-                            width: "20px",
-                            height: "20px",
-                        }}
-                    ></Image>
-                    <Text
-                        sx={{
-                            color: "#FFF",
-                            textAlign: "center",
-                            fontFamily: "Orbitron",
-                            fontSize: "18px",
-                            fontWeight: 400,
-                        }}
-                    >
-                        Esc
-                    </Text>
-                </Flex>
+                ></Image>
                 <Text
                     sx={{
-                        color: "#F2D861",
+                        color: "#FFF",
                         textAlign: "center",
-                        textShadow: "#FFD000",
                         fontFamily: "Orbitron",
-                        fontSize: "34px",
-                        fontWeight: 700,
+                        fontSize: "18px",
+                        fontWeight: 400,
                     }}
                 >
-                    Rules
+                    Esc
                 </Text>
-                <Flex
-                    justify={"center"}
-                    align={"flex-end"}
-                    sx={{
-                        gap: "50px",
-                        marginTop: "60px",
-                        position: "relative",
+            </Flex>
+            <Text
+                sx={{
+                    color: "#F2D861",
+                    textAlign: "center",
+                    textShadow: "#FFD000",
+                    fontFamily: "Orbitron",
+                    fontSize: "34px",
+                    fontWeight: 700,
+                }}
+            >
+                Rules
+            </Text>
+            <Flex
+                justify={"center"}
+                align={"flex-end"}
+                sx={{
+                    gap: "50px",
+                    marginTop: "60px",
+                    position: "relative",
+                }}
+                id="top-nav"
+            >
+                <LArrowIcon
+                    style={{
+                        width: "12px",
+                        position: "absolute",
+                        left: "0",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: activeIndex === 0 && "#646464",
+                        cursor: activeIndex === 0 ? "not-allowed" : "pointer",
                     }}
-                >
-                    <LArrowIcon
-                        style={{
-                            width: "12px",
-                            position: "absolute",
-                            left: "0",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            color: activeIndex === 0 && "#646464",
-                            cursor:
-                                activeIndex === 0 ? "not-allowed" : "pointer",
-                        }}
-                        onClick={() => {
-                            if (activeIndex !== 0) {
-                                setActiveIndex(activeIndex - 1);
-                            }
-                        }}
-                    ></LArrowIcon>
-                    <RArrowIcon
-                        style={{
-                            width: "12px",
-                            position: "absolute",
-                            right: "0",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            color: activeIndex === 4 && "#646464",
-                            cursor:
-                                activeIndex === 4 ? "not-allowed" : "pointer",
-                        }}
-                        onClick={() => {
-                            if (activeIndex !== 4) {
-                                setActiveIndex(activeIndex + 1);
-                            }
-                        }}
-                    ></RArrowIcon>
+                    onClick={() => {
+                        if (activeIndex !== 0) {
+                            handleActiveIndex(activeIndex - 1);
+                        }
+                    }}
+                ></LArrowIcon>
+                <RArrowIcon
+                    style={{
+                        width: "12px",
+                        position: "absolute",
+                        right: "0",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: activeIndex === 4 && "#646464",
+                        cursor: activeIndex === 4 ? "not-allowed" : "pointer",
+                    }}
+                    onClick={() => {
+                        if (activeIndex !== 4) {
+                            handleActiveIndex(activeIndex + 1);
+                        }
+                    }}
+                ></RArrowIcon>
 
-                    {navList.map((item, index) => {
-                        const ActiveIcon = item.activeIcon;
-                        const HoverIcon = item.hIcon;
-                        const Icon = item.icon;
-                        return (
-                            <Flex
-                                key={index}
-                                onClick={() => {
-                                    setActiveIndex(index);
-                                }}
-                                flexDir={"column"}
-                                justify={"flex-end"}
-                                sx={{
-                                    cursor: "pointer",
-                                    width: "55px",
-                                    height: "40px",
-                                    "&:hover": {
-                                        "& img": {
-                                            width: "110px",
-                                        },
-                                        "& img:nth-child(1)": {
-                                            display:
-                                                activeIndex !== index && "none",
-                                        },
-                                        "& img:nth-child(2)": {
-                                            display:
-                                                activeIndex !== index &&
-                                                "block",
-                                        },
-                                    },
-                                }}
-                            >
-                                <Image
-                                    src={
-                                        activeIndex === index
-                                            ? ActiveIcon
-                                            : Icon
-                                    }
-                                ></Image>
-                                <Image
-                                    src={HoverIcon}
-                                    sx={{
-                                        display: "none",
-                                    }}
-                                ></Image>
-                            </Flex>
-                        );
-                    })}
-                </Flex>
-                <SwitchTransition mode="out-in">
-                    <CSSTransition
-                        key={activeIndex}
-                        timeout={300}
-                        classNames="layout-main-page"
-                    >
-                        <Box
+                {navList.map((item, index) => {
+                    const ActiveIcon = item.activeIcon;
+                    const HoverIcon = item.hIcon;
+                    const Icon = item.icon;
+                    return (
+                        <Flex
+                            key={index}
+                            onClick={() => {
+                                handleActiveIndex(index);
+                            }}
+                            flexDir={"column"}
+                            justify={"flex-end"}
                             sx={{
-                                marginTop: "30px",
-                                "& video": {
-                                    border: "1px solid transparent",
-                                },
-                                "& video:hover": {
-                                    border: "1px solid #ffffff",
+                                cursor: "pointer",
+                                width: "55px",
+                                height: "40px",
+                                "&:hover": {
+                                    "& img": {
+                                        width: "110px",
+                                    },
+                                    "& img:nth-child(1)": {
+                                        display:
+                                            activeIndex !== index && "none",
+                                    },
+                                    "& img:nth-child(2)": {
+                                        display:
+                                            activeIndex !== index && "block",
+                                    },
                                 },
                             }}
                         >
-                            {activeIndex === 0 && (
-                                <RuleContent0
-                                    onChangeActiveIndex={(
-                                        activeIndex: number,
-                                    ) => {
-                                        setActiveIndex(activeIndex);
-                                    }}
-                                ></RuleContent0>
-                            )}
-                            {activeIndex === 1 && (
-                                <RuleContent1
-                                    onChangeActiveIndex={(
-                                        activeIndex: number,
-                                    ) => {
-                                        setActiveIndex(activeIndex);
-                                    }}
-                                ></RuleContent1>
-                            )}
-                            {activeIndex === 2 && (
-                                <RuleContent2
-                                    onChangeActiveIndex={(
-                                        activeIndex: number,
-                                    ) => {
-                                        setActiveIndex(activeIndex);
-                                    }}
-                                ></RuleContent2>
-                            )}
-                            {activeIndex === 3 && (
-                                <RuleContent3
-                                    onChangeActiveIndex={(
-                                        activeIndex: number,
-                                    ) => {
-                                        setActiveIndex(activeIndex);
-                                    }}
-                                ></RuleContent3>
-                            )}
-                            {activeIndex === 4 && (
-                                <RuleContent4
-                                    onChangeActiveIndex={(
-                                        activeIndex: number,
-                                    ) => {
-                                        setActiveIndex(activeIndex);
-                                    }}
-                                ></RuleContent4>
-                            )}
-                        </Box>
-                    </CSSTransition>
-                </SwitchTransition>
-            </Box>
+                            <Image
+                                src={activeIndex === index ? ActiveIcon : Icon}
+                            ></Image>
+                            <Image
+                                src={HoverIcon}
+                                sx={{
+                                    display: "none",
+                                }}
+                            ></Image>
+                        </Flex>
+                    );
+                })}
+            </Flex>
+            <SwitchTransition mode="out-in">
+                <CSSTransition
+                    key={activeIndex}
+                    timeout={300}
+                    classNames="layout-main-page"
+                >
+                    <Box
+                        sx={{
+                            marginTop: "30px",
+                            "& video": {
+                                border: "1px solid transparent",
+                            },
+                            "& video:hover": {
+                                border: "1px solid #ffffff",
+                            },
+                        }}
+                    >
+                        {activeIndex === 0 && (
+                            <RuleContent0
+                                onChangeActiveIndex={(activeIndex: number) => {
+                                    handleActiveIndex(activeIndex);
+                                }}
+                            ></RuleContent0>
+                        )}
+                        {activeIndex === 1 && (
+                            <RuleContent1
+                                onChangeActiveIndex={(activeIndex: number) => {
+                                    handleActiveIndex(activeIndex);
+                                }}
+                            ></RuleContent1>
+                        )}
+                        {activeIndex === 2 && (
+                            <RuleContent2
+                                onChangeActiveIndex={(activeIndex: number) => {
+                                    handleActiveIndex(activeIndex);
+                                }}
+                            ></RuleContent2>
+                        )}
+                        {activeIndex === 3 && (
+                            <RuleContent3
+                                onChangeActiveIndex={(activeIndex: number) => {
+                                    handleActiveIndex(activeIndex);
+                                }}
+                            ></RuleContent3>
+                        )}
+                        {activeIndex === 4 && (
+                            <RuleContent4
+                                onChangeActiveIndex={(activeIndex: number) => {
+                                    handleActiveIndex(activeIndex);
+                                }}
+                            ></RuleContent4>
+                        )}
+                    </Box>
+                </CSSTransition>
+            </SwitchTransition>
         </Box>
     );
 };

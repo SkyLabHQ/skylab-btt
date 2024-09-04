@@ -143,8 +143,8 @@ const Introduce = () => {
                 <ModalContent
                     sx={{
                         background: "transparent",
-                        overflow: "auto",
                         padding: "100px 20px 100px",
+                        minHeight: "100%",
                         fontFamily: "Orbitron",
                     }}
                 >
