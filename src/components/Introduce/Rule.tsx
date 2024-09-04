@@ -131,7 +131,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
             console.log(key, "key");
-            if (key === "Enter" && activeIndex !== 4) {
+            if (key === "ArrowRight" && activeIndex !== 4) {
                 handleActiveIndex(activeIndex + 1);
             } else if (key === "ArrowLeft" && activeIndex !== 0) {
                 handleActiveIndex(activeIndex - 1);

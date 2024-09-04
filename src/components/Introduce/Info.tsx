@@ -124,13 +124,6 @@ const Info = () => {
                     marginTop: "40px",
                 }}
             >
-                <Box
-                    sx={{
-                        color: "rgba(255,255,255,0)",
-                    }}
-                >
-                    测试
-                </Box>
                 {rules.map((item, index) => {
                     return (
                         <Box
