@@ -6,6 +6,7 @@ const rules = [
             style={{
                 textDecorationLine: "underline",
                 fontSize: "20px",
+                fontWeight: "700",
             }}
         >
             Attention is limited.
@@ -19,6 +20,7 @@ const rules = [
             style={{
                 textDecorationLine: "underline",
                 fontSize: "20px",
+                fontWeight: "700",
             }}
         >
             {" "}
@@ -31,6 +33,7 @@ const rules = [
             style={{
                 textDecorationLine: "underline",
                 fontSize: "20px",
+                fontWeight: "700",
             }}
         >
             We’ve all been there.
@@ -43,6 +46,7 @@ const rules = [
             style={{
                 textDecorationLine: "underline",
                 fontSize: "20px",
+                fontWeight: "700",
             }}
         >
             why isn’t there something that’s designed to be forgotten?
@@ -54,6 +58,7 @@ const rules = [
             style={{
                 textDecorationLine: "underline",
                 fontSize: "20px",
+                fontWeight: "700",
             }}
         >
             this social game – that you’ll wish would die down.
@@ -66,6 +71,7 @@ const rules = [
             style={{
                 textDecorationLine: "underline",
                 fontSize: "20px",
+                fontWeight: "700",
             }}
         >
             when everyone else forgets, you and your league, shall take it all.
