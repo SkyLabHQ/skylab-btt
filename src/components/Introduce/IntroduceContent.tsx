@@ -342,21 +342,9 @@ const IntroduceContent = ({
                         wMode={wMode}
                         onClick={() => {
                             onThemeChange();
+                            setAddCount(0);
                         }}
                     ></OnButton>
-                    {/* {!wMode ? (
-                        <OnButton
-                            onClick={() => {
-                                onThemeChange();
-                            }}
-                        ></OnButton>
-                    ) : (
-                        <OffButton
-                            onClick={() => {
-                                onThemeChange();
-                            }}
-                        ></OffButton>
-                    )} */}
                 </Box>
                 <Flex
                     sx={{

@@ -109,7 +109,7 @@ const Info = () => {
     return (
         <Box
             sx={{
-                maxWidth: "1344px",
+                maxWidth: "800px",
                 width: "100%",
                 margin: "0 auto",
                 paddingBottom: "40px",

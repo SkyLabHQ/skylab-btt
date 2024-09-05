@@ -41,7 +41,7 @@ const RuleContent1 = ({
                 }}
             >
                 <Text>
-                    A folded/minted paper plane comes{" "}
+                    A folded/minted paper plane comes with{" "}
                     <span
                         style={{
                             fontWeight: 700,
@@ -50,20 +50,9 @@ const RuleContent1 = ({
                             fontSize: "14px",
                         }}
                     >
-                        with 1 xp
+                        1 xp
                     </span>{" "}
-                    and is automatically the newcomer to{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            textDecoration: "underline",
-                            fontSize: "14px",
-                        }}
-                    >
-                        {" "}
-                        Level 1.
-                    </span>{" "}
+                    and is automatically the newcomer to Level 1.
                 </Text>
             </RuleWrap>
 
@@ -85,31 +74,40 @@ const RuleContent1 = ({
                 }}
             >
                 <Text>
-                    A plane's level is determined by its xp. A plane gets
-                    upgraded when its xp reaches the minimum requirement of the
-                    next level.
+                    A plane's level is determined by its xp. A plane
+                    automatically upgrades and becomes the newcomer to the next
+                    level{" "}
                     <span
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
                             textDecoration: "underline",
                             fontSize: "14px",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            onChangeActiveIndex(4);
                         }}
                     >
-                        It becomes the newcomer to the next level and resets the
-                        countdown timer to its beginning,
+                        when it has enough xp.
                     </span>{" "}
-                    till someone else upgrades to that level and steals the
-                    newcomer position.
-                </Text>
-                <Text
-                    sx={{
-                        fontSize: "12px",
-                        lineHeight: "25px",
-                        marginTop: "36px",
-                    }}
-                >
-                    So, how to gain xp? By playing the{" "}
+                    Countdown timer of the next level is also set to
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            textDecoration: "underline",
+                            fontSize: "14px",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            onChangeActiveIndex(4);
+                        }}
+                    >
+                        {" "}
+                        its starting point
+                    </span>{" "}
+                    . The plane can hold the newcomer position
                     <span
                         style={{
                             fontWeight: 700,
@@ -119,7 +117,31 @@ const RuleContent1 = ({
                         }}
                     >
                         {" "}
-                        Bid Tac Toe game.{" "}
+                        till someone else upgrades to that level and steals the
+                        newcomer position.
+                    </span>{" "}
+                </Text>
+                <Text
+                    sx={{
+                        fontSize: "12px",
+                        lineHeight: "25px",
+                        marginTop: "36px",
+                    }}
+                >
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            textDecoration: "underline",
+                            fontSize: "14px",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            onChangeActiveIndex(2);
+                        }}
+                    >
+                        {" "}
+                        So, how to gain xp? By playing the Bid Tac Toe game.{" "}
                     </span>{" "}
                 </Text>
             </RuleWrap>

@@ -80,7 +80,18 @@ const RuleContent0 = ({
                         }}
                     >
                         when ANY timer counts to zero, make sure your league
-                        holds the “newcomer” position of that level
+                        holds the{" "}
+                        <span
+                            style={{
+                                cursor: "pointer",
+                            }}
+                            onClick={() => {
+                                onChangeActiveIndex(1);
+                            }}
+                        >
+                            “newcomer”
+                        </span>{" "}
+                        position of that level
                     </span>{" "}
                     , in order to win the whole pot, which consists of all the
                     paper and paper planes minting fees.*

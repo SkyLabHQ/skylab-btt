@@ -3,6 +3,7 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import GameVideo from "./assets/game.mp4";
 import RuleWrap from "./RuleWrap";
 import { BottomButton } from "./Rule";
+import { TG_URL } from "@/skyConstants/tgConfig";
 
 const RuleContent2 = ({
     onChangeActiveIndex,
@@ -47,6 +48,10 @@ const RuleContent2 = ({
                             color: "#F2D861",
                             textDecoration: "underline",
                             fontSize: "14px",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            window.open(TG_URL);
                         }}
                     >
                         Each game takes ~3min.
