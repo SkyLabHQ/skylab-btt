@@ -27,7 +27,7 @@ const sList = [
         ],
     },
     {
-        title: "CONFRONTATION",
+        title: "CONFLICT",
         list: [
             {
                 title: "Act IV: Stalemate",
@@ -44,7 +44,7 @@ const sList = [
         ],
     },
     {
-        title: "NEW DWAN",
+        title: "NEW DAWN",
         list: [
             {
                 title: "Act VII: Resolution",
