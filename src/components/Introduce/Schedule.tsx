@@ -3,29 +3,58 @@ import { useEffect } from "react";
 import CloseIcon from "./assets/close.svg";
 import CircleGif from "@/components/Introduce/assets/circle.gif";
 import CircleYGif from "@/components/Introduce/assets/circle-y.gif";
+import BtBg from "./assets/bt-bg.png";
+import Line from "./assets/line.png";
 
 import SBg from "./assets/s-bg.png";
 
-const list = [
+const sList = [
     {
-        title: "Act I: Prelude",
-        des: "League leaders emerge. Paper pre-sale begins. The countdown to the game begins. The War of Influence is about to start. Get ready for the clash.",
+        title: "SETUP",
+        list: [
+            {
+                title: "Act I: Prelude",
+                des: "League leaders reveal. Paper airdrops claim opens.",
+            },
+            {
+                title: "Act II: Outbreak",
+                des: "Limited paper pre-sale begins. Get yours before they run out.",
+            },
+            {
+                title: "Act III: Escalation",
+                des: "The War of Influence Game begins. Paper folding and Paper Plane minting starts. Timers start ticking and Bid Tac Toe Battles begin.",
+            },
+        ],
     },
     {
-        title: "Act II: Outbreak",
-        des: "Game starts. Paper folding and Paper Plane minting begins. Timers start ticking and Bid Tac Toe Battles begins.",
+        title: "CONFRONTATION",
+        list: [
+            {
+                title: "Act IV: Stalemate",
+                des: "Any timer is within 5 minutes of finishing",
+            },
+            {
+                title: "Act V: Turning Point",
+                des: "The pot reaches 500 eth and timers are still ticking.",
+            },
+            {
+                title: "Act VI: Turning Point",
+                des: "The shortest timer is not on Level 1",
+            },
+        ],
     },
     {
-        title: "Act III: Escalation",
-        des: "When any timer is within 5 min of finishing.",
-    },
-    {
-        title: "Act IV: Stalemate",
-        des: "When the pot reaches 100 eth.",
-    },
-    {
-        title: "Act V: Turning Point",
-        des: " when the shortest timer is not a Level 1.",
+        title: "NEW DWAN",
+        list: [
+            {
+                title: "Act VII: Resolution",
+                des: "A timer counts to 0. Game over and the pot is distributed pro-rata to the winning league.",
+            },
+            {
+                title: "Act VIII: Epilogue",
+                des: "A new beginning. Every participant is awarded a Badge of Honor, with its tier forged by their performance in the war—greater deeds earn higher honors. Paper holders get the most special awards.",
+            },
+        ],
     },
 ];
 
@@ -107,74 +136,125 @@ const Schedule = ({
                         marginTop: "85px",
                     }}
                 >
-                    {list.map((item, index) => {
+                    {sList.map((item, index) => {
                         return (
                             <Flex
                                 flexDir={"column"}
                                 align={"center"}
                                 sx={{
                                     marginBottom: "40px",
+                                    letterSpacing: "3px",
                                 }}
                                 key={index}
                             >
-                                <Box
+                                <Image
+                                    src={Line}
                                     sx={{
-                                        width: "80px",
-                                        height: "80px",
-                                        "&:hover img:nth-child(1)": {
-                                            display: "none",
-                                        },
-                                        "&:hover img:nth-child(2)": {
-                                            display: "block",
-                                        },
+                                        width: "120px",
                                     }}
-                                >
-                                    <Image
-                                        src={CircleGif}
-                                        sx={{
-                                            width: "100%",
-                                        }}
-                                    ></Image>
-                                    <Image
-                                        src={CircleYGif}
-                                        sx={{
-                                            width: "100%",
-                                            display: "none",
-                                        }}
-                                    ></Image>
-                                </Box>
-
-                                <Box
+                                ></Image>
+                                <Flex
                                     sx={{
-                                        width: "100%",
-                                        height: "160px",
-                                        background: `url(${SBg})`,
+                                        width: "370px",
+                                        height: "100px",
+                                        background: `url(${BtBg})`,
                                         backgroundSize: "100% 100%",
-                                        padding: "0 32px",
                                     }}
+                                    align={"center"}
+                                    justify={"center"}
                                 >
                                     <Text
                                         sx={{
-                                            textAlign: "center",
-                                            fontFamily: "Orbitron",
                                             fontSize: "30px",
+                                            fontStyle: "normal",
                                             fontWeight: 700,
-                                            lineHeight: "80px",
                                         }}
                                     >
-                                        {item.title}
+                                        SETUP
                                     </Text>
-                                    <Text
+                                </Flex>
+                                <Flex
+                                    sx={{
+                                        border: "1px solid #FFFFFF26",
+                                        background: "#ffffff08",
+                                        padding: "28px 0 64px",
+                                    }}
+                                    align={"center"}
+                                    flexDir={"column"}
+                                >
+                                    <Box
                                         sx={{
-                                            fontSize: "18px",
-                                            fontWeight: 400,
-                                            lineHeight: "30px",
-                                            marginTop: "0px",
+                                            width: "100%",
+                                            padding: "0 32px",
                                         }}
                                     >
-                                        {item.des}
-                                    </Text>
-                                </Box>
+                                        {item.list.map((item, index) => {
+                                            return (
+                                                <Flex
+                                                    key={index}
+                                                    flexDir={"column"}
+                                                    align={"center"}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            width: "80px",
+                                                            height: "80px",
+                                                            "&:hover img:nth-child(1)":
+                                                                {
+                                                                    display:
+                                                                        "none",
+                                                                },
+                                                            "&:hover img:nth-child(2)":
+                                                                {
+                                                                    display:
+                                                                        "block",
+                                                                },
+                                                        }}
+                                                    >
+                                                        <Image
+                                                            src={CircleGif}
+                                                            sx={{
+                                                                width: "100%",
+                                                            }}
+                                                        ></Image>
+                                                        <Image
+                                                            src={CircleYGif}
+                                                            sx={{
+                                                                width: "100%",
+                                                                display: "none",
+                                                            }}
+                                                        ></Image>
+                                                    </Box>
+                                                    <Text
+                                                        sx={{
+                                                            textAlign: "center",
+                                                            fontFamily:
+                                                                "Orbitron",
+                                                            fontSize: "30px",
+                                                            fontWeight: 700,
+                                                            lineHeight: "80px",
+                                                        }}
+                                                    >
+                                                        {item.title}
+                                                    </Text>
+                                                    <Text
+                                                        sx={{
+                                                            fontSize: "18px",
+                                                            fontWeight: 400,
+                                                            lineHeight: "30px",
+                                                            marginTop: "0px",
+                                                            width: "100%",
+                                                            marginBottom:
+                                                                "30px",
+                                                        }}
+                                                    >
+                                                        {item.des}
+                                                    </Text>
+                                                </Flex>
+                                            );
+                                        })}
+                                    </Box>
+                                </Flex>
                             </Flex>
                         );
                     })}
