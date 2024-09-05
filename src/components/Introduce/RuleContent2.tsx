@@ -45,7 +45,7 @@ const RuleContent2 = ({
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#F2D861",
+                            color: "#FFF",
                             textDecoration: "underline",
                             fontSize: "14px",
                             cursor: "pointer",
@@ -67,7 +67,6 @@ const RuleContent2 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -84,7 +83,6 @@ const RuleContent2 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -95,7 +93,6 @@ const RuleContent2 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -105,7 +102,6 @@ const RuleContent2 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >

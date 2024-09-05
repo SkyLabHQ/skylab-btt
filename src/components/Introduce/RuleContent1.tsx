@@ -40,19 +40,28 @@ const RuleContent1 = ({
                     marginTop: "16px",
                 }}
             >
+                <Text> At any given time, each level has one newcomer. </Text>
                 <Text>
                     A folded/minted paper plane comes with{" "}
                     <span
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
                         1 xp
                     </span>{" "}
-                    and is automatically the newcomer to Level 1.
+                    and is automatically the newcomer to{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                        }}
+                    >
+                        Level 1.
+                    </span>{" "}
                 </Text>
             </RuleWrap>
 
@@ -80,7 +89,7 @@ const RuleContent1 = ({
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#F2D861",
+                            color: "#FFF",
                             textDecoration: "underline",
                             fontSize: "14px",
                             cursor: "pointer",
@@ -95,7 +104,7 @@ const RuleContent1 = ({
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#F2D861",
+                            color: "#FFF",
                             textDecoration: "underline",
                             fontSize: "14px",
                             cursor: "pointer",
@@ -112,7 +121,6 @@ const RuleContent1 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -128,10 +136,12 @@ const RuleContent1 = ({
                         marginTop: "36px",
                     }}
                 >
+                    {" "}
+                    So, how to gain xp? By playing
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#F2D861",
+                            color: "#FFF",
                             textDecoration: "underline",
                             fontSize: "14px",
                             cursor: "pointer",
@@ -141,7 +151,7 @@ const RuleContent1 = ({
                         }}
                     >
                         {" "}
-                        So, how to gain xp? By playing the Bid Tac Toe game.{" "}
+                        the Bid Tac Toe game.{" "}
                     </span>{" "}
                 </Text>
             </RuleWrap>

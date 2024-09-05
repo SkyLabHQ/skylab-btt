@@ -72,7 +72,6 @@ const RuleContent3 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -99,7 +98,6 @@ const RuleContent3 = ({
                                     style={{
                                         fontWeight: 700,
                                         color: "#F2D861",
-                                        textDecoration: "underline",
                                         fontSize: "14px",
                                     }}
                                 >
@@ -144,7 +142,6 @@ const RuleContent3 = ({
                                     style={{
                                         fontWeight: 700,
                                         color: "#F2D861",
-                                        textDecoration: "underline",
                                         fontSize: "14px",
                                     }}
                                 >
@@ -167,7 +164,6 @@ const RuleContent3 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -188,7 +184,6 @@ const RuleContent3 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >

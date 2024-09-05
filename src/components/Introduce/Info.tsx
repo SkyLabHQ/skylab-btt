@@ -4,7 +4,6 @@ const rules = [
         In Crypto,<br></br>{" "}
         <span
             style={{
-                textDecorationLine: "underline",
                 fontSize: "20px",
                 fontWeight: "700",
             }}
@@ -18,7 +17,6 @@ const rules = [
         else,{" "}
         <span
             style={{
-                textDecorationLine: "underline",
                 fontSize: "20px",
                 fontWeight: "700",
             }}
@@ -31,7 +29,6 @@ const rules = [
         Of course.{" "}
         <span
             style={{
-                textDecorationLine: "underline",
                 fontSize: "20px",
                 fontWeight: "700",
             }}
@@ -44,7 +41,6 @@ const rules = [
         remembered,
         <span
             style={{
-                textDecorationLine: "underline",
                 fontSize: "20px",
                 fontWeight: "700",
             }}
@@ -56,7 +52,6 @@ const rules = [
         So, we create{" "}
         <span
             style={{
-                textDecorationLine: "underline",
                 fontSize: "20px",
                 fontWeight: "700",
             }}
@@ -69,7 +64,6 @@ const rules = [
         Because{" "}
         <span
             style={{
-                textDecorationLine: "underline",
                 fontSize: "20px",
                 fontWeight: "700",
             }}

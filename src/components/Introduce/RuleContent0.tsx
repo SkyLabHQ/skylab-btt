@@ -46,7 +46,6 @@ const RuleContent0 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -75,7 +74,6 @@ const RuleContent0 = ({
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
-                            textDecoration: "underline",
                             fontSize: "14px",
                         }}
                     >
@@ -84,6 +82,8 @@ const RuleContent0 = ({
                         <span
                             style={{
                                 cursor: "pointer",
+                                color: "#fff",
+                                textDecoration: "underline",
                             }}
                             onClick={() => {
                                 onChangeActiveIndex(1);
