@@ -170,7 +170,7 @@ const Schedule = ({
                                             fontWeight: 700,
                                         }}
                                     >
-                                        SETUP
+                                        {item.title}
                                     </Text>
                                 </Flex>
                                 <Flex
