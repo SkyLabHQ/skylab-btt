@@ -1,7 +1,7 @@
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 
 import RewardVideo from "./assets/reward.mp4";
-import RuleWrap, { CircleContent } from "./RuleWrap";
+import RuleWrap, { CircleContent, LastPlane } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
@@ -94,7 +94,9 @@ const RuleContent3 = ({
                                     }}
                                 >
                                     {" "}
-                                    [ Last Plane ]'s
+                                    <LastPlane
+                                        text={"Last Plane's"}
+                                    ></LastPlane>
                                 </span>{" "}
                                 take rate:
                                 <span
@@ -187,8 +189,8 @@ const RuleContent3 = ({
                             color: "#F2D861",
                         }}
                     >
-                        holding the [ Last Plane ] position when any timer
-                        counts down to zero.
+                        holding the <LastPlane></LastPlane>position when any
+                        timer counts down to zero.
                     </span>
                 </Text>
             </RuleWrap>

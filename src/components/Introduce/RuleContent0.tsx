@@ -1,7 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import LevelVideo from "./assets/level.mp4";
 import DownVideo from "./assets/down.mp4";
-import RuleWrap, { CircleContent } from "./RuleWrap";
+import RuleWrap, { CircleContent, LastPlane } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
@@ -11,7 +11,6 @@ const RuleContent0 = ({
     onChangeActiveIndex: (activeIndex: number) => void;
 }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-
     return (
         <Box>
             <Box>
@@ -139,8 +138,8 @@ const RuleContent0 = ({
                             fontSize: "14px",
                         }}
                     >
-                        [ Last Plane ] position of that level in order to win
-                        the entire pot
+                        <LastPlane></LastPlane> position of that level in order
+                        to win the entire pot
                     </span>{" "}
                     , which includes all the minted paper and paper plane base
                     fees.*

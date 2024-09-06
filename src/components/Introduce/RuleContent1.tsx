@@ -2,7 +2,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 
 import PaperVideo from "./assets/paper.mp4";
 import NewcomerVideo from "./assets/newcomer.mp4";
-import RuleWrap, { CircleContent } from "./RuleWrap";
+import RuleWrap, { CircleContent, LastPlane } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
@@ -32,7 +32,7 @@ const RuleContent1 = ({
                         }}
                     >
                         {" "}
-                        [ Last Plane ]
+                        <LastPlane></LastPlane>
                     </span>{" "}
                     ?{" "}
                 </Text>
@@ -64,7 +64,7 @@ const RuleContent1 = ({
                         }}
                     >
                         {" "}
-                        [ Last Plane ]
+                        <LastPlane></LastPlane>
                     </span>{" "}
                     position. It belongs to the last plane that ascends to the
                     level.
@@ -90,7 +90,7 @@ const RuleContent1 = ({
                                     fontSize: "14px",
                                 }}
                             >
-                                [ Last Plane ]
+                                <LastPlane></LastPlane>
                             </span>{" "}
                             at{" "}
                             <span
@@ -147,7 +147,7 @@ const RuleContent1 = ({
                                     fontSize: "14px",
                                 }}
                             >
-                                [ Last Plane ]{" "}
+                                <LastPlane></LastPlane>{" "}
                             </span>{" "}
                             of that level.
                         </Text>
@@ -181,7 +181,7 @@ const RuleContent1 = ({
                             fontSize: "14px",
                         }}
                     >
-                        [ Last Plane ]{" "}
+                        <LastPlane></LastPlane>{" "}
                     </span>{" "}
                     position until another player’s plane upgrades to that level
                     and takes it. When this happens, the countdown timer for

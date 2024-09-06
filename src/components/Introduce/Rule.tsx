@@ -50,7 +50,7 @@ export const BottomButton = ({
                 marginTop: "35px",
                 gap: isPc ? "60px" : "40px",
             }}
-            justify={isPc ? "flex-end" : "center"}
+            justify={"flex-end"}
         >
             {activeIndex !== 0 && (
                 <BlackButton

@@ -6,6 +6,7 @@ import { ReactComponent as LBorder } from "./assets/l-border.svg";
 import { ReactComponent as RBorder } from "./assets/r-border.svg";
 import CIcon from "./assets/c-icon.svg";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import LastIcon from "./assets/last.svg";
 
 const RuleWrapStyle = styled(Box)`
     background-size: 100% 100%;
@@ -14,12 +15,8 @@ const RuleWrapStyle = styled(Box)`
     letter-spacing: 1px;
     background-image: url(${BorderBg});
     position: relative;
-    line-height: 25px;
+    line-height: 1.6;
     font-size: 12px;
-
-    @media (max-width: 800px) {
-        line-height: 18px;
-    }
 `;
 
 const RuleWrap = (props: BoxProps) => {
@@ -73,6 +70,34 @@ export const CircleContent = ({ text }: { text: React.ReactNode }) => {
                 }}
             ></Image>
             <Text>{text}</Text>
+        </Box>
+    );
+};
+
+export const LastPlane = ({ text }: { text?: string }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
+    return (
+        <Box
+            sx={{
+                display: "inline-block",
+                background: "#F2D861",
+                color: "#000",
+                position: "relative",
+                padding: "0 2px",
+                lineHeight: 1,
+            }}
+        >
+            {text || "Last Plane"}
+            <Image
+                src={LastIcon}
+                sx={{
+                    position: "absolute",
+                    right: "0px",
+                    top: isPc ? "-12px" : "-8px",
+                    width: isPc ? "20px" : "12px",
+                }}
+            ></Image>
         </Box>
     );
 };
