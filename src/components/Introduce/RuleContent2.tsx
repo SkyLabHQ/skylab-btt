@@ -6,18 +6,21 @@ import Game1Video from "./assets/game1.mp4";
 import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import { TG_URL } from "@/skyConstants/tgConfig";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const RuleContent2 = ({
     onChangeActiveIndex,
 }: {
     onChangeActiveIndex: (activeIndex: number) => void;
 }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
     return (
         <Box>
             <Box>
                 <Text
                     sx={{
-                        fontSize: "20px",
+                        fontSize: isPc ? "20px" : "14px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -31,10 +34,10 @@ const RuleContent2 = ({
                     style={{
                         width: "100%",
                         maxWidth: "600px",
-                        margin: "20px auto",
+                        margin: isPc ? "20px auto" : "12px auto",
                     }}
                 >
-                    <source src={GameVideo} type="video/mp4" />
+                    <source src={Game1Video} type="video/mp4" />
                 </video>
             </Box>
             <RuleWrap
@@ -143,7 +146,7 @@ const RuleContent2 = ({
                     margin: "20px auto",
                 }}
             >
-                <source src={Game1Video} type="video/mp4" />
+                <source src={GameVideo} type="video/mp4" />
             </video>
             <BottomButton
                 activeIndex={2}

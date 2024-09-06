@@ -33,6 +33,7 @@ import { ReactComponent as RArrowIcon } from "./assets/r-arrow.svg";
 import { SwitchTransition, CSSTransition } from "react-transition-group";
 
 import "./rule.css";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 export const BottomButton = ({
     activeIndex,
@@ -41,12 +42,15 @@ export const BottomButton = ({
     activeIndex: number;
     onChangeActiveIndex: (index: number) => void;
 }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
     return (
         <Flex
             sx={{
                 marginTop: "35px",
+                gap: isPc ? "60px" : "40px",
             }}
-            justify={"flex-end"}
+            justify={isPc ? "flex-end" : "center"}
         >
             {activeIndex !== 0 && (
                 <BlackButton
@@ -54,28 +58,29 @@ export const BottomButton = ({
                         onChangeActiveIndex(activeIndex - 1);
                     }}
                     sx={{
-                        width: "235px",
-                        height: "60px",
+                        width: isPc ? "235px" : "120px",
+                        height: isPc ? "60px" : "25px",
                         background: "rgba(0, 0, 0, 0.20) !important",
                         borderRadius: "12px",
                     }}
                 >
-                    <BackIcon
-                        style={{
-                            marginRight: "24px",
-                            width: "18px",
-                        }}
-                    ></BackIcon>
+                    {isPc && (
+                        <BackIcon
+                            style={{
+                                marginRight: "24px",
+                                width: "18px",
+                            }}
+                        ></BackIcon>
+                    )}
                     <Text>Back</Text>
                 </BlackButton>
             )}
             {activeIndex !== 4 && (
                 <BlackButton
                     sx={{
-                        width: "235px",
-                        height: "60px",
+                        width: isPc ? "235px" : "120px",
+                        height: isPc ? "60px" : "25px",
                         background: "rgba(0, 0, 0, 0.20) !important",
-                        marginLeft: "60px",
                         borderRadius: "12px",
                     }}
                     onClick={() => {
@@ -83,9 +88,11 @@ export const BottomButton = ({
                     }}
                 >
                     <Text>Next</Text>
-                    <NextIcon
-                        style={{ marginLeft: "24px", width: "18px" }}
-                    ></NextIcon>
+                    {isPc && (
+                        <NextIcon
+                            style={{ marginLeft: "24px", width: "18px" }}
+                        ></NextIcon>
+                    )}
                 </BlackButton>
             )}
         </Flex>
@@ -121,6 +128,7 @@ const navList = [
 ];
 
 const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [activeIndex, setActiveIndex] = useState(0);
 
     const handleActiveIndex = (index: number) => {
@@ -164,26 +172,26 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     cursor: "pointer",
                 }}
                 align={"center"}
-                flexDir={"column"}
             >
-                <Image
-                    src={CloseIcon}
-                    sx={{
-                        width: "20px",
-                        height: "20px",
-                    }}
-                ></Image>
                 <Text
                     sx={{
                         color: "#FFF",
                         textAlign: "center",
                         fontFamily: "Orbitron",
-                        fontSize: "18px",
+                        fontSize: isPc ? "18px" : "12px",
                         fontWeight: 400,
+                        marginRight: "6px",
                     }}
                 >
                     Esc
-                </Text>
+                </Text>{" "}
+                <Image
+                    src={CloseIcon}
+                    sx={{
+                        width: isPc ? "16px" : "8px",
+                        height: isPc ? "16px" : "8px",
+                    }}
+                ></Image>
             </Flex>
             <Text
                 sx={{
@@ -191,7 +199,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                     textAlign: "center",
                     textShadow: "#FFD000",
                     fontFamily: "Orbitron",
-                    fontSize: "34px",
+                    fontSize: isPc ? "34px" : "14px",
                     fontWeight: 700,
                 }}
             >
@@ -201,7 +209,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 justify={"center"}
                 align={"flex-end"}
                 sx={{
-                    gap: "50px",
+                    gap: isPc ? "50px" : "38px",
                     marginTop: "20px",
                     position: "relative",
                 }}
@@ -209,7 +217,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
             >
                 <LArrowIcon
                     style={{
-                        width: "12px",
+                        width: isPc ? "12px" : "6px",
                         position: "absolute",
                         left: "0",
                         top: "50%",
@@ -225,7 +233,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 ></LArrowIcon>
                 <RArrowIcon
                     style={{
-                        width: "12px",
+                        width: isPc ? "12px" : "6px",
                         position: "absolute",
                         right: "0",
                         top: "50%",
@@ -254,12 +262,9 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                             justify={"flex-end"}
                             sx={{
                                 cursor: "pointer",
-                                width: "55px",
-                                height: "40px",
+                                width: isPc ? "55px" : "22px",
+                                height: isPc ? "40px" : "16px",
                                 "&:hover": {
-                                    "& img": {
-                                        width: "110px",
-                                    },
                                     "& img:nth-child(1)": {
                                         display:
                                             activeIndex !== index && "none",

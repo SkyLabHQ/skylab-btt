@@ -198,7 +198,7 @@ const IntroduceContent = ({
             <Box
                 sx={{
                     width: "100%",
-                    height: "100vh",
+                    height: isPc ? "100vh" : "100vw",
                     position: "relative",
                     overflow: "hidden",
                     "& *": {
@@ -218,7 +218,7 @@ const IntroduceContent = ({
                                 key={index}
                                 sx={{
                                     position: "absolute",
-                                    top: "50vh",
+                                    top: "50%",
                                     left: "50%",
                                     transform: "translate(-50%, -50%)",
                                     width:
@@ -366,16 +366,18 @@ const IntroduceContent = ({
                         onModeChange("rules");
                     }}
                     sx={{
-                        width: isPc ? "250px" : "150px",
-                        height: isPc ? "60px" : "36px",
+                        width: isPc ? "250px" : "120px",
+                        height: isPc ? "60px" : "25px",
                     }}
                 >
-                    <NextIcon
-                        style={{
-                            width: isPc ? "18px" : "14px",
-                            marginRight: "20px",
-                        }}
-                    ></NextIcon>
+                    {isPc && (
+                        <NextIcon
+                            style={{
+                                width: isPc ? "18px" : "14px",
+                                marginRight: "20px",
+                            }}
+                        ></NextIcon>
+                    )}
                     <Text>Rules</Text>
                 </BlackButton>
                 <BlackButton
@@ -383,16 +385,18 @@ const IntroduceContent = ({
                         onModeChange("schedule");
                     }}
                     sx={{
-                        width: isPc ? "250px" : "150px",
-                        height: isPc ? "60px" : "36px",
+                        width: isPc ? "250px" : "120px",
+                        height: isPc ? "60px" : "25px",
                     }}
                 >
-                    <ShiftEIcon
-                        style={{
-                            width: isPc ? "60px" : "45px",
-                            marginRight: isPc ? "20px" : "10px",
-                        }}
-                    ></ShiftEIcon>
+                    {isPc && (
+                        <ShiftEIcon
+                            style={{
+                                width: isPc ? "60px" : "45px",
+                                marginRight: isPc ? "20px" : "10px",
+                            }}
+                        ></ShiftEIcon>
+                    )}
                     <Text>Schedule</Text>
                 </BlackButton>
             </Flex>

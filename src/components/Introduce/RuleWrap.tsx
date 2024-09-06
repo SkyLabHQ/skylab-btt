@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import { ReactComponent as LBorder } from "./assets/l-border.svg";
 import { ReactComponent as RBorder } from "./assets/r-border.svg";
 import CIcon from "./assets/c-icon.svg";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const RuleWrapStyle = styled(Box)`
     background-size: 100% 100%;
@@ -15,29 +16,35 @@ const RuleWrapStyle = styled(Box)`
     position: relative;
     line-height: 25px;
     font-size: 12px;
+
+    @media (max-width: 800px) {
+        line-height: 18px;
+    }
 `;
 
 const RuleWrap = (props: BoxProps) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
     return (
         <RuleWrapStyle {...props}>
             <LBorder
                 style={{
                     position: "absolute",
-                    left: "-4px",
-                    top: "-4px",
+                    left: isPc ? "-4px" : "-2px",
+                    top: isPc ? "-4px" : "-2px",
                     height: "40%",
                     width: "auto",
-                    maxHeight: "50px",
+                    maxHeight: isPc ? "50px" : "14px",
                 }}
             ></LBorder>
             <RBorder
                 style={{
                     position: "absolute",
-                    right: "-4px",
-                    bottom: "-4px",
+                    right: isPc ? "-4px" : "-2px",
+                    bottom: isPc ? "-4px" : "-2px",
                     height: "40%",
                     width: "auto",
-                    maxHeight: "50px",
+                    maxHeight: isPc ? "50px" : "14px",
                 }}
             ></RBorder>
             {props.children}
@@ -46,12 +53,14 @@ const RuleWrap = (props: BoxProps) => {
 };
 
 export const CircleContent = ({ text }: { text: React.ReactNode }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
     return (
         <Box
             sx={{
                 paddingLeft: "30px",
                 position: "relative",
-                marginTop: "16px",
+                marginTop: isPc ? "16px" : "8px",
             }}
         >
             <Image

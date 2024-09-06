@@ -3,18 +3,21 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import RewardVideo from "./assets/reward.mp4";
 import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const RuleContent3 = ({
     onChangeActiveIndex,
 }: {
     onChangeActiveIndex: (activeIndex: number) => void;
 }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
     return (
         <Box>
             <Box>
                 <Text
                     sx={{
-                        fontSize: "20px",
+                        fontSize: isPc ? "20px" : "14px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -28,7 +31,7 @@ const RuleContent3 = ({
                     style={{
                         width: "100%",
                         maxWidth: "600px",
-                        margin: "20px auto",
+                        margin: isPc ? "20px auto" : "12px auto",
                     }}
                 >
                     <source src={RewardVideo} type="video/mp4" />
