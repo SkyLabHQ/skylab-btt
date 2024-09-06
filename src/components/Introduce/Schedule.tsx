@@ -6,9 +6,13 @@ import CircleYGif from "@/components/Introduce/assets/circle-y.gif";
 import BtBg from "./assets/bt-bg.png";
 import Line from "./assets/line.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import SetupIcon from "./assets/setup.svg";
+import ConflictIcon from "./assets/conflict.svg";
+import NewDawnIcon from "./assets/newdawn.svg";
 
 const sList = [
     {
+        icon: SetupIcon,
         title: "SETUP",
         list: [
             {
@@ -26,6 +30,7 @@ const sList = [
         ],
     },
     {
+        icon: ConflictIcon,
         title: "CONFLICT",
         list: [
             {
@@ -43,6 +48,7 @@ const sList = [
         ],
     },
     {
+        icon: NewDawnIcon,
         title: "NEW DAWN",
         list: [
             {
@@ -164,6 +170,13 @@ const Schedule = ({
                                     align={"center"}
                                     justify={"center"}
                                 >
+                                    <Image
+                                        src={item.icon}
+                                        sx={{
+                                            width: isPc ? "32px" : "16px",
+                                            marginRight: isPc ? "10px" : "5px",
+                                        }}
+                                    ></Image>
                                     <Text
                                         sx={{
                                             fontSize: isPc ? "30px" : "14px",
