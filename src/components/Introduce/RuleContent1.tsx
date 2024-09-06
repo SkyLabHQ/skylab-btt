@@ -185,9 +185,27 @@ const RuleContent1 = ({
                     </span>{" "}
                     position until another player’s plane upgrades to that level
                     and takes it. When this happens, the countdown timer for
-                    that level resets to its starting point.
+                    that level{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                        }}
+                        onClick={() => {
+                            onChangeActiveIndex(4);
+                        }}
+                    >
+                        resets to its starting point.
+                    </span>
                 </Text>
-                <Text>
+                <Text
+                    sx={{
+                        marginTop: isPc ? "16px" : "8px",
+                    }}
+                >
                     <span
                         style={{
                             fontWeight: 700,
@@ -205,6 +223,7 @@ const RuleContent1 = ({
                             color: "#F2D861",
                             fontSize: "14px",
                             textDecoration: "underline",
+                            cursor: "pointer",
                         }}
                         onClick={() => {
                             onChangeActiveIndex(2);

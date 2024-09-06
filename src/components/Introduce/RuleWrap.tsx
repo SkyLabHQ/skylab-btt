@@ -17,6 +17,7 @@ const RuleWrapStyle = styled(Box)`
     position: relative;
     line-height: 1.6;
     font-size: 12px;
+    font-weight: 700;
 `;
 
 const RuleWrap = (props: BoxProps) => {
