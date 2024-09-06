@@ -39,7 +39,18 @@ const RuleContent4 = ({
                 </video>
             </Box>
             <RuleWrap>
-                <Text>As you move up levels, two things double:</Text>
+                <Text>
+                    As you move up levels, two things{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            fontSize: "14px",
+                            color: "#F2D861",
+                        }}
+                    >
+                        double:
+                    </span>{" "}
+                </Text>
                 <CircleContent
                     text={
                         <Box>

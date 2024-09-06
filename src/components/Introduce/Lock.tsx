@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import RuleWrap from "./RuleWrap";
 import { BlackButton } from "./Button";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
+import { useNavigate } from "react-router-dom";
 
 const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
     const [show, setShow] = useState(false);

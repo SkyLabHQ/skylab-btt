@@ -70,7 +70,7 @@ const RuleContent2 = ({
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#FFF",
+                            color: "#F2D861",
                             fontSize: "14px",
                             textDecoration: "underline",
                         }}

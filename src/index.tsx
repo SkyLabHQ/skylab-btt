@@ -57,7 +57,6 @@ const RootContent = () => {
                             <Fragment>
                                 <HelmetProvider>
                                     <AppRoutes />
-                                    <BttHelmet></BttHelmet>
                                 </HelmetProvider>
                             </Fragment>
                         </BidIconProvider>

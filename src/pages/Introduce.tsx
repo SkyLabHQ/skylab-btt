@@ -13,6 +13,7 @@ import CVideo from "@/components/Introduce/assets/c.mp4";
 import WVideo from "@/components/Introduce/assets/w.mp4";
 import Lock from "@/components/Introduce/Lock";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import Tournament from "@/components/Helmet/Tournament";
 
 const Introduce = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
@@ -85,6 +86,7 @@ const Introduce = () => {
                 background: "#1b1b1b",
             }}
         >
+            <Tournament></Tournament>
             <video
                 autoPlay
                 loop

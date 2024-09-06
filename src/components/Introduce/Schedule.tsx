@@ -24,7 +24,7 @@ const sList = [
                 des: "Limited paper pre-sale begins. Get yours before they run out.",
             },
             {
-                title: "Act III: Escalation",
+                title: "Act III: Conflict",
                 des: "The War of Influence Game begins. Paper folding and Paper Plane minting starts. Timers start ticking and Bid Tac Toe Battles begin.",
             },
         ],
@@ -34,11 +34,11 @@ const sList = [
         title: "CONFLICT",
         list: [
             {
-                title: "Act IV: Stalemate",
+                title: "Act IV: Escalation",
                 des: "Any timer is within 5 minutes of finishing",
             },
             {
-                title: "Act V: Turning Point",
+                title: "Act V: Stalemate",
                 des: "The pot reaches 500 eth and timers are still ticking.",
             },
             {
