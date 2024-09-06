@@ -99,7 +99,6 @@ const OnButton = ({
                         textAlign: "center",
                         marginTop: "8px",
                         fontWeight: 700,
-                        letterSpacing: "2px",
                         backgroundImage:
                             "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
                         backgroundClip: "text",

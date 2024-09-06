@@ -10,7 +10,7 @@ const RuleWrapStyle = styled(Box)`
     background-size: 100% 100%;
     background-repeat: no-repeat;
     padding: 20px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     background-image: url(${BorderBg});
     position: relative;
     line-height: 25px;

@@ -116,7 +116,7 @@ const Info = () => {
                 sx={{
                     color: "#646464",
                     lineHeight: isPc ? "28px" : "20px",
-                    letterSpacing: isPc ? "4px" : "2px",
+                    letterSpacing: "1px",
                     marginTop: isPc ? "40px" : "20px",
                 }}
             >

@@ -143,7 +143,7 @@ const Schedule = ({
                                 align={"center"}
                                 sx={{
                                     marginBottom: "40px",
-                                    letterSpacing: "3px",
+                                    letterSpacing: "1px",
                                 }}
                                 key={index}
                             >
