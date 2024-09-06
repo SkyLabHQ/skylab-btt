@@ -13,11 +13,9 @@ import Light from "@/components/Introduce/assets/light.png";
 import LightC from "@/components/Introduce/assets/light-c.svg";
 import { BlackButton } from "./Button";
 import { ReactComponent as ShiftAIcon } from "./assets/shifta.svg";
-import OnTextIcon from "./assets/ON.svg";
 import { ReactComponent as ShiftEIcon } from "./assets/shifte.svg";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
 import OffIcon from "@/components/Introduce/assets/off-icon.svg";
-import OffTextIcon from "@/components/Introduce/assets/OFF.svg";
 import TitleOnIcon from "./assets/Title-On.png";
 import TitleOffIcon from "./assets/Title-Off.png";
 import TitleOnLIcon from "./assets/Title-Off-L.png";
@@ -33,17 +31,23 @@ const OnButton = ({
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     return (
-        <Box>
+        <Flex
+            sx={{
+                width: isPc ? "140px" : "88px",
+            }}
+            flexDir={"column"}
+            align={"center"}
+        >
             <Box
                 onClick={onClick}
                 sx={{
-                    width: isPc ? "124px" : "93px",
-                    height: isPc ? "48px" : "36px",
+                    width: isPc ? "124px" : "80px",
+                    height: isPc ? "48px" : "32px",
                     border: "2px solid",
                     borderImage: wMode
                         ? "#fff 1"
                         : "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
-                    padding: isPc ? "4px" : "2px",
+                    padding: isPc ? "4px" : "6px",
                     cursor: "pointer",
                     overflow: "hidden",
                 }}
@@ -52,7 +56,7 @@ const OnButton = ({
                     sx={{
                         width: isPc ? "160px" : "120px",
                         position: "relative",
-                        left: wMode ? "0" : isPc ? "-48px" : "-36px",
+                        left: wMode ? "0" : isPc ? "-48px" : "-24px",
                         transition: "all 0.5s",
                     }}
                     align={"center"}
@@ -60,22 +64,22 @@ const OnButton = ({
                     <Image
                         src={OnIcon}
                         sx={{
-                            width: isPc ? "36px" : "27px",
-                            height: isPc ? "36px" : "27px",
+                            width: isPc ? "36px" : "18px",
+                            height: isPc ? "36px" : "18px",
                         }}
                     ></Image>
                     <ShiftAIcon
                         style={{
-                            width: isPc ? "60px" : "45px",
-                            margin: isPc ? "0 16px" : "0 12px",
-                            height: isPc ? "23px" : "17px",
+                            width: isPc ? "60px" : "40px",
+                            margin: isPc ? "0 16px" : "0 8px",
+                            height: isPc ? "23px" : "18px",
                         }}
                     ></ShiftAIcon>
                     <Image
                         src={OffIcon}
                         sx={{
-                            width: isPc ? "36px" : "27px",
-                            height: isPc ? "36px" : "27px",
+                            width: isPc ? "36px" : "18px",
+                            height: isPc ? "36px" : "18px",
                         }}
                     ></Image>
                 </Flex>
@@ -84,9 +88,9 @@ const OnButton = ({
                 <Text
                     sx={{
                         color: "#FFF",
-                        fontSize: isPc ? "14px" : "10px",
+                        fontSize: isPc ? "14px" : "12px",
                         textAlign: "center",
-                        marginTop: "8px",
+                        marginTop: isPc ? "8px" : "4px",
                     }}
                 >
                     Monochrome
@@ -95,9 +99,9 @@ const OnButton = ({
                 <Text
                     sx={{
                         color: "#FFF",
-                        fontSize: isPc ? "14px" : "10px",
+                        fontSize: isPc ? "14px" : "12px",
                         textAlign: "center",
-                        marginTop: "8px",
+                        marginTop: isPc ? "8px" : "4px",
                         fontWeight: 700,
                         backgroundImage:
                             "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
@@ -109,7 +113,7 @@ const OnButton = ({
                     Color
                 </Text>
             )}
-        </Box>
+        </Flex>
     );
 };
 
@@ -143,6 +147,39 @@ const quanList = [
         img: Quan6,
         width: "70%",
         activeWidth: "76%",
+    },
+];
+
+const mquanList = [
+    {
+        img: Quan1,
+        width: "30%",
+        activeWidth: "37%",
+    },
+    {
+        img: Quan2,
+        width: "40%",
+        activeWidth: "47%",
+    },
+    {
+        img: Quan3,
+        width: "50%",
+        activeWidth: "57%",
+    },
+    {
+        img: Quan4,
+        width: "60%",
+        activeWidth: "67%",
+    },
+    {
+        img: Quan5,
+        width: "70%",
+        activeWidth: "77%",
+    },
+    {
+        img: Quan6,
+        width: "80%",
+        activeWidth: "87%",
     },
 ];
 
@@ -211,7 +248,7 @@ const IntroduceContent = ({
                         display: wMode ? "none" : "block",
                     }}
                 >
-                    {quanList.map((item, index) => {
+                    {(isPc ? quanList : mquanList).map((item, index) => {
                         return (
                             <Image
                                 src={item.img}
@@ -312,8 +349,8 @@ const IntroduceContent = ({
                 <Box
                     sx={{
                         position: "absolute",
-                        right: "24px",
-                        top: "24px",
+                        right: isPc ? "24px" : "12px",
+                        top: isPc ? "24px" : "16px",
                     }}
                 >
                     <OnButton
