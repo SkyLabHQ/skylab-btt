@@ -1,7 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import LevelVideo from "./assets/level.mp4";
 import DownVideo from "./assets/down.mp4";
-import RuleWrap from "./RuleWrap";
+import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 
 const RuleContent0 = ({
@@ -14,7 +14,7 @@ const RuleContent0 = ({
             <Box>
                 <Text
                     sx={{
-                        fontSize: "24px",
+                        fontSize: "20px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
@@ -40,8 +40,6 @@ const RuleContent0 = ({
                 }}
             >
                 <Text>
-                    The War of Influence is a massive multiplayer on-chain
-                    social game. There are{" "}
                     <span
                         style={{
                             fontWeight: 700,
@@ -49,10 +47,59 @@ const RuleContent0 = ({
                             fontSize: "14px",
                         }}
                     >
-                        8 leagues, 16 levels of planes, and 16 countdown timers
-                        (one for each level).
-                    </span>
+                        The War of Influence Game
+                    </span>{" "}
+                    is a massive multiplayer, on-chain social game.
                 </Text>
+                <Text
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
+                    Here’s what you need to know:
+                </Text>
+                <CircleContent
+                    text={
+                        <Text>
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                8 Teams
+                            </span>{" "}
+                            (8 colors) compete against each other.
+                        </Text>
+                    }
+                ></CircleContent>
+                <CircleContent
+                    text={
+                        <Text>
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                16 Levels of Planes
+                            </span>{" "}
+                            exist, with each level having its own
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                {" "}
+                                countdown timer.
+                            </span>
+                        </Text>
+                    }
+                ></CircleContent>
             </RuleWrap>
 
             <video
@@ -67,9 +114,8 @@ const RuleContent0 = ({
             >
                 <source src={DownVideo} type="video/mp4" />
             </video>
-            <RuleWrap>
+            <RuleWrap sx={{}}>
                 <Text>
-                    This game is about{" "}
                     <span
                         style={{
                             fontWeight: 700,
@@ -77,34 +123,33 @@ const RuleContent0 = ({
                             fontSize: "14px",
                         }}
                     >
-                        when ANY timer counts to zero, make sure your league
-                        holds the{" "}
-                        <span
-                            style={{
-                                cursor: "pointer",
-                                color: "#fff",
-                                textDecoration: "underline",
-                            }}
-                            onClick={() => {
-                                onChangeActiveIndex(1);
-                            }}
-                        >
-                            “newcomer”
-                        </span>{" "}
-                        position of that level
+                        How to win:{" "}
+                    </span>
+                </Text>
+                <Text>
+                    When any level's countdown timer hits zero,a plane from your
+                    team must hold the{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                        }}
+                    >
+                        [ Last Plane ] position of that level in order to win
+                        the entire pot
                     </span>{" "}
-                    , in order to win the whole pot, which consists of all the
-                    paper and paper planes minting fees.*
+                    , which includes all the minted paper and paper plane base
+                    fees.*
                 </Text>
                 <Text
                     sx={{
                         color: "#999",
-                        textAlign: "justify",
-                        fontFamily: "Orbitron",
                         fontSize: "12px",
+                        marginTop: "10px",
                     }}
                 >
-                    *deducting a 10% operational fee
+                    *After deducting a 10% operational fee.
                 </Text>
             </RuleWrap>
             <BottomButton

@@ -14,7 +14,7 @@ import WVideo from "@/components/Introduce/assets/w.mp4";
 import Lock from "@/components/Introduce/Lock";
 
 const Introduce = () => {
-    const [init, setInit] = useState(false);
+    const [init, setInit] = useState(true);
     const cRef = createRef<HTMLVideoElement>();
     const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,8 +22,6 @@ const Introduce = () => {
     const [wMode, setWMode] = useState(false);
 
     const [mode, setMode] = useState("");
-
-    console.log(wMode, "wMode");
 
     const handleChangeWMode = () => {
         if (wMode) {
@@ -142,7 +140,7 @@ const Introduce = () => {
                 <ModalContent
                     sx={{
                         background: "transparent",
-                        padding: "100px 20px 100px",
+                        padding: "50px 20px 100px",
                         minHeight: "100%",
                         fontFamily: "Orbitron",
                     }}

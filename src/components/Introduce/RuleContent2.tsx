@@ -1,7 +1,9 @@
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 
 import GameVideo from "./assets/game.mp4";
-import RuleWrap from "./RuleWrap";
+import Game1Video from "./assets/game1.mp4";
+
+import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import { TG_URL } from "@/skyConstants/tgConfig";
 
@@ -15,12 +17,12 @@ const RuleContent2 = ({
             <Box>
                 <Text
                     sx={{
-                        fontSize: "24px",
+                        fontSize: "20px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
                 >
-                    The Game: Bid Tac Toe
+                    The Game: Bid Tac Toe{" "}
                 </Text>
                 <video
                     autoPlay
@@ -41,75 +43,108 @@ const RuleContent2 = ({
                 }}
             >
                 <Text>
-                    Plane vs. Plane with xp as stake.{" "}
+                    In{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                        }}
+                    >
+                        Bid Tac Toe
+                    </span>
+                    , planes go head-to-head, wagering their{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                        }}
+                    >
+                        XP
+                    </span>{" "}
+                    as the stakes.{" "}
                     <span
                         style={{
                             fontWeight: 700,
                             color: "#FFF",
-                            textDecoration: "underline",
                             fontSize: "14px",
-                            cursor: "pointer",
+                            textDecoration: "underline",
                         }}
                         onClick={() => {
                             window.open(TG_URL);
                         }}
                     >
-                        Each game takes ~3min.
+                        Each match lasts around 3 minutes.
                     </span>
                 </Text>
-                <Text
-                    sx={{
-                        marginTop: "16px",
-                    }}
-                >
-                    Bid Tac Toe is a variation of tic tac toe, except players
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        blind-bid for each grid to occupy three grids in a row.
-                    </span>
-                </Text>
-                <Text
-                    sx={{
-                        marginTop: "16px",
-                    }}
-                >
-                    The stake of each game is half of the{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        xp.
-                    </span>{" "}
-                    amount of the plane with less{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        xp.
-                    </span>
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        The only exception being level 1 paper plane - the stake
-                        is its entire xp holding, 1 xp.{" "}
-                    </span>
-                </Text>
+                <CircleContent
+                    text={
+                        <Text>
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                Bid Tac Toe
+                            </span>{" "}
+                            is a variation of Tic Tac Toe, where players{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                blind-bid
+                            </span>{" "}
+                            for each grid space to form a row of three.
+                        </Text>
+                    }
+                ></CircleContent>
+                <CircleContent
+                    text={
+                        <Text>
+                            The stake for each game is{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                half the XP{" "}
+                            </span>{" "}
+                            of the plane with the lower XP, except at Level 1,
+                            where each plane risks all its{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                1 XP
+                            </span>{" "}
+                            .
+                        </Text>
+                    }
+                ></CircleContent>
             </RuleWrap>
+            <video
+                autoPlay
+                loop
+                muted
+                style={{
+                    width: "100%",
+                    maxWidth: "600px",
+                    margin: "20px auto",
+                }}
+            >
+                <source src={Game1Video} type="video/mp4" />
+            </video>
             <BottomButton
                 activeIndex={2}
                 onChangeActiveIndex={(activeIndex: number) => {

@@ -2,7 +2,7 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 
 import UpVideo from "./assets/up.mp4";
 
-import RuleWrap from "./RuleWrap";
+import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 
 const RuleContent4 = ({
@@ -15,12 +15,12 @@ const RuleContent4 = ({
             <Box>
                 <Text
                     sx={{
-                        fontSize: "24px",
+                        fontSize: "20px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
                 >
-                    Doubles, as you go up
+                    LEVELING UP
                 </Text>
                 <video
                     autoPlay
@@ -36,31 +36,44 @@ const RuleContent4 = ({
                 </video>
             </Box>
             <RuleWrap>
-                <Text
-                    sx={{
-                        fontSize: "12px",
-                        lineHeight: "25px",
-                    }}
-                >
-                    For each level up,{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        minimum xp requirements and timer starting point
-                        doubles.
-                    </span>
-                </Text>
-                <Text
-                    sx={{
-                        marginTop: "16px",
-                    }}
-                >
-                    perhaps so has the worth of your plane in the marketplace 😊
-                </Text>
+                <Text>As you move up levels, two things double:</Text>
+                <CircleContent
+                    text={
+                        <Box>
+                            <Text>
+                                The{" "}
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        fontSize: "14px",
+                                        color: "#F2D861",
+                                    }}
+                                >
+                                    minimum XP requirement
+                                </span>{" "}
+                                to advance.
+                            </Text>
+                        </Box>
+                    }
+                ></CircleContent>{" "}
+                <CircleContent
+                    text={
+                        <Box>
+                            <Text>
+                                The{" "}
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        fontSize: "14px",
+                                        color: "#F2D861",
+                                    }}
+                                >
+                                    starting point of the countdown timer.
+                                </span>
+                            </Text>
+                        </Box>
+                    }
+                ></CircleContent>
             </RuleWrap>
             <BottomButton
                 activeIndex={4}

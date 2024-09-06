@@ -1,33 +1,8 @@
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 
 import RewardVideo from "./assets/reward.mp4";
-import CIcon from "./assets/c-icon.svg";
-import RuleWrap from "./RuleWrap";
+import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
-
-const CircleContent = ({ text }: { text: React.ReactNode }) => {
-    return (
-        <Box
-            sx={{
-                paddingLeft: "40px",
-                position: "relative",
-                marginTop: "16px",
-            }}
-        >
-            <Image
-                src={CIcon}
-                sx={{
-                    position: "absolute",
-                    left: "0px",
-                    top: "6px",
-                    width: "14px",
-                }}
-            ></Image>
-
-            <Text>{text}</Text>
-        </Box>
-    );
-};
 
 const RuleContent3 = ({
     onChangeActiveIndex,
@@ -39,12 +14,12 @@ const RuleContent3 = ({
             <Box>
                 <Text
                     sx={{
-                        fontSize: "24px",
+                        fontSize: "20px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
                 >
-                    League and League Leader
+                    Team and Team Leader{" "}
                 </Text>
                 <video
                     autoPlay
@@ -67,16 +42,8 @@ const RuleContent3 = ({
                         marginTop: "16px",
                     }}
                 >
-                    League leader decides on{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        three parameters of a league.
-                    </span>
+                    Each team is managed by a <span>team leader</span>, who can
+                    adjust three key policies:
                 </Text>
                 <Box
                     sx={{
@@ -93,7 +60,7 @@ const RuleContent3 = ({
                                     fontWeight: 400,
                                 }}
                             >
-                                x - league leader takerate:{" "}
+                                x - Team leader's take rate:
                                 <span
                                     style={{
                                         fontWeight: 700,
@@ -115,11 +82,23 @@ const RuleContent3 = ({
                                     fontWeight: 400,
                                 }}
                             >
-                                y - winning newcomer takerate:{" "}
+                                y - Winning{" "}
                                 <span
                                     style={{
                                         fontWeight: 700,
                                         fontSize: "14px",
+                                        color: "#F2D861",
+                                    }}
+                                >
+                                    {" "}
+                                    [ Last Plane ]'s
+                                </span>{" "}
+                                take rate:
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        fontSize: "14px",
+                                        color: "#F2D861",
                                     }}
                                 >
                                     10%~20%
@@ -135,60 +114,78 @@ const RuleContent3 = ({
                                     fontWeight: 400,
                                 }}
                             >
-                                z - paper plane league premium (in eth) -a cash
-                                flow that goes directly to existing plane
-                                holders or the inviter,{" "}
+                                z - Paper plane team premium – this goes
+                                directly to existing plane holders{" "}
                                 <span
                                     style={{
                                         fontWeight: 700,
-                                        color: "#F2D861",
                                         fontSize: "14px",
+                                        color: "#F2D861",
                                     }}
                                 >
                                     {" "}
-                                    distributed pro-rata based on xp
-                                </span>
+                                    (distributed pro-rata based on XP holdings)
+                                </span>{" "}
+                                or the plane’s inviter.
                             </Text>
                         }
                     ></CircleContent>
                 </Box>
                 <Text
                     sx={{
-                        marginTop: "34px",
+                        marginTop: "14px",
+                        fontWeight: 700,
                         fontSize: "14px",
+                        color: "#F2D861",
+                    }}
+                >
+                    Earn as the game goes:
+                </Text>
+                <Text
+                    sx={{
                         lineHeight: "25px",
                     }}
                 >
-                    Z can be changed be it can only go up.{" "}
+                    The premium (z) is added to the paper plane minting fee and
+                    can only increase. Regardless of your team's ultimate
+                    performance,
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#F2D861",
                             fontSize: "14px",
+                            color: "#F2D861",
                         }}
                     >
-                        The pot is distributed pro-rata based on the winning
-                        league's xp ownership.
+                        {" "}
+                        plane holders continue to earn this premium as the game
+                        progresses.
                     </span>
                 </Text>
                 <Text
                     sx={{
-                        marginTop: "32px",
-                        fontSize: "12px",
-                        lineHeight: "25px",
+                        marginTop: "14px",
+                        fontWeight: 700,
+                        fontSize: "14px",
+                        color: "#F2D861",
                     }}
                 >
-                    All of the above only matters when your league wins. So,
-                    degens,{" "}
+                    Winning the Pot:
+                </Text>
+                <Text sx={{}}>
+                    x and y percent are taken by the team leader and the Last
+                    Plane that locks in the win for the team. The rest of the
+                    pot is distributed within the winning team pro-rata based on
+                    XP holdings. The pot only matters if your team wins, so join
+                    a team that unites around a common goal:{" "}
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#F2D861",
                             fontSize: "14px",
+                            color: "#F2D861",
                         }}
                     >
-                        join the league with the strongest community uniting
-                        around a common goal: winning.
+                        holding the [ Last Plane ] position when any timer
+                        counts down to zero.
                     </span>
                 </Text>
             </RuleWrap>

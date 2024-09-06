@@ -202,7 +202,7 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 align={"flex-end"}
                 sx={{
                     gap: "50px",
-                    marginTop: "60px",
+                    marginTop: "20px",
                     position: "relative",
                 }}
                 id="top-nav"

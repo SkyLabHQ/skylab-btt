@@ -2,7 +2,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 
 import PaperVideo from "./assets/paper.mp4";
 import NewcomerVideo from "./assets/newcomer.mp4";
-import RuleWrap from "./RuleWrap";
+import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 
 const RuleContent1 = ({
@@ -15,12 +15,23 @@ const RuleContent1 = ({
             <Box>
                 <Text
                     sx={{
-                        fontSize: "24px",
+                        fontSize: "20px",
                         fontWeight: 700,
                         textAlign: "center",
                     }}
                 >
-                    How to Become Newcomers?{" "}
+                    How to Become the{" "}
+                    <span
+                        style={{
+                            color: "#F2D861",
+                            fontSize: "24px",
+                            fontWeight: 700,
+                        }}
+                    >
+                        {" "}
+                        [ Last Plane ]
+                    </span>{" "}
+                    ?{" "}
                 </Text>
                 <video
                     autoPlay
@@ -40,9 +51,8 @@ const RuleContent1 = ({
                     marginTop: "16px",
                 }}
             >
-                <Text> At any given time, each level has one newcomer. </Text>
                 <Text>
-                    A folded/minted paper plane comes with{" "}
+                    At any given moment, each level has one plane holding the{" "}
                     <span
                         style={{
                             fontWeight: 700,
@@ -50,19 +60,96 @@ const RuleContent1 = ({
                             fontSize: "14px",
                         }}
                     >
-                        1 xp
+                        {" "}
+                        [ Last Plane ]
                     </span>{" "}
-                    and is automatically the newcomer to{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        Level 1.
-                    </span>{" "}
-                </Text>
+                    position. It belongs to the last plane that ascends to the
+                    level.
+                </Text>{" "}
+                <CircleContent
+                    text={
+                        <Text>
+                            When you fold/mint a paper plane, it starts with{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                1 XP
+                            </span>{" "}
+                            and automatically becomes the{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                [ Last Plane ]
+                            </span>{" "}
+                            at{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                {" "}
+                                Level 1.
+                            </span>
+                        </Text>
+                    }
+                ></CircleContent>
+                <CircleContent
+                    text={
+                        <Text>
+                            A plane’s{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                XP
+                            </span>{" "}
+                            determines its level. When it gains enough{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                XP
+                            </span>{" "}
+                            , it{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                upgrades to the next level
+                            </span>{" "}
+                            and becomes the{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                [ Last Plane ]{" "}
+                            </span>{" "}
+                            of that level.
+                        </Text>
+                    }
+                ></CircleContent>
             </RuleWrap>
 
             <video
@@ -83,40 +170,21 @@ const RuleContent1 = ({
                 }}
             >
                 <Text>
-                    A plane's level is determined by its xp. A plane
-                    automatically upgrades and becomes the newcomer to the next
-                    level{" "}
+                    You hold the{" "}
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#FFF",
-                            textDecoration: "underline",
+                            color: "#F2D861",
                             fontSize: "14px",
-                            cursor: "pointer",
-                        }}
-                        onClick={() => {
-                            onChangeActiveIndex(4);
                         }}
                     >
-                        when it has enough xp.
+                        [ Last Plane ]{" "}
                     </span>{" "}
-                    Countdown timer of the next level is also set to
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#FFF",
-                            textDecoration: "underline",
-                            fontSize: "14px",
-                            cursor: "pointer",
-                        }}
-                        onClick={() => {
-                            onChangeActiveIndex(4);
-                        }}
-                    >
-                        {" "}
-                        its starting point
-                    </span>{" "}
-                    . The plane can hold the newcomer position
+                    position until another player’s plane upgrades to that level
+                    and takes it. When this happens, the countdown timer for
+                    that level resets to its starting point.
+                </Text>
+                <Text>
                     <span
                         style={{
                             fontWeight: 700,
@@ -125,34 +193,22 @@ const RuleContent1 = ({
                         }}
                     >
                         {" "}
-                        till someone else upgrades to that level and steals the
-                        newcomer position.
+                        So, how do you gain XP for upgrading
                     </span>{" "}
-                </Text>
-                <Text
-                    sx={{
-                        fontSize: "12px",
-                        lineHeight: "25px",
-                        marginTop: "36px",
-                    }}
-                >
-                    {" "}
-                    So, how to gain xp? By playing
+                    ? By playing{" "}
                     <span
                         style={{
                             fontWeight: 700,
-                            color: "#FFF",
-                            textDecoration: "underline",
+                            color: "#F2D861",
                             fontSize: "14px",
-                            cursor: "pointer",
+                            textDecoration: "underline",
                         }}
                         onClick={() => {
                             onChangeActiveIndex(2);
                         }}
                     >
-                        {" "}
-                        the Bid Tac Toe game.{" "}
-                    </span>{" "}
+                        Bid Tac Toe.
+                    </span>
                 </Text>
             </RuleWrap>
             <BottomButton
