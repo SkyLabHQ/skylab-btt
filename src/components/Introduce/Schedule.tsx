@@ -264,7 +264,7 @@ const Schedule = ({
                                                     <Text
                                                         sx={{
                                                             fontSize: isPc
-                                                                ? "30px"
+                                                                ? "18px"
                                                                 : "12px",
                                                             fontWeight: 400,
                                                             lineHeight: 1,
