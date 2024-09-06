@@ -21,6 +21,7 @@ import OffTextIcon from "@/components/Introduce/assets/OFF.svg";
 import TitleOnIcon from "./assets/Title-On.png";
 import TitleOffIcon from "./assets/Title-Off.png";
 import TitleOnLIcon from "./assets/Title-Off-L.png";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const OnButton = ({
     wMode,
@@ -29,46 +30,52 @@ const OnButton = ({
     wMode: boolean;
     onClick?: () => void;
 }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
     return (
         <Box>
             <Box
                 onClick={onClick}
                 sx={{
-                    width: "124px",
-                    height: "48px",
+                    width: isPc ? "124px" : "93px",
+                    height: isPc ? "48px" : "36px",
                     border: "2px solid",
                     borderImage: wMode
                         ? "#fff 1"
                         : "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
-                    padding: "4px",
+                    padding: isPc ? "4px" : "2px",
                     cursor: "pointer",
                     overflow: "hidden",
                 }}
             >
                 <Flex
                     sx={{
-                        width: "160px",
+                        width: isPc ? "160px" : "120px",
                         position: "relative",
-                        left: wMode ? "0" : "-48px",
+                        left: wMode ? "0" : isPc ? "-48px" : "-36px",
                         transition: "all 0.5s",
                     }}
+                    align={"center"}
                 >
                     <Image
                         src={OnIcon}
                         sx={{
-                            width: "36px",
+                            width: isPc ? "36px" : "27px",
+                            height: isPc ? "36px" : "27px",
                         }}
                     ></Image>
                     <ShiftAIcon
                         style={{
-                            width: "60px",
-                            margin: "0 16px",
+                            width: isPc ? "60px" : "45px",
+                            margin: isPc ? "0 16px" : "0 12px",
+                            height: isPc ? "23px" : "17px",
                         }}
                     ></ShiftAIcon>
                     <Image
                         src={OffIcon}
                         sx={{
-                            width: "36px",
+                            width: isPc ? "36px" : "27px",
+                            height: isPc ? "36px" : "27px",
                         }}
                     ></Image>
                 </Flex>
@@ -77,7 +84,7 @@ const OnButton = ({
                 <Text
                     sx={{
                         color: "#FFF",
-                        fontSize: "14px",
+                        fontSize: isPc ? "14px" : "10px",
                         textAlign: "center",
                         marginTop: "8px",
                     }}
@@ -88,7 +95,7 @@ const OnButton = ({
                 <Text
                     sx={{
                         color: "#FFF",
-                        fontSize: "14px",
+                        fontSize: isPc ? "14px" : "10px",
                         textAlign: "center",
                         marginTop: "8px",
                         fontWeight: 700,
@@ -104,35 +111,6 @@ const OnButton = ({
                 </Text>
             )}
         </Box>
-    );
-};
-
-const OffButton = ({ onClick }: { onClick?: () => void }) => {
-    return (
-        <Flex
-            onClick={onClick}
-            align={"center"}
-            sx={{
-                width: "182px",
-                height: "48px",
-                border: "2px solid #FFF",
-                padding: "6px",
-                cursor: "pointer",
-            }}
-            justify={"space-between"}
-        >
-            <ShiftAIcon
-                style={{
-                    width: "60px",
-                }}
-            ></ShiftAIcon>
-            <Image
-                src={OffTextIcon}
-                sx={{
-                    width: "40px",
-                }}
-            ></Image>
-        </Flex>
     );
 };
 
@@ -198,6 +176,7 @@ const IntroduceContent = ({
     onThemeChange: () => void;
 }) => {
     const [addCount, setAddCount] = useState(0);
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     const handleDownTo0 = (addCount: number) => {
         if (addCount > 0) {
@@ -377,8 +356,8 @@ const IntroduceContent = ({
 
             <Flex
                 sx={{
-                    fontSize: "32px",
-                    gap: "100px",
+                    fontSize: isPc ? "32px" : "16px",
+                    gap: isPc ? "100px" : "20px",
                     marginTop: "3vw",
                 }}
                 justify={"center"}
@@ -388,46 +367,34 @@ const IntroduceContent = ({
                         onModeChange("rules");
                     }}
                     sx={{
-                        width: "250px",
-                        height: "60px",
+                        width: isPc ? "250px" : "150px",
+                        height: isPc ? "60px" : "36px",
                     }}
                 >
                     <NextIcon
                         style={{
-                            width: "18px",
+                            width: isPc ? "18px" : "14px",
                             marginRight: "20px",
                         }}
                     ></NextIcon>
-                    <Text
-                        sx={{
-                            fontSize: "18px",
-                        }}
-                    >
-                        Rules
-                    </Text>
+                    <Text>Rules</Text>
                 </BlackButton>
                 <BlackButton
                     onClick={() => {
                         onModeChange("schedule");
                     }}
                     sx={{
-                        width: "250px",
-                        height: "60px",
+                        width: isPc ? "250px" : "150px",
+                        height: isPc ? "60px" : "36px",
                     }}
                 >
                     <ShiftEIcon
                         style={{
-                            width: "60px",
-                            marginRight: "20px",
+                            width: isPc ? "60px" : "45px",
+                            marginRight: isPc ? "20px" : "10px",
                         }}
                     ></ShiftEIcon>
-                    <Text
-                        sx={{
-                            fontSize: "18px",
-                        }}
-                    >
-                        Schedule
-                    </Text>
+                    <Text>Schedule</Text>
                 </BlackButton>
             </Flex>
             <Info></Info>

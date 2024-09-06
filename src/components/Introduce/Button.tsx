@@ -17,6 +17,9 @@ const BlackButtonStyle = styled(Button)`
     &:focus {
         box-shadow: none;
     }
+    @media (max-width: 800px) {
+        font-size: 14px;
+    }
 `;
 
 export const BlackButton = (props: ButtonProps) => {

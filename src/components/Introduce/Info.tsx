@@ -1,77 +1,5 @@
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { Box, keyframes, Text } from "@chakra-ui/react";
-const rules = [
-    <Text>
-        In Crypto,<br></br>{" "}
-        <span
-            style={{
-                fontSize: "20px",
-                fontWeight: "700",
-            }}
-        >
-            Attention is limited.
-        </span>{" "}
-        Most hot things eventually die down.
-    </Text>,
-    <Text>
-        When your favorite hot thing fades, forgotten and abandoned by everyone
-        else,{" "}
-        <span
-            style={{
-                fontSize: "20px",
-                fontWeight: "700",
-            }}
-        >
-            {" "}
-            you are heartbroken.
-        </span>
-    </Text>,
-    <Text>
-        Of course.{" "}
-        <span
-            style={{
-                fontSize: "20px",
-                fontWeight: "700",
-            }}
-        >
-            We’ve all been there.
-        </span>{" "}
-    </Text>,
-    <Text>
-        If people tend to forget, in a world where everything fights to be
-        remembered,
-        <span
-            style={{
-                fontSize: "20px",
-                fontWeight: "700",
-            }}
-        >
-            why isn’t there something that’s designed to be forgotten?
-        </span>
-    </Text>,
-    <Text>
-        So, we create{" "}
-        <span
-            style={{
-                fontSize: "20px",
-                fontWeight: "700",
-            }}
-        >
-            this social game – that you’ll wish would die down.
-        </span>{" "}
-        <br></br>Oops. Not just you wish its dying. Everyone does.
-    </Text>,
-    <Text>
-        Because{" "}
-        <span
-            style={{
-                fontSize: "20px",
-                fontWeight: "700",
-            }}
-        >
-            when everyone else forgets, you and your league, shall take it all.
-        </span>{" "}
-    </Text>,
-];
 
 const colorKeyframes = keyframes`
     0% {
@@ -100,22 +28,96 @@ const colorKeyframes = keyframes`
 `;
 
 const Info = () => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+    const rules = [
+        <Text>
+            In Crypto,<br></br>{" "}
+            <span
+                style={{
+                    fontSize: isPc ? "20px" : "14px",
+                    fontWeight: "700",
+                }}
+            >
+                Attention is limited.
+            </span>{" "}
+            Most hot things eventually die down.
+        </Text>,
+        <Text>
+            When your favorite hot thing fades, forgotten and abandoned by
+            everyone else,{" "}
+            <span
+                style={{
+                    fontSize: isPc ? "20px" : "14px",
+                    fontWeight: "700",
+                }}
+            >
+                {" "}
+                you are heartbroken.
+            </span>
+        </Text>,
+        <Text>
+            Of course.{" "}
+            <span
+                style={{
+                    fontSize: isPc ? "20px" : "14px",
+                    fontWeight: "700",
+                }}
+            >
+                We’ve all been there.
+            </span>{" "}
+        </Text>,
+        <Text>
+            If people tend to forget, in a world where everything fights to be
+            remembered,
+            <span
+                style={{
+                    fontSize: isPc ? "20px" : "14px",
+                    fontWeight: "700",
+                }}
+            >
+                why isn’t there something that’s designed to be forgotten?
+            </span>
+        </Text>,
+        <Text>
+            So, we create{" "}
+            <span
+                style={{
+                    fontSize: isPc ? "20px" : "14px",
+                    fontWeight: "700",
+                }}
+            >
+                this social game – that you’ll wish would die down.
+            </span>{" "}
+            <br></br>Oops. Not just you wish its dying. Everyone does.
+        </Text>,
+        <Text>
+            Because{" "}
+            <span
+                style={{
+                    fontSize: isPc ? "20px" : "14px",
+                    fontWeight: "700",
+                }}
+            >
+                when everyone else forgets, you and your league, shall take it
+                all.
+            </span>{" "}
+        </Text>,
+    ];
     return (
         <Box
             sx={{
                 maxWidth: "800px",
                 width: "100%",
                 margin: "0 auto",
-                paddingBottom: "40px",
+                padding: isPc ? "0 0 40px" : "0 20px 40px",
             }}
         >
             <Box
                 sx={{
                     color: "#646464",
-                    lineHeight: "28px",
-                    fontSize: "20px",
-                    letterSpacing: "4px",
-                    marginTop: "40px",
+                    lineHeight: isPc ? "28px" : "20px",
+                    letterSpacing: isPc ? "4px" : "2px",
+                    marginTop: isPc ? "40px" : "20px",
                 }}
             >
                 {rules.map((item, index) => {
@@ -124,13 +126,13 @@ const Info = () => {
                             key={index}
                             sx={{
                                 position: "relative",
-                                fontSize: "14px",
+                                fontSize: isPc ? "14px" : "12px",
                             }}
                         >
                             <Box
                                 sx={{
                                     animationDelay: `${index * 4}s`,
-                                    marginBottom: "30px",
+                                    marginBottom: isPc ? "30px" : "20px",
                                     opacity: 0.1,
                                     textShadow: "0 0 10px #FFF",
                                 }}
