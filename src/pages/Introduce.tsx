@@ -86,7 +86,6 @@ const Introduce = () => {
                 background: "#1b1b1b",
             }}
         >
-            <Tournament></Tournament>
             <video
                 autoPlay
                 loop

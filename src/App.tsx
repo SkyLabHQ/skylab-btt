@@ -12,6 +12,8 @@ import qs from "query-string";
 import useSkyMediaQuery from "./hooks/useSkyMediaQuery";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { base, baseSepolia } from "viem/chains";
+import Tournament from "./components/Helmet/Tournament";
+import BttHelmet from "./components/Helmet/BttHelmet";
 
 const themeColorList = [
     {
@@ -49,7 +51,7 @@ const App = (): ReactElement => {
     const [checked, setChecked] = useState(false);
     const [showTerm, setShowTerm] = useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
+    const { pathname } = useLocation();
 
     // TODO
     // const { blockOpen, handleBlock } = useUserInfo();
@@ -180,6 +182,12 @@ const App = (): ReactElement => {
                 }}
             >
                 <UserInfoProvider>
+                    {pathname === "/" ? (
+                        <Tournament></Tournament>
+                    ) : (
+                        <BttHelmet></BttHelmet>
+                    )}
+
                     <Outlet></Outlet>
                 </UserInfoProvider>
                 {/* {showTerm && <TermPage onContinue={handleContinue}></TermPage>}

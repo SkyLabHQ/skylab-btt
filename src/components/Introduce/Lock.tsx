@@ -4,8 +4,10 @@ import RuleWrap from "./RuleWrap";
 import { BlackButton } from "./Button";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
 import { useNavigate } from "react-router-dom";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [show, setShow] = useState(false);
     const codeRef = [
         useRef(null),
@@ -117,7 +119,7 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                     textAlign: "center",
                     color: "#FFD000",
                     fontFamily: "Orbitron",
-                    fontSize: "24px",
+                    fontSize: isPc ? "24px" : "18px",
                     fontWeight: 700,
                 }}
             >
@@ -128,7 +130,7 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                 sx={{
                     color: "#D40000",
                     textAlign: "center",
-                    fontSize: "18px",
+                    fontSize: isPc ? "18px" : "14px",
                     fontWeight: 700,
                     marginTop: "4px",
                     opacity: show ? 1 : 0,
@@ -139,12 +141,13 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
             <RuleWrap
                 sx={{
                     backgroundColor: "rgba(0, 0, 0, 0.20) !important",
-                    width: "436px",
-                    height: "95px",
+                    width: isPc ? "436px" : "300px",
+                    height: isPc ? "95px" : "65px",
                     position: "relative",
                     display: "flex",
                     justifyContent: "space-between",
                     marginTop: "12px",
+                    padding: isPc ? "20px !important" : "10px !important",
                 }}
             >
                 {codeRef.map((item, index) => {
@@ -170,11 +173,11 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
                             }}
                             variant={"unstyled"}
                             sx={{
-                                fontSize: "20px",
-                                width: "60px",
-                                height: "60px",
+                                fontSize: isPc ? "20px" : "14px",
+                                width: isPc ? "60px" : "40px",
+                                height: isPc ? "60px" : "40px",
                                 border: "2px solid #fff",
-                                padding: "0 0.5208vw",
+                                padding: "0 10px",
                                 background: "#616161",
                                 textAlign: "center",
                                 color: "#fff",
@@ -187,15 +190,17 @@ const Lock = ({ onChangeInit }: { onChangeInit: () => void }) => {
             <BlackButton
                 onClick={handleConfirm}
                 sx={{
-                    width: "250px",
-                    height: "60px",
+                    width: isPc ? "250px" : "120px",
+                    height: isPc ? "60px" : "25px",
                     marginTop: "20px",
                     background: "rgba(0, 0, 0, 0.20) !important",
                 }}
             >
-                <NextIcon
-                    style={{ marginRight: "24px", width: "18px" }}
-                ></NextIcon>
+                {isPc && (
+                    <NextIcon
+                        style={{ marginRight: "24px", width: "18px" }}
+                    ></NextIcon>
+                )}
                 <Text>Confirm</Text>
             </BlackButton>
         </Flex>

@@ -8,7 +8,7 @@ const TournamentHelmet = () => {
             document.createElement("link");
         link.type = "image/x-icon";
         link.rel = "icon";
-        link.href = "/tournament.jpg";
+        link.href = "/tournament.png";
         document.getElementsByTagName("head")[0].appendChild(link);
     }, []);
 

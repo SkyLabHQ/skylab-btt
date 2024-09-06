@@ -162,7 +162,7 @@ const Schedule = ({
                                 ></Image>
                                 <Flex
                                     sx={{
-                                        width: isPc ? "370px" : "130px",
+                                        width: isPc ? "370px" : "160px",
                                         height: isPc ? "100px" : "35px",
                                         background: `url(${BtBg})`,
                                         backgroundSize: "100% 100%",
