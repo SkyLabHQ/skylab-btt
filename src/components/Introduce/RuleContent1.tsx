@@ -37,6 +37,7 @@ const RuleContent1 = ({
                     ?{" "}
                 </Text>
                 <video
+                    playsInline
                     autoPlay
                     loop
                     muted
@@ -156,6 +157,7 @@ const RuleContent1 = ({
             </RuleWrap>
 
             <video
+                playsInline
                 autoPlay
                 loop
                 muted

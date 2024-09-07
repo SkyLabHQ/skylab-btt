@@ -24,6 +24,7 @@ const RuleContent0 = ({
                     Welcome, Pilots
                 </Text>
                 <video
+                    playsInline
                     autoPlay
                     loop
                     muted
@@ -105,6 +106,7 @@ const RuleContent0 = ({
             </RuleWrap>
 
             <video
+                playsInline
                 autoPlay
                 loop
                 muted

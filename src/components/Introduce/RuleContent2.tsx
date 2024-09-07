@@ -28,6 +28,7 @@ const RuleContent2 = ({
                     The Game: Bid Tac Toe{" "}
                 </Text>
                 <video
+                    playsInline
                     autoPlay
                     loop
                     muted
@@ -137,6 +138,7 @@ const RuleContent2 = ({
                 ></CircleContent>
             </RuleWrap>
             <video
+                playsInline
                 autoPlay
                 loop
                 muted

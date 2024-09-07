@@ -25,6 +25,7 @@ const RuleContent3 = ({
                     Team and Team Leader{" "}
                 </Text>
                 <video
+                    playsInline
                     autoPlay
                     loop
                     muted

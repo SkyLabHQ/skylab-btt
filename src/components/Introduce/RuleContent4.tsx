@@ -26,6 +26,7 @@ const RuleContent4 = ({
                     LEVELING UP
                 </Text>
                 <video
+                    playsInline
                     autoPlay
                     loop
                     muted

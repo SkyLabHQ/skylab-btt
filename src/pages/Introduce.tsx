@@ -87,6 +87,7 @@ const Introduce = () => {
             }}
         >
             <video
+                playsInline
                 autoPlay
                 loop
                 muted
@@ -105,6 +106,7 @@ const Introduce = () => {
                 Your browser does not support the video tag.
             </video>
             <video
+                playsInline
                 loop
                 muted
                 style={{
