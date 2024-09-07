@@ -153,33 +153,33 @@ const quanList = [
 const mquanList = [
     {
         img: Quan1,
-        width: "33%",
-        activeWidth: "40%",
+        width: "52%",
+        activeWidth: "56%",
     },
     {
         img: Quan2,
-        width: "403%",
-        activeWidth: "50%",
+        width: "60%",
+        activeWidth: "65%",
     },
     {
         img: Quan3,
-        width: "53%",
-        activeWidth: "60%",
+        width: "69%",
+        activeWidth: "74%",
     },
     {
         img: Quan4,
-        width: "63%",
-        activeWidth: "70%",
+        width: "78%",
+        activeWidth: "83%",
     },
     {
         img: Quan5,
-        width: "73%",
-        activeWidth: "80%",
+        width: "87%",
+        activeWidth: "92%",
     },
     {
         img: Quan6,
-        width: "83%",
-        activeWidth: "90%",
+        width: "96%",
+        activeWidth: "101%",
     },
 ];
 
@@ -278,7 +278,7 @@ const IntroduceContent = ({
                         top: "50%",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
-                        width: isPc ? "26%" : "30%",
+                        width: isPc ? "26%" : "44%",
                         aspectRatio: 1,
                         zIndex: 1,
                         cursor: "pointer",
