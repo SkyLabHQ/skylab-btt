@@ -102,6 +102,7 @@ const Introduce = () => {
                 ref={cRef}
             >
                 <source src={CVideo} type="video/mp4" />
+                Your browser does not support the video tag.
             </video>
             <video
                 loop
@@ -115,9 +116,11 @@ const Introduce = () => {
                     opacity: wMode ? 0 : 0.5,
                     mixBlendMode: "screen",
                 }}
+                autoPlay
                 ref={wRef}
             >
                 <source src={WVideo} type="video/mp4" />
+                Your browser does not support the video tag.
             </video>
 
             <IntroduceContent

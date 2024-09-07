@@ -98,7 +98,7 @@ const Info = () => {
                     fontWeight: "700",
                 }}
             >
-                when everyone else forgets, you and your league, shall take it
+                when everyone else forgets, you and your team, shall take it
                 all.
             </span>{" "}
         </Text>,
