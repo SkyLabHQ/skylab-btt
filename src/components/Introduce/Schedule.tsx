@@ -53,7 +53,7 @@ const sList = [
         list: [
             {
                 title: "Act VII: Resolution",
-                des: "A timer counts to 0. Game over and the pot is distributed pro-rata to the winning league.",
+                des: "A timer counts to 0. Game over and the pot is distributed pro-rata to the winning team.",
             },
             {
                 title: "Act VIII: Epilogue",
