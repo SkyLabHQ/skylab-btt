@@ -37,6 +37,11 @@ export const GlobalStyles = css`
         padding: 0;
         margin: 0;
         user-select: none;
+        -webkit-user-select: none;
+        input {
+            user-select: auto;
+            -webkit-user-select: auto;
+        }
     }
     html {
         height: 100%;
