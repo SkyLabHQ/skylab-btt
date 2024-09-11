@@ -79,27 +79,25 @@ const Info = () => {
             </span>
         </Text>,
         <Text>
-            So, we create{" "}
             <span
                 style={{
                     fontSize: isPc ? "20px" : "14px",
                     fontWeight: "700",
                 }}
             >
-                this social game – that you’ll wish would die down.
+                the social game that you’ll wish would die down.
             </span>{" "}
-            <br></br>Oops. Not just you wish its dying. Everyone does.
         </Text>,
         <Text>
-            Because{" "}
+            {" "}
             <span
                 style={{
                     fontSize: isPc ? "20px" : "14px",
                     fontWeight: "700",
                 }}
             >
-                when everyone else forgets, you and your team, shall take it
-                all.
+                Because when everyone else forgets, you and your team, shall
+                take it all.
             </span>{" "}
         </Text>,
     ];
