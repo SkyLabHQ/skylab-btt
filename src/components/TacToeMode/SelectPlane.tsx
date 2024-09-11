@@ -176,7 +176,7 @@ const MyPlane = ({
         <Box
             sx={{
                 width: "100%",
-                padding: "0 12px 140px",
+                padding: "0 12px 100px",
                 position: "relative",
                 height: "100%",
             }}
@@ -458,7 +458,7 @@ const MyPlane = ({
                 </Box>
                 <Box
                     sx={{
-                        height: "140px",
+                        height: "100px",
                         position: "absolute",
                         left: "50%",
                         bottom: 0,

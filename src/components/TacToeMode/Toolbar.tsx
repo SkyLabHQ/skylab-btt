@@ -53,6 +53,7 @@ export const Toolbar = () => {
                                     backgroundSize: "cover, 42px 42px",
                                     backgroundRepeat: "no-repeat",
                                     backgroundPosition: "center, center",
+                                    borderRadius: "50%",
                                     position: "absolute",
                                     top: "50%",
                                     left: "0px",

@@ -165,10 +165,10 @@ const TacToe = () => {
             point: gameInfo.point1,
             overPoint: gameInfo.overPoint1,
             overLevel: getLevel(gameInfo.overPoint1),
-            photoUrl: gameInfo.user1TgInfo?.photoUrl
-                ? gameInfo.user1TgInfo?.photoUrl
+            photoUrl: gameInfo.photoUrl1
+                ? gameInfo.photoUrl1
                 : avatarImg(gameInfo.player1),
-            username: gameInfo.user1TgInfo?.username,
+            username: gameInfo.username1,
         };
 
         const player2GameInfo = {
@@ -184,12 +184,12 @@ const TacToe = () => {
             point: gameInfo.point2,
             overPoint: gameInfo.overPoint2,
             overLevel: getLevel(gameInfo.overPoint2),
-            photoUrl: gameInfo.user2TgInfo?.photoUrl
-                ? gameInfo.user2TgInfo?.photoUrl
+            photoUrl: gameInfo.photoUrl2
+                ? gameInfo.photoUrl
                 : gameInfo.player2
                 ? avatarImg(gameInfo.player2)
                 : "",
-            username: gameInfo.user2TgInfo?.username,
+            username: gameInfo.username2,
         };
 
         const myGameInfo = isPlayer1 ? player1GameInfo : player2GameInfo;

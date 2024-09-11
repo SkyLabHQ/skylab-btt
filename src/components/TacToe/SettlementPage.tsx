@@ -111,7 +111,7 @@ const WinResult = ({
                 myInfo.level + 1,
                 nextLevelXp,
             ];
-        } else if (myInfo.overLevel > myInfo.level) {
+        } else {
             return [
                 aviationImg(myInfo.overLevel),
                 myInfo.overLevel,
@@ -676,7 +676,7 @@ const SettlementPage = ({}) => {
     return (
         <Box
             onClick={() => {
-                navigate("/");
+                navigate("/mode");
             }}
             sx={{
                 width: "100%",

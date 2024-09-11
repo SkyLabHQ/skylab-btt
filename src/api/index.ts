@@ -12,14 +12,13 @@ api.interceptors.request.use(
         let token = "";
         if (config.url.startsWith("/pvp")) {
             token = sessionStorage.getItem("jwtToken");
-        } else if (
-            config.url.startsWith("/tournament") ||
-            config.url.startsWith("/user")
-        ) {
+        } else if (config.url.startsWith("/tournament/login")) {
             token = localStorage.getItem("privy:token");
             if (token) {
                 token = token.replace(/\"/g, "");
             }
+        } else if (config.url.startsWith("/tournament")) {
+            token = localStorage.getItem("tournamentToken");
         }
         token && (config.headers.Authorization = `Bearer ${token}`);
         return config;

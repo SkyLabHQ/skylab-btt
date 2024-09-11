@@ -1,5 +1,10 @@
 import api from "./index";
 
+export const tournamentLogin = async () => {
+    const response = await api.post("/tournament/login");
+    return response.data;
+};
+
 export const storeAccessToken = async () => {
     const response = await api.post("/tournament/storeAccessToken");
     return response.data;

@@ -418,6 +418,7 @@ const UserInfoDrawer = ({
                             <Image
                                 onClick={async () => {
                                     await logout();
+                                    localStorage.removeItem("tournamentToken");
                                     onClose();
                                 }}
                                 src={QuitIcon}

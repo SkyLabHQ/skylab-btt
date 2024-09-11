@@ -12,9 +12,8 @@ import { aviationImg } from "@/utils/aviationImg";
 import useSkyToast from "@/hooks/useSkyToast";
 import { useLocation } from "react-router-dom";
 import Click1Wav from "@/assets/click1.wav";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { getTokensGame } from "@/api/tournament";
-import { bindTelegram, getUserTgInfo } from "@/api/user";
+import { usePrivy, useWallets, useLogin } from "@privy-io/react-auth";
+import { getTokensGame, tournamentLogin } from "@/api/tournament";
 import { avatarImg } from "@/utils/avatars";
 import { createWalletClient, custom } from "viem";
 import { baseSepolia } from "viem/chains";
@@ -47,18 +46,39 @@ const UserInfoContext = createContext<{
     handleGetUserPlane: () => void;
 }>(null);
 
-const whiteList = ["/", "/plane/my"];
+const whiteList = ["/mode", "/plane/my"];
 
 export const UserInfoProvider = ({
     children,
 }: {
     children: React.ReactNode;
 }) => {
-    const { ready, user, login, linkWallet, getAccessToken, authenticated } =
-        usePrivy();
+    const { ready, user, linkWallet, logout, authenticated } = usePrivy();
 
+    const { login } = useLogin({
+        onComplete: async (user: any) => {
+            try {
+                const res = await tournamentLogin();
+                const { userInfo, jwtToken } = res.data;
+                localStorage.setItem("tournamentToken", jwtToken);
+                const info = {
+                    ...userInfo,
+                    photoUrl: userInfo.photoUrl
+                        ? userInfo.photoUrl
+                        : avatarImg(user.wallet.address),
+                };
+
+                setTgInfo(info);
+                setAddress(user.wallet.address);
+            } catch (e) {
+                console.log(e);
+                toast("Failed to get user info");
+                logout();
+                localStorage.removeItem("tournamentToken");
+            }
+        },
+    });
     const { wallets } = useWallets();
-    const [walletAddress, setWalletAddress] = useState("");
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
     const { pathname } = useLocation();
@@ -225,47 +245,6 @@ export const UserInfoProvider = ({
         setPlaneList(planeList);
     };
 
-    const handleAutoBindTelegram = async () => {
-        try {
-            const res = await bindTelegram({
-                ...user.telegram,
-                address: user.wallet.address,
-            });
-            const info = {
-                ...res.data.userTgInfo,
-                photoUrl: res.data.userTgInfo.photoUrl
-                    ? res.data.userTgInfo.photoUrl
-                    : avatarImg(user.wallet.address),
-            };
-
-            setTgInfo(info);
-        } catch (e) {
-            console.log(e);
-        } finally {
-            setAddress(walletAddress);
-        }
-    };
-
-    const handleGetUserTgInfo = async () => {
-        try {
-            const res = await getUserTgInfo();
-
-            console.log(res.data, "res.data.");
-            const info = {
-                ...res.data.userTgInfo,
-                photoUrl: res.data.userTgInfo.photoUrl
-                    ? res.data.userTgInfo.photoUrl
-                    : avatarImg(user.wallet.address),
-            };
-
-            setTgInfo(info);
-        } catch (e) {
-            console.log(e);
-        } finally {
-            setAddress(walletAddress);
-        }
-    };
-
     // useEffect(() => {
     //     axios.get("https://ipapi.co/json/").then(async (res: any) => {
     //         if (res.data.country_code === "US") {
@@ -277,68 +256,21 @@ export const UserInfoProvider = ({
     // }, []);
 
     useEffect(() => {
+        console.log(
+            multiMercuryJarTournamentContract,
+            multiProvider,
+            address,
+            pathname,
+        );
         if (whiteList.includes(pathname)) {
+            console.log("飞机");
             handleGetUserPaper();
         }
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
 
     useEffect(() => {
-        if (!walletAddress) {
-            return;
-        }
-        if (!user) {
-            return;
-        }
-
-        if (user?.wallet?.walletClientType === "privy" && user?.telegram) {
-            handleAutoBindTelegram();
-        } else {
-            handleGetUserTgInfo();
-        }
-    }, [walletAddress]);
-
-    // 定时获取token 防止token过期
-    useEffect(() => {
-        const timer = setInterval(() => {
-            getAccessToken().then((res) => {
-                const localAc = localStorage.getItem("privy:token");
-                const resAc = `"${res}"`;
-                if (localAc !== res) {
-                    localStorage.setItem("privy:token", resAc);
-                }
-            });
-        }, 1000 * 60);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
-
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (!document.hidden) {
-                getAccessToken().then((res) => {
-                    const localAc = localStorage.getItem("privy:token");
-                    const resAc = `"${res}"`;
-                    if (localAc !== res) {
-                        localStorage.setItem("privy:token", resAc);
-                    }
-                });
-            }
-        };
-        document.addEventListener("visibilitychange", handleVisibilityChange);
-        return () => {
-            document.removeEventListener(
-                "visibilitychange",
-                handleVisibilityChange,
-            );
-        };
-    }, []);
-
-    useEffect(() => {
         const handleGetSigner = async () => {
             if (wallets.length === 0) {
-                setWalletAddress("");
                 setAddress("");
                 setSigner(null);
                 return;
@@ -352,7 +284,6 @@ export const UserInfoProvider = ({
                 return;
             }
 
-            setWalletAddress(user.wallet.address);
             const provider = await wallet.getEthereumProvider();
             const walletClient = createWalletClient({
                 chain: baseSepolia,
@@ -360,11 +291,12 @@ export const UserInfoProvider = ({
                 account: wallet.address as `0x${string}`,
             });
 
+            setAddress(wallet.address);
+
             setSigner(walletClient);
         };
 
         if (wallets.length === 0 || !ready || !user || !authenticated) {
-            setWalletAddress("");
             setAddress("");
             setSigner(null);
             return;
