@@ -194,7 +194,7 @@ const RuleContent1 = ({
                             textDecoration: "underline",
                         }}
                         onClick={() => {
-                            onChangeActiveIndex(5);
+                            onChangeActiveIndex(4);
                         }}
                     >
                         {" "}

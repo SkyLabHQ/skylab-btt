@@ -244,6 +244,10 @@ const IntroduceContent = ({
                 <Box
                     sx={{
                         display: wMode ? "none" : "block",
+                        width: "100%",
+                        height: isPc ? "100vh" : "100vw",
+                        position: "relative",
+                        overflow: "hidden",
                     }}
                 >
                     {(isPc ? quanList : mquanList).map((item, index) => {

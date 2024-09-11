@@ -64,7 +64,16 @@ const RuleContent0 = ({
                 <CircleContent
                     text={
                         <Text>
-                            Teams: There are{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                Teams:
+                            </span>{" "}
+                            There are{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -111,7 +120,17 @@ const RuleContent0 = ({
                 <CircleContent
                     text={
                         <Text>
-                            Planes: Planes all start off at{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                {" "}
+                                Planes:
+                            </span>{" "}
+                            Planes all start off at{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -163,6 +182,22 @@ const RuleContent0 = ({
                     </span>
                 </Text>
                 <Text>
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                            cursor: "pointer",
+                            textDecoration: "underline",
+                        }}
+                        onClick={() => {
+                            onChangeActiveIndex(4);
+                        }}
+                    >
+                        {" "}
+                        When a plane is minted / upgraded, it resets the timer
+                        of its level to its beginning.
+                    </span>
                     When{" "}
                     <span
                         style={{
