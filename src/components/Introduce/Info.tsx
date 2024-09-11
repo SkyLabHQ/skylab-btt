@@ -8,15 +8,15 @@ const colorKeyframes = keyframes`
         text-shadow: 0 0 10px #fff;
      }
     
-    14.3% {
+    10% {
         color: #FFF;
         opacity: 1;
         text-shadow: none;
     }
 
-    28.6% {
+    60% {
         color: #646464;
-        opacity: 0.1;        
+        opacity: 1;        
         text-shadow: 0 0 10px #fff;
     }
     
@@ -30,54 +30,54 @@ const colorKeyframes = keyframes`
 const Info = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const rules = [
-        <Text>
-            In Crypto,<br></br>{" "}
-            <span
-                style={{
-                    fontSize: isPc ? "20px" : "14px",
-                    fontWeight: "700",
-                }}
-            >
-                Attention is limited.
-            </span>{" "}
-            Most hot things eventually die down.
-        </Text>,
-        <Text>
-            When your favorite hot thing fades, forgotten and abandoned by
-            everyone else,{" "}
-            <span
-                style={{
-                    fontSize: isPc ? "20px" : "14px",
-                    fontWeight: "700",
-                }}
-            >
-                {" "}
-                you are heartbroken.
-            </span>
-        </Text>,
-        <Text>
-            Of course.{" "}
-            <span
-                style={{
-                    fontSize: isPc ? "20px" : "14px",
-                    fontWeight: "700",
-                }}
-            >
-                We’ve all been there.
-            </span>{" "}
-        </Text>,
-        <Text>
-            If people tend to forget, in a world where everything fights to be
-            remembered,
-            <span
-                style={{
-                    fontSize: isPc ? "20px" : "14px",
-                    fontWeight: "700",
-                }}
-            >
-                why isn’t there something that’s designed to be forgotten?
-            </span>
-        </Text>,
+        // <Text>
+        //     In Crypto,<br></br>{" "}
+        //     <span
+        //         style={{
+        //             fontSize: isPc ? "20px" : "14px",
+        //             fontWeight: "700",
+        //         }}
+        //     >
+        //         Attention is limited.
+        //     </span>{" "}
+        //     Most hot things eventually die down.
+        // </Text>,
+        // <Text>
+        //     When your favorite hot thing fades, forgotten and abandoned by
+        //     everyone else,{" "}
+        //     <span
+        //         style={{
+        //             fontSize: isPc ? "20px" : "14px",
+        //             fontWeight: "700",
+        //         }}
+        //     >
+        //         {" "}
+        //         you are heartbroken.
+        //     </span>
+        // </Text>,
+        // <Text>
+        //     Of course.{" "}
+        //     <span
+        //         style={{
+        //             fontSize: isPc ? "20px" : "14px",
+        //             fontWeight: "700",
+        //         }}
+        //     >
+        //         We’ve all been there.
+        //     </span>{" "}
+        // </Text>,
+        // <Text>
+        //     If people tend to forget, in a world where everything fights to be
+        //     remembered,
+        //     <span
+        //         style={{
+        //             fontSize: isPc ? "20px" : "14px",
+        //             fontWeight: "700",
+        //         }}
+        //     >
+        //         why isn’t there something that’s designed to be forgotten?
+        //     </span>
+        // </Text>,
         <Text>
             <span
                 style={{
@@ -129,12 +129,12 @@ const Info = () => {
                         >
                             <Box
                                 sx={{
-                                    animationDelay: `${index * 4}s`,
+                                    animationDelay: `${index * 6}s`,
                                     marginBottom: isPc ? "30px" : "20px",
                                     opacity: 0.1,
                                     textShadow: "0 0 10px #FFF",
                                 }}
-                                animation={`${colorKeyframes} 24s linear infinite`}
+                                animation={`${colorKeyframes} 12s linear infinite`}
                                 key={index}
                             >
                                 {item}
