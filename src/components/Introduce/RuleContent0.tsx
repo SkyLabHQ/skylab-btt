@@ -171,9 +171,37 @@ const RuleContent0 = ({
                             fontSize: "14px",
                         }}
                     >
-                        ANY timer counts to zero,
+                        ANY timer counts to zero
                     </span>{" "}
-                    the Last Plane secures victory for its team.
+                    , the{" "}
+                    <span
+                        onClick={() => {
+                            onChangeActiveIndex(1);
+                        }}
+                    >
+                        {" "}
+                        <LastPlane></LastPlane>
+                    </span>{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                        }}
+                    >
+                        wins the entire pot for its team.
+                    </span>{" "}
+                    The pot consists of all* the paper and paper plane minting
+                    fees.
+                </Text>
+                <Text
+                    sx={{
+                        color: "#999",
+                        marginTop: "10px",
+                    }}
+                >
+                    {" "}
+                    * subtracting a 10% fee for the creators{" "}
                 </Text>
             </RuleWrap>
             <BottomButton

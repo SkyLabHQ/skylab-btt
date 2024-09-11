@@ -22,7 +22,7 @@ const RuleContent3 = ({
                         textAlign: "center",
                     }}
                 >
-                    Team and Team Leader{" "}
+                    Team Politics{" "}
                 </Text>
                 <video
                     playsInline
@@ -47,7 +47,16 @@ const RuleContent3 = ({
                     }}
                 >
                     Each team is managed by a <span>team leader</span>, who can
-                    adjust three key policies:
+                    adjust{" "}
+                    <span
+                        style={{
+                            fontWeight: 700,
+                            color: "#F2D861",
+                            fontSize: "14px",
+                        }}
+                    >
+                        three key policies:
+                    </span>
                 </Text>
                 <Box
                     sx={{
@@ -64,7 +73,6 @@ const RuleContent3 = ({
                                     fontWeight: 400,
                                 }}
                             >
-                                x - Team leader's take rate:
                                 <span
                                     style={{
                                         fontWeight: 700,
@@ -72,8 +80,9 @@ const RuleContent3 = ({
                                         fontSize: "14px",
                                     }}
                                 >
-                                    0%~10%
+                                    x{" "}
                                 </span>
+                                - Team leader's take rate: 0%~10%
                             </Text>
                         }
                     ></CircleContent>
@@ -86,7 +95,16 @@ const RuleContent3 = ({
                                     fontWeight: 400,
                                 }}
                             >
-                                y - Winning{" "}
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        color: "#F2D861",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    y{" "}
+                                </span>
+                                - Winning{" "}
                                 <span
                                     style={{
                                         fontWeight: 700,
@@ -99,16 +117,7 @@ const RuleContent3 = ({
                                         text={"Last Plane's"}
                                     ></LastPlane>
                                 </span>{" "}
-                                take rate:
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        fontSize: "14px",
-                                        color: "#F2D861",
-                                    }}
-                                >
-                                    10%~20%
-                                </span>
+                                take rate: 10%~20%
                             </Text>
                         }
                     ></CircleContent>
@@ -120,7 +129,6 @@ const RuleContent3 = ({
                                     fontWeight: 400,
                                 }}
                             >
-                                z - Goes directly to{" "}
                                 <span
                                     style={{
                                         fontWeight: 700,
@@ -128,19 +136,11 @@ const RuleContent3 = ({
                                         fontSize: "14px",
                                     }}
                                 >
-                                    existing plane holders
-                                </span>{" "}
-                                or{" "}
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        color: "#F2D861",
-                                        fontSize: "14px",
-                                    }}
-                                >
-                                    new users' inviter
-                                </span>{" "}
-                                as others join the team (starting at 0.005 eth)
+                                    z{" "}
+                                </span>
+                                - Goes directly to existing plane holders or new
+                                users' inviter as others join the team (starting
+                                at 0.005 eth)
                             </Text>
                         }
                     ></CircleContent>
@@ -158,16 +158,8 @@ const RuleContent3 = ({
                 </Text>
                 <Text sx={{}}>
                     After subtracting x and y, the rest of the pot is
-                    distributed within the{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        winning team pro-rata based on XP holdings.
-                    </span>
+                    distributed within the winning team pro-rata based on XP
+                    holdings.
                 </Text>
             </RuleWrap>
             <BottomButton
