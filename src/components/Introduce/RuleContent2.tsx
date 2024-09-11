@@ -108,34 +108,6 @@ const RuleContent2 = ({
                         </Text>
                     }
                 ></CircleContent>
-                <CircleContent
-                    text={
-                        <Text>
-                            The stake for each game is{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                half the XP{" "}
-                            </span>{" "}
-                            of the plane with the lower XP, except at Level 1,
-                            where each plane risks all its{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                1 XP
-                            </span>{" "}
-                            .
-                        </Text>
-                    }
-                ></CircleContent>
             </RuleWrap>
             <video
                 playsInline

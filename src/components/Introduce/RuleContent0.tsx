@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Tr } from "@chakra-ui/react";
 import LevelVideo from "./assets/level.mp4";
 import DownVideo from "./assets/down.mp4";
 import RuleWrap, { CircleContent, LastPlane } from "./RuleWrap";
@@ -64,6 +64,7 @@ const RuleContent0 = ({
                 <CircleContent
                     text={
                         <Text>
+                            Teams: There are{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -73,13 +74,7 @@ const RuleContent0 = ({
                             >
                                 8 Teams
                             </span>{" "}
-                            (8 colors) compete against each other.
-                        </Text>
-                    }
-                ></CircleContent>
-                <CircleContent
-                    text={
-                        <Text>
+                            (represented by{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -87,9 +82,19 @@ const RuleContent0 = ({
                                     fontSize: "14px",
                                 }}
                             >
-                                16 Levels of Planes
+                                8 colors
                             </span>{" "}
-                            exist, with each level having its own
+                            ) competing with each other. They each have a{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                team leader
+                            </span>{" "}
+                            , selected by the creators of influence.game.{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -98,7 +103,34 @@ const RuleContent0 = ({
                                 }}
                             >
                                 {" "}
-                                countdown timer.
+                                You win as a team.
+                            </span>{" "}
+                        </Text>
+                    }
+                ></CircleContent>
+                <CircleContent
+                    text={
+                        <Text>
+                            Planes: Planes all start off at{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                Level 1: paper planes.
+                            </span>{" "}
+                            Each paper plane needs to choose a team when it's
+                            minted. Once selected,{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                team membership can't be changed.
                             </span>
                         </Text>
                     }
@@ -131,8 +163,7 @@ const RuleContent0 = ({
                     </span>
                 </Text>
                 <Text>
-                    When any level's countdown timer hits zero,a plane from your
-                    team must hold the{" "}
+                    When{" "}
                     <span
                         style={{
                             fontWeight: 700,
@@ -140,20 +171,9 @@ const RuleContent0 = ({
                             fontSize: "14px",
                         }}
                     >
-                        <LastPlane></LastPlane> position of that level in order
-                        to win the entire pot
+                        ANY timer counts to zero,
                     </span>{" "}
-                    , which includes all the minted paper and paper plane base
-                    fees.*
-                </Text>
-                <Text
-                    sx={{
-                        color: "#999",
-                        fontSize: "12px",
-                        marginTop: "10px",
-                    }}
-                >
-                    *After deducting a 10% operational fee.
+                    the Last Plane secures victory for its team.
                 </Text>
             </RuleWrap>
             <BottomButton

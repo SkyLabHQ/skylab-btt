@@ -120,78 +120,53 @@ const RuleContent3 = ({
                                     fontWeight: 400,
                                 }}
                             >
-                                z - Paper plane team premium – this goes
-                                directly to existing plane holders{" "}
+                                z - Goes directly to{" "}
                                 <span
                                     style={{
                                         fontWeight: 700,
-                                        fontSize: "14px",
                                         color: "#F2D861",
+                                        fontSize: "14px",
                                     }}
                                 >
-                                    {" "}
-                                    (distributed pro-rata based on XP holdings)
+                                    existing plane holders
                                 </span>{" "}
-                                or the plane’s inviter.
+                                or{" "}
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        color: "#F2D861",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    new users' inviter
+                                </span>{" "}
+                                as others join the team (starting at 0.005 eth)
                             </Text>
                         }
                     ></CircleContent>
                 </Box>
+
                 <Text
                     sx={{
                         marginTop: "14px",
                         fontWeight: 700,
-                        fontSize: "14px",
-                        color: "#F2D861",
-                    }}
-                >
-                    Earn as the game goes:
-                </Text>
-                <Text
-                    sx={{
-                        lineHeight: "25px",
-                    }}
-                >
-                    The premium (z) is added to the paper plane minting fee and
-                    can only increase. Regardless of your team's ultimate
-                    performance,
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            fontSize: "14px",
-                            color: "#F2D861",
-                        }}
-                    >
-                        {" "}
-                        plane holders continue to earn this premium as the game
-                        progresses.
-                    </span>
-                </Text>
-                <Text
-                    sx={{
-                        marginTop: "14px",
-                        fontWeight: 700,
-                        fontSize: "14px",
+                        fontSize: "16px",
                         color: "#F2D861",
                     }}
                 >
                     Winning the Pot:
                 </Text>
                 <Text sx={{}}>
-                    x and y percent are taken by the team leader and the Last
-                    Plane that locks in the win for the team. The rest of the
-                    pot is distributed within the winning team pro-rata based on
-                    XP holdings. The pot only matters if your team wins, so join
-                    a team that unites around a common goal:{" "}
+                    After subtracting x and y, the rest of the pot is
+                    distributed within the{" "}
                     <span
                         style={{
                             fontWeight: 700,
-                            fontSize: "14px",
                             color: "#F2D861",
+                            fontSize: "14px",
                         }}
                     >
-                        holding the <LastPlane></LastPlane>position when any
-                        timer counts down to zero.
+                        winning team pro-rata based on XP holdings.
                     </span>
                 </Text>
             </RuleWrap>
