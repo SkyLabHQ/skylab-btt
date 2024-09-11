@@ -56,24 +56,15 @@ const RuleContent1 = ({
                 }}
             >
                 <Text>
-                    At any given moment, each level has one plane holding the{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        {" "}
-                        <LastPlane></LastPlane>
-                    </span>{" "}
-                    position. It belongs to the last plane that ascends to the
-                    level.
+                    At any given moment, each level has one{" "}
+                    <LastPlane></LastPlane>. It's the last plane that ascends to
+                    the level.
                 </Text>{" "}
                 <CircleContent
                     text={
                         <Text>
-                            When you fold/mint a paper plane, it starts with{" "}
+                            At Level 1 : When you fold/mint a paper plane, it
+                            starts with{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -81,19 +72,10 @@ const RuleContent1 = ({
                                     fontSize: "14px",
                                 }}
                             >
-                                1 XP
+                                1 XP{" "}
                             </span>{" "}
                             and automatically becomes the{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                <LastPlane></LastPlane>
-                            </span>{" "}
-                            at{" "}
+                            <LastPlane></LastPlane> at{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -110,27 +92,8 @@ const RuleContent1 = ({
                 <CircleContent
                     text={
                         <Text>
-                            A plane’s{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                XP
-                            </span>{" "}
-                            determines its level. When it gains enough{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                XP
-                            </span>{" "}
-                            , it{" "}
+                            At Other Levels : A plane’s XP determines its level.
+                            When it gains enough XP, it{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -140,17 +103,8 @@ const RuleContent1 = ({
                             >
                                 upgrades to the next level
                             </span>{" "}
-                            and becomes the{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                <LastPlane></LastPlane>{" "}
-                            </span>{" "}
-                            of that level.
+                            and becomes the <LastPlane></LastPlane> of that
+                            level.
                         </Text>
                     }
                 ></CircleContent>
@@ -175,7 +129,8 @@ const RuleContent1 = ({
                 }}
             >
                 <Text>
-                    You hold the{" "}
+                    You are the <LastPlane></LastPlane> until another player’s
+                    plane upgrades to that level and{" "}
                     <span
                         style={{
                             fontWeight: 700,
@@ -183,23 +138,17 @@ const RuleContent1 = ({
                             fontSize: "14px",
                         }}
                     >
-                        <LastPlane></LastPlane>{" "}
+                        steal the <LastPlane></LastPlane> position.
                     </span>{" "}
-                    position until another player’s plane upgrades to that level
-                    and takes it. When this happens, the countdown timer for
-                    that level{" "}
+                    When this happens, the countdown timer for that level also
                     <span
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
                             fontSize: "14px",
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                        }}
-                        onClick={() => {
-                            onChangeActiveIndex(4);
                         }}
                     >
+                        {" "}
                         resets to its starting point.
                     </span>
                 </Text>

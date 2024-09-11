@@ -10,7 +10,6 @@ import { useState } from "react";
 import OnIcon from "@/components/Introduce/assets/on-icon.svg";
 import Info from "@/components/Introduce/Info";
 import Light from "@/components/Introduce/assets/light.png";
-import LightC from "@/components/Introduce/assets/light-c.svg";
 import { BlackButton } from "./Button";
 import { ReactComponent as ShiftAIcon } from "./assets/shifta.svg";
 import { ReactComponent as ShiftEIcon } from "./assets/shifte.svg";
@@ -346,28 +345,12 @@ const IntroduceContent = ({
                     )}
                 </Box>
 
-                <Box
-                    sx={{
-                        position: "absolute",
-                        right: isPc ? "24px" : "12px",
-                        top: isPc ? "24px" : "16px",
-                    }}
-                >
-                    <OnButton
-                        wMode={wMode}
-                        onClick={() => {
-                            onThemeChange();
-                            setAddCount(0);
-                        }}
-                    ></OnButton>
-                </Box>
                 <Flex
                     sx={{
                         position: "absolute",
-                        top: "50%",
+                        top: isPc ? "50%" : "60%",
                         left: "50%",
                         transform: "translateX(-50%)",
-                        opacity: wMode ? 0 : 1,
                     }}
                     flexDir={"column"}
                     align={"center"}
@@ -375,18 +358,24 @@ const IntroduceContent = ({
                     <Image
                         src={Light}
                         sx={{
-                            width: "60%",
+                            width: "74%",
                             marginTop: "1vw",
+                            opacity: wMode ? 0 : 1,
                         }}
                     ></Image>
-                    <Image
-                        src={LightC}
+                    <Box
                         sx={{
                             marginTop: "-1vw",
-                            width: "7%",
-                            opacity: 0.5,
                         }}
-                    ></Image>
+                    >
+                        <OnButton
+                            wMode={wMode}
+                            onClick={() => {
+                                onThemeChange();
+                                setAddCount(0);
+                            }}
+                        ></OnButton>
+                    </Box>
                 </Flex>
             </Box>
 

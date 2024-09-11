@@ -41,16 +41,7 @@ const RuleContent4 = ({
             </Box>
             <RuleWrap>
                 <Text>
-                    As you move up levels, two things{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            fontSize: "14px",
-                            color: "#F2D861",
-                        }}
-                    >
-                        double:
-                    </span>{" "}
+                    As you move up levels, two things <span>double:</span>{" "}
                 </Text>
                 <CircleContent
                     text={
@@ -89,6 +80,15 @@ const RuleContent4 = ({
                         </Box>
                     }
                 ></CircleContent>
+                <Text
+                    sx={{
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        marginTop: "16px",
+                    }}
+                >
+                    Perhaps, so as the worth of your plane in the marketplace :)
+                </Text>
             </RuleWrap>
             <BottomButton
                 activeIndex={4}
