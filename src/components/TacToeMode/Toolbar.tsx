@@ -50,6 +50,7 @@ export const Toolbar = () => {
                             <Flex
                                 sx={{
                                     background: `url(${PilotBorder}) ,url(${tgInfo.photoUrl})`,
+                                    backgroundColor: "rgb(61,61,61)",
                                     backgroundSize: "cover, 42px 42px",
                                     backgroundRepeat: "no-repeat",
                                     backgroundPosition: "center, center",

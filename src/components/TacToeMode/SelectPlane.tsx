@@ -522,8 +522,7 @@ const SelectPlane = ({
                     borderRadius: "18px 18px 0 0",
                     border: "1px solid #FFF",
                     borderBottom: "none",
-                    paddingTop: "10px",
-                    height: "calc(100% - 30px)",
+                    height: "calc(100% - 32px)",
                 }}
             >
                 <MyPlane

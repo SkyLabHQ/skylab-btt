@@ -46,7 +46,7 @@ const UserInfoContext = createContext<{
     handleGetUserPlane: () => void;
 }>(null);
 
-const whiteList = ["/mode", "/plane/my"];
+const whiteList = ["/btt", "/plane/my"];
 
 export const UserInfoProvider = ({
     children,
@@ -69,7 +69,6 @@ export const UserInfoProvider = ({
                 };
 
                 setTgInfo(info);
-                setAddress(user.wallet.address);
             } catch (e) {
                 console.log(e);
                 toast("Failed to get user info");
@@ -78,7 +77,7 @@ export const UserInfoProvider = ({
             }
         },
     });
-    const { wallets } = useWallets();
+    const { wallets, ready: aaa } = useWallets();
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
     const { pathname } = useLocation();
@@ -256,14 +255,7 @@ export const UserInfoProvider = ({
     // }, []);
 
     useEffect(() => {
-        console.log(
-            multiMercuryJarTournamentContract,
-            multiProvider,
-            address,
-            pathname,
-        );
         if (whiteList.includes(pathname)) {
-            console.log("飞机");
             handleGetUserPaper();
         }
     }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
@@ -292,7 +284,6 @@ export const UserInfoProvider = ({
             });
 
             setAddress(wallet.address);
-
             setSigner(walletClient);
         };
 

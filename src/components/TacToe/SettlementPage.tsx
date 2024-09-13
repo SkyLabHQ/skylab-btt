@@ -676,7 +676,7 @@ const SettlementPage = ({}) => {
     return (
         <Box
             onClick={() => {
-                navigate("/mode");
+                navigate("/btt");
             }}
             sx={{
                 width: "100%",

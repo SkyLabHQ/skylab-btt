@@ -157,8 +157,6 @@ export const MatchPage = () => {
     const toast = useSkyToast();
     const { myGameInfo, opGameInfo } = useGameContext();
 
-    console.log(myGameInfo, "myGameInfo");
-
     const handleQuit = async () => {
         try {
             await quitMatch({
