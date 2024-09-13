@@ -43,7 +43,7 @@ const OnButton = ({
                     width: isPc ? "124px" : "80px",
                     height: isPc ? "48px" : "32px",
                     border: "2px solid",
-                    borderImage: wMode
+                    borderImage: !wMode
                         ? "#fff 1"
                         : "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
                     padding: isPc ? "4px" : "6px",
@@ -55,7 +55,7 @@ const OnButton = ({
                     sx={{
                         width: isPc ? "160px" : "120px",
                         position: "relative",
-                        left: wMode ? "0" : isPc ? "-48px" : "-24px",
+                        left: !wMode ? "0" : isPc ? "-48px" : "-24px",
                         transition: "all 0.5s",
                     }}
                     align={"center"}
@@ -83,7 +83,7 @@ const OnButton = ({
                     ></Image>
                 </Flex>
             </Box>{" "}
-            {wMode ? (
+            {!wMode ? (
                 <Text
                     sx={{
                         color: "#FFF",
@@ -236,7 +236,6 @@ const IntroduceContent = ({
                     width: "100%",
                     height: isPc ? "100vh" : "100vw",
                     position: "relative",
-                    overflow: "hidden",
                     "& *": {
                         transition: "all 0.5s",
                     },
@@ -245,6 +244,10 @@ const IntroduceContent = ({
                 <Box
                     sx={{
                         display: wMode ? "none" : "block",
+                        width: "100%",
+                        height: isPc ? "100vh" : "100vw",
+                        position: "relative",
+                        overflow: "hidden",
                     }}
                 >
                     {(isPc ? quanList : mquanList).map((item, index) => {

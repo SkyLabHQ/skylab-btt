@@ -7,12 +7,14 @@ import RuleWrap, { CircleContent } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import { useNavigate } from "react-router-dom";
 
 const RuleContent2 = ({
     onChangeActiveIndex,
 }: {
     onChangeActiveIndex: (activeIndex: number) => void;
 }) => {
+    const navigate = useNavigate();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     return (
@@ -50,9 +52,14 @@ const RuleContent2 = ({
                     In{" "}
                     <span
                         style={{
+                            cursor: "pointer",
+                            textDecoration: "underline",
                             fontWeight: 700,
                             color: "#F2D861",
                             fontSize: "14px",
+                        }}
+                        onClick={() => {
+                            navigate("/btt");
                         }}
                     >
                         Bid Tac Toe
@@ -87,9 +94,14 @@ const RuleContent2 = ({
                         <Text>
                             <span
                                 style={{
+                                    cursor: "pointer",
+                                    textDecoration: "underline",
                                     fontWeight: 700,
                                     color: "#F2D861",
                                     fontSize: "14px",
+                                }}
+                                onClick={() => {
+                                    navigate("/btt");
                                 }}
                             >
                                 Bid Tac Toe

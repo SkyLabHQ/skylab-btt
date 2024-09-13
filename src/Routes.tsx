@@ -23,7 +23,7 @@ const AppRoutes = (): ReactElement => {
         <Routes>
             <Route path="/" element={<App />}>
                 <Route index path="/" element={<Introduce />}></Route>
-                <Route index path="/mode" element={<TacToeMode />}></Route>
+                <Route index path="/btt" element={<TacToeMode />}></Route>
                 <Route path="/point" element={<Point />}></Route>
                 <Route path="/btt/game" element={<TacToe />}></Route>
                 <Route path="/btt/history" element={<BttHistory />}></Route>

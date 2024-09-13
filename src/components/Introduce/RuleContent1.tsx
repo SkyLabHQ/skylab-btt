@@ -5,12 +5,14 @@ import NewcomerVideo from "./assets/newcomer.mp4";
 import RuleWrap, { CircleContent, LastPlane } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import { useNavigate } from "react-router-dom";
 
 const RuleContent1 = ({
     onChangeActiveIndex,
 }: {
     onChangeActiveIndex: (activeIndex: number) => void;
 }) => {
+    const navigate = useNavigate();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
 
     return (
@@ -63,8 +65,16 @@ const RuleContent1 = ({
                 <CircleContent
                     text={
                         <Text>
-                            At Level 1 : When you fold/mint a paper plane, it
-                            starts with{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                At Level 1
+                            </span>{" "}
+                            : When you fold/mint a paper plane, it starts with{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -92,8 +102,41 @@ const RuleContent1 = ({
                 <CircleContent
                     text={
                         <Text>
-                            At Other Levels : A plane’s XP determines its level.
-                            When it gains enough XP, it{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                At Other Levels{" "}
+                            </span>{" "}
+                            : A plane’s{" "}
+                            <span
+                                style={{
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                XP
+                            </span>{" "}
+                            determines its level. When it{" "}
+                            <span
+                                style={{
+                                    cursor: "pointer",
+                                    textDecoration: "underline",
+                                    fontWeight: 700,
+                                    color: "#F2D861",
+                                    fontSize: "14px",
+                                }}
+                                onClick={() => {
+                                    onChangeActiveIndex(4);
+                                }}
+                            >
+                                gains enough XP
+                            </span>{" "}
+                            , it{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -138,14 +181,20 @@ const RuleContent1 = ({
                             fontSize: "14px",
                         }}
                     >
-                        steal the <LastPlane></LastPlane> position.
+                        steal the <LastPlane></LastPlane>
                     </span>{" "}
-                    When this happens, the countdown timer for that level also
+                    position . When this happens, the countdown timer for that
+                    level also
                     <span
                         style={{
                             fontWeight: 700,
                             color: "#F2D861",
                             fontSize: "14px",
+                            cursor: "pointer",
+                            textDecoration: "underline",
+                        }}
+                        onClick={() => {
+                            onChangeActiveIndex(4);
                         }}
                     >
                         {" "}
@@ -177,7 +226,7 @@ const RuleContent1 = ({
                             cursor: "pointer",
                         }}
                         onClick={() => {
-                            onChangeActiveIndex(2);
+                            navigate("/btt");
                         }}
                     >
                         Bid Tac Toe.
