@@ -14,7 +14,7 @@ import CopyIcon from "@/assets/copy-icon.svg";
 import QuitIcon from "./assets/quit.png";
 import RightArrowIcon from "./assets/right-arrow.svg";
 import DownArrowIcon from "./assets/down-arrow.png";
-import { usePrivy } from "@privy-io/react-auth";
+import { useLinkAccount, usePrivy } from "@privy-io/react-auth";
 import { shortenAddress } from "@/utils";
 import Blackrrow from "./assets/black-arrow.svg";
 import NoPlane from "./assets/no-plane.png";
@@ -27,15 +27,42 @@ import BiddingGif from "@/assets/bidding.gif";
 import TgIcon from "./assets/tg-icon.svg";
 import { TG_URL } from "@/skyConstants/tgConfig";
 import PilotBorder from "@/assets/pilot-border.png";
-import { storeAccessToken } from "@/api/tournament";
 import ExportIcon from "./assets/export-icon.svg";
-import { avatarImg } from "@/utils/avatars";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import { updateUserInfo } from "@/api/tournament";
+import { avatarImg } from "@/utils/avatars";
 
 const UserInfo = () => {
-    const { user, exportWallet } = usePrivy();
+    const { tgInfo, address, setTgInfo } = useUserInfo();
+
+    const { user, exportWallet, unlinkTelegram } = usePrivy();
+
+    const { linkTelegram } = useLinkAccount({
+        onSuccess: async (user, linkMethod, linkedAccount) => {
+            console.log(
+                user,
+                linkMethod,
+                linkedAccount,
+                "link account success",
+            );
+            const res = await updateUserInfo();
+            const { userInfo } = res.data;
+            const info = {
+                ...userInfo,
+                photoUrl: userInfo.photoUrl
+                    ? userInfo.photoUrl
+                    : avatarImg(user.wallet.address),
+            };
+
+            setTgInfo(info);
+        },
+        onError: (error, details) => {
+            console.log(error, details, "link account error");
+            // Any logic you'd like to execute after a user exits the link flow or there is an error
+        },
+    });
+
     const toast = useSkyToast();
-    const { tgInfo, address } = useUserInfo();
     const { onCopy } = useClipboard(address);
 
     return (
@@ -91,6 +118,48 @@ const UserInfo = () => {
                         ></Image>
                     </Flex>
                 </Flex>
+                {/* !user?.telegram && */}
+                {
+                    <Flex
+                        sx={{
+                            borderRadius: "12px",
+                            background: "#F2D861",
+                            height: "40px",
+                            width: "180px",
+                            paddingLeft: "8px",
+                            marginTop: "15px",
+                            cursor: "pointer",
+                        }}
+                        onClick={async () => {
+                            linkTelegram();
+                        }}
+                        align={"center"}
+                        justify={"center"}
+                    >
+                        <Text
+                            sx={{
+                                fontSize: "12px",
+                                color: "#1b1b1b",
+                                marginRight: "5px",
+                            }}
+                        >
+                            Link to TG
+                        </Text>
+                        <Image
+                            src={Blackrrow}
+                            sx={{
+                                marginRight: "15px",
+                            }}
+                        ></Image>
+                        <Image
+                            src={TgIcon}
+                            sx={{
+                                width: "28px",
+                                maxWidth: "28px",
+                            }}
+                        ></Image>
+                    </Flex>
+                }
                 <Flex
                     sx={{
                         borderRadius: "12px",
@@ -102,16 +171,7 @@ const UserInfo = () => {
                         cursor: "pointer",
                     }}
                     onClick={async () => {
-                        try {
-                            const res = await storeAccessToken();
-                            const shortAccessToken = res.data.shortAccessToken;
-                            window.open(
-                                `${TG_URL}?start=${shortAccessToken}`,
-                                "_blank",
-                            );
-                        } catch (e: any) {
-                            toast(e.data.message);
-                        }
+                        unlinkTelegram(user?.telegram.telegramUserId);
                     }}
                     align={"center"}
                     justify={"center"}
@@ -123,7 +183,7 @@ const UserInfo = () => {
                             marginRight: "5px",
                         }}
                     >
-                        Link to TG
+                        UnLink to TG
                     </Text>
                     <Image
                         src={Blackrrow}

@@ -165,7 +165,7 @@ const App = (): ReactElement => {
                 },
                 loginMethods: isMBrowser
                     ? ["email", "wallet"]
-                    : ["email", "wallet", "discord", "twitter"],
+                    : ["email", "wallet", "discord", "twitter", "telegram"],
                 embeddedWallets: {
                     createOnLogin: "users-without-wallets",
                     requireUserPasswordOnCreate: false,

@@ -5,6 +5,11 @@ export const tournamentLogin = async () => {
     return response.data;
 };
 
+export const updateUserInfo = async () => {
+    const response = await api.post("/tournament/updateUserInfo");
+    return response.data;
+};
+
 export const storeAccessToken = async () => {
     const response = await api.post("/tournament/storeAccessToken");
     return response.data;

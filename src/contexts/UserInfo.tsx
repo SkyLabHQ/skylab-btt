@@ -44,6 +44,7 @@ const UserInfoContext = createContext<{
     handleGetUserPaper: () => void;
     handleLogin: () => void;
     handleGetUserPlane: () => void;
+    setTgInfo: (info: TgInfo) => void;
 }>(null);
 
 const whiteList = ["/btt", "/plane/my"];
@@ -57,6 +58,7 @@ export const UserInfoProvider = ({
 
     const { login } = useLogin({
         onComplete: async (user: any) => {
+            console.log("user", user);
             try {
                 const res = await tournamentLogin();
                 const { userInfo, jwtToken } = res.data;
@@ -76,8 +78,12 @@ export const UserInfoProvider = ({
                 localStorage.removeItem("tournamentToken");
             }
         },
+        onError: (error: any) => {
+            console.log(error);
+            toast("Failed to login");
+        },
     });
-    const { wallets, ready: aaa } = useWallets();
+    const { wallets } = useWallets();
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState(null);
     const { pathname } = useLocation();
@@ -299,6 +305,7 @@ export const UserInfoProvider = ({
         <UserInfoContext.Provider
             value={{
                 tgInfo,
+                setTgInfo,
                 isUserInfoOpen: isOpen,
                 onUserInfoOpen: onOpen,
                 onUserInfoClose: onClose,
