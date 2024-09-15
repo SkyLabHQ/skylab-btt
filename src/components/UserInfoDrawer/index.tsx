@@ -160,7 +160,7 @@ const UserInfo = () => {
                         ></Image>
                     </Flex>
                 }
-                <Flex
+                {/* <Flex
                     sx={{
                         borderRadius: "12px",
                         background: "#F2D861",
@@ -198,7 +198,7 @@ const UserInfo = () => {
                             maxWidth: "28px",
                         }}
                     ></Image>
-                </Flex>
+                </Flex> */}
                 {user?.wallet?.walletClientType === "privy" && (
                     <Flex
                         sx={{

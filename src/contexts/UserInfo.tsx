@@ -58,7 +58,6 @@ export const UserInfoProvider = ({
 
     const { login } = useLogin({
         onComplete: async (user: any) => {
-            console.log("user", user);
             try {
                 const res = await tournamentLogin();
                 const { userInfo, jwtToken } = res.data;
@@ -77,10 +76,6 @@ export const UserInfoProvider = ({
                 logout();
                 localStorage.removeItem("tournamentToken");
             }
-        },
-        onError: (error: any) => {
-            console.log(error);
-            toast("Failed to login");
         },
     });
     const { wallets } = useWallets();
