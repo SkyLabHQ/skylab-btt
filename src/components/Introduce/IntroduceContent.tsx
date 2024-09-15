@@ -382,6 +382,25 @@ const IntroduceContent = ({
                 </Flex>
             </Box>
 
+            <BlackButton
+                onClick={() => {
+                    onModeChange("play");
+                }}
+                sx={{
+                    width: isPc ? "250px" : "120px",
+                    height: isPc ? "60px" : "25px",
+                }}
+            >
+                {isPc && (
+                    <NextIcon
+                        style={{
+                            width: isPc ? "18px" : "14px",
+                            marginRight: "20px",
+                        }}
+                    ></NextIcon>
+                )}
+                <Text>How to play</Text>
+            </BlackButton>
             <Flex
                 sx={{
                     fontSize: isPc ? "32px" : "16px",

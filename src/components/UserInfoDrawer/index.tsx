@@ -25,7 +25,6 @@ import PlaneBg from "./assets/plane-bg.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
 import TgIcon from "./assets/tg-icon.svg";
-import { TG_URL } from "@/skyConstants/tgConfig";
 import PilotBorder from "@/assets/pilot-border.png";
 import ExportIcon from "./assets/export-icon.svg";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
@@ -119,7 +118,7 @@ const UserInfo = () => {
                     </Flex>
                 </Flex>
                 {/* !user?.telegram && */}
-                {
+                {!user?.telegram && (
                     <Flex
                         sx={{
                             borderRadius: "12px",
@@ -159,46 +158,7 @@ const UserInfo = () => {
                             }}
                         ></Image>
                     </Flex>
-                }
-                {/* <Flex
-                    sx={{
-                        borderRadius: "12px",
-                        background: "#F2D861",
-                        height: "40px",
-                        width: "180px",
-                        paddingLeft: "8px",
-                        marginTop: "15px",
-                        cursor: "pointer",
-                    }}
-                    onClick={async () => {
-                        unlinkTelegram(user?.telegram.telegramUserId);
-                    }}
-                    align={"center"}
-                    justify={"center"}
-                >
-                    <Text
-                        sx={{
-                            fontSize: "12px",
-                            color: "#1b1b1b",
-                            marginRight: "5px",
-                        }}
-                    >
-                        UnLink to TG
-                    </Text>
-                    <Image
-                        src={Blackrrow}
-                        sx={{
-                            marginRight: "15px",
-                        }}
-                    ></Image>
-                    <Image
-                        src={TgIcon}
-                        sx={{
-                            width: "28px",
-                            maxWidth: "28px",
-                        }}
-                    ></Image>
-                </Flex> */}
+                )}
                 {user?.wallet?.walletClientType === "privy" && (
                     <Flex
                         sx={{

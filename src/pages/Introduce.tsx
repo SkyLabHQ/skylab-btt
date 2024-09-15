@@ -9,6 +9,7 @@ import { createRef, useEffect, useState } from "react";
 import Rule from "@/components/Introduce/Rule";
 import IntroduceContent from "@/components/Introduce/IntroduceContent";
 import Schedule from "@/components/Introduce/Schedule";
+import Play from "@/components/Introduce/Play";
 import CVideo from "@/components/Introduce/assets/c.mp4";
 import WVideo from "@/components/Introduce/assets/w.mp4";
 import Lock from "@/components/Introduce/Lock";
@@ -16,14 +17,14 @@ import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const Introduce = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const [init, setInit] = useState(false);
+    const [init, setInit] = useState(true);
     const cRef = createRef<HTMLVideoElement>();
     const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [wMode, setWMode] = useState(false);
 
-    const [mode, setMode] = useState("");
+    const [mode, setMode] = useState("play");
 
     const handleChangeWMode = () => {
         if (wMode) {
@@ -165,6 +166,14 @@ const Introduce = () => {
                                 handleChangeMode(mode);
                             }}
                         ></Schedule>
+                    )}
+
+                    {mode === "play" && (
+                        <Play
+                            onModeChange={(mode: string) => {
+                                handleChangeMode(mode);
+                            }}
+                        ></Play>
                     )}
                 </ModalContent>
             </Modal>
