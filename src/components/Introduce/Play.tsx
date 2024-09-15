@@ -2,9 +2,6 @@ import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { useEffect } from "react";
 import CloseIcon from "./assets/close.svg";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
-import SetupIcon from "./assets/setup.svg";
-import ConflictIcon from "./assets/conflict.svg";
-import NewDawnIcon from "./assets/newdawn.svg";
 import PlayIcon from "./assets/play-icon.svg";
 import RuleWrap, { CircleContent } from "./RuleWrap";
 
