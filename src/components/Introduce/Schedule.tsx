@@ -219,12 +219,12 @@ const Schedule = ({
                                                             height: isPc
                                                                 ? "80px"
                                                                 : "56px",
-                                                            "&:hover img:nth-child(1)":
+                                                            "&:hover img:nth-of-type(1)":
                                                                 {
                                                                     display:
                                                                         "none",
                                                                 },
-                                                            "&:hover img:nth-child(2)":
+                                                            "&:hover img:nth-of-type(2)":
                                                                 {
                                                                     display:
                                                                         "block",

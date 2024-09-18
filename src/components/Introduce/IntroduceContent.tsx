@@ -328,10 +328,10 @@ const IntroduceContent = ({
                                 width: "100%",
                                 zIndex: 11,
                                 "&:hover ": {
-                                    "& img:nth-child(1)": {
+                                    "& img:nth-of-type(1)": {
                                         display: "none",
                                     },
-                                    "& img:nth-child(2)": {
+                                    "& img:nth-of-type(2)": {
                                         display: "block",
                                     },
                                 },

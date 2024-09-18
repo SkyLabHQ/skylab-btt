@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Image, Text, useDisclosure } from "@chakra-ui/react";
 
 import PaperVideo from "./assets/paper.mp4";
 import NewcomerVideo from "./assets/newcomer.mp4";
@@ -6,6 +6,7 @@ import RuleWrap, { CircleContent, LastPlane } from "./RuleWrap";
 import { BottomButton } from "./Rule";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { useNavigate } from "react-router-dom";
+import DownIcon from "./assets/down-icon.svg";
 
 const RuleContent1 = ({
     onChangeActiveIndex,
@@ -14,6 +15,9 @@ const RuleContent1 = ({
 }) => {
     const navigate = useNavigate();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+    const { isOpen, onToggle } = useDisclosure({
+        defaultIsOpen: false,
+    });
 
     return (
         <Box>
@@ -57,121 +61,105 @@ const RuleContent1 = ({
                     marginTop: "16px",
                 }}
             >
-                <Text>
+                <Text
+                    sx={{
+                        cursor: "pointer",
+                    }}
+                    onClick={() => {
+                        onToggle();
+                    }}
+                >
                     At any given moment, each level has one{" "}
                     <LastPlane></LastPlane>. It's the last plane that ascends to
                     the level.
+                    <Image
+                        src={DownIcon}
+                        sx={{
+                            display: "inline-block",
+                            marginLeft: "4px",
+                            transform: isOpen
+                                ? "rotate(0deg)"
+                                : "rotate(180deg)",
+                            transition: "all 0.3s",
+                        }}
+                    ></Image>
                 </Text>{" "}
-                <CircleContent
-                    text={
-                        <Text>
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                At Level 1
-                            </span>{" "}
-                            : When you fold/mint a paper plane, it starts with{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                1 XP{" "}
-                            </span>{" "}
-                            and automatically becomes the{" "}
-                            <LastPlane></LastPlane> at{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                {" "}
-                                Level 1.
-                            </span>
-                        </Text>
-                    }
-                ></CircleContent>
-                <CircleContent
-                    text={
-                        <Text>
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                At Other Levels{" "}
-                            </span>{" "}
-                            : A plane’s{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                XP
-                            </span>{" "}
-                            determines its level. When it{" "}
-                            <span
-                                style={{
-                                    cursor: "pointer",
-                                    textDecoration: "underline",
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                                onClick={() => {
-                                    onChangeActiveIndex(4);
-                                }}
-                            >
-                                gains enough XP
-                            </span>{" "}
-                            , it{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                upgrades to the next level
-                            </span>{" "}
-                            and becomes the <LastPlane></LastPlane> of that
-                            level.
-                        </Text>
-                    }
-                ></CircleContent>
-            </RuleWrap>
-
-            <video
-                playsInline
-                autoPlay
-                loop
-                muted
-                style={{
-                    width: "100%",
-                    maxWidth: "600px",
-                    margin: "20px auto",
-                }}
-            >
-                <source src={NewcomerVideo} type="video/mp4" />
-            </video>
-            <RuleWrap
-                sx={{
-                    marginTop: "16px",
-                }}
-            >
-                <Text>
+                <Box
+                    sx={{
+                        transition: "all 0.3s",
+                        maxHeight: isOpen ? "600px" : "0",
+                        overflow: "hidden",
+                    }}
+                >
+                    <CircleContent
+                        text={
+                            <Text>
+                                <span>At Level 1</span> : When you fold/mint a
+                                paper plane, it starts with{" "}
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        color: "#F2D861",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    1 XP{" "}
+                                </span>{" "}
+                                and automatically becomes the{" "}
+                                <LastPlane></LastPlane> at{" "}
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        color: "#F2D861",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    {" "}
+                                    Level 1.
+                                </span>
+                            </Text>
+                        }
+                    ></CircleContent>
+                    <CircleContent
+                        text={
+                            <Text>
+                                <span>At Other Levels </span> : A plane’s{" "}
+                                <span
+                                    style={{
+                                        fontWeight: 700,
+                                        color: "#F2D861",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    XP
+                                </span>{" "}
+                                determines its level. When it{" "}
+                                <span
+                                    style={{
+                                        cursor: "pointer",
+                                        textDecoration: "underline",
+                                        fontWeight: 700,
+                                        color: "#F2D861",
+                                        fontSize: "14px",
+                                    }}
+                                    onClick={() => {
+                                        onChangeActiveIndex(4);
+                                    }}
+                                >
+                                    gains enough XP
+                                </span>{" "}
+                                , it <span>upgrades to the next level</span> and
+                                becomes the <LastPlane></LastPlane> of that
+                                level.
+                            </Text>
+                        }
+                    ></CircleContent>
+                </Box>
+                <Text
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
                     You are the <LastPlane></LastPlane> until another player’s
                     plane upgrades to that level and{" "}
                     <span
@@ -201,6 +189,26 @@ const RuleContent1 = ({
                         resets to its starting point.
                     </span>
                 </Text>
+            </RuleWrap>
+
+            <video
+                playsInline
+                autoPlay
+                loop
+                muted
+                style={{
+                    width: "100%",
+                    maxWidth: "600px",
+                    margin: "20px auto",
+                }}
+            >
+                <source src={NewcomerVideo} type="video/mp4" />
+            </video>
+            <RuleWrap
+                sx={{
+                    marginTop: "16px",
+                }}
+            >
                 <Text
                     sx={{
                         marginTop: isPc ? "16px" : "8px",

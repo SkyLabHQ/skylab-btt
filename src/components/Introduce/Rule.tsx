@@ -265,11 +265,11 @@ const Rule = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                 width: isPc ? "55px" : "22px",
                                 height: isPc ? "40px" : "16px",
                                 "&:hover": {
-                                    "& img:nth-child(1)": {
+                                    "& img:nth-of-type(1)": {
                                         display:
                                             activeIndex !== index && "none",
                                     },
-                                    "& img:nth-child(2)": {
+                                    "& img:nth-of-type(2)": {
                                         display:
                                             activeIndex !== index && "block",
                                     },

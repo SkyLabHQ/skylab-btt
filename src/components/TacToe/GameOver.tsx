@@ -6,11 +6,14 @@ import {
     getPvpWinState,
     winPatterns,
 } from "@/skyConstants/bttGameTypes";
-import MBalance from "../BttComponents/MBalance";
-import { MUserProfileResult } from "../PrivateRoom/UserProfile";
+import {
+    MMyTourUserProfile,
+    MOpTourUserProfile,
+} from "../PrivateRoom/UserProfile";
 import { useGameContext } from "@/pages/TacToe";
 import { OpResultCard, ResultCard } from "../BttComponents/ResultUserCard";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import { shortenAddress } from "@/utils";
 
 const GameOver = ({ gameState }: { gameState: Game2Status }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
@@ -120,47 +123,41 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
                     top: "24px",
                     left: 0,
                     alignItems: "flex-start",
-                    opacity: !isMyWin ? 1 : 0.5,
                 }}
                 flexDir={"column"}
             >
-                <MUserProfileResult
-                    address={opGameInfo.address}
-                    position="left"
-                    img={""}
-                    level={1}
-                ></MUserProfileResult>
-                <MBalance
+                <MOpTourUserProfile
                     balance={opGameInfo.balance}
+                    name={
+                        opGameInfo.username
+                            ? `@${opGameInfo.username}`
+                            : shortenAddress(opGameInfo.address)
+                    }
+                    photoUrl={opGameInfo.photoUrl}
                     mark={opGameInfo.mark}
-                    showResult={true}
                     win={!isMyWin}
-                    status="left"
-                ></MBalance>
+                ></MOpTourUserProfile>
             </Flex>
             <Flex
                 sx={{
                     position: "absolute",
                     right: 0,
                     top: "480px",
-                    opacity: isMyWin ? 1 : 0.5,
                 }}
                 flexDir={"column"}
                 align={"flex-end"}
             >
-                <MUserProfileResult
-                    position="right"
-                    address={myGameInfo.address}
-                    img={""}
-                    level={1}
-                ></MUserProfileResult>
-                <MBalance
+                <MMyTourUserProfile
+                    name={
+                        myGameInfo.username
+                            ? `@${myGameInfo.username}`
+                            : shortenAddress(myGameInfo.address)
+                    }
                     balance={myGameInfo.balance}
-                    status="right"
+                    photoUrl={myGameInfo.photoUrl}
                     mark={myGameInfo.mark}
-                    showResult={true}
                     win={isMyWin}
-                ></MBalance>
+                ></MMyTourUserProfile>
             </Flex>
 
             <Flex

@@ -494,7 +494,6 @@ ${des}`;
                         ) : (
                             <ShareButtons
                                 handleShare={handleShare}
-                                showText={false}
                             ></ShareButtons>
                         )}
                     </Flex>

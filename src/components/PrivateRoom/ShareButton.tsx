@@ -1,18 +1,18 @@
 import { Box, Button, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import TwLogo from "@/components/TacToe/assets/tw-logo.svg";
 import RightArrow from "./assets/arrow-right.svg";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const ShareButtons = ({
     text = "Back to 1v1",
     handleShare,
     handleTextClick,
-    showText = true,
 }: {
     text?: string;
     handleShare: () => void;
     handleTextClick?: () => void;
-    showText?: boolean;
 }) => {
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Box
             sx={{
@@ -21,77 +21,54 @@ const ShareButtons = ({
                 marginTop: "20px",
             }}
         >
-            <SimpleGrid
-                columns={3}
-                spacingX={"9px"}
+            <Flex
                 sx={{
                     margin: "0 auto",
+                    width: "100%",
                     position: "relative",
-                    width: "fit-content",
+                    gap: "20px",
                     "& button": {
-                        width: "120px",
-                        height: "32px",
-                        borderRadius: "10px",
-                        fontSize: "12px",
-                        border: "2px solid #fff !important",
+                        width: isPc ? "206px" : "100px",
+                        height: isPc ? "65px" : "32px",
+                        borderRadius: isPc ? "20px" : "10px",
+                        fontSize: isPc ? "24px" : "12px",
+                        border: isPc
+                            ? "2px solid #fff !important"
+                            : "1px solid #fff !important",
                         color: "#d9d9d9",
+                        fontWeight: 400,
+                    },
+                    "& img": {
+                        width: isPc ? "26px" : "13px",
                     },
                 }}
+                justify={"center"}
             >
-                <Flex justify={"center"}>
-                    <Button
-                        variant={"outline"}
-                        onClick={() => {
-                            handleShare();
-                        }}
-                    >
-                        <Image
-                            src={TwLogo}
-                            sx={{
-                                width: "16px",
-                            }}
-                        ></Image>
-                    </Button>
-                </Flex>
-
-                {showText && (
-                    <Flex
-                        justify={"center"}
+                <Button
+                    variant={"outline"}
+                    onClick={() => {
+                        handleShare();
+                    }}
+                >
+                    <Image src={TwLogo}></Image>
+                    <Text sx={{}}>Share Replay</Text>
+                </Button>
+                <Button
+                    variant={"outline"}
+                    onClick={() => {
+                        handleTextClick();
+                    }}
+                >
+                    <Text
                         sx={{
-                            position: "absolute",
-                            right: "0",
-                            top: "50%",
-                            transform: "translateY(-50%)",
+                            marginRight: "10px",
                         }}
                     >
-                        <Flex
-                            onClick={handleTextClick}
-                            sx={{
-                                justifyContent: "flex-end",
-                                alignItems: "center",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <Text
-                                sx={{
-                                    fontSize: "12px",
-                                    textDecorationLine: "underline",
-                                    maxWidth: "54px",
-                                    textAlign: "center",
-                                }}
-                            >
-                                {text}
-                            </Text>
-                            <Image
-                                src={RightArrow}
-                                sx={{
-                                    width: "12px",
-                                }}
-                            ></Image>
-                        </Flex>
-                    </Flex>
-                )}
-            </SimpleGrid>
+                        Next
+                    </Text>
+                    <Image src={RightArrow}></Image>
+                </Button>
+            </Flex>
         </Box>
     );
 };

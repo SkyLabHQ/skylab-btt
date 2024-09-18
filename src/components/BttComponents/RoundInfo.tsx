@@ -1,6 +1,5 @@
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { Box, Text } from "@chakra-ui/react";
-import React from "react";
 
 const RoundInfo = ({
     currentRound,
@@ -13,19 +12,19 @@ const RoundInfo = ({
     return (
         <Box
             sx={{
-                borderRadius: isPc ? "1.0417vw" : "8px",
+                borderRadius: isPc ? "20px" : "8px",
                 background: "#d9d9d9",
                 display: "flex",
-                width: isPc ? "6.875vw" : "86px",
+                width: isPc ? "132px" : "86px",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "2.6042vw auto 0",
-                height: isPc ? "1.875vw" : "16px",
+                margin: "50px auto 0",
+                height: isPc ? "36px" : "16px",
             }}
         >
             <Text
                 sx={{
-                    fontSize: isPc ? "0.8333vw" : "12px",
+                    fontSize: isPc ? "16px" : "12px",
                     color: "#303030",
                 }}
             >
@@ -33,7 +32,7 @@ const RoundInfo = ({
                 <span
                     style={{
                         color: "#616161",
-                        fontSize: isPc ? "0.7292vw" : "12px",
+                        fontSize: isPc ? "14px" : "12px",
                     }}
                 >
                     /{allRound}

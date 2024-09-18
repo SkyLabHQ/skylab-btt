@@ -9,6 +9,7 @@ import { aviationImg } from "@/utils/aviationImg";
 import useBidIcon from "@/hooks/useBidIcon";
 import GoldIcon from "@/components/BttComponents/assets/gold-icon.svg";
 import { PvpGameInfo } from "@/pages/PvpRoom";
+import { Lose, Win } from "../BttComponents/ResultFlag";
 
 export const MOpUserProfile = ({
     userGameInfo,
@@ -546,6 +547,165 @@ export const MUserProfilePvp = ({
                     {nickname}
                 </Text>
             )}
+        </Flex>
+    );
+};
+
+export const MOpTourUserProfile = ({
+    name,
+    balance,
+    photoUrl,
+    mark,
+    win,
+}: {
+    name: string;
+    balance: number;
+    photoUrl: string;
+    mark: UserMarkType;
+    win: boolean;
+}) => {
+    const MarkIcon = useBidIcon();
+    return (
+        <Flex align={"flex-end"}>
+            <Image
+                src={photoUrl}
+                sx={{
+                    width: "52px",
+                    height: "52px",
+                    borderRadius: "50%",
+                    marginLeft: "4px",
+                    border: "1px solid #fff",
+                    marginRight: "10px",
+                }}
+            ></Image>
+            <Flex align={"center"}>
+                <Flex
+                    flexDir={"column"}
+                    sx={{
+                        marginRight: "10px",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            fontSize: "12px",
+                        }}
+                    >
+                        {name}
+                    </Text>
+                    <Flex align={"center"}>
+                        <Image
+                            src={GoldIcon}
+                            sx={{
+                                width: "22px",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                fontSize: "20px",
+                                margin: "0 4px",
+                            }}
+                        >
+                            {balance}
+                        </Text>
+                        <Image
+                            src={
+                                mark === UserMarkType.Circle
+                                    ? win
+                                        ? MarkIcon.YellowCircle
+                                        : MarkIcon.Circle
+                                    : win
+                                    ? MarkIcon.YellowCross
+                                    : MarkIcon.Cross
+                            }
+                            sx={{
+                                width: "16px",
+                                height: "16px",
+                            }}
+                        ></Image>
+                    </Flex>
+                </Flex>
+                {win ? <Win></Win> : <Lose></Lose>}
+            </Flex>
+        </Flex>
+    );
+};
+
+export const MMyTourUserProfile = ({
+    name,
+    balance,
+    photoUrl,
+    mark,
+    win,
+}: {
+    name: string;
+    balance: number;
+    photoUrl: string;
+    mark: UserMarkType;
+    win: boolean;
+}) => {
+    const MarkIcon = useBidIcon();
+    return (
+        <Flex align={"flex-end"}>
+            <Flex align={"center"}>
+                {win ? <Win></Win> : <Lose></Lose>}
+                <Flex
+                    flexDir={"column"}
+                    sx={{
+                        marginLeft: "10px",
+                    }}
+                >
+                    <Text
+                        sx={{
+                            fontSize: "12px",
+                            textAlign: "right",
+                        }}
+                    >
+                        {name}
+                    </Text>
+                    <Flex align={"center"}>
+                        <Image
+                            src={
+                                mark === UserMarkType.Circle
+                                    ? win
+                                        ? MarkIcon.YellowCircle
+                                        : MarkIcon.Circle
+                                    : win
+                                    ? MarkIcon.YellowCross
+                                    : MarkIcon.Cross
+                            }
+                            sx={{
+                                width: "16px",
+                                height: "16px",
+                            }}
+                        ></Image>
+                        <Image
+                            src={GoldIcon}
+                            sx={{
+                                width: "22px",
+                                margin: "0 4px",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                fontSize: "20px",
+                            }}
+                        >
+                            {balance}
+                        </Text>
+                    </Flex>
+                </Flex>
+            </Flex>
+            <Image
+                src={photoUrl}
+                sx={{
+                    width: "52px",
+                    height: "52px",
+                    borderRadius: "50%",
+                    marginLeft: "4px",
+                    border: "1px solid #fff",
+                    marginRight: "10px",
+                }}
+            ></Image>
         </Flex>
     );
 };

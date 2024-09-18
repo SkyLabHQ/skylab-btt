@@ -7,11 +7,12 @@ export const Lose = () => {
             sx={{
                 width: "60px",
                 height: "24px",
-                borderRadius: "12px",
+                borderRadius: "9px",
                 background: "#D9D9D9",
                 color: "#303030",
                 textAlign: "center",
                 lineHeight: "24px",
+                fontSize: "20px",
             }}
         >
             Lose
@@ -25,11 +26,12 @@ export const Win = () => {
             sx={{
                 width: "60px",
                 height: "24px",
-                borderRadius: "12px",
+                borderRadius: "8px",
                 background: "#FDDC2D",
                 textAlign: "center",
                 color: "#303030",
                 lineHeight: "24px",
+                fontSize: "20px",
             }}
         >
             Win

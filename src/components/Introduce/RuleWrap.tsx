@@ -89,12 +89,13 @@ export const LastPlane = ({ text }: { text?: string }) => {
                 lineHeight: 1,
             }}
         >
-            {text || "Last Plane"}
+            {text || "Champion"}
             <Image
                 src={LastIcon}
                 sx={{
                     position: "absolute",
-                    right: "0px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
                     top: isPc ? "-12px" : "-8px",
                     width: isPc ? "20px" : "12px",
                 }}
