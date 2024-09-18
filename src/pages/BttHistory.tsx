@@ -210,7 +210,7 @@ const BttHistory = () => {
                 }}
             >
                 <BackWithText
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/btt")}
                     textContent={
                         <Box
                             sx={{

@@ -34,7 +34,7 @@ const My = () => {
 
     const [large680] = useMediaQuery("(min-width: 680px)");
 
-    const { planeList, handleGetUserPlane } = useUserInfo();
+    const { planeList, handleGetUserPaper } = useUserInfo();
 
     const [highList, sethighList] = useState(
         new Array(16).fill({
@@ -131,7 +131,7 @@ const My = () => {
             }
 
             getHighPrice();
-            handleGetUserPlane();
+            handleGetUserPaper();
         } catch (e) {
             toast(handleError(e));
         }

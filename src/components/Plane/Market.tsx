@@ -35,7 +35,7 @@ const Market = () => {
     );
 
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
-    const { address, handleGetUserPlane } = useUserInfo();
+    const { address, handleGetUserPaper } = useUserInfo();
     const chainId = useChainId();
     const multiProvider = useMultiProvider(chainId);
     const multiMarketPlaceContract = useMultiMarketPlaceContract();
@@ -163,7 +163,7 @@ const Market = () => {
                 toast("Transaction failed");
                 return;
             }
-            handleGetUserPlane();
+            handleGetUserPaper();
         } catch (e) {
             console.log(e, "e");
             toast(handleError(e));

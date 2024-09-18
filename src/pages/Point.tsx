@@ -60,7 +60,7 @@ const Point = () => {
             >
                 <BackWithText
                     onClick={() => {
-                        navigate("/");
+                        navigate("/btt");
                     }}
                     textContent="Back"
                 ></BackWithText>

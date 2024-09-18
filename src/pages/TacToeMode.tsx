@@ -49,8 +49,6 @@ const TacToeMode = () => {
             try {
                 openLoading();
 
-                console.log(skylabBidTacToeContract, "skylabBidTacToeContract");
-
                 await skylabBidTacToeContract.simulate.approveForGame(
                     [
                         address,

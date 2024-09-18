@@ -53,7 +53,7 @@ export const useGameContext = () => useContext(GameContext);
 const TacToe = () => {
     const navigate = useNavigate();
     const toast = useSkyToast();
-    const { address } = useUserInfo();
+    const { address, loginInit } = useUserInfo();
     const [nextDrawWinner, setNextDrawWinner] = useState<string>("");
     const [init, setInit] = useState<boolean>(false);
     const [list, setList] = useState<BoardItem[]>(initBoard()); // init board
@@ -134,7 +134,7 @@ const TacToe = () => {
 
     const handleGameInfo = (gameInfo: any) => {
         if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
-            navigate("/");
+            navigate("/btt");
             return;
         }
         const gridIndex = gameInfo.gridIndex == 9 ? 8 : gameInfo.gridIndex;
@@ -152,10 +152,14 @@ const TacToe = () => {
         const boardGrids = gameInfo.boards;
         const isPlayer1 =
             address.toLocaleLowerCase() == gameInfo.player1.toLocaleLowerCase();
+
+        const player1IsBid = boardGrids[resCurrentGrid].isBid1;
         const player1GameInfo = {
             address: gameInfo.player1,
             userId: gameInfo.userId1,
-            balance: gameInfo.balance1,
+            balance: player1IsBid
+                ? gameInfo.balance1 - boardGrids[resCurrentGrid].bid1
+                : gameInfo.balance1,
             isBid: boardGrids[resCurrentGrid].isBid1,
             mark: UserMarkType.Circle,
             winMark: UserMarkType.YellowCircle,
@@ -171,11 +175,14 @@ const TacToe = () => {
             username: gameInfo.username1,
         };
 
+        const player2IsBid = boardGrids[resCurrentGrid].isBid2;
         const player2GameInfo = {
             address: gameInfo.player2,
             userId: gameInfo.userId2,
-            balance: gameInfo.balance2,
-            isBid: boardGrids[resCurrentGrid].isBid2,
+            balance: player2IsBid
+                ? gameInfo.balance2 - boardGrids[resCurrentGrid].bid2
+                : gameInfo.balance2,
+            isBid: player2IsBid,
             mark: UserMarkType.Cross,
             winMark: UserMarkType.YellowCross,
             playerStatus: PLayerStatus.Player2,
@@ -198,7 +205,7 @@ const TacToe = () => {
             if (isPlayer1) {
                 setMyGameInfo(player1GameInfo);
             } else {
-                navigate("/");
+                navigate("/btt");
             }
             return;
         }
@@ -301,7 +308,8 @@ const TacToe = () => {
             !gameId ||
             (myGameInfo.gameState !== Game2Status.InProgress &&
                 myGameInfo.gameState !== Game2Status.WaitingForPlayer2) ||
-            !address
+            !address ||
+            !loginInit
         )
             return;
 
@@ -313,14 +321,14 @@ const TacToe = () => {
         return () => {
             clearInterval(timer);
         };
-    }, [gameId, myGameInfo.gameState, address]);
+    }, [gameId, myGameInfo.gameState, address, loginInit]);
 
     useEffect(() => {
-        if (!gameInfo.player1 || !address) {
+        if (!gameInfo.player1 || !address || !loginInit) {
             return;
         }
         handleGameInfo(gameInfo);
-    }, [gameInfo, address]);
+    }, [gameInfo, address, loginInit]);
 
     return (
         <Box

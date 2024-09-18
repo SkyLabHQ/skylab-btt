@@ -142,12 +142,7 @@ const MyPlane = ({
 }) => {
     const toast = useSkyToast();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const {
-        address,
-        planeList,
-        handleGetUserPaper,
-        loading: planetLoading,
-    } = useUserInfo();
+    const { address, planeList, planeInit, handleGetUserPaper } = useUserInfo();
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const publicClient = usePublicClient();
 
@@ -233,7 +228,7 @@ const MyPlane = ({
                 >
                     {address ? (
                         <>
-                            {planetLoading && (
+                            {!planeInit && (
                                 <SimpleGrid
                                     columns={isPc ? 4 : 3}
                                     sx={{
@@ -259,7 +254,7 @@ const MyPlane = ({
                                         })}
                                 </SimpleGrid>
                             )}
-                            {!planetLoading && planeList.length > 0 && (
+                            {planeInit && planeList.length > 0 && (
                                 <SimpleGrid
                                     columns={isPc ? 4 : 3}
                                     spacingY={"20px"}
@@ -466,7 +461,7 @@ const MyPlane = ({
                         transform: "translateX(-50%)",
                     }}
                 >
-                    {!planetLoading && address && (
+                    {planeInit && address && (
                         <MintPlane
                             handleMintPlane={handleMintPlane}
                         ></MintPlane>

@@ -40,10 +40,10 @@ const UserInfoContext = createContext<{
     planeInit: boolean;
     signer: any;
     address: string;
+    loginInit: boolean;
     handleBlock: (block: boolean) => void;
     handleGetUserPaper: () => void;
     handleLogin: () => void;
-    handleGetUserPlane: () => void;
     setTgInfo: (info: TgInfo) => void;
 }>(null);
 
@@ -54,6 +54,7 @@ export const UserInfoProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
+    const [loginInit, setLoginInit] = useState(false);
     const { ready, user, linkWallet, logout, authenticated } = usePrivy();
 
     const { login } = useLogin({
@@ -70,6 +71,7 @@ export const UserInfoProvider = ({
                 };
 
                 setTgInfo(info);
+                setLoginInit(true);
             } catch (e) {
                 console.log(e);
                 toast("Failed to get user info");
@@ -121,7 +123,12 @@ export const UserInfoProvider = ({
     };
 
     const handleGetUserPaper = async () => {
-        if (!multiMercuryJarTournamentContract || !multiProvider || !address) {
+        if (
+            !multiMercuryJarTournamentContract ||
+            !multiProvider ||
+            !address ||
+            !loginInit
+        ) {
             setPlaneList([]);
             return;
         }
@@ -131,6 +138,7 @@ export const UserInfoProvider = ({
 
         try {
             setLoading(true);
+
             const [planeBalance] = await multiProvider.all([
                 multiMercuryJarTournamentContract.balanceOf(address),
             ]);
@@ -199,52 +207,6 @@ export const UserInfoProvider = ({
         }
     };
 
-    const handleGetUserPlane = async () => {
-        const [planeBalance] = await multiProvider.all([
-            multiMercuryJarTournamentContract.balanceOf(address),
-        ]);
-        const p = [];
-        for (let i = 0; i < Number(planeBalance.toString()); i++) {
-            p.push(
-                multiMercuryJarTournamentContract.tokenOfOwnerByIndex(
-                    address,
-                    i,
-                ),
-            );
-        }
-
-        const tokenIds = await multiProvider.all(p);
-
-        const p2: any = [];
-        tokenIds.forEach((item) => {
-            p2.push(multiMercuryJarTournamentContract.aviationPoints(item));
-            p2.push(multiMercuryJarTournamentContract.isAviationLocked(item));
-        });
-
-        const levels = await multiProvider.all(p2);
-
-        const planeList = tokenIds.map((item, index) => {
-            const points = Number(levels[index * 2].toString());
-            const levelItem = levelRanges.find((item) => {
-                return points < item.maxPoints && points >= item.minPoints;
-            });
-            const state = levels[index * 2 + 1];
-            const level = levelItem.level;
-            const nextPoints = levelItem.maxPoints;
-            const prePoints = levelItem.minPoints;
-            return {
-                tokenId: item.toString(),
-                points,
-                level: level,
-                img: aviationImg(level),
-                nextPoints,
-                prePoints,
-                state,
-            };
-        });
-        setPlaneList(planeList);
-    };
-
     // useEffect(() => {
     //     axios.get("https://ipapi.co/json/").then(async (res: any) => {
     //         if (res.data.country_code === "US") {
@@ -259,7 +221,13 @@ export const UserInfoProvider = ({
         if (whiteList.includes(pathname)) {
             handleGetUserPaper();
         }
-    }, [multiMercuryJarTournamentContract, multiProvider, address, pathname]);
+    }, [
+        loginInit,
+        multiMercuryJarTournamentContract,
+        multiProvider,
+        address,
+        pathname,
+    ]);
 
     useEffect(() => {
         const handleGetSigner = async () => {
@@ -305,12 +273,12 @@ export const UserInfoProvider = ({
                 onUserInfoOpen: onOpen,
                 onUserInfoClose: onClose,
                 blockOpen,
+                loginInit,
                 isBlock,
                 handleBlock,
                 planeList,
                 planeInit,
                 handleGetUserPaper,
-                handleGetUserPlane,
                 handleLogin,
                 loading,
                 signer,

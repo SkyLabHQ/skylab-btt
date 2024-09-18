@@ -700,7 +700,7 @@ const SettlementPage = ({}) => {
                 <BackWithText
                     textContent="Back"
                     onClick={() =>
-                        navigate("/", {
+                        navigate("/btt", {
                             replace: true,
                         })
                     }
