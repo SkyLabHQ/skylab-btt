@@ -63,13 +63,15 @@ const Introduce = () => {
         }
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
-            console.log(key, "key");
+            event.preventDefault();
             if (event.shiftKey && key === "Enter") {
                 handleChangeMode("schedule");
             } else if (event.shiftKey && key === "?") {
                 handleChangeWMode();
             } else if (key === "Enter") {
                 handleChangeMode("rules");
+            } else if (key === " ") {
+                handleChangeMode("play");
             }
         };
         document.addEventListener("keydown", keyboardListener);
