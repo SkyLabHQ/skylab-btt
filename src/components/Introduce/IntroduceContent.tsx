@@ -6,7 +6,7 @@ import Quan3 from "@/components/Introduce/assets/quan-3.png";
 import Quan4 from "@/components/Introduce/assets/quan-4.png";
 import Quan5 from "@/components/Introduce/assets/quan-5.png";
 import Quan6 from "@/components/Introduce/assets/quan-6.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OnIcon from "@/components/Introduce/assets/on-icon.svg";
 import Info from "@/components/Introduce/Info";
 import Light from "@/components/Introduce/assets/light.png";
@@ -25,6 +25,7 @@ import TitleOnIcon from "./assets/Title-On.png";
 import TitleOffIcon from "./assets/Title-Off.png";
 import TitleOnLIcon from "./assets/Title-Off-L.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import LeftIcon from "./assets/left.svg";
 
 const OnButton = ({
     wMode,
@@ -33,7 +34,15 @@ const OnButton = ({
     wMode: boolean;
     onClick?: () => void;
 }) => {
+    const [isClicked, setIsClicked] = useState(false);
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
+    useEffect(() => {
+        const localClicked = localStorage.getItem("isClicked");
+        if (localClicked) {
+            setIsClicked(true);
+        }
+    }, []);
 
     return (
         <Flex
@@ -44,62 +53,101 @@ const OnButton = ({
             align={"center"}
         >
             <Box
-                onClick={onClick}
                 sx={{
-                    width: isPc ? "124px" : "80px",
-                    height: isPc ? "48px" : "32px",
-                    border: "2px solid",
-                    borderImage: !wMode
-                        ? "#fff 1"
-                        : "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
-                    padding: isPc ? "4px" : "6px",
-                    cursor: "pointer",
-                    overflow: "hidden",
+                    position: "relative",
                 }}
             >
-                <Flex
-                    sx={{
-                        width: isPc ? "160px" : "120px",
-                        position: "relative",
-                        left: !wMode ? "0" : isPc ? "-48px" : "-24px",
-                        transition: "all 0.5s",
+                <Box
+                    onClick={() => {
+                        localStorage.setItem("isClicked", "true");
+                        setIsClicked(true);
+                        onClick();
                     }}
-                    align={"center"}
+                    sx={{
+                        width: isPc ? "124px" : "80px",
+                        height: isPc ? "48px" : "32px",
+                        border: "2px solid",
+                        borderImage: !wMode
+                            ? "#fff 1"
+                            : "linear-gradient(to right, #FF0000, #FF6B00, #FFE500, #61FF00, #00FFF0, #0057FF, #AD00FF) 1",
+                        padding: isPc ? "4px" : "6px",
+                        cursor: "pointer",
+                        overflow: "hidden",
+                    }}
                 >
-                    <Image
-                        src={OnIcon}
+                    <Flex
                         sx={{
-                            width: isPc ? "36px" : "18px",
-                            height: isPc ? "36px" : "18px",
+                            width: isPc ? "160px" : "120px",
+                            position: "relative",
+                            left: !wMode ? "0" : isPc ? "-48px" : "-24px",
+                            transition: "all 0.5s",
                         }}
-                    ></Image>
-                    {isPc ? (
-                        <ShiftAIcon
-                            style={{
-                                width: "60px",
-                                margin: "0 16px",
-                                height: "23px",
-                            }}
-                        ></ShiftAIcon>
-                    ) : (
+                        align={"center"}
+                    >
                         <Image
-                            src={ClickIcon}
+                            src={OnIcon}
                             sx={{
-                                width: "38px",
-                                margin: "0 11px",
+                                width: isPc ? "36px" : "18px",
+                                height: isPc ? "36px" : "18px",
                             }}
                         ></Image>
-                    )}
-
-                    <Image
-                        src={OffIcon}
+                        {isPc ? (
+                            <ShiftAIcon
+                                style={{
+                                    width: "60px",
+                                    margin: "0 16px",
+                                    height: "23px",
+                                }}
+                            ></ShiftAIcon>
+                        ) : (
+                            <Image
+                                src={ClickIcon}
+                                sx={{
+                                    width: "38px",
+                                    margin: "0 11px",
+                                }}
+                            ></Image>
+                        )}
+                        <Image
+                            src={OffIcon}
+                            sx={{
+                                width: isPc ? "36px" : "18px",
+                                height: isPc ? "36px" : "18px",
+                            }}
+                        ></Image>
+                    </Flex>
+                </Box>
+                {!isClicked && (
+                    <Flex
                         sx={{
-                            width: isPc ? "36px" : "18px",
-                            height: isPc ? "36px" : "18px",
+                            position: "absolute",
+                            top: "50%",
+                            right: "-60px",
+                            fontSize: "12px",
+                            color: "#FFF",
+                            animationDirection: "alternate",
                         }}
-                    ></Image>
-                </Flex>
-            </Box>{" "}
+                        animation={`${arrow} 1s linear infinite`}
+                        align={"center"}
+                    >
+                        <Image
+                            src={LeftIcon}
+                            sx={{
+                                width: "8px",
+                                marginRight: "4px",
+                            }}
+                        ></Image>
+                        <Text
+                            sx={{
+                                color: "#F2D861",
+                            }}
+                        >
+                            Click
+                        </Text>
+                    </Flex>
+                )}
+            </Box>
+
             {!wMode ? (
                 <Text
                     sx={{
@@ -198,6 +246,36 @@ const mquanList = [
         activeWidth: "360px",
     },
 ];
+
+const arrow = keyframes`
+    0% {
+        transform: translate(0%,-50%);
+    }
+
+    50% {
+        transform: translate(10%,-50%);
+    }
+    
+    100% {
+        transform: translate(20%,-50%);
+    }
+`;
+
+const playBt = keyframes`
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+
+`;
 
 const move = keyframes`
     0% {
@@ -412,7 +490,10 @@ const IntroduceContent = ({
                             fontSize: isPc ? "18px" : "12px",
                             fontWeight: 700,
                             marginTop: isPc ? "40px" : "20px",
+                            cursor: "pointer",
+                            zIndex: 10,
                         }}
+                        animation={`${playBt} 0.5s linear infinite`}
                     >
                         {isPc && (
                             <NextIcon
@@ -439,7 +520,7 @@ const IntroduceContent = ({
                             onModeChange("rules");
                         }}
                         sx={{
-                            width: isPc ? "250px" : "130px",
+                            width: isPc ? "270px" : "130px",
                             height: isPc ? "60px" : "25px",
                         }}
                     >
@@ -459,7 +540,7 @@ const IntroduceContent = ({
                             onModeChange("schedule");
                         }}
                         sx={{
-                            width: isPc ? "250px" : "130px",
+                            width: isPc ? "270px" : "130px",
                             height: isPc ? "60px" : "25px",
                         }}
                     >
