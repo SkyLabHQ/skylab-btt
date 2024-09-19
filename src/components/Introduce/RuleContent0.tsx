@@ -54,17 +54,11 @@ const RuleContent0 = ({
                     </span>{" "}
                     is a massive multiplayer, on-chain social game.
                 </Text>
-                <Text
-                    sx={{
-                        marginTop: isPc ? "20px" : "10px",
-                    }}
-                >
-                    Here’s what you need to know:
-                </Text>
+
                 <CircleContent
                     text={
                         <Text>
-                            <span>Teams:</span> There are{" "}
+                            Teams:{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -72,9 +66,9 @@ const RuleContent0 = ({
                                     fontSize: "14px",
                                 }}
                             >
-                                8 Teams
+                                8 teams
                             </span>{" "}
-                            (represented by{" "}
+                            are represented by{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -83,8 +77,8 @@ const RuleContent0 = ({
                                 }}
                             >
                                 8 colors
-                            </span>{" "}
-                            ) competing with each other. They each have a{" "}
+                            </span>
+                            . They each have a{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -94,35 +88,15 @@ const RuleContent0 = ({
                             >
                                 team leader
                             </span>{" "}
-                            , selected by the creators of influence.game.{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                {" "}
-                                You win as a team.
-                            </span>{" "}
+                            , selected by the creators of influence.game.
                         </Text>
                     }
                 ></CircleContent>
                 <CircleContent
                     text={
                         <Text>
-                            <span> Planes:</span> Planes all start off at{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                Level 1: paper planes.
-                            </span>{" "}
-                            Each paper plane needs to choose a team when it's
-                            minted. Once selected,{" "}
+                            Planes: Each newly minted paper plane needs to
+                            choose a team. Once selected,{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -140,9 +114,10 @@ const RuleContent0 = ({
                     text={
                         <Box>
                             <Text>
-                                <span>How to Win:</span> The last plane that's
-                                minted or upgraded becomes the level's Champion
-                                and resets the level's timer.{" "}
+                                {" "}
+                                How to Win: The last plane that's minted or
+                                upgraded becomes the level's Champion and resets
+                                the level's timer.{" "}
                                 <span
                                     style={{
                                         fontWeight: 700,
@@ -151,7 +126,7 @@ const RuleContent0 = ({
                                     }}
                                 >
                                     If any level timer hits zero
-                                </span>
+                                </span>{" "}
                                 , the Champion of that level{" "}
                                 <span
                                     style={{
@@ -164,15 +139,17 @@ const RuleContent0 = ({
                                 </span>{" "}
                                 , which consists of all the paper and paper
                                 plane minting fees*.
-                            </Text>{" "}
+                            </Text>
                             <Text
                                 sx={{
                                     color: "#999",
+                                    fontFamily: "Orbitron",
+                                    fontSize: "12px",
+                                    fontWeight: 700,
                                     marginTop: "10px",
                                 }}
                             >
-                                {" "}
-                                * subtracting a 10% fee for the creators{" "}
+                                * subtracting a 10% fee for the creators
                             </Text>
                         </Box>
                     }
