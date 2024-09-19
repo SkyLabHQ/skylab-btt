@@ -24,7 +24,7 @@ const Introduce = () => {
 
     const [wMode, setWMode] = useState(false);
 
-    const [mode, setMode] = useState("play");
+    const [mode, setMode] = useState("");
 
     const handleChangeWMode = () => {
         if (wMode) {
@@ -58,12 +58,13 @@ const Introduce = () => {
     };
 
     useEffect(() => {
+        console.log(mode, "mode", init, "init");
         if (mode || !init) {
             return;
         }
         const keyboardListener = (event: KeyboardEvent) => {
             const key = event.key;
-            event.preventDefault();
+            console.log(key, "key");
             if (event.shiftKey && key === "Enter") {
                 handleChangeMode("schedule");
             } else if (event.shiftKey && key === "?") {
@@ -71,6 +72,7 @@ const Introduce = () => {
             } else if (key === "Enter") {
                 handleChangeMode("rules");
             } else if (key === " ") {
+                event.preventDefault();
                 handleChangeMode("play");
             }
         };
