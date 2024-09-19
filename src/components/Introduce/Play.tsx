@@ -147,6 +147,7 @@ const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                 <RuleWrap
                     sx={{
                         marginTop: "36px",
+                        fontSize: "14px !important",
                     }}
                 >
                     <CircleContent
@@ -164,7 +165,7 @@ const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                         style={{
                                             fontWeight: 700,
                                             color: "#F2D861",
-                                            fontSize: "14px",
+                                            fontSize: "16px",
                                         }}
                                     >
                                         {" "}
@@ -210,7 +211,7 @@ const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                         style={{
                                             fontWeight: 700,
                                             color: "#F2D861",
-                                            fontSize: "14px",
+                                            fontSize: "16px",
                                         }}
                                     >
                                         PvP Combat:{" "}
@@ -257,7 +258,7 @@ const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                         style={{
                                             fontWeight: 700,
                                             color: "#F2D861",
-                                            fontSize: "14px",
+                                            fontSize: "16px",
                                         }}
                                     >
                                         {" "}
@@ -308,7 +309,7 @@ const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                         style={{
                                             fontWeight: 700,
                                             color: "#F2D861",
-                                            fontSize: "14px",
+                                            fontSize: "16px",
                                         }}
                                     >
                                         {" "}
@@ -359,7 +360,7 @@ const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
                                         style={{
                                             fontWeight: 700,
                                             color: "#F2D861",
-                                            fontSize: "14px",
+                                            fontSize: "16px",
                                         }}
                                     >
                                         {" "}
