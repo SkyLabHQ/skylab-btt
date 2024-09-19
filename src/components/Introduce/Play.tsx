@@ -5,10 +5,10 @@ import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import PlayIcon from "./assets/play-icon.svg";
 import RuleWrap, { CircleContent } from "./RuleWrap";
 import DownIcon from "./assets/down-icon.svg";
-import Play1Img from "./assets/play1.svg";
+import Play1Img from "./assets/play1.png";
 import Play2Img from "./assets/play2.svg";
-import Play3Img from "./assets/play3.svg";
-import Play4Img from "./assets/play4.svg";
+import Play3Img from "./assets/play3.png";
+import Play4Img from "./assets/play4.png";
 import Play5Img from "./assets/play5.svg";
 
 const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {

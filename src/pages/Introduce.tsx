@@ -87,7 +87,8 @@ const Introduce = () => {
                 fontFamily: "Orbitron",
                 position: "relative",
                 background: "#1b1b1b",
-                minHeight: "100vh",
+                overflow: "hidden",
+                // minHeight: "100vh",
             }}
         >
             <video

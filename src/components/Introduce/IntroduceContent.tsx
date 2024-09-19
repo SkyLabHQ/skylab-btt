@@ -331,9 +331,6 @@ const IntroduceContent = ({
                     width: "100%",
                     position: "relative",
                     overflowX: "hidden",
-                    "& *": {
-                        transition: "all 0.5s",
-                    },
                 }}
             >
                 <Box
@@ -349,10 +346,12 @@ const IntroduceContent = ({
                             width: "100%",
                             aspectRatio: 1,
                             zIndex: 1,
-                            cursor: "pointer",
+                            cursor: wMode ? "default" : "pointer",
                             position: "absolute",
                         }}
                         onClick={() => {
+                            if (wMode) return;
+
                             if (addCount >= quanList.length) {
                                 handleDownTo0(addCount);
                                 return;
@@ -363,6 +362,8 @@ const IntroduceContent = ({
                         <Image
                             src={CircleGif}
                             sx={{
+                                transition: "all 0.5s",
+
                                 width: "100%",
                                 cursor: "pointer",
                                 // display: wMode ? "none" : "block",
@@ -421,6 +422,7 @@ const IntroduceContent = ({
                                     top: "50%",
                                     left: "50%",
                                     transform: "translate(-50%, -50%)",
+                                    transition: "all 0.5s",
 
                                     width:
                                         addCount > index
