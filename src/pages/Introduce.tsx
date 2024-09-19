@@ -14,10 +14,12 @@ import CVideo from "@/components/Introduce/assets/c.mp4";
 import WVideo from "@/components/Introduce/assets/w.mp4";
 import Lock from "@/components/Introduce/Lock";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import BgMp3 from "@/components/Introduce/assets/bg.mp3";
+const bgAudio = new Audio(BgMp3);
 
 const Introduce = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const [init, setInit] = useState(true);
+    const [init, setInit] = useState(false);
     const cRef = createRef<HTMLVideoElement>();
     const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -80,6 +82,12 @@ const Introduce = () => {
             document.removeEventListener("keydown", keyboardListener);
         };
     }, [wMode, mode, init]);
+
+    useEffect(() => {
+        if (init) {
+            bgAudio.play();
+        }
+    }, [init]);
 
     return (
         <Box
