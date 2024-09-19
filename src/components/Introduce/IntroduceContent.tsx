@@ -10,11 +10,15 @@ import { useState } from "react";
 import OnIcon from "@/components/Introduce/assets/on-icon.svg";
 import Info from "@/components/Introduce/Info";
 import Light from "@/components/Introduce/assets/light.png";
+import LightC from "@/components/Introduce/assets/light-c.svg";
+
 import { BlackButton } from "./Button";
 import { ReactComponent as ShiftAIcon } from "./assets/shifta.svg";
 import { ReactComponent as ShiftEIcon } from "./assets/shifte.svg";
 import { ReactComponent as ShiftEnIcon } from "./assets/shiften.svg";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
+
+import ClickIcon from "./assets/click.png";
 
 import OffIcon from "@/components/Introduce/assets/off-icon.svg";
 import TitleOnIcon from "./assets/Title-On.png";
@@ -69,13 +73,24 @@ const OnButton = ({
                             height: isPc ? "36px" : "18px",
                         }}
                     ></Image>
-                    <ShiftAIcon
-                        style={{
-                            width: isPc ? "60px" : "40px",
-                            margin: isPc ? "0 16px" : "0 8px",
-                            height: isPc ? "23px" : "18px",
-                        }}
-                    ></ShiftAIcon>
+                    {isPc ? (
+                        <ShiftAIcon
+                            style={{
+                                width: "60px",
+                                margin: "0 16px",
+                                height: "23px",
+                            }}
+                        ></ShiftAIcon>
+                    ) : (
+                        <Image
+                            src={ClickIcon}
+                            sx={{
+                                width: "38px",
+                                margin: "0 11px",
+                            }}
+                        ></Image>
+                    )}
+
                     <Image
                         src={OffIcon}
                         sx={{
@@ -121,66 +136,66 @@ const OnButton = ({
 const quanList = [
     {
         img: Quan1,
-        width: "30%",
-        activeWidth: "36%",
+        width: "450px",
+        activeWidth: "510px",
     },
     {
         img: Quan2,
-        width: "38%",
-        activeWidth: "44%",
+        width: "500px",
+        activeWidth: "610px",
     },
     {
         img: Quan3,
-        width: "46%",
-        activeWidth: "52%",
+        width: "660px",
+        activeWidth: "710px",
     },
     {
         img: Quan4,
-        width: "54%",
-        activeWidth: "60%",
+        width: "760px",
+        activeWidth: "810px",
     },
     {
         img: Quan5,
-        width: "62%",
-        activeWidth: "68%",
+        width: "860px",
+        activeWidth: "910px",
     },
     {
         img: Quan6,
-        width: "70%",
-        activeWidth: "76%",
+        width: "960px",
+        activeWidth: "1010px",
     },
 ];
 
 const mquanList = [
     {
         img: Quan1,
-        width: "52%",
-        activeWidth: "56%",
+        width: "170px",
+        activeWidth: "185px",
     },
     {
         img: Quan2,
-        width: "60%",
-        activeWidth: "65%",
+        width: "195px",
+        activeWidth: "220px",
     },
     {
         img: Quan3,
-        width: "69%",
-        activeWidth: "74%",
+        width: "230px",
+        activeWidth: "255px",
     },
     {
         img: Quan4,
-        width: "78%",
-        activeWidth: "83%",
+        width: "275px",
+        activeWidth: "290px",
     },
     {
         img: Quan5,
-        width: "87%",
-        activeWidth: "92%",
+        width: "300px",
+        activeWidth: "325px",
     },
     {
         img: Quan6,
-        width: "96%",
-        activeWidth: "101%",
+        width: "335px",
+        activeWidth: "360px",
     },
 ];
 
@@ -236,8 +251,8 @@ const IntroduceContent = ({
             <Box
                 sx={{
                     width: "100%",
-                    height: isPc ? "100vh" : "100vw",
                     position: "relative",
+                    overflowX: "hidden",
                     "& *": {
                         transition: "all 0.5s",
                     },
@@ -245,13 +260,79 @@ const IntroduceContent = ({
             >
                 <Box
                     sx={{
-                        display: wMode ? "none" : "block",
-                        width: "100%",
-                        height: isPc ? "100vh" : "100vw",
+                        width: isPc ? "400px" : "140px",
+                        height: isPc ? "400px" : "140px",
                         position: "relative",
-                        overflow: "hidden",
+                        margin: isPc ? "320px auto 0 " : "100px auto 0",
                     }}
                 >
+                    <Box
+                        sx={{
+                            width: "100%",
+                            aspectRatio: 1,
+                            zIndex: 1,
+                            cursor: "pointer",
+                            position: "absolute",
+                        }}
+                        onClick={() => {
+                            if (addCount >= quanList.length) {
+                                handleDownTo0(addCount);
+                                return;
+                            }
+                            setAddCount(addCount + 1);
+                        }}
+                    >
+                        <Image
+                            src={CircleGif}
+                            sx={{
+                                width: "100%",
+                                cursor: "pointer",
+                                // display: wMode ? "none" : "block",
+                                // opacity: wMode ? 0 : 1,
+                                opacity: wMode ? 0 : 1,
+                            }}
+                        ></Image>
+                        {wMode && (
+                            <Image
+                                src={TitleOffIcon}
+                                sx={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    width: "100%",
+                                }}
+                            ></Image>
+                        )}
+                        {!wMode && (
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    width: "100%",
+                                    zIndex: 11,
+                                    "&:hover ": {
+                                        "& img:nth-of-type(1)": {
+                                            display: "none",
+                                        },
+                                        "& img:nth-of-type(2)": {
+                                            display: "block",
+                                        },
+                                    },
+                                }}
+                            >
+                                <Image src={TitleOnIcon}></Image>
+                                <Image
+                                    src={TitleOnLIcon}
+                                    sx={{
+                                        display: "none",
+                                    }}
+                                ></Image>
+                            </Box>
+                        )}
+                    </Box>
                     {(isPc ? quanList : mquanList).map((item, index) => {
                         return (
                             <Image
@@ -262,7 +343,12 @@ const IntroduceContent = ({
                                     top: "50%",
                                     left: "50%",
                                     transform: "translate(-50%, -50%)",
+
                                     width:
+                                        addCount > index
+                                            ? item.activeWidth
+                                            : item.width,
+                                    maxWidth:
                                         addCount > index
                                             ? item.activeWidth
                                             : item.width,
@@ -275,102 +361,31 @@ const IntroduceContent = ({
                         );
                     })}
                 </Box>
-
-                <Box
-                    sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: isPc ? "26%" : "44%",
-                        aspectRatio: 1,
-                        zIndex: 1,
-                        cursor: "pointer",
-                    }}
-                    onClick={() => {
-                        if (addCount >= quanList.length) {
-                            handleDownTo0(addCount);
-                            return;
-                        }
-                        setAddCount(addCount + 1);
-                    }}
-                >
-                    <Image
-                        src={CircleGif}
-                        sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: "100%",
-                            cursor: "pointer",
-                            height: "100%",
-                            display: wMode ? "none" : "block",
-                        }}
-                    ></Image>
-                    {wMode && (
-                        <Image
-                            src={TitleOffIcon}
-                            sx={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                width: "100%",
-                            }}
-                        ></Image>
-                    )}
-                    {!wMode && (
-                        <Box
-                            sx={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                width: "100%",
-                                zIndex: 11,
-                                "&:hover ": {
-                                    "& img:nth-of-type(1)": {
-                                        display: "none",
-                                    },
-                                    "& img:nth-of-type(2)": {
-                                        display: "block",
-                                    },
-                                },
-                            }}
-                        >
-                            <Image src={TitleOnIcon}></Image>
-                            <Image
-                                src={TitleOnLIcon}
-                                sx={{
-                                    display: "none",
-                                }}
-                            ></Image>
-                        </Box>
-                    )}
-                </Box>
-
                 <Flex
-                    sx={{
-                        position: "absolute",
-                        top: isPc ? "50%" : "60%",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                    }}
                     flexDir={"column"}
                     align={"center"}
+                    sx={{
+                        marginTop: isPc ? "-120px" : "-70px",
+                    }}
                 >
                     <Image
                         src={Light}
                         sx={{
-                            width: "74%",
-                            marginTop: "1vw",
+                            width: isPc ? "400px" : "200px",
+                            opacity: wMode ? 0 : 1,
+                        }}
+                    ></Image>{" "}
+                    <Image
+                        src={LightC}
+                        sx={{
+                            marginTop: "-20px",
+                            width: isPc ? "100px" : "40px",
                             opacity: wMode ? 0 : 1,
                         }}
                     ></Image>
                     <Box
                         sx={{
-                            marginTop: "-1vw",
+                            marginTop: "20px",
                         }}
                     >
                         <OnButton
@@ -381,77 +396,86 @@ const IntroduceContent = ({
                             }}
                         ></OnButton>
                     </Box>
-                </Flex>
-            </Box>
-
-            <BlackButton
-                onClick={() => {
-                    onModeChange("play");
-                }}
-                sx={{
-                    width: isPc ? "250px" : "120px",
-                    height: isPc ? "60px" : "25px",
-                }}
-            >
-                {isPc && (
-                    <ShiftEnIcon
-                        style={{
-                            width: isPc ? "80px" : "40px",
-                            height: isPc ? "26px" : "13px",
-                            marginRight: "10px",
+                    <Flex
+                        justify={"center"}
+                        align={"center"}
+                        onClick={() => {
+                            onModeChange("play");
                         }}
-                    ></ShiftEnIcon>
-                )}
-                <Text>How to play</Text>
-            </BlackButton>
-            <Flex
-                sx={{
-                    fontSize: isPc ? "32px" : "16px",
-                    gap: isPc ? "100px" : "20px",
-                    marginTop: "3vw",
-                }}
-                justify={"center"}
-            >
-                <BlackButton
-                    onClick={() => {
-                        onModeChange("rules");
-                    }}
+                        sx={{
+                            width: isPc ? "250px" : "130px",
+                            height: isPc ? "60px" : "25px",
+                            background: "#FFF",
+                            boxShadow:
+                                "0px 0px 17px 0px rgba(255, 246, 166, 0.84)",
+                            color: "#1b1b1b",
+                            fontSize: isPc ? "18px" : "12px",
+                            fontWeight: 700,
+                            marginTop: isPc ? "40px" : "20px",
+                        }}
+                    >
+                        {isPc && (
+                            <NextIcon
+                                style={{
+                                    width: isPc ? "18px" : "14px",
+                                    marginRight: "20px",
+                                }}
+                            ></NextIcon>
+                        )}
+
+                        <Text>How to play</Text>
+                    </Flex>
+                </Flex>
+                <Flex
                     sx={{
-                        width: isPc ? "250px" : "120px",
-                        height: isPc ? "60px" : "25px",
+                        fontSize: isPc ? "32px" : "16px",
+                        gap: isPc ? "100px" : "20px",
+                        marginTop: isPc ? "57px" : "30px",
                     }}
+                    justify={"center"}
                 >
-                    {isPc && (
-                        <NextIcon
-                            style={{
-                                width: isPc ? "18px" : "14px",
-                                marginRight: "20px",
-                            }}
-                        ></NextIcon>
-                    )}
-                    <Text>Rules</Text>
-                </BlackButton>
-                <BlackButton
-                    onClick={() => {
-                        onModeChange("schedule");
-                    }}
-                    sx={{
-                        width: isPc ? "250px" : "120px",
-                        height: isPc ? "60px" : "25px",
-                    }}
-                >
-                    {isPc && (
-                        <ShiftEIcon
-                            style={{
-                                width: isPc ? "60px" : "45px",
-                                marginRight: isPc ? "20px" : "10px",
-                            }}
-                        ></ShiftEIcon>
-                    )}
-                    <Text>Schedule</Text>
-                </BlackButton>
-            </Flex>
-            <Info></Info>
+                    <BlackButton
+                        onClick={() => {
+                            onModeChange("rules");
+                        }}
+                        sx={{
+                            width: isPc ? "250px" : "130px",
+                            height: isPc ? "60px" : "25px",
+                        }}
+                    >
+                        {isPc && (
+                            <ShiftEnIcon
+                                style={{
+                                    width: isPc ? "80px" : "40px",
+                                    height: isPc ? "26px" : "13px",
+                                    marginRight: "10px",
+                                }}
+                            ></ShiftEnIcon>
+                        )}
+                        <Text>Detailed Rules</Text>
+                    </BlackButton>
+                    <BlackButton
+                        onClick={() => {
+                            onModeChange("schedule");
+                        }}
+                        sx={{
+                            width: isPc ? "250px" : "130px",
+                            height: isPc ? "60px" : "25px",
+                        }}
+                    >
+                        {isPc && (
+                            <ShiftEIcon
+                                style={{
+                                    width: isPc ? "60px" : "45px",
+                                    marginRight: isPc ? "20px" : "10px",
+                                }}
+                            ></ShiftEIcon>
+                        )}
+                        <Text>Schedule</Text>
+                    </BlackButton>
+                </Flex>
+                <Info></Info>
+            </Box>
         </Flex>
     );
 };

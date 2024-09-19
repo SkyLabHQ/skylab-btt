@@ -17,7 +17,7 @@ import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const Introduce = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const [init, setInit] = useState(false);
+    const [init, setInit] = useState(true);
     const cRef = createRef<HTMLVideoElement>();
     const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,7 +58,6 @@ const Introduce = () => {
     };
 
     useEffect(() => {
-        console.log(mode, "mode", init, "init");
         if (mode || !init) {
             return;
         }
