@@ -13,7 +13,9 @@ import Light from "@/components/Introduce/assets/light.png";
 import { BlackButton } from "./Button";
 import { ReactComponent as ShiftAIcon } from "./assets/shifta.svg";
 import { ReactComponent as ShiftEIcon } from "./assets/shifte.svg";
+import { ReactComponent as ShiftEnIcon } from "./assets/shiften.svg";
 import { ReactComponent as NextIcon } from "./assets/enter.svg";
+
 import OffIcon from "@/components/Introduce/assets/off-icon.svg";
 import TitleOnIcon from "./assets/Title-On.png";
 import TitleOffIcon from "./assets/Title-Off.png";
@@ -392,12 +394,13 @@ const IntroduceContent = ({
                 }}
             >
                 {isPc && (
-                    <NextIcon
+                    <ShiftEnIcon
                         style={{
-                            width: isPc ? "18px" : "14px",
-                            marginRight: "20px",
+                            width: isPc ? "80px" : "40px",
+                            height: isPc ? "26px" : "13px",
+                            marginRight: "10px",
                         }}
-                    ></NextIcon>
+                    ></ShiftEnIcon>
                 )}
                 <Text>How to play</Text>
             </BlackButton>
