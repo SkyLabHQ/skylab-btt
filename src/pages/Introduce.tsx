@@ -69,10 +69,10 @@ const Introduce = () => {
             } else if (event.shiftKey && key === "?") {
                 handleChangeWMode();
             } else if (key === "Enter") {
-                handleChangeMode("rules");
+                handleChangeMode("play");
             } else if (key === " ") {
                 event.preventDefault();
-                handleChangeMode("play");
+                handleChangeMode("rules");
             }
         };
         document.addEventListener("keydown", keyboardListener);
