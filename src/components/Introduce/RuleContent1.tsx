@@ -124,16 +124,8 @@ const RuleContent1 = ({
                         text={
                             <Text>
                                 <span>At Other Levels </span> : A plane’s{" "}
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        color: "#F2D861",
-                                        fontSize: "14px",
-                                    }}
-                                >
-                                    XP
-                                </span>{" "}
-                                determines its level. When it{" "}
+                                <span>XP</span> determines its level. When it
+                                gains{" "}
                                 <span
                                     style={{
                                         cursor: "pointer",
@@ -146,7 +138,7 @@ const RuleContent1 = ({
                                         onChangeActiveIndex(4);
                                     }}
                                 >
-                                    gains enough XP
+                                    enough XP
                                 </span>{" "}
                                 , it <span>upgrades to the next level</span> and
                                 becomes the <LastPlane></LastPlane> of that
@@ -162,13 +154,7 @@ const RuleContent1 = ({
                 >
                     You are the <LastPlane></LastPlane> until another player’s
                     plane upgrades to that level and{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
+                    <span>
                         steal the <LastPlane></LastPlane>
                     </span>{" "}
                     position . When this happens, the countdown timer for that

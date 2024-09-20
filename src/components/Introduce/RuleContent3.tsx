@@ -74,15 +74,7 @@ const RuleContent3 = ({
                                 }}
                             >
                                 <span>x </span>- Team leader's take rate:{" "}
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        fontSize: "14px",
-                                        color: "#F2D861",
-                                    }}
-                                >
-                                    0%~10%
-                                </span>
+                                <span>0%~10%</span>
                             </Text>
                         }
                     ></CircleContent>
@@ -106,16 +98,7 @@ const RuleContent3 = ({
                                     {" "}
                                     <LastPlane text={"Champion's"}></LastPlane>
                                 </span>{" "}
-                                take rate:{" "}
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        fontSize: "14px",
-                                        color: "#F2D861",
-                                    }}
-                                >
-                                    10%~20%
-                                </span>
+                                take rate: <span>10%~20%</span>
                             </Text>
                         }
                     ></CircleContent>
@@ -128,28 +111,9 @@ const RuleContent3 = ({
                                 }}
                             >
                                 <span>z </span>- Goes directly to{" "}
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        color: "#F2D861",
-                                        fontSize: "14px",
-                                    }}
-                                >
-                                    {" "}
-                                    existing plane holders
-                                </span>{" "}
-                                or{" "}
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        color: "#F2D861",
-                                        fontSize: "14px",
-                                    }}
-                                >
-                                    {" "}
-                                    new users' inviter
-                                </span>{" "}
-                                as others join the team (starting at 0.005 eth)
+                                <span> existing plane holders</span> or{" "}
+                                <span> new users' inviter</span> as others join
+                                the team (starting at 0.005 eth)
                             </Text>
                         }
                     ></CircleContent>
@@ -158,6 +122,9 @@ const RuleContent3 = ({
                 <Text
                     sx={{
                         marginTop: "20px",
+                        fontWeight: 700,
+                        fontSize: "14px",
+                        color: "#F2D861",
                     }}
                 >
                     Winning the prize money:
@@ -165,15 +132,7 @@ const RuleContent3 = ({
                 <Text sx={{}}>
                     After subtracting x and y percent, the rest of the pot is
                     distributed within the{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                        }}
-                    >
-                        winning team pro-rata based on XP holdings.
-                    </span>
+                    <span>winning team pro-rata based on XP holdings.</span>
                 </Text>
             </RuleWrap>
             <BottomButton

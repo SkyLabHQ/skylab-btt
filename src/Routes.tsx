@@ -21,8 +21,8 @@ import Introduce from "./pages/Introduce";
 const AppRoutes = (): ReactElement => {
     return (
         <Routes>
+            <Route index path="/" element={<Introduce />}></Route>
             <Route path="/" element={<App />}>
-                <Route index path="/" element={<Introduce />}></Route>
                 <Route index path="/btt" element={<TacToeMode />}></Route>
                 <Route path="/point" element={<Point />}></Route>
                 <Route path="/btt/game" element={<TacToe />}></Route>

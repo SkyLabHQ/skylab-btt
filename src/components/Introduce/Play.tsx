@@ -13,7 +13,7 @@ import Play5Img from "./assets/play5.svg";
 
 const Play = ({ onModeChange }: { onModeChange: (mode: string) => void }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const [open1, setOpen1] = useState(false);
+    const [open1, setOpen1] = useState(true);
     const [open2, setOpen2] = useState(false);
     const [open3, setOpen3] = useState(false);
     const [open4, setOpen4] = useState(false);

@@ -75,19 +75,7 @@ const RuleContent2 = ({
                         XP
                     </span>{" "}
                     as the stakes.{" "}
-                    <span
-                        style={{
-                            fontWeight: 700,
-                            color: "#F2D861",
-                            fontSize: "14px",
-                            textDecoration: "underline",
-                        }}
-                        onClick={() => {
-                            window.open(TG_URL);
-                        }}
-                    >
-                        Each match lasts around 3 minutes.
-                    </span>
+                    <span>Each match lasts around 3 minutes.</span>
                 </Text>
                 <CircleContent
                     text={

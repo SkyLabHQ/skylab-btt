@@ -322,6 +322,7 @@ const IntroduceContent = ({
         <Flex
             sx={{
                 width: "100%",
+                minHeight: "100vh",
             }}
             flexDir={"column"}
             align={"center"}
@@ -459,7 +460,7 @@ const IntroduceContent = ({
                         src={LightC}
                         sx={{
                             marginTop: "-20px",
-                            width: isPc ? "100px" : "40px",
+                            width: isPc ? "80px" : "40px",
                             opacity: wMode ? 0 : 1,
                         }}
                     ></Image>

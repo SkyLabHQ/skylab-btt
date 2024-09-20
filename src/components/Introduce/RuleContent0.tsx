@@ -58,7 +58,6 @@ const RuleContent0 = ({
                 <CircleContent
                     text={
                         <Text>
-                            Teams:{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -66,37 +65,19 @@ const RuleContent0 = ({
                                     fontSize: "14px",
                                 }}
                             >
-                                8 teams
-                            </span>{" "}
-                            are represented by{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                8 colors
+                                {" "}
+                                Teams:{" "}
                             </span>
-                            . They each have a{" "}
-                            <span
-                                style={{
-                                    fontWeight: 700,
-                                    color: "#F2D861",
-                                    fontSize: "14px",
-                                }}
-                            >
-                                team leader
-                            </span>{" "}
-                            , selected by the creators of influence.game.
+                            <span>8 teams</span> are represented by{" "}
+                            <span>8 colors</span>. They each have a{" "}
+                            <span>team leader</span> , selected by the creators
+                            of influence.game.
                         </Text>
                     }
                 ></CircleContent>
                 <CircleContent
                     text={
                         <Text>
-                            Planes: Each newly minted paper plane needs to
-                            choose a team. Once selected,{" "}
                             <span
                                 style={{
                                     fontWeight: 700,
@@ -104,8 +85,12 @@ const RuleContent0 = ({
                                     fontSize: "14px",
                                 }}
                             >
-                                team membership can't be changed.
-                            </span>
+                                {" "}
+                                Planes:
+                            </span>{" "}
+                            Each newly minted paper plane needs to choose a
+                            team. Once selected, team membership can't be
+                            changed.
                         </Text>
                     }
                 ></CircleContent>
@@ -115,9 +100,6 @@ const RuleContent0 = ({
                         <Box>
                             <Text>
                                 {" "}
-                                How to Win: The last plane that's minted or
-                                upgraded becomes the level's Champion and resets
-                                the level's timer.{" "}
                                 <span
                                     style={{
                                         fontWeight: 700,
@@ -125,16 +107,13 @@ const RuleContent0 = ({
                                         fontSize: "14px",
                                     }}
                                 >
-                                    If any level timer hits zero
+                                    How to Win:
                                 </span>{" "}
+                                The last plane that's minted or upgraded becomes
+                                the level's Champion and resets the level's
+                                timer. <span>If any level timer hits zero</span>{" "}
                                 , the Champion of that level{" "}
-                                <span
-                                    style={{
-                                        fontWeight: 700,
-                                        color: "#F2D861",
-                                        fontSize: "14px",
-                                    }}
-                                >
+                                <span>
                                     secures all prize money for their team
                                 </span>{" "}
                                 , which consists of all the paper and paper
