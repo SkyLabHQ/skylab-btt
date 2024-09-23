@@ -79,37 +79,22 @@ const ResultUserCard = ({
 };
 
 export const ResultCard = ({
+    showResult = true,
     win,
     userInfo,
 }: {
+    showResult?: boolean;
     win?: boolean;
     userInfo: TournamentGameInfo;
 }) => {
-    const UserMarkIcon = useBidIcon();
-
-    const mark = useMemo(() => {
-        if (win) {
-            if (userInfo.mark === UserMarkType.Circle) {
-                return UserMarkIcon.YellowCircle;
-            } else if (userInfo.mark === UserMarkType.BotX) {
-                return UserMarkIcon.YellowBotX;
-            } else {
-                return UserMarkIcon.YellowCross;
-            }
-        } else {
-            if (userInfo.mark === UserMarkType.Circle) {
-                return UserMarkIcon.Circle;
-            } else if (userInfo.mark === UserMarkType.BotX) {
-                return UserMarkIcon.BotX;
-            } else {
-                return UserMarkIcon.Cross;
-            }
-        }
-    }, [win, userInfo]);
-
     return (
         <Flex sx={{}} flexDir={"column"}>
-            <Flex align={"center"}>
+            <Flex
+                align={"center"}
+                sx={{
+                    opacity: showResult ? 1 : 0,
+                }}
+            >
                 <Box
                     sx={{
                         width: "105px",
@@ -125,13 +110,6 @@ export const ResultCard = ({
                 >
                     {win ? "Win" : "Lose"}
                 </Box>
-                <Image
-                    sx={{
-                        width: "46px",
-                        height: "46px",
-                    }}
-                    src={mark}
-                ></Image>
             </Flex>
 
             <Flex
@@ -165,45 +143,22 @@ export const ResultCard = ({
 };
 
 export const OpResultCard = ({
+    showResult = true,
     win,
     userInfo,
 }: {
+    showResult?: boolean;
     win?: boolean;
     userInfo: TournamentGameInfo;
 }) => {
-    const UserMarkIcon = useBidIcon();
-
-    const mark = useMemo(() => {
-        if (win) {
-            if (userInfo.mark === UserMarkType.Circle) {
-                return UserMarkIcon.YellowCircle;
-            } else if (userInfo.mark === UserMarkType.BotX) {
-                return UserMarkIcon.YellowBotX;
-            } else {
-                return UserMarkIcon.YellowCross;
-            }
-        } else {
-            if (userInfo.mark === UserMarkType.Circle) {
-                return UserMarkIcon.Circle;
-            } else if (userInfo.mark === UserMarkType.BotX) {
-                return UserMarkIcon.BotX;
-            } else {
-                return UserMarkIcon.Cross;
-            }
-        }
-    }, [win, userInfo]);
-
     return (
         <Flex sx={{}} flexDir={"column"} align={"flex-end"}>
-            <Flex align={"center"}>
-                <Image
-                    sx={{
-                        width: "46px",
-                        height: "46px",
-                        marginRight: "16px",
-                    }}
-                    src={mark}
-                ></Image>
+            <Flex
+                align={"center"}
+                sx={{
+                    opacity: showResult ? 1 : 0,
+                }}
+            >
                 <Box
                     sx={{
                         width: "105px",

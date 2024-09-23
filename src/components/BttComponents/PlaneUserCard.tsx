@@ -350,9 +350,92 @@ export const MyUserCard = ({
     );
 };
 
+export const MyBalance = ({
+    win,
+    balance,
+    mark,
+}: {
+    win?: boolean;
+    balance: number;
+    mark: UserMarkType;
+}) => {
+    const MarkIcon = useBidIcon();
+
+    return (
+        <Flex align={"center"}>
+            <Image src={GoldIcon}></Image>
+            <Text
+                sx={{
+                    fontFamily: "Quantico",
+                    fontSize: "40px",
+                    marginRight: "10px",
+                }}
+            >
+                {balance}
+            </Text>
+            <Image
+                width={"24px"}
+                height={"24px"}
+                src={
+                    mark === UserMarkType.Circle
+                        ? win
+                            ? MarkIcon.YellowCircle
+                            : MarkIcon.Circle
+                        : win
+                        ? MarkIcon.YellowCross
+                        : MarkIcon.Cross
+                }
+            ></Image>
+        </Flex>
+    );
+};
+
+export const OpBalance = ({
+    win,
+    balance,
+    mark,
+}: {
+    win?: boolean;
+    balance: number;
+    mark: UserMarkType;
+}) => {
+    const MarkIcon = useBidIcon();
+
+    return (
+        <Flex align={"center"}>
+            <Image
+                width={"24px"}
+                height={"24px"}
+                src={
+                    mark === UserMarkType.Circle
+                        ? win
+                            ? MarkIcon.YellowCircle
+                            : MarkIcon.Circle
+                        : win
+                        ? MarkIcon.YellowCross
+                        : MarkIcon.Cross
+                }
+            ></Image>
+            <Image
+                src={GoldIcon}
+                sx={{
+                    marginLeft: "10px",
+                }}
+            ></Image>
+            <Text
+                sx={{
+                    fontFamily: "Quantico",
+                    fontSize: "40px",
+                }}
+            >
+                {balance}
+            </Text>
+        </Flex>
+    );
+};
+
 export const OpUserCard = ({ userGameInfo }: UserCardProps) => {
     const MarkIcon = useBidIcon();
-    const { onCopy } = useClipboard(userGameInfo.address ?? "");
 
     return (
         <Box

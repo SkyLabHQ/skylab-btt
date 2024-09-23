@@ -9,6 +9,7 @@ import { useUserInfo } from "@/contexts/UserInfo";
 import Click1Wav from "@/assets/click1.wav";
 import PilotBorder from "@/assets/pilot-border.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
+import Avatar from "../Avatar";
 
 const audio = new Audio(Click1Wav);
 
@@ -33,6 +34,7 @@ export const Toolbar = () => {
                     cursor: "pointer",
                 }}
             >
+                {" "}
                 {address ? (
                     isPc ? (
                         <Flex
@@ -47,41 +49,23 @@ export const Toolbar = () => {
                             justify={"flex-end"}
                             align={"center"}
                         >
+                            <Avatar img={tgInfo.photoUrl}></Avatar>
                             <Flex
-                                sx={{
-                                    background: `url(${PilotBorder}) ,url(${tgInfo.photoUrl})`,
-                                    backgroundColor: "rgb(61,61,61)",
-                                    backgroundSize: "cover, 42px 42px",
-                                    backgroundRepeat: "no-repeat",
-                                    backgroundPosition: "center, center",
-                                    borderRadius: "50%",
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "0px",
-                                    transform: "translate(0%, -50%)",
-                                    zIndex: 99,
-                                    width: "52px",
-                                    height: "52px",
-                                }}
-                                justify={"center"}
                                 align={"center"}
-                            ></Flex>
-                            <Box
+                                justify={"center"}
                                 sx={{
-                                    width: "184px",
-                                    height: "48px",
-                                    border: "1px solid #f2d861",
+                                    width: "164px",
+                                    height: "44px",
+                                    border: "1px solid #868686",
                                     borderLeft: "none",
                                     position: "relative",
-                                    background: "rgb(61,61,61)",
-                                    borderEndRadius: "24px",
+                                    background: "#000",
                                     fontFamily: "Quantico",
-                                    paddingLeft: "50px",
-                                    lineHeight: "48px",
+                                    fontWeight: "bold",
                                 }}
                             >
                                 {shortenAddress(address, 5, 4)}
-                            </Box>
+                            </Flex>
                         </Flex>
                     ) : (
                         <Flex

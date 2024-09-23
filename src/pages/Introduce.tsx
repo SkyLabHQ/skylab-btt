@@ -19,7 +19,7 @@ const bgAudio = new Audio(BgMp3);
 
 const Introduce = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const [init, setInit] = useState(true);
+    const [init, setInit] = useState(false);
     const cRef = createRef<HTMLVideoElement>();
     const wRef = createRef<HTMLVideoElement>();
     const { isOpen, onOpen, onClose } = useDisclosure();

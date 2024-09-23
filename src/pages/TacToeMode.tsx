@@ -21,10 +21,12 @@ import { usePublicClient } from "wagmi";
 import { handleError } from "@/utils/error";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { useUserInfo } from "@/contexts/UserInfo";
+import { usePrivy } from "@privy-io/react-auth";
 
 const gameAudio = new Audio(GameMp3);
 
 const TacToeMode = () => {
+    const { user, authenticated, ready } = usePrivy();
     const publicClient = usePublicClient();
     const { address } = useUserInfo();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)", {});

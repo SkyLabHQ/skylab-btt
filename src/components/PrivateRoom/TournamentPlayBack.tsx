@@ -1,10 +1,13 @@
 import { Box, Flex } from "@chakra-ui/react";
 import Board from "../BttComponents/Board";
 import { MUserProfileResult } from "./UserProfile";
-import { BoardItem } from "@/skyConstants/bttGameTypes";
+import { BoardItem, getPvpWinState } from "@/skyConstants/bttGameTypes";
 import RoundInfo from "../BttComponents/RoundInfo";
 import MBalance from "../BttComponents/MBalance";
 import { TournamentGameInfo } from "@/pages/TacToe";
+import { OpResultCard, ResultCard } from "../BttComponents/ResultUserCard";
+import { MyBalance, OpBalance } from "../BttComponents/PlaneUserCard";
+import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 
 const TournamentPlayBack = ({
     myBalance,
@@ -23,6 +26,8 @@ const TournamentPlayBack = ({
     opGameInfo: TournamentGameInfo;
     showList: BoardItem[];
 }) => {
+    const isMyWin = getPvpWinState(myGameInfo.gameState);
+    const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     return (
         <Box
             id="share-content"
@@ -42,48 +47,84 @@ const TournamentPlayBack = ({
                     marginTop: "20px",
                 }}
             >
-                <Flex justify={"space-between"}>
-                    <Box>
-                        <Box
-                            sx={{
-                                paddingLeft: "12px",
-                            }}
-                        >
-                            <MUserProfileResult
-                                address={""}
-                                position="left"
-                            ></MUserProfileResult>
-                        </Box>
-
-                        <MBalance
-                            balance={myBalance}
-                            mark={myGameInfo.mark}
-                        ></MBalance>
-                    </Box>
-
+                {isPc ? (
                     <Flex
-                        flexDir={"column"}
-                        align={"flex"}
-                        alignItems={"flex-end"}
+                        justify={"space-between"}
+                        sx={{
+                            padding: "0 20px",
+                        }}
                     >
-                        <Box
-                            sx={{
-                                paddingRight: "12px",
-                            }}
-                        >
-                            <MUserProfileResult
-                                address={""}
-                                position="right"
-                            ></MUserProfileResult>
+                        <Box>
+                            <ResultCard
+                                showResult={currentRound === allRound}
+                                win={isMyWin}
+                                userInfo={myGameInfo}
+                            ></ResultCard>
+                            <MyBalance
+                                win={isMyWin && currentRound === allRound}
+                                balance={myBalance}
+                                mark={myGameInfo.mark}
+                            ></MyBalance>
                         </Box>
 
-                        <MBalance
-                            balance={opBalance}
-                            status="right"
-                            mark={opGameInfo.mark}
-                        ></MBalance>
+                        <Flex flexDir={"column"} align={"flex-end"}>
+                            <OpResultCard
+                                showResult={currentRound === allRound}
+                                win={!isMyWin && currentRound === allRound}
+                                userInfo={opGameInfo}
+                            ></OpResultCard>
+                            <OpBalance
+                                win={!isMyWin && currentRound === allRound}
+                                balance={opBalance}
+                                mark={opGameInfo.mark}
+                            ></OpBalance>
+                        </Flex>
                     </Flex>
-                </Flex>
+                ) : (
+                    <Flex justify={"space-between"}>
+                        <Box>
+                            <Box
+                                sx={{
+                                    paddingLeft: "12px",
+                                }}
+                            >
+                                <MUserProfileResult
+                                    address={""}
+                                    position="left"
+                                ></MUserProfileResult>
+                            </Box>
+
+                            <MBalance
+                                balance={myBalance}
+                                mark={myGameInfo.mark}
+                            ></MBalance>
+                        </Box>
+
+                        <Flex
+                            flexDir={"column"}
+                            align={"flex"}
+                            alignItems={"flex-end"}
+                        >
+                            <Box
+                                sx={{
+                                    paddingRight: "12px",
+                                }}
+                            >
+                                <MUserProfileResult
+                                    address={""}
+                                    position="right"
+                                ></MUserProfileResult>
+                            </Box>
+
+                            <MBalance
+                                balance={opBalance}
+                                status="right"
+                                mark={opGameInfo.mark}
+                            ></MBalance>
+                        </Flex>
+                    </Flex>
+                )}
+
                 <Flex
                     align={"center"}
                     flexDir={"column"}

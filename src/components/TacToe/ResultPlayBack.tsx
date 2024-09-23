@@ -2,7 +2,6 @@ import { useGameContext } from "@/pages/TacToe";
 import { Box, Flex } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import {
-    BoardItem,
     Game2Status,
     UserMarkType,
     getPvpWinState,

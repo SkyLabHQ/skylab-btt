@@ -14,6 +14,7 @@ import { useGameContext } from "@/pages/TacToe";
 import { OpResultCard, ResultCard } from "../BttComponents/ResultUserCard";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { shortenAddress } from "@/utils";
+import { MyBalance, OpBalance } from "../BttComponents/PlaneUserCard";
 
 const GameOver = ({ gameState }: { gameState: Game2Status }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
@@ -77,6 +78,11 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
                 }}
             >
                 <ResultCard win={isMyWin} userInfo={myGameInfo}></ResultCard>
+                <MyBalance
+                    win={isMyWin}
+                    balance={myGameInfo.balance}
+                    mark={myGameInfo.mark}
+                ></MyBalance>
             </Box>
             <Box
                 sx={{
@@ -94,16 +100,23 @@ const GameOver = ({ gameState }: { gameState: Game2Status }) => {
                     Tap anywhere to continue
                 </Text>
             </Box>
-            <Box
+            <Flex
                 sx={{
                     width: "300px",
                 }}
+                flexDir={"column"}
+                align={"flex-end"}
             >
                 <OpResultCard
                     win={!isMyWin}
                     userInfo={opGameInfo}
                 ></OpResultCard>
-            </Box>
+                <OpBalance
+                    win={!isMyWin}
+                    balance={opGameInfo.balance}
+                    mark={opGameInfo.mark}
+                ></OpBalance>
+            </Flex>
         </Flex>
     ) : (
         <Box

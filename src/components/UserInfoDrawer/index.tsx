@@ -30,6 +30,7 @@ import ExportIcon from "./assets/export-icon.svg";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { updateUserInfo } from "@/api/tournament";
 import { avatarImg } from "@/utils/avatars";
+import Avatar from "../Avatar";
 
 const UserInfo = () => {
     const { tgInfo, address, setTgInfo } = useUserInfo();
@@ -448,26 +449,14 @@ const UserInfoDrawer = ({
                                 }}
                             ></Image>
                         </Flex>
-                        <Flex
+                        <Avatar
                             sx={{
                                 width: "80px",
                                 height: "80px",
-                                background: `url(${PilotBorder}) no-repeat`,
-                                backgroundSize: "cover",
                                 margin: "0 auto",
                             }}
-                            align={"center"}
-                            justify={"center"}
-                        >
-                            <Image
-                                src={tgInfo.photoUrl}
-                                sx={{
-                                    width: "56px",
-                                    height: "56px",
-                                    borderRadius: "50%",
-                                }}
-                            ></Image>
-                        </Flex>
+                            img={tgInfo.photoUrl}
+                        ></Avatar>
                         <UserInfo></UserInfo>
                         <MyPlane
                             planeList={planeList}
