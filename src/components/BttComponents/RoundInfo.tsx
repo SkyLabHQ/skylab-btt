@@ -18,7 +18,7 @@ const RoundInfo = ({
                 width: isPc ? "132px" : "86px",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "50px auto 0",
+                margin: isPc ? "50px auto 0" : "20px auto 0",
                 height: isPc ? "36px" : "16px",
             }}
         >

@@ -117,14 +117,15 @@ export const Toolbar = () => {
                 }}
             ></Image> */}
             <BidTacToeTutorial>
-                <Image
+                <Avatar
+                    img={BulbIcon}
+                    imgHeight={isPc ? "32px" : "24px"}
+                    imgWidth={isPc ? "32px" : "24px"}
+                    borderColor="#707070"
                     sx={{
-                        width: isPc ? "48px" : "40px",
-                        height: isPc ? "48px" : "40px",
                         cursor: "pointer",
                     }}
-                    src={BulbIcon}
-                ></Image>
+                ></Avatar>
             </BidTacToeTutorial>
         </Box>
     );

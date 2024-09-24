@@ -557,12 +557,14 @@ export const MOpTourUserProfile = ({
     photoUrl,
     mark,
     win,
+    showResult = true,
 }: {
     name: string;
     balance: number;
     photoUrl: string;
     mark: UserMarkType;
     win: boolean;
+    showResult?: boolean;
 }) => {
     const MarkIcon = useBidIcon();
     return (
@@ -573,9 +575,8 @@ export const MOpTourUserProfile = ({
                     width: "52px",
                     height: "52px",
                     borderRadius: "50%",
-                    marginLeft: "4px",
                     border: "1px solid #fff",
-                    marginRight: "10px",
+                    margin: "0 4px 0 10px",
                 }}
             ></Image>
             <Flex align={"center"}>
@@ -624,7 +625,7 @@ export const MOpTourUserProfile = ({
                         ></Image>
                     </Flex>
                 </Flex>
-                {win ? <Win></Win> : <Lose></Lose>}
+                {showResult && (win ? <Win></Win> : <Lose></Lose>)}
             </Flex>
         </Flex>
     );
@@ -636,18 +637,20 @@ export const MMyTourUserProfile = ({
     photoUrl,
     mark,
     win,
+    showResult = true,
 }: {
     name: string;
     balance: number;
     photoUrl: string;
     mark: UserMarkType;
     win: boolean;
+    showResult?: boolean;
 }) => {
     const MarkIcon = useBidIcon();
     return (
         <Flex align={"flex-end"}>
             <Flex align={"center"}>
-                {win ? <Win></Win> : <Lose></Lose>}
+                {showResult && (win ? <Win></Win> : <Lose></Lose>)}
                 <Flex
                     flexDir={"column"}
                     sx={{

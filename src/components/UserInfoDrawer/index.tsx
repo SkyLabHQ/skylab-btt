@@ -25,7 +25,6 @@ import PlaneBg from "./assets/plane-bg.png";
 import { useUserInfo } from "@/contexts/UserInfo";
 import BiddingGif from "@/assets/bidding.gif";
 import TgIcon from "./assets/tg-icon.svg";
-import PilotBorder from "@/assets/pilot-border.png";
 import ExportIcon from "./assets/export-icon.svg";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { updateUserInfo } from "@/api/tournament";
@@ -33,18 +32,12 @@ import { avatarImg } from "@/utils/avatars";
 import Avatar from "../Avatar";
 
 const UserInfo = () => {
-    const { tgInfo, address, setTgInfo } = useUserInfo();
+    const { address, setTgInfo } = useUserInfo();
 
-    const { user, exportWallet, unlinkTelegram } = usePrivy();
+    const { user, exportWallet } = usePrivy();
 
     const { linkTelegram } = useLinkAccount({
         onSuccess: async (user, linkMethod, linkedAccount) => {
-            console.log(
-                user,
-                linkMethod,
-                linkedAccount,
-                "link account success",
-            );
             const res = await updateUserInfo();
             const { userInfo } = res.data;
             const info = {
