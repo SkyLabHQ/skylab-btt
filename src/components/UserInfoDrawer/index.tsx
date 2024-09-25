@@ -448,8 +448,14 @@ const UserInfoDrawer = ({
                                 height: "80px",
                                 margin: "0 auto",
                             }}
-                            img={tgInfo.photoUrl}
-                        ></Avatar>
+                        >
+                            <Image
+                                src={tgInfo.photoUrl}
+                                sx={{
+                                    width: "100%",
+                                }}
+                            ></Image>
+                        </Avatar>
                         <UserInfo></UserInfo>
                         <MyPlane
                             planeList={planeList}

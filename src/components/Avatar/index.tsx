@@ -6,17 +6,15 @@ import RBIcon from "./assets/rb.svg";
 import RTIcon from "./assets/rt.svg";
 
 const Avatar = ({
-    img,
     sx,
-    imgWidth = "52px",
-    imgHeight = "52px",
     borderColor = "#fff",
+    children,
+    onClick,
 }: {
-    img: string;
     sx?: BoxProps["sx"];
-    imgWidth?: string;
-    imgHeight?: string;
     borderColor?: string;
+    children?: React.ReactNode;
+    onClick?: () => void;
 }) => {
     return (
         <Box
@@ -27,6 +25,7 @@ const Avatar = ({
                 padding: "2px",
                 ...sx,
             }}
+            onClick={onClick}
         >
             <Flex
                 sx={{
@@ -38,13 +37,7 @@ const Avatar = ({
                 align={"center"}
                 justify={"center"}
             >
-                <Image
-                    src={img}
-                    sx={{
-                        width: imgWidth,
-                        height: imgHeight,
-                    }}
-                ></Image>
+                {children}
             </Flex>
             <Image
                 src={LBIcon}

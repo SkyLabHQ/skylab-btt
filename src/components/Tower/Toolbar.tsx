@@ -1,17 +1,13 @@
 import { Box, Flex, Image } from "@chakra-ui/react";
 import BidTacToeTutorial from "@/components/BttComponents/BidTacToeTutorial";
 import BulbIcon from "@/components/TacToe/assets/bulb.svg";
-import PlayBackIcon from "./assets/playback-icon.svg";
-import WalletIcon from "./assets/wallet-icon.png";
+import WalletIcon from "@/assets/wallet.svg";
 import { useNavigate } from "react-router-dom";
 import { shortenAddress } from "@/utils";
 import { useUserInfo } from "@/contexts/UserInfo";
-import Click1Wav from "@/assets/click1.wav";
 import PilotBorder from "@/assets/pilot-border.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import Avatar from "../Avatar";
-
-const audio = new Audio(Click1Wav);
 
 export const Toolbar = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
@@ -29,6 +25,21 @@ export const Toolbar = () => {
                 alignItems: "center",
             }}
         >
+            <Avatar
+                borderColor="#707070"
+                sx={{
+                    cursor: "pointer",
+                }}
+            >
+                <Image
+                    src={BulbIcon}
+                    sx={{
+                        width: isPc ? "32px" : "24px",
+                        height: isPc ? "32px" : "24px",
+                        cursor: "pointer",
+                    }}
+                ></Image>
+            </Avatar>
             <Box
                 sx={{
                     cursor: "pointer",
@@ -39,7 +50,6 @@ export const Toolbar = () => {
                     isPc ? (
                         <Flex
                             onClick={() => {
-                                audio.play();
                                 onUserInfoOpen();
                             }}
                             sx={{
@@ -77,7 +87,6 @@ export const Toolbar = () => {
                     ) : (
                         <Flex
                             onClick={() => {
-                                audio.play();
                                 onUserInfoOpen();
                             }}
                             sx={{
@@ -100,41 +109,16 @@ export const Toolbar = () => {
                         </Flex>
                     )
                 ) : (
-                    <Image
-                        onClick={handleLogin}
-                        src={WalletIcon}
-                        sx={{
-                            width: isPc ? "48px" : "40px",
-                            height: isPc ? "48px" : "40px",
-                            cursor: "pointer",
-                        }}
-                    ></Image>
+                    <Avatar onClick={handleLogin}>
+                        <Image
+                            src={WalletIcon}
+                            sx={{
+                                width: isPc ? "28px" : "24px",
+                            }}
+                        ></Image>
+                    </Avatar>
                 )}
             </Box>
-            {/* <Image
-                src={PlayBackIcon}
-                sx={{
-                    width: isPc ? "48px" : "40px",
-                    height: isPc ? "48px" : "40px",
-                    cursor: "pointer",
-                }}
-                onClick={() => {
-                    audio.play();
-                    navigate("/btt/history");
-                }}
-            ></Image> */}
-            <BidTacToeTutorial>
-                <Avatar borderColor="#707070">
-                    <Image
-                        src={BulbIcon}
-                        sx={{
-                            width: isPc ? "32px" : "24px",
-                            height: isPc ? "32px" : "24px",
-                            cursor: "pointer",
-                        }}
-                    ></Image>
-                </Avatar>
-            </BidTacToeTutorial>
         </Box>
     );
 };

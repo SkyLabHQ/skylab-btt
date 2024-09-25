@@ -1,5 +1,5 @@
 import { Box, Text, Flex, Image } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PlayButtonGroup } from "@/components/TacToeMode/PlayButtonGroup";
 import { motion } from "framer-motion";
@@ -22,6 +22,7 @@ import { handleError } from "@/utils/error";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { useUserInfo } from "@/contexts/UserInfo";
 import { usePrivy } from "@privy-io/react-auth";
+import axios from "axios";
 
 const gameAudio = new Audio(GameMp3);
 
@@ -99,6 +100,12 @@ const TacToeMode = () => {
             toast(e.data.message);
         }
     };
+
+    useEffect(() => {
+        axios.get("http://127.0.0.1:5000").then(async (res: any) => {
+            console.log(res);
+        });
+    }, []);
 
     return (
         <Box
