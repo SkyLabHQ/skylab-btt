@@ -1,3 +1,4 @@
+import Nest from "@/components/Nest";
 import Tower from "@/components/Tower";
 import { Box } from "@chakra-ui/react";
 import React from "react";
@@ -10,6 +11,7 @@ const TowerPage = () => {
             }}
         >
             <Tower></Tower>
+            <Nest />
         </Box>
     );
 };

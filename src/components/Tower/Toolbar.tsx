@@ -8,6 +8,9 @@ import { useUserInfo } from "@/contexts/UserInfo";
 import PilotBorder from "@/assets/pilot-border.png";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import Avatar from "../Avatar";
+import MarketIcon from "./assets/market.svg";
+import TeamIcon from "./assets/team.svg";
+import TutorirlIcon from "./assets/tutorial.svg";
 
 export const Toolbar = () => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
@@ -32,7 +35,7 @@ export const Toolbar = () => {
                 }}
             >
                 <Image
-                    src={BulbIcon}
+                    src={MarketIcon}
                     sx={{
                         width: isPc ? "32px" : "24px",
                         height: isPc ? "32px" : "24px",
@@ -40,6 +43,41 @@ export const Toolbar = () => {
                     }}
                 ></Image>
             </Avatar>
+
+            <Avatar
+                borderColor="#707070"
+                sx={{
+                    cursor: "pointer",
+                }}
+            >
+                <Image
+                    src={TeamIcon}
+                    sx={{
+                        width: isPc ? "32px" : "24px",
+                        height: isPc ? "32px" : "24px",
+                        cursor: "pointer",
+                    }}
+                ></Image>
+            </Avatar>
+
+            <BidTacToeTutorial>
+                <Avatar
+                    borderColor="#707070"
+                    sx={{
+                        cursor: "pointer",
+                    }}
+                >
+                    <Image
+                        src={TutorirlIcon}
+                        sx={{
+                            width: isPc ? "32px" : "24px",
+                            height: isPc ? "32px" : "24px",
+                            cursor: "pointer",
+                        }}
+                    ></Image>
+                </Avatar>
+            </BidTacToeTutorial>
+
             <Box
                 sx={{
                     cursor: "pointer",
@@ -54,7 +92,6 @@ export const Toolbar = () => {
                             }}
                             sx={{
                                 position: "relative",
-                                paddingLeft: "20px",
                             }}
                             justify={"flex-end"}
                             align={"center"}
