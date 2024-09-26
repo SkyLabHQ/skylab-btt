@@ -12,7 +12,7 @@ import MarketIcon from "./assets/market.svg";
 import TeamIcon from "./assets/team.svg";
 import TutorirlIcon from "./assets/tutorial.svg";
 
-export const Toolbar = () => {
+export const Toolbar = ({ showLeague = true }: { showLeague?: boolean }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const navigate = useNavigate();
     const { onUserInfoOpen, tgInfo, handleLogin, address } = useUserInfo();
@@ -43,22 +43,26 @@ export const Toolbar = () => {
                     }}
                 ></Image>
             </Avatar>
-
-            <Avatar
-                borderColor="#707070"
-                sx={{
-                    cursor: "pointer",
-                }}
-            >
-                <Image
-                    src={TeamIcon}
+            {showLeague && (
+                <Avatar
+                    borderColor="#707070"
                     sx={{
-                        width: isPc ? "32px" : "24px",
-                        height: isPc ? "32px" : "24px",
                         cursor: "pointer",
                     }}
-                ></Image>
-            </Avatar>
+                    onClick={() => {
+                        navigate("/league");
+                    }}
+                >
+                    <Image
+                        src={TeamIcon}
+                        sx={{
+                            width: isPc ? "32px" : "24px",
+                            height: isPc ? "32px" : "24px",
+                            cursor: "pointer",
+                        }}
+                    ></Image>
+                </Avatar>
+            )}
 
             <BidTacToeTutorial>
                 <Avatar

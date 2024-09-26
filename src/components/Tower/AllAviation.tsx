@@ -11,13 +11,14 @@ import { Toolbar } from "./Toolbar";
 import ChooseTeamModal from "./ChooseTeamModal";
 import { aviationImg } from "@/utils/aviationImg";
 import { ReactComponent as LevelBorder } from "./assets/level-border.svg";
+import CountDownIcon from "./assets/countdown.svg";
 const AllAviation = () => {
     return (
         <Swiper
             style={{
                 width: "100%",
                 position: "relative",
-                height: "300px",
+                height: "380px",
             }}
             centeredSlides={true}
             slidesPerView={"auto"}
@@ -142,6 +143,27 @@ const AllAviation = () => {
                                         >
                                             {index + 1}
                                         </span>
+                                    </Text>
+                                    <Image
+                                        sx={{
+                                            position: "absolute",
+                                            left: "70%",
+                                            bottom: "-80px",
+                                            width: "180px",
+                                        }}
+                                        src={CountDownIcon}
+                                    ></Image>
+                                    <Text
+                                        sx={{
+                                            position: "absolute",
+                                            right: "-130px",
+                                            bottom: "-80px",
+                                            width: "120px",
+                                            textAlign: "center",
+                                            fontSize: "34px",
+                                        }}
+                                    >
+                                        00:00
                                     </Text>
                                 </Flex>
                                 <Image src={RArrowIcon}></Image>

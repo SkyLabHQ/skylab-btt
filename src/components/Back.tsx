@@ -11,7 +11,7 @@ const Back = ({ onClick }: { onClick?: () => void }) => {
             <Image
                 src={BackIcon}
                 sx={{
-                    width: isPc ? "2.0833vw" : "32px",
+                    width: isPc ? "40px" : "32px",
                     cursor: "pointer",
                 }}
             ></Image>
