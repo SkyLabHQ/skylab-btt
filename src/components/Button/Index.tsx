@@ -1,7 +1,7 @@
 import { Button, ButtonProps, Image } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { ReactComponent as LbIcon } from "./assets/l-b.svg";
-import { ReactComponent as RbIcon } from "./assets/r-b.svg";
+import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
+import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
 
 const PrimaryButtonStyle = styled(Button)`
     &:hover {

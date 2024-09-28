@@ -10,10 +10,12 @@ const PrizeMoney = () => {
                 position: "absolute",
                 top: "0",
                 left: "0",
-                background: `url(${moneyBg}) no-repeat`,
+                // background: `url(${moneyBg}) no-repeat`,
+                background: "green",
                 width: "385px",
                 height: "256px",
                 backgroundSize: "100% 100%",
+                zIndex: 2,
             }}
             align={"center"}
             justify={"center"}

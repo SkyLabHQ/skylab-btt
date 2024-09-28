@@ -1,5 +1,5 @@
 import { Box, Flex, Image, useDisclosure, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper";
 import RArrowIcon from "./assets/r-arrow.svg";
@@ -9,11 +9,18 @@ import PrizeMoney from "./PrizeMoney";
 import BtButton from "./BtButton";
 import { Toolbar } from "./Toolbar";
 import ChooseTeamModal from "./ChooseTeamModal";
-import { aviationImg } from "@/utils/aviationImg";
-import { ReactComponent as LevelBorder } from "./assets/level-border.svg";
 import AllAviation from "./AllAviation";
+import Warning from "./Warning";
+import Status from "./Status";
 const Tower = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const handleInit = () => {
+        console.log("init");
+    };
+
+    useEffect(() => {}, []);
+
     return (
         <Flex
             sx={{
@@ -27,8 +34,10 @@ const Tower = () => {
         >
             <PrizeMoney></PrizeMoney>
             <Toolbar></Toolbar>
+            <Status></Status>
             <AllAviation></AllAviation>
             <BtButton onAvaitionClick={onOpen}></BtButton>
+            <Warning></Warning>
             <ChooseTeamModal
                 isOpen={isOpen}
                 onClose={onClose}

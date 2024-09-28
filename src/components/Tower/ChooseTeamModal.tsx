@@ -13,10 +13,16 @@ import {
 import React from "react";
 import { ReactComponent as BorderBg } from "./assets/border.svg";
 import WLight from "./assets/w-light.svg";
-import TutorialIcon from "./assets/tutorial.svg";
+import TutorialIcon from "@/assets/tutorial.svg";
 import ApyUpIcon from "./assets/apy-up.svg";
 import A1 from "./assets/a1.png";
 import { LButton } from "../Button/Index";
+import WL from "./assets/w-l.svg";
+import YL from "./assets/y-l.svg";
+import WE from "./assets/w-e.svg";
+import YE from "./assets/y-e.svg";
+import XP from "./assets/xp.svg";
+import TutorirlIcon from "@/assets/tutorial.svg";
 
 const rotateKeyframes = keyframes`
     0% {
@@ -26,6 +32,93 @@ const rotateKeyframes = keyframes`
         transform: rotate(360deg);
      }
 `;
+
+const RewardWrap = ({ amount }: { amount: number }) => {
+    return (
+        <Flex
+            sx={{
+                width: "168px",
+                height: "168px",
+                position: "relative",
+                "&:hover": {
+                    ".n-l": {
+                        background: `url(${YL})`,
+                    },
+                    ".xx": {
+                        svg: {
+                            color: "#F2D861",
+                        },
+                    },
+                    ".eth": {
+                        background: `url(${YE})`,
+                    },
+                    ".amount": {
+                        color: "#F2D861",
+                    },
+                },
+            }}
+            align={"center"}
+            justify={"center"}
+        >
+            <Box
+                className="xx"
+                sx={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    left: "0",
+                    top: "0",
+                }}
+                animation={`${rotateKeyframes} 8s linear infinite `}
+            >
+                <BorderBg
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                    }}
+                ></BorderBg>
+            </Box>
+            <Flex
+                className="n-l"
+                sx={{
+                    width: "140px",
+                    height: "140px",
+                    borderRadius: "50%",
+                    background: `url(${WL})`,
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%,-50%)",
+                }}
+                align={"center"}
+                justify={"center"}
+                flexDir={"column"}
+            >
+                <Box
+                    className="eth"
+                    sx={{
+                        width: "43px",
+                        height: "55px",
+                        background: `url(${WE})`,
+                    }}
+                ></Box>
+                <Text
+                    className="amount"
+                    sx={{
+                        textShadow:
+                            "0px 7px 26.5px rgba(255, 255, 255, 0.58), 0px 3px 0px #4D4D4D",
+                        fontFamily: "Quantico",
+                        fontSize: "40px",
+                        fontWeight: 700,
+                        lineHeight: 1,
+                    }}
+                >
+                    999
+                </Text>
+            </Flex>
+        </Flex>
+    );
+};
 
 const ChooseTeamModal = ({
     isOpen,
@@ -64,48 +157,63 @@ const ChooseTeamModal = ({
                         >
                             CHOOSE YOUR FAVOURITE TEAM FIRST
                         </Text>
-                        <Box>
-                            <Flex
-                                sx={{
-                                    width: "168px",
-                                    height: "168px",
-                                    position: "relative",
-                                }}
-                                align={"center"}
-                                justify={"center"}
-                            >
+                        <Flex gap={"46px"}>
+                            {" "}
+                            <Box>
                                 <Box
                                     sx={{
-                                        position: "absolute",
-                                        width: "100%",
-                                        height: "100%",
-                                        left: "0",
-                                        top: "0",
-                                        "&:hover": {
-                                            svg: {
-                                                color: "#F2D861",
-                                            },
-                                        },
+                                        fontSize: "20px",
+                                        textAlign: "center",
                                     }}
-                                    animation={`${rotateKeyframes} 8s linear infinite `}
                                 >
-                                    <BorderBg
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                        }}
-                                    ></BorderBg>
+                                    {" "}
+                                    <Text>CHAMPION</Text>
+                                    <Text>WINS PAYOUT</Text>
                                 </Box>
+                                <RewardWrap amount={999}></RewardWrap>
+                            </Box>
+                            <Box>
                                 <Box
                                     sx={{
-                                        width: "140px",
-                                        height: "140px",
-                                        borderRadius: "50%",
-                                        border: "2px solid #FDDC2D",
+                                        textAlign: "center",
                                     }}
-                                ></Box>
-                            </Flex>
-                        </Box>
+                                >
+                                    <Text
+                                        sx={{
+                                            fontSize: "18px",
+                                        }}
+                                    >
+                                        PER.{" "}
+                                        <Image
+                                            src={XP}
+                                            sx={{
+                                                display: "inline-block",
+                                                width: "27px",
+                                            }}
+                                        ></Image>
+                                    </Text>
+
+                                    <Text
+                                        sx={{
+                                            fontSize: "20px",
+                                        }}
+                                    >
+                                        <Image
+                                            src={TutorirlIcon}
+                                            sx={{
+                                                display: "inline-block",
+                                                width: "16px",
+                                                margin: "2px 5px 0 0",
+                                            }}
+                                        ></Image>
+                                        PAYOUT
+                                    </Text>
+                                </Box>
+
+                                <RewardWrap amount={999}></RewardWrap>
+                            </Box>
+                        </Flex>
+
                         <Flex
                             sx={{
                                 background: `url(${WLight}) no-repeat center center`,

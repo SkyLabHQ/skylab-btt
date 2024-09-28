@@ -10,7 +10,7 @@ import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import Avatar from "../Avatar";
 import MarketIcon from "./assets/market.svg";
 import TeamIcon from "./assets/team.svg";
-import TutorirlIcon from "./assets/tutorial.svg";
+import TutorirlIcon from "@/assets/tutorial.svg";
 
 export const Toolbar = ({ showLeague = true }: { showLeague?: boolean }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");

@@ -1,18 +1,20 @@
 import { Box, BoxProps, Flex, Image } from "@chakra-ui/react";
 import React from "react";
-import LBIcon from "./assets/lb.svg";
-import LTIcon from "./assets/lt.svg";
-import RBIcon from "./assets/rb.svg";
-import RTIcon from "./assets/rt.svg";
+import { ReactComponent as LBIcon } from "./assets/lb.svg";
+import { ReactComponent as LTIcon } from "./assets/lt.svg";
+import { ReactComponent as RBIcon } from "./assets/rb.svg";
+import { ReactComponent as RTIcon } from "./assets/rt.svg";
 
 const Avatar = ({
     sx,
     borderColor = "#fff",
+    hornColor = "#fff",
     children,
     onClick,
 }: {
     sx?: BoxProps["sx"];
     borderColor?: string;
+    hornColor?: string;
     children?: React.ReactNode;
     onClick?: () => void;
 }) => {
@@ -39,38 +41,38 @@ const Avatar = ({
             >
                 {children}
             </Flex>
-            <Image
-                src={LBIcon}
-                sx={{
+            <LBIcon
+                style={{
                     position: "absolute",
                     left: "0px",
                     bottom: "0px",
+                    color: hornColor,
                 }}
-            ></Image>
-            <Image
-                src={LTIcon}
-                sx={{
+            ></LBIcon>
+            <LTIcon
+                style={{
                     position: "absolute",
                     left: "0px",
                     top: "0px",
+                    color: hornColor,
                 }}
-            ></Image>
-            <Image
-                src={RBIcon}
-                sx={{
+            ></LTIcon>
+            <RBIcon
+                style={{
                     position: "absolute",
                     right: "0px",
                     bottom: "0px",
+                    color: hornColor,
                 }}
-            ></Image>
-            <Image
-                src={RTIcon}
-                sx={{
+            ></RBIcon>
+            <RTIcon
+                style={{
                     position: "absolute",
                     right: "0px",
                     top: "0px",
+                    color: hornColor,
                 }}
-            ></Image>
+            ></RTIcon>
         </Box>
     );
 };

@@ -166,7 +166,9 @@ const AllAviation = () => {
                                         00:00
                                     </Text>
                                 </Flex>
-                                <Image src={RArrowIcon}></Image>
+                                {index !== 15 && (
+                                    <Image src={RArrowIcon}></Image>
+                                )}
                             </Flex>
                         </SwiperSlide>
                     );
