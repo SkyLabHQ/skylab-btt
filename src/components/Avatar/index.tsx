@@ -9,12 +9,14 @@ const Avatar = ({
     sx,
     borderColor = "#fff",
     hornColor = "#fff",
+    hornSize = "15px",
     children,
     onClick,
 }: {
     sx?: BoxProps["sx"];
     borderColor?: string;
     hornColor?: string;
+    hornSize?: string;
     children?: React.ReactNode;
     onClick?: () => void;
 }) => {
@@ -46,6 +48,7 @@ const Avatar = ({
                     position: "absolute",
                     left: "0px",
                     bottom: "0px",
+                    width: hornSize,
                     color: hornColor,
                 }}
             ></LBIcon>
@@ -54,6 +57,8 @@ const Avatar = ({
                     position: "absolute",
                     left: "0px",
                     top: "0px",
+                    width: hornSize,
+
                     color: hornColor,
                 }}
             ></LTIcon>
@@ -62,6 +67,8 @@ const Avatar = ({
                     position: "absolute",
                     right: "0px",
                     bottom: "0px",
+                    width: hornSize,
+
                     color: hornColor,
                 }}
             ></RBIcon>
@@ -70,6 +77,8 @@ const Avatar = ({
                     position: "absolute",
                     right: "0px",
                     top: "0px",
+                    width: hornSize,
+
                     color: hornColor,
                 }}
             ></RTIcon>

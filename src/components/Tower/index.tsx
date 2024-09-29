@@ -12,19 +12,48 @@ import ChooseTeamModal from "./ChooseTeamModal";
 import AllAviation from "./AllAviation";
 import Warning from "./Warning";
 import Status from "./Status";
+import ChoosePlane from "./ChoosePlane";
+import {
+    useMultiLeagueTournamentContract,
+    useMultiPointContract,
+    useMultiProvider,
+} from "@/hooks/useMultiContract";
+import { useChainId } from "wagmi";
+import { useLeagueTournamentContract } from "@/hooks/useContract";
 const Tower = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isChoosePlaneOpen,
+        onOpen: onChoosePlaneOpen,
+        onClose: onChoosePlaneClose,
+    } = useDisclosure();
+    const chainId = useChainId();
 
-    const handleInit = () => {
+    const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
+    const multiProvider = useMultiProvider(chainId);
+
+    const handleInit = async () => {
+        // console.log(leagueTournamentContract.read, "leagueTournamentContract");
+        // const res1 = await leagueTournamentContract.read.getnewComerInfo([]);
+        // console.log(res1);
+        const p = [];
+        for (let i = 1; i <= 16; i++) {
+            p.push(multiLeagueTournamentContract.getnewComerInfo(i));
+        }
+
+        const res = await multiProvider.all(p);
+        console.log(res);
         console.log("init");
     };
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        if (!multiProvider || !multiLeagueTournamentContract) return;
+        handleInit();
+    }, [multiProvider, multiLeagueTournamentContract]);
 
     return (
         <Flex
             sx={{
-                // padding: "0 20px",
                 position: "relative",
                 height: "100%",
                 padding: "0 20px",
@@ -36,12 +65,19 @@ const Tower = () => {
             <Toolbar></Toolbar>
             <Status></Status>
             <AllAviation></AllAviation>
-            <BtButton onAvaitionClick={onOpen}></BtButton>
+            <BtButton
+                onAvaitionClick={onOpen}
+                onPlayClick={onChoosePlaneOpen}
+            ></BtButton>
             <Warning></Warning>
             <ChooseTeamModal
                 isOpen={isOpen}
                 onClose={onClose}
             ></ChooseTeamModal>
+            <ChoosePlane
+                isOpen={isChoosePlaneOpen}
+                onClose={onChoosePlaneClose}
+            ></ChoosePlane>
         </Flex>
     );
 };

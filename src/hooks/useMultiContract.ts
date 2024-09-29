@@ -6,13 +6,16 @@ import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.jso
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
 import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
 import MARKETPLACE_ABI from "@/skyConstants/abis/MarketPlace.json";
+import LEAGUETOURNAMENT_ABI from "@/skyConstants/abis/MercuryLeagueTournament.json";
 import LOYALTY_ABI from "@/skyConstants/abis/LoyaltyPoints.json";
+
 import { ChainId, TESTFLIGHT_CHAINID, randomRpc } from "@/utils/web3Utils";
 import {
     skylabBidTacToeAddress,
     skylabTestFlightAddress,
     mercuryJarTournamentAddress,
     marketPlaceAddress,
+    leagueTournamentAddress,
 } from "./useContract";
 import { ethers } from "ethers";
 import { isAddress } from "@/utils/isAddress";
@@ -85,6 +88,11 @@ export const useMultiMercuryJarTournamentContract = () => {
 export const useMultiMarketPlaceContract = () => {
     const chainId = useChainId();
     return useContract(marketPlaceAddress[chainId], MARKETPLACE_ABI);
+};
+
+export const useMultiLeagueTournamentContract = () => {
+    const chainId = useChainId();
+    return useContract(leagueTournamentAddress[chainId], LEAGUETOURNAMENT_ABI);
 };
 
 export const useMultiPointContract = () => {

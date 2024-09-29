@@ -1,17 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="107.05322265625" height="140" viewBox="0 0 107.05322265625 140" fill="none"><g filter="url(#filter_0)"><path id="ETH" fill-rule="evenodd" fill="currentColor"  opacity="1" d="M90.2485 12L16.8047 12C14.1512 12 12 14.1512 12 16.8047C12 19.4583 14.1512 21.6095 16.8047 21.6095L90.2485 21.6095C92.9021 21.6095 95.0532 19.4583 95.0532 16.8047C95.0532 14.1512 92.9021 12 90.2485 12ZM71.4933 65.5391L35.5574 65.5391C32.9038 65.5391 30.7526 67.6903 30.7526 70.3438C30.7526 72.9974 32.9038 75.1486 35.5574 75.1486L71.4933 75.1486C74.1469 75.1486 76.298 72.9974 76.298 70.3438C76.298 67.6903 74.1469 65.5391 71.4933 65.5391ZM16.8047 118.391L90.2485 118.391C92.9021 118.391 95.0532 120.542 95.0532 123.195C95.0532 125.849 92.9021 128 90.2485 128L16.8047 128C14.1512 128 12 125.849 12 123.195C12 120.542 14.1512 118.391 16.8047 118.391Z"></path></g><defs><filter id="filter_0" x="0" y="0" width="119.0532" height="152" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="feFloodId"/>
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-        
-        <feOffset dx="0" dy="5"/>
-        
-         <feComposite in2="hardAlpha" operator="out"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-        <feBlend mode="normal" in2="BackgroundImageFix" result="dropShadow_1"/>
-        
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-        <feMorphology radius="3" operator="dilate" in="SourceAlpha"/>
-        <feOffset dx="0" dy="0"/>
-        <feGaussianBlur stdDeviation="4.5"/>
-         <feComposite in2="hardAlpha" operator="out"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.9215686274509803 0 0 0 0 0.23137254901960785 0 0 0 1 0"/>
-        <feBlend mode="normal" in2="dropShadow_1" result="dropShadow_2"/>
-        <feBlend mode="normal" in="SourceGraphic" in2="dropShadow_3" result="shape"/></filter></defs></svg>
+<svg width="41" height="65" viewBox="0 0 41 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 33.8722L20.0303 45.8444V0.488281L0 33.8722ZM0.462248 36.8664L20.0321 64.9549V48.6083L0.462248 36.8664ZM20.7194 45.8444L40.7498 33.8722L20.7194 0.488323V45.8444ZM40.7496 36.8664L20.9495 64.9549V48.6083L40.7496 36.8664Z" fill="white"/>
+</svg>

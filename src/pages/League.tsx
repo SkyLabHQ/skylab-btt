@@ -1,13 +1,15 @@
 import Back from "@/components/Back";
 import RuleWrap from "@/components/Introduce/RuleWrap";
 import { Toolbar } from "@/components/Tower/Toolbar";
-import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { Box, Flex, Text, Image, color } from "@chakra-ui/react";
 import React from "react";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
 import Avatar from "@/components/Avatar";
 import { useNavigate } from "react-router-dom";
-import TutorirlIcon from "@/assets/tutorial.svg";
+import DataInfo from "@/components/League/DataInfo";
+import TeamPlaneList from "@/components/League/TeamPlaneList";
+import leagueConfigList from "@/utils/league";
 
 const League = () => {
     const [activeIndex, setActiveIndex] = React.useState(0);
@@ -40,17 +42,19 @@ const League = () => {
             <Box>
                 <Text
                     sx={{
-                        textShadow:
-                            "0px -1px 27.7px rgba(255, 63, 66, 0.54), 0px 2px 0px rgba(255, 97, 97, 0.97), 0px 0px 39.4px #FF0404",
+                        textShadow: leagueConfigList[activeIndex].textShadow,
                         WebkitTextStrokeWidth: 2,
-                        WebkitTextStrokeColor: "#000",
+                        WebkitTextStrokeColor:
+                            leagueConfigList[activeIndex].color,
                         fontFamily: "Quantico",
                         fontSize: "32px",
                         fontStyle: "normal",
                         fontWeight: 700,
+                        color: "#000",
+                        textAlign: "center",
                     }}
                 >
-                    RED TEAM
+                    {leagueConfigList[activeIndex].name}
                 </Text>
                 <Flex
                     sx={{
@@ -58,7 +62,7 @@ const League = () => {
                     }}
                     align={"center"}
                 >
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                    {leagueConfigList.map((item, index) => {
                         return (
                             <Box
                                 sx={{
@@ -69,6 +73,9 @@ const League = () => {
                                         display: "none",
                                     },
                                 }}
+                                onClick={() => {
+                                    setActiveIndex(index);
+                                }}
                             >
                                 <Box
                                     key={index}
@@ -76,11 +83,12 @@ const League = () => {
                                         position: "relative",
                                         width: "36px",
                                         height: "36px",
+                                        cursor: "pointer",
                                     }}
                                 >
                                     <Avatar
-                                        borderColor="red"
-                                        hornColor="red"
+                                        borderColor={item.color}
+                                        hornColor={item.color}
                                         sx={{
                                             display: "none",
                                             width: "36px",
@@ -93,7 +101,7 @@ const League = () => {
                                     >
                                         <Box
                                             sx={{
-                                                background: "blue",
+                                                background: item.color,
                                                 width: "100%",
                                                 height: "100%",
                                             }}
@@ -101,7 +109,7 @@ const League = () => {
                                     </Avatar>
                                     <Box
                                         sx={{
-                                            background: "green",
+                                            background: item.color,
                                             width: "20px",
                                             height: "20px",
                                             display: "block",
@@ -117,46 +125,8 @@ const League = () => {
                     })}
                 </Flex>
             </Box>
-            <Box>
-                <Flex>
-                    <Text>TEAM</Text>
-                    <Flex>
-                        <Image src={TutorirlIcon}></Image>
-                    </Flex>
-                </Flex>
-            </Box>
-            <Box
-                sx={{
-                    maxWidth: "800px",
-                    margin: "0 auto",
-                    width: "100%",
-                    height: "200px",
-                    position: "relative",
-                    background: "rgba(0, 0, 0, 0.39)",
-                    border: "1px solid #D60000",
-                }}
-            >
-                <LbIcon
-                    style={{
-                        position: "absolute",
-                        left: "-5px",
-                        top: "-10px",
-                        color: "#D60000",
-                        width: "50px",
-                        height: "50px",
-                    }}
-                ></LbIcon>
-                <RbIcon
-                    style={{
-                        position: "absolute",
-                        right: "-5px",
-                        bottom: "-10px",
-                        color: "#D60000",
-                        width: "50px",
-                        height: "50px",
-                    }}
-                ></RbIcon>
-            </Box>
+            <DataInfo></DataInfo>
+            <TeamPlaneList></TeamPlaneList>
         </Flex>
     );
 };

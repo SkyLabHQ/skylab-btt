@@ -3,6 +3,7 @@ import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import SKYLABTESSTFLIGHT_ABI from "@/skyConstants/abis/SkylabTestFlight.json";
 import SKYLABTOURNAMENT_ABI from "@/skyConstants/abis/SkylabTournament.json";
 import SKYLABBIDTACTOE_ABI from "@/skyConstants/abis/SkylabBidTacToe.json";
+import LEAGUETOURNAMENT_ABI from "@/skyConstants/abis/MercuryLeagueTournament.json";
 import qs from "query-string";
 import SKYLABBIDTACTOEGAME_ABI from "@/skyConstants/abis/SkylabBidTacToeGame.json";
 import MERCURYJARTOURNAMENT_ABI from "@/skyConstants/abis/MercuryJarTournament.json";
@@ -42,6 +43,10 @@ export const mercuryJarTournamentAddress: ChainIdToAddressMap = {
 
 export const marketPlaceAddress: ChainIdToAddressMap = {
     [ChainId.SEPOLIA]: "0xc6B4AF6B7C944a4C43755b83753D292Ac3447b19",
+};
+
+export const leagueTournamentAddress: ChainIdToAddressMap = {
+    [ChainId.SEPOLIA]: "0x128F2604a1bB40d0e793386E8cD399AB4b24c299",
 };
 
 function useContract(address: any, abi: any) {
@@ -124,4 +129,9 @@ export const useMercuryJarTournamentContract = () => {
 export const useMarketPlaceContract = () => {
     const chainId = useChainId();
     return useContract(marketPlaceAddress[chainId], MARKETPLACE_ABI);
+};
+
+export const useLeagueTournamentContract = () => {
+    const chainId = useChainId();
+    return useContract(leagueTournamentAddress[chainId], LEAGUETOURNAMENT_ABI);
 };

@@ -1,17 +1,13 @@
 import { Box, Flex, Image, useDisclosure, Text } from "@chakra-ui/react";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper";
 import RArrowIcon from "./assets/r-arrow.svg";
 import WB from "./assets/w-b.png";
 import Paper from "./assets/paper.png";
-import PrizeMoney from "./PrizeMoney";
-import BtButton from "./BtButton";
-import { Toolbar } from "./Toolbar";
-import ChooseTeamModal from "./ChooseTeamModal";
 import { aviationImg } from "@/utils/aviationImg";
 import { ReactComponent as LevelBorder } from "./assets/level-border.svg";
 import CountDownIcon from "./assets/countdown.svg";
+import LockIcon from "./assets/lock.svg";
 const AllAviation = () => {
     return (
         <Swiper
@@ -93,6 +89,7 @@ const AllAviation = () => {
                                         borderRadius: "50%",
                                         marginRight: "40px",
                                         position: "relative",
+                                        opacity: "0.5",
                                     }}
                                     align={"center"}
                                     justify={"center"}
@@ -115,7 +112,16 @@ const AllAviation = () => {
                                             height: "60%",
                                         }}
                                     ></Image>
-
+                                    <Image
+                                        src={LockIcon}
+                                        sx={{
+                                            position: "absolute",
+                                            left: "50%",
+                                            top: "50%",
+                                            transform: "translate(-50%, -50%)",
+                                            width: "45px",
+                                        }}
+                                    ></Image>
                                     <LevelBorder
                                         style={{
                                             color: "red",

@@ -30,7 +30,13 @@ const Button = ({
     );
 };
 
-const BtButton = ({ onAvaitionClick }: { onAvaitionClick: () => void }) => {
+const BtButton = ({
+    onAvaitionClick,
+    onPlayClick,
+}: {
+    onAvaitionClick: () => void;
+    onPlayClick: () => void;
+}) => {
     return (
         <Flex
             sx={{
@@ -58,7 +64,7 @@ const BtButton = ({ onAvaitionClick }: { onAvaitionClick: () => void }) => {
                     BUY
                 </Text>
             </Button>
-            <Button>
+            <Button onClick={onPlayClick}>
                 <Image
                     src={Play}
                     sx={{
