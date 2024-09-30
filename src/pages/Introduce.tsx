@@ -15,6 +15,7 @@ import WVideo from "@/components/Introduce/assets/w.mp4";
 import Lock from "@/components/Introduce/Lock";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import BgMp3 from "@/components/Introduce/assets/bg.mp3";
+import TournamentHelmet from "@/components/Helmet/Tournament";
 const bgAudio = new Audio(BgMp3);
 
 const Introduce = () => {
@@ -197,6 +198,7 @@ const Introduce = () => {
                     }}
                 ></Lock>
             )}
+            <TournamentHelmet></TournamentHelmet>
         </Box>
     );
 };
