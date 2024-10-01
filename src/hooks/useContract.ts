@@ -46,7 +46,7 @@ export const marketPlaceAddress: ChainIdToAddressMap = {
 };
 
 export const leagueTournamentAddress: ChainIdToAddressMap = {
-    [ChainId.SEPOLIA]: "0x128F2604a1bB40d0e793386E8cD399AB4b24c299",
+    [ChainId.SEPOLIA]: "0x7B6A2EEbF8bE269AC86df85b03f5a23e77414723",
 };
 
 function useContract(address: any, abi: any) {

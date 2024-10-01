@@ -388,6 +388,11 @@
                 "name": "point",
                 "type": "uint256",
                 "internalType": "uint256"
+            },
+            {
+                "name": "leader",
+                "type": "address",
+                "internalType": "address"
             }
         ],
         "stateMutability": "view"

@@ -37,6 +37,7 @@
         "react": "^18.1.0",
         "react-app-rewired": "^2.2.1",
         "react-canvas-nest": "^1.1.1",
+        "react-countdown": "^2.3.6",
         "react-countdown-hook": "^1.1.3",
         "react-countup": "^6.5.2",
         "react-device-detect": "^2.2.2",

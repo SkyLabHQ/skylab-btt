@@ -2,8 +2,9 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import moneyBg from "./assets/money.png";
 import ETHIcon from "./assets/eth.svg";
+import { formatAmount, toFixed } from "@/utils/formatBalance";
 
-const PrizeMoney = () => {
+const PrizeMoney = ({ pot }: { pot: string }) => {
     return (
         <Flex
             sx={{
@@ -54,7 +55,7 @@ const PrizeMoney = () => {
                             fontWeight: 700,
                         }}
                     >
-                        9.99{" "}
+                        {toFixed(formatAmount(pot), 2)}
                     </Text>
                 </Box>
             </Flex>
