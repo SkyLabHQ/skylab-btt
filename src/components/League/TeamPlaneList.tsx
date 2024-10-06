@@ -11,7 +11,11 @@ import TutorirlIcon from "@/assets/tutorial.svg";
 import SettingIcon from "./assets/setting.svg";
 import A1 from "@/assets/a1.png";
 import XP from "@/assets/xp.svg";
-const RateData = () => {
+const RateData = ({
+    onLeaderRateModalOpen,
+}: {
+    onLeaderRateModalOpen: () => void;
+}) => {
     return (
         <Flex align={"center"} gap={"20px"} sx={{}}>
             <Flex align={"center"} gap={"10px"}>
@@ -45,7 +49,10 @@ const RateData = () => {
                         %
                     </span>
                 </Text>
-                <Image src={SettingIcon}></Image>
+                <Image
+                    src={SettingIcon}
+                    onClick={onLeaderRateModalOpen}
+                ></Image>
             </Flex>
             <Flex align={"center"} gap={"10px"}>
                 <Image
@@ -84,7 +91,11 @@ const RateData = () => {
     );
 };
 
-const TeamPlaneList = () => {
+const TeamPlaneList = ({
+    onLeaderRateModalOpen,
+}: {
+    onLeaderRateModalOpen: () => void;
+}) => {
     return (
         <Flex
             sx={{
@@ -122,7 +133,7 @@ const TeamPlaneList = () => {
                     height: "50px",
                 }}
             ></RbIcon>
-            <RateData></RateData>
+            <RateData onLeaderRateModalOpen={onLeaderRateModalOpen}></RateData>
             <Box
                 sx={{
                     width: "100%",
