@@ -1,5 +1,4 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import React from "react";
 import TutorirlIcon from "@/assets/tutorial.svg";
 import ETHIcon from "./assets/eth.svg";
 import APYUp from "@/assets/apy-up.svg";

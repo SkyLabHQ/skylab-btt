@@ -11,6 +11,7 @@ import LockIcon from "./assets/lock.svg";
 import TestBg from "./assets/test.gif";
 import { Newcomer } from ".";
 import Countdown from "react-countdown";
+import TestWebm from "./assets/test.webm";
 
 const renderer = ({
     formatted,
@@ -41,6 +42,7 @@ const Aviation = ({
         <Flex
             sx={{
                 height: "100%",
+                // background: "red",
             }}
             align={"center"}
         >
@@ -56,7 +58,25 @@ const Aviation = ({
                 align={"center"}
                 justify={"center"}
             >
-                <Image
+                <video
+                    width="640"
+                    height="360"
+                    autoPlay
+                    loop={true}
+                    muted={true}
+                    style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    <source src={TestWebm} type="video/webm" />
+                    Your browser does not support the video tag.
+                </video>
+                {/* <Image
                     src={TestBg}
                     sx={{
                         position: "absolute",
@@ -66,7 +86,7 @@ const Aviation = ({
                         width: "100%",
                         height: "100%",
                     }}
-                ></Image>
+                ></Image> */}
                 <Image
                     src={aviationImg(index + 1)}
                     sx={{

@@ -28,3 +28,5 @@ declare module "*.mp3";
 declare module "html2canvas";
 
 declare module "react-canvas-nest";
+
+declare module "*.webm";

@@ -33,7 +33,6 @@ const RuleContent0 = ({
                         maxWidth: "600px",
                         margin: isPc ? "20px auto" : "12px auto",
                     }}
-                    poster="https://test.projmercury.io/favicon.svg"
                 >
                     <source src={LevelVideo} type="video/mp4" />
                 </video>
