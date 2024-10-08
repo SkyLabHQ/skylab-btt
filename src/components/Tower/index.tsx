@@ -71,6 +71,14 @@ const Tower = () => {
     const { openLoading, closeLoading } = useSubmitRequest();
 
     const [timeLeft, { start }] = useCountDown(0, 1000);
+
+    useEffect(() => {
+        start(70000);
+    }, []);
+
+    const [warnType, setWarnType] = useState(0); // 0不展示 1黄色 2红色
+    const [warnSet, setWarnSet] = useState(false);
+
     const toast = useSkyToast();
     const publicClient = usePublicClient();
     const leagueTournamentContract = useLeagueTournamentContract();
@@ -249,9 +257,13 @@ const Tower = () => {
         }
     };
 
+    const handleResetWarnType = () => {
+        setWarnType(0);
+    };
+
     useEffect(() => {
         if (!multiProvider || !multiLeagueTournamentContract) return;
-        handleInit();
+        // handleInit();
     }, [multiProvider, multiLeagueTournamentContract]);
 
     useEffect(() => {
@@ -264,6 +276,8 @@ const Tower = () => {
         if (oldNewcomer) {
             const time = oldNewcomer.claimTIme * 1000 - Date.now();
             if (time > 0) {
+                setWarnType(0);
+                setWarnSet(false);
                 start(time);
             } else {
                 start(0);
@@ -289,6 +303,19 @@ const Tower = () => {
         multiProvider,
     ]);
 
+    useEffect(() => {
+        if (warnSet) {
+            return;
+        }
+        if (timeLeft > 60000 && timeLeft <= 300000) {
+            setWarnType(1);
+            setWarnSet(true);
+        } else if (timeLeft <= 60000 && timeLeft > 0) {
+            setWarnType(2);
+            setWarnSet(true);
+        }
+    }, [timeLeft]);
+
     return (
         <Flex
             sx={{
@@ -301,12 +328,7 @@ const Tower = () => {
         >
             <Toolbar></Toolbar>
             <Status leagueConfig={leagueConfig}></Status>
-            {timeLeft >= 0 && timeLeft < 300000 && (
-                <Warning
-                    timeLeft={timeLeft}
-                    oldNewcomer={oldNewcomer}
-                ></Warning>
-            )}
+            {/* <Warning warnType={warnType} timeLeft={timeLeft}></Warning> */}
             {gameOverNewComer.tokenId == 0 ? (
                 <>
                     <PrizeMoney pot={pot}></PrizeMoney>
@@ -315,12 +337,11 @@ const Tower = () => {
                         onAvaitionClick={onOpen}
                         onPlayClick={onChoosePlaneOpen}
                     ></BtButton>
-                    {timeLeft > 0 && timeLeft < 300000 && (
-                        <Warning
-                            timeLeft={timeLeft}
-                            oldNewcomer={oldNewcomer}
-                        ></Warning>
-                    )}
+                    <Warning
+                        warnType={warnType}
+                        timeLeft={timeLeft}
+                        onResetWarnType={handleResetWarnType}
+                    ></Warning>
                     <ChooseTeamModal
                         handleMint={handleMint}
                         isOpen={isOpen}

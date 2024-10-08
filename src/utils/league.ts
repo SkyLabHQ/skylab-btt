@@ -6,8 +6,10 @@ import cyanBg from "@/assets/league/cyan.webm";
 import blueBg from "@/assets/league/blue.webm";
 import purpleBg from "@/assets/league/purple.webm";
 import pinkBg from "@/assets/league/pink.webm";
+import whiteBg from "@/assets/league/white.webm";
 
-enum League {
+export enum League {
+    WHITE = "WHITE",
     RED = "0x2f49Be6976324000da4Bd091B0217E217b81A93d",
     ORANGE = "0x82152dD7A4a7449DeE6B30F4F7bB93Eb0a362ec7",
     YELLOW = "0x8FB03F7aFa01ee3A42339DcaCEa88F828c1670Af",
@@ -21,6 +23,7 @@ enum League {
 export const leagueBg: {
     [league: string]: string;
 } = {
+    [League.WHITE]: whiteBg,
     [League.RED]: redBg,
     [League.ORANGE]: orangeBg,
     [League.YELLOW]: yellowBg,

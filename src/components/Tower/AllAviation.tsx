@@ -10,8 +10,9 @@ import CountDownIcon from "./assets/countdown.svg";
 import LockIcon from "./assets/lock.svg";
 import { Newcomer } from ".";
 import Countdown from "react-countdown";
-import { leagueBg } from "@/utils/league";
+import { League, leagueBg } from "@/utils/league";
 import VideoComponent from "../Video";
+import WhiteBg from "@/assets/league/white.webm";
 
 const renderer = ({
     formatted,
@@ -61,9 +62,7 @@ const Aviation = ({
                     url={
                         leagueBg[newcomer.leader]
                             ? leagueBg[newcomer.leader]
-                            : leagueBg[
-                                  "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D"
-                              ]
+                            : leagueBg[League.WHITE]
                     }
                     style={{
                         position: "absolute",
@@ -194,21 +193,21 @@ const AllAviation = ({ newcomerList }: { newcomerList: Newcomer[] }) => {
                         align={"center"}
                         justify={"center"}
                     >
-                        <Image
-                            src={WB}
-                            sx={{
+                        <VideoComponent
+                            url={WhiteBg}
+                            style={{
                                 position: "absolute",
                                 left: "50%",
                                 top: "50%",
                                 transform: "translate(-50%, -50%)",
-                                width: "100%",
-                                height: "100%",
+                                width: "360px",
+                                height: "360px",
                             }}
-                        ></Image>
+                        ></VideoComponent>
                         <Image
                             src={Paper}
                             sx={{
-                                width: "60p%",
+                                width: "60%",
                                 height: "60%",
                             }}
                         ></Image>
