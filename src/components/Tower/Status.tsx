@@ -3,8 +3,9 @@ import React from "react";
 import Line from "./assets/line.svg";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
+import { GameOverNewComer } from ".";
 
-const Status = () => {
+const Status = ({ leagueConfig }: { leagueConfig: any }) => {
     return (
         <Flex
             sx={{

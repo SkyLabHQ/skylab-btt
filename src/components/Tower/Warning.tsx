@@ -1,10 +1,25 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import WarnIcon from "./assets/warn.svg";
 import RCountDown from "./assets/r-countdown.svg";
 import WarningIcon from "./assets/warning.svg";
+import { Newcomer, TokenIdInfo } from ".";
 
-const Warning = () => {
+const Warning = ({
+    oldNewcomer,
+    timeLeft,
+}: {
+    oldNewcomer: Newcomer;
+    timeLeft: number;
+}) => {
+    const { minutes, seconds, color } = useMemo(() => {
+        const t = Math.floor(timeLeft / 1000);
+        const color = t <= 60 ? "#DF0915" : "#B69601";
+        const minutes = String(Math.floor(t / 60)).padStart(2, "0");
+        const seconds = String(t % 60).padStart(2, "0");
+        return { minutes, seconds, color };
+    }, [timeLeft]);
+
     return (
         <Flex
             sx={{
@@ -62,7 +77,7 @@ const Warning = () => {
                         margin: "20px 0 0 80px",
                     }}
                 >
-                    00:77
+                    {minutes}:{seconds}
                 </Text>
             </Box>
             <Image

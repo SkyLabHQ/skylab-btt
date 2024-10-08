@@ -1,8 +1,5 @@
-import Back from "@/components/Back";
-import RuleWrap from "@/components/Introduce/RuleWrap";
-import { Toolbar } from "@/components/Tower/Toolbar";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
 import Avatar from "@/components/Avatar";
@@ -12,6 +9,8 @@ import A1 from "@/assets/a1.png";
 import XP from "@/assets/xp.svg";
 import { LeagueInfo, TokenIdInfo } from "@/pages/League";
 import { useUserInfo } from "@/contexts/UserInfo";
+import { Newcomer } from "@/components/Tower";
+import Countdown from "react-countdown";
 
 const RateData = ({
     leagueInfo,
@@ -126,17 +125,184 @@ const RateData = ({
     );
 };
 
+const TeamTokenIdInfo = ({
+    tokenIdInfo,
+    leagueColor,
+}: {
+    tokenIdInfo: TokenIdInfo;
+    leagueColor: string;
+}) => {
+    return (
+        <Flex
+            sx={{
+                background: `linear-gradient(90deg, ${leagueColor} 31%, rgba(0, 0, 0, 0.00) 100%)`,
+                height: "52px",
+                marginBottom: "15px ",
+                position: "relative",
+            }}
+            align={"center"}
+            justify={"space-between"}
+        >
+            <Image
+                src={A1}
+                sx={{
+                    position: "absolute",
+                    left: "-20px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: "80px",
+                }}
+            ></Image>
+            <Text
+                sx={{
+                    width: "140px",
+                    fontSize: "12px",
+                    textAlign: "right",
+                }}
+            >
+                Lvl.{" "}
+                <span
+                    style={{
+                        fontSize: "24px",
+                    }}
+                >
+                    {tokenIdInfo.level}
+                </span>
+            </Text>
+            <Flex align={"center"}>
+                <Avatar
+                    hornSize="10px"
+                    sx={{
+                        width: "36px",
+                        height: "36px",
+                    }}
+                >
+                    <Image src={tokenIdInfo.img}></Image>
+                </Avatar>
+                <Text
+                    sx={{
+                        fontSize: "16px",
+                        fontWeight: 700,
+                        marginLeft: "10px",
+                    }}
+                >
+                    @ownername
+                </Text>
+            </Flex>
+            <Flex flexDir={"column"} align={"center"}>
+                <Flex align={"flex-end"}>
+                    <Image
+                        src={XP}
+                        sx={{
+                            width: "14px",
+                            marginBottom: "3px",
+                            marginRight: "4px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: "20px",
+                        }}
+                    >
+                        {tokenIdInfo.point}
+                    </Text>
+                </Flex>
+                <Box
+                    sx={{
+                        padding: "2px",
+                        border: "2px solid #fff",
+                        borderRadius: "10px",
+                        width: "175px",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            background: "#FDDC2D",
+                            height: "10px",
+                            width:
+                                ((tokenIdInfo.point - tokenIdInfo.prePoint) /
+                                    (tokenIdInfo.nextPoint -
+                                        tokenIdInfo.prePoint)) *
+                                    100 +
+                                "%",
+                            borderRadius: "5px",
+                        }}
+                    ></Box>
+                </Box>
+            </Flex>
+        </Flex>
+    );
+};
+
+const renderer = ({
+    formatted,
+}: {
+    formatted: {
+        minutes: string;
+        seconds: string;
+    };
+}) => {
+    return (
+        <Text
+            sx={{ fontSize: "16px", textAlign: "center", marginBottom: "10px" }}
+        >
+            Shortest Timer{" "}
+            <span
+                style={{
+                    fontSize: "24px",
+                }}
+            >
+                {formatted.minutes}:{formatted.seconds}
+            </span>
+        </Text>
+    );
+};
+
 const TeamPlaneList = ({
+    newcomerList,
     onSetPremium,
-    leagueConfig,
+    leagueColor,
     leagueInfo,
     onLeaderRateModalOpen,
 }: {
-    leagueConfig: any;
+    newcomerList: Newcomer[];
+    leagueColor: string;
     leagueInfo: LeagueInfo;
     onSetPremium: (amount: string) => void;
     onLeaderRateModalOpen: () => void;
 }) => {
+    console.log(leagueInfo.tokenIdsInfo, "newcomerList");
+
+    // 获取最短时间
+    const [newcomer, newcomerTokenIdInfo, tokenIdsInfo] = useMemo(() => {
+        const _tokenIdsInfo = [...leagueInfo.tokenIdsInfo];
+
+        const currentNewcomerList = newcomerList.filter((item) => {
+            return item.leader == leagueInfo.leader;
+        });
+
+        currentNewcomerList.sort((a, b) => {
+            return a.claimTIme - b.claimTIme;
+        });
+
+        if (currentNewcomerList.length == 0) {
+            return [null, null, _tokenIdsInfo];
+        }
+
+        console.log(currentNewcomerList, _tokenIdsInfo, "currentNewcomerList");
+
+        const fIndex = _tokenIdsInfo.findIndex((item) => {
+            return item.tokenId == currentNewcomerList[0].newComerId;
+        });
+        console.log(fIndex, "fIndex");
+
+        const [shortestTokenIdInfo] = _tokenIdsInfo.splice(fIndex, 1);
+
+        return [currentNewcomerList[0], shortestTokenIdInfo, _tokenIdsInfo];
+    }, [newcomerList, leagueInfo.tokenIdsInfo]);
+
+    console.log(newcomerTokenIdInfo, "newcomerTokenIdInfo");
+
     return (
         <Flex
             sx={{
@@ -146,7 +312,7 @@ const TeamPlaneList = ({
                 height: "calc(100vh - 400px)",
                 position: "relative",
                 background: "rgba(0, 0, 0, 0.39)",
-                border: `1px solid ${leagueConfig.color}`,
+                border: `1px solid ${leagueColor}`,
                 marginTop: "15px",
                 lineHeight: 1,
                 padding: "20px 0",
@@ -159,7 +325,7 @@ const TeamPlaneList = ({
                     position: "absolute",
                     left: "-5px",
                     top: "-10px",
-                    color: `${leagueConfig.color}`,
+                    color: `${leagueColor}`,
                     width: "50px",
                     height: "50px",
                 }}
@@ -169,7 +335,7 @@ const TeamPlaneList = ({
                     position: "absolute",
                     right: "-5px",
                     bottom: "-10px",
-                    color: `${leagueConfig.color}`,
+                    color: `${leagueColor}`,
                     width: "50px",
                     height: "50px",
                 }}
@@ -198,107 +364,30 @@ const TeamPlaneList = ({
                     },
                 }}
             >
-                {leagueInfo.tokenIdsInfo.map((item, index) => {
+                {newcomerTokenIdInfo && (
+                    <Box
+                        sx={{
+                            borderBottom: `1px dashed ${leagueColor}`,
+                        }}
+                    >
+                        <Countdown
+                            zeroPadTime={2}
+                            date={newcomer.claimTIme * 1000}
+                            renderer={renderer}
+                        />
+                        <TeamTokenIdInfo
+                            tokenIdInfo={newcomerTokenIdInfo}
+                            leagueColor={leagueColor}
+                        ></TeamTokenIdInfo>
+                    </Box>
+                )}
+                {tokenIdsInfo.map((item, index) => {
                     return (
-                        <Flex
+                        <TeamTokenIdInfo
                             key={index}
-                            sx={{
-                                background: `linear-gradient(90deg, ${leagueConfig.color} 31%, rgba(0, 0, 0, 0.00) 100%)`,
-                                height: "52px",
-                                marginBottom: "15px ",
-                                position: "relative",
-                            }}
-                            align={"center"}
-                            justify={"space-between"}
-                        >
-                            <Image
-                                src={A1}
-                                sx={{
-                                    position: "absolute",
-                                    left: "-20px",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                    width: "80px",
-                                }}
-                            ></Image>
-                            <Text
-                                sx={{
-                                    width: "140px",
-                                    fontSize: "12px",
-                                    textAlign: "right",
-                                }}
-                            >
-                                Lvl.{" "}
-                                <span
-                                    style={{
-                                        fontSize: "24px",
-                                    }}
-                                >
-                                    {item.level}
-                                </span>
-                            </Text>
-                            <Flex align={"center"}>
-                                <Avatar
-                                    hornSize="10px"
-                                    sx={{
-                                        width: "36px",
-                                        height: "36px",
-                                    }}
-                                >
-                                    <Image src={item.img}></Image>
-                                </Avatar>
-                                <Text
-                                    sx={{
-                                        fontSize: "16px",
-                                        fontWeight: 700,
-                                        marginLeft: "10px",
-                                    }}
-                                >
-                                    @ownername
-                                </Text>
-                            </Flex>
-                            <Flex flexDir={"column"} align={"center"}>
-                                <Flex align={"flex-end"}>
-                                    <Image
-                                        src={XP}
-                                        sx={{
-                                            width: "14px",
-                                            marginBottom: "3px",
-                                            marginRight: "4px",
-                                        }}
-                                    ></Image>
-                                    <Text
-                                        sx={{
-                                            fontSize: "20px",
-                                        }}
-                                    >
-                                        {item.point}
-                                    </Text>
-                                </Flex>
-                                <Box
-                                    sx={{
-                                        padding: "2px",
-                                        border: "2px solid #fff",
-                                        borderRadius: "10px",
-                                        width: "175px",
-                                    }}
-                                >
-                                    <Box
-                                        sx={{
-                                            background: "#FDDC2D",
-                                            height: "10px",
-                                            width:
-                                                ((item.point - item.prePoint) /
-                                                    (item.nextPoint -
-                                                        item.prePoint)) *
-                                                    100 +
-                                                "%",
-                                            borderRadius: "5px",
-                                        }}
-                                    ></Box>
-                                </Box>
-                            </Flex>
-                        </Flex>
+                            tokenIdInfo={item}
+                            leagueColor={leagueColor}
+                        ></TeamTokenIdInfo>
                     );
                 })}
             </Box>

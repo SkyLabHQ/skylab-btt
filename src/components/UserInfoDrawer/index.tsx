@@ -434,11 +434,13 @@ const UserInfoDrawer = ({
     ethBalance,
     onClose,
     isOpen,
+    onOpenMint,
 }: {
     referralReward: string;
     ethBalance: string;
     isOpen: boolean;
     onClose: () => void;
+    onOpenMint: () => void;
 }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const { logout } = usePrivy();
@@ -468,6 +470,7 @@ const UserInfoDrawer = ({
                         height: "100%",
                     }}
                 >
+                    <Box onClick={onOpenMint}>测试</Box>
                     {isPc ? (
                         <Image
                             src={RightArrowIcon}

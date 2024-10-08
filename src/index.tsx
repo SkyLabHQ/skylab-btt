@@ -30,6 +30,8 @@ const config = createConfig(
         appName: "Skylab-Btt",
         appUrl: window.location.host, // your app's url
         appIcon: logoIcon, // your app's icon, no bigger than 1024x1024px (max. 1MB)
+        enableWebSocketPublicClient: false,
+        connectors: [],
     }),
 );
 

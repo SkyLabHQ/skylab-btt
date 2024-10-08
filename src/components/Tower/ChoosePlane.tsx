@@ -79,13 +79,7 @@ const TokenInfoItem = ({
                 }}
             >
                 <VideoComponent
-                    url={
-                        leagueBg[tokenInfo.leader]
-                            ? leagueBg[tokenInfo.leader]
-                            : leagueBg[
-                                  "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D"
-                              ]
-                    }
+                    url={leagueBg[tokenInfo.leader]}
                     style={{
                         position: "absolute",
                         left: "50%",

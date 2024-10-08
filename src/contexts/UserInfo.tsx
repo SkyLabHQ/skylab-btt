@@ -18,6 +18,7 @@ import { avatarImg } from "@/utils/avatars";
 import { createWalletClient, custom } from "viem";
 import { baseSepolia } from "viem/chains";
 import {} from "ethers-multicall";
+import ChooseTeamModal from "@/components/Tower/ChooseTeamModal";
 
 const audio = new Audio(Click1Wav);
 
@@ -48,8 +49,6 @@ const UserInfoContext = createContext<{
     setTgInfo: (info: TgInfo) => void;
 }>(null);
 
-const whiteList = ["/btt", "/plane/my"];
-
 export const UserInfoProvider = ({
     children,
 }: {
@@ -57,13 +56,16 @@ export const UserInfoProvider = ({
 }) => {
     const [loginInit, setLoginInit] = useState(false);
     const { ready, user, linkWallet, logout, authenticated } = usePrivy();
+    const {
+        isOpen: mintOpen,
+        onOpen: onMintOpen,
+        onClose: onMintClose,
+    } = useDisclosure();
 
     const { login } = useLogin({
         onComplete: async (user: any) => {
             try {
-                console.log("开始登录");
                 const res = await tournamentLogin();
-                console.log(res, "看得懂");
                 const { userInfo, jwtToken } = res.data;
                 localStorage.setItem("tournamentToken", jwtToken);
                 const info = {
@@ -304,7 +306,13 @@ export const UserInfoProvider = ({
                     ethBalance={ethBalance}
                     isOpen={isOpen}
                     onClose={onClose}
+                    onOpenMint={onMintOpen}
                 ></UserInfoDrawer>
+                <ChooseTeamModal
+                    handleMint={() => {}}
+                    isOpen={mintOpen}
+                    onClose={onMintClose}
+                ></ChooseTeamModal>
             </Box>
         </UserInfoContext.Provider>
     );

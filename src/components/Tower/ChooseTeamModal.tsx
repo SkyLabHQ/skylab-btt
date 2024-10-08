@@ -316,7 +316,7 @@ const ChooseTeamModal = ({
                                 marginTop: "10px",
                             }}
                         >
-                            <Flex justify={"center"}>
+                            <Flex justify={"center"} align={"center"}>
                                 <Image
                                     src={EthIcon}
                                     sx={{

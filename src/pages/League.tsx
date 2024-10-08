@@ -17,6 +17,7 @@ import { getLevelInfo } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
+import { getInitNewcomerList, Newcomer } from "@/components/Tower";
 
 export interface TokenIdInfo {
     tokenId: number;
@@ -56,6 +57,9 @@ const League = () => {
     const multiProvider = useMultiProvider(chainId);
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [pot, setPot] = React.useState("0");
+    const [newcomerList, setNewcomerList] = React.useState(
+        getInitNewcomerList(),
+    );
 
     const [leagueInfoList, setLeagueInfoList] =
         React.useState(initLeagueInfoList);
@@ -75,13 +79,34 @@ const League = () => {
         const p = [];
         p.push(multiLeagueTournamentContract.pot());
 
+        for (let i = 1; i <= 16; i++) {
+            p.push(multiLeagueTournamentContract.getNewComerInfo(i));
+        }
+
         for (let i = 0; i < leagueAddressList.length; i++) {
             const leaderAddress = leagueAddressList[i];
             p.push(multiLeagueTournamentContract.getLeagueInfo(leaderAddress));
         }
 
-        const [pot, ...leagueListRes] = await multiProvider.all(p);
+        const res = await multiProvider.all(p);
+        const pot = res[0].toString();
+        const newcomerList = res.slice(1, 17);
+        const leagueListRes = res.slice(17);
+
         setPot(pot.toString());
+
+        const list: Newcomer[] = [];
+        newcomerList.forEach((item) => {
+            list.push({
+                claimTIme: item.claimTime.toNumber(),
+                newComerId: item.newComerId.toNumber(),
+                owner: item.owner,
+                point: item.point.toNumber(),
+                leader: item.leader,
+            });
+        });
+
+        setNewcomerList(list);
         console.log(leagueListRes, "leagueListRes");
         const allTokenIds: string[] = [];
         const leagueInfoList: LeagueInfo[] = [];
@@ -184,8 +209,9 @@ const League = () => {
                 pot={pot}
             ></DataInfo>
             <TeamPlaneList
+                newcomerList={newcomerList}
                 onSetPremium={handleSetPremium}
-                leagueConfig={leagueConfigList[activeIndex]}
+                leagueColor={leagueConfigList[activeIndex].color}
                 leagueInfo={leagueInfoList[activeIndex]}
                 onLeaderRateModalOpen={onLeaderRateModalOpen}
             ></TeamPlaneList>

@@ -1,5 +1,5 @@
 import { Box, Flex, Image, useDisclosure, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PrizeMoney from "./PrizeMoney";
 import BtButton from "./BtButton";
 import { Toolbar } from "./Toolbar";
@@ -18,12 +18,15 @@ import { ZERO_DATA } from "@/skyConstants";
 import { useUserInfo } from "@/contexts/UserInfo";
 import { getMintSignature, getTokensGame } from "@/api/tournament";
 import { isAddress } from "@/utils/isAddress";
-import { leagueAddressList } from "@/utils/league";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { parseAmount } from "@/utils/formatBalance";
 import { getLevelInfo } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
+import GameOver from "./GmeOver";
+import leagueConfigList from "@/utils/league";
+import useCountDown from "react-countdown-hook";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 export interface TokenIdInfo {
     tokenId: number;
@@ -33,6 +36,8 @@ export interface TokenIdInfo {
     prePoint: number;
     nextPoint: number;
     leader: string;
+    state: boolean;
+    gameId: number;
 }
 export interface Newcomer {
     claimTIme: number;
@@ -42,7 +47,13 @@ export interface Newcomer {
     leader: string;
 }
 
-const getInitNewcomerList = () => {
+export interface GameOverNewComer {
+    leader: string;
+    tokenId: number;
+    owner: string;
+}
+
+export const getInitNewcomerList = () => {
     const list: Newcomer[] = [];
     for (let i = 0; i < 16; i++) {
         list.push({
@@ -57,6 +68,9 @@ const getInitNewcomerList = () => {
 };
 
 const Tower = () => {
+    const { openLoading, closeLoading } = useSubmitRequest();
+
+    const [timeLeft, { start }] = useCountDown(0, 1000);
     const toast = useSkyToast();
     const publicClient = usePublicClient();
     const leagueTournamentContract = useLeagueTournamentContract();
@@ -70,29 +84,62 @@ const Tower = () => {
     const [newcomerList, setNewcomerList] = useState<Newcomer[]>(
         getInitNewcomerList(),
     );
+    const [gameOverNewComer, setGameOverNewComer] = useState<GameOverNewComer>({
+        leader: ZERO_DATA,
+        tokenId: 0,
+        owner: ZERO_DATA,
+    });
     const { address } = useUserInfo();
     const [pot, setPot] = useState("");
     const [myTokenIdsInfo, setMyAviationInfo] = useState<TokenIdInfo[]>([]);
+    const [myClaimReward, setMyClaimReward] = useState("");
 
     const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
     const multiProvider = useMultiProvider(chainId);
 
+    const leagueConfig = useMemo(() => {
+        const fItem = leagueConfigList.find(
+            (item) => item.leader === gameOverNewComer.leader,
+        );
+        return fItem;
+    }, [gameOverNewComer]);
+
+    const oldNewcomer = useMemo(() => {
+        const _list = newcomerList
+            .filter((item) => {
+                return item.claimTIme != 0;
+            })
+            .sort((a, b) => {
+                return a.claimTIme - b.claimTIme;
+            });
+
+        if (_list.length == 0) {
+            return null;
+        }
+
+        return _list[0];
+    }, [newcomerList]);
+
     const handleInit = async () => {
         const p = [];
         p.push(multiLeagueTournamentContract.pot());
+        p.push(multiLeagueTournamentContract.getGameOverNewComer());
         for (let i = 1; i <= 16; i++) {
             p.push(multiLeagueTournamentContract.getNewComerInfo(i));
         }
-        const [pot, ...res] = await multiProvider.all(p);
+        const [pot, gameOver, ...res] = await multiProvider.all(p);
+        setGameOverNewComer({
+            leader: gameOver[2],
+            tokenId: gameOver[1].toNumber(),
+            owner: gameOver[0],
+        });
         setPot(pot.toString());
         const list: Newcomer[] = [];
-        console.log(res, "res");
         res.forEach((item) => {
             list.push({
                 claimTIme: item.claimTime.toNumber(),
                 newComerId: item.newComerId.toNumber(),
-                // owner: item[2],
-                owner: ZERO_DATA,
+                owner: item.owner,
                 point: item.point.toNumber(),
                 leader: item.leader,
             });
@@ -104,11 +151,11 @@ const Tower = () => {
     };
 
     const handleGetMyPlane = async () => {
-        console.log(address, "address");
         const [aviationInfos] = await multiProvider.all([
             multiLeagueTournamentContract.getAccountInfo(address),
         ]);
-        const { leaders, points, tokenIds } = aviationInfos;
+        console.log(aviationInfos, "aviationInfos");
+        const { leaders, points, tokenIds, isLocked } = aviationInfos;
 
         const gameRes = await getTokensGame({
             tokens: tokenIds.map((item: string) => {
@@ -137,6 +184,7 @@ const Tower = () => {
                 img: img,
                 prePoint: levelInfo.minPoints,
                 nextPoint: levelInfo.maxPoints,
+                state: isLocked[index],
                 gameId: inGame ? inGame.id : 0,
             };
         });
@@ -156,7 +204,7 @@ const Tower = () => {
                 referral = ZERO_DATA;
             }
 
-            console.log(referral, expirationTime, signature, "signature");
+            openLoading();
             const hash = await leagueTournamentContract.write.mint(
                 [leader, referral, expirationTime, signature],
                 {
@@ -168,13 +216,37 @@ const Tower = () => {
             await publicClient.waitForTransactionReceipt({
                 hash,
             });
+            closeLoading();
             handleInit();
             handleGetMyPlane();
         } catch (e) {
+            closeLoading();
             toast(handleError(e));
         }
+    };
 
-        // const res= await getMintSignature("0x")
+    const handleGetPotReward = async () => {
+        const [reward] = await multiProvider.all([
+            multiLeagueTournamentContract.claimPot(address),
+        ]);
+        setMyClaimReward(reward.toString());
+        console.log(reward.toString(), "reward");
+    };
+
+    const handleClaimReward = async () => {
+        try {
+            openLoading();
+            const hash = await leagueTournamentContract.write.claimPot([
+                address,
+            ]);
+            // @ts-ignore
+            await publicClient.waitForTransactionReceipt(hash);
+            handleGetPotReward();
+            closeLoading();
+        } catch (e) {
+            closeLoading();
+            toast(handleError(e));
+        }
     };
 
     useEffect(() => {
@@ -185,9 +257,37 @@ const Tower = () => {
     useEffect(() => {
         if (!address || !multiProvider || !multiLeagueTournamentContract)
             return;
-
         handleGetMyPlane();
     }, [multiProvider, multiLeagueTournamentContract, address]);
+
+    useEffect(() => {
+        if (oldNewcomer) {
+            const time = oldNewcomer.claimTIme * 1000 - Date.now();
+            if (time > 0) {
+                start(time);
+            } else {
+                start(0);
+            }
+        }
+    }, [oldNewcomer]);
+
+    useEffect(() => {
+        if (
+            gameOverNewComer.tokenId == 0 ||
+            !address ||
+            !multiProvider ||
+            !multiLeagueTournamentContract
+        ) {
+            return;
+        }
+
+        handleGetPotReward();
+    }, [
+        gameOverNewComer.tokenId,
+        address,
+        multiLeagueTournamentContract,
+        multiProvider,
+    ]);
 
     return (
         <Flex
@@ -199,25 +299,46 @@ const Tower = () => {
             flexDir={"column"}
             justify={"center"}
         >
-            <PrizeMoney pot={pot}></PrizeMoney>
             <Toolbar></Toolbar>
-            <Status></Status>
-            <AllAviation newcomerList={newcomerList}></AllAviation>
-            <BtButton
-                onAvaitionClick={onOpen}
-                onPlayClick={onChoosePlaneOpen}
-            ></BtButton>
-            {/* <Warning></Warning> */}
-            <ChooseTeamModal
-                handleMint={handleMint}
-                isOpen={isOpen}
-                onClose={onClose}
-            ></ChooseTeamModal>
-            <ChoosePlane
-                myTokenIdsInfo={myTokenIdsInfo}
-                isOpen={isChoosePlaneOpen}
-                onClose={onChoosePlaneClose}
-            ></ChoosePlane>
+            <Status leagueConfig={leagueConfig}></Status>
+            {timeLeft >= 0 && timeLeft < 300000 && (
+                <Warning
+                    timeLeft={timeLeft}
+                    oldNewcomer={oldNewcomer}
+                ></Warning>
+            )}
+            {gameOverNewComer.tokenId == 0 ? (
+                <>
+                    <PrizeMoney pot={pot}></PrizeMoney>
+                    <AllAviation newcomerList={newcomerList}></AllAviation>
+                    <BtButton
+                        onAvaitionClick={onOpen}
+                        onPlayClick={onChoosePlaneOpen}
+                    ></BtButton>
+                    {timeLeft > 0 && timeLeft < 300000 && (
+                        <Warning
+                            timeLeft={timeLeft}
+                            oldNewcomer={oldNewcomer}
+                        ></Warning>
+                    )}
+                    <ChooseTeamModal
+                        handleMint={handleMint}
+                        isOpen={isOpen}
+                        onClose={onClose}
+                    ></ChooseTeamModal>
+                    <ChoosePlane
+                        myTokenIdsInfo={myTokenIdsInfo}
+                        isOpen={isChoosePlaneOpen}
+                        onClose={onChoosePlaneClose}
+                    ></ChoosePlane>
+                </>
+            ) : (
+                <GameOver
+                    leagueConfig={leagueConfig}
+                    reward={myClaimReward}
+                    onClaimReward={handleClaimReward}
+                ></GameOver>
+            )}
         </Flex>
     );
 };
