@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import TutorirlIcon from "@/assets/tutorial.svg";
-import ETHIcon from "@/assets/eth.svg";
+import ETHIcon from "./assets/eth.svg";
 import APYUp from "@/assets/apy-up.svg";
 import Border from "./assets/border.png";
 import A1 from "@/assets/a1.png";
