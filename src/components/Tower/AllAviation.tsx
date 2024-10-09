@@ -8,7 +8,6 @@ import { aviationImg } from "@/utils/aviationImg";
 import { ReactComponent as LevelBorder } from "./assets/level-border.svg";
 import CountDownIcon from "./assets/countdown.svg";
 import LockIcon from "./assets/lock.svg";
-import TestBg from "./assets/test.gif";
 import { Newcomer } from ".";
 import Countdown from "react-countdown";
 import TestWebm from "./assets/test.webm";

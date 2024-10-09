@@ -20,8 +20,8 @@ const Status = () => {
             <Flex
                 sx={{
                     position: "relative",
-                    width: "246px",
-                    height: "60px",
+                    width: "206px",
+                    height: "55px",
                     border: "1px solid #fff",
                 }}
                 align={"center"}
@@ -58,15 +58,15 @@ const Status = () => {
             <Flex
                 sx={{
                     position: "relative",
-                    width: "246px",
-                    height: "60px",
+                    width: "206px",
+                    height: "50px",
                     border: "1px solid #FF2D2D",
                     background:
                         "linear-gradient(180deg, rgba(255, 45, 45, 0.50) 6.67%, rgba(255, 45, 45, 0.20) 100%)",
                     color: "#D9D9D9",
                     textAlign: "center",
                     fontFamily: "Quantico",
-                    fontSize: "20px",
+                    fontSize: "16px",
                 }}
                 align={"center"}
                 justify={"center"}
@@ -75,7 +75,7 @@ const Status = () => {
                     Shortest Timer Lvl.{" "}
                     <span
                         style={{
-                            fontSize: "40px",
+                            fontSize: "30px",
                         }}
                     >
                         1
@@ -85,8 +85,9 @@ const Status = () => {
                     sx={{
                         position: "absolute",
                         width: "100px",
-                        height: "60px",
+                        height: "50px",
                         left: "100%",
+                        top: "-8px",
                     }}
                     flexDir={"column"}
                 >
@@ -101,7 +102,7 @@ const Status = () => {
                     </Text>
                     <Flex
                         sx={{
-                            border: "1px solid #FF2D2D",
+                            border: "1px solid #FFF",
                             borderLeft: "none",
                             borderRight: "none",
                             flex: 1,

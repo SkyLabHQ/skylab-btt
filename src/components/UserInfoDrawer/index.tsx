@@ -16,10 +16,7 @@ import RightArrowIcon from "./assets/right-arrow.svg";
 import DownArrowIcon from "./assets/down-arrow.png";
 import { useLinkAccount, usePrivy } from "@privy-io/react-auth";
 import { shortenAddress } from "@/utils";
-import Blackrrow from "./assets/black-arrow.svg";
 import NoPlane from "./assets/no-plane.png";
-import DiscordIcon from "./assets/discord.png";
-import TwIcon from "./assets/twitter.png";
 import useSkyToast from "@/hooks/useSkyToast";
 import PlaneBg from "./assets/plane-bg.png";
 import { useUserInfo } from "@/contexts/UserInfo";
@@ -30,8 +27,13 @@ import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
 import { updateUserInfo } from "@/api/tournament";
 import { avatarImg } from "@/utils/avatars";
 import Avatar from "../Avatar";
+import { LButton } from "../Button/Index";
+import EthIcon from "@/assets/eth.svg";
+import InviteIcon from "./assets/invite.png";
+import { formatAmount, toFixed } from "@/utils/formatBalance";
+import { useLocation } from "react-router-dom";
 
-const UserInfo = () => {
+const UserInfo = ({ ethBalance }: { ethBalance: string }) => {
     const { address, setTgInfo } = useUserInfo();
 
     const { user, exportWallet } = usePrivy();
@@ -57,136 +59,185 @@ const UserInfo = () => {
 
     const toast = useSkyToast();
     const { onCopy } = useClipboard(address);
+    const { onCopy: onCopyReferral } = useClipboard(
+        `${window.location.host}/tower?referral=${address}`,
+    );
+
+    const handleInvite = async () => {
+        onCopyReferral();
+    };
 
     return (
         <Flex flexDir={"column"} align={"center"}>
             <Flex flexDir={"column"} align={"center"}>
                 <Flex
                     sx={{
+                        fontSize: "14px",
+                        color: "#FFF",
                         marginTop: "8px",
                     }}
-                    align={"center"}
+                    onClick={() => {
+                        onCopy();
+                        toast("Address copied");
+                    }}
                 >
-                    {user?.discord && (
-                        <Image
-                            src={DiscordIcon}
-                            sx={{
-                                width: "16px",
-                                marginRight: "4px",
-                            }}
-                        ></Image>
-                    )}
-                    {user?.twitter && (
-                        <Image
-                            src={TwIcon}
-                            sx={{
-                                width: "16px",
-                                marginRight: "4px",
-                            }}
-                        ></Image>
-                    )}
-                    <Flex
+                    <Text
                         sx={{
                             fontSize: "14px",
-                            color: "#F2D861",
-                        }}
-                        onClick={() => {
-                            onCopy();
-                            toast("Address copied");
+                            marginRight: "11px",
                         }}
                     >
-                        <Text
-                            sx={{
-                                fontSize: "14px",
-                                marginRight: "11px",
-                            }}
-                        >
-                            {`${shortenAddress(address, 4, 4)}`}
-                        </Text>
-                        <Image
-                            src={CopyIcon}
-                            sx={{
-                                width: "14px",
-                            }}
-                        ></Image>
-                    </Flex>
+                        {`${shortenAddress(address, 4, 4)}`}
+                    </Text>
+                    <Image
+                        src={CopyIcon}
+                        sx={{
+                            width: "14px",
+                        }}
+                    ></Image>
                 </Flex>
-                {/* !user?.telegram && */}
-                {!user?.telegram && (
-                    <Flex
+                <Flex>
+                    <Image
+                        src={EthIcon}
                         sx={{
-                            borderRadius: "12px",
-                            background: "#F2D861",
-                            height: "40px",
+                            width: "14px",
+                            marginRight: "2px",
+                        }}
+                    ></Image>
+                    <Text
+                        sx={{
+                            fontSize: "32px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                        }}
+                    >
+                        {toFixed(formatAmount(ethBalance), 2)}
+                    </Text>
+                </Flex>
+                <Box
+                    sx={{
+                        marginTop: "20px",
+                    }}
+                >
+                    {!user?.telegram && (
+                        <LButton
+                            sx={{
+                                width: "180px",
+                                height: "40px",
+                                color: "#fff",
+                            }}
+                        >
+                            {" "}
+                            <Flex
+                                sx={{}}
+                                onClick={async () => {
+                                    linkTelegram();
+                                }}
+                                align={"center"}
+                                justify={"center"}
+                            >
+                                <Text
+                                    sx={{
+                                        fontSize: "12px",
+                                        color: "#fff",
+                                        marginRight: "5px",
+                                    }}
+                                >
+                                    Connect Telegram
+                                </Text>
+
+                                <Image
+                                    src={TgIcon}
+                                    sx={{
+                                        width: "20px",
+                                    }}
+                                ></Image>
+                            </Flex>
+                        </LButton>
+                    )}
+                    <LButton
+                        sx={{
                             width: "180px",
-                            paddingLeft: "8px",
-                            marginTop: "15px",
-                            cursor: "pointer",
+                            height: "40px",
+                            color: "#fff",
                         }}
-                        onClick={async () => {
-                            linkTelegram();
+                    >
+                        <Flex
+                            sx={{}}
+                            onClick={handleInvite}
+                            align={"center"}
+                            justify={"center"}
+                        >
+                            <Image
+                                src={InviteIcon}
+                                sx={{
+                                    width: "20px",
+                                    marginRight: "6px",
+                                }}
+                            ></Image>
+                            <Text
+                                sx={{
+                                    fontSize: "12px",
+                                    color: "#fff",
+                                }}
+                            >
+                                Invite & Earn
+                            </Text>
+                        </Flex>
+                    </LButton>
+                    <Flex
+                        justify={"space-between"}
+                        sx={{
+                            marginTop: "8px",
                         }}
-                        align={"center"}
-                        justify={"center"}
                     >
                         <Text
                             sx={{
                                 fontSize: "12px",
-                                color: "#1b1b1b",
-                                marginRight: "5px",
+                                fontWeight: "700",
                             }}
                         >
-                            Link to TG
+                            Reward Earned
                         </Text>
-                        <Image
-                            src={Blackrrow}
-                            sx={{
-                                marginRight: "15px",
-                            }}
-                        ></Image>
-                        <Image
-                            src={TgIcon}
-                            sx={{
-                                width: "28px",
-                                maxWidth: "28px",
-                            }}
-                        ></Image>
+                        <Flex>
+                            <Image
+                                src={EthIcon}
+                                sx={{
+                                    width: "6px",
+                                }}
+                            ></Image>
+                            <Text></Text>
+                        </Flex>
                     </Flex>
-                )}
-                {user?.wallet?.walletClientType === "privy" && (
-                    <Flex
-                        sx={{
-                            borderRadius: "12px",
-                            background: "#F2D861",
-                            height: "40px",
-                            width: "180px",
-                            paddingLeft: "8px",
-                            marginTop: "15px",
-                            cursor: "pointer",
-                        }}
-                        onClick={async () => {
-                            exportWallet();
-                        }}
-                        align={"center"}
-                        justify={"center"}
-                    >
-                        <Image
-                            src={ExportIcon}
+                    {user?.wallet?.walletClientType === "privy" && (
+                        <Flex
                             sx={{
-                                marginRight: "4px",
+                                marginTop: "20px",
+                                cursor: "pointer",
                             }}
-                        ></Image>
-                        <Text
-                            sx={{
-                                fontSize: "12px",
-                                color: "#1b1b1b",
-                                marginRight: "5px",
+                            onClick={async () => {
+                                exportWallet();
                             }}
+                            align={"center"}
+                            justify={"center"}
                         >
-                            Export Embedded Wallet{" "}
-                        </Text>
-                    </Flex>
-                )}
+                            <Image
+                                src={ExportIcon}
+                                sx={{
+                                    marginRight: "4px",
+                                }}
+                            ></Image>
+                            <Text
+                                sx={{
+                                    fontSize: "12px",
+                                    color: "#fff",
+                                }}
+                            >
+                                Export Embedded Wallet{" "}
+                            </Text>
+                        </Flex>
+                    )}
+                </Box>
             </Flex>
         </Flex>
     );
@@ -366,9 +417,11 @@ const MyPlane = ({
 };
 
 const UserInfoDrawer = ({
+    ethBalance,
     onClose,
     isOpen,
 }: {
+    ethBalance: string;
     isOpen: boolean;
     onClose: () => void;
 }) => {
@@ -385,7 +438,6 @@ const UserInfoDrawer = ({
             <DrawerOverlay />
             <DrawerContent
                 sx={{
-                    borderRadius: "20px",
                     border: "1px solid #F2D861",
                     background: "rgba(255, 255, 255, 0.15)",
                     backdropFilter: "blur(25px)",
@@ -456,7 +508,7 @@ const UserInfoDrawer = ({
                                 }}
                             ></Image>
                         </Avatar>
-                        <UserInfo></UserInfo>
+                        <UserInfo ethBalance={ethBalance}></UserInfo>
                         <MyPlane
                             planeList={planeList}
                             planeInit={planeInit}

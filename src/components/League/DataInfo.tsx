@@ -6,8 +6,39 @@ import Border from "./assets/border.png";
 import A1 from "@/assets/a1.png";
 import RArrow from "./assets/r-arrow.svg";
 import XP from "@/assets/xp.svg";
+import { LeagueInfo } from "@/pages/League";
+import {
+    accAdd,
+    accDiv,
+    accMul,
+    accSub,
+    formatAmount,
+    toFixed,
+} from "@/utils/formatBalance";
+import { useMemo } from "react";
 
-const DataInfo = () => {
+const DataInfo = ({
+    pot,
+    leagueInfo,
+}: {
+    pot: string;
+    leagueInfo: LeagueInfo;
+}) => {
+    const lv1Price = useMemo(() => {
+        return accAdd("0.02", leagueInfo.premium);
+    }, [leagueInfo]);
+
+    const payout = useMemo(() => {
+        const x_y = accAdd(
+            leagueInfo.leagueOwnerPercentage,
+            leagueInfo.newComerPercentage,
+        );
+
+        const restRewardRate = accDiv(accSub(100, x_y), 100);
+        const pot_1_x_y_ = accMul(restRewardRate, formatAmount(pot));
+        return pot_1_x_y_;
+    }, [pot, leagueInfo]);
+
     return (
         <Flex
             align={"center"}
@@ -54,7 +85,7 @@ const DataInfo = () => {
                             fontSize: "30px",
                         }}
                     >
-                        0.0005
+                        {leagueInfo.premium.toString()}
                     </Text>
                 </Flex>
                 <Flex align={"center"} gap={"4px"}>
@@ -142,7 +173,7 @@ const DataInfo = () => {
                                 fontSize: "32px",
                             }}
                         >
-                            2.99
+                            {accAdd("0.02", leagueInfo.premium)}
                         </Text>
                     </Flex>
                 </Flex>
@@ -188,7 +219,7 @@ const DataInfo = () => {
                                 fontSize: "32px",
                             }}
                         >
-                            2.99
+                            {payout}
                         </Text>
                     </Flex>
                 </Flex>

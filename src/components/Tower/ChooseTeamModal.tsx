@@ -23,6 +23,8 @@ import WE from "./assets/w-e.svg";
 import YE from "./assets/y-e.svg";
 import XP from "@/assets/xp.svg";
 import TutorirlIcon from "@/assets/tutorial.svg";
+import EthIcon from "@/assets/eth.svg";
+import SelectTeam from "../League/SelectTeam";
 
 const rotateKeyframes = keyframes`
     0% {
@@ -40,6 +42,7 @@ const RewardWrap = ({ amount }: { amount: number }) => {
                 width: "168px",
                 height: "168px",
                 position: "relative",
+                marginTop: "10px",
                 "&:hover": {
                     ".n-l": {
                         background: `url(${YL})`,
@@ -121,13 +124,20 @@ const RewardWrap = ({ amount }: { amount: number }) => {
 };
 
 const ChooseTeamModal = ({
+    handleMint,
     isOpen,
     onClose,
 }: {
+    handleMint: (leader: string) => void;
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const [activeIndex, setActiveIndex] = React.useState(0);
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+
+    const handleActiveIndex = (index: number) => {
+        setActiveIndex(index);
+    };
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
             <ModalOverlay backdropFilter={"blur(35px)"} />
@@ -157,8 +167,16 @@ const ChooseTeamModal = ({
                         >
                             CHOOSE YOUR FAVOURITE TEAM FIRST
                         </Text>
-                        <Flex gap={"46px"}>
-                            {" "}
+                        <SelectTeam
+                            activeIndex={activeIndex}
+                            onActiveIndex={handleActiveIndex}
+                        ></SelectTeam>
+                        <Flex
+                            gap={"46px"}
+                            sx={{
+                                marginTop: "40px",
+                            }}
+                        >
                             <Box>
                                 <Box
                                     sx={{
@@ -166,7 +184,6 @@ const ChooseTeamModal = ({
                                         textAlign: "center",
                                     }}
                                 >
-                                    {" "}
                                     <Text>CHAMPION</Text>
                                     <Text>WINS PAYOUT</Text>
                                 </Box>
@@ -192,7 +209,6 @@ const ChooseTeamModal = ({
                                             }}
                                         ></Image>
                                     </Text>
-
                                     <Text
                                         sx={{
                                             fontSize: "20px",
@@ -209,11 +225,9 @@ const ChooseTeamModal = ({
                                         PAYOUT
                                     </Text>
                                 </Box>
-
                                 <RewardWrap amount={999}></RewardWrap>
                             </Box>
                         </Flex>
-
                         <Flex
                             sx={{
                                 background: `url(${WLight}) no-repeat center center`,
@@ -292,21 +306,33 @@ const ChooseTeamModal = ({
                             </Text>
                         </Box>
                         <LButton
+                            onClick={() => {
+                                handleMint("");
+                            }}
                             sx={{
                                 width: "272px",
                                 height: "62px",
                                 marginTop: "10px",
                             }}
                         >
-                            <Text
-                                sx={{
-                                    color: "#fff",
-                                    fontSize: "18px",
-                                    fontWeight: "700",
-                                }}
-                            >
-                                Join
-                            </Text>
+                            <Flex justify={"center"}>
+                                <Image
+                                    src={EthIcon}
+                                    sx={{
+                                        width: "12px",
+                                        marginRight: "10px",
+                                    }}
+                                ></Image>
+                                <Text
+                                    sx={{
+                                        color: "#fff",
+                                        fontSize: "24px",
+                                        fontWeight: "700",
+                                    }}
+                                >
+                                    0.02
+                                </Text>
+                            </Flex>
                         </LButton>
                     </Flex>
                 </ModalBody>

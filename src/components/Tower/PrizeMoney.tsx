@@ -13,51 +13,43 @@ const PrizeMoney = ({ pot }: { pot: string }) => {
                 left: "0",
                 background: `url(${moneyBg}) no-repeat`,
                 // background: "green",
-                width: "385px",
-                height: "256px",
+                width: "290px",
+                height: "192px",
                 backgroundSize: "100% 100%",
                 zIndex: 2,
             }}
             align={"center"}
             justify={"center"}
+            flexDir={"column"}
         >
+            <Text
+                sx={{
+                    fontSize: "24px",
+                    fontWeight: 700,
+                    textAlign: "center",
+                }}
+            >
+                PRIZE MONEY
+            </Text>
             <Flex align={"center"}>
                 <Image
                     src={ETHIcon}
                     sx={{
-                        width: "40px",
+                        width: "30px",
                         marginRight: "24px",
                     }}
                 ></Image>
-                <Box
+                <Text
                     sx={{
-                        lineHeight: "1",
-                        position: "relative",
+                        color: "#FFF",
+                        fontFamily: "Quantico",
+                        fontSize: "60px",
+                        fontWeight: 700,
+                        lineHeight: 1,
                     }}
                 >
-                    <Text
-                        sx={{
-                            fontSize: "30px",
-                            fontWeight: 700,
-                            position: "absolute",
-                            top: "-30px",
-                            width: "100%",
-                            textAlign: "center",
-                        }}
-                    >
-                        PRIZE MONEY
-                    </Text>
-                    <Text
-                        sx={{
-                            color: "#FFF",
-                            fontFamily: "Quantico",
-                            fontSize: "96px",
-                            fontWeight: 700,
-                        }}
-                    >
-                        {toFixed(formatAmount(pot), 2)}
-                    </Text>
-                </Box>
+                    {toFixed(formatAmount(pot), 2)}
+                </Text>
             </Flex>
         </Flex>
     );

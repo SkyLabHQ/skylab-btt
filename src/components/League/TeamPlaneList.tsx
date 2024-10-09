@@ -11,11 +11,16 @@ import TutorirlIcon from "@/assets/tutorial.svg";
 import SettingIcon from "./assets/setting.svg";
 import A1 from "@/assets/a1.png";
 import XP from "@/assets/xp.svg";
+import { LeagueInfo, TokenIdInfo } from "@/pages/League";
+import { useUserInfo } from "@/contexts/UserInfo";
 const RateData = ({
+    leagueInfo,
     onLeaderRateModalOpen,
 }: {
+    leagueInfo: LeagueInfo;
     onLeaderRateModalOpen: () => void;
 }) => {
+    const { address } = useUserInfo();
     return (
         <Flex align={"center"} gap={"20px"} sx={{}}>
             <Flex align={"center"} gap={"10px"}>
@@ -34,13 +39,13 @@ const RateData = ({
                     <Text>TAKE RATE</Text>
                 </Box>
             </Flex>
-            <Flex gap={"6px"}>
+            <Flex gap={"6px"} align={"center"}>
                 <Text
                     sx={{
                         fontSize: "40px",
                     }}
                 >
-                    8
+                    {leagueInfo.leagueOwnerPercentage}
                     <span
                         style={{
                             fontSize: "12px",
@@ -49,10 +54,24 @@ const RateData = ({
                         %
                     </span>
                 </Text>
-                <Image
-                    src={SettingIcon}
-                    onClick={onLeaderRateModalOpen}
-                ></Image>
+
+                <Box
+                    sx={{
+                        width: "16px",
+                        height: "16px",
+                    }}
+                >
+                    {address == leagueInfo.leader && (
+                        <Image
+                            sx={{
+                                width: "100%",
+                                height: "100%",
+                            }}
+                            src={SettingIcon}
+                            onClick={onLeaderRateModalOpen}
+                        ></Image>
+                    )}
+                </Box>
             </Flex>
             <Flex align={"center"} gap={"10px"}>
                 <Image
@@ -70,13 +89,13 @@ const RateData = ({
                     <Text>TAKE RATE</Text>
                 </Box>
             </Flex>
-            <Flex gap={"6px"}>
+            <Flex gap={"6px"} align={"center"}>
                 <Text
                     sx={{
                         fontSize: "40px",
                     }}
                 >
-                    8
+                    {leagueInfo.newComerPercentage}
                     <span
                         style={{
                             fontSize: "12px",
@@ -85,15 +104,35 @@ const RateData = ({
                         %
                     </span>
                 </Text>
-                <Image src={SettingIcon}></Image>
+                <Box
+                    sx={{
+                        width: "16px",
+                        height: "16px",
+                    }}
+                >
+                    {address == leagueInfo.leader && (
+                        <Image
+                            sx={{
+                                width: "100%",
+                                height: "100%",
+                            }}
+                            src={SettingIcon}
+                            onClick={onLeaderRateModalOpen}
+                        ></Image>
+                    )}
+                </Box>
             </Flex>
         </Flex>
     );
 };
 
 const TeamPlaneList = ({
+    leagueConfig,
+    leagueInfo,
     onLeaderRateModalOpen,
 }: {
+    leagueConfig: any;
+    leagueInfo: LeagueInfo;
     onLeaderRateModalOpen: () => void;
 }) => {
     return (
@@ -105,7 +144,7 @@ const TeamPlaneList = ({
                 height: "calc(100vh - 400px)",
                 position: "relative",
                 background: "rgba(0, 0, 0, 0.39)",
-                border: "1px solid #D60000",
+                border: `1px solid ${leagueConfig.color}`,
                 marginTop: "15px",
                 lineHeight: 1,
                 padding: "20px 0",
@@ -118,7 +157,7 @@ const TeamPlaneList = ({
                     position: "absolute",
                     left: "-5px",
                     top: "-10px",
-                    color: "#D60000",
+                    color: `${leagueConfig.color}`,
                     width: "50px",
                     height: "50px",
                 }}
@@ -128,17 +167,19 @@ const TeamPlaneList = ({
                     position: "absolute",
                     right: "-5px",
                     bottom: "-10px",
-                    color: "#D60000",
+                    color: `${leagueConfig.color}`,
                     width: "50px",
                     height: "50px",
                 }}
             ></RbIcon>
-            <RateData onLeaderRateModalOpen={onLeaderRateModalOpen}></RateData>
+            <RateData
+                leagueInfo={leagueInfo}
+                onLeaderRateModalOpen={onLeaderRateModalOpen}
+            ></RateData>
             <Box
                 sx={{
                     width: "100%",
                     padding: "0 40px",
-                    // height:
                     flex: 1,
                     overflowY: "auto",
                     marginTop: "30px",
@@ -155,107 +196,109 @@ const TeamPlaneList = ({
                     },
                 }}
             >
-                {[1, 2, 3, 4, 5, 6, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(
-                    (item, index) => {
-                        return (
-                            <Flex
-                                key={index}
+                {leagueInfo.tokenIdsInfo.map((item, index) => {
+                    return (
+                        <Flex
+                            key={index}
+                            sx={{
+                                background: `linear-gradient(90deg, ${leagueConfig.color} 31%, rgba(0, 0, 0, 0.00) 100%)`,
+                                height: "52px",
+                                marginBottom: "15px ",
+                                position: "relative",
+                            }}
+                            align={"center"}
+                            justify={"space-between"}
+                        >
+                            <Image
+                                src={A1}
                                 sx={{
-                                    background:
-                                        "linear-gradient(90deg, red 31%, rgba(0, 0, 0, 0.00) 100%)",
-                                    height: "52px",
-                                    marginBottom: "15px ",
-                                    position: "relative",
+                                    position: "absolute",
+                                    left: "-20px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    width: "80px",
                                 }}
-                                align={"center"}
-                                justify={"space-between"}
+                            ></Image>
+                            <Text
+                                sx={{
+                                    width: "140px",
+                                    fontSize: "12px",
+                                    textAlign: "right",
+                                }}
                             >
-                                <Image
-                                    src={A1}
-                                    sx={{
-                                        position: "absolute",
-                                        left: "-20px",
-                                        top: "50%",
-                                        transform: "translateY(-50%)",
-                                        width: "80px",
-                                    }}
-                                ></Image>
-                                <Text
-                                    sx={{
-                                        width: "140px",
-                                        fontSize: "12px",
-                                        textAlign: "right",
+                                Lvl.{" "}
+                                <span
+                                    style={{
+                                        fontSize: "24px",
                                     }}
                                 >
-                                    Lvl.{" "}
-                                    <span
-                                        style={{
-                                            fontSize: "24px",
-                                        }}
-                                    >
-                                        16
-                                    </span>
+                                    {item.level}
+                                </span>
+                            </Text>
+                            <Flex align={"center"}>
+                                <Avatar
+                                    hornSize="10px"
+                                    sx={{
+                                        width: "36px",
+                                        height: "36px",
+                                    }}
+                                >
+                                    <Image src={item.img}></Image>
+                                </Avatar>
+                                <Text
+                                    sx={{
+                                        fontSize: "16px",
+                                        fontWeight: 700,
+                                        marginLeft: "10px",
+                                    }}
+                                >
+                                    @ownername
                                 </Text>
-                                <Flex align={"center"}>
-                                    <Avatar
-                                        hornSize="10px"
+                            </Flex>
+                            <Flex flexDir={"column"} align={"center"}>
+                                <Flex align={"flex-end"}>
+                                    <Image
+                                        src={XP}
                                         sx={{
-                                            width: "36px",
-                                            height: "36px",
+                                            width: "14px",
+                                            marginBottom: "3px",
+                                            marginRight: "4px",
                                         }}
-                                    >
-                                        <Image src={A1}></Image>
-                                    </Avatar>
+                                    ></Image>
                                     <Text
                                         sx={{
-                                            fontSize: "16px",
-                                            fontWeight: 700,
-                                            marginLeft: "10px",
+                                            fontSize: "20px",
                                         }}
                                     >
-                                        @ownername
+                                        {item.point}
                                     </Text>
                                 </Flex>
-                                <Flex flexDir={"column"} align={"center"}>
-                                    <Flex align={"flex-end"}>
-                                        <Image
-                                            src={XP}
-                                            sx={{
-                                                width: "14px",
-                                                marginBottom: "3px",
-                                                marginRight: "4px",
-                                            }}
-                                        ></Image>
-                                        <Text
-                                            sx={{
-                                                fontSize: "20px",
-                                            }}
-                                        >
-                                            45
-                                        </Text>
-                                    </Flex>
+                                <Box
+                                    sx={{
+                                        padding: "2px",
+                                        border: "2px solid #fff",
+                                        borderRadius: "10px",
+                                        width: "175px",
+                                    }}
+                                >
                                     <Box
                                         sx={{
-                                            padding: "2px",
-                                            border: "2px solid #fff",
-                                            borderRadius: "10px",
-                                            width: "175px",
+                                            background: "#FDDC2D",
+                                            height: "10px",
+                                            width:
+                                                ((item.point - item.prePoint) /
+                                                    (item.nextPoint -
+                                                        item.prePoint)) *
+                                                    100 +
+                                                "%",
+                                            borderRadius: "5px",
                                         }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                background: "#FDDC2D",
-                                                height: "10px",
-                                                width: "80%",
-                                                borderRadius: "5px",
-                                            }}
-                                        ></Box>
-                                    </Box>
-                                </Flex>
+                                    ></Box>
+                                </Box>
                             </Flex>
-                        );
-                    },
-                )}
+                        </Flex>
+                    );
+                })}
             </Box>
         </Flex>
     );

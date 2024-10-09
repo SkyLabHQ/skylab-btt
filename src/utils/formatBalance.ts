@@ -55,7 +55,7 @@ export function toFixed(number: string, pp: number) {
     }
     return n[0] + (x == "" ? "" : "." + x);
 }
-export function accMul(arg1: string, arg2: string) {
+export function accMul(arg1: string | number, arg2: string | number) {
     if (!arg1 || !arg2) {
         return "0";
     }

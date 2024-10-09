@@ -12,10 +12,16 @@ import {
     useMultiLeagueTournamentContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
-import { useChainId } from "wagmi";
+import { useChainId, usePublicClient } from "wagmi";
 import { useLeagueTournamentContract } from "@/hooks/useContract";
 import { ZERO_DATA } from "@/skyConstants";
 import { useUserInfo } from "@/contexts/UserInfo";
+import { getMintSignature } from "@/api/tournament";
+import { isAddress } from "@/utils/isAddress";
+import { leagueAddressList } from "@/utils/league";
+import useSkyToast from "@/hooks/useSkyToast";
+import { handleError } from "@/utils/error";
+import { parseAmount } from "@/utils/formatBalance";
 
 export interface Newcomer {
     claimTIme: number;
@@ -40,6 +46,9 @@ const getInitNewcomerList = () => {
 };
 
 const Tower = () => {
+    const toast = useSkyToast();
+    const publicClient = usePublicClient();
+    const leagueTournamentContract = useLeagueTournamentContract();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         isOpen: isChoosePlaneOpen,
@@ -60,7 +69,7 @@ const Tower = () => {
         const p = [];
         p.push(multiLeagueTournamentContract.pot());
         for (let i = 1; i <= 16; i++) {
-            p.push(multiLeagueTournamentContract.getnewComerInfo(i));
+            p.push(multiLeagueTournamentContract.getNewComerInfo(i));
         }
 
         const [pot, ...res] = await multiProvider.all(p);
@@ -69,13 +78,15 @@ const Tower = () => {
 
         setPot(pot.toString());
         const list: Newcomer[] = [];
+        console.log(res, "res");
         res.forEach((item) => {
             list.push({
-                claimTIme: item[0].toNumber(),
-                newComerId: item[1].toNumber(),
-                owner: item[2],
-                point: item[3].toNumber(),
-                leader: item[4],
+                claimTIme: item.claimTime.toNumber(),
+                newComerId: item.newComerId.toNumber(),
+                // owner: item[2],
+                owner: ZERO_DATA,
+                point: item.point.toNumber(),
+                leader: item.leader,
             });
         });
 
@@ -95,6 +106,41 @@ const Tower = () => {
             );
         }
         const tokenIds = await multiProvider.all(p);
+    };
+
+    const handleMint = async (leader: string) => {
+        try {
+            let referral = sessionStorage.getItem("referral");
+            const expirationTime = Math.floor(Date.now() / 1000) + 86400;
+            let signature = "";
+            if (isAddress(referral)) {
+                const res = await getMintSignature(referral, expirationTime);
+                console.log(res, "r");
+            } else {
+                referral = ZERO_DATA;
+            }
+
+            console.log(referral, expirationTime, signature, "signature");
+            const hash = await leagueTournamentContract.write.mint(
+                [leader, referral, expirationTime, signature],
+                {
+                    value: parseAmount("0.02"),
+                },
+            );
+
+            // @ts-ignore
+            const receipt = await publicClient.waitForTransactionReceipt({
+                hash,
+            });
+            if (receipt.status !== "success") {
+                toast("Transaction failed");
+                return;
+            }
+        } catch (e) {
+            toast(handleError(e));
+        }
+
+        // const res= await getMintSignature("0x")
     };
 
     useEffect(() => {
@@ -129,6 +175,7 @@ const Tower = () => {
             ></BtButton>
             {/* <Warning></Warning> */}
             <ChooseTeamModal
+                handleMint={handleMint}
                 isOpen={isOpen}
                 onClose={onClose}
             ></ChooseTeamModal>

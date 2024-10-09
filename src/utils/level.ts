@@ -29,3 +29,14 @@ export const levelRanges = [
     { level: 15, minPoints: 16384, maxPoints: 32768 },
     { level: 16, minPoints: 32768, maxPoints: 1000000 },
 ];
+
+export const getLevelInfo = (point: number) => {
+    for (let i = 0; i < levelRanges.length; i++) {
+        if (
+            point < levelRanges[i].maxPoints &&
+            point >= levelRanges[i].minPoints
+        ) {
+            return levelRanges[i]; // 返回等级，从1开始
+        }
+    }
+};

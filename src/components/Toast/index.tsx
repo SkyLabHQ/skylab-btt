@@ -21,7 +21,6 @@ const SkyToast = ({
             fontSize={isPc ? "1.5625vw" : "16px"}
             sx={{
                 maxWidth: isPc ? "40vw" : "300px",
-                overflow: "hidden",
                 textOverflow: "ellipsis",
                 display: "-webkit-box",
                 WebkitLineClamp: 4,
@@ -29,6 +28,8 @@ const SkyToast = ({
                 breakword: "break-all",
                 position: "relative",
                 zIndex: 10001,
+                maxHeight: "118px",
+                overflow: "hidden",
             }}
         >
             {message}

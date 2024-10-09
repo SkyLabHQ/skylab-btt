@@ -243,6 +243,30 @@
     },
     {
         "type": "function",
+        "name": "getAccountInfo",
+        "inputs": [
+            {
+                "name": "account",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "tokenIds",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
+            },
+            {
+                "name": "leaders",
+                "type": "address[]",
+                "internalType": "address[]"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "getApproved",
         "inputs": [
             {
@@ -256,6 +280,24 @@
                 "name": "",
                 "type": "address",
                 "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getGameOverNewComer",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
             }
         ],
         "stateMutability": "view"
@@ -341,26 +383,7 @@
     },
     {
         "type": "function",
-        "name": "getTokenIdPerLevel",
-        "inputs": [
-            {
-                "name": "level",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256[]",
-                "internalType": "uint256[]"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "getnewComerInfo",
+        "name": "getNewComerInfo",
         "inputs": [
             {
                 "name": "level",
@@ -380,11 +403,6 @@
                 "internalType": "uint256"
             },
             {
-                "name": "owner",
-                "type": "address",
-                "internalType": "address"
-            },
-            {
                 "name": "point",
                 "type": "uint256",
                 "internalType": "uint256"
@@ -393,6 +411,25 @@
                 "name": "leader",
                 "type": "address",
                 "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getTokenIdPerLevel",
+        "inputs": [
+            {
+                "name": "level",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
             }
         ],
         "stateMutability": "view"
@@ -413,6 +450,11 @@
             },
             {
                 "name": "_admin",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "_vaultV2",
                 "type": "address",
                 "internalType": "address"
             }
@@ -614,25 +656,6 @@
     },
     {
         "type": "function",
-        "name": "memberToLeader",
-        "inputs": [
-            {
-                "name": "",
-                "type": "address",
-                "internalType": "address"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "address",
-                "internalType": "address"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
         "name": "metadataBaseURI",
         "inputs": [],
         "outputs": [
@@ -739,38 +762,6 @@
                 "name": "",
                 "type": "address",
                 "internalType": "contract Paper"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "paperBalance",
-        "inputs": [
-            {
-                "name": "",
-                "type": "address",
-                "internalType": "address"
-            }
-        ],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "paperTotalAmount",
-        "inputs": [],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256",
-                "internalType": "uint256"
             }
         ],
         "stateMutability": "view"
@@ -1131,6 +1122,25 @@
     },
     {
         "type": "function",
+        "name": "tokenIdToLeader",
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
         "name": "tokenOfOwnerByIndex",
         "inputs": [
             {
@@ -1207,6 +1217,19 @@
         ],
         "outputs": [],
         "stateMutability": "payable"
+    },
+    {
+        "type": "function",
+        "name": "vaultV2",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
     },
     {
         "type": "function",

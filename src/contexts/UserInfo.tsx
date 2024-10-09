@@ -17,6 +17,7 @@ import { getTokensGame, tournamentLogin } from "@/api/tournament";
 import { avatarImg } from "@/utils/avatars";
 import { createWalletClient, custom } from "viem";
 import { baseSepolia } from "viem/chains";
+import {} from "ethers-multicall";
 
 const audio = new Audio(Click1Wav);
 
@@ -94,6 +95,7 @@ export const UserInfoProvider = ({
     const [planeList, setPlaneList] = useState([] as any[]);
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [ethBalance, setEthBalance] = useState("0");
     const [tgInfo, setTgInfo] = useState({
         tgId: "",
         firstName: "",
@@ -138,10 +140,11 @@ export const UserInfoProvider = ({
 
         try {
             setLoading(true);
-
-            const [planeBalance] = await multiProvider.all([
+            const [ethBalance, planeBalance] = await multiProvider.all([
+                multiProvider.getEthBalance(address),
                 multiMercuryJarTournamentContract.balanceOf(address),
             ]);
+            console.log(ethBalance, "ethBalance");
             const p = [];
             for (let i = 0; i < Number(planeBalance.toString()); i++) {
                 p.push(
@@ -200,6 +203,7 @@ export const UserInfoProvider = ({
 
             setPlaneInit(true);
             setPlaneList(planeList);
+            setEthBalance(ethBalance.toString());
             setLoading(false);
         } catch (e) {
             setLoading(false);
@@ -218,9 +222,7 @@ export const UserInfoProvider = ({
     // }, []);
 
     useEffect(() => {
-        if (whiteList.includes(pathname)) {
-            handleGetUserPaper();
-        }
+        handleGetUserPaper();
     }, [
         loginInit,
         multiMercuryJarTournamentContract,
@@ -292,6 +294,7 @@ export const UserInfoProvider = ({
             >
                 {children}
                 <UserInfoDrawer
+                    ethBalance={ethBalance}
                     isOpen={isOpen}
                     onClose={onClose}
                 ></UserInfoDrawer>

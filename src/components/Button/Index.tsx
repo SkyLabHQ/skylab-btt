@@ -18,16 +18,28 @@ export const PrimaryButton = (props: ButtonProps) => {
     );
 };
 
-export const LButton = (props: ButtonProps) => {
-    const { sx, children, ...rest } = props;
+export const LButton = (
+    props: ButtonProps & {
+        bColor?: string;
+    },
+) => {
+    const { sx, bColor = "#fff", children, ...rest } = props;
     return (
         <Button
             variant={"unstyled"}
             sx={{
                 height: "40px",
                 width: "64px",
-                border: "1px solid #3c3c3c",
+                border: "1px solid",
+                borderColor: "#3c3c3c",
                 borderRadius: "0px",
+                "&:hover": {
+                    borderColor: "#F2D861",
+                    svg: {
+                        color: "#F2D861",
+                    },
+                },
+
                 ...sx,
             }}
             {...rest}
