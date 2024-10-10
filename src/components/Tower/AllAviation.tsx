@@ -1,4 +1,4 @@
-import { Box, Flex, Image, useDisclosure, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import RArrowIcon from "./assets/r-arrow.svg";
@@ -10,7 +10,6 @@ import CountDownIcon from "./assets/countdown.svg";
 import LockIcon from "./assets/lock.svg";
 import { Newcomer } from ".";
 import Countdown from "react-countdown";
-import TestWebm from "./assets/test.webm";
 import { leagueBg } from "@/utils/league";
 
 const renderer = ({
@@ -71,17 +70,15 @@ const Aviation = ({
                         width: "100%",
                         height: "100%",
                     }}
+                    src={
+                        leagueBg[newcomer.leader]
+                            ? leagueBg[newcomer.leader]
+                            : leagueBg[
+                                  "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D"
+                              ]
+                    }
                 >
-                    <source
-                        src={
-                            leagueBg[newcomer.leader]
-                                ? leagueBg[newcomer.leader]
-                                : leagueBg[
-                                      "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D"
-                                  ]
-                        }
-                        type="video/webm"
-                    />
+                    <source type="video/webm" />
                     Your browser does not support the video tag.
                 </video>
                 <Image

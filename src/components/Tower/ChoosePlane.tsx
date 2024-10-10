@@ -91,11 +91,9 @@ const TokenInfoItem = ({
                         width: "100%",
                         height: "100%",
                     }}
+                    src={leagueBg[tokenInfo.leader]}
                 >
-                    <source
-                        src={leagueBg[tokenInfo.leader]}
-                        type="video/webm"
-                    />
+                    <source type="video/webm" />
                     Your browser does not support the video tag.
                 </video>
                 <Image
