@@ -12,9 +12,11 @@ import {
     useMultiLeagueTournamentContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
-import { useChainId } from "wagmi";
+import { useChainId, usePublicClient } from "wagmi";
 import { getLevelInfo } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
+import useSkyToast from "@/hooks/useSkyToast";
+import { handleError } from "@/utils/error";
 
 export interface TokenIdInfo {
     tokenId: number;
@@ -48,6 +50,8 @@ const initLeagueInfoList = leagueAddressList.map((item) => {
 
 const League = () => {
     const chainId = useChainId();
+    const publicClient = usePublicClient();
+    const toast = useSkyToast();
     const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
     const multiProvider = useMultiProvider(chainId);
     const [activeIndex, setActiveIndex] = React.useState(0);
@@ -125,6 +129,22 @@ const League = () => {
         setLeagueInfoList(leagueInfoList);
     };
 
+    const handleSetPremium = async (amount: string) => {
+        try {
+            const hash = await multiLeagueTournamentContract.setPremium([
+                amount,
+            ]);
+            // @ts-ignore
+            await publicClient.waitForTransactionReceipt({
+                hash,
+            });
+            handleGetLeagueInfo();
+        } catch (e) {
+            console.log(e);
+            toast(handleError(e));
+        }
+    };
+
     useEffect(() => {
         if (!multiLeagueTournamentContract || !multiProvider) return;
         handleGetLeagueInfo();
@@ -164,6 +184,7 @@ const League = () => {
                 pot={pot}
             ></DataInfo>
             <TeamPlaneList
+                onSetPremium={handleSetPremium}
                 leagueConfig={leagueConfigList[activeIndex]}
                 leagueInfo={leagueInfoList[activeIndex]}
                 onLeaderRateModalOpen={onLeaderRateModalOpen}

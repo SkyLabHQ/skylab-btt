@@ -33,6 +33,9 @@ export const LButton = (
                 border: "1px solid",
                 borderColor: "#3c3c3c",
                 borderRadius: "0px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 "&:hover": {
                     borderColor: "#F2D861",
                     svg: {

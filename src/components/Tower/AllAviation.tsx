@@ -11,6 +11,7 @@ import LockIcon from "./assets/lock.svg";
 import { Newcomer } from ".";
 import Countdown from "react-countdown";
 import TestWebm from "./assets/test.webm";
+import { leagueBg } from "@/utils/league";
 
 const renderer = ({
     formatted,
@@ -20,7 +21,6 @@ const renderer = ({
         seconds: string;
     };
 }) => {
-    console.log(formatted, "formatted");
     return (
         <span>
             {formatted.minutes}:{formatted.seconds}
@@ -36,7 +36,7 @@ const Aviation = ({
     index: number;
 }) => {
     const isLock = newcomer.newComerId == 0;
-
+    console.log(leagueBg[newcomer.leader], "newcomer");
     return (
         <Flex
             sx={{
@@ -72,20 +72,18 @@ const Aviation = ({
                         height: "100%",
                     }}
                 >
-                    <source src={TestWebm} type="video/webm" />
+                    <source
+                        src={
+                            leagueBg[newcomer.leader]
+                                ? leagueBg[newcomer.leader]
+                                : leagueBg[
+                                      "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D"
+                                  ]
+                        }
+                        type="video/webm"
+                    />
                     Your browser does not support the video tag.
                 </video>
-                {/* <Image
-                    src={TestBg}
-                    sx={{
-                        position: "absolute",
-                        left: "50%",
-                        top: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: "100%",
-                        height: "100%",
-                    }}
-                ></Image> */}
                 <Image
                     src={aviationImg(index + 1)}
                     sx={{

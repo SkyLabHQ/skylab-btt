@@ -6,13 +6,13 @@ import React from "react";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
 import Avatar from "@/components/Avatar";
-import { useNavigate } from "react-router-dom";
 import TutorirlIcon from "@/assets/tutorial.svg";
 import SettingIcon from "./assets/setting.svg";
 import A1 from "@/assets/a1.png";
 import XP from "@/assets/xp.svg";
 import { LeagueInfo, TokenIdInfo } from "@/pages/League";
 import { useUserInfo } from "@/contexts/UserInfo";
+
 const RateData = ({
     leagueInfo,
     onLeaderRateModalOpen,
@@ -127,12 +127,14 @@ const RateData = ({
 };
 
 const TeamPlaneList = ({
+    onSetPremium,
     leagueConfig,
     leagueInfo,
     onLeaderRateModalOpen,
 }: {
     leagueConfig: any;
     leagueInfo: LeagueInfo;
+    onSetPremium: (amount: string) => void;
     onLeaderRateModalOpen: () => void;
 }) => {
     return (
@@ -300,6 +302,7 @@ const TeamPlaneList = ({
                     );
                 })}
             </Box>
+            {/* <TeamPremiumModal></TeamPremiumModal> */}
         </Flex>
     );
 };

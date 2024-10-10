@@ -42,9 +42,4 @@ api.interceptors.response.use(
     },
 );
 
-export const bindBurner = async (data: any) => {
-    const response = await api.post("/bindBurner", data);
-    return response.data;
-};
-
 export default api;

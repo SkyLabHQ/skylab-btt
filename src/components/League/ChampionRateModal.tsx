@@ -1,6 +1,5 @@
 import {
     Text,
-    Img,
     Modal,
     ModalBody,
     ModalContent,
@@ -22,7 +21,7 @@ import { useState } from "react";
 import SubIcon from "./assets/sub.svg";
 import AddIcon from "./assets/add.svg";
 
-const LeaderRateModal = ({
+const ChampionRateModal = ({
     isOpen,
     onClose,
 }: {
@@ -30,18 +29,16 @@ const LeaderRateModal = ({
     onClose: () => void;
 }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
-    const toast = useSkyToast();
-
-    const [value, setValue] = useState("0");
+    const [value, setValue] = useState("10");
     const handleAdd = () => {
-        if (Number(value) >= 10) {
+        if (Number(value) >= 20) {
             return;
         }
         setValue(String(Number(value) + 1));
     };
 
     const handleSub = () => {
-        if (Number(value) <= 0) {
+        if (Number(value) <= 10) {
             return;
         }
         setValue(String(Number(value) - 1));
@@ -90,8 +87,7 @@ const LeaderRateModal = ({
                                     lineHeight: 1,
                                 }}
                             >
-                                <Text>TEAM</Text>
-                                <Text>LEADER</Text>
+                                <Text>CHAMPION</Text>
                             </Box>
                             <Flex
                                 align={"center"}
@@ -151,8 +147,8 @@ const LeaderRateModal = ({
                                         console.log(e);
                                         setValue(String(e));
                                     }}
-                                    max={10}
-                                    min={0}
+                                    max={20}
+                                    min={10}
                                     sx={{
                                         width: "100px",
                                     }}
@@ -200,14 +196,14 @@ const LeaderRateModal = ({
                                     fontSize: "16px",
                                 }}
                             >
-                                *Team leader's take rate
+                                *Winning Last Plane's take rate{" "}
                             </Text>
                             <Text
                                 sx={{
                                     fontSize: "20px",
                                 }}
                             >
-                                (0% - 10%)
+                                (10% - 20%)
                             </Text>
                         </Box>
                         <Flex
@@ -267,4 +263,4 @@ const LeaderRateModal = ({
     );
 };
 
-export default LeaderRateModal;
+export default ChampionRateModal;

@@ -22,7 +22,18 @@ import { leagueAddressList } from "@/utils/league";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { parseAmount } from "@/utils/formatBalance";
+import { getLevelInfo } from "@/utils/level";
+import { aviationImg } from "@/utils/aviationImg";
 
+export interface TokenIdInfo {
+    tokenId: number;
+    point: number;
+    level: number;
+    img: string;
+    prePoint: number;
+    nextPoint: number;
+    leader: string;
+}
 export interface Newcomer {
     claimTIme: number;
     newComerId: number;
@@ -61,6 +72,7 @@ const Tower = () => {
     );
     const { address } = useUserInfo();
     const [pot, setPot] = useState("");
+    const [myTokenIdsInfo, setMyAviationInfo] = useState<TokenIdInfo[]>([]);
 
     const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
     const multiProvider = useMultiProvider(chainId);
@@ -71,11 +83,7 @@ const Tower = () => {
         for (let i = 1; i <= 16; i++) {
             p.push(multiLeagueTournamentContract.getNewComerInfo(i));
         }
-
         const [pot, ...res] = await multiProvider.all(p);
-
-        console.log(pot, "pot");
-
         setPot(pot.toString());
         const list: Newcomer[] = [];
         console.log(res, "res");
@@ -96,16 +104,29 @@ const Tower = () => {
     };
 
     const handleGetMyPlane = async () => {
-        const [planeBalance] = await multiProvider.all([
-            multiLeagueTournamentContract.balanceOf(address),
+        console.log(address, "address");
+        const [aviationInfos] = await multiProvider.all([
+            multiLeagueTournamentContract.getAccountInfo(address),
         ]);
-        const p = [];
-        for (let i = 0; i < Number(planeBalance.toString()); i++) {
-            p.push(
-                multiLeagueTournamentContract.tokenOfOwnerByIndex(address, i),
-            );
-        }
-        const tokenIds = await multiProvider.all(p);
+        const { leaders, points, tokenIds } = aviationInfos;
+
+        const myAviation = tokenIds.map((item: string, index: number) => {
+            const point = points[index].toNumber();
+            const levelInfo = getLevelInfo(point);
+            const level = levelInfo.level;
+            const img = aviationImg(level);
+            return {
+                leader: leaders[index],
+                point: points[index].toNumber(),
+                tokenId: item.toString(),
+                level: level,
+                img: img,
+                prePoint: levelInfo.minPoints,
+                nextPoint: levelInfo.maxPoints,
+            };
+        });
+        setMyAviationInfo(myAviation);
+        console.log(myAviation, "myAviation");
     };
 
     const handleMint = async (leader: string) => {
@@ -129,13 +150,11 @@ const Tower = () => {
             );
 
             // @ts-ignore
-            const receipt = await publicClient.waitForTransactionReceipt({
+            await publicClient.waitForTransactionReceipt({
                 hash,
             });
-            if (receipt.status !== "success") {
-                toast("Transaction failed");
-                return;
-            }
+            handleInit();
+            handleGetMyPlane();
         } catch (e) {
             toast(handleError(e));
         }
@@ -180,6 +199,7 @@ const Tower = () => {
                 onClose={onClose}
             ></ChooseTeamModal>
             <ChoosePlane
+                myTokenIdsInfo={myTokenIdsInfo}
                 isOpen={isChoosePlaneOpen}
                 onClose={onChoosePlaneClose}
             ></ChoosePlane>

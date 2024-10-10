@@ -8,126 +8,210 @@ import {
     ModalOverlay,
     Text,
     Image,
-    keyframes,
+    SimpleGrid,
 } from "@chakra-ui/react";
-import React from "react";
-import { ReactComponent as BorderBg } from "./assets/border.svg";
-import WLight from "./assets/w-light.svg";
-import TutorialIcon from "@/assets/tutorial.svg";
-import ApyUpIcon from "@/assets/apy-up.svg";
-import A1 from "./assets/a1.png";
+import { useEffect, useState } from "react";
 import { LButton } from "../Button/Index";
-import WL from "./assets/w-l.svg";
-import YL from "./assets/y-l.svg";
-import WE from "./assets/w-e.svg";
-import YE from "./assets/y-e.svg";
+import { useUserInfo } from "@/contexts/UserInfo";
+import {
+    useMultiLeagueTournamentContract,
+    useMultiProvider,
+} from "@/hooks/useMultiContract";
+import { useChainId } from "wagmi";
+import { TokenIdInfo } from ".";
+import { leagueBg } from "@/utils/league";
 import XP from "@/assets/xp.svg";
-import TutorirlIcon from "@/assets/tutorial.svg";
+import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
+import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
+import EnterIcon from "@/assets/enter.svg";
 
-const rotateKeyframes = keyframes`
-    0% {
-        transform: rotate(0deg);
-     }
-    100% {
-        transform: rotate(360deg);
-     }
-`;
-
-const RewardWrap = ({ amount }: { amount: number }) => {
+const TokenInfoItem = ({
+    isSelect,
+    tokenInfo,
+    onClick,
+}: {
+    isSelect: boolean;
+    tokenInfo: TokenIdInfo;
+    onClick: () => void;
+}) => {
     return (
         <Flex
-            sx={{
-                width: "168px",
-                height: "168px",
-                position: "relative",
-                "&:hover": {
-                    ".n-l": {
-                        background: `url(${YL})`,
-                    },
-                    ".xx": {
-                        svg: {
-                            color: "#F2D861",
-                        },
-                    },
-                    ".eth": {
-                        background: `url(${YE})`,
-                    },
-                    ".amount": {
-                        color: "#F2D861",
-                    },
-                },
-            }}
+            flexDir={"column"}
             align={"center"}
-            justify={"center"}
+            onClick={onClick}
+            sx={{
+                border: isSelect ? "1px solid #999" : "1px solid transparent",
+                width: "150px",
+                height: "200px",
+                padding: "10px 0",
+                position: "relative",
+                cursor: "pointer",
+            }}
         >
-            <Box
-                className="xx"
+            {isSelect && (
+                <>
+                    <LbIcon
+                        style={{
+                            position: "absolute",
+                            left: "-2px",
+                            top: "-2px",
+                        }}
+                    ></LbIcon>
+                    <RbIcon
+                        style={{
+                            position: "absolute",
+                            right: "-2px",
+                            bottom: "-2px",
+                        }}
+                    ></RbIcon>
+                </>
+            )}
+
+            <Flex
+                align={"center"}
+                flexDir={"column"}
+                justify={"center"}
                 sx={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    left: "0",
-                    top: "0",
+                    width: "110px",
+                    height: "110px",
+                    position: "relative",
                 }}
-                animation={`${rotateKeyframes} 8s linear infinite `}
             >
-                <BorderBg
+                <video
+                    width="110px"
+                    height="110px"
+                    autoPlay
+                    loop={true}
+                    muted={true}
                     style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
                         width: "100%",
                         height: "100%",
                     }}
-                ></BorderBg>
-            </Box>
-            <Flex
-                className="n-l"
-                sx={{
-                    width: "140px",
-                    height: "140px",
-                    borderRadius: "50%",
-                    background: `url(${WL})`,
-                    position: "absolute",
-                    left: "50%",
-                    top: "50%",
-                    transform: "translate(-50%,-50%)",
-                }}
-                align={"center"}
-                justify={"center"}
-                flexDir={"column"}
-            >
-                <Box
-                    className="eth"
+                >
+                    <source
+                        src={leagueBg[tokenInfo.leader]}
+                        type="video/webm"
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                <Image
+                    src={tokenInfo.img}
                     sx={{
-                        width: "43px",
-                        height: "55px",
-                        background: `url(${WE})`,
+                        width: "100px",
                     }}
-                ></Box>
+                ></Image>
                 <Text
-                    className="amount"
                     sx={{
-                        textShadow:
-                            "0px 7px 26.5px rgba(255, 255, 255, 0.58), 0px 3px 0px #4D4D4D",
-                        fontFamily: "Quantico",
-                        fontSize: "40px",
-                        fontWeight: 700,
-                        lineHeight: 1,
+                        position: "absolute",
+                        bottom: "10px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: "12px",
                     }}
                 >
-                    999
+                    Lvl.{" "}
+                    <span
+                        style={{
+                            fontSize: "16px",
+                        }}
+                    >
+                        {tokenInfo.level}
+                    </span>
                 </Text>
             </Flex>
+            <Text
+                sx={{
+                    fontSize: "12px",
+                }}
+            >
+                #{tokenInfo.tokenId}
+            </Text>
+            <Flex>
+                <Image
+                    src={XP}
+                    sx={{
+                        width: "18px",
+                        marginTop: "4px",
+                        marginRight: "4px",
+                    }}
+                ></Image>
+                <Text
+                    sx={{
+                        fontSize: "20px",
+                        fontWeight: "700",
+                    }}
+                >
+                    {tokenInfo.point}
+                </Text>
+            </Flex>
+            <Box
+                sx={{
+                    width: "102px",
+                    height: "8px",
+                    borderRadius: "4px",
+                    border: "1px solid #fff",
+                }}
+            >
+                <Box
+                    sx={{
+                        width: `${
+                            ((tokenInfo.point - tokenInfo.prePoint) /
+                                (tokenInfo.nextPoint - tokenInfo.prePoint)) *
+                            100
+                        }%`,
+                        height: "100%",
+                        backgroundColor: "#FDDC2D",
+                    }}
+                ></Box>
+            </Box>
         </Flex>
     );
 };
 
 const ChooseTeamModal = ({
+    myTokenIdsInfo,
     isOpen,
     onClose,
 }: {
+    myTokenIdsInfo: TokenIdInfo[];
     isOpen: boolean;
     onClose: () => void;
 }) => {
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
+    const [selectIndex, setSelectIndex] = useState(-1);
+    const { address } = useUserInfo();
+    const chainId = useChainId();
+    const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
+    const multiProvider = useMultiProvider(chainId);
+
+    const handleGetAccountInfo = async () => {
+        console.log(1111);
+        const res = await multiProvider.all([
+            multiLeagueTournamentContract.getAccountInfo(address),
+        ]);
+        console.log(res);
+    };
+
+    const handleSelect = (index: number) => {
+        setSelectIndex(index);
+    };
+
+    useEffect(() => {
+        if (!address || !multiProvider || !multiLeagueTournamentContract)
+            return;
+        handleGetAccountInfo();
+    }, [address, multiProvider, multiLeagueTournamentContract]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setSelectIndex(-1);
+        }
+    }, [isOpen]);
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
             <ModalOverlay backdropFilter={"blur(35px)"} />
@@ -135,7 +219,7 @@ const ChooseTeamModal = ({
                 bg="rgba(0, 0, 0, 0.5)"
                 border="1px solid #FDDC2D"
                 borderRadius="8px"
-                maxW={isPc ? "800px" : "300px"}
+                maxW={isPc ? "800px" : "100%"}
             >
                 <ModalBody pb="20px" pt={"20px"}>
                     <Flex
@@ -149,7 +233,6 @@ const ChooseTeamModal = ({
                         <Text
                             fontSize={isPc ? "24px" : "20px"}
                             fontWeight="700"
-                            fontFamily={"Orbitron"}
                             textAlign={"center"}
                             sx={{
                                 color: "#fff",
@@ -157,50 +240,91 @@ const ChooseTeamModal = ({
                         >
                             CHOOSE YOUR PLANE FIRST
                         </Text>
-
-                        <Box
+                        <SimpleGrid
                             sx={{
-                                marginTop: "40px",
+                                width: "100%",
+                                maxWidth: "600px",
+                                marginTop: "20px",
+                                height: "500px",
+                                overflowY: "auto",
+                                overflowX: "hidden",
+                                "::-webkit-scrollbar": {
+                                    width: "0",
+                                },
+                            }}
+                            columns={4}
+                            rowGap={"24px"}
+                        >
+                            {myTokenIdsInfo.map((item, index) => {
+                                return (
+                                    <TokenInfoItem
+                                        isSelect={selectIndex === index}
+                                        onClick={() => {
+                                            handleSelect(index);
+                                        }}
+                                        key={index}
+                                        tokenInfo={item}
+                                    ></TokenInfoItem>
+                                );
+                            })}
+                        </SimpleGrid>
+
+                        <Flex
+                            align={"center"}
+                            gap={"20px"}
+                            sx={{
+                                marginTop: "24px",
                             }}
                         >
-                            <Image
-                                src={A1}
+                            <LButton
                                 sx={{
-                                    width: "80px",
-                                }}
-                            ></Image>
-                            <Text
-                                sx={{
-                                    textAlign: "center",
+                                    width: "113px",
+                                    height: "46px",
                                 }}
                             >
-                                Lvl.{" "}
-                                <span
-                                    style={{
-                                        fontSize: "24px",
+                                <Text
+                                    sx={{
+                                        fontSize: "12px",
+                                        marginRight: "8px",
                                     }}
                                 >
-                                    1
-                                </span>
-                            </Text>
-                        </Box>
-                        <LButton
-                            sx={{
-                                width: "272px",
-                                height: "62px",
-                                marginTop: "10px",
-                            }}
-                        >
-                            <Text
+                                    esc
+                                </Text>
+                                <Text
+                                    sx={{
+                                        color: "#fff",
+                                        fontSize: "14px",
+                                        fontWeight: "700",
+                                    }}
+                                >
+                                    Cancel
+                                </Text>
+                            </LButton>
+                            <LButton
                                 sx={{
-                                    color: "#fff",
-                                    fontSize: "18px",
-                                    fontWeight: "700",
+                                    width: "113px",
+                                    height: "46px",
                                 }}
+                                alignContent={"center"}
                             >
-                                Join
-                            </Text>
-                        </LButton>
+                                <Image
+                                    src={EnterIcon}
+                                    sx={{
+                                        width: "10px",
+                                        marginRight: "6px",
+                                    }}
+                                ></Image>
+                                <Text
+                                    sx={{
+                                        color: "#fff",
+                                        fontSize: "14px",
+                                        fontWeight: "700",
+                                    }}
+                                >
+                                    Confirm
+                                </Text>
+                            </LButton>
+                        </Flex>
                     </Flex>
                 </ModalBody>
             </ModalContent>

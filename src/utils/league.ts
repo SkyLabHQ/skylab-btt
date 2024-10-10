@@ -1,3 +1,36 @@
+import redBg from "@/assets/league/red.webm";
+import orangeBg from "@/assets/league/orange.webm";
+import yellowBg from "@/assets/league/yellow.webm";
+import greenBg from "@/assets/league/green.webm";
+import cyanBg from "@/assets/league/cyan.webm";
+import blueBg from "@/assets/league/blue.webm";
+import purpleBg from "@/assets/league/purple.webm";
+import pinkBg from "@/assets/league/pink.webm";
+
+enum League {
+    RED = "0x2f49Be6976324000da4Bd091B0217E217b81A93d",
+    ORANGE = "0x82152dD7A4a7449DeE6B30F4F7bB93Eb0a362ec7",
+    YELLOW = "0x8FB03F7aFa01ee3A42339DcaCEa88F828c1670Af",
+    GREEN = "0x737E8dB0D308eb0B9d0BC843198f0De3672334b4",
+    CYAN = "0x40BA69df5c58A1106480b42aFEF78DA08860081c",
+    BLUE = "0x79Ecf06eF9240f033e87Eb5bC8d96579970De265",
+    PURPLE = "0xE75c943E63b67c2E21340F93DC156aFA80fe11cB",
+    PINK = "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D",
+}
+
+export const leagueBg: {
+    [league: string]: string;
+} = {
+    [League.RED]: redBg,
+    [League.ORANGE]: orangeBg,
+    [League.YELLOW]: yellowBg,
+    [League.GREEN]: greenBg,
+    [League.CYAN]: cyanBg,
+    [League.BLUE]: blueBg,
+    [League.PURPLE]: purpleBg,
+    [League.PINK]: pinkBg,
+};
+
 const leagueConfigList = [
     {
         name: "RED TEAM",
@@ -56,6 +89,8 @@ const leagueConfigList = [
         color: "#D651A1",
     },
 ];
+
+const leagueWebm = {};
 
 export const leagueAddressList = leagueConfigList.map((item) => item.leader);
 

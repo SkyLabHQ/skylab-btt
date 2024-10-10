@@ -25,6 +25,7 @@ import XP from "@/assets/xp.svg";
 import TutorirlIcon from "@/assets/tutorial.svg";
 import EthIcon from "@/assets/eth.svg";
 import SelectTeam from "../League/SelectTeam";
+import { leagueAddressList } from "@/utils/league";
 
 const rotateKeyframes = keyframes`
     0% {
@@ -307,7 +308,7 @@ const ChooseTeamModal = ({
                         </Box>
                         <LButton
                             onClick={() => {
-                                handleMint("");
+                                handleMint(leagueAddressList[activeIndex]);
                             }}
                             sx={{
                                 width: "272px",
