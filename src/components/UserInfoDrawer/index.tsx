@@ -28,10 +28,9 @@ import { updateUserInfo } from "@/api/tournament";
 import { avatarImg } from "@/utils/avatars";
 import Avatar from "../Avatar";
 import { LButton } from "../Button/Index";
-import EthIcon from "@/assets/eth.svg";
+import EthIcon from "@/assets/eth.png";
 import InviteIcon from "./assets/invite.png";
 import { formatAmount, toFixed } from "@/utils/formatBalance";
-import { useLocation } from "react-router-dom";
 
 const UserInfo = ({ ethBalance }: { ethBalance: string }) => {
     const { address, setTgInfo } = useUserInfo();

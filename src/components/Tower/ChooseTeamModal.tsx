@@ -23,7 +23,7 @@ import WE from "./assets/w-e.svg";
 import YE from "./assets/y-e.svg";
 import XP from "@/assets/xp.svg";
 import TutorirlIcon from "@/assets/tutorial.svg";
-import EthIcon from "@/assets/eth.svg";
+import EthIcon from "@/assets/eth.png";
 import SelectTeam from "../League/SelectTeam";
 import { leagueAddressList } from "@/utils/league";
 
