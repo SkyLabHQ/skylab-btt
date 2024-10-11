@@ -32,7 +32,13 @@ import EthIcon from "@/assets/eth.png";
 import InviteIcon from "./assets/invite.png";
 import { formatAmount, toFixed } from "@/utils/formatBalance";
 
-const UserInfo = ({ ethBalance }: { ethBalance: string }) => {
+const UserInfo = ({
+    ethBalance,
+    referralReward,
+}: {
+    ethBalance: string;
+    referralReward: string;
+}) => {
     const { address, setTgInfo } = useUserInfo();
 
     const { user, exportWallet } = usePrivy();
@@ -95,7 +101,7 @@ const UserInfo = ({ ethBalance }: { ethBalance: string }) => {
                         }}
                     ></Image>
                 </Flex>
-                <Flex>
+                <Flex align={"center"}>
                     <Image
                         src={EthIcon}
                         sx={{
@@ -159,6 +165,7 @@ const UserInfo = ({ ethBalance }: { ethBalance: string }) => {
                             width: "180px",
                             height: "40px",
                             color: "#fff",
+                            marginTop: "20px",
                         }}
                     >
                         <Flex
@@ -198,14 +205,21 @@ const UserInfo = ({ ethBalance }: { ethBalance: string }) => {
                         >
                             Reward Earned
                         </Text>
-                        <Flex>
+                        <Flex align={"center"}>
                             <Image
                                 src={EthIcon}
                                 sx={{
                                     width: "6px",
+                                    marginRight: "4px",
                                 }}
                             ></Image>
-                            <Text></Text>
+                            <Text
+                                sx={{
+                                    fontSize: "12px",
+                                }}
+                            >
+                                {referralReward}
+                            </Text>
                         </Flex>
                     </Flex>
                     {user?.wallet?.walletClientType === "privy" && (
@@ -416,10 +430,12 @@ const MyPlane = ({
 };
 
 const UserInfoDrawer = ({
+    referralReward,
     ethBalance,
     onClose,
     isOpen,
 }: {
+    referralReward: string;
     ethBalance: string;
     isOpen: boolean;
     onClose: () => void;
@@ -507,7 +523,10 @@ const UserInfoDrawer = ({
                                 }}
                             ></Image>
                         </Avatar>
-                        <UserInfo ethBalance={ethBalance}></UserInfo>
+                        <UserInfo
+                            referralReward={referralReward}
+                            ethBalance={ethBalance}
+                        ></UserInfo>
                         <MyPlane
                             planeList={planeList}
                             planeInit={planeInit}

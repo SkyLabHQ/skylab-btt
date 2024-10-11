@@ -24,6 +24,7 @@ import XP from "@/assets/xp.svg";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
 import EnterIcon from "@/assets/enter.svg";
+import VideoComponent from "../Video";
 
 const TokenInfoItem = ({
     isSelect,
@@ -77,25 +78,25 @@ const TokenInfoItem = ({
                     position: "relative",
                 }}
             >
-                <video
-                    width="110px"
-                    height="110px"
-                    autoPlay
-                    loop={true}
-                    muted={true}
+                <VideoComponent
+                    url={
+                        leagueBg[tokenInfo.leader]
+                            ? leagueBg[tokenInfo.leader]
+                            : leagueBg[
+                                  "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D"
+                              ]
+                    }
                     style={{
                         position: "absolute",
                         left: "50%",
                         top: "50%",
                         transform: "translate(-50%, -50%)",
-                        width: "100%",
-                        height: "100%",
+
+                        width: "110px",
+                        height: "110px",
                     }}
-                    src={leagueBg[tokenInfo.leader]}
-                >
-                    <source type="video/webm" />
-                    Your browser does not support the video tag.
-                </video>
+                ></VideoComponent>
+
                 <Image
                     src={tokenInfo.img}
                     sx={{
@@ -186,23 +187,9 @@ const ChooseTeamModal = ({
     const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
     const multiProvider = useMultiProvider(chainId);
 
-    const handleGetAccountInfo = async () => {
-        console.log(1111);
-        const res = await multiProvider.all([
-            multiLeagueTournamentContract.getAccountInfo(address),
-        ]);
-        console.log(res);
-    };
-
     const handleSelect = (index: number) => {
         setSelectIndex(index);
     };
-
-    useEffect(() => {
-        if (!address || !multiProvider || !multiLeagueTournamentContract)
-            return;
-        handleGetAccountInfo();
-    }, [address, multiProvider, multiLeagueTournamentContract]);
 
     useEffect(() => {
         if (!isOpen) {

@@ -61,7 +61,9 @@ export const UserInfoProvider = ({
     const { login } = useLogin({
         onComplete: async (user: any) => {
             try {
+                console.log("开始登录");
                 const res = await tournamentLogin();
+                console.log(res, "看得懂");
                 const { userInfo, jwtToken } = res.data;
                 localStorage.setItem("tournamentToken", jwtToken);
                 const info = {
@@ -96,6 +98,7 @@ export const UserInfoProvider = ({
     const [planeInit, setPlaneInit] = useState(false);
     const [loading, setLoading] = useState(false);
     const [ethBalance, setEthBalance] = useState("0");
+    const [referralReward, setReferralReward] = useState("0");
     const [tgInfo, setTgInfo] = useState({
         tgId: "",
         firstName: "",
@@ -140,11 +143,13 @@ export const UserInfoProvider = ({
 
         try {
             setLoading(true);
-            const [ethBalance, planeBalance] = await multiProvider.all([
-                multiProvider.getEthBalance(address),
-                multiMercuryJarTournamentContract.balanceOf(address),
-            ]);
-            console.log(ethBalance, "ethBalance");
+            const [ethBalance, planeBalance, referralReward] =
+                await multiProvider.all([
+                    multiProvider.getEthBalance(address),
+                    multiMercuryJarTournamentContract.balanceOf(address),
+                    multiMercuryJarTournamentContract.referralReward(address),
+                ]);
+            console.log(referralReward, "ethBalance");
             const p = [];
             for (let i = 0; i < Number(planeBalance.toString()); i++) {
                 p.push(
@@ -204,6 +209,7 @@ export const UserInfoProvider = ({
             setPlaneInit(true);
             setPlaneList(planeList);
             setEthBalance(ethBalance.toString());
+            setReferralReward(referralReward.toString());
             setLoading(false);
         } catch (e) {
             setLoading(false);
@@ -294,6 +300,7 @@ export const UserInfoProvider = ({
             >
                 {children}
                 <UserInfoDrawer
+                    referralReward={referralReward}
                     ethBalance={ethBalance}
                     isOpen={isOpen}
                     onClose={onClose}

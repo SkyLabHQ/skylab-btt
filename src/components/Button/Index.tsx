@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Image } from "@chakra-ui/react";
+import { Button, ButtonProps, Flex, FlexProps, Image } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
@@ -19,14 +19,13 @@ export const PrimaryButton = (props: ButtonProps) => {
 };
 
 export const LButton = (
-    props: ButtonProps & {
+    props: FlexProps & {
         bColor?: string;
     },
 ) => {
     const { sx, bColor = "#fff", children, ...rest } = props;
     return (
-        <Button
-            variant={"unstyled"}
+        <Flex
             sx={{
                 height: "40px",
                 width: "64px",
@@ -36,6 +35,8 @@ export const LButton = (
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                cursor: "pointer",
+                position: "relative",
                 "&:hover": {
                     borderColor: "#F2D861",
                     svg: {
@@ -62,6 +63,6 @@ export const LButton = (
                 }}
             ></RbIcon>
             {children}
-        </Button>
+        </Flex>
     );
 };

@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import RArrowIcon from "./assets/r-arrow.svg";
 import WB from "./assets/w-b.png";
@@ -11,6 +11,7 @@ import LockIcon from "./assets/lock.svg";
 import { Newcomer } from ".";
 import Countdown from "react-countdown";
 import { leagueBg } from "@/utils/league";
+import VideoComponent from "../Video";
 
 const renderer = ({
     formatted,
@@ -56,31 +57,24 @@ const Aviation = ({
                 align={"center"}
                 justify={"center"}
             >
-                <video
-                    width="640"
-                    height="360"
-                    autoPlay
-                    loop={true}
-                    muted={true}
-                    style={{
-                        position: "absolute",
-                        left: "50%",
-                        top: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: "100%",
-                        height: "100%",
-                    }}
-                    src={
+                <VideoComponent
+                    url={
                         leagueBg[newcomer.leader]
                             ? leagueBg[newcomer.leader]
                             : leagueBg[
                                   "0x63e96235427dC44bf3D7F3A7212c879ba4B5685D"
                               ]
                     }
-                >
-                    <source type="video/webm" />
-                    Your browser does not support the video tag.
-                </video>
+                    style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "360px",
+                        height: "360px",
+                    }}
+                ></VideoComponent>
+
                 <Image
                     src={aviationImg(index + 1)}
                     sx={{

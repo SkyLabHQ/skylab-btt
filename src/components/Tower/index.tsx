@@ -16,7 +16,7 @@ import { useChainId, usePublicClient } from "wagmi";
 import { useLeagueTournamentContract } from "@/hooks/useContract";
 import { ZERO_DATA } from "@/skyConstants";
 import { useUserInfo } from "@/contexts/UserInfo";
-import { getMintSignature } from "@/api/tournament";
+import { getMintSignature, getTokensGame } from "@/api/tournament";
 import { isAddress } from "@/utils/isAddress";
 import { leagueAddressList } from "@/utils/league";
 import useSkyToast from "@/hooks/useSkyToast";
@@ -110,11 +110,25 @@ const Tower = () => {
         ]);
         const { leaders, points, tokenIds } = aviationInfos;
 
+        const gameRes = await getTokensGame({
+            tokens: tokenIds.map((item: string) => {
+                return item.toString();
+            }),
+        });
+
+        const tokensGame = gameRes.data.tokensGame;
+
         const myAviation = tokenIds.map((item: string, index: number) => {
             const point = points[index].toNumber();
             const levelInfo = getLevelInfo(point);
             const level = levelInfo.level;
             const img = aviationImg(level);
+            const inGame = tokensGame.find((item1: any) => {
+                return (
+                    item1.tokenId1 === Number(item.toString()) ||
+                    item1.tokenId2 === Number(item.toString())
+                );
+            });
             return {
                 leader: leaders[index],
                 point: points[index].toNumber(),
@@ -123,6 +137,7 @@ const Tower = () => {
                 img: img,
                 prePoint: levelInfo.minPoints,
                 nextPoint: levelInfo.maxPoints,
+                gameId: inGame ? inGame.id : 0,
             };
         });
         setMyAviationInfo(myAviation);
