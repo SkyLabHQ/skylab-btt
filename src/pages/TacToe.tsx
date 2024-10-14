@@ -134,7 +134,7 @@ const TacToe = () => {
 
     const handleGameInfo = (gameInfo: any) => {
         if (gameInfo.gameStatus1 === Game2Status.QuitByPlayer1) {
-            navigate("/btt");
+            navigate("/tower");
             return;
         }
         const gridIndex = gameInfo.gridIndex == 9 ? 8 : gameInfo.gridIndex;
@@ -205,7 +205,7 @@ const TacToe = () => {
             if (isPlayer1) {
                 setMyGameInfo(player1GameInfo);
             } else {
-                navigate("/btt");
+                navigate("/tower");
             }
             return;
         }

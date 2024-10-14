@@ -676,7 +676,7 @@ const SettlementPage = ({}) => {
     return (
         <Box
             onClick={() => {
-                navigate("/btt");
+                navigate("/tower");
             }}
             sx={{
                 width: "100%",
@@ -700,7 +700,7 @@ const SettlementPage = ({}) => {
                 <BackWithText
                     textContent="Back"
                     onClick={() =>
-                        navigate("/btt", {
+                        navigate("/tower", {
                             replace: true,
                         })
                     }

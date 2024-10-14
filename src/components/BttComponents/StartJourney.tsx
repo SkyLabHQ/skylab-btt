@@ -27,7 +27,7 @@ const StartJourney = () => {
                     border: "1px solid #000",
                 }}
                 onClick={() => {
-                    navigate("/btt");
+                    navigate("/tower");
                 }}
             >
                 <Image

@@ -1,22 +1,20 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import { useMemo } from "react";
 import RWarnIcon from "./assets/rwarn.svg";
 import YWarnIcon from "./assets/ywarn.png";
 import RCountDownIcon from "./assets/r-countdown.svg";
 import YCountDownIcon from "./assets/y-countdown.png";
 import { ReactComponent as WarningIcon } from "./assets/rwarning.svg";
+import Countdown from "react-countdown";
+import { Newcomer } from ".";
 
 const Warning = ({
-    minutes,
-    seconds,
+    oldNewcomer,
     warnType,
-    timeLeft,
     onResetWarnType,
 }: {
-    minutes: string;
-    seconds: string;
+    oldNewcomer: Newcomer;
     warnType: number;
-    timeLeft: number;
     onResetWarnType: () => void;
 }) => {
     const [WarnIcon, CountDownIcon, color] = useMemo(() => {
@@ -25,7 +23,7 @@ const Warning = ({
         }
 
         return [RWarnIcon, RCountDownIcon, "#F80505"];
-    }, [timeLeft, warnType]);
+    }, [warnType]);
 
     return (
         <Flex
@@ -71,24 +69,36 @@ const Warning = ({
                     top: "0",
                 }}
             ></Box>
-            <Box
-                sx={{
-                    background: `url(${CountDownIcon})`,
-                    width: "248px",
-                    height: "109px",
-                    backgroundSize: "100% 100%",
-                }}
-            >
-                <Text
+            {oldNewcomer && (
+                <Box
                     sx={{
-                        color: color,
-                        fontSize: "50px",
-                        margin: "20px 0 0 80px",
+                        background: `url(${CountDownIcon})`,
+                        width: "248px",
+                        height: "109px",
+                        backgroundSize: "100% 100%",
                     }}
                 >
-                    {minutes}:{seconds}
-                </Text>
-            </Box>
+                    <Countdown
+                        key={oldNewcomer.claimTIme}
+                        zeroPadTime={2}
+                        date={oldNewcomer.claimTIme * 1000}
+                        renderer={({ formatted }) => (
+                            <Text
+                                sx={{
+                                    color: color,
+                                    fontSize: "50px",
+                                    margin: "20px 0 0 80px",
+                                }}
+                                align={"center"}
+                            >
+                                <span>
+                                    {formatted.minutes}:{formatted.seconds}
+                                </span>
+                            </Text>
+                        )}
+                    />
+                </Box>
+            )}
             <WarningIcon
                 style={{
                     width: "300px",

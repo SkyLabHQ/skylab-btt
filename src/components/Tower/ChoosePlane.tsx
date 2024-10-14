@@ -17,7 +17,7 @@ import {
     useMultiLeagueTournamentContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
-import { useChainId } from "wagmi";
+import { useChainId, usePublicClient } from "wagmi";
 import { TokenIdInfo } from ".";
 import { leagueBg } from "@/utils/league";
 import XP from "@/assets/xp.svg";
@@ -30,6 +30,7 @@ import { useSubmitRequest } from "@/contexts/SubmitRequest";
 import {
     leagueTournamentAddress,
     useLeagueTournamentContract,
+    useSkylabBidTacToeContract,
 } from "@/hooks/useContract";
 import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
 import { handleError } from "@/utils/error";
@@ -184,16 +185,14 @@ const ChooseTeamModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const leagueTournamentContract = useLeagueTournamentContract();
+    const skylabBidTacToeContract = useSkylabBidTacToeContract();
+    const publicClient = usePublicClient();
     const toast = useSkyToast();
     const { openLoading, closeLoading } = useSubmitRequest();
     const navigate = useNavigate();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [selectIndex, setSelectIndex] = useState(-1);
     const { address } = useUserInfo();
-    const chainId = useChainId();
-    const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
-    const multiProvider = useMultiProvider(chainId);
 
     const handleSelect = (index: number) => {
         setSelectIndex(index);
@@ -202,6 +201,9 @@ const ChooseTeamModal = ({
     const handleConfirm = async () => {
         const selectPlane = myTokenIdsInfo[selectIndex];
         const tokenId = selectPlane.tokenId;
+
+        console.log(leagueTournamentAddress[DEAFAULT_CHAINID]);
+
         let lock = false;
         if (selectPlane.state && selectPlane.gameId) {
             navigate("/btt/game?gameId=" + selectPlane.gameId);
@@ -212,12 +214,7 @@ const ChooseTeamModal = ({
             try {
                 openLoading();
 
-                console.log(
-                    leagueTournamentContract,
-                    "leagueTournamentContract",
-                );
-
-                await leagueTournamentContract.simulate.approveForGame(
+                await skylabBidTacToeContract.simulate.approveForGame(
                     [
                         address,
                         tokenId,
@@ -227,12 +224,13 @@ const ChooseTeamModal = ({
                         account: address,
                     },
                 );
-                const hash =
-                    await leagueTournamentContract.write.approveForGame([
+                const hash = await skylabBidTacToeContract.write.approveForGame(
+                    [
                         address,
                         tokenId,
                         leagueTournamentAddress[DEAFAULT_CHAINID],
-                    ]);
+                    ],
+                );
 
                 // @ts-ignore
                 await publicClient.waitForTransactionReceipt({

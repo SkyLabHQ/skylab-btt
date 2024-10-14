@@ -4,20 +4,42 @@ import Line from "./assets/line.svg";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
 import { GameOverNewComer, Newcomer } from ".";
+import Countdown from "react-countdown";
+
+const renderer = ({
+    formatted,
+}: {
+    formatted: {
+        minutes: string;
+        seconds: string;
+    };
+}) => {
+    return (
+        <Flex
+            sx={{
+                border: "1px solid #FFF",
+                borderLeft: "none",
+                borderRight: "none",
+                flex: 1,
+                fontSize: "36px",
+                lineHeight: "1",
+            }}
+            align={"center"}
+        >
+            <span>
+                {formatted.minutes}:{formatted.seconds}
+            </span>
+        </Flex>
+    );
+};
 
 const Status = ({
     gameOverFlag,
     oldNewcomer,
     leagueConfig,
-    timeLeft,
-    minutes,
-    seconds,
 }: {
     oldNewcomer: Newcomer;
     leagueConfig: any;
-    timeLeft: number;
-    minutes: string;
-    seconds: string;
     gameOverFlag: boolean;
 }) => {
     return (
@@ -119,19 +141,12 @@ const Status = ({
                         >
                             COUNTDOWN
                         </Text>
-                        <Flex
-                            sx={{
-                                border: "1px solid #FFF",
-                                borderLeft: "none",
-                                borderRight: "none",
-                                flex: 1,
-                                fontSize: "36px",
-                                lineHeight: "1",
-                            }}
-                            align={"center"}
-                        >
-                            {minutes}:{seconds}
-                        </Flex>
+
+                        <Countdown
+                            zeroPadTime={2}
+                            date={oldNewcomer.claimTIme * 1000}
+                            renderer={renderer}
+                        />
                     </Flex>
                 </Flex>
             )}

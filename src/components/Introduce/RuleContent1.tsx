@@ -220,7 +220,7 @@ const RuleContent1 = ({
                             cursor: "pointer",
                         }}
                         onClick={() => {
-                            navigate("/btt");
+                            navigate("/tower");
                         }}
                     >
                         Bid Tac Toe.

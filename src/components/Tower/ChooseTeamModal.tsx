@@ -8,118 +8,43 @@ import {
     ModalOverlay,
     Text,
     Image,
-    keyframes,
 } from "@chakra-ui/react";
 import React from "react";
-import { ReactComponent as BorderBg } from "./assets/border.svg";
 import WLight from "./assets/w-light.svg";
 import TutorialIcon from "@/assets/tutorial.svg";
 import ApyUpIcon from "@/assets/apy-up.svg";
 import A1 from "./assets/a1.png";
 import { LButton } from "../Button/Index";
-import WL from "./assets/w-l.svg";
-import YL from "./assets/y-l.svg";
-import WE from "./assets/w-e.svg";
-import YE from "./assets/y-e.svg";
 import XP from "@/assets/xp.svg";
 import TutorirlIcon from "@/assets/tutorial.svg";
 import EthIcon from "@/assets/eth.png";
 import SelectTeam from "../League/SelectTeam";
 import { leagueAddressList } from "@/utils/league";
+import ChampionIcon from "./assets/champion.svg";
+import GArrow from "./assets/g-arror.svg";
 
-const rotateKeyframes = keyframes`
-    0% {
-        transform: rotate(0deg);
-     }
-    100% {
-        transform: rotate(360deg);
-     }
-`;
-
-const RewardWrap = ({ amount }: { amount: number }) => {
+const WinIcon = () => {
     return (
         <Flex
-            sx={{
-                width: "168px",
-                height: "168px",
-                position: "relative",
-                marginTop: "10px",
-                "&:hover": {
-                    ".n-l": {
-                        background: `url(${YL})`,
-                    },
-                    ".xx": {
-                        svg: {
-                            color: "#F2D861",
-                        },
-                    },
-                    ".eth": {
-                        background: `url(${YE})`,
-                    },
-                    ".amount": {
-                        color: "#F2D861",
-                    },
-                },
-            }}
             align={"center"}
-            justify={"center"}
+            flexDir={"column"}
+            sx={{
+                width: "100px",
+            }}
         >
-            <Box
-                className="xx"
+            <Text
                 sx={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    left: "0",
-                    top: "0",
+                    color: "#24FF00",
+                    textAlign: "center",
+
+                    fontSize: "16px",
+
+                    fontWeight: 900,
                 }}
-                animation={`${rotateKeyframes} 8s linear infinite `}
             >
-                <BorderBg
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                    }}
-                ></BorderBg>
-            </Box>
-            <Flex
-                className="n-l"
-                sx={{
-                    width: "140px",
-                    height: "140px",
-                    borderRadius: "50%",
-                    background: `url(${WL})`,
-                    position: "absolute",
-                    left: "50%",
-                    top: "50%",
-                    transform: "translate(-50%,-50%)",
-                }}
-                align={"center"}
-                justify={"center"}
-                flexDir={"column"}
-            >
-                <Box
-                    className="eth"
-                    sx={{
-                        width: "43px",
-                        height: "55px",
-                        background: `url(${WE})`,
-                    }}
-                ></Box>
-                <Text
-                    className="amount"
-                    sx={{
-                        textShadow:
-                            "0px 7px 26.5px rgba(255, 255, 255, 0.58), 0px 3px 0px #4D4D4D",
-                        fontFamily: "Quantico",
-                        fontSize: "40px",
-                        fontWeight: 700,
-                        lineHeight: 1,
-                    }}
-                >
-                    999
-                </Text>
-            </Flex>
+                WINS
+            </Text>
+            <Image src={GArrow}></Image>
         </Flex>
     );
 };
@@ -172,23 +97,42 @@ const ChooseTeamModal = ({
                             activeIndex={activeIndex}
                             onActiveIndex={handleActiveIndex}
                         ></SelectTeam>
+
+                        <Flex>
+                            <Flex
+                                align={"center"}
+                                flexDir={"column"}
+                                sx={{
+                                    width: "100px",
+                                }}
+                            >
+                                <Image src={ChampionIcon}></Image>
+                                <Text
+                                    sx={{
+                                        fontSize: "14px",
+                                        fontWeight: 900,
+                                    }}
+                                >
+                                    CHAMPION
+                                </Text>
+                            </Flex>
+                            <WinIcon></WinIcon>
+                        </Flex>
+
                         <Flex
                             gap={"46px"}
                             sx={{
                                 marginTop: "40px",
                             }}
                         >
-                            <Box>
-                                <Box
-                                    sx={{
-                                        fontSize: "20px",
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    <Text>CHAMPION</Text>
-                                    <Text>WINS PAYOUT</Text>
-                                </Box>
-                                <RewardWrap amount={999}></RewardWrap>
+                            <Box
+                                sx={{
+                                    fontSize: "20px",
+                                    textAlign: "center",
+                                }}
+                            >
+                                <Text>CHAMPION</Text>
+                                <Text>WINS PAYOUT</Text>
                             </Box>
                             <Box>
                                 <Box
@@ -226,7 +170,6 @@ const ChooseTeamModal = ({
                                         PAYOUT
                                     </Text>
                                 </Box>
-                                <RewardWrap amount={999}></RewardWrap>
                             </Box>
                         </Flex>
                         <Flex

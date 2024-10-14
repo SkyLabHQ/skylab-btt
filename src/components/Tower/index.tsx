@@ -1,5 +1,5 @@
 import { Box, Flex, Image, useDisclosure, Text } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import PrizeMoney from "./PrizeMoney";
 import BtButton from "./BtButton";
 import { Toolbar } from "./Toolbar";
@@ -72,14 +72,9 @@ export const getInitNewcomerList = () => {
 const Tower = () => {
     const { openLoading, closeLoading } = useSubmitRequest();
 
-    const [timeLeft, { start }] = useCountDown(0, 1000);
-
-    useEffect(() => {
-        start(70000);
-    }, []);
-
+    const yWarnTimer = useRef(null);
+    const rWarnTimer = useRef(null);
     const [warnType, setWarnType] = useState(0); // 0不展示 1黄色 2红色
-    const [warnSet, setWarnSet] = useState(false);
 
     const toast = useSkyToast();
     const publicClient = usePublicClient();
@@ -119,14 +114,6 @@ const Tower = () => {
         return [fItem, true];
     }, [gameOverNewComer]);
 
-    // 倒计时的分钟和秒
-    const { minutes, seconds } = useMemo(() => {
-        const t = Math.floor(timeLeft / 1000);
-        const minutes = String(Math.floor(t / 60)).padStart(2, "0");
-        const seconds = String(t % 60).padStart(2, "0");
-        return { minutes, seconds };
-    }, [timeLeft]);
-
     // 倒计时最短的newcomer
     const oldNewcomer = useMemo(() => {
         const _list = newcomerList
@@ -142,6 +129,7 @@ const Tower = () => {
         }
 
         return _list[0];
+        // return { ..._list[0], claimTIme: Math.floor(Date.now() / 1000) + 70 };
     }, [newcomerList]);
 
     const handleInit = async () => {
@@ -297,7 +285,7 @@ const Tower = () => {
 
     useEffect(() => {
         if (!multiProvider || !multiLeagueTournamentContract) return;
-        // handleInit();
+        handleInit();
     }, [multiProvider, multiLeagueTournamentContract]);
 
     useEffect(() => {
@@ -309,12 +297,27 @@ const Tower = () => {
     useEffect(() => {
         if (oldNewcomer) {
             const time = oldNewcomer.claimTIme * 1000 - Date.now();
-            if (time > 0) {
-                setWarnType(0);
-                setWarnSet(false);
-                start(time);
-            } else {
-                start(0);
+            yWarnTimer.current && clearTimeout(yWarnTimer.current);
+            rWarnTimer.current && clearTimeout(rWarnTimer.current);
+            if (time < 0) {
+                return;
+            }
+
+            if (time > 300000) {
+                yWarnTimer.current = setTimeout(() => {
+                    setWarnType(1);
+                }, time - 300000);
+
+                rWarnTimer.current = setTimeout(() => {
+                    setWarnType(2);
+                }, time - 60000);
+            } else if (time < 300000 && time > 60000) {
+                setWarnType(1);
+                rWarnTimer.current = setTimeout(() => {
+                    setWarnType(2);
+                }, time - 60000);
+            } else if (time < 60000) {
+                setWarnType(2);
             }
         }
     }, [oldNewcomer]);
@@ -337,25 +340,6 @@ const Tower = () => {
         multiProvider,
     ]);
 
-    useEffect(() => {
-        if (timeLeft === 0) {
-            setWarnType(0);
-            return;
-        }
-
-        if (warnSet) {
-            return;
-        }
-
-        if (timeLeft > 60000 && timeLeft <= 300000) {
-            setWarnType(1);
-            setWarnSet(true);
-        } else if (timeLeft <= 60000 && timeLeft > 0) {
-            setWarnType(2);
-            setWarnSet(true);
-        }
-    }, [timeLeft]);
-
     return (
         <Flex
             sx={{
@@ -370,9 +354,6 @@ const Tower = () => {
             <Status
                 oldNewcomer={oldNewcomer}
                 leagueConfig={leagueConfig}
-                timeLeft={timeLeft}
-                minutes={minutes}
-                seconds={seconds}
                 gameOverFlag={gameOverFlag}
             ></Status>
             {!gameOverFlag && (
@@ -384,10 +365,8 @@ const Tower = () => {
                         onPlayClick={handleOpenChoosePlane}
                     ></BtButton>
                     <Warning
+                        oldNewcomer={oldNewcomer}
                         warnType={warnType}
-                        timeLeft={timeLeft}
-                        minutes={minutes}
-                        seconds={seconds}
                         onResetWarnType={handleResetWarnType}
                     ></Warning>
                     <ChooseTeamModal

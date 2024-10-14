@@ -29,7 +29,7 @@ const Header = () => {
             >
                 <Image
                     onClick={() => {
-                        navigate("/btt");
+                        navigate("/tower");
                     }}
                     src={BackIcon}
                     sx={{

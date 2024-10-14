@@ -59,7 +59,7 @@ const RuleContent2 = ({
                             fontSize: "14px",
                         }}
                         onClick={() => {
-                            navigate("/btt");
+                            navigate("/tower");
                         }}
                     >
                         Bid Tac Toe
@@ -89,7 +89,7 @@ const RuleContent2 = ({
                                     fontSize: "14px",
                                 }}
                                 onClick={() => {
-                                    navigate("/btt");
+                                    navigate("/tower");
                                 }}
                             >
                                 Bid Tac Toe
