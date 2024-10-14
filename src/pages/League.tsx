@@ -125,7 +125,6 @@ const League = () => {
         }
 
         const aviationPoints = await multiProvider.all(p1);
-        console.log(aviationPoints, "aviationPoints");
 
         leagueListRes.forEach((item, index) => {
             leagueInfoList.push({
@@ -149,7 +148,7 @@ const League = () => {
                         };
                     },
                 ),
-                premium: item.premium.toNumber(),
+                premium: item.premium.toString(),
                 leader: leagueAddressList[index],
             });
         });

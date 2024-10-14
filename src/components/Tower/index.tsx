@@ -25,7 +25,6 @@ import { getLevel, getLevelInfo } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
 import GameOver from "./GmeOver";
 import leagueConfigList from "@/utils/league";
-import useCountDown from "react-countdown-hook";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
 
 export interface TokenIdInfo {
@@ -356,7 +355,7 @@ const Tower = () => {
                 leagueConfig={leagueConfig}
                 gameOverFlag={gameOverFlag}
             ></Status>
-            {!gameOverFlag && (
+            {(!gameOverFlag || true) && (
                 <>
                     <PrizeMoney pot={pot}></PrizeMoney>
                     <AllAviation newcomerList={newcomerList}></AllAviation>
@@ -370,6 +369,7 @@ const Tower = () => {
                         onResetWarnType={handleResetWarnType}
                     ></Warning>
                     <ChooseTeamModal
+                        mintType={"toPlane"}
                         handleMint={handleMint}
                         isOpen={isOpen}
                         onClose={onClose}
@@ -382,13 +382,13 @@ const Tower = () => {
                 </>
             )}
 
-            {gameOverFlag && (
+            {/* {gameOverFlag && (
                 <GameOver
                     leagueConfig={leagueConfig}
                     reward={myClaimReward}
                     onClaimReward={handleClaimReward}
                 ></GameOver>
-            )}
+            )} */}
         </Flex>
     );
 };

@@ -119,17 +119,14 @@ const UserInfo = ({
                         {toFixed(formatAmount(ethBalance), 2)}
                     </Text>
                 </Flex>
-                <Box
-                    sx={{
-                        marginTop: "20px",
-                    }}
-                >
+                <Box>
                     {!user?.telegram && (
                         <LButton
                             sx={{
                                 width: "180px",
                                 height: "40px",
                                 color: "#fff",
+                                marginTop: "20px",
                             }}
                         >
                             {" "}

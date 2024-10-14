@@ -27,8 +27,9 @@ export const LButton = (
     return (
         <Flex
             sx={{
+                width: "fit-content",
                 height: "40px",
-                width: "64px",
+                minWidth: "64px",
                 border: "1px solid",
                 borderColor: "#3c3c3c",
                 borderRadius: "0px",

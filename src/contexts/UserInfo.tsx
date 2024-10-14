@@ -315,6 +315,7 @@ export const UserInfoProvider = ({
                     onOpenMint={onMintOpen}
                 ></UserInfoDrawer>
                 <ChooseTeamModal
+                    mintType="paperToPlane"
                     handleMint={() => {}}
                     isOpen={mintOpen}
                     onClose={onMintClose}

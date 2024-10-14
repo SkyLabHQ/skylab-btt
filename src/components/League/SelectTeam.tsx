@@ -28,7 +28,8 @@ const SelectTeam = ({
             </Text>
             <Flex
                 sx={{
-                    gap: "16px",
+                    gap: "8px",
+                    marginTop: "10px",
                 }}
                 align={"center"}
             >
