@@ -266,13 +266,19 @@ export const UserInfoProvider = ({
             setSigner(walletClient);
         };
 
-        if (wallets.length === 0 || !ready || !user || !authenticated) {
+        if (
+            wallets.length === 0 ||
+            !ready ||
+            !user ||
+            !authenticated ||
+            !loginInit
+        ) {
             setAddress("");
             setSigner(null);
             return;
         }
         handleGetSigner();
-    }, [wallets, ready, user, authenticated]);
+    }, [wallets, ready, user, authenticated, loginInit]);
 
     return (
         <UserInfoContext.Provider

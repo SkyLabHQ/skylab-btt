@@ -18,9 +18,9 @@ const SkyToast = ({
             p={3}
             bg="#ABABAB"
             borderRadius="20px"
-            fontSize={isPc ? "1.5625vw" : "16px"}
+            fontSize={isPc ? "24px" : "16px"}
             sx={{
-                maxWidth: isPc ? "40vw" : "300px",
+                maxWidth: isPc ? "768px" : "300px",
                 textOverflow: "ellipsis",
                 display: "-webkit-box",
                 WebkitLineClamp: 4,
@@ -28,8 +28,9 @@ const SkyToast = ({
                 breakword: "break-all",
                 position: "relative",
                 zIndex: 10001,
-                maxHeight: "118px",
+                maxHeight: isPc ? "144px" : "110px",
                 overflow: "hidden",
+                lineHeight: isPc ? "32px" : "24px",
             }}
         >
             {message}

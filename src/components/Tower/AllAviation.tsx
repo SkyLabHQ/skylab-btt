@@ -1,8 +1,6 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import RArrowIcon from "./assets/r-arrow.svg";
-import WB from "./assets/w-b.png";
 import Paper from "./assets/paper.png";
 import { aviationImg } from "@/utils/aviationImg";
 import { ReactComponent as LevelBorder } from "./assets/level-border.svg";
@@ -10,7 +8,7 @@ import CountDownIcon from "./assets/countdown.svg";
 import LockIcon from "./assets/lock.svg";
 import { Newcomer } from ".";
 import Countdown from "react-countdown";
-import { League, leagueBg } from "@/utils/league";
+import leagueConfigList, { League, leagueBg } from "@/utils/league";
 import VideoComponent from "../Video";
 import WhiteBg from "@/assets/league/white.webm";
 
@@ -30,19 +28,19 @@ const renderer = ({
 };
 
 const Aviation = ({
+    config,
     newcomer,
     index,
 }: {
+    config: any;
     newcomer: Newcomer;
     index: number;
 }) => {
     const isLock = newcomer.newComerId == 0;
-    console.log(leagueBg[newcomer.leader], "newcomer");
     return (
         <Flex
             sx={{
                 height: "100%",
-                // background: "red",
             }}
             align={"center"}
         >
@@ -95,7 +93,7 @@ const Aviation = ({
                 )}
                 <LevelBorder
                     style={{
-                        color: "red",
+                        color: config ? config.color : "#fff",
                         position: "absolute",
                         left: "80%",
                         top: "-20px",
@@ -107,7 +105,7 @@ const Aviation = ({
                         position: "absolute",
                         left: "85%",
                         top: "-34px",
-                        width: "80px",
+                        width: "90px",
                         textAlign: "center",
                     }}
                 >
@@ -216,6 +214,9 @@ const AllAviation = ({ newcomerList }: { newcomerList: Newcomer[] }) => {
                 </Flex>
             </SwiperSlide>
             {newcomerList.map((item, index) => {
+                const config = leagueConfigList.find((lItem) => {
+                    return lItem.leader == item.leader;
+                });
                 return (
                     <SwiperSlide
                         key={index}
@@ -225,7 +226,11 @@ const AllAviation = ({ newcomerList }: { newcomerList: Newcomer[] }) => {
                             width: "400px",
                         }}
                     >
-                        <Aviation newcomer={item} index={index}></Aviation>
+                        <Aviation
+                            newcomer={item}
+                            index={index}
+                            config={config}
+                        ></Aviation>
                     </SwiperSlide>
                 );
             })}

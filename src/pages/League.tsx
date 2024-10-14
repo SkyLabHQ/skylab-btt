@@ -13,7 +13,7 @@ import {
     useMultiProvider,
 } from "@/hooks/useMultiContract";
 import { useChainId, usePublicClient } from "wagmi";
-import { getLevelInfo } from "@/utils/level";
+import { getLevel, getLevelInfo } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
@@ -97,12 +97,15 @@ const League = () => {
 
         const list: Newcomer[] = [];
         newcomerList.forEach((item) => {
+            const point = item.point.toNumber();
+            const level = getLevel(point);
             list.push({
                 claimTIme: item.claimTime.toNumber(),
                 newComerId: item.newComerId.toNumber(),
                 owner: item.owner,
-                point: item.point.toNumber(),
+                point: point,
                 leader: item.leader,
+                level,
             });
         });
 

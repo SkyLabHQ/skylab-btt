@@ -3,9 +3,23 @@ import React from "react";
 import Line from "./assets/line.svg";
 import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
-import { GameOverNewComer } from ".";
+import { GameOverNewComer, Newcomer } from ".";
 
-const Status = ({ leagueConfig }: { leagueConfig: any }) => {
+const Status = ({
+    gameOverFlag,
+    oldNewcomer,
+    leagueConfig,
+    timeLeft,
+    minutes,
+    seconds,
+}: {
+    oldNewcomer: Newcomer;
+    leagueConfig: any;
+    timeLeft: number;
+    minutes: string;
+    seconds: string;
+    gameOverFlag: boolean;
+}) => {
     return (
         <Flex
             sx={{
@@ -44,78 +58,83 @@ const Status = ({ leagueConfig }: { leagueConfig: any }) => {
                         width: "20px",
                     }}
                 ></RbIcon>
-                <Text
+                {gameOverFlag && (
+                    <Text
+                        sx={{
+                            color: leagueConfig.color,
+                            textAlign: "center",
+                            fontFamily: "Quantico",
+                            fontSize: "24px",
+                            fontWeight: 700,
+                        }}
+                    >
+                        GAME OVER
+                    </Text>
+                )}
+            </Flex>
+            {!gameOverFlag && oldNewcomer && (
+                <Flex
                     sx={{
+                        position: "relative",
+                        width: "206px",
+                        height: "50px",
+                        border: "1px solid #FF2D2D",
+                        background:
+                            "linear-gradient(180deg, rgba(255, 45, 45, 0.50) 6.67%, rgba(255, 45, 45, 0.20) 100%)",
                         color: "#D9D9D9",
                         textAlign: "center",
                         fontFamily: "Quantico",
-                        fontSize: "24px",
-                        fontWeight: 700,
+                        fontSize: "16px",
                     }}
+                    align={"center"}
+                    justify={"center"}
                 >
-                    Act V Stalemate
-                </Text>
-            </Flex>
-            <Flex
-                sx={{
-                    position: "relative",
-                    width: "206px",
-                    height: "50px",
-                    border: "1px solid #FF2D2D",
-                    background:
-                        "linear-gradient(180deg, rgba(255, 45, 45, 0.50) 6.67%, rgba(255, 45, 45, 0.20) 100%)",
-                    color: "#D9D9D9",
-                    textAlign: "center",
-                    fontFamily: "Quantico",
-                    fontSize: "16px",
-                }}
-                align={"center"}
-                justify={"center"}
-            >
-                <Text>
-                    Shortest Timer Lvl.{" "}
-                    <span
-                        style={{
-                            fontSize: "30px",
-                        }}
-                    >
-                        1
-                    </span>
-                </Text>
-                <Flex
-                    sx={{
-                        position: "absolute",
-                        width: "100px",
-                        height: "50px",
-                        left: "100%",
-                        top: "-8px",
-                    }}
-                    flexDir={"column"}
-                >
-                    <Text
-                        sx={{
-                            textAlign: "center",
-                            fontSize: "12px",
-                            color: "#fff",
-                        }}
-                    >
-                        COUNTDOWN
+                    <Text>
+                        Shortest Timer Lvl.{" "}
+                        <span
+                            style={{
+                                fontSize: "30px",
+                            }}
+                        >
+                            1
+                        </span>
                     </Text>
+
                     <Flex
                         sx={{
-                            border: "1px solid #FFF",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            flex: 1,
-                            fontSize: "36px",
-                            lineHeight: "1",
+                            position: "absolute",
+                            width: "100px",
+                            height: "50px",
+                            left: "100%",
+                            top: "-8px",
                         }}
-                        align={"center"}
+                        flexDir={"column"}
                     >
-                        00:15
+                        <Text
+                            sx={{
+                                textAlign: "center",
+                                fontSize: "12px",
+                                color: "#fff",
+                            }}
+                        >
+                            COUNTDOWN
+                        </Text>
+                        <Flex
+                            sx={{
+                                border: "1px solid #FFF",
+                                borderLeft: "none",
+                                borderRight: "none",
+                                flex: 1,
+                                fontSize: "36px",
+                                lineHeight: "1",
+                            }}
+                            align={"center"}
+                        >
+                            {minutes}:{seconds}
+                        </Flex>
                     </Flex>
                 </Flex>
-            </Flex>
+            )}
         </Flex>
     );
 };

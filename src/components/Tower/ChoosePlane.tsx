@@ -25,6 +25,16 @@ import { ReactComponent as LbIcon } from "@/assets/l-b.svg";
 import { ReactComponent as RbIcon } from "@/assets/r-b.svg";
 import EnterIcon from "@/assets/enter.svg";
 import VideoComponent from "../Video";
+import { useNavigate } from "react-router-dom";
+import { useSubmitRequest } from "@/contexts/SubmitRequest";
+import {
+    leagueTournamentAddress,
+    useLeagueTournamentContract,
+} from "@/hooks/useContract";
+import { DEAFAULT_CHAINID } from "@/utils/web3Utils";
+import { handleError } from "@/utils/error";
+import useSkyToast from "@/hooks/useSkyToast";
+import { startGame } from "@/api/tournament";
 
 const TokenInfoItem = ({
     isSelect,
@@ -174,6 +184,10 @@ const ChooseTeamModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
+    const leagueTournamentContract = useLeagueTournamentContract();
+    const toast = useSkyToast();
+    const { openLoading, closeLoading } = useSubmitRequest();
+    const navigate = useNavigate();
     const [isPc] = useSkyMediaQuery("(min-width: 800px)");
     const [selectIndex, setSelectIndex] = useState(-1);
     const { address } = useUserInfo();
@@ -185,14 +199,84 @@ const ChooseTeamModal = ({
         setSelectIndex(index);
     };
 
-    useEffect(() => {
-        if (!isOpen) {
-            setSelectIndex(-1);
+    const handleConfirm = async () => {
+        const selectPlane = myTokenIdsInfo[selectIndex];
+        const tokenId = selectPlane.tokenId;
+        let lock = false;
+        if (selectPlane.state && selectPlane.gameId) {
+            navigate("/btt/game?gameId=" + selectPlane.gameId);
+            return;
         }
-    }, [isOpen]);
+
+        if (!selectPlane.state) {
+            try {
+                openLoading();
+
+                console.log(
+                    leagueTournamentContract,
+                    "leagueTournamentContract",
+                );
+
+                await leagueTournamentContract.simulate.approveForGame(
+                    [
+                        address,
+                        tokenId,
+                        leagueTournamentAddress[DEAFAULT_CHAINID],
+                    ],
+                    {
+                        account: address,
+                    },
+                );
+                const hash =
+                    await leagueTournamentContract.write.approveForGame([
+                        address,
+                        tokenId,
+                        leagueTournamentAddress[DEAFAULT_CHAINID],
+                    ]);
+
+                // @ts-ignore
+                await publicClient.waitForTransactionReceipt({
+                    hash,
+                });
+
+                lock = true;
+            } catch (e: any) {
+                console.log(e);
+                closeLoading();
+                toast(handleError(e));
+            }
+        } else {
+            lock = true;
+        }
+
+        if (!lock) {
+            return;
+        }
+
+        try {
+            const res = await startGame({
+                tokenId,
+            });
+            closeLoading();
+            navigate("/btt/game?gameId=" + res.data.game.id);
+        } catch (e: any) {
+            closeLoading();
+            toast(e.data.message);
+        }
+    };
+
+    const handleClose = () => {
+        setSelectIndex(-1);
+        onClose();
+    };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
+        <Modal
+            isOpen={isOpen}
+            onClose={handleClose}
+            isCentered
+            autoFocus={false}
+        >
             <ModalOverlay backdropFilter={"blur(35px)"} />
             <ModalContent
                 bg="rgba(0, 0, 0, 0.5)"
@@ -260,6 +344,7 @@ const ChooseTeamModal = ({
                                     width: "113px",
                                     height: "46px",
                                 }}
+                                onClick={handleClose}
                             >
                                 <Text
                                     sx={{
@@ -284,6 +369,7 @@ const ChooseTeamModal = ({
                                     width: "113px",
                                     height: "46px",
                                 }}
+                                onClick={handleConfirm}
                                 alignContent={"center"}
                             >
                                 <Image

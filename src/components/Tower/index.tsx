@@ -21,7 +21,7 @@ import { isAddress } from "@/utils/isAddress";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { parseAmount } from "@/utils/formatBalance";
-import { getLevelInfo } from "@/utils/level";
+import { getLevel, getLevelInfo } from "@/utils/level";
 import { aviationImg } from "@/utils/aviationImg";
 import GameOver from "./GmeOver";
 import leagueConfigList from "@/utils/league";
@@ -45,6 +45,7 @@ export interface Newcomer {
     owner: string;
     point: number;
     leader: string;
+    level: number;
 }
 
 export interface GameOverNewComer {
@@ -62,6 +63,7 @@ export const getInitNewcomerList = () => {
             owner: ZERO_DATA,
             point: 0,
             leader: ZERO_DATA,
+            level: 0,
         });
     }
     return list;
@@ -105,13 +107,27 @@ const Tower = () => {
     const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
     const multiProvider = useMultiProvider(chainId);
 
-    const leagueConfig = useMemo(() => {
+    // [winleage的配置 ,游戏是否结束]
+    const [leagueConfig, gameOverFlag] = useMemo(() => {
+        if (gameOverNewComer.tokenId == 0) {
+            return [null, false];
+        }
+
         const fItem = leagueConfigList.find(
             (item) => item.leader === gameOverNewComer.leader,
         );
-        return fItem;
+        return [fItem, true];
     }, [gameOverNewComer]);
 
+    // 倒计时的分钟和秒
+    const { minutes, seconds } = useMemo(() => {
+        const t = Math.floor(timeLeft / 1000);
+        const minutes = String(Math.floor(t / 60)).padStart(2, "0");
+        const seconds = String(t % 60).padStart(2, "0");
+        return { minutes, seconds };
+    }, [timeLeft]);
+
+    // 倒计时最短的newcomer
     const oldNewcomer = useMemo(() => {
         const _list = newcomerList
             .filter((item) => {
@@ -144,12 +160,15 @@ const Tower = () => {
         setPot(pot.toString());
         const list: Newcomer[] = [];
         res.forEach((item) => {
+            const point = item.point.toNumber();
+            const level = getLevel(point);
             list.push({
                 claimTIme: item.claimTime.toNumber(),
                 newComerId: item.newComerId.toNumber(),
                 owner: item.owner,
-                point: item.point.toNumber(),
+                point: point,
                 leader: item.leader,
+                level: level,
             });
         });
 
@@ -158,11 +177,11 @@ const Tower = () => {
         console.log("init");
     };
 
+    // 获取我的飞机信息列表
     const handleGetMyPlane = async () => {
         const [aviationInfos] = await multiProvider.all([
             multiLeagueTournamentContract.getAccountInfo(address),
         ]);
-        console.log(aviationInfos, "aviationInfos");
         const { leaders, points, tokenIds, isLocked } = aviationInfos;
 
         const gameRes = await getTokensGame({
@@ -261,6 +280,21 @@ const Tower = () => {
         setWarnType(0);
     };
 
+    const handleOpenBuyPlane = () => {
+        if (!address) {
+            return;
+        }
+        onOpen();
+    };
+
+    // 打开选择飞机弹窗
+    const handleOpenChoosePlane = () => {
+        if (!address) {
+            return;
+        }
+        onChoosePlaneOpen();
+    };
+
     useEffect(() => {
         if (!multiProvider || !multiLeagueTournamentContract) return;
         // handleInit();
@@ -304,9 +338,15 @@ const Tower = () => {
     ]);
 
     useEffect(() => {
+        if (timeLeft === 0) {
+            setWarnType(0);
+            return;
+        }
+
         if (warnSet) {
             return;
         }
+
         if (timeLeft > 60000 && timeLeft <= 300000) {
             setWarnType(1);
             setWarnSet(true);
@@ -327,19 +367,27 @@ const Tower = () => {
             justify={"center"}
         >
             <Toolbar></Toolbar>
-            <Status leagueConfig={leagueConfig}></Status>
-            {/* <Warning warnType={warnType} timeLeft={timeLeft}></Warning> */}
-            {gameOverNewComer.tokenId == 0 ? (
+            <Status
+                oldNewcomer={oldNewcomer}
+                leagueConfig={leagueConfig}
+                timeLeft={timeLeft}
+                minutes={minutes}
+                seconds={seconds}
+                gameOverFlag={gameOverFlag}
+            ></Status>
+            {!gameOverFlag && (
                 <>
                     <PrizeMoney pot={pot}></PrizeMoney>
                     <AllAviation newcomerList={newcomerList}></AllAviation>
                     <BtButton
-                        onAvaitionClick={onOpen}
-                        onPlayClick={onChoosePlaneOpen}
+                        onAvaitionClick={handleOpenBuyPlane}
+                        onPlayClick={handleOpenChoosePlane}
                     ></BtButton>
                     <Warning
                         warnType={warnType}
                         timeLeft={timeLeft}
+                        minutes={minutes}
+                        seconds={seconds}
                         onResetWarnType={handleResetWarnType}
                     ></Warning>
                     <ChooseTeamModal
@@ -353,7 +401,9 @@ const Tower = () => {
                         onClose={onChoosePlaneClose}
                     ></ChoosePlane>
                 </>
-            ) : (
+            )}
+
+            {gameOverFlag && (
                 <GameOver
                     leagueConfig={leagueConfig}
                     reward={myClaimReward}

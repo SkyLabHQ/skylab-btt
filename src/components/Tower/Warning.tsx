@@ -1,35 +1,31 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import RWarnIcon from "./assets/rwarn.svg";
-import YWarnIcon from "./assets/ywarn.svg";
+import YWarnIcon from "./assets/ywarn.png";
 import RCountDownIcon from "./assets/r-countdown.svg";
-import YCountDownIcon from "./assets/y-countdown.svg";
-import RWarningIcon from "./assets/rwarning.svg";
-import YWarningIcon from "./assets/ywarning.svg";
+import YCountDownIcon from "./assets/y-countdown.png";
+import { ReactComponent as WarningIcon } from "./assets/rwarning.svg";
 
 const Warning = ({
+    minutes,
+    seconds,
     warnType,
     timeLeft,
     onResetWarnType,
 }: {
+    minutes: string;
+    seconds: string;
     warnType: number;
     timeLeft: number;
     onResetWarnType: () => void;
 }) => {
-    const { minutes, seconds } = useMemo(() => {
-        const t = Math.floor(timeLeft / 1000);
-        const minutes = String(Math.floor(t / 60)).padStart(2, "0");
-        const seconds = String(t % 60).padStart(2, "0");
-        return { minutes, seconds };
-    }, [timeLeft]);
-
-    const [WarnIcon, CountDownIcon, WarningIcon] = useMemo(() => {
+    const [WarnIcon, CountDownIcon, color] = useMemo(() => {
         if (warnType == 1) {
-            return [YWarnIcon, YCountDownIcon, YWarningIcon];
+            return [YWarnIcon, YCountDownIcon, "#B69601"];
         }
 
-        return [RWarnIcon, RCountDownIcon, RWarningIcon];
-    }, [timeLeft]);
+        return [RWarnIcon, RCountDownIcon, "#F80505"];
+    }, [timeLeft, warnType]);
 
     return (
         <Flex
@@ -80,11 +76,12 @@ const Warning = ({
                     background: `url(${CountDownIcon})`,
                     width: "248px",
                     height: "109px",
+                    backgroundSize: "100% 100%",
                 }}
             >
                 <Text
                     sx={{
-                        color: "#F80404",
+                        color: color,
                         fontSize: "50px",
                         margin: "20px 0 0 80px",
                     }}
@@ -92,12 +89,12 @@ const Warning = ({
                     {minutes}:{seconds}
                 </Text>
             </Box>
-            <Image
-                src={WarningIcon}
-                sx={{
+            <WarningIcon
+                style={{
                     width: "300px",
+                    color: color,
                 }}
-            ></Image>
+            ></WarningIcon>
         </Flex>
     );
 };
