@@ -36,6 +36,7 @@ const SelectTeam = ({
                 {leagueConfigList.map((item, index) => {
                     return (
                         <Box
+                            key={index}
                             sx={{
                                 "&:hover div:nth-of-type(1)": {
                                     display: "block",

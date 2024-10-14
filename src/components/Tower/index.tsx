@@ -69,15 +69,14 @@ export const getInitNewcomerList = () => {
 };
 
 const Tower = () => {
-    const { openLoading, closeLoading } = useSubmitRequest();
-
     const yWarnTimer = useRef(null);
     const rWarnTimer = useRef(null);
     const [warnType, setWarnType] = useState(0); // 0不展示 1黄色 2红色
+    const { openLoading, closeLoading } = useSubmitRequest();
+    const leagueTournamentContract = useLeagueTournamentContract();
 
     const toast = useSkyToast();
     const publicClient = usePublicClient();
-    const leagueTournamentContract = useLeagueTournamentContract();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         isOpen: isChoosePlaneOpen,
@@ -101,7 +100,7 @@ const Tower = () => {
     const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
     const multiProvider = useMultiProvider(chainId);
 
-    // [winleage的配置 ,游戏是否结束]
+    // [winleague的配置 ,游戏是否结束]
     const [leagueConfig, gameOverFlag] = useMemo(() => {
         if (gameOverNewComer.tokenId == 0) {
             return [null, false];
@@ -206,6 +205,7 @@ const Tower = () => {
         console.log(myAviation, "myAviation");
     };
 
+    // 直接mint飞机
     const handleMint = async (leader: string) => {
         try {
             let referral = sessionStorage.getItem("referral");
@@ -239,6 +239,7 @@ const Tower = () => {
         }
     };
 
+    // 获取游戏结束奖励
     const handleGetPotReward = async () => {
         const [reward] = await multiProvider.all([
             multiLeagueTournamentContract.claimPot(address),
@@ -247,6 +248,7 @@ const Tower = () => {
         console.log(reward.toString(), "reward");
     };
 
+    // 领取游戏结束奖励
     const handleClaimReward = async () => {
         try {
             openLoading();
@@ -355,7 +357,7 @@ const Tower = () => {
                 leagueConfig={leagueConfig}
                 gameOverFlag={gameOverFlag}
             ></Status>
-            {(!gameOverFlag || true) && (
+            {!gameOverFlag && (
                 <>
                     <PrizeMoney pot={pot}></PrizeMoney>
                     <AllAviation newcomerList={newcomerList}></AllAviation>
@@ -382,13 +384,13 @@ const Tower = () => {
                 </>
             )}
 
-            {/* {gameOverFlag && (
+            {gameOverFlag && (
                 <GameOver
                     leagueConfig={leagueConfig}
                     reward={myClaimReward}
                     onClaimReward={handleClaimReward}
                 ></GameOver>
-            )} */}
+            )}
         </Flex>
     );
 };
