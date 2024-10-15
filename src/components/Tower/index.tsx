@@ -1,5 +1,5 @@
-import { Box, Flex, Image, useDisclosure, Text } from "@chakra-ui/react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Flex, useDisclosure } from "@chakra-ui/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import PrizeMoney from "./PrizeMoney";
 import BtButton from "./BtButton";
 import { Toolbar } from "./Toolbar";
@@ -26,6 +26,8 @@ import { aviationImg } from "@/utils/aviationImg";
 import GameOver from "./GmeOver";
 import leagueConfigList from "@/utils/league";
 import { useSubmitRequest } from "@/contexts/SubmitRequest";
+import { useLocation } from "react-router-dom";
+import qs from "query-string";
 
 export interface TokenIdInfo {
     tokenId: number;
@@ -71,6 +73,9 @@ export const getInitNewcomerList = () => {
 const Tower = () => {
     const yWarnTimer = useRef(null);
     const rWarnTimer = useRef(null);
+    const { search } = useLocation();
+
+    const params = qs.parse(search) as any;
     const [warnType, setWarnType] = useState(0); // 0不展示 1黄色 2红色
     const { openLoading, closeLoading } = useSubmitRequest();
     const leagueTournamentContract = useLeagueTournamentContract();
@@ -159,8 +164,6 @@ const Tower = () => {
         });
 
         setNewcomerList(list);
-        console.log(res);
-        console.log("init");
     };
 
     // 获取我的飞机信息列表
@@ -177,7 +180,6 @@ const Tower = () => {
         });
 
         const tokensGame = gameRes.data.tokensGame;
-
         const myAviation = tokenIds.map((item: string, index: number) => {
             const point = points[index].toNumber();
             const levelInfo = getLevelInfo(point);
@@ -202,7 +204,6 @@ const Tower = () => {
             };
         });
         setMyAviationInfo(myAviation);
-        console.log(myAviation, "myAviation");
     };
 
     // 直接mint飞机
@@ -245,7 +246,6 @@ const Tower = () => {
             multiLeagueTournamentContract.claimPot(address),
         ]);
         setMyClaimReward(reward.toString());
-        console.log(reward.toString(), "reward");
     };
 
     // 领取游戏结束奖励
@@ -340,6 +340,12 @@ const Tower = () => {
         multiLeagueTournamentContract,
         multiProvider,
     ]);
+
+    useEffect(() => {
+        if (params && params.referral) {
+            sessionStorage.setItem("referral", params.referral);
+        }
+    }, [params]);
 
     return (
         <Flex

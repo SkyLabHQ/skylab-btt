@@ -289,12 +289,9 @@ const TeamPlaneList = ({
             return [null, null, _tokenIdsInfo];
         }
 
-        console.log(currentNewcomerList, _tokenIdsInfo, "currentNewcomerList");
-
         const fIndex = _tokenIdsInfo.findIndex((item) => {
             return item.tokenId == currentNewcomerList[0].newComerId;
         });
-        console.log(fIndex, "fIndex");
 
         const [shortestTokenIdInfo] = _tokenIdsInfo.splice(fIndex, 1);
 

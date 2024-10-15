@@ -1,7 +1,7 @@
 import Back from "@/components/Back";
 import { Toolbar } from "@/components/Tower/Toolbar";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DataInfo from "@/components/League/DataInfo";
 import TeamPlaneList from "@/components/League/TeamPlaneList";
@@ -18,6 +18,7 @@ import { aviationImg } from "@/utils/aviationImg";
 import useSkyToast from "@/hooks/useSkyToast";
 import { handleError } from "@/utils/error";
 import { getInitNewcomerList, Newcomer } from "@/components/Tower";
+import Nest from "@/components/Nest";
 
 export interface TokenIdInfo {
     tokenId: number;
@@ -55,14 +56,11 @@ const League = () => {
     const toast = useSkyToast();
     const multiLeagueTournamentContract = useMultiLeagueTournamentContract();
     const multiProvider = useMultiProvider(chainId);
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const [pot, setPot] = React.useState("0");
-    const [newcomerList, setNewcomerList] = React.useState(
-        getInitNewcomerList(),
-    );
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [pot, setPot] = useState("0");
+    const [newcomerList, setNewcomerList] = useState(getInitNewcomerList());
 
-    const [leagueInfoList, setLeagueInfoList] =
-        React.useState(initLeagueInfoList);
+    const [leagueInfoList, setLeagueInfoList] = useState(initLeagueInfoList);
     const navigate = useNavigate();
     const {
         isOpen: isLeaderRateModalOpen,
@@ -70,7 +68,6 @@ const League = () => {
         onClose: onLeaderRateModalClose,
     } = useDisclosure();
 
-    console.log(leagueInfoList, "leagueInfoList");
     const handleActiveIndex = (index: number) => {
         setActiveIndex(index);
     };
@@ -110,7 +107,6 @@ const League = () => {
         });
 
         setNewcomerList(list);
-        console.log(leagueListRes, "leagueListRes");
         const allTokenIds: string[] = [];
         const leagueInfoList: LeagueInfo[] = [];
         leagueListRes.forEach((item) => {
@@ -221,6 +217,7 @@ const League = () => {
                 isOpen={isLeaderRateModalOpen}
                 onClose={onLeaderRateModalClose}
             ></LeaderRateModal>
+            <Nest />
         </Flex>
     );
 };

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Bg from "./assets/card-bg.png";
 import {
     useMultiMarketPlaceContract,
-    useMultiMercuryJarTournamentContract,
     useMultiProvider,
 } from "@/hooks/useMultiContract";
 import { useChainId, usePublicClient } from "wagmi";
@@ -22,24 +21,19 @@ import { useUserInfo } from "@/contexts/UserInfo";
 import ETHIcon from "./assets/eth.svg";
 import A1Icon from "./assets/a1.svg";
 import useSkyMediaQuery from "@/hooks/useSkyMediaQuery";
-import { getTokensGame } from "@/api/tournament";
-import { levelRanges } from "@/utils/level";
 
 const planeList = new Array(16).fill("").map((_, index) => {
     return { img: aviationImg(index + 1), level: index + 1 };
 });
 
 const Market = () => {
-    // const [planeList, setPlaneList] = useState([] as any[]);
-
     const publicClient = usePublicClient();
     const toast = useSkyToast();
     const [inputMode, setInputMode] = useState(new Array(16).fill(false));
     const [inputAmount, setInputAmount] = useState(
         new Array(16).fill("0") as string[],
     );
-    const multiMercuryJarTournamentContract =
-        useMultiMercuryJarTournamentContract();
+
     const mercuryJarTournamentContract = useMercuryJarTournamentContract();
     const { address } = useUserInfo();
     const chainId = useChainId();

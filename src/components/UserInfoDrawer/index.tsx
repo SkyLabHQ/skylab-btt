@@ -179,13 +179,9 @@ const UserInfo = ({
                             color: "#fff",
                             marginTop: "20px",
                         }}
+                        onClick={handleInvite}
                     >
-                        <Flex
-                            sx={{}}
-                            onClick={handleInvite}
-                            align={"center"}
-                            justify={"center"}
-                        >
+                        <Flex sx={{}} align={"center"} justify={"center"}>
                             <Image
                                 src={InviteIcon}
                                 sx={{
